@@ -4,13 +4,13 @@ This research aims to measure the articulability gap by comparing dense models t
 <p align="center">
   <img src="assets/reward-scaling-laws.png" alt="Reward Scaling Laws" width="600"/>
   <br/>
-  <em>We aim to study how reward models in different domains model human preference. We hypothesize that different task types exhibit distinct scaling behaviors: Creative Tasks, governed by more diffuse, community-originated norms (e.g., creative writing, humor), will require substantially more training data to reach asymptotic performance. Codified Tasks, which follow articulated rules and standards (e.g., code review, legal decisions), should converge faster with less data. Auditable Tasks, whose outcomes can often be objectively verified (e.g., grant funding decisions, patent outcomes), are expected to require the least data. By sweeping across data fractions, we can empirically characterize these scaling curves and identify the point at which additional data yields diminishing returns for each task type.</em>
+  <em>We hypothesize that task types have distinct scaling behaviors: Creative Tasks (diffuse, community-originated norms) require the most data, Codified Tasks (articulated rules) converge faster, and Auditable Tasks (objectively verifiable outcomes) require the least. By sweeping across data fractions we can characterize these scaling curves and identify diminishing-returns thresholds for each domain.</em>
 </p>
 
 <p align="center">
   <img src="assets/modeling-approach.png" alt="Modeling Approach" width="600"/>
   <br/>
-  <em>From a computer-science perspective, we aim to provide insights into which reward modeling approach works best in different settings. Dense reward models learn a latent objective end-to-end from human preference data, while articulable approaches decompose the objective into explicit, human-interpretable metrics. We compare these paradigms across tasks to understand when the expressiveness of dense models justifies their opacity, and when structured, interpretable approaches can match or exceed their performance.</em>
+  <em>Dense reward models learn a latent objective end-to-end from preference data, while articulable approaches decompose the objective into explicit, interpretable metrics. We compare these paradigms across tasks to understand when dense expressiveness justifies its opacity and when structured approaches can match or exceed it.</em>
 </p>
 
 # Usage
@@ -51,7 +51,7 @@ The table below tracks training progress across model types and datasets.
 <p align="center">
   <img src="assets/articulability-gap.png" alt="Articulability Gap" width="600"/>
   <br/>
-  <em>We aim to measure dense modeling performance as an upper bound that reflects the inherent noise and subjectivity in each task's human annotations. The articulability gap is the difference between this dense upper bound and the best-performing articulable model. A small gap suggests the task's norms can be effectively captured by explicit metrics; a large gap indicates that human preferences rely on latent, hard-to-articulate features that only end-to-end models can learn. By measuring this gap across domains, we can characterize which tasks are amenable to interpretable reward modeling and which fundamentally require opaque, learned objectives.</em>
+  <em>Dense performance serves as an upper bound reflecting each task's inherent noise; the articulability gap is the difference between this ceiling and the best articulable model. A small gap means explicit metrics suffice, while a large gap indicates preferences that only end-to-end models can capture.</em>
 </p>
 
 <table>
