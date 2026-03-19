@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run iterative AutoMetrics with VLLM backend on a single GPU."""
 
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -26,6 +27,25 @@ import pandas as pd
 from autometrics.iterative_refinement.runner import run_iterative
 from autometrics.dataset.Dataset import Dataset
 from autometrics.backends import create_backend
+from autometrics.task_descriptions import get_task_description
+
+# ── CLI args ──
+parser = argparse.ArgumentParser(description="Run iterative AutoMetrics with VLLM backend")
+parser.add_argument("--disable-early-stopping", action="store_true",
+                    help="Run all iterations without early stopping")
+parser.add_argument("--num-iterations", type=int, default=25)
+parser.add_argument("--early-stop-patience", type=int, default=2)
+parser.add_argument("--num-metrics", type=int, default=5,
+                    help="Number of single-dimension metrics to propose per iteration")
+parser.add_argument("--num-rubrics", type=int, default=5,
+                    help="Number of holistic rubrics to propose per iteration")
+parser.add_argument("--no-interactions", action="store_true",
+                    help="Disable pairwise interaction terms in the regression")
+parser.add_argument("--eval-fraction", type=float, default=0.4,
+                    help="Fraction of combined train+eval to use as eval (default 0.3)")
+parser.add_argument("--max-text-tokens", type=int, default=512,
+                    help="Truncate text to first N whitespace tokens (default 1024)")
+args = parser.parse_args()
 
 # ── Config ──
 MODEL = os.environ.get("VLLM_MODEL", "meta-llama/Llama-3.3-70B-Instruct")
@@ -36,11 +56,9 @@ OUTPUT_DIR = REPO_ROOT / "outputs" / "iterative_autometrics" / "press_release_vl
 ID_COLUMN = "id"
 TEXT_COLUMN = "output"
 LABEL_COLUMN = "newsworthiness_score"
+DATASET_NAME = "PressReleaseModeling"
 
-TASK_DESCRIPTION = (
-    "Evaluate press-release text for the human judgment label. The model should score "
-    "each press release according to the rubric-driven criteria the LLM proposes."
-)
+TASK_DESCRIPTION = get_task_description(DATASET_NAME)
 
 # ── Load data ──
 print(f"Loading data from splits in {SPLIT_DIR} ...")
@@ -61,7 +79,7 @@ dataset = Dataset(
     target_columns=[LABEL_COLUMN],
     ignore_columns=[ID_COLUMN],
     metric_columns=[],
-    name="PressReleaseModeling",
+    name=DATASET_NAME,
     data_id_column=ID_COLUMN,
     input_column=TEXT_COLUMN,
     output_column=TEXT_COLUMN,
@@ -76,7 +94,7 @@ backend = create_backend(
     "vllm",
     model_name_or_path=MODEL,
     tensor_parallel_size=1,
-    max_model_len=32768,
+    max_model_len=4096,
     gpu_memory_utilization=0.95,
 )
 print("VLLM backend ready.")
@@ -92,7 +110,9 @@ results = run_iterative(
     target_measure=LABEL_COLUMN,
     generator_llm=generator_llm,
     judge_llm=judge_llm,
-    num_iterations=3,
+    num_iterations=args.num_iterations,
+    disable_early_stopping=args.disable_early_stopping,
+    early_stop_patience=args.early_stop_patience,
     data_path=str(DATA_PATH),
     split_dir=str(SPLIT_DIR),
     id_column=ID_COLUMN,
@@ -100,14 +120,16 @@ results = run_iterative(
     label_column=LABEL_COLUMN,
     output_dir=str(OUTPUT_DIR),
     k_pairs=5,
-    num_metrics=5,
-    num_rubrics=5,
+    num_metrics=args.num_metrics,
+    num_rubrics=args.num_rubrics,
     label_batch_size=200,
     verbose=True,
-    max_train_set_size=0.1,
-    eval_sample_fraction=0.15,
+    eval_fraction=args.eval_fraction,
+    eval_gate_fraction=0.2,
+    max_text_tokens=args.max_text_tokens,
     tqdm_scoring=True,
     scoring_backend=backend,
+    use_interactions=not args.no_interactions,
     seed=42,
 )
 

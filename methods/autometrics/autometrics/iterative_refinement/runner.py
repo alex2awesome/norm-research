@@ -22,7 +22,7 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import train_test_split
 
-from autometrics.aggregator.regression.LogisticL1 import LogisticL1
+from autometrics.aggregator.regression.LogisticL1 import LogisticL1, LogisticL1WithInteractions
 from autometrics.dataset.Dataset import Dataset
 from autometrics.generator.ContrastiveRubricProposer import ContrastiveRubricProposer
 from autometrics.metrics.generated.GeneratedLLMJudgeMetric import (
@@ -33,7 +33,7 @@ from autometrics.util.splits import load_fixed_split
 
 from .label_cache import LabelCache
 from .lifecycle import MetricLifecycleTracker
-from .matching import normalize_pair_id, propensity_match, residual_select
+from .matching import normalize_pair_id, exact_match, mahalanobis_match, propensity_match, residual_select
 
 _iter_logger = logging.getLogger("autometrics.iterative")
 
@@ -53,6 +53,18 @@ class _DedupSignature(dspy.Signature):
     existing_metrics: str = dspy.InputField(desc="Existing metrics with rubrics.")
     candidate_metric: str = dspy.InputField(desc="Candidate metric name and rubric.")
     verdict: str = dspy.OutputField(desc="Return 'distinct' or 'duplicate: <metric name>'.")
+
+
+class _SelfCritiqueSignature(dspy.Signature):
+    """Critique a proposed evaluation metric. Determine if it is substantive and would meaningfully distinguish between high- and low-quality items based on genuine content differences, NOT surface-level features like text length, formatting, readability, or writing style."""
+
+    task_description: str = dspy.InputField(desc="Brief description of the task.")
+    metric_name: str = dspy.InputField(desc="Name of the proposed metric.")
+    metric_rubric: str = dspy.InputField(desc="The metric's full rubric description.")
+    verdict: str = dspy.OutputField(
+        desc="Return 'substantive' if the metric captures a genuine content-level "
+             "distinction, or 'superficial: <reason>' if it is surface-level or trivial."
+    )
 
 
 class _MultiMetricSignature(dspy.Signature):
@@ -77,14 +89,7 @@ def _normalize_whitespace(text: str) -> str:
 def _iter_log(message: str, verbose_only: bool, verbose: bool) -> None:
     if verbose_only and not verbose:
         return
-    try:
-        _iter_logger.info(message)
-    except Exception:
-        pass
-    try:
-        print(message)
-    except Exception:
-        pass
+    _iter_logger.info(message)
 
 
 def _rubric_to_text(rubric: Dict[str, str]) -> str:
@@ -173,6 +178,238 @@ def _truncate_text(text: str, max_chars: int = 1500) -> str:
     if len(text) <= max_chars:
         return text
     return text[: max_chars - 3] + "..."
+
+
+def _compute_metric_stats(
+    scored_frame: "pd.DataFrame",
+    active_specs: list,
+    label_column: str,
+    coef_map: Optional[Dict[str, float]] = None,
+) -> str:
+    """Compute per-metric summary statistics from scored data.
+
+    Returns a formatted string showing each metric's mean, std, label
+    correlation, and coefficient so the proposer knows what's covered.
+    """
+    import numpy as np
+
+    lines = []
+    y = scored_frame[label_column].values.astype(float) if label_column in scored_frame.columns else None
+
+    for spec in active_specs:
+        if spec.name not in scored_frame.columns:
+            continue
+        vals = scored_frame[spec.name].values.astype(float)
+        valid = ~np.isnan(vals)
+        if valid.sum() == 0:
+            continue
+
+        mean = float(np.nanmean(vals))
+        std = float(np.nanstd(vals))
+
+        corr_str = ""
+        if y is not None and valid.sum() > 2:
+            both_valid = valid & ~np.isnan(y)
+            if both_valid.sum() > 2:
+                corr = float(np.corrcoef(vals[both_valid], y[both_valid])[0, 1])
+                corr_str = f"  corr_with_label={corr:+.3f}"
+
+        coef_str = ""
+        if coef_map and spec.metric_id in coef_map:
+            coef_str = f"  coef={coef_map[spec.metric_id]:+.3f}"
+
+        lines.append(
+            f"  - {spec.name}: mean={mean:.2f} std={std:.2f}{corr_str}{coef_str}"
+        )
+
+    if not lines:
+        return ""
+
+    return (
+        "\n\n--- METRIC PERFORMANCE STATISTICS ---\n"
+        "Score distribution and predictive signal for each active metric "
+        "(higher |corr_with_label| = more predictive; higher |coef| = more "
+        "important in the current model). Prioritize proposing metrics that "
+        "capture different signals from the high-|coef| metrics below.\n"
+        + "\n".join(lines)
+    )
+
+
+def _condense_metric_description(spec: MetricSpec) -> str:
+    """Condense a metric's full 5-level rubric into a 1-2 sentence summary.
+
+    Extracts the score-1 (lowest) and score-5 (highest) descriptions and
+    combines them into a concise description of what the metric measures.
+    """
+    rubric = spec.rubric
+    low = rubric.get("score1_description", "").strip()
+    high = rubric.get("score5_description", "").strip()
+
+    if high and low:
+        return f"{spec.name}: Ranges from '{low}' (1) to '{high}' (5)."
+    if high:
+        return f"{spec.name}: Highest score means '{high}'."
+    if low:
+        return f"{spec.name}: Lowest score means '{low}'."
+    return f"{spec.name}: {spec.rubric_text[:150]}"
+
+
+def _generate_iteration_reasoning(
+    scoring_backend: Any,
+    generator_llm: Any,
+    task_description: str,
+    iteration: int,
+    contrastive_text: List[str],
+    active_metric_summaries: List[str],
+    prev_reasoning: Optional[str] = None,
+    prev_metrics_proposed: Optional[List[str]] = None,
+    misclassified_examples: Optional[str] = None,
+) -> str:
+    """LLM call that reasons about what to measure before proposing metrics.
+
+    At iteration 1: reasons about task aspects and pos/neg differences.
+    At iteration >1: first reflects on why previous metrics failed, then
+    reasons about what new aspects to target.
+
+    Returns 2-3 sentence reasoning summary.
+    """
+    parts = [f"Task: {task_description}"]
+
+    if iteration > 1 and prev_reasoning:
+        parts.append(
+            f"\nIn the previous iteration, our reasoning was:\n{prev_reasoning}"
+        )
+        if prev_metrics_proposed:
+            parts.append(
+                f"\nWe proposed these metrics: {', '.join(prev_metrics_proposed)}"
+            )
+        if misclassified_examples:
+            parts.append(
+                f"\nHere are examples we still got wrong:\n{misclassified_examples}"
+            )
+        parts.append(
+            "\nFirst, briefly explain why you think the previous metrics failed "
+            "to capture the distinction. What patterns in the misclassified examples "
+            "suggest our metrics missed?"
+        )
+
+    if active_metric_summaries:
+        parts.append(
+            "\nCurrent active metrics:\n" + "\n".join(f"- {s}" for s in active_metric_summaries)
+        )
+
+    if contrastive_text:
+        parts.append(
+            "\nContrastive pairs (similar scored examples with opposite labels):\n"
+            + "\n\n".join(contrastive_text[:3])
+        )
+
+    parts.append(
+        "\nBased on the above, write a 2-3 sentence reasoning summary that identifies: "
+        "(1) the core aspects of the task that distinguish positive from negative examples, "
+        "(2) what specific textual or structural differences the contrastive pairs reveal, "
+        "and (3) what NEW dimensions should be measured that current metrics do NOT capture. "
+        "Be specific and concrete — name the patterns you see."
+    )
+
+    prompt = "\n".join(parts)
+
+    if scoring_backend is not None and hasattr(scoring_backend, "generate_text"):
+        return scoring_backend.generate_text(prompt, max_tokens=512)
+    if generator_llm is not None:
+        try:
+            with dspy.settings.context(lm=generator_llm):
+                response = generator_llm(prompt, max_tokens=512)
+            if isinstance(response, list) and response:
+                return str(response[0])
+            return str(response)
+        except Exception:
+            return ""
+    return ""
+
+
+def _generate_trajectory_summary(
+    scoring_backend: Any,
+    generator_llm: Any,
+    iteration_reasonings: List[Tuple[int, str, List[str]]],
+) -> str:
+    """Aggregate all prior iteration reasonings into a meta-summary.
+
+    Each entry in iteration_reasonings is (iteration_num, reasoning_text,
+    list_of_metric_names_proposed).
+
+    Returns a concise trajectory summary: what's been tried, what worked,
+    what failed, and what remains unexplored.
+    """
+    if not iteration_reasonings:
+        return ""
+
+    history_lines = []
+    for iter_num, reasoning, metric_names in iteration_reasonings:
+        names_str = ", ".join(metric_names) if metric_names else "(none survived)"
+        history_lines.append(
+            f"Iteration {iter_num}:\n"
+            f"  Reasoning: {reasoning}\n"
+            f"  Metrics proposed: {names_str}"
+        )
+
+    prompt = (
+        "Below is the history of our iterative metric development process. "
+        "Each iteration shows our reasoning about what to measure and which "
+        "metrics we proposed.\n\n"
+        + "\n\n".join(history_lines)
+        + "\n\nWrite a concise trajectory summary (3-5 sentences) covering:\n"
+        "1. What approaches have been tried so far\n"
+        "2. What seems to be working (metrics that survived and have signal)\n"
+        "3. What has failed or been redundant\n"
+        "4. What directions remain unexplored and should be tried next\n"
+        "Be specific — reference actual metric names and patterns."
+    )
+
+    if scoring_backend is not None and hasattr(scoring_backend, "generate_text"):
+        return scoring_backend.generate_text(prompt, max_tokens=512)
+    if generator_llm is not None:
+        try:
+            with dspy.settings.context(lm=generator_llm):
+                response = generator_llm(prompt, max_tokens=512)
+            if isinstance(response, list) and response:
+                return str(response[0])
+            return str(response)
+        except Exception:
+            return ""
+    return ""
+
+
+def _cluster_metrics_thematically(
+    active_specs: list,
+    scoring_backend: Any = None,
+    generator_llm: Any = None,
+) -> str:
+    """Ask the LLM to cluster active metrics into themes and identify gaps."""
+    if len(active_specs) < 3:
+        return ""
+    metrics_text = "\n".join([f"- {s.name}: {s.rubric_text[:200]}" for s in active_specs])
+    prompt = (
+        "Below are the current evaluation metrics. Group them into thematic clusters "
+        "(e.g., 'Writing Quality', 'Factual Content', 'Audience Impact'). For each cluster, "
+        "list the metrics and indicate if that theme is OVER-REPRESENTED (has too many similar "
+        "metrics) or UNDER-REPRESENTED. Suggest 2-3 theme areas that are completely MISSING "
+        "and would be most valuable for distinguishing high-quality from low-quality items.\n\n"
+        f"Metrics:\n{metrics_text}\n\n"
+        "Format: list clusters, then missing themes. Be concise."
+    )
+    if scoring_backend is not None and hasattr(scoring_backend, "generate_text"):
+        return scoring_backend.generate_text(prompt, max_tokens=1024)
+    if generator_llm is not None:
+        try:
+            with dspy.settings.context(lm=generator_llm):
+                response = generator_llm(prompt, max_tokens=1024)
+            if isinstance(response, list) and response:
+                return str(response[0])
+            return str(response)
+        except Exception:
+            return ""
+    return ""
 
 
 def _compute_train_assessment(
@@ -306,29 +543,37 @@ def _build_feature_frame(
             scored_map: Dict[str, Dict[str, float]] = {m.name: {} for m in metrics}
 
             # ── Backend path: delegate to ScoringBackend ──
+            # Send all missing samples at once — VLLM handles batching internally.
             if scoring_backend is not None:
                 metric_names = [m.name for m in metrics]
-                for start in range(0, len(missing_df), batch_size):
-                    chunk_df = missing_df.iloc[start : start + batch_size]
-                    if verbose:
-                        _iter_log(
-                            f"[Autometrics][Iterative] Backend scoring chunk {start}:{start+len(chunk_df)} ({stage})",
-                            verbose_only=False,
-                            verbose=verbose,
-                        )
-                    chunk_ids = chunk_df[id_column].astype(str).tolist()
-                    chunk_inputs = chunk_df[text_column].astype(str).tolist()
-                    chunk_outputs = chunk_inputs  # same column used for both
+                if verbose:
+                    _iter_log(
+                        f"[Autometrics][Iterative] Backend scoring {len(missing_df)} samples ({stage})",
+                        verbose_only=False,
+                        verbose=verbose,
+                    )
+                all_ids = missing_df[id_column].astype(str).tolist()
+                all_texts = missing_df[text_column].astype(str).tolist()
+                # Use single-text scoring if available (text appears once in
+                # prompt instead of twice, nearly halving prompt size).
+                if hasattr(scoring_backend, "score_single_text_batch"):
+                    responses = scoring_backend.score_single_text_batch(
+                        task_description=task_description,
+                        rubrics_text=rubrics_text,
+                        metric_names=metric_names,
+                        texts=all_texts,
+                    )
+                else:
                     responses = scoring_backend.score_multi_metric_batch(
                         task_description=task_description,
                         rubrics_text=rubrics_text,
                         metric_names=metric_names,
-                        inputs=chunk_inputs,
-                        outputs=chunk_outputs,
+                        inputs=all_texts,
+                        outputs=all_texts,
                     )
-                    for row_id, resp in zip(chunk_ids, responses):
-                        for spec in metrics:
-                            scored_map[spec.name][row_id] = float(resp.scores.get(spec.name, 0.0))
+                for row_id, resp in zip(all_ids, responses):
+                    for spec in metrics:
+                        scored_map[spec.name][row_id] = float(resp.scores.get(spec.name, 0.0))
             else:
                 # ── Original DSPy path ──
                 module = dspy.ChainOfThought(_MultiMetricSignature)
@@ -465,15 +710,65 @@ def _build_feature_frame(
 def _select_active_metric_ids(
     metric_specs: List[MetricSpec],
     coef_map: Dict[str, float],
+    interaction_coef_map: Optional[Dict[str, Tuple[str, str, float]]] = None,
 ) -> List[str]:
-    active = [spec.metric_id for spec in metric_specs if abs(coef_map.get(spec.metric_id, 0.0)) > 1e-6]
-    if active:
-        return active
+    # A metric is active if it has a non-zero direct coefficient
+    # OR participates in any non-zero interaction
+    active_set: set[str] = set()
+    name_to_id = {spec.name: spec.metric_id for spec in metric_specs}
+
+    # Direct coefficients
+    for spec in metric_specs:
+        if abs(coef_map.get(spec.metric_id, 0.0)) > 1e-6:
+            active_set.add(spec.metric_id)
+
+    # Interaction coefficients: keep base metrics that participate
+    if interaction_coef_map:
+        for _col_name, (metric_a_name, metric_b_name, coef) in interaction_coef_map.items():
+            if abs(coef) > 1e-6:
+                if metric_a_name in name_to_id:
+                    active_set.add(name_to_id[metric_a_name])
+                if metric_b_name in name_to_id:
+                    active_set.add(name_to_id[metric_b_name])
+
+    if active_set:
+        # Preserve original spec order
+        return [spec.metric_id for spec in metric_specs if spec.metric_id in active_set]
+
     # Fallback: keep the strongest metric to avoid empty active set
     if not metric_specs:
         return []
     ranked = sorted(metric_specs, key=lambda s: abs(coef_map.get(s.metric_id, 0.0)), reverse=True)
     return [ranked[0].metric_id]
+
+
+def _name_interaction(
+    metric_a_name: str,
+    metric_a_rubric: str,
+    metric_b_name: str,
+    metric_b_rubric: str,
+    task_description: str,
+    scoring_backend: Optional[Any] = None,
+    generator_llm: Optional[Any] = None,
+) -> str:
+    """Ask the LLM to name what the interaction of two metrics captures."""
+    prompt = (
+        f"Task: {task_description}\n\n"
+        f"Two evaluation metrics were found to be meaningful in combination (their interaction term "
+        f"has a significant coefficient in a predictive model).\n\n"
+        f"Metric A: {metric_a_name}\n{metric_a_rubric}\n\n"
+        f"Metric B: {metric_b_name}\n{metric_b_rubric}\n\n"
+        f"In one concise sentence, describe what the combination/interaction of these two metrics "
+        f"captures that neither metric alone would. Focus on the semantic meaning, not statistics."
+    )
+    if scoring_backend is not None and hasattr(scoring_backend, "generate_text"):
+        return scoring_backend.generate_text(prompt, max_tokens=128).strip()
+    if generator_llm is not None:
+        import dspy
+        with dspy.settings.context(lm=generator_llm):
+            pred = dspy.Predict("prompt -> description")(prompt=prompt)
+            return getattr(pred, "description", "").strip()
+    return f"Combination of {metric_a_name} and {metric_b_name}"
 
 
 def _compute_metrics(y_true: np.ndarray, y_prob: np.ndarray) -> Dict[str, float]:
@@ -538,6 +833,53 @@ def _llm_dedup(
     if "duplicate" in verdict:
         return False
     return True
+
+
+def _self_critique_candidates(
+    candidate_defs: list,
+    task_description: str,
+    generator_llm: dspy.LM,
+    scoring_backend: Any = None,
+) -> list:
+    """Return (filtered_defs, verdicts) after self-critique.
+
+    Uses scoring_backend.critique_metrics_batch if available, else
+    falls back to DSPy _SelfCritiqueSignature per candidate.
+    Returns list of (candidate_def, verdict_str) tuples.
+    """
+    if not candidate_defs:
+        return []
+
+    results: list = []
+
+    if scoring_backend is not None and hasattr(scoring_backend, "critique_metrics_batch"):
+        verdicts = scoring_backend.critique_metrics_batch(
+            task_description=task_description,
+            candidates=[
+                {"name": str(c.get("name", "")), "rubric": str(c.get("rubric", ""))}
+                for c in candidate_defs
+            ],
+        )
+        for cand, verdict in zip(candidate_defs, verdicts):
+            results.append((cand, verdict))
+    else:
+        for cand in candidate_defs:
+            rubric_str = cand.get("rubric", "")
+            if isinstance(rubric_str, dict):
+                rubric_str = "\n".join(f"{k}: {v}" for k, v in rubric_str.items())
+            try:
+                with dspy.settings.context(lm=generator_llm):
+                    prediction = dspy.Predict(_SelfCritiqueSignature)(
+                        task_description=task_description,
+                        metric_name=str(cand.get("name", "")),
+                        metric_rubric=str(rubric_str),
+                    )
+                verdict = str(getattr(prediction, "verdict", "substantive")).strip()
+            except Exception:
+                verdict = "substantive"
+            results.append((cand, verdict))
+
+    return results
 
 
 def _log_coefficients(
@@ -657,12 +999,28 @@ def _compute_marginal_contributions(
     if model.scaler is not None:
         X = model.scaler.transform(X)
 
+    # Build map of which interaction coefficient indices involve each base metric
+    interaction_indices_for_base: Dict[int, List[int]] = {}
+    if isinstance(model, LogisticL1WithInteractions):
+        n_base = len(metric_specs)
+        spec_names = [s.name for s in metric_specs]
+        for inter_idx, (_col_name, col_a, col_b) in enumerate(model.interaction_pairs):
+            coef_idx = n_base + inter_idx
+            if coef_idx >= len(coef_vec):
+                break
+            for base_idx, name in enumerate(spec_names):
+                if name == col_a or name == col_b:
+                    interaction_indices_for_base.setdefault(base_idx, []).append(coef_idx)
+
     contribs: Dict[str, float] = {}
     for idx, spec in enumerate(metric_specs):
         if idx >= len(coef_vec):
             continue
         masked_coef = coef_vec.copy()
         masked_coef[idx] = 0.0
+        # Also zero out interaction terms involving this metric
+        for inter_idx in interaction_indices_for_base.get(idx, []):
+            masked_coef[inter_idx] = 0.0
         logits = intercept + X.dot(masked_coef)
         masked_probs = 1.0 / (1.0 + np.exp(-logits))
         masked_metrics = _compute_metrics(y_true, masked_probs)
@@ -692,16 +1050,20 @@ def run_iterative(
     num_rubrics: int = 5,
     caliper: float = 0.1,
     label_batch_size: int = 200,
-    eval_gate_fraction: float = 0.3,
+    eval_gate_fraction: float = 0.2,
+    eval_fraction: float = 0.4,
+    max_text_tokens: Optional[int] = 512,
     eval_plateau_eps: float = 0.005,
+    early_stop_patience: int = 2,
+    disable_early_stopping: bool = False,
     churn_warning_threshold: float = 0.5,
     min_tenure: int = 0,
     score_all_metrics_together: bool = True,
-    eval_sample_fraction: Optional[float] = None,
-    eval_max_samples: Optional[int] = None,
     tqdm_scoring: bool = False,
     llm_parallelism: int = 1,
     scoring_backend: Optional[Any] = None,
+    intermediate_test_samples: Optional[int] = 100,
+    use_interactions: bool = True,
     verbose: bool = True,
     **kwargs,
 ) -> Dict[str, Any]:
@@ -716,7 +1078,7 @@ def run_iterative(
     if matching_only and residual_only:
         raise ValueError("matching_only and residual_only cannot both be True.")
 
-    train_df, eval_df, test_df = load_fixed_split(
+    orig_train_df, orig_eval_df, test_df = load_fixed_split(
         data_path=data_path,
         split_dir=split_dir,
         create_if_missing=True,
@@ -724,52 +1086,30 @@ def run_iterative(
         label_column=label_column,
     )
     _iter_log(
-        f"[Autometrics][Iterative] Loaded splits: train={len(train_df)}, eval={len(eval_df)}, test={len(test_df)}",
+        f"[Autometrics][Iterative] Loaded on-disk splits: train={len(orig_train_df)}, eval={len(orig_eval_df)}, test={len(test_df)}",
         verbose_only=False,
         verbose=verbose,
     )
 
-    id_column = _resolve_column(train_df, id_column, "press_release_id")
-    text_column = _resolve_column(train_df, text_column, ["output", "text"])
-    label_column = _resolve_column(train_df, label_column, ["human_score", "judgement"])
+    id_column = _resolve_column(orig_train_df, id_column, "press_release_id")
+    text_column = _resolve_column(orig_train_df, text_column, ["output", "text"])
+    label_column = _resolve_column(orig_train_df, label_column, ["human_score", "judgement"])
 
-    train_df = _coerce_binary_labels(train_df, label_column)
-    eval_df = _coerce_binary_labels(eval_df, label_column)
+    # Combine train + eval from on-disk splits, then re-split.
+    # Test set stays identical for comparability with other model runs.
+    combined_df = pd.concat([orig_train_df, orig_eval_df], ignore_index=True)
+    combined_df = _coerce_binary_labels(combined_df, label_column)
     test_df = _coerce_binary_labels(test_df, label_column)
 
-    if eval_sample_fraction or eval_max_samples:
-        n_eval = len(eval_df)
-        target_n = n_eval
-        if eval_sample_fraction:
-            target_n = max(1, int(n_eval * eval_sample_fraction))
-        if eval_max_samples:
-            target_n = min(target_n, int(eval_max_samples))
-        if target_n < n_eval:
-            stratify_eval = eval_df[label_column] if eval_df[label_column].nunique() > 1 else None
-            if stratify_eval is None:
-                eval_df = eval_df.sample(n=target_n, random_state=seed, replace=False)
-            else:
-                eval_df, _ = train_test_split(
-                    eval_df,
-                    train_size=target_n,
-                    random_state=seed,
-                    stratify=stratify_eval,
-                )
-            _iter_log(
-                f"[Autometrics][Iterative] Downsampled eval to {len(eval_df)} rows (fraction={eval_sample_fraction}, max={eval_max_samples})",
-                verbose_only=False,
-                verbose=verbose,
-            )
+    stratify_combined = combined_df[label_column] if combined_df[label_column].nunique() > 1 else None
+    train_df, eval_df = train_test_split(
+        combined_df,
+        test_size=eval_fraction,
+        random_state=seed,
+        stratify=stratify_combined,
+    )
 
-    task_description = dataset.get_task_description()
-    if not task_description:
-        raise ValueError("dataset.task_description is required for iterative AutoMetrics.")
-
-    output_path = Path(output_dir)
-    output_path.mkdir(parents=True, exist_ok=True)
-    label_cache = LabelCache(cache_dir=str(output_path / "label_cache"))
-
-    # Eval selection/gating split
+    # Split eval into selection (for model fitting/selection) and gating (for validation)
     stratify_eval = eval_df[label_column] if eval_df[label_column].nunique() > 1 else None
     eval_sel_df, eval_gate_df = train_test_split(
         eval_df,
@@ -778,10 +1118,34 @@ def run_iterative(
         stratify=stratify_eval,
     )
     _iter_log(
-        f"[Autometrics][Iterative] Eval split: selection={len(eval_sel_df)}, gating={len(eval_gate_df)}",
+        f"[Autometrics][Iterative] Re-split: train={len(train_df)}, eval_sel={len(eval_sel_df)}, eval_gate={len(eval_gate_df)}, test={len(test_df)}",
         verbose_only=False,
         verbose=verbose,
     )
+
+    # Truncate text to first N whitespace tokens to speed up LLM scoring
+    if max_text_tokens:
+        def _truncate(text):
+            tokens = str(text).split()
+            if len(tokens) > max_text_tokens:
+                return " ".join(tokens[:max_text_tokens])
+            return str(text)
+
+        for _df in (train_df, eval_sel_df, eval_gate_df, test_df):
+            _df[text_column] = _df[text_column].map(_truncate)
+        _iter_log(
+            f"[Autometrics][Iterative] Truncated text to first {max_text_tokens} whitespace tokens",
+            verbose_only=False,
+            verbose=verbose,
+        )
+
+    task_description = dataset.get_task_description()
+    if not task_description:
+        raise ValueError("dataset.task_description is required for iterative AutoMetrics.")
+
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+    label_cache = LabelCache(cache_dir=str(output_path / "label_cache"))
 
     run_config = {
         "num_iterations": num_iterations,
@@ -800,16 +1164,38 @@ def run_iterative(
         "caliper": caliper,
         "label_batch_size": label_batch_size,
         "eval_gate_fraction": eval_gate_fraction,
-        "eval_sample_fraction": eval_sample_fraction,
-        "eval_max_samples": eval_max_samples,
+        "eval_fraction": eval_fraction,
+        "max_text_tokens": max_text_tokens,
         "tqdm_scoring": tqdm_scoring,
         "llm_parallelism": llm_parallelism,
         "seed": seed,
         "churn_warning_threshold": churn_warning_threshold,
         "min_tenure": min_tenure,
         "verbose": verbose,
+        "early_stop_patience": early_stop_patience,
+        "disable_early_stopping": disable_early_stopping,
+        "use_interactions": use_interactions,
     }
     (output_path / "config.json").write_text(json.dumps(run_config, indent=2), encoding="utf-8")
+
+    # Helper: subsample test_df for intermediate iterations to save scoring time
+    def _get_test_df(iteration: int, final_iteration: int) -> pd.DataFrame:
+        if intermediate_test_samples and iteration < final_iteration and len(test_df) > intermediate_test_samples:
+            _iter_log(
+                f"[Autometrics][Iterative] Subsampling test set: {intermediate_test_samples}/{len(test_df)} rows (intermediate iteration {iteration})",
+                verbose_only=False,
+                verbose=verbose,
+            )
+            stratify_test = test_df[label_column] if test_df[label_column].nunique() > 1 else None
+            if stratify_test is not None:
+                sampled, _ = train_test_split(
+                    test_df, train_size=intermediate_test_samples, random_state=seed, stratify=stratify_test,
+                )
+                return sampled
+            return test_df.sample(n=intermediate_test_samples, random_state=seed)
+        return test_df
+
+    final_iteration = num_iterations - 1
 
     proposer = ContrastiveRubricProposer(generator_llm=generator_llm, seed=seed, scoring_backend=scoring_backend)
     lifecycle = MetricLifecycleTracker()
@@ -818,9 +1204,16 @@ def run_iterative(
     metric_bank: Dict[str, MetricSpec] = {}
     active_metric_ids: List[str] = []
     coef_records: List[Dict[str, Any]] = []
+    cumulative_train_ids: set[str] = set()
+    dropped_metrics_log: List[str] = []
     no_new_metrics_iters = 0
     eval_plateau_iters = 0
     last_eval_gate_score = None
+    # Interaction tracking: {col_name: (metric_a_name, metric_b_name, coef, description)}
+    active_interactions: Dict[str, Tuple[str, str, float, str]] = {}
+    # Reasoning chain: list of (iteration, reasoning_text, metric_names_proposed)
+    iteration_reasonings: List[Tuple[int, str, List[str]]] = []
+    prev_iteration_reasoning: Optional[str] = None
 
     def build_dataset_from_frame(df: pd.DataFrame, metric_specs: List[MetricSpec], name: str) -> Dataset:
         metric_columns = [m.name for m in metric_specs]
@@ -842,9 +1235,19 @@ def run_iterative(
         df_frame: pd.DataFrame,
         metric_specs: List[MetricSpec],
         name: str,
+        interaction_names: Optional[List[str]] = None,
     ) -> LogisticL1:
         ds = build_dataset_from_frame(df_frame, metric_specs, name=name)
-        model = LogisticL1(dataset=ds, input_metrics=[m.metric for m in metric_specs])
+        if use_interactions and len(metric_specs) >= 2:
+            base_names = [m.name for m in metric_specs]
+            model = LogisticL1WithInteractions(
+                base_feature_names=base_names,
+                interaction_feature_names=interaction_names,
+                dataset=ds,
+                input_metrics=[m.metric for m in metric_specs],
+            )
+        else:
+            model = LogisticL1(dataset=ds, input_metrics=[m.metric for m in metric_specs])
         model.learn(ds, target_column=label_column)
         return model
 
@@ -854,6 +1257,53 @@ def run_iterative(
 
     def current_metric_specs() -> List[MetricSpec]:
         return [metric_bank[mid] for mid in active_metric_ids]
+
+    def _extract_coefs_and_interactions(
+        model: LogisticL1,
+        metric_specs: List[MetricSpec],
+        iteration: int,
+    ) -> Tuple[Dict[str, float], Dict[str, Tuple[str, str, float]]]:
+        """Extract base coefficient map and interaction coefficient map from a fitted model."""
+        coef_map = {
+            spec.metric_id: float(coef)
+            for spec, coef in zip(metric_specs, model.model.coef_.reshape(-1)[:len(metric_specs)])
+        }
+        interaction_coef_map: Dict[str, Tuple[str, str, float]] = {}
+        if use_interactions and isinstance(model, LogisticL1WithInteractions):
+            interaction_coef_map = model.get_interaction_coef_map(metric_specs)
+        return coef_map, interaction_coef_map
+
+    def _update_active_interactions(
+        interaction_coef_map: Dict[str, Tuple[str, str, float]],
+        metric_specs: List[MetricSpec],
+    ) -> None:
+        """Name new interactions and update active_interactions dict."""
+        nonlocal active_interactions
+        name_to_spec = {spec.name: spec for spec in metric_specs}
+        new_interactions: Dict[str, Tuple[str, str, float, str]] = {}
+        for col_name, (metric_a_name, metric_b_name, coef) in interaction_coef_map.items():
+            # Reuse existing description if we've already named this interaction
+            if col_name in active_interactions:
+                _, _, _, prev_desc = active_interactions[col_name]
+                new_interactions[col_name] = (metric_a_name, metric_b_name, coef, prev_desc)
+            else:
+                spec_a = name_to_spec.get(metric_a_name)
+                spec_b = name_to_spec.get(metric_b_name)
+                rubric_a = spec_a.rubric_text if spec_a else ""
+                rubric_b = spec_b.rubric_text if spec_b else ""
+                desc = _name_interaction(
+                    metric_a_name, rubric_a,
+                    metric_b_name, rubric_b,
+                    task_description,
+                    scoring_backend=scoring_backend,
+                    generator_llm=generator_llm,
+                )
+                new_interactions[col_name] = (metric_a_name, metric_b_name, coef, desc)
+                _iter_log(
+                    f"[Autometrics][Iterative] Named interaction: {col_name} -> {desc}",
+                    verbose_only=False, verbose=verbose,
+                )
+        active_interactions = new_interactions
 
     # Iteration 0: contrastive init
     positives = train_df[train_df[label_column] == 1]
@@ -918,6 +1368,7 @@ def run_iterative(
                 prior_candidate_summaries.append(f"- {name}: {short_rubric}")
             if not rubric_text:
                 dropped_empty += 1
+                dropped_metrics_log.append(f"DROPPED (empty rubric, iter 0): {name}")
                 if verbose:
                     _iter_log(
                         f"[Autometrics][Iterative] Dropped candidate (empty rubric): {name}",
@@ -928,6 +1379,7 @@ def run_iterative(
             metric_id = _metric_id_from_rubric(rubric_text)
             if metric_id in metric_bank:
                 dropped_dupe += 1
+                dropped_metrics_log.append(f"DROPPED (duplicate rubric, iter 0): {name}")
                 if verbose:
                     _iter_log(
                         f"[Autometrics][Iterative] Dropped candidate (duplicate rubric): {name}",
@@ -971,12 +1423,21 @@ def run_iterative(
         scoring_backend=scoring_backend,
         )
     selection_model = fit_regression(eval_sel_frame, candidate_specs, name="eval_selection_full")
-    selection_coef_map = {
-        spec.metric_id: float(coef) for spec, coef in zip(candidate_specs, selection_model.model.coef_.reshape(-1))
-    }
+    selection_coef_map, selection_interaction_map = _extract_coefs_and_interactions(
+        selection_model, candidate_specs, iteration=0,
+    )
     lifecycle.record_coefficients(0, selection_coef_map)
+    if selection_interaction_map:
+        _update_active_interactions(selection_interaction_map, candidate_specs)
 
-    active_metric_ids = _select_active_metric_ids(candidate_specs, selection_coef_map)
+    active_metric_ids = _select_active_metric_ids(
+        candidate_specs, selection_coef_map, selection_interaction_map,
+    )
+    for spec in candidate_specs:
+        if spec.metric_id not in active_metric_ids:
+            dropped_metrics_log.append(
+                f"DROPPED (zero coefficient, iter 0): {spec.name} - {spec.rubric_text[:100]}"
+            )
     active_specs = current_metric_specs()
     _iter_log(
         f"[Autometrics][Iterative] Iteration 0 selected {len(active_metric_ids)} active metrics after regression",
@@ -1024,8 +1485,9 @@ def run_iterative(
     )
     _log_coefficients(coef_records, 0, candidate_specs, selection_coef_map)
 
+    iter0_test_df = _get_test_df(0, final_iteration)
     test_frame = _build_feature_frame(
-        test_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+        iter0_test_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
         verbose=verbose, stage="test_0",
         score_all_metrics_together=score_all_metrics_together,
         judge_llm=judge_llm,
@@ -1070,7 +1532,9 @@ def run_iterative(
         "test": test_metrics,
         "accepted": True,
         "num_active_metrics": len(active_metric_ids),
-        "train_assessed": {"n": 0, "correct": 0, "accuracy": float("nan")},
+        "num_active_interactions": len(active_interactions),
+        "active_interactions": {k: {"a": v[0], "b": v[1], "coef": v[2], "desc": v[3]} for k, v in active_interactions.items()},
+        "train_assessed": {"n": len(seed_pairs) * 2, "correct": 0, "accuracy": float("nan"), "note": "seed pairs, no model scoring"},
         "mismatch_stats": {"method": "seed", "pairs": len(seed_pairs), "points": len(seed_pairs) * 2},
         "data_sizes": {
             "eval_selection": len(eval_sel_frame_active),
@@ -1097,74 +1561,210 @@ def run_iterative(
             verbose=verbose,
         )
 
-        # Lazy label training data until enough matches/hard examples
-        labeled_ids = None
-        unlabeled_ids = set(train_df[id_column].astype(str).tolist())
-        while True:
-            if labeled_ids is None:
-                labeled_ids = set.intersection(
-                    *[label_cache.available_ids(spec.metric_id) for spec in active_specs]
-                ) if active_specs else set()
-            else:
-                labeled_ids = set.intersection(
-                    labeled_ids, *[label_cache.available_ids(spec.metric_id) for spec in active_specs]
-                ) if active_specs else labeled_ids
+        # ── Exact-match-driven pool growth ──
+        # Strategy: keep labeling fresh batches of training data as long as
+        # exact matches (identical rounded metric scores, different labels)
+        # can be found.  Only fall back to near-exact / propensity once exact
+        # matches are exhausted.
+        all_train_ids = set(train_df[id_column].astype(str).tolist())
+        feature_columns = [spec.name for spec in active_specs]
+        _bff_kwargs = dict(
+            label_cache=label_cache, id_column=id_column, text_column=text_column,
+            label_column=label_column, batch_size=label_batch_size, verbose=verbose,
+            score_all_metrics_together=score_all_metrics_together,
+            judge_llm=judge_llm, task_description=task_description,
+            use_tqdm=tqdm_scoring, llm_parallelism=llm_parallelism,
+            scoring_backend=scoring_backend,
+        )
 
-            unlabeled_ids = set(train_df[id_column].astype(str).tolist()) - labeled_ids
-            candidate_df = train_df[train_df[id_column].astype(str).isin(labeled_ids)]
-
-            if len(candidate_df) >= 2 * k_pairs:
-                break
-            if not unlabeled_ids:
-                break
-            batch_ids = list(unlabeled_ids)[:label_batch_size]
-            batch_df = train_df[train_df[id_column].astype(str).isin(batch_ids)]
-            _ = _build_feature_frame(
-                batch_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
-                verbose=verbose, stage="train_label_batch",
-                score_all_metrics_together=score_all_metrics_together,
-                judge_llm=judge_llm,
-                task_description=task_description,
-                use_tqdm=tqdm_scoring,
-                llm_parallelism=llm_parallelism,
-                scoring_backend=scoring_backend,
+        # Re-score existing cumulative pool with current active metrics
+        # (_build_feature_frame only scores IDs missing for new metrics via cache)
+        if cumulative_train_ids:
+            rescore_ids = cumulative_train_ids & all_train_ids
+            if rescore_ids:
+                rescore_df = train_df[train_df[id_column].astype(str).isin(rescore_ids)]
+                _iter_log(
+                    f"[Autometrics][Iterative] Iteration {iteration} re-scoring cumulative pool: "
+                    f"{len(rescore_df)} samples with {len(active_specs)} active metrics",
+                    verbose_only=False, verbose=verbose,
                 )
-            labeled_ids.update(batch_ids)
+                _ = _build_feature_frame(
+                    rescore_df, active_specs, stage=f"train_rescore_{iteration}", **_bff_kwargs,
+                )
+
+        # Growth loop: label batches until exact matches stop improving
+        prev_exact_count = -1
+        max_growth_rounds = 50
+        for growth_round in range(max_growth_rounds):
+            # Ensure we have at least one batch labeled
+            if not cumulative_train_ids:
+                fresh_ids = list(all_train_ids)
+                random.shuffle(fresh_ids)
+                batch_ids = fresh_ids[:label_batch_size]
+                batch_df = train_df[train_df[id_column].astype(str).isin(batch_ids)]
+                _iter_log(
+                    f"[Autometrics][Iterative] Iteration {iteration} labeling initial batch of {len(batch_df)} samples",
+                    verbose_only=False, verbose=verbose,
+                )
+                _ = _build_feature_frame(
+                    batch_df, active_specs, stage=f"train_growth_{iteration}_{growth_round}", **_bff_kwargs,
+                )
+                cumulative_train_ids.update(batch_ids)
+
+            # Get fully labeled pool (intersection of caches for all active metrics)
+            labeled_ids = (set.intersection(
+                *[label_cache.available_ids(spec.metric_id) for spec in active_specs]
+            ) & all_train_ids) if active_specs else set()
+
+            if len(labeled_ids) < 2:
+                # Need more data to even try matching
+                fresh_ids = list(all_train_ids - cumulative_train_ids)
+                if not fresh_ids:
+                    break
+                random.shuffle(fresh_ids)
+                batch_ids = fresh_ids[:label_batch_size]
+                batch_df = train_df[train_df[id_column].astype(str).isin(batch_ids)]
+                _ = _build_feature_frame(
+                    batch_df, active_specs, stage=f"train_growth_{iteration}_{growth_round}", **_bff_kwargs,
+                )
+                cumulative_train_ids.update(batch_ids)
+                continue
+
+            # Build candidate frame and try exact-only matching
+            candidate_df = train_df[train_df[id_column].astype(str).isin(labeled_ids)]
+            candidate_frame_tmp = _build_feature_frame(
+                candidate_df, active_specs, stage=f"train_growth_check_{iteration}_{growth_round}", **_bff_kwargs,
+            )
+            exact_pairs = exact_match(
+                candidate_frame_tmp, id_column, label_column, feature_columns,
+                1, k_pairs, seen_pairs, exact_only=True,
+            )
+            current_exact_count = len(exact_pairs)
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} pool growth round {growth_round}: "
+                f"{current_exact_count} exact matches from {len(labeled_ids)} labeled samples",
+                verbose_only=False, verbose=verbose,
+            )
+
+            if current_exact_count >= k_pairs:
+                _iter_log(
+                    f"[Autometrics][Iterative] Iteration {iteration} pool growth complete: "
+                    f"found {current_exact_count} >= {k_pairs} exact matches",
+                    verbose_only=False, verbose=verbose,
+                )
+                break
+
+            if growth_round > 0 and current_exact_count <= prev_exact_count:
+                _iter_log(
+                    f"[Autometrics][Iterative] Iteration {iteration} pool growth exhausted: "
+                    f"no new exact matches from last batch ({current_exact_count} <= {prev_exact_count})",
+                    verbose_only=False, verbose=verbose,
+                )
+                break
+
+            prev_exact_count = current_exact_count
+
+            # Label a fresh batch to grow the pool
+            fresh_ids = list(all_train_ids - cumulative_train_ids)
+            if not fresh_ids:
+                _iter_log(
+                    f"[Autometrics][Iterative] Iteration {iteration} pool growth complete: no more unlabeled data",
+                    verbose_only=False, verbose=verbose,
+                )
+                break
+
+            random.shuffle(fresh_ids)
+            batch_ids = fresh_ids[:label_batch_size]
+            batch_df = train_df[train_df[id_column].astype(str).isin(batch_ids)]
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} labeling {len(batch_df)} fresh samples "
+                f"(growth round {growth_round})",
+                verbose_only=False, verbose=verbose,
+            )
+            _ = _build_feature_frame(
+                batch_df, active_specs, stage=f"train_growth_{iteration}_{growth_round}", **_bff_kwargs,
+            )
+            cumulative_train_ids.update(batch_ids)
+        else:
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} pool growth hit safety limit ({max_growth_rounds} rounds)",
+                verbose_only=False, verbose=verbose,
+            )
+
+        # ── Final candidate frame from full labeled pool ──
+        labeled_ids = (set.intersection(
+            *[label_cache.available_ids(spec.metric_id) for spec in active_specs]
+        ) & all_train_ids) if active_specs else set()
 
         if not labeled_ids:
             _iter_log(
                 f"[Autometrics][Iterative] Iteration {iteration} stopping: no labeled data for matching.",
-                verbose_only=False,
-                verbose=verbose,
+                verbose_only=False, verbose=verbose,
             )
             break
 
+        _iter_log(
+            f"[Autometrics][Iterative] Iteration {iteration} cumulative training pool: "
+            f"{len(cumulative_train_ids)} total, {len(labeled_ids)} fully labeled for {len(active_specs)} metrics",
+            verbose_only=False, verbose=verbose,
+        )
+
         candidate_df = train_df[train_df[id_column].astype(str).isin(labeled_ids)]
         candidate_frame = _build_feature_frame(
-            candidate_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
-            verbose=verbose, stage="train_candidate",
-            score_all_metrics_together=score_all_metrics_together,
-            judge_llm=judge_llm,
-            task_description=task_description,
-            use_tqdm=tqdm_scoring,
-            llm_parallelism=llm_parallelism,
-            scoring_backend=scoring_backend,
-            )
+            candidate_df, active_specs, stage=f"train_candidate_{iteration}", **_bff_kwargs,
+        )
         train_probs = compute_probabilities(model, candidate_frame, active_specs, name="train")
         candidate_frame = candidate_frame.copy()
         candidate_frame["prob"] = train_probs
         train_assessed = _compute_train_assessment(candidate_frame, label_column, train_probs)
+        train_assessed["cumulative_pool_size"] = len(cumulative_train_ids)
 
-        pairs = propensity_match(
-            candidate_frame, id_column, label_column, "prob", 1, k_pairs, caliper, seen_pairs
+        # ── Pair selection: exact (full) -> propensity -> residual ──
+        pairs = exact_match(
+            candidate_frame, id_column, label_column, feature_columns, 1, k_pairs, seen_pairs
         )
         _iter_log(
-            f"[Autometrics][Iterative] Iteration {iteration} propensity pairs found: {len(pairs)}",
-            verbose_only=True,
-            verbose=verbose,
+            f"[Autometrics][Iterative] Iteration {iteration} exact-match pairs: {len(pairs)} (incl. near-exact)",
+            verbose_only=False, verbose=verbose,
         )
+        used_method = "exact"
 
-        used_method = "matching"
+        if len(pairs) < k_pairs:
+            # Update seen_pairs with exact matches before Mahalanobis
+            mahal_seen = set(seen_pairs)
+            for pid, nid, _ in pairs:
+                mahal_seen.add(normalize_pair_id(pid, nid))
+            mahal_pairs = mahalanobis_match(
+                candidate_frame, id_column, label_column, feature_columns, 1,
+                k_pairs - len(pairs), mahal_seen,
+                prob_column="prob", propensity_caliper=caliper,
+            )
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} mahalanobis pairs: {len(mahal_pairs)} "
+                f"(supplementing {len(pairs)} exact)",
+                verbose_only=False, verbose=verbose,
+            )
+            if mahal_pairs:
+                used_method = "exact+mahalanobis" if pairs else "mahalanobis"
+            pairs.extend(mahal_pairs)
+
+        if len(pairs) < k_pairs:
+            # Update seen_pairs with matches so far before propensity
+            prop_seen = set(seen_pairs)
+            for pid, nid, _ in pairs:
+                prop_seen.add(normalize_pair_id(pid, nid))
+            propensity_pairs = propensity_match(
+                candidate_frame, id_column, label_column, "prob", 1, k_pairs - len(pairs), caliper, prop_seen
+            )
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} propensity pairs: {len(propensity_pairs)} "
+                f"(supplementing {len(pairs)} exact+mahalanobis)",
+                verbose_only=False, verbose=verbose,
+            )
+            if propensity_pairs:
+                used_method = used_method + "+propensity" if "exact" in used_method or "mahalanobis" in used_method else "propensity"
+            pairs.extend(propensity_pairs)
+
         hard_pos: List[str] = []
         hard_neg: List[str] = []
         if residual_only or (not matching_only and len(pairs) < k_pairs):
@@ -1180,8 +1780,9 @@ def run_iterative(
             )
             break
 
+        is_pair_method = used_method != "residual"
         mismatch_points = 0
-        if used_method == "matching":
+        if is_pair_method:
             mismatch_points = len(set([p[0] for p in pairs] + [p[1] for p in pairs]))
         else:
             mismatch_points = len(set(hard_pos + hard_neg))
@@ -1191,9 +1792,9 @@ def run_iterative(
             "points": mismatch_points,
         }
 
-        if used_method == "matching" and len(pairs) < k_pairs:
+        if is_pair_method and len(pairs) < k_pairs:
             _iter_log(
-                f"[Autometrics][Iterative] Iteration {iteration} stopping: insufficient matched pairs under caliper.",
+                f"[Autometrics][Iterative] Iteration {iteration} stopping: insufficient matched pairs.",
                 verbose_only=False,
                 verbose=verbose,
             )
@@ -1206,22 +1807,61 @@ def run_iterative(
             )
             break
 
+        # Variable pair sampling + token-based text budget
+        # Budget: ~8k tokens ≈ ~32k chars for contrastive text.
+        # Each iteration, randomly vary how many pairs we show the proposer
+        # (more pairs = less text each, fewer pairs = more text each).
+        CHARS_PER_TOKEN = 4
+        contrastive_token_budget = 8000
+        contrastive_char_budget = contrastive_token_budget * CHARS_PER_TOKEN
+        overhead_per_pair = 300  # score dicts, IDs, labels, formatting
+
+        available_pairs = pairs if is_pair_method else list(zip(hard_pos, hard_neg, [0.0] * min(len(hard_pos), len(hard_neg))))
+        n_available = len(available_pairs) if is_pair_method else min(len(hard_pos), len(hard_neg), k_pairs)
+        if n_available > 0:
+            # Randomly sample how many pairs to show (between 2 and n_available)
+            n_show = random.randint(min(2, n_available), n_available)
+            per_text_chars = max(500, (contrastive_char_budget - n_show * overhead_per_pair) // max(1, n_show * 2))
+        else:
+            n_show = 0
+            per_text_chars = 1500
+
         pair_records: List[str] = []
         contrastive_text = []
-        if used_method == "matching":
-            for pos_id, neg_id, diff in pairs:
+        if is_pair_method:
+            # Sample which pairs to show (all go into pair_records, but only n_show get text)
+            show_indices = set(random.sample(range(len(pairs)), min(n_show, len(pairs)))) if pairs else set()
+            for pair_idx, (pos_id, neg_id, diff) in enumerate(pairs):
                 pair_key = normalize_pair_id(pos_id, neg_id)
                 seen_pairs.add(pair_key)
                 pair_id = "|".join(pair_key)
                 pair_records.append(pair_id)
-                pos_row = train_df[train_df[id_column].astype(str) == pos_id].iloc[0]
-                neg_row = train_df[train_df[id_column].astype(str) == neg_id].iloc[0]
-                pos_scores = candidate_frame[candidate_frame[id_column].astype(str) == pos_id][[m.name for m in active_specs]].iloc[0].to_dict()
-                neg_scores = candidate_frame[candidate_frame[id_column].astype(str) == neg_id][[m.name for m in active_specs]].iloc[0].to_dict()
+                if pair_idx not in show_indices:
+                    continue  # registered but not shown to proposer
+                pos_matches = train_df[train_df[id_column].astype(str) == str(pos_id)]
+                neg_matches = train_df[train_df[id_column].astype(str) == str(neg_id)]
+                if pos_matches.empty or neg_matches.empty:
+                    _iter_log(
+                        f"[Autometrics][Iterative] Warning: pair {pair_id} ID not found in train_df (pos_empty={pos_matches.empty}, neg_empty={neg_matches.empty})",
+                        verbose_only=False, verbose=verbose,
+                    )
+                    continue
+                pos_row = pos_matches.iloc[0]
+                neg_row = neg_matches.iloc[0]
+                pos_score_matches = candidate_frame[candidate_frame[id_column].astype(str) == str(pos_id)]
+                neg_score_matches = candidate_frame[candidate_frame[id_column].astype(str) == str(neg_id)]
+                if pos_score_matches.empty or neg_score_matches.empty:
+                    _iter_log(
+                        f"[Autometrics][Iterative] Warning: pair {pair_id} ID not found in candidate_frame (pos_empty={pos_score_matches.empty}, neg_empty={neg_score_matches.empty})",
+                        verbose_only=False, verbose=verbose,
+                    )
+                    continue
+                pos_scores = pos_score_matches[[m.name for m in active_specs]].iloc[0].to_dict()
+                neg_scores = neg_score_matches[[m.name for m in active_specs]].iloc[0].to_dict()
                 contrastive_text.append(
                     "PAIR\n"
-                    f"POS id={pos_id} scores={pos_scores}\n{_truncate_text(str(pos_row[text_column]))}\n\n"
-                    f"NEG id={neg_id} scores={neg_scores}\n{_truncate_text(str(neg_row[text_column]))}"
+                    f"POS id={pos_id} scores={pos_scores}\n{_truncate_text(str(pos_row[text_column]), max_chars=per_text_chars)}\n\n"
+                    f"NEG id={neg_id} scores={neg_scores}\n{_truncate_text(str(neg_row[text_column]), max_chars=per_text_chars)}"
                 )
         else:
             used_pairs = 0
@@ -1233,14 +1873,32 @@ def run_iterative(
                     seen_pairs.add(pair_key)
                     pair_id = "|".join(pair_key)
                     pair_records.append(pair_id)
-                    pos_row = train_df[train_df[id_column].astype(str) == pos_id].iloc[0]
-                    neg_row = train_df[train_df[id_column].astype(str) == neg_id].iloc[0]
-                    pos_scores = candidate_frame[candidate_frame[id_column].astype(str) == pos_id][[m.name for m in active_specs]].iloc[0].to_dict()
-                    neg_scores = candidate_frame[candidate_frame[id_column].astype(str) == neg_id][[m.name for m in active_specs]].iloc[0].to_dict()
+                    pos_matches = train_df[train_df[id_column].astype(str) == str(pos_id)]
+                    neg_matches = train_df[train_df[id_column].astype(str) == str(neg_id)]
+                    if pos_matches.empty or neg_matches.empty:
+                        _iter_log(
+                            f"[Autometrics][Iterative] Warning: residual pair {pair_id} ID not found in train_df",
+                            verbose_only=False, verbose=verbose,
+                        )
+                        used_pairs += 1
+                        break
+                    pos_row = pos_matches.iloc[0]
+                    neg_row = neg_matches.iloc[0]
+                    pos_score_matches = candidate_frame[candidate_frame[id_column].astype(str) == str(pos_id)]
+                    neg_score_matches = candidate_frame[candidate_frame[id_column].astype(str) == str(neg_id)]
+                    if pos_score_matches.empty or neg_score_matches.empty:
+                        _iter_log(
+                            f"[Autometrics][Iterative] Warning: residual pair {pair_id} ID not found in candidate_frame",
+                            verbose_only=False, verbose=verbose,
+                        )
+                        used_pairs += 1
+                        break
+                    pos_scores = pos_score_matches[[m.name for m in active_specs]].iloc[0].to_dict()
+                    neg_scores = neg_score_matches[[m.name for m in active_specs]].iloc[0].to_dict()
                     contrastive_text.append(
                         "HARD EXAMPLES\n"
-                        f"POS id={pos_id} scores={pos_scores}\n{_truncate_text(str(pos_row[text_column]))}\n\n"
-                        f"NEG id={neg_id} scores={neg_scores}\n{_truncate_text(str(neg_row[text_column]))}"
+                        f"POS id={pos_id} scores={pos_scores}\n{_truncate_text(str(pos_row[text_column]), max_chars=per_text_chars)}\n\n"
+                        f"NEG id={neg_id} scores={neg_scores}\n{_truncate_text(str(neg_row[text_column]), max_chars=per_text_chars)}"
                     )
                     used_pairs += 1
                     break
@@ -1255,15 +1913,145 @@ def run_iterative(
             )
             break
 
-        current_metrics_text = "\n\n".join([f"{m.name}\n{m.rubric_text}" for m in active_specs])
+        _iter_log(
+            f"[Autometrics][Iterative] Iteration {iteration} contrastive context: "
+            f"showing {len(contrastive_text)} of {len(pair_records)} pairs, "
+            f"{per_text_chars} chars/text (~{per_text_chars // CHARS_PER_TOKEN} tokens/text)",
+            verbose_only=False, verbose=verbose,
+        )
+
+        # ── Build enriched context for the proposer ──
+
+        # Condensed metric summaries (1-2 sentences each, not full rubrics)
+        active_metric_summaries = [_condense_metric_description(s) for s in active_specs]
+
+        # Metric performance statistics from scored training data
+        stats_section = ""
+        if candidate_frame is not None and len(active_specs) > 0:
+            stats_coef_map = {}
+            if model is not None and hasattr(model, 'model') and hasattr(model.model, 'coef_'):
+                stats_coef_map = {
+                    spec.metric_id: float(coef)
+                    for spec, coef in zip(active_specs, model.model.coef_.reshape(-1)[:len(active_specs)])
+                }
+            stats_section = _compute_metric_stats(
+                candidate_frame, active_specs, label_column, coef_map=stats_coef_map,
+            )
+
+        # Build misclassified examples text for reasoning (up to 5 examples)
+        misclassified_text = ""
+        if candidate_frame is not None and "prob" in candidate_frame.columns:
+            preds = (candidate_frame["prob"].values >= 0.5).astype(int)
+            actuals = candidate_frame[label_column].values.astype(int)
+            wrong_mask = preds != actuals
+            wrong_df = candidate_frame[wrong_mask]
+            if len(wrong_df) > 0:
+                sample_wrong = wrong_df.sample(n=min(5, len(wrong_df)), random_state=seed)
+                wrong_lines = []
+                for _, row in sample_wrong.iterrows():
+                    pred_label = int(row["prob"] >= 0.5)
+                    wrong_lines.append(
+                        f"[id={row[id_column]} true_label={int(row[label_column])} "
+                        f"predicted={pred_label}]\n{_truncate_text(str(row[text_column]), max_chars=500)}"
+                    )
+                misclassified_text = "\n\n".join(wrong_lines)
+
+        # ── Iteration reasoning chain ──
+        # Step 1: Generate per-iteration reasoning (before proposing metrics)
+        prev_metrics_proposed = None
+        if iteration_reasonings:
+            prev_metrics_proposed = iteration_reasonings[-1][2]
+
+        iteration_reasoning = _generate_iteration_reasoning(
+            scoring_backend=scoring_backend,
+            generator_llm=generator_llm,
+            task_description=task_description,
+            iteration=iteration,
+            contrastive_text=contrastive_text,
+            active_metric_summaries=active_metric_summaries,
+            prev_reasoning=prev_iteration_reasoning,
+            prev_metrics_proposed=prev_metrics_proposed,
+            misclassified_examples=misclassified_text if iteration > 1 else None,
+        )
+        if iteration_reasoning:
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} reasoning: {iteration_reasoning[:200]}...",
+                verbose_only=False, verbose=verbose,
+            )
+
+        # Step 2: Generate trajectory summary (aggregates all prior reasonings)
+        trajectory_section = ""
+        if iteration > 1 and iteration_reasonings:
+            trajectory_summary = _generate_trajectory_summary(
+                scoring_backend, generator_llm, iteration_reasonings,
+            )
+            if trajectory_summary:
+                trajectory_section = (
+                    "\n\n--- TRAJECTORY SUMMARY (what we've tried so far) ---\n"
+                    f"{trajectory_summary}\n"
+                    "--- END TRAJECTORY SUMMARY ---\n"
+                )
+                _iter_log(
+                    f"[Autometrics][Iterative] Iteration {iteration} trajectory: {trajectory_summary[:200]}...",
+                    verbose_only=False, verbose=verbose,
+                )
+
+        # Dropped metrics history (so proposer avoids similar themes)
+        dropped_section = ""
+        if dropped_metrics_log:
+            recent_dropped = dropped_metrics_log[-20:]
+            dropped_section = (
+                "\n\n--- PREVIOUSLY DROPPED METRICS (do NOT re-propose similar themes) ---\n"
+                + "\n".join(recent_dropped)
+            )
+
+        # Build interaction section for the proposer
+        interaction_section = ""
+        if active_interactions:
+            interaction_lines = []
+            for col_name, (m_a, m_b, coef, desc) in active_interactions.items():
+                interaction_lines.append(
+                    f"- {m_a} × {m_b} (coef={coef:.3f}): {desc}"
+                )
+            interaction_section = (
+                "\n\n--- ACTIVE INTERACTION TERMS (combinations found to be meaningful) ---\n"
+                "The following pairwise metric interactions were found to have significant "
+                "predictive power. Avoid proposing metrics that duplicate what these "
+                "interactions already capture, either individually or in combination.\n"
+                + "\n".join(interaction_lines)
+            )
+
+        # Assemble current_metrics_text with condensed descriptions (not full rubrics)
+        metrics_list_text = "\n".join(active_metric_summaries) if active_metric_summaries else ""
+        current_metrics_text = trajectory_section + metrics_list_text
+        current_metrics_text += stats_section + interaction_section + dropped_section
+
+        # Build iteration-aware task description with reasoning context
+        iter_task_description = task_description
+        if iteration_reasoning:
+            reasoning_section = (
+                f"\n\n--- REASONING FOR THIS ITERATION (iteration {iteration}) ---\n"
+                f"{iteration_reasoning}\n"
+                "--- END REASONING ---\n\n"
+                "Use the above reasoning to guide your metric proposals. Focus on the "
+                "specific patterns and dimensions identified."
+            )
+            iter_task_description += reasoning_section
+        if iteration >= 2:
+            iter_task_description += (
+                f"\n\nThis is iteration {iteration}. Focus on genuinely NEW dimensions "
+                "identified in the reasoning above that current metrics do NOT capture."
+            )
+
         new_specs: List[MetricSpec] = []
         dropped_empty = 0
         dropped_dupe = 0
         dropped_llm = 0
+        dropped_critique = 0
         attempt = 0
         while attempt < max_candidate_attempts and len(new_specs) < min_unique:
             candidate_defs = proposer.propose(
-                task_description=task_description,
+                task_description=iter_task_description,
                 positive_examples="",
                 negative_examples="",
                 current_metrics=current_metrics_text or "None",
@@ -1278,6 +2066,34 @@ def run_iterative(
                 verbose=verbose,
             )
 
+            # Self-critique: filter superficial metrics before dedup
+            if candidate_defs:
+                critique_results = _self_critique_candidates(
+                    candidate_defs, task_description, generator_llm, scoring_backend,
+                )
+                filtered_defs = []
+                for cand, verdict in critique_results:
+                    if "superficial" in verdict.lower():
+                        dropped_critique += 1
+                        cand_name = cand.get("name", "Metric")
+                        cand_rubric_raw = cand.get("rubric", {})
+                        cand_rubric_preview = _truncate_text(
+                            _rubric_to_text(_normalize_rubric(cand_rubric_raw, str(cand.get("scale", "ordinal")))),
+                            max_chars=200,
+                        ) if cand_rubric_raw else ""
+                        dropped_metrics_log.append(
+                            f"DROPPED (self-critique: superficial, iter {iteration}): "
+                            f"{cand_name} — {verdict.strip()}"
+                            + (f"\n  Rubric: {cand_rubric_preview}" if cand_rubric_preview else "")
+                        )
+                        _iter_log(
+                            f"[Autometrics][Iterative] Self-critique filtered: {cand_name} -- {verdict}",
+                            verbose_only=False, verbose=verbose,
+                        )
+                    else:
+                        filtered_defs.append(cand)
+                candidate_defs = filtered_defs
+
             for cand in candidate_defs:
                 name = cand.get("name") or "Metric"
                 scale = str(cand.get("scale") or "ordinal").lower()
@@ -1285,6 +2101,7 @@ def run_iterative(
                 rubric_text = _rubric_to_text(rubric)
                 if not rubric_text:
                     dropped_empty += 1
+                    dropped_metrics_log.append(f"DROPPED (empty rubric, iter {iteration}): {name}")
                     if verbose:
                         _iter_log(
                             f"[Autometrics][Iterative] Dropped candidate (empty rubric): {name}",
@@ -1295,6 +2112,12 @@ def run_iterative(
                 metric_id = _metric_id_from_rubric(rubric_text)
                 if metric_id in metric_bank:
                     dropped_dupe += 1
+                    rubric_preview = _truncate_text(rubric_text, max_chars=200)
+                    existing_name = metric_bank[metric_id].name
+                    dropped_metrics_log.append(
+                        f"DROPPED (duplicate rubric of '{existing_name}', iter {iteration}): {name}"
+                        f"\n  Rubric: {rubric_preview}"
+                    )
                     if verbose:
                         _iter_log(
                             f"[Autometrics][Iterative] Dropped candidate (duplicate rubric): {name}",
@@ -1315,6 +2138,11 @@ def run_iterative(
                 )
                 if not _llm_dedup(generator_llm, spec, active_specs, scoring_backend=scoring_backend):
                     dropped_llm += 1
+                    rubric_preview = _truncate_text(rubric_text, max_chars=200)
+                    dropped_metrics_log.append(
+                        f"DROPPED (LLM dedup, iter {iteration}): {name}"
+                        f"\n  Rubric: {rubric_preview}"
+                    )
                     if verbose:
                         _iter_log(
                             f"[Autometrics][Iterative] Dropped candidate (LLM dedup): {name}",
@@ -1327,12 +2155,18 @@ def run_iterative(
                 lifecycle.register_metric(spec.metric_id, spec.name, spec.rubric_text, iteration, source_pairs=pair_records)
             attempt += 1
 
+        # Record iteration reasoning for the chain
+        new_metric_names = [s.name for s in new_specs]
+        if iteration_reasoning:
+            iteration_reasonings.append((iteration, iteration_reasoning, new_metric_names))
+            prev_iteration_reasoning = iteration_reasoning
+
         if not new_specs:
             no_new_metrics_iters += 1
             _iter_log(
                 f"[Autometrics][Iterative] Iteration {iteration} no new metrics survived "
                 f"(dropped_empty={dropped_empty}, dropped_duplicate={dropped_dupe}, "
-                f"dropped_llm={dropped_llm}, counter={no_new_metrics_iters})",
+                f"dropped_llm={dropped_llm}, dropped_critique={dropped_critique}, counter={no_new_metrics_iters})",
                 verbose_only=False,
                 verbose=verbose,
             )
@@ -1363,8 +2197,9 @@ def run_iterative(
             eval_gate_metrics = _compute_metrics(eval_gate_frame_active[label_column].values, eval_gate_probs)
             gate_key, gate_value = _gate_metric(eval_gate_metrics)
 
+            iter_test_df = _get_test_df(iteration, final_iteration)
             test_frame = _build_feature_frame(
-                test_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+                iter_test_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
                 verbose=verbose, stage=f"test_{iteration}",
                 score_all_metrics_together=score_all_metrics_together,
                 judge_llm=judge_llm,
@@ -1436,12 +2271,15 @@ def run_iterative(
                 "test": test_metrics,
                 "accepted": False,
                 "num_active_metrics": len(active_metric_ids),
+                "num_active_interactions": len(active_interactions),
+                "active_interactions": {k: {"a": v[0], "b": v[1], "coef": v[2], "desc": v[3]} for k, v in active_interactions.items()},
                 "churn": churn,
                 "churn_warning": churn_warning,
                 "method": used_method,
                 "note": "no_new_metrics",
                 "train_assessed": train_assessed,
                 "mismatch_stats": mismatch_stats,
+                "iteration_reasoning": iteration_reasoning or "",
                 "data_sizes": {
                     "eval_selection": len(eval_sel_frame_active),
                     "eval_gating": len(eval_gate_frame_active),
@@ -1454,9 +2292,9 @@ def run_iterative(
             for pair_id in pair_records:
                 _jsonl_append(output_path / "pairs.jsonl", {"iteration": iteration, "pair_id": pair_id, "method": used_method})
 
-            if no_new_metrics_iters >= 2 or eval_plateau_iters >= 2:
+            if not disable_early_stopping and (no_new_metrics_iters >= early_stop_patience or eval_plateau_iters >= early_stop_patience):
                 _iter_log(
-                    f"[Autometrics][Iterative] Iteration {iteration} stopping: no-new-metrics or eval plateau.",
+                    f"[Autometrics][Iterative] Iteration {iteration} stopping: no-new-metrics ({no_new_metrics_iters}) or eval plateau ({eval_plateau_iters}) hit patience={early_stop_patience}.",
                     verbose_only=False,
                     verbose=verbose,
                 )
@@ -1485,17 +2323,31 @@ def run_iterative(
             scoring_backend=scoring_backend,
             )
 
-        joint_model = fit_regression(eval_sel_frame_joint, joint_specs, name=f"eval_selection_{iteration}")
-        joint_coef_map = {
-            spec.metric_id: float(coef)
-            for spec, coef in zip(joint_specs, joint_model.model.coef_.reshape(-1))
-        }
+        # Only generate interactions among previously-active metrics, not new
+        # candidates.  New metrics must prove themselves via base coefficient
+        # before getting interaction terms.  This prevents quadratic feature
+        # explosion when many candidates are tested at once.
+        prev_active_names = [m.name for m in active_specs]
+        joint_model = fit_regression(
+            eval_sel_frame_joint, joint_specs, name=f"eval_selection_{iteration}",
+            interaction_names=prev_active_names,
+        )
+        joint_coef_map, joint_interaction_map = _extract_coefs_and_interactions(
+            joint_model, joint_specs, iteration=iteration,
+        )
 
         eval_gate_probs = compute_probabilities(joint_model, eval_gate_frame_joint, joint_specs, name=f"eval_gating_{iteration}")
         eval_gate_metrics = _compute_metrics(eval_gate_frame_joint[label_column].values, eval_gate_probs)
         gate_key, gate_value = _gate_metric(eval_gate_metrics)
 
+        # Check if new metrics survived: non-zero direct coef OR participate in non-zero interaction
+        new_metric_names = {spec.name for spec in new_specs}
         new_survived = any(abs(joint_coef_map.get(spec.metric_id, 0.0)) > 1e-6 for spec in new_specs)
+        if not new_survived and joint_interaction_map:
+            for _col, (m_a, m_b, c) in joint_interaction_map.items():
+                if abs(c) > 1e-6 and (m_a in new_metric_names or m_b in new_metric_names):
+                    new_survived = True
+                    break
         accept = new_survived or (prev_gate_score is not None and gate_value > prev_gate_score)
         _iter_log(
             f"[Autometrics][Iterative] Iteration {iteration} accept={accept} new_survived={new_survived} gate={gate_value:.4f}",
@@ -1509,7 +2361,16 @@ def run_iterative(
             no_new_metrics_iters += 1
 
         if accept:
-            active_metric_ids = _select_active_metric_ids(joint_specs, joint_coef_map)
+            active_metric_ids = _select_active_metric_ids(
+                joint_specs, joint_coef_map, joint_interaction_map,
+            )
+            if joint_interaction_map:
+                _update_active_interactions(joint_interaction_map, joint_specs)
+            for spec in joint_specs:
+                if spec.metric_id not in active_metric_ids:
+                    dropped_metrics_log.append(
+                        f"DROPPED (zero coefficient, iter {iteration}): {spec.name} - {spec.rubric_text[:100]}"
+                    )
         else:
             active_metric_ids = prev_active_ids
 
@@ -1561,8 +2422,9 @@ def run_iterative(
         lifecycle.record_coefficients(iteration, joint_coef_map)
         lifecycle.mark_active(iteration, active_metric_ids)
 
+        iter_test_df = _get_test_df(iteration, final_iteration)
         test_frame = _build_feature_frame(
-            test_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+            iter_test_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
             verbose=verbose, stage=f"test_{iteration}",
             score_all_metrics_together=score_all_metrics_together,
             judge_llm=judge_llm,
@@ -1623,11 +2485,14 @@ def run_iterative(
             "test": test_metrics,
             "accepted": accept,
             "num_active_metrics": len(active_metric_ids),
+            "num_active_interactions": len(active_interactions),
+            "active_interactions": {k: {"a": v[0], "b": v[1], "coef": v[2], "desc": v[3]} for k, v in active_interactions.items()},
             "churn": churn,
             "churn_warning": churn_warning,
             "method": used_method,
             "train_assessed": train_assessed,
             "mismatch_stats": mismatch_stats,
+            "iteration_reasoning": iteration_reasoning or "",
             "data_sizes": {
                 "eval_selection": len(eval_sel_frame_active),
                 "eval_gating": len(eval_gate_frame_active),
@@ -1640,9 +2505,9 @@ def run_iterative(
         for pair_id in pair_records:
             _jsonl_append(output_path / "pairs.jsonl", {"iteration": iteration, "pair_id": pair_id, "method": used_method})
 
-        if no_new_metrics_iters >= 2 or eval_plateau_iters >= 2:
+        if not disable_early_stopping and (no_new_metrics_iters >= early_stop_patience or eval_plateau_iters >= early_stop_patience):
             _iter_log(
-                f"[Autometrics][Iterative] Iteration {iteration} stopping: no-new-metrics or eval plateau.",
+                f"[Autometrics][Iterative] Iteration {iteration} stopping: no-new-metrics ({no_new_metrics_iters}) or eval plateau ({eval_plateau_iters}) hit patience={early_stop_patience}.",
                 verbose_only=False,
                 verbose=verbose,
             )
@@ -1661,5 +2526,9 @@ def run_iterative(
         "top_metrics": [metric_bank[mid].metric for mid in active_metric_ids],
         "regression_metric": model,
         "active_metric_ids": active_metric_ids,
+        "active_interactions": {
+            k: {"metric_a": v[0], "metric_b": v[1], "coefficient": v[2], "description": v[3]}
+            for k, v in active_interactions.items()
+        } if active_interactions else {},
         "output_dir": str(output_path),
     }

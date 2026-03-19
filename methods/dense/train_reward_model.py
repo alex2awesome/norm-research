@@ -77,6 +77,11 @@ def parse_args():
         action="store_true",
         help="Use 4-bit quantization (QLoRA). Recommended for 70B.",
     )
+    parser.add_argument(
+        "--gradient-checkpointing",
+        action="store_true",
+        help="Enable gradient checkpointing to reduce GPU memory at the cost of ~30%% slower training.",
+    )
 
     # LoRA
     parser.add_argument("--lora_r", type=int, default=16, help="LoRA rank")
@@ -433,13 +438,19 @@ def build_model(args):
     else:
         logger.info("Running in bf16 without quantization")
 
-    logger.info("Loading base model %s", args.model_name)
+    # When running under FSDP (via accelerate), let FSDP handle device placement.
+    # device_map="auto" conflicts with FSDP sharding.
+    use_fsdp = os.environ.get("ACCELERATE_USE_FSDP", "false").lower() == "true"
+    device_map = None if use_fsdp else "auto"
+
+    logger.info("Loading base model %s (device_map=%s)", args.model_name, device_map)
     model = AutoModelForSequenceClassification.from_pretrained(
         args.model_name,
         num_labels=1,
         torch_dtype=torch.bfloat16,
         quantization_config=quantization_config,
-        device_map="auto",
+        device_map=device_map,
+        low_cpu_mem_usage=True,
         trust_remote_code=True,
     )
     model.config.pad_token_id = tokenizer.pad_token_id
@@ -469,6 +480,12 @@ def build_model(args):
         model.config.pad_token_id = tokenizer.pad_token_id
     if hasattr(model, "base_model") and hasattr(model.base_model, "config"):
         model.base_model.config.pad_token_id = tokenizer.pad_token_id
+
+    if args.gradient_checkpointing:
+        logger.info("Enabling gradient checkpointing")
+        model.enable_input_require_grads()
+        model.gradient_checkpointing_enable()
+
     model.print_trainable_parameters()
 
     return model, tokenizer
@@ -817,6 +834,14 @@ def train(args):
         final_dir,
         log_path,
     )
+
+    # Free GPU memory between Optuna trials
+    del model, optimizer, scheduler, trainable_params
+    import gc
+    gc.collect()
+    torch.cuda.empty_cache()
+    logger.info("GPU memory released after trial cleanup")
+
     return {
         "best_selection_auc": float(best_test_auc),
         "best_epoch": int(best_epoch),
@@ -835,16 +860,28 @@ def _trial_args(args, trial, output_dir: str) -> argparse.Namespace:
     trial_cfg["use_optuna"] = False
     trial_cfg["is_optuna_trial"] = True
     trial_cfg["output_dir"] = output_dir
-    trial_cfg["batch_size"] = trial.suggest_categorical("batch_size", [1, 2, 4, 8])
-    trial_cfg["gradient_accumulation_steps"] = trial.suggest_categorical(
-        "gradient_accumulation_steps", [1, 2, 4, 8, 16]
-    )
-    trial_cfg["max_length"] = trial.suggest_categorical("max_length", [256, 512, 1024, 2048])
+    # For quantized (large) models, lock batch_size=1 to avoid OOM and tune
+    # gradient_accumulation_steps for effective batch size instead.
+    if args.quantize:
+        trial_cfg["batch_size"] = 1
+        trial_cfg["gradient_accumulation_steps"] = trial.suggest_categorical(
+            "gradient_accumulation_steps", [4, 8, 16, 32]
+        )
+        trial_cfg["max_length"] = trial.suggest_categorical("max_length", [256, 512, 1024])
+    else:
+        # Keep batch_size small to avoid OOM; use gradient_accumulation_steps
+        # to control effective batch size instead (equivalent, but constant memory).
+        trial_cfg["batch_size"] = trial.suggest_categorical("batch_size", [1, 2])
+        trial_cfg["gradient_accumulation_steps"] = trial.suggest_categorical(
+            "gradient_accumulation_steps", [2, 4, 8, 16, 32]
+        )
+        trial_cfg["max_length"] = trial.suggest_categorical("max_length", [256, 512, 1024])
     trial_cfg["learning_rate"] = trial.suggest_float("learning_rate", 1e-5, 5e-4, log=True)
     trial_cfg["weight_decay"] = trial.suggest_float("weight_decay", 1e-5, 1e-1, log=True)
     trial_cfg["warmup_ratio"] = trial.suggest_float("warmup_ratio", 0.0, 0.2)
-    trial_cfg["lora_r"] = trial.suggest_categorical("lora_r", [8, 16, 32, 64])
-    trial_cfg["lora_alpha"] = trial.suggest_categorical("lora_alpha", [16, 32, 64, 128])
+    # lora_r beyond 16 rarely helps; keep alpha ~ 2*r as a common heuristic
+    trial_cfg["lora_r"] = trial.suggest_categorical("lora_r", [8, 16, 32])
+    trial_cfg["lora_alpha"] = trial.suggest_categorical("lora_alpha", [16, 32, 64])
     trial_cfg["lora_dropout"] = trial.suggest_float("lora_dropout", 0.0, 0.2)
     module_subsets = _build_lora_target_module_subsets(args.lora_target_modules)
     module_subset_name = trial.suggest_categorical("lora_target_modules_subset", list(module_subsets.keys()))

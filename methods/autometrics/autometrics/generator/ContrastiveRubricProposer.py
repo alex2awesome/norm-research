@@ -12,7 +12,7 @@ logger = logging.getLogger("autometrics.generator.ContrastiveRubricProposer")
 
 
 class ContrastiveRubricSignature(dspy.Signature):
-    """Propose metrics and rubrics that distinguish positive vs negative examples. Each metric must have a DETAILED rubric with specific, descriptive scoring criteria for each level (1-5). The rubric must explain exactly what distinguishes each score level so a human annotator could reliably apply it."""
+    """Propose metrics and rubrics that distinguish positive vs negative examples. Metrics must capture substantive, content-level distinctions (e.g. evidence quality, domain relevance, specificity of claims) rather than surface-level features (e.g. text length, formatting, readability, word choice). Every proposed metric must plausibly distinguish between items a domain expert would rate differently. Each metric must have a DETAILED rubric with specific, descriptive scoring criteria for each level (1-5). The rubric must explain exactly what distinguishes each score level so a human annotator could reliably apply it."""
 
     task_description: str = dspy.InputField(desc="Brief description of the task.")
     positive_examples: str = dspy.InputField(desc="Positive examples (k), formatted for readability.")

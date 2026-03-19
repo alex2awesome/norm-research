@@ -294,8 +294,7 @@ class Autometrics:
         model_save_dir: Optional[str] = None,
         eval_dataset: Optional[Dataset] = None,
         report_output_path: Optional[str] = None,
-        eval_sample_fraction: Optional[float] = None,
-        eval_max_samples: Optional[int] = None,
+        eval_fraction: float = 0.4,
         tqdm_scoring: bool = False,
         llm_parallelism: int = 1,
         scoring_backend: Optional[Any] = None,
@@ -323,8 +322,7 @@ class Autometrics:
             regenerate_metrics: If True, force regeneration of metrics even if files exist
             prometheus_api_base: API base for Prometheus models (required for rubric_prometheus)
             model_save_dir: Directory to save fine-tuned models (defaults to "/finetunes")
-            eval_sample_fraction: Optional fraction to downsample eval split (iterative mode)
-            eval_max_samples: Optional max rows to keep in eval split (iterative mode)
+            eval_fraction: Fraction of combined train+eval to use as eval (iterative mode, default 0.1)
             tqdm_scoring: Enable tqdm progress bars for iterative scoring
             llm_parallelism: Number of parallel LLM calls during iterative scoring
             scoring_backend: Optional ScoringBackend for LLM-as-a-judge calls (e.g. VLLMOfflineBackend)
@@ -355,8 +353,7 @@ class Autometrics:
                 regenerate_metrics=regenerate_metrics,
                 seed=self.seed,
                 verbose=verbose,
-                eval_sample_fraction=eval_sample_fraction,
-                eval_max_samples=eval_max_samples,
+                eval_fraction=eval_fraction,
                 tqdm_scoring=tqdm_scoring,
                 llm_parallelism=llm_parallelism,
                 scoring_backend=scoring_backend,

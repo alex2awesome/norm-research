@@ -59,8 +59,16 @@ class _MultiMetricSignature(dspy.Signature):
     scores_json: str = dspy.OutputField(desc="JSON object mapping metric names to numeric scores (1-5). Example: {\"Clarity\": 4, \"Relevance\": 3}")
 
 
+class _SingleTextMultiMetricSignature(dspy.Signature):
+    """Score the text on multiple metrics at once. For each metric, read its rubric carefully and assign the score (1-5) whose level description best matches the text. Provide brief reasoning for each metric before the scores."""
+    task_description: str = dspy.InputField(desc="Brief description of the underlying task.")
+    rubrics: str = dspy.InputField(desc="Metric names with detailed rubrics. Each metric has score-level descriptions (1-5). Assign the score whose description best matches the text.")
+    text: str = dspy.InputField(desc="The text to evaluate.")
+    scores_json: str = dspy.OutputField(desc="JSON object mapping metric names to numeric scores (1-5). Example: {\"Clarity\": 4, \"Relevance\": 3}")
+
+
 class _GenerateMetricsSignature(dspy.Signature):
-    """Propose metrics and rubrics that distinguish positive vs negative examples. Each metric must have a DETAILED rubric with specific, descriptive scoring criteria for each level (1-5). The rubric must explain exactly what distinguishes each score level so a human annotator could reliably apply it."""
+    """Propose metrics and rubrics that distinguish positive vs negative examples. Metrics must capture substantive, content-level distinctions (e.g. evidence quality, domain relevance, specificity of claims) rather than surface-level features (e.g. text length, formatting, readability, word choice). Every proposed metric must plausibly distinguish between items a domain expert would rate differently. Each metric must have a DETAILED rubric with specific, descriptive scoring criteria for each level (1-5). The rubric must explain exactly what distinguishes each score level so a human annotator could reliably apply it."""
     task_description: str = dspy.InputField(desc="Brief description of the task.")
     positive_examples: str = dspy.InputField(desc="Positive examples (k), formatted for readability.")
     negative_examples: str = dspy.InputField(desc="Negative examples (k), formatted for readability.")
@@ -91,6 +99,17 @@ class _DedupSignature(dspy.Signature):
     verdict: str = dspy.OutputField(desc="Return 'distinct' or 'duplicate: <metric name>'.")
 
 
+class _SelfCritiqueSignature(dspy.Signature):
+    """Critique a proposed evaluation metric. Determine if it is substantive and would meaningfully distinguish between high- and low-quality items based on genuine content differences, NOT surface-level features like text length, formatting, readability, or writing style."""
+    task_description: str = dspy.InputField(desc="Brief description of the task.")
+    metric_name: str = dspy.InputField(desc="Name of the proposed metric.")
+    metric_rubric: str = dspy.InputField(desc="The metric's full rubric description.")
+    verdict: str = dspy.OutputField(
+        desc="Return 'substantive' if the metric captures a genuine content-level "
+             "distinction, or 'superficial: <reason>' if it is surface-level or trivial."
+    )
+
+
 # ── Pre-build extended signatures (ChainOfThought adds reasoning) ──
 
 def _cot_signature(sig_cls: type) -> type:
@@ -102,6 +121,7 @@ def _cot_signature(sig_cls: type) -> type:
 _COT_JUDGE_REF_FREE = _cot_signature(_JudgeSignatureRefFree)
 _COT_JUDGE_REF_BASED = _cot_signature(_JudgeSignatureRefBased)
 _COT_MULTI_METRIC = _cot_signature(_MultiMetricSignature)
+_COT_SINGLE_TEXT_MULTI_METRIC = _cot_signature(_SingleTextMultiMetricSignature)
 _COT_GENERATE_METRICS = _cot_signature(_GenerateMetricsSignature)
 # Dedup uses Predict (no CoT), so no extension needed
 
@@ -297,6 +317,40 @@ class VLLMOfflineBackend:
             results.append(MultiMetricResponse(scores=scores, raw_text=text))
         return results
 
+    def score_single_text_batch(
+        self,
+        task_description: str,
+        rubrics_text: str,
+        metric_names: List[str],
+        texts: List[str],
+    ) -> List[MultiMetricResponse]:
+        """Score texts on multiple metrics — single-text variant.
+
+        Unlike ``score_multi_metric_batch`` which takes separate inputs/outputs
+        (duplicating the text when they are identical), this method includes the
+        text only once in the prompt, nearly halving prompt size.
+        """
+        prompts: List[str] = []
+        for txt in texts:
+            input_dict = {
+                "task_description": _truncate(str(task_description or ""), self.max_prompt_chars),
+                "rubrics": str(rubrics_text or ""),
+                "text": _truncate(str(txt or ""), self.max_prompt_chars),
+            }
+            prompts.append(self._render_prompt(_COT_SINGLE_TEXT_MULTI_METRIC, input_dict))
+
+        vllm_outputs = self.llm.generate(prompts, self.sampling_params)
+
+        results: List[MultiMetricResponse] = []
+        for vout in vllm_outputs:
+            text = vout.outputs[0].text if vout.outputs else ""
+            scores = _parse_multi_metric_from_text(text)
+            for name in metric_names:
+                if name not in scores:
+                    scores[name] = 0.0
+            results.append(MultiMetricResponse(scores=scores, raw_text=text))
+        return results
+
     def generate_metrics(
         self,
         task_description: str,
@@ -313,7 +367,7 @@ class VLLMOfflineBackend:
             "task_description": _truncate(str(task_description or ""), self.max_prompt_chars),
             "positive_examples": _truncate(str(positive_examples or "None"), self.max_prompt_chars),
             "negative_examples": _truncate(str(negative_examples or "None"), self.max_prompt_chars),
-            "current_metrics": str(current_metrics or "None"),
+            "current_metrics": _truncate(str(current_metrics or "None"), self.max_prompt_chars),
             "contrastive_pairs": _truncate(str(contrastive_pairs or "None"), self.max_prompt_chars),
             "num_metrics": int(num_metrics),
             "num_rubrics": int(num_rubrics),
@@ -387,5 +441,29 @@ class VLLMOfflineBackend:
         vllm_outputs = self.llm.generate(prompts, dedup_params)
         return [
             vout.outputs[0].text.strip() if vout.outputs else "distinct"
+            for vout in vllm_outputs
+        ]
+
+    def critique_metrics_batch(
+        self,
+        task_description: str,
+        candidates: List[Dict[str, str]],
+    ) -> List[str]:
+        """Batch self-critique: check if each candidate metric is substantive."""
+        from vllm import SamplingParams  # type: ignore[import-untyped]
+
+        _COT_CRITIQUE = _cot_signature(_SelfCritiqueSignature)
+        prompts = []
+        for cand in candidates:
+            input_dict = {
+                "task_description": _truncate(str(task_description or ""), self.max_prompt_chars),
+                "metric_name": str(cand.get("name", "")),
+                "metric_rubric": str(cand.get("rubric", "")),
+            }
+            prompts.append(self._render_prompt(_COT_CRITIQUE, input_dict))
+        params = SamplingParams(temperature=0, max_tokens=256)
+        vllm_outputs = self.llm.generate(prompts, params)
+        return [
+            vout.outputs[0].text.strip() if vout.outputs else "substantive"
             for vout in vllm_outputs
         ]
