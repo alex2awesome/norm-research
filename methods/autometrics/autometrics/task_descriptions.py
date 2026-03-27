@@ -23,6 +23,19 @@ TASK_DESCRIPTIONS: dict[str, str] = {
         "than surface-level writing features (e.g., clarity, coherence, "
         "readability, word choice, sentence structure, formatting)."
     ),
+    "PeerReviewAcceptance": (
+        "Predict whether a scientific paper will be accepted or rejected at a "
+        "peer-reviewed venue, based on its abstract. An accepted paper typically "
+        "presents a clear and significant contribution — a novel method, "
+        "theoretical result, or empirical finding — supported by rigorous "
+        "methodology and positioned well within the existing literature. "
+        "Metrics should capture substantive research quality signals "
+        "(e.g., novelty and originality of the contribution, strength of "
+        "empirical or theoretical support, clarity of the research question, "
+        "significance of the problem addressed, soundness of methodology, "
+        "positioning relative to prior work) rather than surface-level "
+        "writing features (e.g., grammar, formatting, abstract length)."
+    ),
 }
 
 

@@ -23,6 +23,7 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 
 from autometrics.aggregator.regression.LogisticL1 import LogisticL1, LogisticL1WithInteractions
+from autometrics.aggregator.regression.GatedMLP import GatedInteractionMLP
 from autometrics.dataset.Dataset import Dataset
 from autometrics.generator.ContrastiveRubricProposer import ContrastiveRubricProposer
 from autometrics.metrics.generated.GeneratedLLMJudgeMetric import (
@@ -990,6 +991,30 @@ def _compute_marginal_contributions(
     base_metrics = _compute_metrics(y_true, probs)
     gate_key, base_value = _gate_metric(base_metrics)
 
+    # For GatedMLP: use feature zeroing approach (set feature column to 0, re-predict)
+    if isinstance(model, GatedInteractionMLP):
+        import torch
+        input_columns = model.get_input_columns()
+        X = df[input_columns].replace([np.inf, -np.inf], np.nan).fillna(0).values
+        if model.scaler is not None:
+            X_scaled = model.scaler.transform(X)
+        else:
+            X_scaled = X
+        contribs: Dict[str, float] = {}
+        for idx, spec in enumerate(metric_specs):
+            if idx >= X_scaled.shape[1]:
+                continue
+            X_masked = X_scaled.copy()
+            X_masked[:, idx] = 0.0  # zero out this feature
+            X_t = torch.tensor(X_masked, dtype=torch.float32)
+            with torch.no_grad():
+                logits = model._net(X_t).squeeze(1)
+                masked_probs = torch.sigmoid(logits).cpu().numpy()
+            masked_metrics = _compute_metrics(y_true, masked_probs)
+            _, masked_value = _gate_metric(masked_metrics)
+            contribs[spec.metric_id] = float(base_value - masked_value)
+        return contribs
+
     coef = getattr(model.model, "coef_", None)
     if coef is None:
         return {}
@@ -1064,6 +1089,14 @@ def run_iterative(
     scoring_backend: Optional[Any] = None,
     intermediate_test_samples: Optional[int] = 100,
     use_interactions: bool = True,
+    max_interaction_metrics: int = 8,
+    eval_selection_max: Optional[int] = None,
+    model_type: str = "logistic",  # "logistic" or "gated_mlp"
+    gated_mlp_hidden_dim: int = 64,
+    gated_mlp_lambda_feature: float = 0.1,
+    gated_mlp_lambda_interaction: float = 0.05,
+    gated_mlp_epochs: int = 200,
+    gated_mlp_gate_threshold: float = 0.1,
     verbose: bool = True,
     **kwargs,
 ) -> Dict[str, Any]:
@@ -1091,9 +1124,9 @@ def run_iterative(
         verbose=verbose,
     )
 
-    id_column = _resolve_column(orig_train_df, id_column, "press_release_id")
-    text_column = _resolve_column(orig_train_df, text_column, ["output", "text"])
-    label_column = _resolve_column(orig_train_df, label_column, ["human_score", "judgement"])
+    id_column = _resolve_column(orig_train_df, id_column, None)
+    text_column = _resolve_column(orig_train_df, text_column, None)
+    label_column = _resolve_column(orig_train_df, label_column, None)
 
     # Combine train + eval from on-disk splits, then re-split.
     # Test set stays identical for comparability with other model runs.
@@ -1166,6 +1199,7 @@ def run_iterative(
         "eval_gate_fraction": eval_gate_fraction,
         "eval_fraction": eval_fraction,
         "max_text_tokens": max_text_tokens,
+        "eval_selection_max": eval_selection_max,
         "tqdm_scoring": tqdm_scoring,
         "llm_parallelism": llm_parallelism,
         "seed": seed,
@@ -1238,7 +1272,19 @@ def run_iterative(
         interaction_names: Optional[List[str]] = None,
     ) -> LogisticL1:
         ds = build_dataset_from_frame(df_frame, metric_specs, name=name)
-        if use_interactions and len(metric_specs) >= 2:
+        if model_type == "gated_mlp" and len(metric_specs) >= 2:
+            base_names = [m.name for m in metric_specs]
+            model = GatedInteractionMLP(
+                base_feature_names=base_names,
+                hidden_dim=gated_mlp_hidden_dim,
+                lambda_feature=gated_mlp_lambda_feature,
+                lambda_interaction=gated_mlp_lambda_interaction,
+                n_epochs=gated_mlp_epochs,
+                gate_threshold=gated_mlp_gate_threshold,
+                dataset=ds,
+                input_metrics=[m.metric for m in metric_specs],
+            )
+        elif use_interactions and len(metric_specs) >= 2:
             base_names = [m.name for m in metric_specs]
             model = LogisticL1WithInteractions(
                 base_feature_names=base_names,
@@ -1269,7 +1315,9 @@ def run_iterative(
             for spec, coef in zip(metric_specs, model.model.coef_.reshape(-1)[:len(metric_specs)])
         }
         interaction_coef_map: Dict[str, Tuple[str, str, float]] = {}
-        if use_interactions and isinstance(model, LogisticL1WithInteractions):
+        if isinstance(model, GatedInteractionMLP):
+            interaction_coef_map = model.get_interaction_coef_map(metric_specs)
+        elif use_interactions and isinstance(model, LogisticL1WithInteractions):
             interaction_coef_map = model.get_interaction_coef_map(metric_specs)
         return coef_map, interaction_coef_map
 
@@ -1412,8 +1460,18 @@ def run_iterative(
         verbose=verbose,
     )
 
+    # Subsample eval_selection for seed iteration
+    if eval_selection_max and len(eval_sel_df) > eval_selection_max:
+        iter_eval_sel_df_0 = eval_sel_df.sample(n=eval_selection_max, random_state=seed)
+        _iter_log(
+            f"[Autometrics][Iterative] Iteration 0 subsampled eval_selection: {len(eval_sel_df)} → {len(iter_eval_sel_df_0)}",
+            verbose_only=False, verbose=verbose,
+        )
+    else:
+        iter_eval_sel_df_0 = eval_sel_df
+
     eval_sel_frame = _build_feature_frame(
-        eval_sel_df, candidate_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+        iter_eval_sel_df_0, candidate_specs, label_cache, id_column, text_column, label_column, label_batch_size,
         verbose=verbose, stage="eval_selection_full",
         score_all_metrics_together=score_all_metrics_together,
         judge_llm=judge_llm,
@@ -1446,7 +1504,7 @@ def run_iterative(
     )
 
     eval_sel_frame_active = _build_feature_frame(
-        eval_sel_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+        iter_eval_sel_df_0, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
         verbose=verbose, stage="eval_selection_active_0",
         score_all_metrics_together=score_all_metrics_together,
         judge_llm=judge_llm,
@@ -1560,6 +1618,16 @@ def run_iterative(
             verbose_only=False,
             verbose=verbose,
         )
+
+        # ── Subsample eval_selection for this iteration ──
+        if eval_selection_max and len(eval_sel_df) > eval_selection_max:
+            iter_eval_sel_df = eval_sel_df.sample(n=eval_selection_max, random_state=seed + iteration)
+            _iter_log(
+                f"[Autometrics][Iterative] Iteration {iteration} subsampled eval_selection: {len(eval_sel_df)} → {len(iter_eval_sel_df)}",
+                verbose_only=False, verbose=verbose,
+            )
+        else:
+            iter_eval_sel_df = eval_sel_df
 
         # ── Exact-match-driven pool growth ──
         # Strategy: keep labeling fresh batches of training data as long as
@@ -1944,15 +2012,19 @@ def run_iterative(
             preds = (candidate_frame["prob"].values >= 0.5).astype(int)
             actuals = candidate_frame[label_column].values.astype(int)
             wrong_mask = preds != actuals
-            wrong_df = candidate_frame[wrong_mask]
-            if len(wrong_df) > 0:
-                sample_wrong = wrong_df.sample(n=min(5, len(wrong_df)), random_state=seed)
+            wrong_ids = candidate_frame.loc[wrong_mask, id_column].astype(str)
+            if len(wrong_ids) > 0:
+                sample_ids = wrong_ids.sample(n=min(5, len(wrong_ids)), random_state=seed).tolist()
+                # Look up text from train_df (candidate_frame doesn't have text_column)
+                text_lookup = train_df.set_index(train_df[id_column].astype(str))[text_column]
                 wrong_lines = []
-                for _, row in sample_wrong.iterrows():
+                for sid in sample_ids:
+                    row = candidate_frame[candidate_frame[id_column].astype(str) == sid].iloc[0]
                     pred_label = int(row["prob"] >= 0.5)
+                    txt = str(text_lookup.get(sid, ""))
                     wrong_lines.append(
-                        f"[id={row[id_column]} true_label={int(row[label_column])} "
-                        f"predicted={pred_label}]\n{_truncate_text(str(row[text_column]), max_chars=500)}"
+                        f"[id={sid} true_label={int(row[label_column])} "
+                        f"predicted={pred_label}]\n{_truncate_text(txt, max_chars=500)}"
                     )
                 misclassified_text = "\n\n".join(wrong_lines)
 
@@ -2052,8 +2124,8 @@ def run_iterative(
         while attempt < max_candidate_attempts and len(new_specs) < min_unique:
             candidate_defs = proposer.propose(
                 task_description=iter_task_description,
-                positive_examples="",
-                negative_examples="",
+                positive_examples="N/A — see contrastive_pairs for labeled examples.",
+                negative_examples="N/A — see contrastive_pairs for labeled examples.",
                 current_metrics=current_metrics_text or "None",
                 contrastive_pairs="\n\n".join(contrastive_text),
                 num_metrics=num_metrics,
@@ -2172,7 +2244,7 @@ def run_iterative(
             )
 
             eval_sel_frame_active = _build_feature_frame(
-                eval_sel_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+                iter_eval_sel_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
                 verbose=verbose, stage=f"eval_selection_active_{iteration}",
                 score_all_metrics_together=score_all_metrics_together,
                 judge_llm=judge_llm,
@@ -2303,7 +2375,7 @@ def run_iterative(
 
         joint_specs = active_specs + new_specs
         eval_sel_frame_joint = _build_feature_frame(
-            eval_sel_df, joint_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+            iter_eval_sel_df, joint_specs, label_cache, id_column, text_column, label_column, label_batch_size,
             verbose=verbose, stage=f"eval_selection_joint_{iteration}",
             score_all_metrics_together=score_all_metrics_together,
             judge_llm=judge_llm,
@@ -2327,7 +2399,11 @@ def run_iterative(
         # candidates.  New metrics must prove themselves via base coefficient
         # before getting interaction terms.  This prevents quadratic feature
         # explosion when many candidates are tested at once.
+        # Cap to top-K by absolute coefficient to keep interactions O(K^2).
         prev_active_names = [m.name for m in active_specs]
+        if max_interaction_metrics and len(prev_active_names) > max_interaction_metrics:
+            name_to_coef = {m.name: abs(active_coef_map.get(m.metric_id, 0.0)) for m in active_specs}
+            prev_active_names = sorted(prev_active_names, key=lambda n: name_to_coef.get(n, 0.0), reverse=True)[:max_interaction_metrics]
         joint_model = fit_regression(
             eval_sel_frame_joint, joint_specs, name=f"eval_selection_{iteration}",
             interaction_names=prev_active_names,
@@ -2386,7 +2462,7 @@ def run_iterative(
 
         active_specs = current_metric_specs()
         eval_sel_frame_active = _build_feature_frame(
-            eval_sel_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
+            iter_eval_sel_df, active_specs, label_cache, id_column, text_column, label_column, label_batch_size,
             verbose=verbose, stage=f"eval_selection_active_{iteration}",
             score_all_metrics_together=score_all_metrics_together,
             judge_llm=judge_llm,
@@ -2405,7 +2481,12 @@ def run_iterative(
             llm_parallelism=llm_parallelism,
             scoring_backend=scoring_backend,
             )
-        model = fit_regression(eval_sel_frame_active, active_specs, name=f"eval_selection_active_{iteration}")
+        refit_interaction_names = [m.name for m in active_specs]
+        if max_interaction_metrics and len(refit_interaction_names) > max_interaction_metrics:
+            name_to_coef = {m.name: abs(active_coef_map.get(m.metric_id, 0.0)) for m in active_specs}
+            refit_interaction_names = sorted(refit_interaction_names, key=lambda n: name_to_coef.get(n, 0.0), reverse=True)[:max_interaction_metrics]
+        model = fit_regression(eval_sel_frame_active, active_specs, name=f"eval_selection_active_{iteration}",
+                               interaction_names=refit_interaction_names)
 
         eval_sel_probs = compute_probabilities(model, eval_sel_frame_active, active_specs, name=f"eval_selection_active_{iteration}")
         eval_gate_probs_active = compute_probabilities(model, eval_gate_frame_active, active_specs, name=f"eval_gating_active_{iteration}")

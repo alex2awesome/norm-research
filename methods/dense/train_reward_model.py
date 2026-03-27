@@ -23,6 +23,8 @@ from transformers import (
 
 from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
 
+from eval_utils import compute_metrics, run_dataset_evals
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 FIXED_TRAIN_FRACTION = 0.8
@@ -835,6 +837,25 @@ def train(args):
         log_path,
     )
 
+    # Run dataset-specific sliced evaluation on best model
+    best_model_dir = os.path.join(args.output_dir, "best_model")
+    if os.path.isdir(best_model_dir):
+        logger.info("[Stage] Running dataset-specific evaluations on %s split", selection_split_name)
+        sel_probs = np.array(
+            score_texts(best_model_dir, selection_df["text"].tolist(),
+                        max_length=args.max_length, batch_size=args.eval_batch_size)
+        )
+        sel_labels = selection_df["judgement"].astype(int).to_numpy()
+        dataset_eval_results = run_dataset_evals(
+            df=selection_df,
+            labels=sel_labels,
+            probs=sel_probs,
+            data_path=args.data_path,
+            output_path=os.path.join(args.output_dir, f"dataset_eval_{selection_split_name}.json"),
+        )
+    else:
+        dataset_eval_results = {}
+
     # Free GPU memory between Optuna trials
     del model, optimizer, scheduler, trainable_params
     import gc
@@ -907,24 +928,13 @@ def _build_lora_target_module_subsets(base_modules: List[str]) -> Dict[str, List
 
 
 def _metrics_from_probs(labels: np.ndarray, probs: np.ndarray) -> Dict[str, float]:
-    """Compute binary metrics from probabilities."""
-    probs = probs.astype(np.float64)
-    labels = labels.astype(int)
-    preds = (probs >= 0.5).astype(int)
-    probs_clipped = np.clip(probs, 1e-7, 1.0 - 1e-7)
-    bce_loss = -np.mean(labels * np.log(probs_clipped) + (1 - labels) * np.log(1.0 - probs_clipped))
-    try:
-        auc = roc_auc_score(labels, probs)
-    except ValueError:
-        auc = float("nan")
-    return {
-        "loss": float(bce_loss),
-        "accuracy": float(accuracy_score(labels, preds)),
-        "precision": float(precision_score(labels, preds, zero_division=0)),
-        "recall": float(recall_score(labels, preds, zero_division=0)),
-        "f1": float(f1_score(labels, preds, zero_division=0)),
-        "auc": float(auc),
-    }
+    """Compute binary metrics from probabilities.
+
+    Delegates to eval_utils.compute_metrics (single source of truth).
+    """
+    m = compute_metrics(labels, probs)
+    # Return only the original keys for backward compatibility
+    return {k: m[k] for k in ("loss", "accuracy", "precision", "recall", "f1", "auc")}
 
 
 def evaluate_saved_model_on_split(model_dir: str, split_df: pd.DataFrame, args, split_name: str) -> Dict[str, float]:
@@ -1010,6 +1020,21 @@ def run_optuna(args):
     df["judgement"] = df["judgement"].astype(int)
     _, _, test_df = get_or_create_fixed_split(df, args)
     best_trial_test_metrics = evaluate_saved_model_on_split(best_model_dir, test_df, args, split_name="test")
+
+    # Run dataset-specific sliced evaluation on test split
+    logger.info("[Stage] Running dataset-specific evaluations on test split")
+    test_probs = np.array(
+        score_texts(best_model_dir, test_df["text"].tolist(),
+                    max_length=args.max_length, batch_size=args.eval_batch_size)
+    )
+    test_labels = test_df["judgement"].astype(int).to_numpy()
+    dataset_eval_results = run_dataset_evals(
+        df=test_df,
+        labels=test_labels,
+        probs=test_probs,
+        data_path=args.data_path,
+        output_path=os.path.join(args.output_dir, "dataset_eval_test.json"),
+    )
 
     summary = {
         "study_name": args.optuna_study_name,

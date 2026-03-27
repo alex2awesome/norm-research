@@ -36,8 +36,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--hosts",
         nargs="*",
-        default=None,
-        help="Hosts to sync. If omitted (or passed with no values), sync all default hosts.",
+        default=["sk3"],
+        help="Hosts to sync. Defaults to sk3.",
     )
     parser.add_argument(
         "--local-root",
@@ -109,6 +109,9 @@ def main() -> int:
     args = parse_args()
     if args.pull_remote_only:
         args.download = True
+    # Default to upload when neither direction is specified.
+    if not args.upload and not args.download:
+        args.upload = True
 
     repo_root = find_repo_root(Path(__file__).resolve())
     sys.path.insert(0, str(repo_root))

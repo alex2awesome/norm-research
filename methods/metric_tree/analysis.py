@@ -10,7 +10,8 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 
-from .data_structures import MetricTree, MetricTreeNode
+from .data_structures import MetricTree, PartitionTreeNode
+from .partition import format_partition_description, _format_key
 
 logger = logging.getLogger("metric_tree.analysis")
 
@@ -19,8 +20,8 @@ def analyze_tree_complexity(tree: MetricTree) -> pd.DataFrame:
     """Compute per-node statistics for the tree.
 
     Returns a DataFrame with columns: node_id, depth, parent_id,
-    n_local_metrics, n_all_metrics, n_features, n_points, train_accuracy,
-    eval_accuracy, n_children, confidence_threshold.
+    n_local_metrics, n_all_metrics, n_points, partition_key,
+    n_positive, n_negative, base_rate, n_children, is_leaf.
     """
     rows = []
     for node_id, node in tree.all_nodes.items():
@@ -28,16 +29,15 @@ def analyze_tree_complexity(tree: MetricTree) -> pd.DataFrame:
             "node_id": node.node_id,
             "depth": node.depth,
             "parent_id": node.parent_id or "",
+            "partition_key": _format_key(node.partition_key) if node.partition_key else "",
             "n_local_metrics": len(node.local_metrics),
             "n_all_metrics": len(node.all_metrics),
-            "n_features": len(node.feature_names),
             "n_points": len(node.point_indices),
-            "n_correct": int(node.correct_mask.sum()) if len(node.correct_mask) > 0 else 0,
-            "train_accuracy": node.train_accuracy,
-            "eval_accuracy": node.eval_accuracy,
+            "n_positive": node.n_positive,
+            "n_negative": node.n_negative,
+            "base_rate": node.base_rate,
             "n_children": len(node.children),
-            "confidence_threshold": node.confidence_threshold,
-            "n_interactions": len(node.interaction_pairs),
+            "is_leaf": node.is_leaf or len(node.children) == 0,
         })
     return pd.DataFrame(rows)
 
@@ -46,11 +46,7 @@ def measure_depth_distribution(
     tree: MetricTree,
     predictions_df: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Compute resolution depth histogram from prediction results.
-
-    Expects predictions_df to have a 'resolving_node' column (from predict_batch).
-    Returns DataFrame with columns: depth, count, fraction.
-    """
+    """Compute resolution depth histogram from prediction results."""
     node_depths = {nid: node.depth for nid, node in tree.all_nodes.items()}
 
     depths = []
@@ -58,7 +54,7 @@ def measure_depth_distribution(
         if node_id in node_depths:
             depths.append(node_depths[node_id])
         else:
-            depths.append(-1)  # unresolved
+            depths.append(-1)
 
     depth_series = pd.Series(depths, name="depth")
     counts = depth_series.value_counts().sort_index()
@@ -79,49 +75,54 @@ def export_tree_summary(tree: MetricTree, path: str) -> None:
 
     lines = []
     lines.append("=" * 80)
-    lines.append("METRIC TREE SUMMARY")
+    lines.append("PARTITIONED METRIC TREE SUMMARY")
     lines.append("=" * 80)
     lines.append(f"Task: {tree.task_description[:200]}")
     lines.append(f"Total nodes: {len(tree.all_nodes)}")
     lines.append(f"Total unique metrics: {len(tree.all_metrics)}")
+    n_leaves = sum(1 for n in tree.all_nodes.values() if n.is_leaf or not n.children)
+    lines.append(f"Leaf nodes: {n_leaves}")
     lines.append("")
 
-    def _format_node(node: MetricTreeNode, indent: int = 0) -> List[str]:
+    def _format_node(node: PartitionTreeNode, indent: int = 0) -> List[str]:
         prefix = "  " * indent
         node_lines = []
-        node_lines.append(f"{prefix}[{node.node_id}] depth={node.depth}")
-        node_lines.append(f"{prefix}  Train acc: {node.train_accuracy:.3f} | Eval acc: {node.eval_accuracy:.3f}")
-        node_lines.append(f"{prefix}  Points: {len(node.point_indices)} | Confidence threshold: {node.confidence_threshold:.3f}")
-        node_lines.append(f"{prefix}  Features ({len(node.feature_names)}):")
 
-        for fn in node.feature_names:
-            node_lines.append(f"{prefix}    - {fn}")
+        # Header with partition key
+        pk_str = ""
+        if node.partition_key:
+            metric_names = []
+            parent = tree.all_nodes.get(node.parent_id or "")
+            if parent and parent.local_metrics:
+                metric_names = [m.name for m in parent.local_metrics]
+            pk_str = f" [{format_partition_description(node.partition_key, metric_names)}]"
 
+        node_lines.append(f"{prefix}[{node.node_id}] depth={node.depth}{pk_str}")
+        node_lines.append(
+            f"{prefix}  base_rate={node.base_rate:.3f}"
+        )
+        node_lines.append(
+            f"{prefix}  Points: {len(node.point_indices)} "
+            f"(+{node.n_positive} / -{node.n_negative})"
+        )
+
+        # Local metrics
         if node.local_metrics:
-            node_lines.append(f"{prefix}  Local metrics ({len(node.local_metrics)}):")
+            node_lines.append(f"{prefix}  Binary metrics ({len(node.local_metrics)}):")
             for m in node.local_metrics:
-                node_lines.append(f"{prefix}    [{m.metric_id[:8]}] {m.name} (scale={m.scale})")
-                # Show abbreviated rubric
-                rubric_preview = m.rubric_text[:150].replace("\n", " ")
-                node_lines.append(f"{prefix}      Rubric: {rubric_preview}...")
+                node_lines.append(f"{prefix}    - {m.name}")
+                yes_desc = m.rubric.get("yes", "")[:100]
+                no_desc = m.rubric.get("no", "")[:100]
+                node_lines.append(f"{prefix}      YES: {yes_desc}")
+                node_lines.append(f"{prefix}      NO:  {no_desc}")
 
-        if node.interaction_pairs:
-            node_lines.append(f"{prefix}  Interactions ({len(node.interaction_pairs)}):")
-            for a, b in node.interaction_pairs:
-                node_lines.append(f"{prefix}    {a} x {b}")
+        if node.is_leaf or not node.children:
+            node_lines.append(f"{prefix}  [LEAF — base-rate prediction]")
 
-        if node.classifier is not None:
-            try:
-                coefs = node.classifier.coef_.ravel()
-                for i, (fn, c) in enumerate(zip(node.feature_names, coefs)):
-                    if abs(c) > 1e-4:
-                        node_lines.append(f"{prefix}  Coef {fn}: {c:.4f}")
-            except Exception:
-                pass
-
-        for child_type, child_node in node.children.items():
-            node_lines.append(f"{prefix}  -> Child [{child_type}]:")
-            node_lines.extend(_format_node(child_node, indent + 2))
+        # Children
+        for pk, child in sorted(node.children.items(), key=lambda x: _format_key(x[0])):
+            node_lines.append(f"{prefix}  -> Partition {_format_key(pk)}:")
+            node_lines.extend(_format_node(child, indent + 2))
 
         return node_lines
 
@@ -133,8 +134,9 @@ def export_tree_summary(tree: MetricTree, path: str) -> None:
     lines.append("ALL METRICS")
     lines.append("=" * 80)
     for metric_id, m in sorted(tree.all_metrics.items()):
-        lines.append(f"\n[{metric_id[:8]}] {m.name} (source: {m.source_node_id}, scale={m.scale})")
-        lines.append(f"  Rubric:\n    {m.rubric_text[:500]}")
+        lines.append(f"\n[{metric_id[:8]}] {m.name} (source: {m.source_node_id})")
+        lines.append(f"  YES: {m.rubric.get('yes', '')[:200]}")
+        lines.append(f"  NO:  {m.rubric.get('no', '')[:200]}")
 
     text = "\n".join(lines)
     output_path.write_text(text, encoding="utf-8")
@@ -147,45 +149,24 @@ def compute_articulability_gap(
     true_labels: np.ndarray,
     root_only_predictions: Optional[np.ndarray] = None,
 ) -> Dict[str, Any]:
-    """Measure the articulability gap: how much accuracy improves with depth.
+    """Measure the articulability gap: how much AUC improves with depth."""
+    from sklearn.metrics import roc_auc_score
 
-    The spec defines three accuracy numbers:
-    1. Root-only accuracy: classify ALL test points using root's classifier only.
-    2. Full tree accuracy: the complete rule-plus-exception hierarchy.
-    3. Implicit model accuracy: external (not computed here).
-
-    Parameters
-    ----------
-    root_only_predictions : optional array of predictions from root classifier
-        applied to ALL test points. If not provided, we approximate using
-        predictions from examples that resolved at root depth.
-
-    Returns dict with:
-    - root_accuracy: accuracy using only root node on ALL test points
-    - tree_accuracy: accuracy using full tree
-    - articulability_gap: tree_accuracy - root_accuracy
-    - per_depth_accuracy: accuracy at each depth level
-    """
     tree_preds = predictions_df["prediction"].values
+    tree_probs = predictions_df["probability"].values
     tree_accuracy = float((tree_preds == true_labels).mean())
 
-    # Root-only accuracy: root classifier applied to ALL test points
+    try:
+        tree_auc = float(roc_auc_score(true_labels, tree_probs))
+    except ValueError:
+        tree_auc = 0.5
+
     if root_only_predictions is not None:
         root_accuracy = float((root_only_predictions == true_labels).mean())
     else:
-        # Approximate: use tree predictions for root-resolved, but note this
-        # underestimates root-only accuracy since deeper-resolved examples
-        # may have been classified differently by the root alone.
-        # For proper measurement, caller should pass root_only_predictions.
-        root_accuracy = tree.root.eval_accuracy if tree.root else 0.0
-        logger.warning(
-            "root_only_predictions not provided; using root eval_accuracy (%.3f) "
-            "as approximation. For accurate gap measurement, score all test points "
-            "through root classifier only and pass as root_only_predictions.",
-            root_accuracy,
-        )
+        root_accuracy = tree.root.base_rate if tree.root else 0.0
 
-    # Per-depth accuracy: how accurate are predictions at each resolution depth
+    # Per-depth accuracy
     node_depths = {nid: node.depth for nid, node in tree.all_nodes.items()}
     per_depth: Dict[int, Dict[str, int]] = {}
     for node_id in predictions_df["resolving_node"].unique():
@@ -206,6 +187,7 @@ def compute_articulability_gap(
     return {
         "root_accuracy": root_accuracy,
         "tree_accuracy": tree_accuracy,
+        "tree_auc": tree_auc,
         "articulability_gap": tree_accuracy - root_accuracy,
         "per_depth_accuracy": per_depth_accuracy,
         "n_examples": len(true_labels),

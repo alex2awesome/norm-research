@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
+import pandas as pd
 from sklearn.linear_model import LogisticRegressionCV
 
 from autometrics.aggregator.regression import Regression
@@ -23,8 +24,9 @@ class LogisticL1(Regression):
         **kwargs,
     ):
         model = LogisticRegressionCV(
-            penalty="l1",
-            solver=solver,
+            penalty="elasticnet",
+            l1_ratios=(1.0,),
+            solver="saga",
             Cs=10,
             cv=cv,
             max_iter=max_iter,
@@ -118,9 +120,13 @@ class LogisticL1WithInteractions(LogisticL1):
 
     def _ensure_interaction_columns(self, df):
         """Add interaction product columns to df in-place."""
-        for col_name, col_a, col_b in self._interaction_pairs:
-            if col_name not in df.columns and col_a in df.columns and col_b in df.columns:
-                df[col_name] = df[col_a] * df[col_b]
+        new_cols = {
+            col_name: (df[col_a] * df[col_b]).values
+            for col_name, col_a, col_b in self._interaction_pairs
+            if col_name not in df.columns and col_a in df.columns and col_b in df.columns
+        }
+        if new_cols:
+            df[list(new_cols.keys())] = pd.DataFrame(new_cols, index=df.index)
 
     def learn(self, dataset, target_column=None):
         # ensure_dependencies may replace the dataframe, so call it first

@@ -152,18 +152,24 @@ Pre-existing data in `PeerRead/data/` (not from our crawler):
 6. **TMLR invitation patterns** differ from conferences: uses `/-/Review` (not `/-/Official_Review`), `directReplies` (not `replies`), and `recommendation` (not `decision`).
 7. **COLM** only publishes accepted papers' reviews.
 
-### Grand Total (with review text)
+### Unified Summary (as of 2026-03-19)
 
-| Source | Papers | Reviews | Domain |
-|--------|--------|---------|--------|
-| ICLR | 32,646 | 123,172 | AI/ML |
-| NeurIPS | 18,764 | 75,258 | AI/ML |
-| ICML 2025 | 3,422 | 13,102 | AI/ML |
-| TMLR | 6,333 | 17,858 | AI/ML |
-| COLM | 721 | 2,735 | AI/ML |
-| eLife | ~4,286 | ~10K | Life sciences |
-| F1000Research | ~11,369 | ~30K | Multidisciplinary |
-| **Grand Total** | **~77,500** | **~272,000** | |
+Unified dataset processor: `datasets/peer-review/unify_datasets.py`
+Output: `unified_papers.csv.gz` (43 MB) + `unified_reviews.csv.gz` (241 MB)
 
-- **TODO**: Build unified modeling CSVs from raw JSONs.
+| Venue           | Domain               | Papers  | Reviews  | Accept / Reject              | Years       |
+|-----------------|----------------------|--------:|---------:|------------------------------|-------------|
+| ICLR            | AI/ML                |  33,073 |  146,369 | 11,193 / 17,209              | (2017–2025) |
+| NeurIPS         | AI/ML                |  18,764 |   78,085 | 17,842 / 922*                | (2021–2025) |
+| F1000Research   | Multidisciplinary    |  11,264 |   26,861 | 2,166 / 1,895 / 4,986 cond.  | (2012–2026) |
+| ICML            | AI/ML                |   7,860 |   13,105 | 7,698 / 162*                 | (2023–2025) |
+| TMLR            | AI/ML                |   6,333 |   17,858 | 3,716 / 1,688                | (rolling)   |
+| eLife           | Life Sciences        |   4,286 |   14,634 | assessment only              | (2022–2026) |
+| COLM            | AI/ML                |     721 |    2,735 | 717 / 4*                     | (2024–2025) |
+| ACL 2017        | NLP                  |     137 |      275 | unlabeled                    | (2017)      |
+| CoNLL 2016      | NLP                  |      22 |       39 | unlabeled                    | (2016)      |
+| **TOTAL**       |                      | **82,460** | **299,961** | **43,332 / 21,880**     | (2012–2026) |
+
+*NeurIPS/ICML/COLM accept-skewed: rejected papers are opt-in/hidden (~95% visible acceptance vs ~25% real rate).
+
 - **TODO**: Run remaining eLife + F1000 fetches to completion (background processes still running as of 2026-03-18).

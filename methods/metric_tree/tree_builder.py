@@ -1,4 +1,4 @@
-"""Core Metric Tree builder: root node, exception nodes, recursive growth."""
+"""Core Metric Tree builder: partition-based with binary features and base-rate leaves."""
 
 from __future__ import annotations
 
@@ -9,8 +9,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LogisticRegressionCV
-from sklearn.preprocessing import StandardScaler
 
 from autometrics.generator.ContrastiveRubricProposer import (
     ContrastiveRubricProposer,
@@ -19,46 +17,82 @@ from autometrics.generator.ContrastiveRubricProposer import (
 from autometrics.iterative_refinement.runner import (
     _coerce_binary_labels,
     _format_examples,
-    _metric_id_from_rubric,
     _normalize_rubric,
     _rubric_to_text,
     _ensure_unique_name,
-    _truncate_text,
 )
 from autometrics.iterative_refinement.label_cache import LabelCache
 
 from .config import TreeConfig
-from .data_structures import MetricTree, MetricTreeNode, TreeMetric
-from .example_selection import select_representative_examples
-from .proposer import ExceptionMetricProposer
-from .routing import build_learned_router, tune_threshold
+from .data_structures import MetricTree, PartitionTreeNode, TreeMetric
+from .example_selection import cluster_and_select, select_representative_examples
+# mahalanobis removed — using base-rate prediction instead
+from .partition import (
+    assign_to_partitions,
+    count_contrastive_pairs,
+    format_partition_description,
+    prune_partitions,
+    _format_key,
+)
+from .proposer import PartitionMetricProposer
+from .router import train_node_router
 from .scoring import (
-    add_interaction_features,
-    build_feature_matrix,
-    score_subset,
+    DEFAULT_CLUSTERING_DEPTH,
+    _binary_rubric_to_criteria_text,
+    _metric_id_from_rubric,
+    build_binary_feature_matrix,
+    compute_mutual_information,
+    score_binary_subset,
+    select_clustering_features,
 )
 from .token_utils import (
     compute_generation_example_budget,
-    compute_scoring_text_budget,
     truncate_to_tokens,
 )
 
 logger = logging.getLogger("metric_tree.builder")
 
 
-def _create_tree_metrics(
+def _normalize_binary_rubric(rubric_raw: dict) -> Dict[str, str]:
+    """Normalize a rubric dict to have 'yes' and 'no' keys."""
+    normalized = {}
+    for k, v in rubric_raw.items():
+        k_lower = str(k).strip().lower()
+        if k_lower in ("yes", "1", "true"):
+            normalized["yes"] = str(v)
+        elif k_lower in ("no", "0", "false"):
+            normalized["no"] = str(v)
+    # Fallback if keys are ordinal (1-5) — take 4-5 as yes, 1-2 as no
+    if "yes" not in normalized and "no" not in normalized:
+        vals = list(rubric_raw.values())
+        keys = list(rubric_raw.keys())
+        if len(vals) >= 2:
+            # Assume higher keys = yes, lower keys = no
+            normalized["yes"] = str(vals[-1])
+            normalized["no"] = str(vals[0])
+        elif len(vals) == 1:
+            normalized["yes"] = str(vals[0])
+            normalized["no"] = "Does not meet the criterion."
+    if "yes" not in normalized:
+        normalized["yes"] = "Meets the criterion."
+    if "no" not in normalized:
+        normalized["no"] = "Does not meet the criterion."
+    return normalized
+
+
+def _create_binary_tree_metrics(
     raw_metrics: List[Dict[str, Any]],
     source_node_id: str,
     existing_metric_ids: set,
     existing_names: set,
 ) -> List[TreeMetric]:
-    """Convert raw metric dicts from the proposer into TreeMetric objects."""
+    """Convert raw metric dicts from the proposer into binary TreeMetric objects."""
     tree_metrics = []
     for m in raw_metrics:
         name = _sanitize_metric_name(m.get("name", "Metric"))
-        scale = m.get("scale", "ordinal")
-        rubric = _normalize_rubric(m.get("rubric", {}), scale)
-        rubric_text = _rubric_to_text(rubric)
+        rubric_raw = m.get("rubric", {})
+        rubric = _normalize_binary_rubric(rubric_raw)
+        rubric_text = f"YES: {rubric['yes']}\nNO: {rubric['no']}"
         metric_id = _metric_id_from_rubric(rubric_text)
 
         # Skip duplicates
@@ -76,71 +110,9 @@ def _create_tree_metrics(
             rubric_text=rubric_text,
             rubric=rubric,
             source_node_id=source_node_id,
-            scale=scale,
+            scale="binary",
         ))
     return tree_metrics
-
-
-def _fit_l1_selector(
-    X: np.ndarray,
-    y: np.ndarray,
-    feature_names: List[str],
-    config: TreeConfig,
-) -> Tuple[List[str], np.ndarray]:
-    """Fit L1-penalized logistic regression for metric selection.
-
-    Returns (selected_feature_names, coefficients_for_selected).
-    """
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-
-    clf = LogisticRegressionCV(
-        penalty="l1",
-        solver="liblinear",
-        Cs=10,
-        cv=min(config.cv_folds, max(2, int(y.sum()), int((1 - y).sum()))),
-        class_weight=config.class_weight,
-        max_iter=1000,
-        random_state=config.random_seed,
-    )
-    clf.fit(X_scaled, y)
-
-    coefs = clf.coef_.ravel()
-    nonzero_mask = np.abs(coefs) > 1e-6
-    selected = [feature_names[i] for i in range(len(feature_names)) if nonzero_mask[i]]
-    selected_coefs = coefs[nonzero_mask]
-
-    logger.info(
-        "L1 selection: %d/%d features selected (C=%.4f)",
-        len(selected), len(feature_names), clf.C_[0] if hasattr(clf, "C_") else 0,
-    )
-    return selected, selected_coefs
-
-
-def _fit_final_classifier(
-    X: np.ndarray,
-    y: np.ndarray,
-    config: TreeConfig,
-) -> Tuple[Any, StandardScaler]:
-    """Fit L2-regularized logistic regression on selected features.
-
-    Returns (classifier, scaler).
-    """
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-
-    clf = LogisticRegressionCV(
-        penalty="l2",
-        solver="lbfgs",
-        Cs=10,
-        cv=min(config.cv_folds, max(2, int(y.sum()), int((1 - y).sum()))),
-        class_weight=config.class_weight,
-        max_iter=1000,
-        random_state=config.random_seed,
-    )
-    clf.fit(X_scaled, y)
-
-    return clf, scaler
 
 
 def _sample_examples(
@@ -150,7 +122,6 @@ def _sample_examples(
     seed: int = 42,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Sample positive and negative examples for metric generation."""
-    rng = random.Random(seed)
     pos_df = df[df[label_column] == 1]
     neg_df = df[df[label_column] == 0]
 
@@ -160,42 +131,383 @@ def _sample_examples(
     return pos_sample, neg_sample
 
 
+def _format_sibling_and_uncle_context(
+    current_key: Tuple[int, ...],
+    all_partitions: Dict[Tuple[int, ...], np.ndarray],
+    parent_metric_names: List[str],
+    parent: PartitionTreeNode,
+    tree: MetricTree,
+    train_df: pd.DataFrame,
+    label_column: str,
+) -> str:
+    """Format 2-3 sentence contrastive summaries of sibling and uncle/aunt branches.
+
+    Siblings: other partitions at the same level (same parent).
+    Uncle/aunts: parent's siblings (same grandparent).
+    """
+    lines = []
+
+    # --- Siblings: other partitions from the same parent ---
+    sibling_descs = []
+    for key, indices in all_partitions.items():
+        if key == current_key:
+            continue
+        global_idx = parent.point_indices[indices]
+        labels = train_df.iloc[global_idx][label_column].values.astype(float)
+        acc_rate = float((labels == 1).mean()) if len(labels) > 0 else 0.5
+        desc = format_partition_description(key, parent_metric_names)
+        sibling_descs.append(
+            f"  - [{desc}]: {len(indices):,} examples, "
+            f"{acc_rate:.0%} accepted"
+        )
+
+    if sibling_descs:
+        lines.append("SIBLING BRANCHES (other partitions from the same parent node):")
+        # Show at most 4 siblings to keep it concise
+        for s in sibling_descs[:4]:
+            lines.append(s)
+        if len(sibling_descs) > 4:
+            lines.append(f"  ... and {len(sibling_descs) - 4} more sibling partitions")
+        lines.append("")
+
+    # --- Uncle/aunt: parent's siblings (nodes with the same grandparent) ---
+    if parent.parent_id and tree.all_nodes:
+        grandparent = tree.all_nodes.get(parent.parent_id)
+        gp_metric_names = (
+            [m.name for m in grandparent.local_metrics]
+            if grandparent and grandparent.local_metrics else []
+        )
+        uncle_descs = []
+        for nid, node in tree.all_nodes.items():
+            if node.parent_id == parent.parent_id and nid != parent.node_id:
+                n_examples = len(node.point_indices)
+                acc_rate = node.n_positive / max(1, node.n_positive + node.n_negative)
+                # partition_key is defined by grandparent's metrics
+                local_desc = format_partition_description(
+                    node.partition_key, gp_metric_names,
+                ) if gp_metric_names and node.partition_key else ""
+                uncle_descs.append(
+                    f"  - {node.node_id} [{local_desc}]: {n_examples:,} examples, "
+                    f"{acc_rate:.0%} accepted"
+                )
+
+        if uncle_descs:
+            lines.append("PARENT'S SIBLINGS (uncle/aunt branches — same grandparent, different parent partition):")
+            for u in uncle_descs[:3]:
+                lines.append(u)
+            if len(uncle_descs) > 3:
+                lines.append(f"  ... and {len(uncle_descs) - 3} more")
+            lines.append("")
+
+    return "\n".join(lines)
+
+
+def _compute_base_rate(labels: np.ndarray) -> float:
+    """Compute base rate (fraction of positive examples)."""
+    n = len(labels)
+    if n == 0:
+        return 0.5
+    return float((labels == 1).sum()) / n
+
+
+def _format_round_history(round_history: List[Dict]) -> str:
+    """Format accumulated history of all prior rounds' failed features."""
+    if not round_history:
+        return ""
+
+    lines = ["PRIOR ATTEMPTS (all produced features that were too lenient):"]
+    for entry in round_history:
+        lines.append(f"\n  Round {entry['round']}:")
+        for feat in entry["skewed"]:
+            lines.append(
+                f"    - '{feat['name']}': P(YES) = {feat['p_yes']:.1%}"
+                f"  (YES criterion: \"{feat['rubric_yes']}\")"
+            )
+    lines.append(
+        "\nAll the above features were USELESS because nearly every paper scored YES. "
+        "Do NOT repeat similar features or similarly lenient rubrics. "
+        "Your new features must be MUCH more specific and demanding."
+    )
+    return "\n".join(lines)
+
+
+def _format_yes_examples(
+    scored_df: pd.DataFrame,
+    skewed: List[Tuple],
+    id_column: str,
+    text_column: str,
+    label_column: str,
+    max_chars: int = 250,
+) -> str:
+    """Pick papers that scored YES on the most skewed feature — both accepted and rejected.
+
+    Shows the model concrete evidence that its rubric was too easy.
+    """
+    if not skewed:
+        return ""
+
+    # Pick the most skewed feature
+    worst_idx, worst_metric, worst_p = max(skewed, key=lambda x: abs(x[2] - 0.5))
+    if worst_metric.name not in scored_df.columns:
+        return ""
+
+    yes_papers = scored_df[scored_df[worst_metric.name] == 1]
+    if len(yes_papers) == 0:
+        return ""
+
+    rejected_yes = yes_papers[yes_papers[label_column] == 0].head(2)
+    accepted_yes = yes_papers[yes_papers[label_column] == 1].head(1)
+
+    lines = [
+        f"WHY YOUR RUBRIC WAS TOO EASY — example papers that ALL scored YES on "
+        f"'{worst_metric.name}' (P(YES)={worst_p:.1%}):",
+        f"  Your YES criterion was: \"{worst_metric.rubric.get('yes', '?')[:200]}\"",
+        "",
+    ]
+    for _, row in rejected_yes.iterrows():
+        text = str(row[text_column])[:max_chars].replace("\n", " ")
+        lines.append(f"  REJECTED paper (but scored YES!): {text}...")
+    for _, row in accepted_yes.iterrows():
+        text = str(row[text_column])[:max_chars].replace("\n", " ")
+        lines.append(f"  ACCEPTED paper (scored YES): {text}...")
+    lines.append(
+        f"\n  Both accepted AND rejected papers easily pass your '{worst_metric.name}' "
+        f"criterion. The rubric is too broad — nearly any paper qualifies as YES."
+    )
+
+    return "\n".join(lines)
+
+
+def _propose_and_refine(
+    proposer: PartitionMetricProposer,
+    config: TreeConfig,
+    label_cache: LabelCache,
+    sample_df: pd.DataFrame,
+    pos_sample: pd.DataFrame,
+    neg_sample: pd.DataFrame,
+    task_description: str,
+    node_id: str,
+    *,
+    parent: Any = None,
+    partition_key: Tuple[int, ...] = (),
+    id_column: str,
+    text_column: str,
+    label_column: str,
+    scoring_backend: Any,
+    gen_example_tokens: int = 0,
+    tokenizer: Any = None,
+    max_model_len: int = 0,
+    population_size: int = 0,
+    positive_rate: float = 0.5,
+    sample_scored: Any = None,
+    sibling_context: str = "",
+    exception_context: str = "",
+) -> List[TreeMetric]:
+    """Propose metrics, score a sample, refine skewed ones, return final candidates.
+
+    Iterates up to config.max_refinement_rounds times:
+    1. Propose candidate features
+    2. Score a sample (config.refinement_sample_size)
+    3. Check balance: features with P(YES) outside [min_balance, 1-min_balance] are skewed
+    4. Re-propose replacements for skewed features
+    """
+    K_propose = config.n_rubrics_to_propose
+    min_bal = config.min_feature_balance
+    existing_metric_ids: set = set()
+    existing_names: set = set()
+
+    # Initial proposal
+    logger.info("Proposing %d binary metrics (round 1)...", K_propose)
+    raw_metrics = proposer.propose(
+        task_description=task_description,
+        parent=parent,
+        partition_key=partition_key,
+        positive_df=pos_sample,
+        negative_df=neg_sample,
+        id_column=id_column,
+        text_column=text_column,
+        label_column=label_column,
+        num_metrics=K_propose,
+        max_example_tokens=gen_example_tokens,
+        tokenizer=tokenizer,
+        scoring_backend=scoring_backend,
+        contrastive_pairs_k=config.contrastive_pairs_k,
+        population_size=population_size,
+        positive_rate=positive_rate,
+        sample_scored=sample_scored,
+        sibling_context=sibling_context,
+        exception_context=exception_context,
+    )
+    logger.info("Proposer returned %d metrics", len(raw_metrics))
+
+    if not raw_metrics:
+        return []
+
+    candidate_metrics = _create_binary_tree_metrics(
+        raw_metrics, node_id, existing_metric_ids, existing_names,
+    )
+    if not candidate_metrics:
+        return []
+
+    # Refinement loop: score different samples each round, accumulate history,
+    # show the model its own failures with concrete examples.
+    sample_size = min(config.refinement_sample_size, len(sample_df))
+    round_history: List[Dict] = []  # cumulative history of all failed rounds
+
+    for round_num in range(config.max_refinement_rounds):
+        # Draw a DIFFERENT sample each round for robustness
+        rng = np.random.RandomState(config.random_seed + round_num)
+        round_indices = rng.choice(len(sample_df), size=sample_size, replace=False)
+        round_sample = sample_df.iloc[round_indices].reset_index(drop=True)
+
+        # Score sample on current candidates
+        logger.info("Refinement round %d/%d: scoring %d-example sample on %d candidates...",
+                     round_num + 1, config.max_refinement_rounds,
+                     len(round_sample), len(candidate_metrics))
+        sample_scored_df = score_binary_subset(
+            round_sample, np.arange(len(round_sample)), candidate_metrics, label_cache,
+            id_column=id_column, text_column=text_column, label_column=label_column,
+            task_description=task_description, scoring_backend=scoring_backend,
+            batch_size=config.label_batch_size, verbose=False,
+            stage=f"{node_id}_refine_r{round_num+1}",
+            tokenizer=tokenizer, max_model_len=max_model_len,
+        )
+
+        # Check balance
+        cand_names = [m.name for m in candidate_metrics]
+        X_sample, _ = build_binary_feature_matrix(sample_scored_df, cand_names, label_column)
+
+        skewed = []
+        good = []
+        for i, m in enumerate(candidate_metrics):
+            p_yes = float(X_sample[:, i].mean())
+            logger.info("  %s: P(YES)=%.3f", m.name, p_yes)
+            if p_yes < min_bal or p_yes > (1 - min_bal):
+                skewed.append((i, m, p_yes))
+            else:
+                good.append((i, m, p_yes))
+
+        if not skewed:
+            logger.info("All %d features have acceptable balance — no refinement needed", len(candidate_metrics))
+            break
+
+        logger.info("%d/%d features are skewed (P(YES) outside [%.0f%%, %.0f%%]) — round %d/%d",
+                     len(skewed), len(candidate_metrics), min_bal*100, (1-min_bal)*100,
+                     round_num + 1, config.max_refinement_rounds)
+
+        # Record this round's failures in history
+        round_history.append({
+            "round": round_num + 1,
+            "skewed": [
+                {
+                    "name": m.name,
+                    "p_yes": p,
+                    "rubric_yes": m.rubric.get("yes", "?")[:150],
+                }
+                for _, m, p in skewed
+            ],
+        })
+
+        # Gather concrete examples of papers that scored YES on skewed features
+        example_papers = _format_yes_examples(
+            sample_scored_df, skewed, id_column, text_column, label_column,
+        )
+
+        # Format cumulative prior rounds history
+        prior_summary = _format_round_history(round_history)
+
+        # Ask proposer to refine with full history + concrete examples
+        skewed_info = [{"name": m.name, "p_yes": p, "rubric": m.rubric} for _, m, p in skewed]
+        good_info = [{"name": m.name, "p_yes": p, "rubric": m.rubric} for _, m, p in good]
+
+        replacement_raws = proposer.refine(
+            task_description=task_description,
+            skewed_features=skewed_info,
+            good_features=good_info,
+            num_replacements=len(skewed),
+            parent=parent,
+            partition_key=partition_key,
+            positive_df=pos_sample,
+            negative_df=neg_sample,
+            id_column=id_column,
+            text_column=text_column,
+            label_column=label_column,
+            max_example_tokens=gen_example_tokens,
+            tokenizer=tokenizer,
+            population_size=population_size,
+            positive_rate=positive_rate,
+            round_num=round_num + 1,
+            prior_rounds_summary=prior_summary,
+            example_papers_on_skewed=example_papers,
+        )
+
+        if not replacement_raws:
+            logger.warning("Refinement returned no replacements (round %d), keeping current candidates",
+                          round_num + 1)
+            break
+
+        replacement_metrics = _create_binary_tree_metrics(
+            replacement_raws, node_id, existing_metric_ids, existing_names,
+        )
+        logger.info("Refinement round %d produced %d replacement metrics",
+                     round_num + 1, len(replacement_metrics))
+
+        # Replace skewed metrics with new ones
+        new_candidates = [m for _, m, _ in good]
+        new_candidates.extend(replacement_metrics)
+        candidate_metrics = new_candidates
+
+        if not candidate_metrics:
+            logger.warning("No candidates remaining after refinement round %d", round_num + 1)
+            break
+
+    if round_history:
+        logger.info("Refinement used %d rounds total", len(round_history))
+    logger.info("Final candidate pool: %d metrics", len(candidate_metrics))
+    return candidate_metrics
+
+
 def build_root_node(
     train_df: pd.DataFrame,
     eval_df: pd.DataFrame,
     config: TreeConfig,
     label_cache: LabelCache,
-    proposer: ContrastiveRubricProposer,
+    proposer: PartitionMetricProposer,
     task_description: str,
     *,
     id_column: str,
     text_column: str,
     label_column: str,
-    judge_llm: Any,
-    scoring_backend: Any = None,
+    scoring_backend: Any,
     tokenizer: Any = None,
-    token_budgets: Optional[Dict] = None,
-) -> Tuple[MetricTreeNode, Dict[str, TreeMetric]]:
-    """Build the root node of the Metric Tree.
+    max_model_len: int = 0,
+) -> Tuple[PartitionTreeNode, Dict[str, TreeMetric]]:
+    """Build the root node of the Partition Metric Tree.
 
     Steps:
     1. Sample positive/negative examples
-    2. Propose candidate metrics via ContrastiveRubricProposer
-    3. Score train + eval on candidates
-    4. L1 selection on eval set
-    5. Optionally add interaction features and re-select
-    6. Fit final L2 classifier on selected features
-    7. Predict on train → correct_mask
-    8. Tune confidence threshold on eval
+    2. Propose K_propose binary metrics with refinement loop on sample
+    3. Score full train + eval on final candidates
+    4. Select top K by clustering quality or MI
+    5. Compute base rate
     """
     node_id = "root"
-    budgets = token_budgets or {}
-    max_model_len = budgets.get("max_model_len", 0)
-    logger.info("Building root node (max_model_len=%d)...", max_model_len)
+    K = config.n_binary_metrics_per_level
+    logger.info("Building root node (proposing %d, selecting %d)...", config.n_rubrics_to_propose, K)
 
     # 1. Sample examples for metric generation
-    pos_sample, neg_sample = _sample_examples(train_df, label_column, seed=config.random_seed)
-    # Dynamic generation budget: current_metrics="" at root, measure exact budget
+    pos_sample, neg_sample = _sample_examples(
+        train_df, label_column, n_per_class=config.exception_examples_per_class,
+        seed=config.random_seed,
+    )
+
+    # Population stats for prompt
+    combined_df = pd.concat([train_df, eval_df], ignore_index=True)
+    population_size = len(combined_df)
+    positive_rate = float((combined_df[label_column].astype(float) == 1).mean())
+
+    # Token budget for examples
+    gen_example_tokens = 0
     if max_model_len > 0 and tokenizer is not None:
         n_total = len(pos_sample) + len(neg_sample)
         gen_example_tokens = compute_generation_example_budget(
@@ -205,643 +517,550 @@ def build_root_node(
             n_total_examples=max(1, n_total),
             tokenizer=tokenizer,
         )
-        pos_sample = pos_sample.copy()
-        neg_sample = neg_sample.copy()
-        pos_sample[text_column] = pos_sample[text_column].apply(
-            lambda t: truncate_to_tokens(str(t), gen_example_tokens, tokenizer=tokenizer))
-        neg_sample[text_column] = neg_sample[text_column].apply(
-            lambda t: truncate_to_tokens(str(t), gen_example_tokens, tokenizer=tokenizer))
-    pos_text = _format_examples(pos_sample, id_column, text_column, label_column)
-    neg_text = _format_examples(neg_sample, id_column, text_column, label_column)
 
-    # 2. Propose candidate metrics
-    logger.info("Proposing %d metrics...", config.n_metrics_to_propose)
-    raw_metrics = proposer.propose(
+    # 2. Propose + refine on sample
+    candidate_metrics = _propose_and_refine(
+        proposer=proposer,
+        config=config,
+        label_cache=label_cache,
+        sample_df=combined_df,
+        pos_sample=pos_sample,
+        neg_sample=neg_sample,
         task_description=task_description,
-        positive_examples=pos_text,
-        negative_examples=neg_text,
-        current_metrics="",
-        contrastive_pairs="",
-        num_metrics=config.n_metrics_to_propose,
-        num_rubrics=config.n_rubrics_to_propose,
-    )
-    logger.info("Proposer returned %d metrics", len(raw_metrics))
-
-    if not raw_metrics:
-        raise RuntimeError("Proposer returned no metrics for root node")
-
-    # 3. Create TreeMetric objects
-    existing_metric_ids: set = set()
-    existing_names: set = set()
-    candidate_metrics = _create_tree_metrics(
-        raw_metrics, node_id, existing_metric_ids, existing_names,
-    )
-
-    if not candidate_metrics:
-        raise RuntimeError("No valid metrics after deduplication for root node")
-
-    # 4. Score train and eval
-    train_indices = np.arange(len(train_df))
-    eval_indices = np.arange(len(eval_df))
-
-    logger.info("Scoring %d train examples on %d metrics...", len(train_df), len(candidate_metrics))
-    train_scored = score_subset(
-        train_df, train_indices, candidate_metrics, label_cache,
-        id_column=id_column, text_column=text_column, label_column=label_column,
-        judge_llm=judge_llm, task_description=task_description,
-        batch_size=config.label_batch_size, verbose=config.verbose,
-        stage="root_train", scoring_backend=scoring_backend,
-        tokenizer=tokenizer, max_model_len=max_model_len,
-    )
-
-    logger.info("Scoring %d eval examples...", len(eval_df))
-    eval_scored = score_subset(
-        eval_df, eval_indices, candidate_metrics, label_cache,
-        id_column=id_column, text_column=text_column, label_column=label_column,
-        judge_llm=judge_llm, task_description=task_description,
-        batch_size=config.label_batch_size, verbose=config.verbose,
-        stage="root_eval", scoring_backend=scoring_backend,
-        tokenizer=tokenizer, max_model_len=max_model_len,
-    )
-
-    # 5. L1 feature selection on eval
-    candidate_names = [m.name for m in candidate_metrics]
-    X_eval, y_eval = build_feature_matrix(eval_scored, candidate_names, label_column)
-    selected_names, _ = _fit_l1_selector(X_eval, y_eval, candidate_names, config)
-
-    if not selected_names:
-        logger.warning("L1 selected no features, keeping all candidates")
-        selected_names = candidate_names
-
-    # Filter metrics to selected
-    selected_metrics = [m for m in candidate_metrics if m.name in set(selected_names)]
-
-    # 6. Optionally add interactions (at root, depth=0)
-    feature_names = [m.name for m in selected_metrics]
-    interaction_pairs = []
-
-    X_train, y_train = build_feature_matrix(train_scored, feature_names, label_column)
-
-    if config.use_interactions and len(feature_names) >= 2:
-        logger.info("Adding interaction features...")
-        X_train_aug, aug_names, interaction_pairs = add_interaction_features(X_train, feature_names)
-        X_eval_aug, _, _ = add_interaction_features(
-            build_feature_matrix(eval_scored, feature_names, label_column)[0],
-            feature_names,
-        )
-        y_eval_for_interactions = build_feature_matrix(eval_scored, feature_names, label_column)[1]
-
-        # Re-run L1 selection with interactions
-        selected_aug_names, _ = _fit_l1_selector(
-            X_eval_aug, y_eval_for_interactions, aug_names, config,
-        )
-
-        if selected_aug_names:
-            # Use augmented features
-            feature_names = selected_aug_names
-            # Rebuild train matrix with selected augmented features
-            aug_name_set = set(selected_aug_names)
-            col_mask = [i for i, n in enumerate(aug_names) if n in aug_name_set]
-            X_train = X_train_aug[:, col_mask]
-
-            # Determine which interaction pairs survived
-            interaction_pairs = [
-                ip for ip, n in zip(
-                    [(None, None)] * len([m.name for m in selected_metrics])  # base features have no pair
-                    + interaction_pairs,
-                    aug_names,
-                )
-                if n in aug_name_set and ip != (None, None)
-            ]
-
-    # 7. Fit final L2 classifier
-    logger.info("Fitting final classifier on %d features...", len(feature_names))
-    classifier, scaler = _fit_final_classifier(X_train, y_train, config)
-
-    # Predict on train set
-    X_train_scaled = scaler.transform(X_train)
-    train_probs = classifier.predict_proba(X_train_scaled)[:, 1]
-    train_preds = (train_probs >= 0.5).astype(int)
-    correct_mask = (train_preds == y_train)
-    train_acc = correct_mask.mean()
-    logger.info("Root train accuracy: %.3f", train_acc)
-
-    # 8. Tune threshold on eval
-    # Rebuild eval features for selected feature set
-    eval_feature_names_base = [m.name for m in selected_metrics]
-    X_eval_base, y_eval_base = build_feature_matrix(eval_scored, eval_feature_names_base, label_column)
-
-    if config.use_interactions and interaction_pairs:
-        X_eval_aug, eval_aug_names, _ = add_interaction_features(X_eval_base, eval_feature_names_base)
-        aug_name_set = set(feature_names)
-        col_mask = [i for i, n in enumerate(eval_aug_names) if n in aug_name_set]
-        X_eval_final = X_eval_aug[:, col_mask]
-    else:
-        X_eval_final = X_eval_base
-
-    X_eval_scaled = scaler.transform(X_eval_final)
-    eval_probs = classifier.predict_proba(X_eval_scaled)[:, 1]
-    eval_preds = (eval_probs >= 0.5).astype(int)
-    eval_acc = (eval_preds == y_eval_base).mean()
-    logger.info("Root eval accuracy: %.3f", eval_acc)
-
-    confidence_threshold, _, _ = tune_threshold(eval_probs, y_eval_base)
-
-    # Build node
-    node = MetricTreeNode(
         node_id=node_id,
-        depth=0,
-        parent_id=None,
-        local_metrics=selected_metrics,
-        all_metrics=selected_metrics,
-        classifier=classifier,
-        scaler=scaler,
-        feature_names=feature_names,
-        point_indices=np.arange(len(train_df)),
-        predictions=train_preds,
-        probabilities=train_probs,
-        correct_mask=correct_mask,
-        confidence_threshold=confidence_threshold,
-        interaction_pairs=interaction_pairs,
-        train_accuracy=float(train_acc),
-        eval_accuracy=float(eval_acc),
-    )
-
-    # Optionally build learned router
-    if config.use_learned_router:
-        node.router = build_learned_router(X_train_scaled, correct_mask, config)
-
-    # Collect all metrics
-    all_metrics_dict = {m.metric_id: m for m in selected_metrics}
-
-    return node, all_metrics_dict
-
-
-def _extract_parent_coefficients(parent: MetricTreeNode) -> str:
-    """Format parent's logistic regression coefficients sorted by absolute magnitude."""
-    if parent.classifier is None or not hasattr(parent.classifier, 'coef_'):
-        return ""
-
-    coefs = parent.classifier.coef_.ravel()
-    names = parent.feature_names
-
-    if len(coefs) != len(names):
-        return ""
-
-    # Sort by absolute magnitude (most important first)
-    pairs = sorted(zip(names, coefs), key=lambda x: abs(x[1]), reverse=True)
-    lines = []
-    for name, coef in pairs:
-        direction = "+" if coef > 0 else "-"
-        lines.append(f"  {direction} {name}: {coef:.3f}")
-
-    return "\n".join(lines)
-
-
-def build_exception_node(
-    parent: MetricTreeNode,
-    error_type: str,
-    error_indices: np.ndarray,
-    train_df: pd.DataFrame,
-    eval_df: pd.DataFrame,
-    config: TreeConfig,
-    label_cache: LabelCache,
-    exception_proposer: ExceptionMetricProposer,
-    task_description: str,
-    tree: MetricTree,
-    *,
-    id_column: str,
-    text_column: str,
-    label_column: str,
-    judge_llm: Any,
-    scoring_backend: Any = None,
-    tokenizer: Any = None,
-    token_budgets: Optional[Dict] = None,
-) -> Optional[MetricTreeNode]:
-    """Build a child node for exceptions (misclassified points).
-
-    Critical design: child trains on the FULL prediction bucket from parent,
-    not just misclassified points.
-    - false_positive child: train on all parent-predicted-positive (TP + FP)
-    - false_negative child: train on all parent-predicted-negative (TN + FN)
-    """
-    node_id = f"{parent.node_id}_{error_type}"
-    depth = parent.depth + 1
-    budgets = token_budgets or {}
-    max_model_len = budgets.get("max_model_len", 0)
-    logger.info("Building exception node %s (depth=%d, %d errors)...", node_id, depth, len(error_indices))
-
-    # Determine the full prediction bucket
-    if error_type == "false_positive":
-        # All points parent predicted positive
-        bucket_mask = parent.predictions == 1
-    elif error_type == "false_negative":
-        # All points parent predicted negative
-        bucket_mask = parent.predictions == 0
-    else:
-        # "misclassified" fallback: use all parent's points
-        bucket_mask = np.ones(len(parent.predictions), dtype=bool)
-
-    bucket_indices = parent.point_indices[bucket_mask]
-    bucket_correct = parent.correct_mask[bucket_mask]
-
-    if len(bucket_indices) < config.min_subset_size:
-        logger.info("Bucket too small (%d < %d), skipping", len(bucket_indices), config.min_subset_size)
-        return None
-
-    # Partition into exception vs correct within this bucket
-    exception_mask = ~bucket_correct
-    correct_in_bucket_mask = bucket_correct
-
-    exception_df = train_df.iloc[bucket_indices[exception_mask]].reset_index(drop=True)
-    correct_in_bucket_df = train_df.iloc[bucket_indices[correct_in_bucket_mask]].reset_index(drop=True)
-
-    if len(exception_df) == 0:
-        logger.info("No exceptions in bucket for %s, skipping", node_id)
-        return None
-
-    logger.info("Proposing exception metrics for %s (%d exceptions, %d correct)...",
-                node_id, len(exception_df), len(correct_in_bucket_df))
-
-    # Step 1: Select representative examples via embedding-based clustering
-    exception_sample, correct_sample = select_representative_examples(
-        exception_df, correct_df=correct_in_bucket_df,
-        text_column=text_column,
-        k_per_class=config.exception_examples_per_class,
-        model_name=config.embedding_model,
-        seed=config.random_seed,
-    )
-
-    # Step 2: Score samples on parent metrics (mostly cached)
-    sample_combined = pd.concat([exception_sample, correct_sample], ignore_index=True)
-    sample_indices = np.arange(len(sample_combined))
-    sample_scored = None
-    if parent.all_metrics:
-        try:
-            sample_scored = score_subset(
-                sample_combined, sample_indices, parent.all_metrics, label_cache,
-                id_column=id_column, text_column=text_column, label_column=label_column,
-                judge_llm=judge_llm, task_description=task_description,
-                batch_size=config.label_batch_size, verbose=config.verbose,
-                stage=f"{node_id}_sample", scoring_backend=scoring_backend,
-                tokenizer=tokenizer, max_model_len=max_model_len,
-            )
-            logger.info("Scored %d sample examples on %d parent metrics",
-                        len(sample_scored), len(parent.all_metrics))
-        except Exception as e:
-            logger.warning("Failed to score sample on parent metrics: %s", e)
-
-    # Step 3: Compute token budget with correct n_total_examples (~10, not 47K)
-    gen_example_tokens = 0
-    if max_model_len > 0 and tokenizer is not None:
-        from .proposer import _format_parent_context
-        parent_coefficients = _extract_parent_coefficients(parent)
-        parent_context_text = _format_parent_context(parent, error_type, coefficients=parent_coefficients)
-        exception_task = (
-            f"{task_description}\n\n"
-            f"=== EXCEPTION ANALYSIS MODE ===\n"
-            f"The parent classifier has already applied general rules but misclassifies "
-            f"some examples ({error_type})."
-        )
-        n_total = len(exception_sample) + len(correct_sample)
-        gen_example_tokens = compute_generation_example_budget(
-            current_metrics_text=parent_context_text,
-            task_description=exception_task,
-            max_model_len=max_model_len,
-            n_total_examples=max(1, n_total),
-            tokenizer=tokenizer,
-        )
-    else:
-        parent_coefficients = _extract_parent_coefficients(parent)
-
-    # Step 4: Call proposer with enriched args
-    raw_metrics = exception_proposer.propose(
-        task_description=task_description,
-        parent=parent,
-        error_type=error_type,
-        exception_df=exception_sample,
-        correct_df=correct_sample,
+        parent=None,
+        partition_key=(),
         id_column=id_column,
         text_column=text_column,
         label_column=label_column,
-        num_metrics=config.n_metrics_to_propose,
-        num_rubrics=config.n_rubrics_to_propose,
-        max_example_tokens=gen_example_tokens,
-        tokenizer=tokenizer,
-        sample_scored=sample_scored,
-        parent_coefficients=parent_coefficients,
         scoring_backend=scoring_backend,
-        enable_error_analysis=config.enable_error_analysis,
-        contrastive_pairs_k=config.contrastive_pairs_k,
+        gen_example_tokens=gen_example_tokens,
+        tokenizer=tokenizer,
+        max_model_len=max_model_len,
+        population_size=population_size,
+        positive_rate=positive_rate,
     )
 
-    if not raw_metrics:
-        logger.warning("No exception metrics proposed for %s", node_id)
-        return None
+    if not candidate_metrics:
+        raise RuntimeError("No valid metrics after proposal + refinement for root node")
 
-    # Create TreeMetric objects
-    existing_metric_ids = set(tree.all_metrics.keys())
-    existing_names = {m.name for m in tree.all_metrics.values()}
-    new_metrics = _create_tree_metrics(raw_metrics, node_id, existing_metric_ids, existing_names)
-
-    if not new_metrics:
-        logger.warning("No new metrics after dedup for %s", node_id)
-        return None
-
-    # Score bucket examples on NEW metrics only (parent scores already cached)
-    bucket_df = train_df.iloc[bucket_indices].reset_index(drop=True)
-    bucket_local_indices = np.arange(len(bucket_df))
-
-    logger.info("Scoring %d bucket examples on %d new metrics...", len(bucket_df), len(new_metrics))
-    new_scored = score_subset(
-        bucket_df, bucket_local_indices, new_metrics, label_cache,
+    # 3. Score full train+eval on final candidates
+    all_indices = np.arange(len(combined_df))
+    logger.info("Scoring %d examples on %d final candidate metrics...", len(combined_df), len(candidate_metrics))
+    scored_df = score_binary_subset(
+        combined_df, all_indices, candidate_metrics, label_cache,
         id_column=id_column, text_column=text_column, label_column=label_column,
-        judge_llm=judge_llm, task_description=task_description,
+        task_description=task_description, scoring_backend=scoring_backend,
         batch_size=config.label_batch_size, verbose=config.verbose,
-        stage=f"{node_id}_new", scoring_backend=scoring_backend,
-        tokenizer=tokenizer, max_model_len=max_model_len,
+        stage="root_score", tokenizer=tokenizer, max_model_len=max_model_len,
     )
 
-    # Also score on parent's metrics (will mostly come from cache)
-    parent_scored = score_subset(
-        bucket_df, bucket_local_indices, parent.all_metrics, label_cache,
-        id_column=id_column, text_column=text_column, label_column=label_column,
-        judge_llm=judge_llm, task_description=task_description,
-        batch_size=config.label_batch_size, verbose=config.verbose,
-        stage=f"{node_id}_parent", scoring_backend=scoring_backend,
-        tokenizer=tokenizer, max_model_len=max_model_len,
-    )
+    # 4. Select top K features
+    candidate_names = [m.name for m in candidate_metrics]
+    X_all, y_all = build_binary_feature_matrix(scored_df, candidate_names, label_column)
 
-    # Combine features: parent metrics + new metrics
-    all_node_metrics = list(parent.all_metrics) + new_metrics
-    all_feature_names = [m.name for m in all_node_metrics]
+    # Root is always depth 0 → use clustering selection if clustering_depth > 0
+    is_clustering = 0 < config.clustering_depth
+    if is_clustering:
+        logger.info("Using CLUSTERING selection (high-entropy, low-redundancy)")
+        for i, name in enumerate(candidate_names):
+            p = X_all[:, i].mean()
+            logger.info("  %s: P(YES)=%.3f (balance=%.2f)", name, p, min(p, 1-p)*2)
+        top_k_indices = select_clustering_features(X_all, candidate_names, K)
+    else:
+        mi_scores = compute_mutual_information(X_all, y_all)
+        for name, mi in zip(candidate_names, mi_scores):
+            logger.info("  MI(%s) = %.4f", name, mi)
+        top_k_indices = list(np.argsort(mi_scores)[::-1][:K])
 
-    # Build combined scored DataFrame
-    combined_scored = parent_scored.copy()
-    for m in new_metrics:
-        if m.name in new_scored.columns:
-            combined_scored[m.name] = new_scored[m.name].values
+    selected_metrics = [candidate_metrics[i] for i in top_k_indices]
+    selected_names = [m.name for m in selected_metrics]
+    logger.info("Selected %d metrics: %s", len(selected_metrics), selected_names)
 
-    # Build child's label: 1 = exception (misclassified), 0 = correct
-    # Actually, for classification we want to use the ORIGINAL labels
-    # The child learns to classify within the bucket using original labels
-    X_all, y_all = build_feature_matrix(combined_scored, all_feature_names, label_column)
+    # Get binary scores for selected metrics only
+    X_selected, y_selected = build_binary_feature_matrix(scored_df, selected_names, label_column)
 
-    # L1 selection
-    selected_names, _ = _fit_l1_selector(X_all, y_all, all_feature_names, config)
+    # Split back into train/eval
+    n_train = len(train_df)
+    X_train = X_selected[:n_train]
+    y_train = y_selected[:n_train]
+    X_eval = X_selected[n_train:]
+    y_eval = y_selected[n_train:]
 
-    # Check if any NEW exception metrics survived L1 selection.
-    # Spec: "no new metrics selected — meaning the LLM couldn't find useful exception
-    # criteria" → don't create the child node. Without new metrics the child just
-    # repeats the parent's classifier on a subset.
-    new_metric_names = {m.name for m in new_metrics}
-    new_survived = [n for n in (selected_names or []) if n in new_metric_names]
+    # 6. Compute base rate
+    base_rate = _compute_base_rate(y_train)
+    logger.info("Root base rate: %.4f (%d pos, %d neg)",
+                base_rate, int((y_train == 1).sum()), int((y_train == 0).sum()))
 
-    if not new_survived:
-        logger.info(
-            "L1 selected no NEW exception metrics for %s — parent becomes forced "
-            "leaf (inarticulate residual). %d parent metrics survived but no new ones.",
-            node_id, len(selected_names or []),
+    # Train router if enabled
+    root_router = None
+    if config.use_router and n_train >= config.router_min_examples:
+        logger.info("Training root router...")
+        train_texts = train_df[text_column].astype(str).tolist()
+        root_router = train_node_router(
+            texts=train_texts,
+            labels=y_train,
+            base_rate=base_rate,
+            embedding_model_name=config.embedding_model,
+            n_epochs=config.router_n_epochs,
+            batch_size=config.router_batch_size,
+            learning_rate=config.router_learning_rate,
+            hidden_dim=config.router_hidden_dim,
+            dropout=config.router_dropout,
+            seed=config.random_seed,
+            min_examples=config.router_min_examples,
         )
-        return None
 
-    # Interactions (only if depth <= interaction_max_depth)
-    feature_names = selected_names
-    interaction_pairs = []
-
-    selected_col_mask = [i for i, n in enumerate(all_feature_names) if n in set(selected_names)]
-    X_selected = X_all[:, selected_col_mask]
-
-    if config.use_interactions and depth <= config.interaction_max_depth and len(feature_names) >= 2:
-        X_aug, aug_names, interaction_pairs = add_interaction_features(X_selected, feature_names)
-        selected_aug, _ = _fit_l1_selector(X_aug, y_all, aug_names, config)
-        if selected_aug:
-            feature_names = selected_aug
-            aug_name_set = set(selected_aug)
-            col_mask = [i for i, n in enumerate(aug_names) if n in aug_name_set]
-            X_selected = X_aug[:, col_mask]
-
-    # Fit final classifier
-    classifier, scaler_node = _fit_final_classifier(X_selected, y_all, config)
-
-    # Predict on bucket
-    X_scaled = scaler_node.transform(X_selected)
-    probs = classifier.predict_proba(X_scaled)[:, 1]
-    preds = (probs >= 0.5).astype(int)
-    correct_mask = (preds == y_all)
-    train_acc = correct_mask.mean()
-    logger.info("Node %s train accuracy: %.3f", node_id, train_acc)
-
-    # Eval accuracy (score eval on same metrics, predict)
-    eval_acc = _evaluate_node_on_eval(
-        eval_df, all_node_metrics, feature_names, classifier, scaler_node,
-        label_cache, config, id_column, text_column, label_column,
-        judge_llm, task_description, scoring_backend, node_id,
-        interaction_pairs, tokenizer=tokenizer, max_model_len=max_model_len,
-    )
-
-    # Tune threshold
-    confidence_threshold, _, _ = tune_threshold(probs, y_all)
-
-    # Build selected metrics list
-    selected_name_set = set()
-    for fn in feature_names:
-        # Strip interaction suffix
-        if "__x__" in fn:
-            parts = fn.split("__x__")
-            selected_name_set.update(parts)
-        else:
-            selected_name_set.add(fn)
-
-    local_selected = [m for m in new_metrics if m.name in selected_name_set]
-    all_selected = [m for m in all_node_metrics if m.name in selected_name_set]
-
-    node = MetricTreeNode(
+    # Build node
+    node = PartitionTreeNode(
         node_id=node_id,
-        depth=depth,
-        parent_id=parent.node_id,
-        local_metrics=local_selected,
-        all_metrics=all_selected,
-        classifier=classifier,
-        scaler=scaler_node,
-        feature_names=feature_names,
-        point_indices=bucket_indices,
-        predictions=preds,
-        probabilities=probs,
-        correct_mask=correct_mask,
-        confidence_threshold=confidence_threshold,
-        interaction_pairs=interaction_pairs,
-        train_accuracy=float(train_acc),
-        eval_accuracy=float(eval_acc),
+        depth=0,
+        parent_id=None,
+        partition_key=(),
+        local_metrics=selected_metrics,
+        all_metrics=list(selected_metrics),
+        point_indices=np.arange(n_train),
+        local_scores=X_train,
+        all_scores=X_train,
+        base_rate=base_rate,
+        n_positive=int((y_train == 1).sum()),
+        n_negative=int((y_train == 0).sum()),
+        router=root_router,
+        router_minority_is_positive=root_router.minority_is_positive if root_router else None,
     )
 
-    if config.use_learned_router:
-        node.router = build_learned_router(X_scaled, correct_mask, config)
-
-    # Register new metrics in tree
-    for m in new_metrics:
-        tree.all_metrics[m.metric_id] = m
-
-    return node
+    all_metrics_dict = {m.metric_id: m for m in selected_metrics}
+    return node, all_metrics_dict
 
 
-def _evaluate_node_on_eval(
-    eval_df, metrics, feature_names, classifier, scaler,
-    label_cache, config, id_column, text_column, label_column,
-    judge_llm, task_description, scoring_backend, node_id,
-    interaction_pairs, tokenizer=None, max_model_len=0,
-):
-    """Score eval set and compute accuracy for a node."""
-    try:
-        eval_indices = np.arange(len(eval_df))
-        eval_scored = score_subset(
-            eval_df, eval_indices, metrics, label_cache,
-            id_column=id_column, text_column=text_column, label_column=label_column,
-            judge_llm=judge_llm, task_description=task_description,
-            batch_size=config.label_batch_size, verbose=False,
-            stage=f"{node_id}_eval", scoring_backend=scoring_backend,
-            tokenizer=tokenizer, max_model_len=max_model_len,
-        )
-
-        base_names = [m.name for m in metrics]
-        X_eval, y_eval = build_feature_matrix(eval_scored, base_names, label_column)
-
-        # Rebuild feature matrix with selected features
-        if any("__x__" in fn for fn in feature_names):
-            X_eval_aug, aug_names, _ = add_interaction_features(X_eval, base_names)
-            name_set = set(feature_names)
-            col_mask = [i for i, n in enumerate(aug_names) if n in name_set]
-            X_eval_final = X_eval_aug[:, col_mask]
-        else:
-            name_set = set(feature_names)
-            col_mask = [i for i, n in enumerate(base_names) if n in name_set]
-            X_eval_final = X_eval[:, col_mask]
-
-        X_eval_scaled = scaler.transform(X_eval_final)
-        eval_preds = (classifier.predict_proba(X_eval_scaled)[:, 1] >= 0.5).astype(int)
-        eval_acc = float((eval_preds == y_eval).mean())
-        logger.info("Node %s eval accuracy: %.3f", node_id, eval_acc)
-        return eval_acc
-    except Exception as e:
-        logger.warning("Failed to evaluate node %s on eval: %s", node_id, e)
-        return 0.0
-
-
-def grow_tree(
-    node: MetricTreeNode,
+def build_partition_children(
+    parent: PartitionTreeNode,
     train_df: pd.DataFrame,
     eval_df: pd.DataFrame,
     config: TreeConfig,
     label_cache: LabelCache,
-    exception_proposer: ExceptionMetricProposer,
+    proposer: PartitionMetricProposer,
     task_description: str,
     tree: MetricTree,
     *,
     id_column: str,
     text_column: str,
     label_column: str,
-    judge_llm: Any,
-    scoring_backend: Any = None,
+    scoring_backend: Any,
     tokenizer: Any = None,
-    token_budgets: Optional[Dict] = None,
+    max_model_len: int = 0,
 ) -> None:
-    """Recursively grow the tree from a node by handling its misclassifications."""
+    """Build child partitions for a parent node.
+
+    1. Assign parent's examples to 2^K partitions
+    2. Prune small partitions
+    3. For each surviving partition:
+       a. Check contrastive pairs → leaf if insufficient
+       b. Propose K new binary metrics
+       c. Score, select by MI, compute base rate
+    """
+    K = config.n_binary_metrics_per_level
+    K_propose = config.n_rubrics_to_propose
+
+    # Assign to partitions based on parent's local_scores
+    partitions = assign_to_partitions(parent.local_scores)
+    metric_names = [m.name for m in parent.local_metrics]
+
+    logger.info(
+        "Node %s: %d partitions from %d examples (K=%d)",
+        parent.node_id, len(partitions), len(parent.point_indices), K,
+    )
+    for key, indices in partitions.items():
+        logger.info("  Partition %s: %d examples", _format_key(key), len(indices))
+
+    # Prune
+    partitions = prune_partitions(partitions, config.min_partition_size)
+    if not partitions:
+        logger.info("No surviving partitions for %s", parent.node_id)
+        parent.is_leaf = True
+        return
+
+    # Process each partition
+    for partition_key, local_indices in partitions.items():
+        # local_indices are indices into parent.point_indices
+        global_indices = parent.point_indices[local_indices]
+        partition_df = train_df.iloc[global_indices].reset_index(drop=True)
+        labels = train_df.iloc[global_indices][label_column].values.astype(float)
+
+        n_pairs = count_contrastive_pairs(labels)
+        key_str = _format_key(partition_key)
+        child_node_id = f"{parent.node_id}_p{key_str}"
+
+        logger.info(
+            "Partition %s (%s): %d examples, %d contrastive pairs",
+            key_str, format_partition_description(partition_key, metric_names),
+            len(global_indices), n_pairs,
+        )
+
+        # Accumulate parent's all_scores for this partition
+        parent_all_scores = parent.all_scores[local_indices]
+
+        # Check minority fraction for --errors-only pruning
+        minority_frac = min(
+            float((labels == 1).sum()), float((labels == 0).sum())
+        ) / max(len(labels), 1)
+
+        if n_pairs < config.min_contrastive_pairs:
+            logger.info("  Too few pairs (%d < %d) → leaf", n_pairs, config.min_contrastive_pairs)
+            child = PartitionTreeNode(
+                node_id=child_node_id,
+                depth=parent.depth + 1,
+                parent_id=parent.node_id,
+                partition_key=partition_key,
+                local_metrics=[],
+                all_metrics=list(parent.all_metrics),
+                point_indices=global_indices,
+                local_scores=np.empty((len(global_indices), 0)),
+                all_scores=parent_all_scores,
+                base_rate=_compute_base_rate(labels),
+                n_positive=int((labels == 1).sum()),
+                n_negative=int((labels == 0).sum()),
+                is_leaf=True,
+            )
+            parent.children[partition_key] = child
+            tree.all_nodes[child_node_id] = child
+            continue
+
+        if config.min_minority_fraction > 0 and minority_frac < config.min_minority_fraction:
+            logger.info("  Minority fraction %.1f%% < %.1f%% → leaf (--errors-only pruning)",
+                       minority_frac * 100, config.min_minority_fraction * 100)
+            child = PartitionTreeNode(
+                node_id=child_node_id,
+                depth=parent.depth + 1,
+                parent_id=parent.node_id,
+                partition_key=partition_key,
+                local_metrics=[],
+                all_metrics=list(parent.all_metrics),
+                point_indices=global_indices,
+                local_scores=np.empty((len(global_indices), 0)),
+                all_scores=parent_all_scores,
+                base_rate=_compute_base_rate(labels),
+                n_positive=int((labels == 1).sum()),
+                n_negative=int((labels == 0).sum()),
+                is_leaf=True,
+            )
+            parent.children[partition_key] = child
+            tree.all_nodes[child_node_id] = child
+            continue
+
+        # Select representative examples for proposer, emphasizing "exceptions"
+        # (minority-class examples that the base-rate prediction gets wrong)
+        pos_df = partition_df[partition_df[label_column] == 1]
+        neg_df = partition_df[partition_df[label_column] == 0]
+
+        if len(pos_df) == 0 or len(neg_df) == 0:
+            # Degenerate: single-class partition → leaf
+            child = PartitionTreeNode(
+                node_id=child_node_id,
+                depth=parent.depth + 1,
+                parent_id=parent.node_id,
+                partition_key=partition_key,
+                local_metrics=[],
+                all_metrics=list(parent.all_metrics),
+                point_indices=global_indices,
+                local_scores=np.empty((len(global_indices), 0)),
+                all_scores=parent_all_scores,
+                base_rate=_compute_base_rate(labels),
+                n_positive=int((labels == 1).sum()),
+                n_negative=int((labels == 0).sum()),
+                is_leaf=True,
+            )
+            parent.children[partition_key] = child
+            tree.all_nodes[child_node_id] = child
+            continue
+
+        # Determine majority/minority class: show MORE minority examples (exceptions)
+        base_rate_here = _compute_base_rate(labels)
+        majority_is_positive = base_rate_here >= 0.5
+        k_base = config.exception_examples_per_class
+
+        if majority_is_positive:
+            # Rejected papers are exceptions — show more of them
+            k_minority = min(k_base * 2, len(neg_df))
+            k_majority = k_base
+            exception_class = "rejected"
+        else:
+            # Accepted papers are exceptions — show more of them
+            k_minority = min(k_base * 2, len(pos_df))
+            k_majority = k_base
+            exception_class = "accepted"
+
+        pos_sample = cluster_and_select(
+            pos_df, text_column,
+            k=k_minority if not majority_is_positive else k_majority,
+            model_name=config.embedding_model, seed=config.random_seed,
+        )
+        neg_sample = cluster_and_select(
+            neg_df, text_column,
+            k=k_minority if majority_is_positive else k_majority,
+            model_name=config.embedding_model, seed=config.random_seed,
+        )
+
+        # Build exception context for the proposer
+        n_minority = int((labels == 0).sum()) if majority_is_positive else int((labels == 1).sum())
+        exception_context = (
+            f"EXCEPTIONS: This partition predicts '{('accepted' if majority_is_positive else 'rejected')}' "
+            f"for all {len(labels):,} examples (base rate = {base_rate_here:.0%} accepted). "
+            f"But {n_minority:,} examples ({n_minority/len(labels):.0%}) are {exception_class} — "
+            f"the partition gets them WRONG. We show extra {exception_class} examples below "
+            f"because they represent the prediction errors your features should help explain."
+        )
+
+        # Token budget
+        gen_example_tokens = 0
+        if max_model_len > 0 and tokenizer is not None:
+            partition_context = format_partition_description(partition_key, metric_names)
+            current_metrics_text = "\n".join([
+                f"{m.name}: YES={m.rubric.get('yes', '')[:100]}"
+                for m in parent.all_metrics
+            ])
+            n_total = len(pos_sample) + len(neg_sample)
+            gen_example_tokens = compute_generation_example_budget(
+                current_metrics_text=current_metrics_text,
+                task_description=task_description,
+                max_model_len=max_model_len,
+                n_total_examples=max(1, n_total),
+                tokenizer=tokenizer,
+            )
+
+        # Score sample on parent metrics (for contrastive pairs in proposer)
+        sample_combined = pd.concat([pos_sample, neg_sample], ignore_index=True)
+        sample_scored = None
+        if parent.all_metrics:
+            try:
+                sample_scored = score_binary_subset(
+                    sample_combined, np.arange(len(sample_combined)),
+                    parent.all_metrics, label_cache,
+                    id_column=id_column, text_column=text_column, label_column=label_column,
+                    task_description=task_description, scoring_backend=scoring_backend,
+                    batch_size=config.label_batch_size, verbose=False,
+                    stage=f"{child_node_id}_sample",
+                    tokenizer=tokenizer, max_model_len=max_model_len,
+                )
+            except Exception as e:
+                logger.warning("Failed to score sample: %s", e)
+
+        # Build sibling + uncle/aunt contrastive context
+        sibling_ctx = _format_sibling_and_uncle_context(
+            current_key=partition_key,
+            all_partitions=partitions,
+            parent_metric_names=metric_names,
+            parent=parent,
+            tree=tree,
+            train_df=train_df,
+            label_column=label_column,
+        )
+
+        # Propose + refine on sample
+        partition_pop_size = len(partition_df)
+        partition_pos_rate = float((labels == 1).mean()) if len(labels) > 0 else 0.5
+
+        logger.info("  Proposing %d binary metrics for partition %s (with refinement)...",
+                     config.n_rubrics_to_propose, key_str)
+        new_metrics = _propose_and_refine(
+            proposer=proposer,
+            config=config,
+            label_cache=label_cache,
+            sample_df=partition_df,
+            pos_sample=pos_sample,
+            neg_sample=neg_sample,
+            task_description=task_description,
+            node_id=child_node_id,
+            parent=parent,
+            partition_key=partition_key,
+            id_column=id_column,
+            text_column=text_column,
+            label_column=label_column,
+            scoring_backend=scoring_backend,
+            gen_example_tokens=gen_example_tokens,
+            tokenizer=tokenizer,
+            max_model_len=max_model_len,
+            population_size=partition_pop_size,
+            positive_rate=partition_pos_rate,
+            sample_scored=sample_scored,
+            sibling_context=sibling_ctx,
+            exception_context=exception_context,
+        )
+
+        if not new_metrics:
+            logger.warning("  No metrics after proposal+refinement for %s → leaf", key_str)
+            child = PartitionTreeNode(
+                node_id=child_node_id,
+                depth=parent.depth + 1,
+                parent_id=parent.node_id,
+                partition_key=partition_key,
+                local_metrics=[],
+                all_metrics=list(parent.all_metrics),
+                point_indices=global_indices,
+                local_scores=np.empty((len(global_indices), 0)),
+                all_scores=parent_all_scores,
+                base_rate=_compute_base_rate(labels),
+                n_positive=int((labels == 1).sum()),
+                n_negative=int((labels == 0).sum()),
+                is_leaf=True,
+            )
+            parent.children[partition_key] = child
+            tree.all_nodes[child_node_id] = child
+            continue
+
+        # Score partition on new metrics
+        logger.info("  Scoring %d examples on %d new metrics...", len(partition_df), len(new_metrics))
+        new_scored = score_binary_subset(
+            partition_df, np.arange(len(partition_df)), new_metrics, label_cache,
+            id_column=id_column, text_column=text_column, label_column=label_column,
+            task_description=task_description, scoring_backend=scoring_backend,
+            batch_size=config.label_batch_size, verbose=config.verbose,
+            stage=f"{child_node_id}_new", tokenizer=tokenizer, max_model_len=max_model_len,
+        )
+
+        # Select top K — clustering vs. discriminative based on child depth
+        new_names = [m.name for m in new_metrics]
+        X_new, y_new = build_binary_feature_matrix(new_scored, new_names, label_column)
+        child_depth = parent.depth + 1
+        is_clustering = child_depth < config.clustering_depth
+
+        if is_clustering:
+            logger.info("  Using CLUSTERING selection (depth=%d)", child_depth)
+            for i, name in enumerate(new_names):
+                p = X_new[:, i].mean()
+                logger.info("    %s: P(YES)=%.3f (balance=%.2f)", name, p, min(p, 1-p)*2)
+            top_k_idx = select_clustering_features(X_new, new_names, K)
+        else:
+            logger.info("  Using DISCRIMINATIVE selection (MI, depth=%d)", child_depth)
+            mi_scores = compute_mutual_information(X_new, y_new)
+            for name, mi in zip(new_names, mi_scores):
+                logger.info("    MI(%s) = %.4f", name, mi)
+            top_k_idx = list(np.argsort(mi_scores)[::-1][:K])
+
+        selected_new = [new_metrics[i] for i in top_k_idx]
+        selected_new_names = [m.name for m in selected_new]
+        logger.info("  Selected: %s", selected_new_names)
+
+        # Build accumulated scores: parent_all_scores + new local scores
+        X_local, _ = build_binary_feature_matrix(new_scored, selected_new_names, label_column)
+        X_all_child = np.hstack([parent_all_scores, X_local])
+        all_child_metrics = list(parent.all_metrics) + selected_new
+
+        # Compute base rate
+        br = _compute_base_rate(labels)
+        logger.info("  Child %s: base_rate=%.3f (%d pos, %d neg)",
+                    key_str, br, int((labels == 1).sum()), int((labels == 0).sum()))
+
+        # Train router if enabled
+        child_router = None
+        if config.use_router and len(global_indices) >= config.router_min_examples:
+            partition_texts = train_df.iloc[global_indices][text_column].astype(str).tolist()
+            child_router = train_node_router(
+                texts=partition_texts,
+                labels=labels,
+                base_rate=br,
+                embedding_model_name=config.embedding_model,
+                n_epochs=config.router_n_epochs,
+                batch_size=config.router_batch_size,
+                learning_rate=config.router_learning_rate,
+                hidden_dim=config.router_hidden_dim,
+                dropout=config.router_dropout,
+                seed=config.random_seed,
+                min_examples=config.router_min_examples,
+            )
+
+        child = PartitionTreeNode(
+            node_id=child_node_id,
+            depth=parent.depth + 1,
+            parent_id=parent.node_id,
+            partition_key=partition_key,
+            local_metrics=selected_new,
+            all_metrics=all_child_metrics,
+            point_indices=global_indices,
+            local_scores=X_local,
+            all_scores=X_all_child,
+            base_rate=br,
+            n_positive=int((labels == 1).sum()),
+            n_negative=int((labels == 0).sum()),
+            router=child_router,
+            router_minority_is_positive=child_router.minority_is_positive if child_router else None,
+        )
+
+        parent.children[partition_key] = child
+        tree.all_nodes[child_node_id] = child
+
+        # Register new metrics
+        for m in selected_new:
+            tree.all_metrics[m.metric_id] = m
+
+
+def grow_partition_tree(
+    node: PartitionTreeNode,
+    train_df: pd.DataFrame,
+    eval_df: pd.DataFrame,
+    config: TreeConfig,
+    label_cache: LabelCache,
+    proposer: PartitionMetricProposer,
+    task_description: str,
+    tree: MetricTree,
+    *,
+    id_column: str,
+    text_column: str,
+    label_column: str,
+    scoring_backend: Any,
+    tokenizer: Any = None,
+    max_model_len: int = 0,
+) -> None:
+    """Recursively grow the tree from a node by building partition children."""
     if node.depth >= config.max_depth:
         logger.info("Max depth %d reached at node %s", config.max_depth, node.node_id)
+        node.is_leaf = True
         return
 
-    y_train = train_df.iloc[node.point_indices][label_column].values
-    misclassified = ~node.correct_mask
-    n_misclassified = misclassified.sum()
-    logger.info("Node %s: %d/%d misclassified", node.node_id, n_misclassified, len(node.correct_mask))
-
-    if n_misclassified < config.min_subset_size:
-        logger.info("Too few misclassified (%d < %d), leaf node", n_misclassified, config.min_subset_size)
+    if node.is_leaf:
         return
 
-    # Split misclassified into false positives and false negatives
-    fp_mask = misclassified & (node.predictions == 1)  # predicted 1, true 0
-    fn_mask = misclassified & (node.predictions == 0)  # predicted 0, true 1
+    if not node.local_metrics:
+        logger.info("Node %s has no local metrics, marking as leaf", node.node_id)
+        node.is_leaf = True
+        return
 
-    n_fp = fp_mask.sum()
-    n_fn = fn_mask.sum()
-    logger.info("Node %s: %d false positives, %d false negatives", node.node_id, n_fp, n_fn)
+    build_partition_children(
+        parent=node,
+        train_df=train_df,
+        eval_df=eval_df,
+        config=config,
+        label_cache=label_cache,
+        proposer=proposer,
+        task_description=task_description,
+        tree=tree,
+        id_column=id_column,
+        text_column=text_column,
+        label_column=label_column,
+        scoring_backend=scoring_backend,
+        tokenizer=tokenizer,
+        max_model_len=max_model_len,
+    )
 
-    built_any = False
-
-    # Try to build separate FP and FN children
-    for error_type, count in [("false_positive", n_fp), ("false_negative", n_fn)]:
-        if count >= config.min_subset_size:
-            error_indices = node.point_indices[fp_mask if error_type == "false_positive" else fn_mask]
-            child = build_exception_node(
-                parent=node,
-                error_type=error_type,
-                error_indices=error_indices,
+    # Recurse on children
+    for child in node.children.values():
+        if not child.is_leaf:
+            grow_partition_tree(
+                node=child,
                 train_df=train_df,
                 eval_df=eval_df,
                 config=config,
                 label_cache=label_cache,
-                exception_proposer=exception_proposer,
+                proposer=proposer,
                 task_description=task_description,
                 tree=tree,
                 id_column=id_column,
                 text_column=text_column,
                 label_column=label_column,
-                judge_llm=judge_llm,
                 scoring_backend=scoring_backend,
                 tokenizer=tokenizer,
-                token_budgets=token_budgets,
+                max_model_len=max_model_len,
             )
-            if child is not None:
-                node.children[error_type] = child
-                tree.all_nodes[child.node_id] = child
-                built_any = True
-
-    # Fallback: single "misclassified" child if neither FP nor FN met min_subset_size alone
-    if not built_any and n_misclassified >= config.min_subset_size:
-        error_indices = node.point_indices[misclassified]
-        child = build_exception_node(
-            parent=node,
-            error_type="misclassified",
-            error_indices=error_indices,
-            train_df=train_df,
-            eval_df=eval_df,
-            config=config,
-            label_cache=label_cache,
-            exception_proposer=exception_proposer,
-            task_description=task_description,
-            tree=tree,
-            id_column=id_column,
-            text_column=text_column,
-            label_column=label_column,
-            judge_llm=judge_llm,
-            scoring_backend=scoring_backend,
-            tokenizer=tokenizer,
-            token_budgets=token_budgets,
-        )
-        if child is not None:
-            node.children["misclassified"] = child
-            tree.all_nodes[child.node_id] = child
-
-    # Recurse on children
-    for child_type, child_node in node.children.items():
-        grow_tree(
-            node=child_node,
-            train_df=train_df,
-            eval_df=eval_df,
-            config=config,
-            label_cache=label_cache,
-            exception_proposer=exception_proposer,
-            task_description=task_description,
-            tree=tree,
-            id_column=id_column,
-            text_column=text_column,
-            label_column=label_column,
-            judge_llm=judge_llm,
-            scoring_backend=scoring_backend,
-            tokenizer=tokenizer,
-            token_budgets=token_budgets,
-        )
 
 
 def build_metric_tree(
@@ -854,16 +1073,18 @@ def build_metric_tree(
     id_column: str,
     text_column: str,
     label_column: str,
-    judge_llm: Any,
     cache_dir: Optional[str] = None,
     scoring_backend: Any = None,
     tokenizer: Any = None,
-    token_budgets: Optional[Dict] = None,
+    max_model_len: int = 0,
 ) -> MetricTree:
-    """Build a complete Metric Tree.
+    """Build a complete Partitioned Metric Tree.
 
-    Orchestrates: root construction → recursive exception node growth.
+    Orchestrates: root construction → recursive partition growth.
     """
+    if scoring_backend is None:
+        raise ValueError("scoring_backend is required for binary scoring")
+
     # Set up label cache
     if cache_dir is None:
         cache_dir = str(Path(config.output_dir) / "label_cache")
@@ -876,51 +1097,52 @@ def build_metric_tree(
     # Initialize tree
     tree = MetricTree(config=config, task_description=task_description)
 
+    # Build partition proposer with clustering depth from config
+    partition_proposer = PartitionMetricProposer(
+        proposer, clustering_depth=config.clustering_depth,
+    )
+
     # Build root
     root_node, root_metrics = build_root_node(
         train_df=train_df,
         eval_df=eval_df,
         config=config,
         label_cache=label_cache,
-        proposer=proposer,
+        proposer=partition_proposer,
         task_description=task_description,
         id_column=id_column,
         text_column=text_column,
         label_column=label_column,
-        judge_llm=judge_llm,
         scoring_backend=scoring_backend,
         tokenizer=tokenizer,
-        token_budgets=token_budgets,
+        max_model_len=max_model_len,
     )
 
     tree.root = root_node
     tree.all_nodes[root_node.node_id] = root_node
     tree.all_metrics.update(root_metrics)
 
-    # Build exception proposer
-    exception_proposer = ExceptionMetricProposer(proposer)
-
     # Grow tree recursively
-    grow_tree(
+    grow_partition_tree(
         node=root_node,
         train_df=train_df,
         eval_df=eval_df,
         config=config,
         label_cache=label_cache,
-        exception_proposer=exception_proposer,
+        proposer=partition_proposer,
         task_description=task_description,
         tree=tree,
         id_column=id_column,
         text_column=text_column,
         label_column=label_column,
-        judge_llm=judge_llm,
         scoring_backend=scoring_backend,
         tokenizer=tokenizer,
-        token_budgets=token_budgets,
+        max_model_len=max_model_len,
     )
 
     n_nodes = len(tree.all_nodes)
     n_metrics = len(tree.all_metrics)
-    logger.info("Metric Tree complete: %d nodes, %d unique metrics", n_nodes, n_metrics)
+    n_leaves = sum(1 for n in tree.all_nodes.values() if n.is_leaf or not n.children)
+    logger.info("Metric Tree complete: %d nodes (%d leaves), %d unique metrics", n_nodes, n_leaves, n_metrics)
 
     return tree

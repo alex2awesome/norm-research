@@ -32,16 +32,12 @@ def build_metric_tree_ensemble(
     id_column: str,
     text_column: str,
     label_column: str,
-    judge_llm: Any,
     cache_dir: Optional[str] = None,
     scoring_backend: Any = None,
     tokenizer: Any = None,
-    token_budgets: Optional[dict] = None,
+    max_model_len: int = 0,
 ) -> List[MetricTree]:
-    """Build an ensemble of Metric Trees with varying seeds and temperatures.
-
-    All trees share a single LabelCache directory for cross-tree caching.
-    """
+    """Build an ensemble of Partition Metric Trees with varying seeds and temperatures."""
     if cache_dir is None:
         cache_dir = str(Path(config.output_dir) / "label_cache")
 
@@ -63,11 +59,10 @@ def build_metric_tree_ensemble(
             id_column=id_column,
             text_column=text_column,
             label_column=label_column,
-            judge_llm=judge_llm,
-            cache_dir=cache_dir,  # shared cache
+            cache_dir=cache_dir,
             scoring_backend=scoring_backend,
             tokenizer=tokenizer,
-            token_budgets=token_budgets,
+            max_model_len=max_model_len,
         )
         trees.append(tree)
         logger.info("Tree %d: %d nodes, %d metrics",
@@ -84,19 +79,14 @@ def ensemble_predict(
     id_column: str,
     text_column: str,
     label_column: str,
-    judge_llm: Any,
     task_description: str,
+    scoring_backend: Any,
     batch_size: int = 200,
-    scoring_backend: Any = None,
     verbose: bool = False,
     max_model_len: int = 0,
     tokenizer: Any = None,
 ) -> pd.DataFrame:
-    """Aggregate predictions from multiple trees via majority vote.
-
-    Returns DataFrame with columns: id, prediction, probability,
-    agreement (fraction of trees that agree), individual predictions.
-    """
+    """Aggregate predictions from multiple trees via majority vote."""
     all_predictions = []
     all_probs = []
 
@@ -109,10 +99,9 @@ def ensemble_predict(
             id_column=id_column,
             text_column=text_column,
             label_column=label_column,
-            judge_llm=judge_llm,
             task_description=task_description,
-            batch_size=batch_size,
             scoring_backend=scoring_backend,
+            batch_size=batch_size,
             verbose=verbose,
             max_model_len=max_model_len,
             tokenizer=tokenizer,
@@ -120,22 +109,17 @@ def ensemble_predict(
         all_predictions.append(result["prediction"].values)
         all_probs.append(result["probability"].values)
 
-    # Stack: shape (n_trees, n_examples)
     pred_matrix = np.stack(all_predictions, axis=0)
     prob_matrix = np.stack(all_probs, axis=0)
 
-    # Confidence-weighted majority vote: each tree's vote is weighted by its
-    # confidence (distance from 0.5). A tree that says P(1)=0.95 contributes
-    # more than one that says P(1)=0.51.
-    confidence_weights = np.abs(prob_matrix - 0.5)  # shape (n_trees, n_examples)
-    # Weighted vote toward class 1: sum(w_i * pred_i) / sum(w_i)
+    # Confidence-weighted majority vote
+    confidence_weights = np.abs(prob_matrix - 0.5)
     weight_sum = confidence_weights.sum(axis=0)
-    weight_sum = np.where(weight_sum == 0, 1.0, weight_sum)  # avoid division by zero
+    weight_sum = np.where(weight_sum == 0, 1.0, weight_sum)
     weighted_vote = (confidence_weights * pred_matrix).sum(axis=0) / weight_sum
     ensemble_preds = (weighted_vote >= 0.5).astype(int)
     ensemble_probs = prob_matrix.mean(axis=0)
 
-    # Agreement: fraction of trees that agree with the ensemble prediction
     agreement = np.array([
         (pred_matrix[:, j] == ensemble_preds[j]).mean()
         for j in range(len(ensemble_preds))

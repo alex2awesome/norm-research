@@ -67,6 +67,22 @@ class _SingleTextMultiMetricSignature(dspy.Signature):
     scores_json: str = dspy.OutputField(desc="JSON object mapping metric names to numeric scores (1-5). Example: {\"Clarity\": 4, \"Relevance\": 3}")
 
 
+class _BinaryMetricSignature(dspy.Signature):
+    """For each criterion below, answer YES or NO. Be STRICT: only answer YES if the text clearly and specifically meets ALL aspects of the YES description. If the text only partially meets the criterion, meets it in a vague or generic way, or you are uncertain, answer NO. Read the YES/NO descriptions carefully and apply them literally — do not give the benefit of the doubt. Provide brief reasoning before your answers."""
+    task_description: str = dspy.InputField(desc="Brief description of the underlying task.")
+    criteria: str = dspy.InputField(desc="Binary criteria with YES/NO descriptions. For each criterion, determine if the text CLEARLY and SPECIFICALLY meets the YES description. Be strict — partial or vague matches should be scored NO.")
+    text: str = dspy.InputField(desc="The text to evaluate.")
+    answers_json: str = dspy.OutputField(desc="JSON object mapping criterion names to \"yes\" or \"no\". Example: {\"Has_Novel_Method\": \"yes\", \"Uses_Empirical_Data\": \"no\"}")
+
+
+class _TernaryMetricSignature(dspy.Signature):
+    """For each criterion below, answer YES, NO, or NA. Be STRICT: only answer YES if the text clearly and specifically meets ALL aspects of the YES description. Answer NA only when the criterion is entirely inapplicable to this text — it addresses an aspect that is absent from or irrelevant to the text's scope (e.g., evaluating "statistical rigor" for a purely theoretical contribution with no empirical component). Do NOT answer NA when you are uncertain — if the criterion could apply but the text falls short, answer NO. Provide brief reasoning before your answers."""
+    task_description: str = dspy.InputField(desc="Brief description of the underlying task.")
+    criteria: str = dspy.InputField(desc="Criteria with YES/NO/NA descriptions. For each criterion: YES if the text clearly meets it, NO if it does not or meets it poorly, NA if the criterion is entirely inapplicable to this text.")
+    text: str = dspy.InputField(desc="The text to evaluate.")
+    answers_json: str = dspy.OutputField(desc="JSON object mapping criterion names to \"yes\", \"no\", or \"na\". Example: {\"Has_Novel_Method\": \"yes\", \"Uses_Empirical_Data\": \"na\"}")
+
+
 class _GenerateMetricsSignature(dspy.Signature):
     """Propose metrics and rubrics that distinguish positive vs negative examples. Metrics must capture substantive, content-level distinctions (e.g. evidence quality, domain relevance, specificity of claims) rather than surface-level features (e.g. text length, formatting, readability, word choice). Every proposed metric must plausibly distinguish between items a domain expert would rate differently. Each metric must have a DETAILED rubric with specific, descriptive scoring criteria for each level (1-5). The rubric must explain exactly what distinguishes each score level so a human annotator could reliably apply it."""
     task_description: str = dspy.InputField(desc="Brief description of the task.")
@@ -123,6 +139,8 @@ _COT_JUDGE_REF_BASED = _cot_signature(_JudgeSignatureRefBased)
 _COT_MULTI_METRIC = _cot_signature(_MultiMetricSignature)
 _COT_SINGLE_TEXT_MULTI_METRIC = _cot_signature(_SingleTextMultiMetricSignature)
 _COT_GENERATE_METRICS = _cot_signature(_GenerateMetricsSignature)
+_COT_BINARY_METRIC = _cot_signature(_BinaryMetricSignature)
+_COT_TERNARY_METRIC = _cot_signature(_TernaryMetricSignature)
 # Dedup uses Predict (no CoT), so no extension needed
 
 
@@ -171,6 +189,94 @@ def _parse_multi_metric_from_text(text: str) -> Dict[str, float]:
             obj = ast.literal_eval(text[start : end + 1])
             if isinstance(obj, dict):
                 return {str(k): float(v) for k, v in obj.items()}
+    except Exception:
+        pass
+
+    return {}
+
+
+def _parse_binary_from_text(text: str) -> Dict[str, int]:
+    """Extract a JSON dict of binary (yes/no → 1/0) answers from raw LLM text."""
+    # Try to find JSON object in the text
+    for candidate in [text]:
+        try:
+            start = candidate.find("{")
+            end = candidate.rfind("}")
+            if start >= 0 and end > start:
+                obj = json.loads(candidate[start : end + 1])
+                if isinstance(obj, dict):
+                    result = {}
+                    for k, v in obj.items():
+                        v_str = str(v).strip().lower()
+                        if v_str in ("yes", "true", "1"):
+                            result[str(k)] = 1
+                        elif v_str in ("no", "false", "0"):
+                            result[str(k)] = 0
+                        else:
+                            result[str(k)] = 0  # default to 0 for unparseable
+                    return result
+        except Exception:
+            pass
+
+    # Fallback: try ast.literal_eval
+    try:
+        start = text.find("{")
+        end = text.rfind("}")
+        if start >= 0 and end > start:
+            obj = ast.literal_eval(text[start : end + 1])
+            if isinstance(obj, dict):
+                result = {}
+                for k, v in obj.items():
+                    v_str = str(v).strip().lower()
+                    result[str(k)] = 1 if v_str in ("yes", "true", "1") else 0
+                return result
+    except Exception:
+        pass
+
+    return {}
+
+
+def _parse_ternary_from_text(text: str) -> Dict[str, Optional[int]]:
+    """Extract a JSON dict of ternary (yes/no/na → 1/0/None) answers from raw LLM text."""
+    for candidate in [text]:
+        try:
+            start = candidate.find("{")
+            end = candidate.rfind("}")
+            if start >= 0 and end > start:
+                obj = json.loads(candidate[start : end + 1])
+                if isinstance(obj, dict):
+                    result = {}
+                    for k, v in obj.items():
+                        v_str = str(v).strip().lower()
+                        if v_str in ("yes", "true", "1"):
+                            result[str(k)] = 1
+                        elif v_str in ("no", "false", "0"):
+                            result[str(k)] = 0
+                        elif v_str in ("na", "n/a", "none", "null", "not applicable"):
+                            result[str(k)] = None
+                        else:
+                            result[str(k)] = None  # unparseable → NA
+                    return result
+        except Exception:
+            pass
+
+    # Fallback: try ast.literal_eval
+    try:
+        start = text.find("{")
+        end = text.rfind("}")
+        if start >= 0 and end > start:
+            obj = ast.literal_eval(text[start : end + 1])
+            if isinstance(obj, dict):
+                result = {}
+                for k, v in obj.items():
+                    v_str = str(v).strip().lower()
+                    if v_str in ("yes", "true", "1"):
+                        result[str(k)] = 1
+                    elif v_str in ("no", "false", "0"):
+                        result[str(k)] = 0
+                    else:
+                        result[str(k)] = None
+                return result
     except Exception:
         pass
 
@@ -227,7 +333,7 @@ class VLLMOfflineBackend:
             self.llm = LLM(model=model_name_or_path, **vllm_kwargs)
 
         self.sampling_params = sampling_params or SamplingParams(
-            temperature=0, max_tokens=1024,
+            temperature=0, max_tokens=512,
         )
         self.max_prompt_chars = max_prompt_chars
         self._tokenizer = self.llm.get_tokenizer()
@@ -349,6 +455,75 @@ class VLLMOfflineBackend:
                 if name not in scores:
                     scores[name] = 0.0
             results.append(MultiMetricResponse(scores=scores, raw_text=text))
+        return results
+
+    def score_binary_batch(
+        self,
+        task_description: str,
+        criteria_text: str,
+        criterion_names: List[str],
+        texts: List[str],
+    ) -> List[Dict[str, int]]:
+        """Score texts on binary (yes/no) criteria.
+
+        Each criterion is evaluated as YES (1) or NO (0).
+        Returns a list of dicts mapping criterion names to 0 or 1.
+        """
+        prompts: List[str] = []
+        for txt in texts:
+            input_dict = {
+                "task_description": _truncate(str(task_description or ""), self.max_prompt_chars),
+                "criteria": str(criteria_text or ""),
+                "text": _truncate(str(txt or ""), self.max_prompt_chars),
+            }
+            prompts.append(self._render_prompt(_COT_BINARY_METRIC, input_dict))
+
+        vllm_outputs = self.llm.generate(prompts, self.sampling_params)
+
+        results: List[Dict[str, int]] = []
+        for vout in vllm_outputs:
+            text = vout.outputs[0].text if vout.outputs else ""
+            answers = _parse_binary_from_text(text)
+            # Ensure all criterion names are present
+            for name in criterion_names:
+                if name not in answers:
+                    answers[name] = 0
+            results.append(answers)
+        return results
+
+    def score_ternary_batch(
+        self,
+        task_description: str,
+        criteria_text: str,
+        criterion_names: List[str],
+        texts: List[str],
+    ) -> List[Dict[str, Optional[int]]]:
+        """Score texts on ternary (yes/no/na) criteria.
+
+        Each criterion is evaluated as YES (1), NO (0), or NA (None).
+        NA means the criterion is entirely inapplicable to the text.
+        Returns a list of dicts mapping criterion names to 1, 0, or None.
+        """
+        prompts: List[str] = []
+        for txt in texts:
+            input_dict = {
+                "task_description": _truncate(str(task_description or ""), self.max_prompt_chars),
+                "criteria": str(criteria_text or ""),
+                "text": _truncate(str(txt or ""), self.max_prompt_chars),
+            }
+            prompts.append(self._render_prompt(_COT_TERNARY_METRIC, input_dict))
+
+        vllm_outputs = self.llm.generate(prompts, self.sampling_params)
+
+        results: List[Dict[str, Optional[int]]] = []
+        for vout in vllm_outputs:
+            text = vout.outputs[0].text if vout.outputs else ""
+            answers = _parse_ternary_from_text(text)
+            # Ensure all criterion names are present (missing → NA)
+            for name in criterion_names:
+                if name not in answers:
+                    answers[name] = None
+            results.append(answers)
         return results
 
     def generate_metrics(

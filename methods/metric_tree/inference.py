@@ -1,8 +1,13 @@
-"""Prediction through built Metric Trees."""
+"""Prediction through Partitioned Metric Trees — deterministic routing + base-rate leaves.
+
+When use_router is enabled, per-node text classifiers gate which examples
+continue deeper vs. stop at the current node's base-rate prediction.
+"""
 
 from __future__ import annotations
 
 import logging
+from collections import deque
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
@@ -10,133 +15,82 @@ import pandas as pd
 
 from autometrics.iterative_refinement.label_cache import LabelCache
 
-from .data_structures import MetricTree, MetricTreeNode
-from .scoring import (
-    add_interaction_features,
-    build_feature_matrix,
-    score_subset,
-)
+from .data_structures import MetricTree, PartitionTreeNode
+from .partition import assign_to_partitions, _format_key
+from .router import predict_router
+from .scoring import build_binary_feature_matrix, score_binary_subset
 
 logger = logging.getLogger("metric_tree.inference")
 
 
 def _predict_at_node(
-    node: MetricTreeNode,
-    scored_df: pd.DataFrame,
-    label_column: str,
+    node: PartitionTreeNode,
+    n: int,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Apply a node's classifier to pre-scored data.
+    """Predict using the node's base rate.
+
+    All examples in a partition share identical feature vectors,
+    so the prediction is the same for everyone: the base rate.
 
     Returns (predictions, probabilities).
     """
-    base_metric_names = [m.name for m in node.all_metrics]
-    available = [n for n in base_metric_names if n in scored_df.columns]
-
-    if not available:
-        raise ValueError(f"No metric columns found in scored_df for node {node.node_id}")
-
-    X, _ = build_feature_matrix(scored_df, available, label_column)
-
-    # Add interactions if needed
-    if any("__x__" in fn for fn in node.feature_names):
-        X_aug, aug_names, _ = add_interaction_features(X, available)
-        name_set = set(node.feature_names)
-        col_mask = [i for i, n in enumerate(aug_names) if n in name_set]
-        X_final = X_aug[:, col_mask]
-    else:
-        name_set = set(node.feature_names)
-        col_mask = [i for i, n in enumerate(available) if n in name_set]
-        X_final = X[:, col_mask]
-
-    X_scaled = node.scaler.transform(X_final)
-    probs = node.classifier.predict_proba(X_scaled)[:, 1]
-    preds = (probs >= 0.5).astype(int)
-
+    preds = np.ones(n, dtype=int) if node.base_rate >= 0.5 else np.zeros(n, dtype=int)
+    probs = np.full(n, node.base_rate)
     return preds, probs
 
 
-def predict_single(
-    tree: MetricTree,
-    scored_row: Dict[str, float],
-    label_column: str = "label",
-) -> Tuple[int, float, str]:
-    """Predict for a single example that has already been scored on all metrics.
-
-    Returns (prediction, probability, resolving_node_id).
-    """
-    node = tree.root
-    df = pd.DataFrame([scored_row])
-    df[label_column] = 0  # dummy label for matrix building
-
-    while node is not None:
-        preds, probs = _predict_at_node(node, df, label_column)
-        pred, prob = int(preds[0]), float(probs[0])
-        confidence = max(prob, 1 - prob)
-
-        # Check if resolved at this node
-        if not node.children or confidence >= node.confidence_threshold:
-            return pred, prob, node.node_id
-
-        # Route to appropriate child
-        if node.router is not None:
-            # Learned routing: check if router thinks parent is correct
-            base_names = [m.name for m in node.all_metrics]
-            X, _ = build_feature_matrix(df, base_names, label_column)
-            X_scaled = node.scaler.transform(X)
-            router_prob = node.router.predict_proba(X_scaled)[0, 1]
-            if router_prob >= 0.5:
-                # Router thinks parent is correct, resolve here
-                return pred, prob, node.node_id
-
-        # Route based on prediction direction
-        if pred == 1 and "false_positive" in node.children:
-            node = node.children["false_positive"]
-        elif pred == 0 and "false_negative" in node.children:
-            node = node.children["false_negative"]
-        elif "misclassified" in node.children:
-            node = node.children["misclassified"]
-        else:
-            # No matching child, resolve here
-            return pred, prob, node.node_id
-
-    return pred, prob, node.node_id
+def _resolve_at_node(
+    node: PartitionTreeNode,
+    global_idx: np.ndarray,
+    predictions: np.ndarray,
+    probabilities: np.ndarray,
+    resolving_nodes: list,
+) -> None:
+    """Predict at a node and store results for the given global indices."""
+    preds, probs = _predict_at_node(node, len(global_idx))
+    predictions[global_idx] = preds
+    probabilities[global_idx] = probs
+    node_id = node.node_id
+    for idx in global_idx:
+        resolving_nodes[idx] = node_id
 
 
-def predict_root_only(
-    tree: MetricTree,
+def _apply_router_gate(
+    node: PartitionTreeNode,
+    child: PartitionTreeNode,
+    actual_global_idx: np.ndarray,
     df: pd.DataFrame,
-    label_cache: LabelCache,
-    *,
-    id_column: str,
     text_column: str,
-    label_column: str,
-    judge_llm: Any,
-    task_description: str,
-    batch_size: int = 200,
-    scoring_backend: Any = None,
-    verbose: bool = False,
-    max_model_len: int = 0,
-    tokenizer: Any = None,
-) -> np.ndarray:
-    """Classify ALL examples using only the root node's classifier.
-
-    Used for computing the articulability gap: root-only accuracy vs. full tree.
-    Returns array of predictions (0 or 1).
-    """
-    root = tree.root
-    all_metrics = list(root.all_metrics)
-
-    scored_df = score_subset(
-        df, np.arange(len(df)), all_metrics, label_cache,
-        id_column=id_column, text_column=text_column, label_column=label_column,
-        judge_llm=judge_llm, task_description=task_description,
-        batch_size=batch_size, verbose=verbose,
-        stage="root_only_predict", scoring_backend=scoring_backend,
-        tokenizer=tokenizer, max_model_len=max_model_len,
+    router_threshold: float,
+    embedding_model_name: str,
+    predictions: np.ndarray,
+    probabilities: np.ndarray,
+    resolving_nodes: list,
+    queue: deque,
+) -> None:
+    """Apply router gating: examples above threshold continue, others stop."""
+    texts = df.iloc[actual_global_idx][text_column].astype(str).tolist()
+    minority_probs = predict_router(
+        node.router, texts,
+        embedding_model_name=embedding_model_name,
     )
 
-    preds, _ = _predict_at_node(root, scored_df, label_column)
-    return preds
+    continue_mask = minority_probs > router_threshold
+    continue_idx = actual_global_idx[continue_mask]
+    stop_idx = actual_global_idx[~continue_mask]
+
+    if len(continue_idx) > 0:
+        queue.append((child, continue_idx))
+    if len(stop_idx) > 0:
+        # Stopped examples get the child's base-rate prediction
+        # (they landed in this partition but the router says they're majority-class)
+        resolve_node = child
+        _resolve_at_node(resolve_node, stop_idx, predictions, probabilities, resolving_nodes)
+
+    logger.debug(
+        "Router at %s: %d/%d continue (threshold=%.2f)",
+        node.node_id, len(continue_idx), len(actual_global_idx), router_threshold,
+    )
 
 
 def predict_batch(
@@ -147,115 +101,145 @@ def predict_batch(
     id_column: str,
     text_column: str,
     label_column: str,
-    judge_llm: Any,
     task_description: str,
+    scoring_backend: Any,
     batch_size: int = 200,
-    scoring_backend: Any = None,
     verbose: bool = False,
     max_model_len: int = 0,
     tokenizer: Any = None,
+    use_router: Optional[bool] = None,
+    router_threshold: Optional[float] = None,
+    # Legacy params (ignored, kept for API compatibility)
+    judge_llm: Any = None,
 ) -> pd.DataFrame:
-    """Efficient batch prediction through the tree.
+    """Batch prediction through the partition tree.
 
-    1. Score all examples on root metrics → classify
-    2. Partition by confidence → resolved at root vs. routed to children
-    3. Score routed examples on child's local metrics (parent scores cached)
-    4. Repeat until all resolved or at leaf
+    1. Score all examples on root's K metrics -> binary
+    2. Assign to partitions
+    3. BFS: for each (node, partition_key, indices):
+       - Look up child = node.children.get(partition_key)
+       - If child exists and not leaf: optionally apply router gate, then
+         score on child's metrics, assign to sub-partitions, enqueue
+       - If child is leaf or missing: predict via base rate
+    4. Return DataFrame with id, prediction, probability, resolving_node
 
-    Returns DataFrame with columns: id, prediction, probability, resolving_node.
+    When use_router=True, per-node text classifiers filter which examples
+    continue deeper. Examples where p(minority | text) <= threshold stop
+    at the current node's base-rate prediction.
     """
+    # Resolve router config
+    cfg = tree.config
+    if use_router is None:
+        use_router = getattr(cfg, "use_router", False) if cfg else False
+    if router_threshold is None:
+        router_threshold = getattr(cfg, "router_threshold", 0.5) if cfg else 0.5
+    embedding_model_name = getattr(cfg, "embedding_model", "all-MiniLM-L6-v2") if cfg else "all-MiniLM-L6-v2"
+
+    if use_router:
+        logger.info("Router-gated inference enabled (threshold=%.2f)", router_threshold)
+
     n = len(df)
     predictions = np.zeros(n, dtype=int)
-    probabilities = np.zeros(n, dtype=float)
+    probabilities = np.full(n, 0.5)
     resolving_nodes = [""] * n
 
-    # Track which examples are still unresolved
-    unresolved = np.ones(n, dtype=bool)
-    indices = np.arange(n)
+    root = tree.root
+    if root is None:
+        return pd.DataFrame({
+            id_column: df[id_column].values,
+            "prediction": predictions,
+            "probability": probabilities,
+            "resolving_node": resolving_nodes,
+        })
 
-    # BFS through tree levels
-    queue: List[Tuple[MetricTreeNode, np.ndarray]] = [(tree.root, indices)]
+    # Score all examples on root's metrics
+    logger.info("Scoring %d examples on root metrics (%d)...", n, len(root.local_metrics))
+    root_scored = score_binary_subset(
+        df, np.arange(n), root.local_metrics, label_cache,
+        id_column=id_column, text_column=text_column, label_column=label_column,
+        task_description=task_description, scoring_backend=scoring_backend,
+        batch_size=batch_size, verbose=verbose,
+        stage="predict_root", tokenizer=tokenizer, max_model_len=max_model_len,
+    )
 
-    while queue:
-        next_queue: List[Tuple[MetricTreeNode, np.ndarray]] = []
+    root_metric_names = [m.name for m in root.local_metrics]
+    X_root, _ = build_binary_feature_matrix(root_scored, root_metric_names, label_column)
 
-        for node, node_indices in queue:
-            if len(node_indices) == 0:
-                continue
+    # BFS queue: (node, global_indices)
+    queue: deque[Tuple[PartitionTreeNode, np.ndarray]] = deque()
 
-            node_df = df.iloc[node_indices].reset_index(drop=True)
+    # Assign to root partitions
+    root_partitions = assign_to_partitions(X_root)
 
-            # Score on this node's metrics
-            all_metrics = list(node.all_metrics)
-            scored_df = score_subset(
-                node_df, np.arange(len(node_df)), all_metrics, label_cache,
-                id_column=id_column, text_column=text_column, label_column=label_column,
-                judge_llm=judge_llm, task_description=task_description,
-                batch_size=batch_size, verbose=verbose,
-                stage=f"predict_{node.node_id}", scoring_backend=scoring_backend,
-                tokenizer=tokenizer, max_model_len=max_model_len,
-            )
-
-            # Predict at this node
-            preds, probs = _predict_at_node(node, scored_df, label_column)
-            confidence = np.maximum(probs, 1 - probs)
-
-            # Determine resolved vs. unresolved
-            if not node.children:
-                # Leaf node: everything resolves here
-                resolved_local = np.ones(len(node_indices), dtype=bool)
+    for p_key, local_idx in root_partitions.items():
+        child = root.children.get(p_key)
+        if child is not None and not child.is_leaf and child.local_metrics:
+            # Router gate at root level
+            if use_router and root.router is not None:
+                _apply_router_gate(
+                    root, child, local_idx, df, text_column,
+                    router_threshold, embedding_model_name,
+                    predictions, probabilities, resolving_nodes, queue,
+                )
             else:
-                resolved_local = confidence >= node.confidence_threshold
+                queue.append((child, local_idx))
+        else:
+            resolve_node = child if child is not None else root
+            _resolve_at_node(resolve_node, local_idx, predictions, probabilities, resolving_nodes)
 
-                # Learned router override
-                if node.router is not None:
-                    base_names = [m.name for m in node.all_metrics]
-                    avail = [n_name for n_name in base_names if n_name in scored_df.columns]
-                    X, _ = build_feature_matrix(scored_df, avail, label_column)
-                    X_scaled = node.scaler.transform(X)
-                    router_correct_probs = node.router.predict_proba(X_scaled)[:, 1]
-                    # Override: router-confident examples are also resolved
-                    resolved_local = resolved_local | (router_correct_probs >= 0.5)
+    # BFS through deeper levels
+    while queue:
+        node, global_idx = queue.popleft()
 
-            # Record resolved predictions
-            resolved_global = node_indices[resolved_local]
-            predictions[resolved_global] = preds[resolved_local]
-            probabilities[resolved_global] = probs[resolved_local]
-            for idx in resolved_global:
-                resolving_nodes[idx] = node.node_id
-            unresolved[resolved_global] = False
+        if len(global_idx) == 0:
+            continue
 
-            # Route unresolved to children
-            unresolved_local = ~resolved_local
-            if unresolved_local.any() and node.children:
-                unresolved_indices = node_indices[unresolved_local]
-                unresolved_preds = preds[unresolved_local]
+        # Score on this node's local metrics
+        node_df = df.iloc[global_idx].reset_index(drop=True)
+        node_scored = score_binary_subset(
+            node_df, np.arange(len(node_df)), node.local_metrics, label_cache,
+            id_column=id_column, text_column=text_column, label_column=label_column,
+            task_description=task_description, scoring_backend=scoring_backend,
+            batch_size=batch_size, verbose=verbose,
+            stage=f"predict_{node.node_id}", tokenizer=tokenizer, max_model_len=max_model_len,
+        )
 
-                for child_type, child_node in node.children.items():
-                    if child_type == "false_positive":
-                        child_mask = unresolved_preds == 1
-                    elif child_type == "false_negative":
-                        child_mask = unresolved_preds == 0
-                    elif child_type == "misclassified":
-                        child_mask = np.ones(len(unresolved_indices), dtype=bool)
-                    else:
-                        continue
+        local_names = [m.name for m in node.local_metrics]
+        X_local, _ = build_binary_feature_matrix(node_scored, local_names, label_column)
 
-                    child_indices = unresolved_indices[child_mask]
-                    if len(child_indices) > 0:
-                        next_queue.append((child_node, child_indices))
+        # Assign to partitions based on THIS node's local scores
+        node_partitions = assign_to_partitions(X_local)
 
-        queue = next_queue
+        for p_key, local_idx in node_partitions.items():
+            actual_global_idx = global_idx[local_idx]
+            child = node.children.get(p_key)
 
-    # Any remaining unresolved get root prediction
-    still_unresolved = unresolved
-    if still_unresolved.any():
-        logger.warning("%d examples unresolved after tree traversal, using root prediction", still_unresolved.sum())
-        # These should have been scored at some point, use last available
-        for idx in indices[still_unresolved]:
-            predictions[idx] = 0
-            probabilities[idx] = 0.5
-            resolving_nodes[idx] = "unresolved"
+            if child is not None and not child.is_leaf and child.local_metrics:
+                # Router gate: filter which examples continue deeper
+                if use_router and node.router is not None:
+                    _apply_router_gate(
+                        node, child, actual_global_idx, df, text_column,
+                        router_threshold, embedding_model_name,
+                        predictions, probabilities, resolving_nodes, queue,
+                    )
+                else:
+                    queue.append((child, actual_global_idx))
+            else:
+                resolve_node = child if child is not None else node
+                _resolve_at_node(
+                    resolve_node, actual_global_idx,
+                    predictions, probabilities, resolving_nodes,
+                )
+
+    # Handle any unresolved (shouldn't happen with fallback, but just in case)
+    unresolved = np.array([rn == "" for rn in resolving_nodes])
+    if unresolved.any():
+        logger.warning("%d examples unresolved, using root prediction", unresolved.sum())
+        preds, probs = _predict_at_node(root, int(unresolved.sum()))
+        predictions[unresolved] = preds
+        probabilities[unresolved] = probs
+        for idx in np.where(unresolved)[0]:
+            resolving_nodes[idx] = "root_fallback"
 
     result = pd.DataFrame({
         id_column: df[id_column].values,
@@ -269,3 +253,53 @@ def predict_batch(
         logger.info("Resolution distribution:\n%s", node_counts.to_string())
 
     return result
+
+
+def predict_root_only(
+    tree: MetricTree,
+    df: pd.DataFrame,
+    label_cache: LabelCache,
+    *,
+    id_column: str,
+    text_column: str,
+    label_column: str,
+    task_description: str,
+    scoring_backend: Any,
+    batch_size: int = 200,
+    verbose: bool = False,
+    max_model_len: int = 0,
+    tokenizer: Any = None,
+    judge_llm: Any = None,
+) -> np.ndarray:
+    """Classify ALL examples using only the root node's base rate per partition.
+
+    Used for computing the articulability gap. No router gating here —
+    this is the baseline that uses only root-level features.
+    Returns array of predictions (0 or 1).
+    """
+    root = tree.root
+    if root is None:
+        return np.zeros(len(df), dtype=int)
+
+    scored_df = score_binary_subset(
+        df, np.arange(len(df)), root.local_metrics, label_cache,
+        id_column=id_column, text_column=text_column, label_column=label_column,
+        task_description=task_description, scoring_backend=scoring_backend,
+        batch_size=batch_size, verbose=verbose,
+        stage="root_only_predict", tokenizer=tokenizer, max_model_len=max_model_len,
+    )
+
+    metric_names = [m.name for m in root.local_metrics]
+    X, _ = build_binary_feature_matrix(scored_df, metric_names, label_column)
+
+    # Per-partition base rate prediction
+    n = len(df)
+    predictions = np.zeros(n, dtype=int)
+    partitions = assign_to_partitions(X)
+    for p_key, local_idx in partitions.items():
+        child = root.children.get(p_key)
+        resolve_node = child if child is not None else root
+        preds, _ = _predict_at_node(resolve_node, len(local_idx))
+        predictions[local_idx] = preds
+
+    return predictions
