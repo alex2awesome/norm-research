@@ -143,6 +143,13 @@ def parse_args():
     )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
+        "--class_weight_auto",
+        "--class-weight-auto",
+        action="store_true",
+        help="Automatically compute pos_weight for BCEWithLogitsLoss to handle class imbalance. "
+             "Weight = num_neg / num_pos.",
+    )
+    parser.add_argument(
         "--bradley-terry",
         "--bradley_terry",
         action="store_true",
@@ -626,7 +633,15 @@ def train(args):
         args.gradient_accumulation_steps,
     )
 
-    loss_fn = nn.BCEWithLogitsLoss()
+    if args.class_weight_auto:
+        num_pos = train_df["judgement"].sum()
+        num_neg = len(train_df) - num_pos
+        pos_weight_val = num_neg / max(num_pos, 1)
+        logger.info("Class weight auto: %d pos, %d neg -> pos_weight=%.3f", num_pos, num_neg, pos_weight_val)
+        pos_weight = torch.tensor([pos_weight_val], device=model.device, dtype=torch.float32)
+        loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
+    else:
+        loss_fn = nn.BCEWithLogitsLoss()
     best_test_auc = 0.0
     best_epoch = 0
     history: List[Dict[str, float]] = []

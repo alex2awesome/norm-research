@@ -21,10 +21,11 @@ class TreeConfig:
 
     # Metric generation
     contrastive_pairs_k: int = 5            # pairs for proposer context
-    exception_examples_per_class: int = 15
+    exception_examples_per_class: int = 25
     refinement_sample_size: int = 1000      # sample size per refinement round (different sample each round)
     max_refinement_rounds: int = 5          # max rounds of propose→score→refine with cumulative history
     min_feature_balance: float = 0.15       # features with P(YES) outside [min, 1-min] are "skewed"
+    proposer_max_retries: int = 3           # retry proposal with fresh examples on total failure
 
     # Error-based pruning: only extend partitions with enough minority-class examples
     min_minority_fraction: float = 0.0    # 0 = extend all (default); e.g. 0.15 = prune pure partitions

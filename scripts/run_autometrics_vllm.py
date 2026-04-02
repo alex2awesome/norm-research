@@ -167,6 +167,7 @@ backend = create_backend(
     tensor_parallel_size=args.tensor_parallel_size,
     max_model_len=args.max_model_len,
     gpu_memory_utilization=0.95,
+    attention_config={"backend": "FLASH_ATTN"},
 )
 print("VLLM backend ready.")
 

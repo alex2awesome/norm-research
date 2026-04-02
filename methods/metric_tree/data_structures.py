@@ -53,6 +53,9 @@ class PartitionTreeNode:
 
     is_leaf: bool = False
 
+    # Leaf regression: logistic regression on accumulated binary features
+    leaf_model: Any = None  # fitted sklearn LogisticRegression (or None)
+
     # Router: per-node text classifier for selective deepening (optional)
     router: Any = None                              # trained NodeRouter instance
     router_minority_is_positive: Optional[bool] = None  # whether minority class = label 1

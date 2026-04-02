@@ -131,6 +131,49 @@ def _sample_examples(
     return pos_sample, neg_sample
 
 
+def _fit_leaf_model(
+    all_scores: np.ndarray,
+    labels: np.ndarray,
+) -> Any:
+    """Fit a logistic regression on accumulated binary features for a leaf node.
+
+    Returns fitted sklearn LogisticRegression, or None if fitting fails
+    (e.g. too few examples, single class, or all-constant features).
+    """
+    if all_scores.shape[1] == 0 or len(labels) < 5:
+        return None
+
+    # Need both classes present
+    n_pos = int((labels == 1).sum())
+    n_neg = int((labels == 0).sum())
+    if n_pos == 0 or n_neg == 0:
+        return None
+
+    # Check for any variance in features
+    col_var = all_scores.var(axis=0)
+    useful_cols = col_var > 0
+    if not useful_cols.any():
+        return None
+
+    try:
+        from sklearn.linear_model import LogisticRegression
+        model = LogisticRegression(
+            penalty="l1",
+            solver="liblinear",
+            C=1.0,
+            max_iter=200,
+            random_state=42,
+        )
+        X = all_scores[:, useful_cols]
+        model.fit(X, labels)
+        # Store which columns were used so inference can replicate
+        model._useful_cols = useful_cols
+        return model
+    except Exception as e:
+        logger.warning("Failed to fit leaf model: %s", e)
+        return None
+
+
 def _format_sibling_and_uncle_context(
     current_key: Tuple[int, ...],
     all_partitions: Dict[Tuple[int, ...], np.ndarray],
@@ -316,29 +359,48 @@ def _propose_and_refine(
     existing_metric_ids: set = set()
     existing_names: set = set()
 
-    # Initial proposal
-    logger.info("Proposing %d binary metrics (round 1)...", K_propose)
-    raw_metrics = proposer.propose(
-        task_description=task_description,
-        parent=parent,
-        partition_key=partition_key,
-        positive_df=pos_sample,
-        negative_df=neg_sample,
-        id_column=id_column,
-        text_column=text_column,
-        label_column=label_column,
-        num_metrics=K_propose,
-        max_example_tokens=gen_example_tokens,
-        tokenizer=tokenizer,
-        scoring_backend=scoring_backend,
-        contrastive_pairs_k=config.contrastive_pairs_k,
-        population_size=population_size,
-        positive_rate=positive_rate,
-        sample_scored=sample_scored,
-        sibling_context=sibling_context,
-        exception_context=exception_context,
-    )
-    logger.info("Proposer returned %d metrics", len(raw_metrics))
+    # Initial proposal with retry logic
+    max_retries = getattr(config, "proposer_max_retries", 3)
+    raw_metrics = []
+
+    for attempt in range(1, max_retries + 1):
+        logger.info("Proposing %d binary metrics (attempt %d/%d)...", K_propose, attempt, max_retries)
+        raw_metrics = proposer.propose(
+            task_description=task_description,
+            parent=parent,
+            partition_key=partition_key,
+            positive_df=pos_sample,
+            negative_df=neg_sample,
+            id_column=id_column,
+            text_column=text_column,
+            label_column=label_column,
+            num_metrics=K_propose,
+            max_example_tokens=gen_example_tokens,
+            tokenizer=tokenizer,
+            scoring_backend=scoring_backend,
+            contrastive_pairs_k=config.contrastive_pairs_k,
+            population_size=population_size,
+            positive_rate=positive_rate,
+            sample_scored=sample_scored,
+            sibling_context=sibling_context,
+            exception_context=exception_context,
+        )
+        logger.info("Proposer returned %d metrics (attempt %d/%d)", len(raw_metrics), attempt, max_retries)
+
+        if raw_metrics:
+            break
+
+        if attempt < max_retries:
+            logger.warning("Proposer returned 0 metrics, retrying with fresh examples (attempt %d/%d)...",
+                          attempt, max_retries)
+            # Re-sample examples for retry — use a different seed to get diverse examples
+            rng_retry = np.random.RandomState(config.random_seed + attempt * 1000)
+            if len(pos_sample) > 0:
+                resample_idx = rng_retry.choice(len(pos_sample), size=len(pos_sample), replace=True)
+                pos_sample = pos_sample.iloc[resample_idx].reset_index(drop=True)
+            if len(neg_sample) > 0:
+                resample_idx = rng_retry.choice(len(neg_sample), size=len(neg_sample), replace=True)
+                neg_sample = neg_sample.iloc[resample_idx].reset_index(drop=True)
 
     if not raw_metrics:
         return []
@@ -1011,56 +1073,54 @@ def grow_partition_tree(
     tokenizer: Any = None,
     max_model_len: int = 0,
 ) -> None:
-    """Recursively grow the tree from a node by building partition children."""
-    if node.depth >= config.max_depth:
-        logger.info("Max depth %d reached at node %s", config.max_depth, node.node_id)
-        node.is_leaf = True
-        return
+    """Grow the tree BFS: process all nodes at depth d before depth d+1.
 
-    if node.is_leaf:
-        return
+    This ensures balanced progress — if the run dies mid-way, all shallower
+    levels are complete rather than having deep subtrees for some branches
+    and nothing for others.
+    """
+    from collections import deque
 
-    if not node.local_metrics:
-        logger.info("Node %s has no local metrics, marking as leaf", node.node_id)
-        node.is_leaf = True
-        return
+    queue: deque[PartitionTreeNode] = deque()
+    queue.append(node)
 
-    build_partition_children(
-        parent=node,
-        train_df=train_df,
-        eval_df=eval_df,
-        config=config,
-        label_cache=label_cache,
-        proposer=proposer,
-        task_description=task_description,
-        tree=tree,
-        id_column=id_column,
-        text_column=text_column,
-        label_column=label_column,
-        scoring_backend=scoring_backend,
-        tokenizer=tokenizer,
-        max_model_len=max_model_len,
-    )
+    while queue:
+        current = queue.popleft()
 
-    # Recurse on children
-    for child in node.children.values():
-        if not child.is_leaf:
-            grow_partition_tree(
-                node=child,
-                train_df=train_df,
-                eval_df=eval_df,
-                config=config,
-                label_cache=label_cache,
-                proposer=proposer,
-                task_description=task_description,
-                tree=tree,
-                id_column=id_column,
-                text_column=text_column,
-                label_column=label_column,
-                scoring_backend=scoring_backend,
-                tokenizer=tokenizer,
-                max_model_len=max_model_len,
-            )
+        if current.depth >= config.max_depth:
+            logger.info("Max depth %d reached at node %s", config.max_depth, current.node_id)
+            current.is_leaf = True
+            continue
+
+        if current.is_leaf:
+            continue
+
+        if not current.local_metrics:
+            logger.info("Node %s has no local metrics, marking as leaf", current.node_id)
+            current.is_leaf = True
+            continue
+
+        build_partition_children(
+            parent=current,
+            train_df=train_df,
+            eval_df=eval_df,
+            config=config,
+            label_cache=label_cache,
+            proposer=proposer,
+            task_description=task_description,
+            tree=tree,
+            id_column=id_column,
+            text_column=text_column,
+            label_column=label_column,
+            scoring_backend=scoring_backend,
+            tokenizer=tokenizer,
+            max_model_len=max_model_len,
+        )
+
+        # Enqueue non-leaf children for next level
+        for child in current.children.values():
+            if not child.is_leaf:
+                queue.append(child)
 
 
 def build_metric_tree(
@@ -1140,9 +1200,23 @@ def build_metric_tree(
         max_model_len=max_model_len,
     )
 
+    # Fit leaf regression models on accumulated binary features
+    n_leaf_models = 0
+    for node in tree.all_nodes.values():
+        if node.is_leaf or not node.children:
+            if node.all_scores.shape[1] > 0 and len(node.point_indices) > 0:
+                labels = train_df.iloc[node.point_indices][label_column].values.astype(float)
+                node.leaf_model = _fit_leaf_model(node.all_scores, labels)
+                if node.leaf_model is not None:
+                    n_leaf_models += 1
+    logger.info("Fitted leaf regression models on %d/%d leaves",
+                n_leaf_models,
+                sum(1 for n in tree.all_nodes.values() if n.is_leaf or not n.children))
+
     n_nodes = len(tree.all_nodes)
     n_metrics = len(tree.all_metrics)
     n_leaves = sum(1 for n in tree.all_nodes.values() if n.is_leaf or not n.children)
-    logger.info("Metric Tree complete: %d nodes (%d leaves), %d unique metrics", n_nodes, n_leaves, n_metrics)
+    logger.info("Metric Tree complete: %d nodes (%d leaves, %d with regression), %d unique metrics",
+                n_nodes, n_leaves, n_leaf_models, n_metrics)
 
     return tree

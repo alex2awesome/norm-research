@@ -26,14 +26,27 @@ logger = logging.getLogger("metric_tree.inference")
 def _predict_at_node(
     node: PartitionTreeNode,
     n: int,
+    all_scores: np.ndarray = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Predict using the node's base rate.
+    """Predict using the node's leaf regression model if available, else base rate.
 
-    All examples in a partition share identical feature vectors,
-    so the prediction is the same for everyone: the base rate.
+    If a leaf regression model was fitted and all_scores are provided,
+    use logistic regression on accumulated binary features.
+    Otherwise, fall back to base rate prediction.
 
     Returns (predictions, probabilities).
     """
+    if node.leaf_model is not None and all_scores is not None and all_scores.shape[0] == n:
+        try:
+            useful_cols = node.leaf_model._useful_cols
+            X = all_scores[:, useful_cols]
+            probs = node.leaf_model.predict_proba(X)[:, 1]
+            preds = (probs >= 0.5).astype(int)
+            return preds, probs
+        except Exception as e:
+            logger.warning("Leaf model prediction failed at %s: %s, falling back to base rate",
+                          node.node_id, e)
+
     preds = np.ones(n, dtype=int) if node.base_rate >= 0.5 else np.zeros(n, dtype=int)
     probs = np.full(n, node.base_rate)
     return preds, probs
@@ -45,9 +58,10 @@ def _resolve_at_node(
     predictions: np.ndarray,
     probabilities: np.ndarray,
     resolving_nodes: list,
+    all_scores: np.ndarray = None,
 ) -> None:
     """Predict at a node and store results for the given global indices."""
-    preds, probs = _predict_at_node(node, len(global_idx))
+    preds, probs = _predict_at_node(node, len(global_idx), all_scores=all_scores)
     predictions[global_idx] = preds
     probabilities[global_idx] = probs
     node_id = node.node_id
@@ -67,6 +81,7 @@ def _apply_router_gate(
     probabilities: np.ndarray,
     resolving_nodes: list,
     queue: deque,
+    accum_scores: np.ndarray = None,
 ) -> None:
     """Apply router gating: examples above threshold continue, others stop."""
     texts = df.iloc[actual_global_idx][text_column].astype(str).tolist()
@@ -80,12 +95,17 @@ def _apply_router_gate(
     stop_idx = actual_global_idx[~continue_mask]
 
     if len(continue_idx) > 0:
-        queue.append((child, continue_idx))
+        if accum_scores is not None:
+            queue.append((child, continue_idx, accum_scores[continue_mask]))
+        else:
+            queue.append((child, continue_idx, np.empty((len(continue_idx), 0))))
     if len(stop_idx) > 0:
         # Stopped examples get the child's base-rate prediction
         # (they landed in this partition but the router says they're majority-class)
         resolve_node = child
-        _resolve_at_node(resolve_node, stop_idx, predictions, probabilities, resolving_nodes)
+        stop_scores = accum_scores[~continue_mask] if accum_scores is not None else None
+        _resolve_at_node(resolve_node, stop_idx, predictions, probabilities, resolving_nodes,
+                        all_scores=stop_scores)
 
     logger.debug(
         "Router at %s: %d/%d continue (threshold=%.2f)",
@@ -165,14 +185,16 @@ def predict_batch(
     root_metric_names = [m.name for m in root.local_metrics]
     X_root, _ = build_binary_feature_matrix(root_scored, root_metric_names, label_column)
 
-    # BFS queue: (node, global_indices)
-    queue: deque[Tuple[PartitionTreeNode, np.ndarray]] = deque()
+    # BFS queue: (node, global_indices, accumulated_scores)
+    # accumulated_scores tracks all binary features scored so far for each example
+    queue: deque[Tuple[PartitionTreeNode, np.ndarray, np.ndarray]] = deque()
 
     # Assign to root partitions
     root_partitions = assign_to_partitions(X_root)
 
     for p_key, local_idx in root_partitions.items():
         child = root.children.get(p_key)
+        accum_scores = X_root[local_idx]  # root-level scores for these examples
         if child is not None and not child.is_leaf and child.local_metrics:
             # Router gate at root level
             if use_router and root.router is not None:
@@ -182,14 +204,15 @@ def predict_batch(
                     predictions, probabilities, resolving_nodes, queue,
                 )
             else:
-                queue.append((child, local_idx))
+                queue.append((child, local_idx, accum_scores))
         else:
             resolve_node = child if child is not None else root
-            _resolve_at_node(resolve_node, local_idx, predictions, probabilities, resolving_nodes)
+            _resolve_at_node(resolve_node, local_idx, predictions, probabilities, resolving_nodes,
+                           all_scores=accum_scores)
 
     # BFS through deeper levels
     while queue:
-        node, global_idx = queue.popleft()
+        node, global_idx, parent_accum_scores = queue.popleft()
 
         if len(global_idx) == 0:
             continue
@@ -207,11 +230,15 @@ def predict_batch(
         local_names = [m.name for m in node.local_metrics]
         X_local, _ = build_binary_feature_matrix(node_scored, local_names, label_column)
 
+        # Accumulate: concatenate parent's accumulated scores with this node's local scores
+        node_accum_scores = np.hstack([parent_accum_scores, X_local])
+
         # Assign to partitions based on THIS node's local scores
         node_partitions = assign_to_partitions(X_local)
 
         for p_key, local_idx in node_partitions.items():
             actual_global_idx = global_idx[local_idx]
+            child_accum = node_accum_scores[local_idx]
             child = node.children.get(p_key)
 
             if child is not None and not child.is_leaf and child.local_metrics:
@@ -223,12 +250,13 @@ def predict_batch(
                         predictions, probabilities, resolving_nodes, queue,
                     )
                 else:
-                    queue.append((child, actual_global_idx))
+                    queue.append((child, actual_global_idx, child_accum))
             else:
                 resolve_node = child if child is not None else node
                 _resolve_at_node(
                     resolve_node, actual_global_idx,
                     predictions, probabilities, resolving_nodes,
+                    all_scores=child_accum,
                 )
 
     # Handle any unresolved (shouldn't happen with fallback, but just in case)

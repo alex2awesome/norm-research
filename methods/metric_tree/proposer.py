@@ -507,36 +507,64 @@ class PartitionMetricProposer:
                 f"and what kinds of features might matter specifically here.\n"
             )
 
+        # --- Explicit blocklist of all accumulated metric names ---
+        blocklist_section = ""
+        if accumulated_metrics:
+            metric_names_list = ", ".join(
+                f"'{m.name.replace('_', ' ')}'" for m in accumulated_metrics
+            )
+            blocklist_section = (
+                f"\n\n=== METRICS ALREADY IN USE (DO NOT RE-PROPOSE) ===\n"
+                f"The following metrics are already assigned to nodes higher up in our "
+                f"tree. Proposing anything semantically similar to these is WASTEFUL — "
+                f"they have already been scored and they did NOT help distinguish "
+                f"accepted from rejected papers in this subpopulation.\n"
+                f"BLOCKLIST: {metric_names_list}\n"
+                f"Also avoid synonyms, rewordings, or slight variations of the above. "
+                f"For example, if 'Rigorous Methodology' is on the blocklist, do NOT "
+                f"propose 'Well Defined Methodology', 'Sound Methodology', or "
+                f"'Thorough Methodology' — these are the same thing.\n"
+            )
+
         # --- Main discriminative prompt ---
         prompt = (
             f"{task_description}{pop_info}{partition_summary}"
-            f"{exception_section}{sibling_section}\n"
-            f"=== DISCRIMINATIVE FEATURES: What did our prior features miss? ===\n\n"
+            f"{exception_section}{sibling_section}"
+            f"{blocklist_section}\n"
+            f"=== WHAT WILL FURTHER CHARACTERIZE THESE DATAPOINTS? ===\n\n"
             f"{existing_feature_summary}"
-            f"Your goal: propose {num_metrics} binary (yes/no) features that capture "
-            f"SPECIFIC, CONCRETE differences between accepted and rejected papers of "
-            f"this type — things our existing features missed.\n\n"
+            f"Your goal: propose {num_metrics} binary (yes/no) features that help us "
+            f"FURTHER DEFINE and CHARACTERIZE the datapoints in this specific "
+            f"subpopulation. What properties distinguish accepted from rejected papers "
+            f"WITHIN this group that our existing features completely miss?\n\n"
+            f"Think about it this way: all papers in this partition look the same "
+            f"through the lens of our existing features. Yet some are accepted and "
+            f"some are rejected. What ADDITIONAL properties — ones NOT already "
+            f"captured above — would let you tell them apart?\n\n"
             f"CRITICAL REQUIREMENTS:\n"
-            f"  1. DEMAND SPECIFICITY in your rubrics. Write YES criteria that are "
-            f"HARD TO SATISFY — only 20-80% of papers should qualify. If you write "
-            f"'the paper has a clear methodology', virtually every paper will score YES. "
-            f"Instead write something like 'the paper includes ablation studies or "
-            f"sensitivity analysis comparing at least 3 variants of the approach'.\n"
-            f"  2. THINK ABOUT FAILURE MODES. What specific weaknesses cause papers "
-            f"like these to be rejected? Examples of useful features:\n"
-            f"    - 'Compares against strong recent baselines (not just trivial ones)'\n"
-            f"    - 'Provides error analysis or failure case discussion'\n"
-            f"    - 'Reports confidence intervals or statistical significance tests'\n"
-            f"    - 'Addresses limitations of the proposed approach explicitly'\n"
-            f"    - 'Validates on multiple datasets or across different conditions'\n"
-            f"  3. BE SPECIFIC TO THIS SUBPOPULATION. Think about what distinguishes "
-            f"accepted from rejected papers SPECIFICALLY among papers of this type.\n"
-            f"  4. DO NOT propose generic quality signals like 'Novel Contribution', "
-            f"'Sound Methodology', 'Clear Research Question', 'Significant Impact', "
-            f"'Well-Supported Claims'. These are always YES and waste a feature slot.\n\n"
+            f"  1. SPECIFICITY: Write YES criteria that are HARD TO SATISFY — only "
+            f"20-80% of papers should qualify. If you write 'the paper has a clear "
+            f"methodology', virtually every paper will score YES and the feature is "
+            f"useless. Your rubric must describe something CONCRETE and TESTABLE that "
+            f"a significant fraction of papers will genuinely fail.\n"
+            f"  2. PARTITION-SPECIFIC: Think about what makes THIS type of paper "
+            f"succeed or fail. What would an expert reviewer look for in papers "
+            f"specifically of this kind? What are the UNIQUE failure modes for this "
+            f"subpopulation, not generic paper-writing issues?\n"
+            f"  3. NO OVERLAP WITH EXISTING METRICS: Stay away from metrics that "
+            f"overlap with the ones listed in the blocklist above or in the existing "
+            f"features. If our tree already checks for 'Empirical Study' or "
+            f"'Theoretical Contribution', you must go DEEPER — what specific aspects "
+            f"WITHIN empirical studies or theoretical contributions predict success?\n"
+            f"  4. NO GENERIC QUALITY SIGNALS: Do NOT propose features like "
+            f"'Novel Contribution', 'Sound Methodology', 'Clear Research Question', "
+            f"'Significant Impact', 'Well-Supported Claims', 'Clear Contribution', "
+            f"'Strong Empirical Support', 'Rigorous Methodology'. These are always "
+            f"YES for virtually every paper and waste a feature slot. If a mediocre "
+            f"paper would trivially satisfy the criterion, it is too generic.\n\n"
             f"For each criterion, provide:\n"
             f"  - A clear, specific name\n"
-            f"  - A YES description that is DEMANDING — most papers should NOT trivially satisfy it\n"
+            f"  - A YES description that is DEMANDING — a mediocre paper should NOT qualify\n"
             f"  - A NO description that captures a specific, concrete deficiency\n\n"
             f"The rubric for each metric MUST use keys 'yes' and 'no' with "
             f"detailed multi-sentence descriptions. The scale must be 'binary'."
@@ -658,23 +686,43 @@ class PartitionMetricProposer:
                 f"or framing that would split the population roughly in half.\n\n"
             )
         else:
+            # Build blocklist from accumulated metrics + good features
+            blocklist_names = []
+            if parent is not None and parent.all_metrics:
+                blocklist_names.extend(
+                    m.name.replace('_', ' ') for m in parent.all_metrics
+                )
+            blocklist_names.extend(f['name'].replace('_', ' ') for f in good_features)
+            # Also include the skewed names so the model avoids re-proposing them
+            blocklist_names.extend(f['name'].replace('_', ' ') for f in skewed_features)
+
+            blocklist_str = ""
+            if blocklist_names:
+                blocklist_str = (
+                    f"METRICS ALREADY TRIED (do NOT re-propose or use synonyms): "
+                    f"{', '.join(blocklist_names)}\n\n"
+                )
+
             refinement_task += (
                 f"Propose {num_replacements} REPLACEMENT binary features.\n"
                 f"You have now seen {round_num} round(s) of features that were ALL "
                 f"too lenient — nearly every paper scored YES. The problem is your "
                 f"YES criteria are too broad and generic.\n\n"
+                f"{blocklist_str}"
                 f"To break this pattern, your replacement features MUST:\n"
                 f"  1. Have NARROW, DEMANDING YES criteria. Think: 'Would a mediocre "
                 f"paper in this field satisfy this criterion?' If yes, the criterion "
                 f"is too easy.\n"
-                f"  2. Focus on SPECIFIC, TESTABLE properties — not vague quality:\n"
-                f"    GOOD: 'Includes ablation study removing each component'\n"
-                f"    GOOD: 'Compares against >=3 baselines published in last 2 years'\n"
-                f"    GOOD: 'Reports confidence intervals or significance tests'\n"
-                f"    BAD:  'Sound methodology' (too vague, every paper scores YES)\n"
-                f"    BAD:  'Clear contribution' (too vague, every paper scores YES)\n"
-                f"  3. Target SPECIFIC FAILURE MODES: what concrete deficiency would "
-                f"cause a reviewer to reject a paper of this type?\n\n"
+                f"  2. Focus on SPECIFIC, TESTABLE properties — not vague quality. "
+                f"Avoid any feature that is essentially 'is this paper good?' in "
+                f"disguise. Features like 'Sound Methodology', 'Clear Contribution', "
+                f"'Strong Results', 'Well-Written' are ALWAYS too generic.\n"
+                f"  3. Think about what FURTHER DEFINES papers in this subpopulation. "
+                f"What specific, concrete property would a domain expert look for to "
+                f"distinguish strong from weak papers OF THIS TYPE? Go beyond generic "
+                f"reviewer checklists.\n"
+                f"  4. Do NOT propose anything semantically similar to the blocklist "
+                f"above, even with different wording.\n\n"
             )
 
         refinement_task += (
