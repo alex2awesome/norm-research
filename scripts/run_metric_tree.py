@@ -63,6 +63,14 @@ DATASET_CONFIGS = {
         "text_column": "text",
         "label_column": "judgement",
     },
+    "code-review": {
+        "dataset_name": "CodeReviewAcceptance",
+        "split_dir": REPO_ROOT / "datasets" / "code-review" / "code_review_dense_4096tok",
+        "output_subdir": "code_review_partition_tree",
+        "id_column": "paper_id",
+        "text_column": "text",
+        "label_column": "judgement",
+    },
 }
 
 # ── CLI args ──
@@ -86,6 +94,8 @@ parser.add_argument("--min-minority-fraction", type=float, default=0.0,
 parser.add_argument("--clustering-depth", type=int, default=2,
                     help="Depths < this use clustering (descriptive) features; >= this use discriminative")
 parser.add_argument("--eval-fraction", type=float, default=0.4)
+parser.add_argument("--balance-classes", action="store_true",
+                    help="Downsample majority class to match minority class size")
 
 # Router: per-node text classifier for selective deepening
 parser.add_argument("--use-router", action="store_true",
@@ -181,8 +191,26 @@ def main():
     train_df = train_df.dropna(subset=[ID_COLUMN, TEXT_COLUMN, LABEL_COLUMN])
     eval_df = eval_df.dropna(subset=[ID_COLUMN, TEXT_COLUMN, LABEL_COLUMN])
     test_df = test_df.dropna(subset=[ID_COLUMN, TEXT_COLUMN, LABEL_COLUMN])
-    
+
     print(f"Loaded train={len(train_df)}, eval={len(eval_df)}, test={len(test_df)}")
+
+    # ── Balance classes by downsampling majority class ──
+    if args.balance_classes:
+        for name, df in [("train", train_df), ("eval", eval_df)]:
+            pos = df[df[LABEL_COLUMN] == 1]
+            neg = df[df[LABEL_COLUMN] == 0]
+            minority_size = min(len(pos), len(neg))
+            print(f"Balancing {name}: {len(pos)} positive, {len(neg)} negative → {minority_size} each")
+            if len(pos) > len(neg):
+                pos = pos.sample(n=minority_size, random_state=42)
+            else:
+                neg = neg.sample(n=minority_size, random_state=42)
+            balanced = pd.concat([pos, neg], ignore_index=True).sample(frac=1, random_state=42).reset_index(drop=True)
+            if name == "train":
+                train_df = balanced
+            else:
+                eval_df = balanced
+        print(f"Balanced: train={len(train_df)}, eval={len(eval_df)}, test={len(test_df)} (test kept original)")
     
     # ── Create VLLM backend ──
     print(f"Initializing VLLM backend with model: {MODEL}")

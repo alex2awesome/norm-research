@@ -1243,6 +1243,7 @@ def run_iterative(
     no_new_metrics_iters = 0
     eval_plateau_iters = 0
     last_eval_gate_score = None
+    active_coef_map: Dict[str, float] = {}
     # Interaction tracking: {col_name: (metric_a_name, metric_b_name, coef, description)}
     active_interactions: Dict[str, Tuple[str, str, float, str]] = {}
     # Reasoning chain: list of (iteration, reasoning_text, metric_names_proposed)
@@ -2483,7 +2484,7 @@ def run_iterative(
             )
         refit_interaction_names = [m.name for m in active_specs]
         if max_interaction_metrics and len(refit_interaction_names) > max_interaction_metrics:
-            name_to_coef = {m.name: abs(active_coef_map.get(m.metric_id, 0.0)) for m in active_specs}
+            name_to_coef = {m.name: abs(joint_coef_map.get(m.metric_id, 0.0)) for m in active_specs}
             refit_interaction_names = sorted(refit_interaction_names, key=lambda n: name_to_coef.get(n, 0.0), reverse=True)[:max_interaction_metrics]
         model = fit_regression(eval_sel_frame_active, active_specs, name=f"eval_selection_active_{iteration}",
                                interaction_names=refit_interaction_names)
@@ -2553,6 +2554,7 @@ def run_iterative(
             ),
         )
         _log_coefficients(coef_records, iteration, joint_specs, joint_coef_map)
+        active_coef_map = joint_coef_map
 
         _jsonl_append(output_path / "iterations.jsonl", {
             "iteration": iteration,

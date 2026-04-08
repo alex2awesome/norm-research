@@ -36,6 +36,31 @@ TASK_DESCRIPTIONS: dict[str, str] = {
         "positioning relative to prior work) rather than surface-level "
         "writing features (e.g., grammar, formatting, abstract length)."
     ),
+    "NoticeAndComment": (
+        "Predict whether a public comment on a proposed federal regulation is "
+        "substantive (worthy of agency consideration) or non-substantive. "
+        "A substantive comment typically raises specific legal, technical, or "
+        "policy concerns about the proposed rule, provides evidence or data, "
+        "suggests concrete alternatives, or identifies unintended consequences. "
+        "Metrics should capture qualities that distinguish thoughtful policy "
+        "engagement from generic support/opposition (e.g., specificity of legal "
+        "or regulatory references, presence of evidence or data, identification "
+        "of affected stakeholders, proposing concrete alternatives, depth of "
+        "policy analysis, technical expertise signals) rather than surface-level "
+        "features (e.g., comment length, formality, sentiment polarity)."
+    ),
+    "CodeReviewAcceptance": (
+        "Predict whether a GitHub pull request will be accepted (merged) or "
+        "rejected (closed without merging), based on its title, description, "
+        "and code diff. An accepted PR typically introduces a well-scoped change "
+        "— a bug fix, feature, or refactor — with clean code, adequate context, "
+        "and alignment with project conventions. Metrics should capture "
+        "substantive code quality and contribution signals (e.g., change scope "
+        "and coherence, code correctness indicators, test coverage signals, "
+        "documentation adequacy, adherence to project style, risk of regressions, "
+        "reviewer burden, clarity of intent in the PR description) rather than "
+        "surface-level features (e.g., diff size, number of files, formatting)."
+    ),
 }
 
 

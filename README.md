@@ -8,7 +8,7 @@ This research aims to measure the articulability gap by comparing dense models t
 </p>
 
 <p align="center">
-  <img src="assets/modeling-approach.png" alt="Modeling Approach" width="600"/>
+  <img src="scripts/assets/preference-modeling-tasks.png" alt="Preference Modeling Tasks" width="600"/>
   <br/>
   <em>Dense reward models learn a latent objective end-to-end from preference data, while articulable approaches decompose the objective into explicit, interpretable metrics. We compare these paradigms across tasks to understand when dense expressiveness justifies its opacity and when structured approaches can match or exceed it.</em>
 </p>

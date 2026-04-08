@@ -49,6 +49,23 @@ DATASET_CONFIGS = {
         "text_column": "text",
         "label_column": "judgement",
     },
+    "code-review": {
+        "dataset_name": "CodeReviewAcceptance",
+        "split_dir": REPO_ROOT / "datasets" / "code-review" / "code_review_dense_4096tok",
+        "output_subdir": "code_review_vllm_70b",
+        "id_column": "paper_id",
+        "text_column": "text",
+        "label_column": "judgement",
+    },
+    "notice-and-comment": {
+        "dataset_name": "NoticeAndComment",
+        "split_dir": REPO_ROOT / "datasets" / "notice-and-comment" / "notice_and_comment_len_balanced",
+        "output_subdir": "notice_and_comment_vllm_70b",
+        "id_column": "id",
+        "text_column": "text",
+        "label_column": "judgement",
+        "add_synthetic_id": True,
+    },
 }
 
 # ── CLI args ──
@@ -87,10 +104,15 @@ parser.add_argument("--eval-selection-max", type=int, default=10_000,
                     help="Max eval_selection samples per iteration (default 10000, 0=unlimited)")
 parser.add_argument("--continue-run-id", type=str, default=None,
                     help="Resume from an existing run ID (reuses its label_cache)")
+parser.add_argument("--balance-classes", action="store_true",
+                    help="Downsample majority class to match minority class size")
 parser.add_argument("--max-model-len", type=int, default=16384,
                     help="VLLM max model context length (default 16384)")
 parser.add_argument("--tensor-parallel-size", type=int, default=1,
                     help="Number of GPUs for tensor parallelism (default 1)")
+parser.add_argument("--proposer-model", type=str, default=None,
+                    help="External API model for metric proposer (e.g., 'openai/gpt-5.4-mini'). "
+                         "If not set, uses the VLLM backend for both scoring and proposing.")
 args = parser.parse_args()
 
 # ── Resolve dataset config ──
@@ -142,8 +164,27 @@ for split in ("train", "eval", "test"):
         raise FileNotFoundError(f"Missing {split} split in {SPLIT_DIR}")
 
 df = pd.concat(split_dfs, ignore_index=True)
+
+# Add synthetic ID column if needed (for datasets without a natural ID)
+if dcfg.get("add_synthetic_id"):
+    df[ID_COLUMN] = [f"row_{i}" for i in range(len(df))]
+
 df = df.dropna(subset=[ID_COLUMN, TEXT_COLUMN, LABEL_COLUMN])
 print(f"Loaded {len(df)} rows")
+
+# ── Balance classes by downsampling majority class ──
+if args.balance_classes:
+    pos = df[df[LABEL_COLUMN] == 1]
+    neg = df[df[LABEL_COLUMN] == 0]
+    minority_size = min(len(pos), len(neg))
+    majority_label = 1 if len(pos) > len(neg) else 0
+    print(f"Balancing classes: {len(pos)} positive, {len(neg)} negative → {minority_size} each")
+    if len(pos) > len(neg):
+        pos = pos.sample(n=minority_size, random_state=42)
+    else:
+        neg = neg.sample(n=minority_size, random_state=42)
+    df = pd.concat([pos, neg], ignore_index=True).sample(frac=1, random_state=42).reset_index(drop=True)
+    print(f"Balanced dataset: {len(df)} rows ({(df[LABEL_COLUMN]==1).sum()} pos, {(df[LABEL_COLUMN]==0).sum()} neg)")
 
 dataset = Dataset(
     dataframe=df,
@@ -171,8 +212,21 @@ backend = create_backend(
 )
 print("VLLM backend ready.")
 
-# ── Generator/Judge LLM (needed as fallback signatures; backend handles actual calls) ──
-generator_llm = dspy.LM(model=f"openai/{MODEL}", api_key="unused", api_base="http://localhost:1")
+# ── Generator/Judge LLM ──
+if args.proposer_model:
+    # Use external API model for metric proposer (e.g., GPT-5.4 mini)
+    print(f"Using external proposer model: {args.proposer_model}")
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        key_file = Path("/lfs/skampere3/0/alexspan/.openai-salt-lab-key.txt")
+        if key_file.exists():
+            api_key = key_file.read_text().strip()
+    if not api_key:
+        raise RuntimeError("No OPENAI_API_KEY found in env or key file")
+    os.environ["OPENAI_API_KEY"] = api_key
+    generator_llm = dspy.LM(model=args.proposer_model)
+else:
+    generator_llm = dspy.LM(model=f"openai/{MODEL}", api_key="unused", api_base="http://localhost:1")
 judge_llm = generator_llm
 
 # ── Run ──

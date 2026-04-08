@@ -355,7 +355,12 @@ def _propose_and_refine(
     4. Re-propose replacements for skewed features
     """
     K_propose = config.n_rubrics_to_propose
-    min_bal = config.min_feature_balance
+    # Relax balance requirement at deeper levels
+    depth = parent.depth + 1 if parent is not None else 0
+    if depth >= config.clustering_depth and hasattr(config, 'min_feature_balance_deep'):
+        min_bal = config.min_feature_balance_deep
+    else:
+        min_bal = config.min_feature_balance
     existing_metric_ids: set = set()
     existing_names: set = set()
 
