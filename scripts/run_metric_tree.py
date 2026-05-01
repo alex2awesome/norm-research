@@ -71,7 +71,29 @@ DATASET_CONFIGS = {
         "text_column": "text",
         "label_column": "judgement",
     },
+    "notice-and-comment": {
+        "dataset_name": "NoticeAndComment",
+        "split_dir": REPO_ROOT / "datasets" / "notice-and-comment" / "notice_and_comment_len_balanced",
+        "output_subdir": "notice_and_comment_partition_tree",
+        "id_column": "id",
+        "text_column": "text",
+        "label_column": "judgement",
+    },
 }
+
+NOTICE_AND_COMMENT_AGENCIES = [
+    "cms", "epa", "fws", "fda", "faa", "aphis", "noaa", "ed", "ams", "nhtsa", "uscis", "dot",
+    "cdc", "blm", "fs", "osha", "fsis", "irs",
+]
+for _ag in NOTICE_AND_COMMENT_AGENCIES:
+    DATASET_CONFIGS[f"notice-and-comment-{_ag}"] = {
+        "dataset_name": "NoticeAndComment",
+        "split_dir": REPO_ROOT / "datasets" / "notice-and-comment" / "agencies" / _ag,
+        "output_subdir": f"notice_and_comment_{_ag}_partition_tree",
+        "id_column": "id",
+        "text_column": "text",
+        "label_column": "judgement",
+    }
 
 # ── CLI args ──
 parser = argparse.ArgumentParser(description="Run Partitioned Metric Tree with VLLM backend")

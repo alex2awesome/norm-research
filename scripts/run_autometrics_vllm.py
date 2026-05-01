@@ -68,6 +68,22 @@ DATASET_CONFIGS = {
     },
 }
 
+# Per-agency notice-and-comment splits (tier 1 + tier 2).
+NOTICE_AND_COMMENT_AGENCIES = [
+    "cms", "epa", "fws", "fda", "faa", "aphis", "noaa", "ed", "ams", "nhtsa", "uscis", "dot",
+    "cdc", "blm", "fs", "osha", "fsis", "irs",
+]
+for _ag in NOTICE_AND_COMMENT_AGENCIES:
+    DATASET_CONFIGS[f"notice-and-comment-{_ag}"] = {
+        "dataset_name": "NoticeAndComment",
+        "split_dir": REPO_ROOT / "datasets" / "notice-and-comment" / "agencies" / _ag,
+        "output_subdir": f"notice_and_comment_{_ag}_vllm_70b",
+        "id_column": "id",
+        "text_column": "text",
+        "label_column": "judgement",
+        "add_synthetic_id": True,
+    }
+
 # ── CLI args ──
 parser = argparse.ArgumentParser(description="Run iterative AutoMetrics with VLLM backend")
 parser.add_argument("--dataset", type=str, default="press-release",

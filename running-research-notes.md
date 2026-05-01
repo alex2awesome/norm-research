@@ -25,6 +25,18 @@ Key decisions and context for dataset processing and modeling.
 - **NIH RePORTER** (`datasets/grant-funding/nih_exporter/`): 2.8 GB of compressed ZIPs (1985–2024). Metadata + abstracts only — no proposal text, no accept/reject labels. Not useful for modeling as-is.
 - **Open Grants** (`datasets/grant-funding/open-source-grants/processed/`): ~12 MB. Small set of voluntarily shared proposals with labeled outcomes.
 
+### NIH A0/A1 resubmission signal (investigated 2026-04-10)
+- **Motivation**: Considered matching pairs of A0 (original) + A1 (resubmission) within RePORTER to recover rejection labels — i.e., if both exist, the A0 was rejected.
+- **Finding**: Impossible within RePORTER. It only contains **funded** grants, so rejected A0s are never rows. Confirmed empirically: 0 `CORE_PROJECT_NUM`s have both an A0 row and an A1 row in FY2023.
+- **Available proxy**: The `SUFFIX` field on funded "new" first-year grants (`APPLICATION_TYPE=1`, `SUPPORT_YEAR=1`) encodes resubmission history. No suffix = funded on A0. `A1` suffix = A0 was rejected, funded on 1st resubmission. `A2` = A0+A1 both rejected.
+- **Aggregation across FY1985–FY2024** (`datasets/grant-funding/nih_a0_a1_summary.csv`, script: `nih_a0_a1_aggregation.py`):
+  - 506,587 new-year-1 funded grants total
+  - 340,096 funded on A0; 141,547 on A1; 23,233 on A2; 1,371 on A3+
+  - **166,151 funded grants (~32.8%) had a rejected A0** — gives a grant-level binary label but **only the funded version's abstract text** is available
+  - A2+ counts collapse after FY2011 — matches NIH's 2009 policy restricting to one resubmission
+- **Limitation**: This gives an outcome label on the funded A1, not the rejected A0 text itself. Cannot be used to train a rejected-vs-accepted text classifier from RePORTER alone.
+- **Data now also on sk3**: `/lfs/skampere3/0/alexspan/norm-research/datasets/grant-funding/nih_exporter/RePORTER_PRJ_C_FY*.zip` (PRJ files only, 1.0 GB; abstracts not mirrored).
+
 ## Peer Review
 
 Massive multi-venue peer review corpus assembled from OpenReview API, eLife API, and F1000Research XML corpus. All data in `datasets/peer-review/`.

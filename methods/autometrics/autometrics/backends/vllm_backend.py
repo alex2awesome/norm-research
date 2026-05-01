@@ -325,6 +325,12 @@ class VLLMOfflineBackend:
     ):
         from vllm import LLM, SamplingParams  # type: ignore[import-untyped]
 
+        # Remember construction args so we can tear down + rebuild the VLLM
+        # engine on demand (release() / reload()) to free GPU memory for
+        # intermediate steps like similarity-model fine-tuning.
+        self._model_name_or_path = model_name_or_path
+        self._vllm_kwargs = dict(vllm_kwargs)
+
         if llm is not None:
             self.llm = llm
         else:
@@ -339,19 +345,83 @@ class VLLMOfflineBackend:
         self._tokenizer = self.llm.get_tokenizer()
         self._adapter = ChatAdapter()
 
+    # ── Lifecycle: release / reload GPU weights ──
+
+    def release(self) -> None:
+        """Tear down the VLLM engine and free GPU memory.
+
+        After this call the backend cannot generate until ``reload()`` is called.
+        Safe to call multiple times.
+        """
+        import gc
+
+        if getattr(self, "llm", None) is None:
+            return
+        try:
+            # vLLM v1 engine cleanup: delete the client & engine core subprocesses.
+            engine = getattr(self.llm, "llm_engine", None)
+            if engine is not None:
+                core = getattr(engine, "engine_core", None)
+                if core is not None and hasattr(core, "shutdown"):
+                    try:
+                        core.shutdown()
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+        try:
+            del self.llm
+        except Exception:
+            pass
+        self.llm = None
+        self._tokenizer = None
+        gc.collect()
+        try:
+            import torch
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                torch.cuda.ipc_collect()
+        except Exception:
+            pass
+
+    def reload(self) -> None:
+        """Rebuild the VLLM engine using the args passed to __init__.
+
+        No-op if the engine is already loaded.
+        """
+        from vllm import LLM  # type: ignore[import-untyped]
+
+        if getattr(self, "llm", None) is not None:
+            return
+        if not self._model_name_or_path:
+            raise RuntimeError(
+                "Cannot reload: backend was constructed with an external llm=, "
+                "not a model_name_or_path. Provide model_name_or_path at init."
+            )
+        self.llm = LLM(model=self._model_name_or_path, **self._vllm_kwargs)
+        self._tokenizer = self.llm.get_tokenizer()
+
     # ── Prompt rendering ──
 
     def _render_prompt(self, signature: type, inputs: dict) -> str:
         """Use DSPy's adapter to format, then apply the model's chat template."""
         messages = self._adapter.format(signature, demos=[], inputs=inputs)
-        # Use the tokenizer's chat template to convert messages -> string
+        # Use the tokenizer's chat template to convert messages -> string.
+        # enable_thinking=False disables Qwen3/3.5 reasoning blocks; non-Qwen
+        # tokenizers pass the unknown kwarg to Jinja context and ignore it.
         if hasattr(self._tokenizer, "apply_chat_template"):
             try:
                 return self._tokenizer.apply_chat_template(
                     messages, tokenize=False, add_generation_prompt=True,
+                    enable_thinking=False,
                 )
             except Exception:
-                pass
+                try:
+                    return self._tokenizer.apply_chat_template(
+                        messages, tokenize=False, add_generation_prompt=True,
+                    )
+                except Exception:
+                    pass
         # Fallback: concatenate
         return "\n\n".join(
             f"{m['role'].upper()}: {m['content']}" for m in messages
@@ -587,9 +657,15 @@ class VLLMOfflineBackend:
             try:
                 formatted = self._tokenizer.apply_chat_template(
                     messages, tokenize=False, add_generation_prompt=True,
+                    enable_thinking=False,
                 )
             except Exception:
-                formatted = f"USER: {prompt}\n\nASSISTANT:"
+                try:
+                    formatted = self._tokenizer.apply_chat_template(
+                        messages, tokenize=False, add_generation_prompt=True,
+                    )
+                except Exception:
+                    formatted = f"USER: {prompt}\n\nASSISTANT:"
         else:
             formatted = f"USER: {prompt}\n\nASSISTANT:"
 
