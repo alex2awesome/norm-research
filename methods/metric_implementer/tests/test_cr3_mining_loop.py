@@ -14,6 +14,7 @@ from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     main as mining_main,
     mcq_instrument_quality,
 )
+from methods.metric_implementer.experiments.cr3_evidence_store import build_evidence_store
 from scripts.tools.cr3_mining_worker import (
     _content_cached_signature,
     draw_valid_rows,
@@ -108,6 +109,10 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
         "mcq_codebook_entry": {
             "target_design_yes_rate": 0.5,
             "distractor_design_statistics": selected,
+            "prior_calibration": {
+                "passes_prior_balance": True,
+                "prior": {"canonical_mean_prior": [0.99, 0.005, 0.003, 0.002]},
+            },
         },
     }
     diagnostic = mcq_instrument_quality(state, args)
@@ -118,6 +123,8 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     state["fixed_no_demo_canonical_choice_probabilities"] = np.tile(
         np.asarray([[0.25, 0.25, 0.25, 0.25]]), (4, 1))
     state["value_cap"] = 0.75
+    state["mcq_codebook_entry"]["prior_calibration"]["prior"][
+        "canonical_mean_prior"] = [0.25, 0.25, 0.25, 0.25]
     for row in selected:
         row["kappa"] += 0.50
     diagnostic = mcq_instrument_quality(state, args)
@@ -330,8 +337,14 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
     codebook = json.loads((output / "mcq_codebooks" / "creative-writing.json").read_text())
     assert codebook["premises"]["uses_external_labels"] is False
     assert len(codebook["metrics"]) == 5
-    assert "creative-writing_metric4" in codebook["entries"][
-        "creative-writing_metric0"]["distractor_metric_keys"]
+    panel_plan = json.loads(
+        (output / "mcq_codebooks" / "creative-writing.panel_plan.json").read_text())
+    assert any(
+        "creative-writing_metric4" in panel["distractor_metric_keys"]
+        for panel in panel_plan["panels"]["creative-writing_metric0"]
+    )
+    assert (output / "mcq_codebooks" / "creative-writing.prior_calibration.json").exists()
+    assert codebook["entries"]["creative-writing_metric0"]["prior_calibration"] is not None
     candidate = (output / "mcq_codebook_candidates" / "creative-writing_metric4"
                  / "bootstrap" / "scored.npz")
     assert candidate.exists()
@@ -398,3 +411,32 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
         reused = (reused_output / "mcq_codebook_candidates"
                   / f"creative-writing_metric{index}" / "bootstrap" / "scored.npz")
         assert original.stat().st_ino == reused.stat().st_ino
+
+    # Expensive historical generations can enter a new run only as achieved-value
+    # candidates. They precede the adaptive ledger and never count as confirmation.
+    evidence_root = tmp_path / "evidence"
+    build_evidence_store([output], evidence_root)
+    evidence_output = tmp_path / "mcq_evidence_reused"
+    evidence_argv = list(argv)
+    evidence_argv[evidence_argv.index(str(output))] = str(evidence_output)
+    evidence_argv.extend(["--reuse-evidence-root", str(evidence_root)])
+    assert mining_main(evidence_argv) == 0
+    for index in range(4):
+        metric_dir = evidence_output / f"creative-writing_metric{index}"
+        imported = json.loads((metric_dir / "historical" / "import.json").read_text())
+        assert imported["evidence_role"] == "candidate_only"
+        assert imported["eligible_as_fresh_audit"] is False
+        assert (metric_dir / "historical" / "values.npz").exists()
+        ledger = json.loads((metric_dir / "absorption_ledger.jsonl").read_text())
+        assert ledger["pool_n_before"] == 3 + imported["n_candidates"]
+        certificate = json.loads((metric_dir / "confirmation" / "certificate.json").read_text())
+        assert certificate["run"]["never_absorbed"] is True
+        assert "historical" not in certificate["run"]["confirmation_scored_path"]
+
+    # Resume reconstructs bootstrap + historical candidates + adaptive ledger in
+    # the same order and leaves the immutable confirmation untouched.
+    before = (evidence_output / "creative-writing_metric0" / "confirmation"
+              / "certificate.json").read_bytes()
+    assert mining_main(evidence_argv) == 0
+    assert (evidence_output / "creative-writing_metric0" / "confirmation"
+            / "certificate.json").read_bytes() == before

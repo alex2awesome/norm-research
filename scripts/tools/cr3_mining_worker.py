@@ -33,6 +33,7 @@ from methods.metric_implementer.experiments import alpha_probe as aprobe  # noqa
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (  # noqa: E402
     CachedChoiceReconstructor,
     evaluate_scored_prompt_values,
+    score_codebook_panel_priors,
     write_value_artifact,
 )
 from methods.metric_implementer.recon_channel import _YESNO_TEMPLATE  # noqa: E402
@@ -122,6 +123,25 @@ def _atomic_jsonl(path: str, rows: Iterable[dict]) -> None:
         with tmp.open("x", encoding="utf-8") as fout:
             for row in rows:
                 fout.write(json.dumps(row, sort_keys=True) + "\n")
+            fout.flush()
+            os.fsync(fout.fileno())
+        os.replace(tmp, target)
+        _fsync_directory(target.parent)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+
+
+def _atomic_json(path: str, payload: dict) -> None:
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.exists():
+        raise FileExistsError(target)
+    tmp = target.with_name(f".{target.name}.tmp-{os.getpid()}")
+    try:
+        with tmp.open("x", encoding="utf-8") as fout:
+            json.dump(payload, fout, sort_keys=True, indent=2)
+            fout.write("\n")
             fout.flush()
             os.fsync(fout.fileno())
         os.replace(tmp, target)
@@ -602,9 +622,53 @@ def stage_value(args) -> None:
         )
 
 
+def stage_codebook_prior(args) -> None:
+    """Calibrate blind no-demo menu priors before any prompt-value search."""
+    with open(args.jobs, encoding="utf-8") as source:
+        jobs = json.load(source)
+    cfg = ImplementerConfig()
+    if args.fake:
+        cfg.vllm_fake = True
+    if getattr(cfg, "vllm_lfs_home", None):
+        os.environ["HOME"] = str(cfg.vllm_lfs_home)
+    reconstructor = make_judge_backend(args.model, cfg, 0.0)
+    revision = _model_revision(args.model)
+    cache_paths = {str(job.get("choice_probability_cache")) for job in jobs
+                   if job.get("choice_probability_cache")}
+    if len(cache_paths) > 1:
+        raise RuntimeError("one prior worker cannot mix choice-probability caches")
+    if cache_paths:
+        reconstructor = CachedChoiceReconstructor(
+            reconstructor,
+            next(iter(cache_paths)),
+            model=args.model,
+            revision=revision,
+        )
+    for job in jobs:
+        with open(job["panel_plan"], encoding="utf-8") as source:
+            plan = json.load(source)
+        payload = score_codebook_panel_priors(
+            reconstructor,
+            panel_plan=plan,
+            noun=str(job["noun"]),
+            n_draws=int(job.get("n_draws", 4)),
+            query_batch_size=int(job.get("query_batch_size", 512)),
+            reconstructor_model=args.model,
+            reconstructor_revision=revision,
+        )
+        _atomic_json(job["out"], payload)
+        print(
+            f"[codebook_prior] targets={len(payload['rows'])} -> {job['out']}",
+            flush=True,
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--stage", required=True, choices=["propose", "score", "value"])
+    parser.add_argument(
+        "--stage", required=True,
+        choices=["propose", "score", "value", "codebook_prior"],
+    )
     parser.add_argument("--jobs", required=True)
     parser.add_argument("--model", required=True)
     parser.add_argument("--family", default="")
@@ -612,7 +676,12 @@ def main() -> None:
     parser.add_argument("--max-attempt-mult", type=int, default=10)
     parser.add_argument("--fake", action="store_true")
     args = parser.parse_args()
-    {"propose": stage_propose, "score": stage_score, "value": stage_value}[args.stage](args)
+    {
+        "propose": stage_propose,
+        "score": stage_score,
+        "value": stage_value,
+        "codebook_prior": stage_codebook_prior,
+    }[args.stage](args)
 
 
 if __name__ == "__main__":

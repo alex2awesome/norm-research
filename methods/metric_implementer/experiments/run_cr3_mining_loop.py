@@ -22,6 +22,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -39,9 +40,15 @@ from methods.metric_implementer.experiments.cr_audit import (  # noqa: E402
     prompt_articulation_certificate,
 )
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (  # noqa: E402
+    build_codebook_panel_plan,
     build_frozen_codebook_manifest,
     load_value_artifact,
+    select_prior_balanced_panels,
     validate_codebook_manifest,
+)
+from methods.metric_implementer.experiments.cr3_evidence_store import (  # noqa: E402
+    install_evidence_store,
+    load_evidence_manifest,
 )
 from methods.metric_implementer.experiments.mine_clusters import (  # noqa: E402
     r1_groups,
@@ -54,7 +61,7 @@ DEFAULT_WORKER = REPO / "scripts" / "tools" / "cr3_mining_worker.py"
 DEFAULT_PYTHON = Path("/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python")
 DEFAULT_WORKER_HOME = Path("/lfs/skampere3/0/alexspan")
 LEDGER_SCHEMA = "cr3-ledger-v3"
-MANIFEST_SCHEMA = "cr3-run-v10"
+MANIFEST_SCHEMA = "cr3-run-v11"
 BOOTSTRAP_SCHEMA = "cr3-bootstrap-v2"
 CODEBOOK_BOOTSTRAP_SCHEMA = "cr3-codebook-bootstrap-v1"
 AUDIT_SIG_SCHEMA = "cr3-audit-signatures-v2"
@@ -129,11 +136,19 @@ def mcq_instrument_quality(state: dict, args) -> dict:
     entry = state["mcq_codebook_entry"]
     selected = list(entry["distractor_design_statistics"])
     min_kappa = float(min(row["kappa"] for row in selected))
+    prior_calibration = entry.get("prior_calibration") or {}
+    calibrated_prior = ((prior_calibration.get("prior") or {}).get(
+        "canonical_mean_prior"))
+    if calibrated_prior is not None and not np.allclose(
+            np.asarray(calibrated_prior, float), prior, rtol=0.0, atol=1e-12):
+        raise RuntimeError("frozen codebook prior calibration differs from the value channel")
     reasons = []
     if state["value_cap"] < args.mcq_min_headline_value_cap:
         reasons.append("frozen no-demo target prior leaves too little value headroom")
     if min_kappa < args.mcq_min_headline_distractor_kappa:
         reasons.append("selected distractor panel is behaviorally too easy")
+    if not prior_calibration.get("passes_prior_balance", False):
+        reasons.append("no candidate menu passed the predeclared blind no-demo prior-balance gate")
     return {
         "status": "HEADLINE_ELIGIBLE" if not reasons else "FORMAL_CERTIFICATE_ONLY",
         "headline_eligible": not reasons,
@@ -158,6 +173,7 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "selected_distractor_disagreements_min": int(min(
             row["n_disagree"] for row in selected)),
         "selected_distractors": selected,
+        "prior_calibration": prior_calibration,
         "scope": (
             "descriptive gate for scientific headline use; failure does not invalidate the "
             "fixed-instrument all-prompt inequality"),
@@ -360,6 +376,11 @@ def _manifest_payload(args) -> dict:
         "mcq_value_query_batch_size": args.mcq_value_query_batch_size,
         "mcq_min_headline_value_cap": args.mcq_min_headline_value_cap,
         "mcq_min_headline_distractor_kappa": args.mcq_min_headline_distractor_kappa,
+        "mcq_prior_candidate_pool_size": args.mcq_prior_candidate_pool_size,
+        "mcq_prior_max_panels_per_target": args.mcq_prior_max_panels_per_target,
+        "mcq_prior_max_option_probability": args.mcq_prior_max_option_probability,
+        "mcq_prior_target_probability_tolerance": args.mcq_prior_target_probability_tolerance,
+        "mcq_prior_min_normalized_entropy": args.mcq_prior_min_normalized_entropy,
         "mcq_codebook_metrics": codebook_metrics,
         "mcq_codebook_metric_sha256": {
             path: file_sha256(path) for path in codebook_metrics
@@ -399,6 +420,15 @@ def _manifest_payload(args) -> dict:
         "reuse_mcq_codebook_manifest_sha256": (
             file_sha256(Path(args.reuse_mcq_codebook_root).resolve() / "run_manifest.json")
             if args.reuse_mcq_codebook_root else None),
+        "reuse_evidence_root": (
+            str(Path(args.reuse_evidence_root).resolve())
+            if args.reuse_evidence_root else None),
+        "reuse_evidence_manifest_sha256": (
+            load_evidence_manifest(args.reuse_evidence_root)["manifest_sha256"]
+            if args.reuse_evidence_root else None),
+        "reuse_evidence_manifest_file_sha256": (
+            file_sha256(Path(args.reuse_evidence_root).resolve() / "evidence_manifest.json")
+            if args.reuse_evidence_root else None),
         "r2_bucket": args.r2_bucket,
         "worker": worker,
         "worker_environment": {
@@ -416,6 +446,8 @@ def _manifest_payload(args) -> dict:
             "certificate": file_sha256(Path(__file__).with_name("cr_audit.py")),
             "reconstruction_values": file_sha256(
                 Path(__file__).with_name("cr3_reconstruction_values.py")),
+            "evidence_store": file_sha256(
+                Path(__file__).with_name("cr3_evidence_store.py")),
             "vllm_backend": file_sha256(REPO / "methods" / "metric_implementer" / "vllm_backend.py"),
             "recon_channel": file_sha256(REPO / "methods" / "metric_implementer" / "recon_channel.py"),
             "alpha_probe": file_sha256(Path(__file__).with_name("alpha_probe.py")),
@@ -602,10 +634,14 @@ def run_stage(*, stage: str, items: list[dict], jobs_file: Path, model: str,
             _dry_propose(items, family, model, temperature)
         elif stage == "score":
             _dry_score(items, worlds, model)
-        else:
+        elif stage == "value":
             from types import SimpleNamespace
             from scripts.tools.cr3_mining_worker import stage_value
             stage_value(SimpleNamespace(jobs=str(jobs_file), model=model, fake=True))
+        else:
+            from types import SimpleNamespace
+            from scripts.tools.cr3_mining_worker import stage_codebook_prior
+            stage_codebook_prior(SimpleNamespace(jobs=str(jobs_file), model=model, fake=True))
         return
     cmd = [args.worker_python, args.worker, "--stage", stage, "--jobs", str(jobs_file),
            "--model", model]
@@ -904,19 +940,77 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
                           candidate_paths_by_task: dict[str, list[Path]]) -> None:
     if args.value_mode != "reconstruction_mcq":
         return
+    from methods.metric_implementer.config import ImplementerConfig, apply_task_preset
+
     by_task: dict[str, list[dict]] = {}
     for state in states.values():
         by_task.setdefault(state["task"], []).append(state)
+    planned = {}
+    calibration_jobs = []
     for task, task_states in by_task.items():
         paths = sorted(candidate_paths_by_task.get(task, []), key=lambda path: str(path))
         if not paths:
             raise RuntimeError(f"no frozen MCQ codebook candidates were prepared for task {task}")
+        plan = build_codebook_panel_plan(
+            paths,
+            target_metric_keys=[state["key"] for state in task_states],
+            n_options=args.mcq_n_options,
+            design_size=args.mcq_design_size,
+            min_design_disagreements=args.mcq_min_design_disagreements,
+            seed=stable_seed("mcq-codebook", task) % (2 ** 32),
+            candidate_pool_size=args.mcq_prior_candidate_pool_size,
+            max_panels_per_target=args.mcq_prior_max_panels_per_target,
+        )
+        plan_path = root / "mcq_codebooks" / f"{task}.panel_plan.json"
+        if plan_path.exists():
+            if json.loads(plan_path.read_text()) != plan:
+                raise RuntimeError(f"frozen MCQ panel plan changed for task {task}")
+        else:
+            _atomic_json(plan_path, plan)
+        calibration_path = root / "mcq_codebooks" / f"{task}.prior_calibration.json"
+        if not calibration_path.exists():
+            cfg = ImplementerConfig()
+            apply_task_preset(cfg, task)
+            calibration_jobs.append({
+                "panel_plan": str(plan_path),
+                "noun": str(getattr(cfg, "item_noun", task)),
+                "n_draws": args.mcq_reconstruction_draws,
+                "query_batch_size": args.mcq_value_query_batch_size,
+                "choice_probability_cache": str(
+                    root / "mcq_query_cache" / "choice_probabilities.sqlite"),
+                "out": str(calibration_path),
+            })
+        planned[task] = (task_states, paths, plan, calibration_path)
+
+    run_stage(
+        stage="codebook_prior",
+        items=calibration_jobs,
+        jobs_file=root / "jobs" / "codebook_prior.json",
+        model=args.mcq_reconstructor,
+        family="",
+        temperature=0.0,
+        args=args,
+        worlds={},
+    )
+
+    for task, (task_states, paths, plan, calibration_path) in planned.items():
+        if not calibration_path.exists():
+            raise RuntimeError(f"missing MCQ prior calibration for task {task}")
+        calibration = json.loads(calibration_path.read_text())
+        selections = select_prior_balanced_panels(
+            plan,
+            calibration,
+            maximum_option_probability=args.mcq_prior_max_option_probability,
+            target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+            minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+        )
         expected = build_frozen_codebook_manifest(
             paths,
             n_options=args.mcq_n_options,
             design_size=args.mcq_design_size,
             min_design_disagreements=args.mcq_min_design_disagreements,
             seed=stable_seed("mcq-codebook", task) % (2 ** 32),
+            panel_selections=selections,
         )
         path = root / "mcq_codebooks" / f"{task}.json"
         if path.exists():
@@ -1002,14 +1096,44 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
         list(states), states, scored, phase="bootstrap", iteration=0, args=args, worlds=worlds)
     for key, state in states.items():
         payload = bootstrap_values[key]
+        state["value_name"] = payload["value_name"]
+        state["value_unit"] = payload["value_unit"]
+        state["value_cap"] = float(payload["value_cap"])
+        state["no_demonstration_target_probability"] = float(
+            payload["no_demonstration_target_probability"])
+        state["fixed_no_demo_canonical_choice_probabilities"] = np.asarray(
+            payload["fixed_no_demo_canonical_choice_probabilities"], float)
+
+    historical_scored = {
+        key: state["historical_scored_path"]
+        for key, state in states.items() if "historical_scored_path" in state
+    }
+    historical_values = value_all(
+        list(historical_scored), states, historical_scored,
+        phase="historical", iteration=0, args=args, worlds=worlds,
+    ) if historical_scored else {}
+
+    for key, state in states.items():
+        payload = bootstrap_values[key]
         values = [payload["values"]]
         details = list(payload["details"])
-        value_cap = float(payload["value_cap"])
-        no_demo = float(payload["no_demonstration_target_probability"])
-        fixed_no_demo = np.asarray(
-            payload["fixed_no_demo_canonical_choice_probabilities"], float)
+        value_cap = state["value_cap"]
+        no_demo = state["no_demonstration_target_probability"]
+        fixed_no_demo = state["fixed_no_demo_canonical_choice_probabilities"]
         value_determined_by_exact_behavior = bool(
             payload["premises"].get("value_determined_by_exact_behavior"))
+        if key in historical_values:
+            historical = historical_values[key]
+            if (not np.isclose(historical["value_cap"], value_cap, rtol=0.0, atol=1e-12)
+                    or not np.array_equal(
+                        historical["fixed_no_demo_canonical_choice_probabilities"],
+                        fixed_no_demo)):
+                raise RuntimeError(f"frozen MCQ control changed in historical values for {key}")
+            values.append(historical["values"])
+            details.extend(historical["details"])
+            value_determined_by_exact_behavior = (
+                value_determined_by_exact_behavior
+                and bool(historical["premises"].get("value_determined_by_exact_behavior")))
         for row in _read_jsonl(state["dir"] / "absorption_ledger.jsonl"):
             value_path_text = row.get("value_path")
             if not value_path_text:
@@ -1044,11 +1168,6 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
         state["pool_value_species"] = [
             detail["design"]["teaching_transcript_sha256"] for detail in details
         ]
-        state["value_name"] = payload["value_name"]
-        state["value_unit"] = payload["value_unit"]
-        state["value_cap"] = value_cap
-        state["no_demonstration_target_probability"] = no_demo
-        state["fixed_no_demo_canonical_choice_probabilities"] = fixed_no_demo
         state["value_determined_by_exact_behavior"] = value_determined_by_exact_behavior
         confirmation_path = state["dir"] / "confirmation" / "certificate.json"
         if confirmation_path.exists():
@@ -1065,6 +1184,132 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
             )
             if loaded["sha256"] != run.get("confirmation_value_sha256"):
                 raise RuntimeError(f"MCQ confirmation value hash mismatch for {key}")
+
+
+def _load_historical_import(root: Path, state: dict, manifest: dict) -> np.ndarray | None:
+    """Load candidate-only historical prompts before replaying adaptive absorptions."""
+    path = state["dir"] / "historical" / "import.json"
+    if not path.exists():
+        return None
+    record = json.loads(path.read_text())
+    if (record.get("schema") != "cr3-historical-import-v1"
+            or record.get("evidence_manifest_sha256")
+            != manifest.get("reuse_evidence_manifest_sha256")
+            or record.get("metric_key") != state["key"]
+            or record.get("evidence_role") != "candidate_only"
+            or record.get("eligible_as_fresh_audit") is not False):
+        raise RuntimeError(f"invalid historical import contract for {state['key']}")
+    candidate_path = root / record["candidate_path"]
+    scored_path = root / record["scored_path"]
+    if (file_sha256(candidate_path) != record["candidate_sha256"]
+            or file_sha256(scored_path) != record["scored_sha256"]):
+        raise RuntimeError(f"historical evidence changed for {state['key']}")
+    batch, _, meta = load_scored(
+        scored_path, ["historical_candidate"], int(record["n_candidates"]))
+    for field in ("probe_sha256", "executor_model_revision", "readout_id",
+                  "cache_namespace_sha256"):
+        if meta[field] != state[field]:
+            raise RuntimeError(f"historical {field} mismatch for {state['key']}")
+    state["historical_import"] = record
+    state["historical_scored_path"] = scored_path
+    return batch
+
+
+def prepare_historical_candidates(
+    root: Path,
+    states: dict[str, dict],
+    manifest: dict,
+    args,
+    worlds: dict[str, dict],
+) -> None:
+    """Re-score reusable prompts as frozen-pool candidates, never as audit draws."""
+    if not args.reuse_evidence_root:
+        return
+    evidence_root = Path(args.reuse_evidence_root).resolve()
+    evidence = load_evidence_manifest(evidence_root)
+    if evidence["manifest_sha256"] != manifest["reuse_evidence_manifest_sha256"]:
+        raise RuntimeError("the configured evidence store changed after manifest freeze")
+    jobs = []
+    pending: dict[str, tuple[Path, Path, Path, int]] = {}
+    for key, state in states.items():
+        entry = evidence["metrics"].get(key)
+        if entry is None:
+            continue
+        destination = state["dir"] / "historical" / "candidates.jsonl"
+        source = evidence_root / entry["candidate_path"]
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if not destination.exists():
+            shutil.copy2(source, destination)
+            with destination.open("rb") as handle:
+                os.fsync(handle.fileno())
+            _fsync_directory(destination.parent)
+        if file_sha256(destination) != entry["candidate_sha256"]:
+            raise RuntimeError(f"historical candidate copy changed for {key}")
+        rows = _read_jsonl(destination)
+        n_candidates = int(entry["n_unique_candidates"])
+        if (len(rows) != n_candidates or n_candidates < 1
+                or len({int(row["seed"]) for row in rows}) != n_candidates
+                or any(row.get("evidence_role") != "candidate_only"
+                       or row.get("eligible_as_fresh_audit") is not False
+                       or row.get("family") != "historical_candidate" for row in rows)):
+            raise RuntimeError(f"invalid candidate-only evidence rows for {key}")
+        scored = state["dir"] / "historical" / "scored.npz"
+        import_path = state["dir"] / "historical" / "import.json"
+        pending[key] = (destination, scored, import_path, n_candidates)
+        if not scored.exists():
+            jobs.append({
+                "mode": "audit",
+                "task": state["task"],
+                "criteria": [str(destination)],
+                "family_names": ["historical_candidate"],
+                "expected_per_family": n_candidates,
+                "signature_cache_root": str(root / "signature_cache"),
+                "expected_probe_sha256": state["probe_sha256"],
+                "expected_executor_model_revision": state["executor_model_revision"],
+                "expected_readout_id": state["readout_id"],
+                "expected_cache_namespace_sha256": state["cache_namespace_sha256"],
+                "out": str(scored),
+                "out_key": key,
+            })
+    run_stage(
+        stage="score",
+        items=jobs,
+        jobs_file=root / "jobs" / "score_historical.json",
+        model=args.executor,
+        family="",
+        temperature=0.0,
+        args=args,
+        worlds=worlds,
+    )
+    for key, (candidate, scored, import_path, n_candidates) in pending.items():
+        state = states[key]
+        _, _, meta = load_scored(scored, ["historical_candidate"], n_candidates)
+        for field in ("probe_sha256", "executor_model_revision", "readout_id",
+                      "cache_namespace_sha256"):
+            if meta[field] != state[field]:
+                raise RuntimeError(f"historical {field} mismatch for {key}")
+        record = {
+            "schema": "cr3-historical-import-v1",
+            "metric_key": key,
+            "evidence_manifest_sha256": evidence["manifest_sha256"],
+            "candidate_path": str(candidate.relative_to(root)),
+            "candidate_sha256": file_sha256(candidate),
+            "scored_path": str(scored.relative_to(root)),
+            "scored_sha256": file_sha256(scored),
+            "n_candidates": n_candidates,
+            "pool_position": "after bootstrap and before adaptive absorption ledger",
+            "evidence_role": "candidate_only",
+            "eligible_as_fresh_audit": False,
+            "may_raise_achieved_lower_bound": True,
+        }
+        if import_path.exists():
+            if json.loads(import_path.read_text()) != record:
+                raise RuntimeError(f"historical import record changed for {key}")
+        else:
+            _atomic_json(import_path, record)
+        if "historical_import" not in state:
+            batch = _load_historical_import(root, state, manifest)
+            state["pool"] = np.vstack([state["pool"], batch])
 
 
 def _load_metric(path: str, root: Path, dry_run: bool, manifest: dict) -> tuple[dict, dict | None]:
@@ -1105,6 +1350,9 @@ def _load_metric(path: str, root: Path, dry_run: bool, manifest: dict) -> tuple[
         "stopped": None,
         "confirmed": False,
     }
+    historical = _load_historical_import(root, state, manifest)
+    if historical is not None:
+        state["pool"] = np.vstack([state["pool"], historical])
     for expected_iter, row in enumerate(_read_jsonl(directory / "absorption_ledger.jsonl")):
         if row.get("schema") != LEDGER_SCHEMA or row.get("event") != "absorb":
             raise RuntimeError(f"invalid ledger row for {key}: {row}")
@@ -1266,7 +1514,13 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             "proposal_template": "family-mode-specific; see proposer_modes and run manifest",
             "scored_artifact_sha256": meta["artifact_sha256"],
             "iid_provenance_established": not args.dry_run,
-            "prompt_class": "bootstrap pool union declared proposer-mixture support",
+            "prompt_class": (
+                "frozen discovery pool (bootstrap, candidate-only historical imports, and "
+                "absorbed monitors) union declared proposer-mixture support"),
+            "historical_evidence_manifest_sha256": manifest.get(
+                "reuse_evidence_manifest_sha256"),
+            "n_candidate_only_historical_prompts": int(
+                (state.get("historical_import") or {}).get("n_candidates", 0)),
             "certificate_role": certificate_role,
         },
     )
@@ -1545,6 +1799,11 @@ def main(argv=None) -> int:
     parser.add_argument("--mcq-max-chars", type=int, default=600)
     parser.add_argument("--mcq-min-headline-value-cap", type=float, default=0.10)
     parser.add_argument("--mcq-min-headline-distractor-kappa", type=float, default=0.50)
+    parser.add_argument("--mcq-prior-candidate-pool-size", type=int, default=16)
+    parser.add_argument("--mcq-prior-max-panels-per-target", type=int, default=256)
+    parser.add_argument("--mcq-prior-max-option-probability", type=float, default=0.35)
+    parser.add_argument("--mcq-prior-target-probability-tolerance", type=float, default=0.10)
+    parser.add_argument("--mcq-prior-min-normalized-entropy", type=float, default=0.90)
     parser.add_argument(
         "--mcq-codebook-metrics", nargs="+", default=None,
         help=("frozen task-level candidate bank for hard MCQ distractors; targets are added "
@@ -1576,6 +1835,11 @@ def main(argv=None) -> int:
     parser.add_argument(
         "--reuse-mcq-codebook-root", default=None,
         help="verified immutable CR3 root whose canonical MCQ candidate bootstraps may be hard-linked",
+    )
+    parser.add_argument(
+        "--reuse-evidence-root", default=None,
+        help=("validated CR3 evidence store; imported prompts are candidate-only and "
+              "never confirmation observations"),
     )
     parser.add_argument("--r2-bucket", default="general")
     parser.add_argument("--temp", type=float, default=0.90)
@@ -1616,6 +1880,13 @@ def main(argv=None) -> int:
     if (not 0.0 <= args.mcq_min_headline_value_cap <= 1.0
             or not -1.0 <= args.mcq_min_headline_distractor_kappa <= 1.0):
         parser.error("invalid MCQ headline-quality thresholds")
+    if (args.mcq_prior_candidate_pool_size < args.mcq_n_options - 1
+            or args.mcq_prior_max_panels_per_target < 1):
+        parser.error("invalid MCQ prior-calibration search budget")
+    if (not 0.0 < args.mcq_prior_max_option_probability <= 1.0
+            or not 0.0 <= args.mcq_prior_target_probability_tolerance <= 1.0
+            or not 0.0 <= args.mcq_prior_min_normalized_entropy <= 1.0):
+        parser.error("invalid MCQ prior-balance thresholds")
     if args.max_iter <= 0 or args.patience <= 0:
         parser.error("--max-iter and --patience must be positive")
     if args.worker_max_attempts <= 0 or args.worker_retry_delay_seconds < 0.0:
@@ -1648,6 +1919,11 @@ def main(argv=None) -> int:
         reuse_manifest = Path(args.reuse_mcq_codebook_root).resolve() / "run_manifest.json"
         if not reuse_manifest.is_file():
             parser.error("--reuse-mcq-codebook-root must contain run_manifest.json")
+    if args.reuse_evidence_root:
+        try:
+            load_evidence_manifest(args.reuse_evidence_root)
+        except (FileNotFoundError, ValueError) as exc:
+            parser.error(f"invalid --reuse-evidence-root: {exc}")
     if not args.dry_run:
         worker_home = Path(args.worker_home).resolve()
         if not worker_home.is_dir() or not os.access(worker_home, os.W_OK | os.X_OK):
@@ -1661,6 +1937,8 @@ def main(argv=None) -> int:
     root.mkdir(parents=True, exist_ok=True)
     with run_lock(root):
         manifest = prepare_manifest(root, args)
+        if args.reuse_evidence_root:
+            install_evidence_store(args.reuse_evidence_root, root)
         prepare_bootstraps(root, manifest, args)
         codebook_candidate_paths = prepare_mcq_codebook_bootstraps(root, manifest, args)
         states: dict[str, dict] = {}
@@ -1673,6 +1951,7 @@ def main(argv=None) -> int:
             if world is not None:
                 worlds[state["key"]] = world
         prepare_mcq_codebooks(root, states, args, codebook_candidate_paths)
+        prepare_historical_candidates(root, states, manifest, args, worlds)
         attach_mcq_pool_values(root, states, args, worlds)
         cell_alpha, alpha_scope = confirmation_alpha(args, n_metrics=len(states))
 

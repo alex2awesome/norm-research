@@ -2686,13 +2686,23 @@ unsaturated: many distinct behaviors may map to the same maximal reconstruction 
 
 **Codebook scope is part of the estimand.** An easy four-option panel can yield a valid but scientifically
 weak all-string certificate because `C_b` and `V_ann` are defined for that panel. Production codebooks are
-therefore frozen from a broader task-level candidate bank before target prompt search. Candidate-bank
-metrics contribute only their canonical executor behavior on the design panel; their historical prompt
-pools are not admitted into the target search. For each target, the codebook selects the behaviorally
-closest non-clone options with predeclared design disagreements, and the exact teaching-set optimizer then
-maximizes demonstrated separation and label balance. The reconstructor still sees only option descriptions
-and the target prompt's self-annotations. Changing the bank changes the reconstruction instrument, so
-easy-panel and hard-bank values must be reported as different estimands rather than pooled.
+therefore frozen from a broader task-level candidate bank before target prompt search. A bank-only metric
+contributes only its canonical executor behavior on the design panel; its historical prompt pool is not
+automatically admitted into another target's search. Separately, prompts previously generated **for the
+same target metric** may enter `Omega_N` as candidate-only evidence after they are content-validated,
+rescored by the current executor namespace, and revalued under the current frozen codebook. They can raise
+the achieved lower endpoint but can never be relabeled as fresh audit or confirmation draws.
+
+For each target, the implementation first enumerates behaviorally hard non-clone panels using only the
+design split. Before any candidate prompt is valued, it evaluates each unlabeled menu with the exact blind
+no-demonstration query and counterbalanced option positions. A panel is headline-eligible only if the
+predeclared full-posterior gates pass (default maximum option probability `0.35`, target probability within
+`0.10` of chance, and normalized entropy at least `0.90`). Among passing panels it freezes the behaviorally
+hardest; if none pass, it retains the least-violating panel only for a formally valid, explicitly
+`FORMAL_CERTIFICATE_ONLY` estimand. The teaching-set optimizer then maximizes demonstrated separation and
+label balance. The reconstructor still sees only option descriptions and the target prompt's
+self-annotations. Changing the bank or selected panel changes the reconstruction instrument, so easy-panel
+and hard-bank values must be reported as different estimands rather than pooled.
 
 Formal validity and scientific informativeness are separate. A frozen codebook may give the target option
 nearly unit no-demo probability, leaving a tiny `C_b`; attaining that cap is a correct global theorem but a
@@ -2905,6 +2915,27 @@ This theorem has no species rule, substitutability premise, submodularity ratio,
 the object is the best **one** prompt. It is an upper bound on an expectation over a declared finite
 future mining budget, not a high-probability bound on the realized maximum and not an all-support
 supremum. Those are different estimands and are never conflated.
+
+#### C.1 Value weighting: what is certified and what is not
+
+The historical `alpha_V` curve weights discovered species by realized value and remains useful for asking
+whether cumulative value grows more slowly than behavioral richness. It is not a ceiling: singleton
+degeneracy, same-sample value assignment, redundancy, and synergy prevent any transformation or
+"upweighting" of `alpha_V` from bounding an unseen optimum.
+
+The bound-grade value weighting is instead the mark `G(p)` on **every** fresh audit draw. This produces the
+desired asymmetry without a heuristic coefficient: one hundred novel behaviors with zero improvement add
+zero gain, while one rare prompt with gain `g` contributes the full bounded mark `g` and prevents a false
+plateau. Behavioral missing mass and the value-gain ceiling must therefore be plotted and classified as
+separate axes. A metric may validly remain behaviorally `UNSATURATED` while becoming value-`PLATEAUED`.
+
+Search may be made more value-sensitive by adding a separately named, prospectively frozen
+**value-tilted proposer family** (for example, mutations or compositions of high-value discovery prompts).
+Its model, conditioning data, sampling law, future quota, and family tag must be frozen after a design
+stage and before its confirmation audit. The family then receives its own empirical-Bernstein and DKW
+components. Post-hoc weights based on observed gains are forbidden. The value-tilted family can raise
+`V_Omega` faster and, after improvements are absorbed and a new audit is drawn, shrink the residual
+`B=C_b-V_Omega`; it does not broaden a process-relative theorem to all strings.
 
 ### D. Capture mass and exact-support exhaustion
 

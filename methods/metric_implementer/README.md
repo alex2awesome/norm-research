@@ -229,6 +229,27 @@ lightweight artifacts after full hash, identity, schema, and executor-namespace 
 production path for hard behaviorally related distractors; a codebook built only from the current target
 subset is a different and usually easier reconstruction estimand.
 
+V11 enumerates behaviorally hard panels and runs the exact blind no-demonstration query before any prompt
+is valued. The default prior-balance gate requires maximum option probability `<=0.35`, target probability
+within `0.10` of chance, and normalized prior entropy `>=0.90`; among passing menus it freezes the
+behaviorally hardest. If none passes, the least-violating menu is retained only as
+`FORMAL_CERTIFICATE_ONLY`. The calibration and value stages share the same rendered queries, seeds,
+reconstructor revision, and choice cache, and the loop verifies their probability matrices agree exactly.
+
+Historical prompts for the same target can be reused without laundering them into fresh data. First build
+one immutable evidence store, then pass it to a new run:
+
+```bash
+python -m methods.metric_implementer.experiments.cr3_evidence_store \
+  --source-root <old-cr3-root> --source-root <another-old-root> \
+  --out-root <immutable-evidence-root>
+```
+
+`--reuse-evidence-root` installs validated content-addressed signature/choice caches and admits deduplicated
+prompts as candidate-only pool rows after current-namespace rescoring and current-codebook revaluation.
+They may raise the achieved lower endpoint. They are inserted before the adaptive ledger and can never be
+used as checkpoint or confirmation observations.
+
 Formal optimality is not automatically a headline articulability result. The global payload's
 `instrument_quality` reports the full no-demo option prior, entropy, value headroom, selected-distractor
 kappas, and disagreement counts. By default, cap `<0.10` or minimum selected kappa `<0.50` yields
@@ -240,6 +261,7 @@ easy for the substantive claim. Thresholds are predeclared with `--mcq-min-headl
 # CPU certificate, production-path, value-census, and resume tests:
 PYTHONPATH=. pytest -q \
   methods/metric_implementer/tests/test_cr_audit.py \
+  methods/metric_implementer/tests/test_cr3_evidence_store.py \
   methods/metric_implementer/tests/test_cr3_mining_loop.py \
   methods/metric_implementer/tests/test_value_census.py
 
@@ -249,6 +271,7 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
   --mcq-codebook-metrics <full frozen task-level checkpoint bank ...> \
   --reuse-bootstrap-root <verified-prior-cr3-root> \
   --reuse-mcq-codebook-root <optional prior root with the same candidate bank> \
+  --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
   --mcq-choice-readout logits --mcq-value-query-batch-size 512 \
@@ -280,13 +303,14 @@ prompts are evaluated separately in the unrestricted certificate. This prevents 
 from erasing the unit-discovery experiment. `assumption_dependent.exact_support` is usable only when its
 stated external `p_min` premise is scientifically defended.
 
-### v10 release contract
+### Release contract
 
-The v10 manifest, value functional, certificate schemas, thresholds, and resume rules are frozen. Every run
-records exact code SHA-256 values and must resume from the same immutable release overlay; even a whitespace
-edit is intentionally rejected. There is no artifact migrator. New runs may hard-link hash-compatible
-bootstraps and codebook candidates and may reuse content-addressed signature/choice caches, but they always
-write to a new immutable output root. The orchestrator accepts the existing R3 banks for creative writing,
+Existing v10 roots remain frozen and receive no migrator. V11 adds prior-balanced menu construction and
+candidate-only historical evidence reuse, so it always writes a new immutable output root. Every run
+records exact code SHA-256 values and must resume from the same release overlay; even a whitespace edit is
+intentionally rejected. New runs may hard-link hash-compatible bootstraps and codebook candidates and may
+reuse content-addressed signature/choice caches, but never rewrite an older root. The orchestrator accepts
+the existing R3 banks for creative writing,
 humor, news homepages, press releases, code review, Math StackExchange, grant funding, peer review, and legal
 outcome prediction. The nonblocking run lock fails immediately when another process owns a root.
 

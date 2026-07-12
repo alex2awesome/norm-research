@@ -1,4 +1,4 @@
-# CR-3 executor-indexed prompt-ceiling loop (authoritative v10, 2026-07-12)
+# CR-3 executor-indexed prompt-ceiling loop (authoritative v11, 2026-07-12)
 
 ## Objective
 
@@ -55,13 +55,17 @@ have arbitrarily small proposer mass.
   backend, GEPA, or ordinary metric scoring.
 - `experiments/cr3_reconstruction_values.py` freezes bootstrap-only codebooks and validates/serializes the
   all-row MCQ value transaction. It supplies values to `cr_audit.py`; it is not a second certificate engine.
+- `experiments/cr3_evidence_store.py` consolidates historical prompt generations and content-addressed
+  executor/MCQ caches. Imported prompts are permanently candidate-only: after current-namespace rescoring
+  and current-codebook revaluation they may raise `V_Omega`, but they cannot serve as audit or confirmation
+  observations.
 - `experiments/run_cr3_mining_loop.py` is the user-facing orchestrator. It owns the immutable manifest,
   bootstrap transaction, monitor/absorption ledger, stopping rule, resume behavior, and isolated
   confirmation audit. It invokes the worker one model per subprocess, then calls `cr_audit.py` on CPU.
 - `vllm_backend.py` remains the shared backend. CR-3 only extends it compatibly so one batch can carry a
   distinct seed per request and deterministic seeds for binary readout.
 
-The v10 end-to-end path is:
+The v11 end-to-end path is:
 
 ```
 source checkpoints -> bootstrap/cache -> propose -> score behaviors -> measure frozen MCQ value marks
@@ -95,10 +99,23 @@ behavior; its historical source prompts are neither rescored nor admitted into t
 candidate bank may be hard-linked with `--reuse-mcq-codebook-root` only after validating the source
 checkpoint hash, metric identity, executor namespace, and artifact schema.
 
-**v10 freeze (2026-07-12).** The production estimand, schemas, thresholds, and exact-code resume contract
-are frozen. New task coverage uses new immutable roots and hash-compatible cache/bootstrap reuse; it does
-not migrate or rewrite older roots. Exact source hashes remain load-bearing, so a changed release cannot
-resume a v10 root. Supported existing R3 bank prefixes are creative writing, humor, news homepages, press
+Candidate panels are enumerated by behavioral hardness on the design split, then scored with the exact
+blind no-demonstration query before prompt-value search. Complete-block position counterbalancing is
+mandatory. The default gate requires maximum mean option probability at most `0.35`, target prior within
+`0.10` of chance, and normalized menu-prior entropy at least `0.90`. The behaviorally hardest passing panel
+is frozen. If none passes, the least-violating panel remains available only as
+`FORMAL_CERTIFICATE_ONLY`; the full metric denominator is preserved without treating a prior-answerable
+menu as an articulability result.
+
+Historical prompts for the **same target metric** are a separate input. `--reuse-evidence-root` installs
+validated cache entries and copies a deduplicated candidate manifest into the new root. Those prompts are
+rescored/revalued and inserted after bootstrap but before the adaptive absorption ledger. Their role never
+changes to audit evidence, even when their source file came from a historical monitor or confirmation.
+
+**Release freeze (2026-07-12).** Existing v10 roots remain immutable and are not migrated. V11 adds
+prior-balanced panel selection and candidate-only evidence reuse; it always writes a new root. Within each
+release, exact code and source hashes remain load-bearing, so a changed release cannot resume an old root.
+Supported existing R3 bank prefixes are creative writing, humor, news homepages, press
 releases, code review, Math StackExchange, grant funding, peer review, and legal outcome prediction.
 
 The legacy-to-bootstrap agreement is diagnostic only. Validity comes from defining the v2 target, pool,
@@ -149,7 +166,10 @@ U_DKW = integral_0^B [1 - product_f L_f(t)^m_f] dt
 U_horizon = min(B, U_sum, U_DKW).
 ```
 
-The reported finite-horizon expected prompt ceiling is `V_Omega + U_horizon`. No species value,
+The reported finite-horizon expected prompt ceiling is `V_Omega + U_horizon`. This all-draw gain mark is
+the bound-grade form of value weighting: behaviorally novel zero-gain prompts contribute zero, while a
+rare high-gain prompt contributes its full bounded gain. Historical `alpha_V` remains descriptive and is
+not transformed into a ceiling. No species value,
 substitutability, submodularity, Good-Toulmin extrapolation, or fitted asymptote enters this result.
 
 If every exact pattern in the proposer-mixture support is externally assumed to have mass at least
@@ -212,11 +232,18 @@ points; monitor rows are explicitly excluded.
 
 ```
 <root>/run_manifest.json
+<root>/evidence_install.json
 <root>/mcq_codebooks/<task>.json
+<root>/mcq_codebooks/<task>.panel_plan.json
+<root>/mcq_codebooks/<task>.prior_calibration.json
 <root>/mcq_codebook_candidates/<metric>/bootstrap/scored.npz
 <root>/signature_cache/<namespace>/<prompt_sha>.npz
 <root>/<metric>/bootstrap/scored.npz
 <root>/<metric>/bootstrap/values.npz
+<root>/<metric>/historical/candidates.jsonl
+<root>/<metric>/historical/scored.npz
+<root>/<metric>/historical/values.npz
+<root>/<metric>/historical/import.json
 <root>/<metric>/monitor/iter_NNN/proposal_<family>.jsonl
 <root>/<metric>/monitor/iter_NNN/scored.npz
 <root>/<metric>/monitor/iter_NNN/values.npz
@@ -254,6 +281,11 @@ both hashed in the run manifest and configurable before data collection.
 ## Tightening levers
 
 - **Mine more:** enlarges `Omega_N`, can raise `R_Omega`, and changes future gain marks toward zero.
+- **Reuse old GPU generations:** admit them only as re-scored/revalued candidates. They can raise the
+  achieved endpoint but are never spent a second time as confirmation evidence.
+- **Add a value-tilted proposer stratum:** after a design stage, freeze mutations/compositions of
+  high-value prompts as a separate family with its own future quota and confidence components. Never
+  weight gains post hoc.
 - **Audit more:** shrinks Clopper-Pearson, empirical-Bernstein, and DKW penalties; it does not move the
   underlying novelty/gain center at a fixed pool.
 - **Set the horizon scientifically:** a smaller bound for 100 future prompts does not certify 10,000.
@@ -272,6 +304,7 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
   --mcq-codebook-metrics <full frozen task-level checkpoint bank ...> \
   --reuse-bootstrap-root <verified-prior-cr3-root> \
   --reuse-mcq-codebook-root <optional prior root with the same candidate bank> \
+  --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
   --mcq-choice-readout logits --mcq-value-query-batch-size 512 \

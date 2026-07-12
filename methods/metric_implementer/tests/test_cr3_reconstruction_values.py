@@ -10,9 +10,12 @@ import pytest
 
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (
     CachedChoiceReconstructor,
+    build_codebook_panel_plan,
     build_frozen_codebook_manifest,
     evaluate_scored_prompt_values,
     load_value_artifact,
+    score_codebook_panel_priors,
+    select_prior_balanced_panels,
     validate_codebook_manifest,
     write_value_artifact,
 )
@@ -47,6 +50,20 @@ class _DriftingSelector:
         self.calls += 1
         return [[self.target_probability, 1.0 - self.target_probability]
                 for _ in prompts]
+
+
+class _SemanticPriorSelector:
+    def score_choices(self, prompts, choices, **_kwargs):
+        rows = []
+        for prompt in prompts:
+            descriptions = [description for _, description in
+                            re.findall(r"(?m)^(\d+)\. (.+)$", prompt)]
+            weights = np.asarray([
+                4.0 if "salient" in description else 1.0
+                for description in descriptions
+            ])
+            rows.append((weights / weights.sum()).tolist())
+        return rows
 
 
 def test_choice_probability_cache_freezes_cross_process_numeric_drift(tmp_path):
@@ -119,6 +136,76 @@ def test_codebook_is_bootstrap_only_frozen_and_hash_validated(tmp_path):
     mutated["design_seed"] = 99
     with pytest.raises(ValueError, match="mutated"):
         validate_codebook_manifest(mutated)
+
+
+def test_prior_calibration_selects_a_balanced_menu_before_prompt_search(tmp_path):
+    base = np.tile([0.0, 1.0], 20)
+    descriptions = [
+        "salient target",
+        "salient neighbor one",
+        "salient neighbor two",
+        "salient neighbor three",
+        "obscure neighbor four",
+        "obscure neighbor five",
+        "obscure neighbor six",
+    ]
+    paths = []
+    for index, description in enumerate(descriptions):
+        vector = base.copy()
+        vector[np.arange(index, len(base), 11)] = 1.0 - vector[
+            np.arange(index, len(base), 11)]
+        paths.append(_write_bootstrap(tmp_path, f"metric_{index}", vector, description))
+
+    plan = build_codebook_panel_plan(
+        paths,
+        target_metric_keys=["metric_0"],
+        n_options=4,
+        design_size=40,
+        min_design_disagreements=2,
+        candidate_pool_size=6,
+        max_panels_per_target=20,
+        seed=9,
+    )
+    calibration = score_codebook_panel_priors(
+        _SemanticPriorSelector(),
+        panel_plan=plan,
+        noun="story",
+        n_draws=4,
+        reconstructor_model="semantic-selector",
+        reconstructor_revision="revision",
+    )
+    selections = select_prior_balanced_panels(
+        plan,
+        calibration,
+        maximum_option_probability=0.35,
+        target_probability_tolerance=0.10,
+        minimum_normalized_entropy=0.90,
+    )
+    selected = selections["metric_0"]
+    assert selected["prior_calibration"]["passes_prior_balance"] is True
+    selected_prior = selected["prior_calibration"]["prior"]
+    assert selected_prior["maximum_option_probability"] <= 0.35
+    assert abs(selected_prior["target_probability"] - 0.25) <= 0.10
+    assert selected_prior["normalized_entropy"] >= 0.90
+
+    passing_rows = [
+        row for row in calibration["rows"]["metric_0"]
+        if row["panel_id"] == selected["prior_calibration"]["panel_id"]
+    ]
+    assert len(passing_rows) == 1
+
+    manifest = build_frozen_codebook_manifest(
+        paths,
+        n_options=4,
+        design_size=40,
+        min_design_disagreements=2,
+        seed=9,
+        panel_selections=selections,
+    )
+    validate_codebook_manifest(manifest)
+    entry = manifest["entries"]["metric_0"]
+    assert entry["selection_method"].startswith("blind_no_demo")
+    assert entry["prior_calibration"]["passes_prior_balance"] is True
 
 
 def test_every_scored_row_receives_an_anchor_free_mcq_value(tmp_path):

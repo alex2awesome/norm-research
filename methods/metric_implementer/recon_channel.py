@@ -662,6 +662,80 @@ def _balanced_option_permutations(n_options: int, n_draws: int, seed: int = 7) -
     return [np.asarray(p, dtype=int) for p in permutations]
 
 
+def mcq_no_demo_choice_probabilities(
+    reconstructor,
+    *,
+    noun: str,
+    option_descriptions,
+    n_draws: int,
+    query_batch_size: int = 512,
+) -> dict:
+    """Evaluate the blind, position-counterbalanced MCQ menu prior.
+
+    No target identity or candidate-prompt annotation is rendered. Canonical option zero
+    is tracked only after scoring so callers can diagnose the target prior without
+    disclosing it to the reconstructor.
+    """
+    descriptions = [str(value) for value in option_descriptions]
+    n_options = len(descriptions)
+    if n_options < 2 or n_draws < n_options or n_draws % n_options != 0:
+        raise ValueError("no-demo calibration requires complete option-position blocks")
+    if query_batch_size <= 0:
+        raise ValueError("query_batch_size must be positive")
+    permutations = _balanced_option_permutations(n_options, n_draws)
+    prompts = []
+    for permutation in permutations:
+        displayed = [descriptions[i] for i in permutation]
+        choices = "\n".join(
+            f"{i + 1}. {description[:200]}" for i, description in enumerate(displayed))
+        prompts.append(_RECON_MCQ_LOGITS.format(
+            noun=noun,
+            examples=_RECON_MCQ_NO_DEMOS,
+            choices=choices,
+            labels=", ".join(str(i + 1) for i in range(n_options)),
+        ))
+    seeds = [20_000 + draw for draw in range(n_draws)]
+    displayed_rows = []
+    choice_labels = [str(i + 1) for i in range(n_options)]
+    for start in range(0, len(prompts), query_batch_size):
+        stop = min(len(prompts), start + query_batch_size)
+        batch = np.asarray(reconstructor.score_choices(
+            prompts[start:stop],
+            choice_labels,
+            system=None,
+            seed=seeds[start:stop],
+        ), dtype=float)
+        if (batch.shape != (stop - start, n_options)
+                or np.any(~np.isfinite(batch)) or np.any(batch < 0.0)
+                or np.any(batch.sum(axis=1) <= 0.0)):
+            raise RuntimeError("invalid no-demo choice-probability batch")
+        batch = batch / batch.sum(axis=1, keepdims=True)
+        displayed_rows.extend(batch.tolist())
+
+    displayed_probabilities = np.asarray(displayed_rows, dtype=float)
+    canonical_probabilities = np.empty_like(displayed_probabilities)
+    for draw, permutation in enumerate(permutations):
+        canonical_probabilities[draw, permutation] = displayed_probabilities[draw]
+    prior = canonical_probabilities.mean(axis=0)
+    prior = prior / prior.sum()
+    positive = prior > 0.0
+    entropy = float(-np.sum(prior[positive] * np.log2(prior[positive])))
+    return {
+        "canonical_choice_probabilities": canonical_probabilities.tolist(),
+        "displayed_choice_probabilities": displayed_probabilities.tolist(),
+        "canonical_mean_prior": prior.tolist(),
+        "target_probability": float(prior[0]),
+        "maximum_option_probability": float(np.max(prior)),
+        "normalized_entropy": float(entropy / np.log2(n_options)),
+        "total_variation_from_uniform": float(
+            0.5 * np.abs(prior - 1.0 / n_options).sum()),
+        "n_draws": int(n_draws),
+        "position_counterbalanced": True,
+        "query_sha256": [hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+                         for prompt in prompts],
+    }
+
+
 def _verdict_vec(pyes) -> np.ndarray:
     """P(YES) -> binarized verdict vector (NaN preserved). The unit transmission is computed on,
     so distractor similarity is measured here too (behavioral, not semantic)."""

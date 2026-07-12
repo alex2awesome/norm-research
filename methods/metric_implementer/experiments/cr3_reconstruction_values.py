@@ -18,6 +18,7 @@ fallbacks retain the all-draw finite-horizon bound without that support-level pr
 from __future__ import annotations
 
 import hashlib
+import itertools
 import json
 import os
 from pathlib import Path
@@ -29,12 +30,15 @@ import numpy as np
 from ..recon_channel import (
     CLONE_CAP,
     _kappa,
+    mcq_no_demo_choice_probabilities,
     mcq_logit_values_from_precomputed_behaviors,
     mcq_value_from_precomputed_behavior,
 )
 
 
-CODEBOOK_SCHEMA = "cr3-reconstruction-codebook-v2"
+CODEBOOK_SCHEMA = "cr3-reconstruction-codebook-v3"
+PANEL_PLAN_SCHEMA = "cr3-reconstruction-panel-plan-v1"
+PRIOR_CALIBRATION_SCHEMA = "cr3-reconstruction-prior-calibration-v1"
 VALUE_SCHEMA = "cr3-reconstruction-values-v3"
 
 
@@ -174,8 +178,13 @@ def build_frozen_codebook_manifest(
     design_size: int = 120,
     min_design_disagreements: int = 2,
     seed: int = 0,
+    panel_selections: Mapping[str, Mapping[str, object]] | None = None,
 ) -> dict:
-    """Freeze related, empirically distinguishable metric options using bootstrap data only."""
+    """Freeze related, empirically distinguishable options before prompt-value search.
+
+    ``panel_selections`` may supply a no-demo-calibrated panel chosen solely from the
+    bootstrap-derived panel plan. It cannot depend on any candidate prompt behavior.
+    """
     views = [_bootstrap(path) for path in bootstrap_paths]
     if len(views) < n_options or n_options < 2:
         raise ValueError("need at least n_options bootstrap metrics and n_options >= 2")
@@ -223,13 +232,24 @@ def build_frozen_codebook_manifest(
                     and candidate["n_disagree"] >= min_design_disagreements]
         eligible.sort(key=lambda candidate: (
             -candidate["kappa"], -candidate["n_disagree"], candidate["metric_key"]))
-        selected = eligible[:n_options - 1]
+        selection = ((panel_selections or {}).get(target["key"]) or {})
+        selected_keys = [str(value) for value in selection.get("distractor_metric_keys", [])]
+        if selected_keys:
+            by_key = {candidate["metric_key"]: candidate for candidate in eligible}
+            if (len(selected_keys) != n_options - 1 or len(set(selected_keys)) != len(selected_keys)
+                    or any(key not in by_key for key in selected_keys)):
+                raise ValueError(f"invalid calibrated panel selection for {target['key']}")
+            selected = [by_key[key] for key in selected_keys]
+        else:
+            selected = eligible[:n_options - 1]
+        prior_calibration = selection.get("prior_calibration")
         entries[target["key"]] = {
             "target_metric_key": target["key"],
             "target_description": target["description"],
             "target_design_yes_rate": float(np.mean(target_hard)),
             "distractor_metric_keys": [candidate["metric_key"] for candidate in selected],
             "distractor_design_statistics": selected,
+            "eligible_distractor_statistics": eligible,
             "selected_distractor_kappa_min": (
                 float(min(candidate["kappa"] for candidate in selected)) if selected else None),
             "selected_distractor_kappa_mean": (
@@ -237,6 +257,10 @@ def build_frozen_codebook_manifest(
                 if selected else None),
             "selected_distractor_disagreements_min": (
                 int(min(candidate["n_disagree"] for candidate in selected)) if selected else None),
+            "selection_method": (
+                "blind_no_demo_prior_balance_then_behavioral_hardness"
+                if selected_keys else "behavioral_hardness_only"),
+            "prior_calibration": prior_calibration,
             "valid": len(selected) == n_options - 1,
             "failure": (None if len(selected) == n_options - 1 else
                         f"only {len(selected)} eligible distractors for {n_options - 1} required"),
@@ -264,10 +288,225 @@ def build_frozen_codebook_manifest(
         "premises": {
             "built_from_bootstrap_only": True,
             "frozen_before_prompt_value_search": True,
+            "prior_calibration_used_no_candidate_prompt_annotations": bool(panel_selections),
             "uses_external_labels": False,
         },
     }
     return {**core, "manifest_sha256": _payload_sha256(core)}
+
+
+def build_codebook_panel_plan(
+    bootstrap_paths: Sequence[str | Path],
+    *,
+    target_metric_keys: Sequence[str],
+    n_options: int = 4,
+    design_size: int = 120,
+    min_design_disagreements: int = 2,
+    seed: int = 0,
+    candidate_pool_size: int = 16,
+    max_panels_per_target: int = 256,
+) -> dict:
+    """Enumerate hard candidate menus using bootstrap behavior only."""
+    if candidate_pool_size < n_options - 1 or max_panels_per_target < 1:
+        raise ValueError("panel search needs enough candidates and a positive panel budget")
+    base = build_frozen_codebook_manifest(
+        bootstrap_paths,
+        n_options=n_options,
+        design_size=design_size,
+        min_design_disagreements=min_design_disagreements,
+        seed=seed,
+    )
+    targets = [str(value) for value in target_metric_keys]
+    if len(set(targets)) != len(targets):
+        raise ValueError("target_metric_keys must be unique")
+    panels = {}
+    for target_key in targets:
+        if target_key not in base["entries"]:
+            raise ValueError(f"panel target {target_key!r} is absent from the candidate bank")
+        entry = base["entries"][target_key]
+        eligible = list(entry["eligible_distractor_statistics"])[:candidate_pool_size]
+        combinations = []
+        for combo in itertools.combinations(eligible, n_options - 1):
+            keys = [str(candidate["metric_key"]) for candidate in combo]
+            behavior = {
+                "selected_distractor_kappa_min": float(min(c["kappa"] for c in combo)),
+                "selected_distractor_kappa_mean": float(np.mean([c["kappa"] for c in combo])),
+                "selected_distractor_disagreements_min": int(
+                    min(c["n_disagree"] for c in combo)),
+            }
+            combinations.append({
+                "distractor_metric_keys": keys,
+                "option_metric_keys": [target_key, *keys],
+                "option_descriptions": [
+                    base["metrics"][key]["description"] for key in [target_key, *keys]
+                ],
+                "behavioral_panel_statistics": behavior,
+            })
+        combinations.sort(key=lambda panel: (
+            -panel["behavioral_panel_statistics"]["selected_distractor_kappa_min"],
+            -panel["behavioral_panel_statistics"]["selected_distractor_kappa_mean"],
+            -panel["behavioral_panel_statistics"]["selected_distractor_disagreements_min"],
+            panel["distractor_metric_keys"],
+        ))
+        kept = combinations[:max_panels_per_target]
+        for panel in kept:
+            panel["panel_id"] = _payload_sha256({
+                "target_metric_key": target_key,
+                "distractor_metric_keys": panel["distractor_metric_keys"],
+            })
+        panels[target_key] = kept
+
+    core = {
+        "schema": PANEL_PLAN_SCHEMA,
+        "base_codebook_manifest_sha256": base["manifest_sha256"],
+        "n_options": int(n_options),
+        "target_metric_keys": targets,
+        "candidate_pool_size": int(candidate_pool_size),
+        "max_panels_per_target": int(max_panels_per_target),
+        "panels": panels,
+        "premises": {
+            "uses_bootstrap_behavior_only": True,
+            "uses_candidate_prompt_annotations": False,
+            "uses_external_labels": False,
+        },
+    }
+    return {**core, "plan_sha256": _payload_sha256(core)}
+
+
+def score_codebook_panel_priors(
+    reconstructor,
+    *,
+    panel_plan: Mapping[str, object],
+    noun: str,
+    n_draws: int = 4,
+    query_batch_size: int = 512,
+    reconstructor_model: str,
+    reconstructor_revision: str,
+) -> dict:
+    """Measure blind no-demo menu priors; candidate annotations are unavailable here."""
+    plan = dict(panel_plan)
+    observed_sha = str(plan.pop("plan_sha256", ""))
+    if plan.get("schema") != PANEL_PLAN_SCHEMA or observed_sha != _payload_sha256(plan):
+        raise ValueError("invalid or mutated MCQ panel plan")
+    rows = {}
+    for target_key in plan["target_metric_keys"]:
+        target_rows = []
+        for panel in plan["panels"][target_key]:
+            prior = mcq_no_demo_choice_probabilities(
+                reconstructor,
+                noun=str(noun),
+                option_descriptions=panel["option_descriptions"],
+                n_draws=n_draws,
+                query_batch_size=query_batch_size,
+            )
+            target_rows.append({
+                "panel_id": panel["panel_id"],
+                "target_metric_key": target_key,
+                "distractor_metric_keys": panel["distractor_metric_keys"],
+                "behavioral_panel_statistics": panel["behavioral_panel_statistics"],
+                "prior": prior,
+            })
+        rows[target_key] = target_rows
+    core = {
+        "schema": PRIOR_CALIBRATION_SCHEMA,
+        "panel_plan_sha256": observed_sha,
+        "reconstructor_model": str(reconstructor_model),
+        "reconstructor_revision": str(reconstructor_revision),
+        "noun": str(noun),
+        "n_draws": int(n_draws),
+        "rows": rows,
+        "premises": {
+            "blind_unlabeled_menu": True,
+            "position_counterbalanced": True,
+            "uses_candidate_prompt_annotations": False,
+            "uses_external_labels": False,
+        },
+    }
+    return {**core, "calibration_sha256": _payload_sha256(core)}
+
+
+def select_prior_balanced_panels(
+    panel_plan: Mapping[str, object],
+    prior_calibration: Mapping[str, object],
+    *,
+    maximum_option_probability: float = 0.35,
+    target_probability_tolerance: float = 0.10,
+    minimum_normalized_entropy: float = 0.90,
+) -> dict[str, dict]:
+    """Choose the hardest panel satisfying predeclared full-posterior prior gates.
+
+    If no panel passes, retain the least-violating panel for a formal-only result and
+    mark the failure explicitly. This keeps the full denominator without laundering an
+    instrument failure into an articulability conclusion.
+    """
+    plan = dict(panel_plan)
+    plan_sha = str(plan.pop("plan_sha256", ""))
+    calibration = dict(prior_calibration)
+    calibration_sha = str(calibration.pop("calibration_sha256", ""))
+    if (plan.get("schema") != PANEL_PLAN_SCHEMA or plan_sha != _payload_sha256(plan)
+            or calibration.get("schema") != PRIOR_CALIBRATION_SCHEMA
+            or calibration_sha != _payload_sha256(calibration)
+            or calibration.get("panel_plan_sha256") != plan_sha):
+        raise ValueError("panel plan and prior calibration are invalid or mismatched")
+    if (not 0.0 < maximum_option_probability <= 1.0
+            or not 0.0 <= target_probability_tolerance <= 1.0
+            or not 0.0 <= minimum_normalized_entropy <= 1.0):
+        raise ValueError("invalid prior-balance thresholds")
+    chance = 1.0 / int(plan["n_options"])
+    thresholds = {
+        "maximum_option_probability": float(maximum_option_probability),
+        "target_probability_interval": [
+            float(max(0.0, chance - target_probability_tolerance)),
+            float(min(1.0, chance + target_probability_tolerance)),
+        ],
+        "minimum_normalized_entropy": float(minimum_normalized_entropy),
+    }
+    selections = {}
+    for target_key in plan["target_metric_keys"]:
+        rows = [dict(row) for row in calibration["rows"].get(target_key, [])]
+        if not rows:
+            raise ValueError(f"no prior calibration rows for {target_key}")
+        for row in rows:
+            prior = row["prior"]
+            target_probability = float(prior["target_probability"])
+            max_probability = float(prior["maximum_option_probability"])
+            entropy = float(prior["normalized_entropy"])
+            violations = {
+                "maximum_option_probability_excess": float(max(
+                    0.0, max_probability - maximum_option_probability)),
+                "target_probability_distance_excess": float(max(
+                    0.0, abs(target_probability - chance) - target_probability_tolerance)),
+                "normalized_entropy_shortfall": float(max(
+                    0.0, minimum_normalized_entropy - entropy)),
+            }
+            row["prior_balance_violations"] = violations
+            row["passes_prior_balance"] = all(value <= 1e-12 for value in violations.values())
+            row["total_prior_balance_violation"] = float(sum(violations.values()))
+
+        passing = [row for row in rows if row["passes_prior_balance"]]
+        candidates = passing or rows
+        candidates.sort(key=lambda row: (
+            0.0 if row["passes_prior_balance"] else row["total_prior_balance_violation"],
+            -row["behavioral_panel_statistics"]["selected_distractor_kappa_min"],
+            -row["behavioral_panel_statistics"]["selected_distractor_kappa_mean"],
+            -row["behavioral_panel_statistics"]["selected_distractor_disagreements_min"],
+            row["panel_id"],
+        ))
+        chosen = candidates[0]
+        selections[target_key] = {
+            "distractor_metric_keys": list(chosen["distractor_metric_keys"]),
+            "prior_calibration": {
+                "panel_id": chosen["panel_id"],
+                "passes_prior_balance": bool(chosen["passes_prior_balance"]),
+                "prior": chosen["prior"],
+                "violations": chosen["prior_balance_violations"],
+                "thresholds": thresholds,
+                "n_panels_evaluated": len(rows),
+                "n_panels_passing": len(passing),
+                "calibration_sha256": calibration_sha,
+            },
+        }
+    return selections
 
 
 def validate_codebook_manifest(manifest: Mapping[str, object]) -> None:
