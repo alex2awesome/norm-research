@@ -1,0 +1,91 @@
+{
+  "schema_version": "science-claims-v2-articulability-counterpart",
+  "status": "frozen_not_run",
+  "purpose": "Future prompt-articulability counterpart to the code-verification run over the identical abstract+body evidence representation.",
+  "external_knowledge": "forbidden",
+  "input_allowlist": [
+    "paper_id",
+    "abstract",
+    "body"
+  ],
+  "system_prompt": "You are a scientific claim-to-evidence auditor. Use only the supplied ABSTRACT and BODY. Extract at most five result-bearing claims from the abstract and check whether distinct sentences in the body support or contradict each claim. Do not treat a sentence copied from the abstract as body evidence. Normalize equivalent numeric values and units, preserve the direction and entity roles of comparisons, and require the named baseline to match. Only exact numeric/comparative relations are strong certificates; lexical plus evidence/proof markers are weaker evidence_links and must not be called semantic support. Return only JSON matching the schema. A certificate is an auditable within-document relation witness, not external scientific truth. Abstain rather than guess.",
+  "user_template": "PAPER_ID: {paper_id}\n\nABSTRACT:\n{abstract}\n\nBODY:\n{body}",
+  "decision_semantics": {
+    "supported": "A distinct body sentence reproduces a numeric or comparative claim relation; quantities/units and comparison entity roles, direction, and baseline agree whenever present.",
+    "contradicted": "A distinct body sentence addresses the same entities/baseline but reverses the comparison direction or entity roles.",
+    "evidence_link": "A distinct body sentence has relation-relevant lexical and evidence/proof markers, but no numeric/comparative relation certificate; this locates evidence and does not establish semantic support.",
+    "insufficient": "Relevant body material exists but does not certify support or contradiction.",
+    "abstain": "The abstract/body is missing, the body contains no evidence independent of the abstract, no executable claim relation can be identified, or no evidence can be retrieved without guessing."
+  },
+  "output_schema": {
+    "paper_id": "string",
+    "status": "supported | contradicted | mixed | evidence_link | insufficient | abstain",
+    "reason": "string",
+    "claim_count": "integer",
+    "certificate_count": "integer: number of supported or contradicted certificates",
+    "evidence_link_count": "integer: number of weaker surface evidence links",
+    "certificates": [
+      {
+        "decision": "supported | contradicted",
+        "witness_kind": "relation_certificate",
+        "reason": "string",
+        "claim": {
+          "sentence_index": "integer",
+          "text": "string",
+          "relation": "comparative | numeric | theoretical | empirical | qualitative",
+          "quantities": [
+            {
+              "raw": "string",
+              "value": "number normalized to the canonical unit",
+              "unit": "string",
+              "start": "integer",
+              "end": "integer"
+            }
+          ],
+          "comparison": "null or {cue, polarity, left_terms, right_terms}"
+        },
+        "evidence": {
+          "sentence_index": "integer",
+          "start": "integer",
+          "end": "integer",
+          "text": "string",
+          "quantities": "same quantity list schema",
+          "comparison": "null or {cue, polarity, left_terms, right_terms}"
+        },
+        "checks": {
+          "bm25": null,
+          "claim_term_coverage": null,
+          "quantity_matches": "integer",
+          "quantity_required": "integer",
+          "relation_state": "aligned | aligned_reversed | reversed_roles | direction_mismatch | baseline_mismatch | missing | not_required"
+        }
+      }
+    ],
+    "evidence_links": [
+      {
+        "decision": "evidence_link",
+        "witness_kind": "evidence_link",
+        "shape": "same claim/evidence/checks fields as a certificate"
+      }
+    ],
+    "matches": [
+      {
+        "decision": "supported | contradicted | evidence_link | insufficient",
+        "witness_kind": "relation_certificate | evidence_link | none",
+        "shape": "same claim/evidence/checks fields as above"
+      }
+    ],
+    "graph": {
+      "claim_nodes": "integer",
+      "evidence_nodes": "integer",
+      "edges": null,
+      "matched_edges": "integer",
+      "matching": "prompt_relation_matching"
+    }
+  },
+  "run_result": "unavailable_not_run",
+  "notes": [
+    "Null BM25/lexical fields preserve the shared certificate shape without pretending that the prompt executed the code retriever.",
+    "No LLM call is part of the current science full-paper run."
+  ]
+}
