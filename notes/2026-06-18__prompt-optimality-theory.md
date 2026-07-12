@@ -3037,6 +3037,13 @@ seeded never-absorbed audit before further monitoring. Alpha is allocated across
 an optional study-level allocation additionally covers every declared metric. Adaptive monitor rows may be
 plotted as diagnostics but never appear as certified trajectory points.
 
+**Prospective 95%/90% reporting rule (declared 2026-07-12 before the v11 checkpoint and confirmation
+audits).** The scientific certificate remains the 95% simultaneous interval. The identical frozen audit may
+also be evaluated at 90% confidence as a secondary sensitivity analysis. Results passing only the latter are
+`SUGGESTIVE`, not `CERTIFIED`; the report shows both intervals for every metric and may not choose the level
+after seeing the metric. This tiering broadens the descriptive status spectrum without weakening the theorem
+or spending additional GPU observations.
+
 The July-11 live run violated item 2: a shared vLLM seed produced one prompt repeated 150 times in
 almost every family file, with some empty files. It was terminated and none of its monitor or future
 confirmation artifacts are evidence. Legacy pilot-v2 intervals remain arithmetic sensitivities

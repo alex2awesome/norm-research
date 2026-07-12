@@ -278,6 +278,15 @@ fixed-instrument interval but is marked `FORMAL_CERTIFICATE_ONLY`; it cannot sup
 The defaults are a value cap of at least `0.10` and minimum selected-distractor kappa of at least `0.50`,
 both hashed in the run manifest and configurable before data collection.
 
+### Prospective reporting tiers (declared 2026-07-12 before v11 audit results)
+
+The primary certificate and every `CERTIFIED_*` label use 95% simultaneous confidence at the scope recorded
+in the payload. The same never-absorbed audit may additionally be recomputed at 90% confidence as a
+predeclared sensitivity tier. A label that passes only there is written `SUGGESTIVE_*`, never `CERTIFIED_*`.
+Both intervals and the unchanged point estimates are reported, so the 90% tier cannot replace an unfavorable
+95% result or be selected metric by metric. This secondary computation is CPU-only and does not change the
+frozen GPU run, its stopping rule, or its evidence ledger.
+
 ## Tightening levers
 
 - **Mine more:** enlarges `Omega_N`, can raise `R_Omega`, and changes future gain marks toward zero.
