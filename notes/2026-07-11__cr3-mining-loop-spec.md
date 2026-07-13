@@ -107,8 +107,13 @@ artifact schema. Pre-v12 numeric artifacts are rejected, not migrated. Candidate
 versions through the evidence store because they are re-scored and revalued before entering the achieved pool.
 
 Candidate panels are enumerated by behavioral hardness on the design split, then scored with the exact
-blind no-demonstration query before prompt-value search. Complete-block position counterbalancing is
-mandatory. The default gate requires maximum mean option probability at most `0.35`, target prior within
+blind no-demonstration query before prompt-value search. The four-option headline instrument uses the full
+`S_4` block: all `4!=24` option orders exactly once. The first four rows reproduce the historical seed-7
+cyclic block and the remaining 20 unique orders are appended deterministically, so existing prefix query
+cache keys remain reusable. A four-row calibration artifact itself is not transplanted into the 24-row
+functional; the imported private cache supplies the identical prefix and the worker fills only missing rows.
+The ordered list and its hash are frozen in every relevant artifact. The default
+gate requires maximum mean option probability at most `0.35`, target prior within
 `0.10` of chance, and normalized menu-prior entropy at least `0.90`. Every prior-passing panel then receives
 its own fixed-T8 exhaustive state envelope. Retain state-live panels, select the largest `U_state`, and use
 behavioral hardness then panel ID only as tie-breaks. This maximizes measurable dynamic range and avoids
@@ -133,9 +138,9 @@ rendered queries, they define the evaluator namespace. After direct Qwen evaluat
 every prompt value is a validated CPU lookup by transcript. A direct-replay regression test checks lookup
 equality.
 
-At four counterbalanced draws, one candidate panel requires `256 * 2 * 4 = 2,048` annotation/shuffled
-choice queries; no-demo rows come from prior calibration. These queries are batched and content-cached, and
-fixed panels bypass per-state MILP selection. Total pre-search work scales with the number of prior-passing
+At 24 factorial draws, one candidate panel requires `256 * 2 * 24 = 12,288` annotation/shuffled
+choice queries; the 24 no-demo rows come from prior calibration. These queries are batched and content-cached,
+and fixed panels bypass per-state MILP selection. Total pre-search work scales with the number of prior-passing
 panels, so `--mcq-prior-max-panels-per-target` is a prospective compute budget (default 256). Expanding that
 budget regenerates the plan/calibration provenance but reuses identical rendered-query cache rows; it does
 not invalidate executor bootstraps.
@@ -148,7 +153,8 @@ changes to audit evidence, even when their source file came from a historical mo
 **Release freeze (updated 2026-07-13).** Existing v10/v11/e601 roots remain immutable and are not migrated.
 V11 added prior-balanced panel selection and candidate-only evidence reuse. V12 adds total constrained behavior/choice
 readouts, new signature and choice-cache namespaces, level-matched codebook banks, and predeclared dual
-95%/90% reporting; the fixed-state v12 release adds codebook v4 and exhaustive `T_8` enumeration. Within
+95%/90% reporting; the fixed-state v12 release adds codebook v4, exhaustive `T_8` enumeration, and the exact
+24-order factorial headline block. Within
 each release, exact code and source hashes remain load-bearing, so a changed
 release cannot resume an old root. V11 prompt texts may be imported as candidate-only evidence and rescored;
 old candidate value artifacts are never promoted into the v4 namespace. Validated e601 target and codebook
@@ -318,14 +324,16 @@ The query cache is part of the value definition, not a speed-only convenience: i
 transcripts receive byte-identical choice probabilities across bootstrap, monitor, checkpoint, confirmation,
 and resume. Value evaluation batches rendered queries and evaluates the prompt-independent no-demo channel
 only once per metric. V12 cache keys include the exact constrained-choice protocol ID. Frozen `q_no_demo`
-is an exact arithmetic mean over a finite complete counterbalancing block, not a binomial estimate; it has
+is an exact arithmetic mean over the finite full-factorial 24-order block, not a binomial estimate; it has
 no Clopper-Pearson interval. A claim over random menus, items, or reconstructor runs is a separate estimand.
 
 The all-prompt lower endpoint is the best value among the absorbed pool and the current fresh audit. The
 fresh audit remains excluded from the pool used by CR-3 gain/missing-mass calculations; using an observed
 audit prompt as an achieved global lower bound does not alter that conditioning. Every MCQ global payload
 also contains `instrument_quality`. Headline gates are the blind prior, coarse headroom of at least `0.10`,
-`U_state` above the predeclared resolution, and a positive unique-target envelope maximizer. The stored
+`U_state` above the predeclared resolution, a positive unique-target envelope maximizer, and the exact
+four-option 24-order block. A different frozen finite block still defines a valid formal finite-state
+functional and upper envelope, but it is reported only as `FORMAL_CERTIFICATE_ONLY`. The stored
 operational-target transcript is diagnostic only: it is canonical-description behavior for a one-form target,
 but for an orbit target it is the hard readout of the declared orbit average and need not be realized by one
 prompt. The historical selected-distractor kappa `0.50` threshold remains hashed and reported as a descriptive
@@ -380,7 +388,8 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
   --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
-  --mcq-choice-readout logits --mcq-n-examples 8 --mcq-value-query-batch-size 512 \
+  --mcq-choice-readout logits --mcq-n-examples 8 --mcq-reconstruction-draws 24 \
+  --mcq-value-query-batch-size 512 \
   --families microsoft/phi-4 microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
   --family-tags phi4_atomic phi4_holistic qwen14_atomic llama8_holistic \
   --family-modes atomic holistic atomic holistic \

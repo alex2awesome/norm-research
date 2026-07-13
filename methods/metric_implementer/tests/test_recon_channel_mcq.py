@@ -1,6 +1,7 @@
 """Reconstruction-MCQ experimental-design and selection-channel tests."""
 from __future__ import annotations
 
+import itertools
 import re
 from types import SimpleNamespace
 
@@ -16,6 +17,7 @@ from methods.metric_implementer.recon_channel import (
     mcq_identity_channel,
     mcq_logit_values_from_precomputed_behaviors,
     mcq_no_demo_choice_probabilities,
+    mcq_option_order_design,
     mcq_value_from_precomputed_behavior,
     run_metric,
 )
@@ -92,13 +94,43 @@ def test_option_permutations_are_exactly_counterbalanced_in_complete_blocks():
     assert all(sorted(p.tolist()) == [0, 1, 2, 3] for p in permutations)
 
 
+def test_four_option_factorial_block_enumerates_s4_and_preserves_cached_prefix():
+    legacy_prefix = _balanced_option_permutations(4, 4, seed=7)
+    factorial = _balanced_option_permutations(4, 24, seed=7)
+    assert len(factorial) == 24
+    assert all(np.array_equal(observed, expected)
+               for observed, expected in zip(factorial[:4], legacy_prefix))
+    observed = {tuple(permutation.tolist()) for permutation in factorial}
+    assert observed == set(itertools.permutations(range(4)))
+
+    design = mcq_option_order_design(4, 24, seed=7)
+    assert design["exact_full_factorial"] is True
+    assert design["each_permutation_exactly_once"] is True
+    assert design["n_unique_orders"] == 24
+    assert design["canonical_option_orders"][:4] == [
+        permutation.tolist() for permutation in legacy_prefix
+    ]
+    assert design["cache_compatible_cyclic_prefix_size"] == 4
+    assert design["query_seeds_by_condition"]["annotations"][:4] == [
+        10_000, 10_001, 10_002, 10_003,
+    ]
+    assert design["shuffled_label_permutation_seeds"][:4] == [
+        91_000, 91_001, 91_002, 91_003,
+    ]
+    assert design == mcq_option_order_design(4, 24, seed=7)
+    assert len(design["orders_sha256"]) == 64
+    assert len(design["design_sha256"]) == 64
+
+
 def test_blind_no_demo_query_discloses_no_target_and_canonicalizes_after_scoring():
     class RecordingPrior:
         def __init__(self):
             self.prompts = []
+            self.seeds = []
 
         def score_choices(self, prompts, choices, **_kwargs):
             self.prompts.extend(prompts)
+            self.seeds.extend(_kwargs["seed"])
             assert choices == ["1", "2", "3", "4"]
             return [[0.1, 0.2, 0.3, 0.4] for _ in prompts]
 
@@ -129,6 +161,18 @@ def test_blind_no_demo_query_discloses_no_target_and_canonicalizes_after_scoring
         assert sorted(canonical[:, option].tolist()) == pytest.approx([0.1, 0.2, 0.3, 0.4])
     assert report["canonical_mean_prior"] == pytest.approx([0.25] * 4)
     assert report["target_probability"] == pytest.approx(0.25)
+
+    factorial_reconstructor = RecordingPrior()
+    factorial_report = mcq_no_demo_choice_probabilities(
+        factorial_reconstructor,
+        noun="joke",
+        option_descriptions=descriptions,
+        n_draws=24,
+    )
+    assert factorial_reconstructor.prompts[:4] == reconstructor.prompts
+    assert factorial_reconstructor.seeds[:4] == reconstructor.seeds
+    assert factorial_report["query_sha256"][:4] == report["query_sha256"]
+    assert factorial_report["option_order_design"]["exact_full_factorial"] is True
 
 
 def test_shuffled_label_control_preserves_marginal_but_breaks_pairing():

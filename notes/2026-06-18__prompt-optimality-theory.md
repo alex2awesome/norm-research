@@ -2635,6 +2635,14 @@ an independent selection/certification design and simultaneous bounds on both ac
 already prefers without annotations. Both values lie in `[0,1]` and use no external labels: `b` is known by
 experimental construction.
 
+For the four-option bound-grade production instrument, `R=4!=24` and the option-order component of
+`\mathcal Q_b` is exactly `S_4`: every permutation appears once. Its deterministic stored order begins with
+the historical seed-7 four-row cyclic block, then appends the remaining 20 permutations in lexicographic
+order. This retains those four existing rendered-query cache keys without giving them extra weight. The full
+ordered list, seeds, and SHA-256 are part of the instrument. A smaller cyclic block still defines an exact
+finite functional to which Theorems P.1-P.2 apply, but it does not average all order interactions and is
+therefore ineligible for the scientific headline.
+
 The production readout is total on its declared output alphabet. The backend first computes the exact
 normalized conditional probability on the two allowed single-token verdicts. A frozen deterministic hard
 readout then maps each item to one annotation bit: `Z=1` iff normalized `pYES>0.5`, with an exact tie mapped
@@ -2768,8 +2776,10 @@ prior-degenerate, lacks coarse headroom, or the exhaustive state functional lack
 capability, the fixed-instrument inequalities remain formally true but both
 global and directionally resolved process-value headlines are `FORMAL_CERTIFICATE_ONLY`; a statistically
 unresolved process-value axis remains `UNRESOLVED` rather than acquiring a conclusion from the quality
-gate. Behavioral missing-mass conclusions are unchanged. Synthetic/fake runs are never instances of these
-empirical theorems and carry no publishable status.
+gate. The same demotion applies unless a four-option instrument records all 24 permutations exactly once;
+simple position balance is insufficient because higher-order option interactions may remain. Behavioral
+missing-mass conclusions are unchanged. Synthetic/fake runs are never instances of these empirical theorems
+and carry no publishable status.
 
 **Codebook scope is part of the estimand.** An easy four-option panel can yield a valid but scientifically
 weak all-string certificate because `U_range,b` and `V_ann` are defined for that panel. Production codebooks are
@@ -2833,6 +2843,15 @@ inequalities in Theorems P.1-P.2.
 > the table is frozen, later candidate values are validated CPU lookups by their exact eight-bit state; they
 > do not issue new reconstructor queries. Direct table construction/replay tests retain the Qwen path and
 > verify lookup equality.
+
+> **Implementation correction (full-factorial v12 block, 2026-07-13).** The earlier four-draw cyclic block
+> balanced each option's marginal display position but did not average the full option-order interaction.
+> Residual order sensitivity in the sentinel made that distinction operationally material. Headline v12 now
+> freezes all 24 orders exactly once. To preserve expensive existing query work, draws 0--3 are byte-for-byte
+> the prior seed-7 cyclic schedule (including their deterministic seeds), followed by the other 20 unique
+> permutations. Prior calibration, every state-value row, the semantic state-function hash, run manifest,
+> instrument-quality record, and final certificate bind the exact list and its hash. A nonfactorial block can
+> still issue the formal fixed-instrument upper envelope, but only as `FORMAL_CERTIFICATE_ONLY`.
 
 ### A. Auxiliary fixed-target behavioral channel (historical identity theorem retained)
 

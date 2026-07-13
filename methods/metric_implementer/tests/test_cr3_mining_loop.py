@@ -12,6 +12,7 @@ from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     _apply_publication_gate,
     _metric_task,
     _retryable_worker_failure,
+    _validate_mcq_stage_draw_contract,
     _validate_proposal,
     _validate_level_matched_codebook_banks,
     _worker_environment,
@@ -24,6 +25,7 @@ from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     validate_numeric_reuse_manifest,
 )
 from methods.metric_implementer.experiments.cr3_evidence_store import build_evidence_store
+from methods.metric_implementer.recon_channel import mcq_option_order_design
 from scripts.tools.cr3_mining_worker import (
     READOUT_ID,
     _checked_signature,
@@ -309,6 +311,19 @@ def test_worker_retry_filter_is_narrow_to_vllm_memory_profile_race():
     assert not _retryable_worker_failure("PermissionError: inaccessible HOME")
 
 
+def test_mcq_gpu_jobs_explicitly_bind_factorial_draw_count():
+    _validate_mcq_stage_draw_contract(
+        "codebook_prior", [{"n_draws": 24}], expected=24)
+    _validate_mcq_stage_draw_contract(
+        "value", [{"n_reconstruction_draws": 24}], expected=24)
+    with np.testing.assert_raises_regex(RuntimeError, "explicitly bind n_draws=24"):
+        _validate_mcq_stage_draw_contract("codebook_prior", [{}], expected=24)
+    with np.testing.assert_raises_regex(
+            RuntimeError, "explicitly bind n_reconstruction_draws=24"):
+        _validate_mcq_stage_draw_contract(
+            "value", [{"n_reconstruction_draws": 4}], expected=24)
+
+
 def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     args = SimpleNamespace(
         mcq_min_headline_value_cap=0.10,
@@ -322,7 +337,8 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     ]
     state = {
         "fixed_no_demo_canonical_choice_probabilities": np.tile(
-            np.asarray([[0.25, 0.25, 0.25, 0.25]]), (4, 1)),
+            np.asarray([[0.25, 0.25, 0.25, 0.25]]), (24, 1)),
+        "mcq_option_order_design": mcq_option_order_design(4, 24),
         "value_cap": 0.60,
         "coarse_range_cap": 0.75,
         "finite_state_envelope": {
@@ -357,6 +373,44 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     assert mcq_reported_global_status(
         "CERTIFIED_EPSILON_GLOBAL_OPTIMUM", diagnostic
     ) == "FORMAL_CERTIFICATE_ONLY"
+
+
+def test_nonfactorial_option_block_is_formal_only_despite_valid_state_bound():
+    args = SimpleNamespace(
+        mcq_min_headline_value_cap=0.10,
+        mcq_min_headline_distractor_kappa=0.50,
+        target_value_gap=0.02,
+    )
+    state = {
+        "fixed_no_demo_canonical_choice_probabilities": np.tile(
+            np.asarray([[0.25, 0.25, 0.25, 0.25]]), (4, 1)),
+        "mcq_option_order_design": mcq_option_order_design(4, 4),
+        "value_cap": 0.60,
+        "coarse_range_cap": 0.75,
+        "finite_state_envelope": {
+            "state_envelope_capability": {
+                "has_positive_unique_target_maximizer": True,
+            },
+            "operational_target_diagnostic": {"value": 0.1, "is_headline_gate": False},
+        },
+        "mcq_codebook_entry": {
+            "target_design_yes_rate": 0.5,
+            "distractor_design_statistics": [
+                {"metric_key": f"d{index}", "kappa": 0.3, "n_disagree": 4}
+                for index in range(1, 4)
+            ],
+            "prior_calibration": {
+                "passes_prior_balance": True,
+                "prior": {"canonical_mean_prior": [0.25, 0.25, 0.25, 0.25]},
+            },
+        },
+    }
+    diagnostic = mcq_instrument_quality(state, args)
+    assert diagnostic["status"] == "FORMAL_CERTIFICATE_ONLY"
+    assert diagnostic["formal_all_prompt_bound_valid"] is True
+    assert diagnostic["reasons"] == [
+        "headline Reconstruction-MCQ requires all 24 four-option orders exactly once"
+    ]
 
 
 def test_production_sampler_uses_unique_per_request_seeds_and_exact_quota():

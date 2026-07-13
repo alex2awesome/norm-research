@@ -66,7 +66,10 @@ from methods.metric_implementer.experiments.mine_clusters import (  # noqa: E402
     r2_groups,
     r3_groups,
 )
-from methods.metric_implementer.recon_channel import mcq_identity_channel  # noqa: E402
+from methods.metric_implementer.recon_channel import (  # noqa: E402
+    mcq_identity_channel,
+    mcq_option_order_design,
+)
 from methods.metric_implementer.vllm_backend import (  # noqa: E402
     CHOICE_READOUT_ID,
     CR3_BINARY_READOUT_ID,
@@ -409,6 +412,9 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         raise RuntimeError("cannot diagnose an invalid frozen no-demo choice channel")
     prior = fixed.mean(axis=0)
     prior = prior / prior.sum()
+    option_order_design = mcq_option_order_design(len(prior), fixed.shape[0])
+    if dict(state.get("mcq_option_order_design") or {}) != option_order_design:
+        raise RuntimeError("frozen MCQ option-order design changed before certification")
     positive = prior > 0.0
     entropy = float(-np.sum(prior[positive] * np.log2(prior[positive])))
     normalized_entropy = entropy / float(np.log2(len(prior)))
@@ -433,6 +439,11 @@ def mcq_instrument_quality(state: dict, args) -> dict:
     if not capability.get("has_positive_unique_target_maximizer"):
         reasons.append(
             "no envelope-maximizing transcript has positive lift and uniquely identifies the target")
+    if (len(prior) != 4 or fixed.shape[0] != 24
+            or not option_order_design["exact_full_factorial"]
+            or not option_order_design["each_permutation_exactly_once"]):
+        reasons.append(
+            "headline Reconstruction-MCQ requires all 24 four-option orders exactly once")
     return {
         "status": "HEADLINE_ELIGIBLE" if not reasons else "FORMAL_CERTIFICATE_ONLY",
         "headline_eligible": not reasons,
@@ -452,6 +463,7 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "finite_state_global_value_cap": float(state["value_cap"]),
         "coarse_no_demo_range_cap": coarse_cap,
         "state_envelope_capability": capability,
+        "option_order_design": option_order_design,
         "operational_target_diagnostic": state["finite_state_envelope"][
             "operational_target_diagnostic"],
         "target_design_yes_rate": float(entry["target_design_yes_rate"]),
@@ -728,6 +740,10 @@ def _manifest_payload(args) -> dict:
         "mcq_min_design_disagreements": args.mcq_min_design_disagreements,
         "mcq_n_examples": args.mcq_n_examples,
         "mcq_reconstruction_draws": args.mcq_reconstruction_draws,
+        "mcq_option_order_design": mcq_option_order_design(
+            args.mcq_n_options, args.mcq_reconstruction_draws),
+        "mcq_headline_option_order_requirement": (
+            "four options; all 24 permutations exactly once"),
         "mcq_max_chars": args.mcq_max_chars,
         "mcq_task_nouns": mcq_task_nouns,
         "mcq_choice_readout": args.mcq_choice_readout,
@@ -1050,10 +1066,41 @@ def _dry_score(items: list[dict], worlds: dict[str, dict], executor: str) -> Non
         )
 
 
+def _validate_mcq_stage_draw_contract(stage: str, items: list[dict], expected: int) -> None:
+    """Ensure production jobs never depend on the worker's legacy four-draw fallback."""
+    field = {
+        "codebook_prior": "n_draws",
+        "value": "n_reconstruction_draws",
+    }.get(stage)
+    if field is None:
+        return
+    invalid = [index for index, item in enumerate(items)
+               if field not in item or int(item[field]) != int(expected)]
+    if invalid:
+        raise RuntimeError(
+            f"MCQ {stage} jobs {invalid} do not explicitly bind {field}={int(expected)}")
+
+
+def _mcq_calibration_matches_order_design(
+    calibration: dict, expected_design: dict,
+) -> bool:
+    """Allow artifact transplant only for the identical finite query functional."""
+    try:
+        n_draws = int(calibration.get("n_draws", -1))
+    except (TypeError, ValueError):
+        return False
+    return (
+        n_draws == int(expected_design["n_draws"])
+        and dict(calibration.get("option_order_design") or {}) == expected_design
+    )
+
+
 def run_stage(*, stage: str, items: list[dict], jobs_file: Path, model: str,
               family: str, temperature: float, args, worlds: dict[str, dict]) -> None:
     if not items:
         return
+    _validate_mcq_stage_draw_contract(
+        stage, items, int(getattr(args, "mcq_reconstruction_draws", 24)))
     digest = hashlib.sha256(
         json.dumps(items, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()[:12]
@@ -1563,35 +1610,41 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
                 reuse_root / "mcq_codebooks" / f"{task}.prior_calibration.json")
             if reusable_calibration.exists():
                 observed_calibration = json.loads(reusable_calibration.read_text())
-                validate_reconstructor_artifact_contract(
-                    observed_calibration, manifest,
-                    role=f"reusable MCQ prior calibration for {task}")
-                # Selection validates both the calibration checksum and exact plan binding.
-                select_prior_balanced_panels(
-                    reusable_plan_payload,
-                    observed_calibration,
-                    maximum_option_probability=args.mcq_prior_max_option_probability,
-                    target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
-                    minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
-                )
-                calibration_core = dict(observed_calibration)
-                calibration_core.pop("calibration_sha256", None)
-                calibration_core["panel_plan_sha256"] = plan["plan_sha256"]
-                transplanted = {
-                    **calibration_core,
-                    "calibration_sha256": hashlib.sha256(json.dumps(
-                        calibration_core, sort_keys=True, separators=(",", ":")
-                    ).encode("utf-8")).hexdigest(),
-                }
-                # The numeric query rows are reused exactly; only the root-bound plan hash changes.
-                select_prior_balanced_panels(
-                    plan,
-                    transplanted,
-                    maximum_option_probability=args.mcq_prior_max_option_probability,
-                    target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
-                    minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
-                )
-                _atomic_json(calibration_path, transplanted)
+                same_order_design = _mcq_calibration_matches_order_design(
+                    observed_calibration, manifest["mcq_option_order_design"])
+                if same_order_design:
+                    validate_reconstructor_artifact_contract(
+                        observed_calibration, manifest,
+                        role=f"reusable MCQ prior calibration for {task}")
+                    # Selection validates both the calibration checksum and exact plan binding.
+                    select_prior_balanced_panels(
+                        reusable_plan_payload,
+                        observed_calibration,
+                        maximum_option_probability=args.mcq_prior_max_option_probability,
+                        target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+                        minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+                    )
+                    calibration_core = dict(observed_calibration)
+                    calibration_core.pop("calibration_sha256", None)
+                    calibration_core["panel_plan_sha256"] = plan["plan_sha256"]
+                    transplanted = {
+                        **calibration_core,
+                        "calibration_sha256": hashlib.sha256(json.dumps(
+                            calibration_core, sort_keys=True, separators=(",", ":")
+                        ).encode("utf-8")).hexdigest(),
+                    }
+                    # Numeric rows are reused exactly; only the root-bound plan hash changes.
+                    select_prior_balanced_panels(
+                        plan,
+                        transplanted,
+                        maximum_option_probability=args.mcq_prior_max_option_probability,
+                        target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+                        minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+                    )
+                    _atomic_json(calibration_path, transplanted)
+                # A nonmatching calibration is a different finite functional. Its query cache was
+                # already imported above, so the shared four-row prefix still hits while the worker
+                # computes only the missing factorial rows into this root's private cache.
         if not calibration_path.exists():
             calibration_jobs.append({
                 "panel_plan": str(plan_path),
@@ -1946,6 +1999,7 @@ def prepare_mcq_finite_state_tables(
             values[key]["no_demonstration_target_probability"])
         state["fixed_no_demo_canonical_choice_probabilities"] = np.asarray(
             values[key]["fixed_no_demo_canonical_choice_probabilities"], float)
+        state["mcq_option_order_design"] = dict(values[key]["option_order_design"])
 
 
 def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, args,
@@ -2530,6 +2584,7 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
                 "state_envelope_capability"],
             "operational_target_diagnostic": state["finite_state_envelope"][
                 "operational_target_diagnostic"],
+            "option_order_design": state["mcq_option_order_design"],
             "bound_identity": (
                 "V_ann(p)=v(s_T(p)) <= max_{s in {0,1}^8} v(s) <= "
                 "1-q_no_demo(b) for every finite p in Dom(E_wrapper)"),
@@ -2856,7 +2911,7 @@ def main(argv=None) -> int:
     parser.add_argument("--mcq-design-size", type=int, default=120)
     parser.add_argument("--mcq-min-design-disagreements", type=int, default=2)
     parser.add_argument("--mcq-n-examples", type=int, default=8)
-    parser.add_argument("--mcq-reconstruction-draws", type=int, default=4)
+    parser.add_argument("--mcq-reconstruction-draws", type=int, default=24)
     parser.add_argument("--mcq-choice-readout", default="logits",
                         choices=["auto", "logits", "sampled"])
     parser.add_argument("--mcq-value-query-batch-size", type=int, default=512)

@@ -254,7 +254,13 @@ and is conservative against easy certification. If no passing panel is live, the
 menu is formal-only; if no panel passes the prior gates, the least-violating menu is formal-only. The
 calibration and value stages share the same frozen noun, rendering limit, rendered queries, seeds,
 reconstructor revision, and choice cache, and the loop verifies their probability matrices agree exactly.
-Each prior-passing panel costs 2,048 batched annotation/shuffled choice queries at the default four draws;
+For the four-option headline instrument, the query block contains every one of the `4!=24` option orders
+exactly once. Its first four rows are the historical seed-7 cyclic block and the remaining 20 are appended
+deterministically, preserving those existing rendered-query cache keys. The complete order list and SHA-256
+are stored in the run manifest, prior calibration, value artifacts, state envelope, and final certificate.
+The old four-row calibration artifact is a different functional and is not transplanted; its private choice
+cache supplies the identical prefix rows while only the missing 20 orders are scored.
+Each prior-passing panel costs 12,288 batched annotation/shuffled choice queries at 24 draws;
 fixed panels do not rerun teaching-set MILPs per state. `--mcq-prior-max-panels-per-target` is the prospective
 compute budget. Increasing it preserves executor artifacts and rendered-query cache hits but produces a new
 plan/final-codebook namespace.
@@ -278,8 +284,10 @@ Formal optimality is not automatically a headline articulability result. The glo
 kappas, disagreement counts, exhaustive state capability, and operational target/orbit diagnostic. A
 headline requires the blind-prior gates, coarse headroom `>=0.10`, `U_state` above the predeclared value
 resolution, and at least one envelope-maximizing transcript with positive lift and a unique target-option
-posterior argmax. For one-form targets the operational diagnostic is the canonical-description behavior; for
-orbit targets it is the hard readout of the declared orbit average and need not be realizable by one prompt.
+posterior argmax. It also requires the recorded exact 24-order factorial block; a smaller cyclic block keeps
+the fixed-instrument inequality but is explicitly `FORMAL_CERTIFICATE_ONLY`. For one-form targets the
+operational diagnostic is the canonical-description behavior; for orbit targets it is the hard readout of
+the declared orbit average and need not be realizable by one prompt.
 It is diagnostic only. The historical universal
 kappa `>=0.50` threshold is retained as a descriptive near-clone diagnostic, not a headline gate.
 
@@ -302,7 +310,8 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
   --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
-  --mcq-choice-readout logits --mcq-n-examples 8 --mcq-value-query-batch-size 512 \
+  --mcq-choice-readout logits --mcq-n-examples 8 --mcq-reconstruction-draws 24 \
+  --mcq-value-query-batch-size 512 \
   --families microsoft/phi-4 microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
   --family-tags phi4_atomic phi4_holistic qwen14_atomic llama8_holistic \
   --family-modes atomic holistic atomic holistic \
@@ -344,7 +353,8 @@ stated external `p_min` premise is scientifically defended.
 ### Release contract
 
 Existing v10/v11 roots remain frozen and receive no migrator. V12 adds total constrained behavior and MCQ
-choice readouts, fixed-eight codebook v4 state enumeration, dual 95%/90% reporting, and
+choice readouts, fixed-eight codebook v4 state enumeration, exact 24-order factorial MCQ blocks for
+headline use, dual 95%/90% reporting, and
 task-and-hierarchy-level matched MCQ banks. V11 added
 prior-balanced menu construction and candidate-only historical evidence reuse, so it always writes a new
 immutable output root. Every run
@@ -358,7 +368,9 @@ outcome prediction. The nonblocking run lock fails immediately when another proc
 
 In Reconstruction-MCQ mode every finite prompt executable by the frozen wrapper maps to one of the 256
 enumerated transcripts, so `V_ann <= U_state <= 1-q_no_demo(target)`. Here `q_no_demo` is the exact mean
-over the frozen complete counterbalancing block, not an estimated Bernoulli rate. `prompt_evolution_status` is issued only from
+over the frozen full-factorial 24-order block, not an estimated Bernoulli rate. The all-prompt inequality
+remains valid for any frozen finite block, but nonfactorial four-option blocks are formal-only rather than
+headline-eligible. `prompt_evolution_status` is issued only from
 never-absorbed checkpoint/final audits and separately reports behavior `SATURATED/UNSATURATED/UNRESOLVED`
 and value `RISING/PLATEAUED/UNRESOLVED`. These are fixed-executor prompt-evolution statuses, not OSL labels.
 `reporting_tiers.primary_95` is the only source of process-evolution `CERTIFIED_*` labels. The same immutable audit is also

@@ -32,7 +32,9 @@ from __future__ import annotations
 import argparse
 import collections
 import hashlib
+import itertools
 import json
+import math
 import time
 from typing import List
 
@@ -683,17 +685,92 @@ def induce_mcq(backend, noun, examples, cand_descs, seed) -> dict:
     return {"choice": ch}
 
 
+OPTION_ORDER_DESIGN_SCHEMA = "reconstruction-mcq-option-order-block-v1"
+
+
 def _balanced_option_permutations(n_options: int, n_draws: int, seed: int = 7) -> list[np.ndarray]:
-    """Counterbalance every canonical option across display positions in complete blocks."""
+    """Construct a deterministic option-order block.
+
+    When the requested block has exactly ``n_options!`` rows, retain the historical
+    seeded cyclic block as its prefix, then append every remaining permutation once in
+    lexicographic order. This preserves existing cache keys for the prefix while making
+    the complete block exactly factorial. Other sizes retain the historical schedule.
+    """
     if n_options < 2 or n_draws < 1:
         raise ValueError("MCQ needs at least two options and one reconstruction draw")
     rng = np.random.default_rng(seed)
+    if n_draws == math.factorial(n_options):
+        base = rng.permutation(n_options)
+        prefix = [tuple(np.roll(base, offset).astype(int)) for offset in range(n_options)]
+        seen = set(prefix)
+        orders = [*prefix, *(
+            permutation for permutation in itertools.permutations(range(n_options))
+            if permutation not in seen
+        )]
+        return [np.asarray(permutation, dtype=int) for permutation in orders]
     permutations = []
     for start in range(0, n_draws, n_options):
         base = rng.permutation(n_options)
         block_size = min(n_options, n_draws - start)
         permutations.extend(np.roll(base, offset) for offset in range(block_size))
     return [np.asarray(p, dtype=int) for p in permutations]
+
+
+def mcq_option_order_design(
+    n_options: int, n_draws: int, seed: int = 7,
+) -> dict:
+    """Return the complete, auditable design record for an MCQ option-order block."""
+    permutations = _balanced_option_permutations(n_options, n_draws, seed=seed)
+    orders = [permutation.astype(int).tolist() for permutation in permutations]
+    if any(sorted(order) != list(range(n_options)) for order in orders):
+        raise RuntimeError("MCQ option-order generator produced a non-permutation")
+    unique_orders = {tuple(order) for order in orders}
+    factorial_size = math.factorial(n_options)
+    full_factorial = (
+        len(orders) == factorial_size
+        and len(unique_orders) == factorial_size
+        and unique_orders == set(itertools.permutations(range(n_options)))
+    )
+    position_counts = [
+        [sum(order[position] == option for order in orders) for position in range(n_options)]
+        for option in range(n_options)
+    ]
+    position_counterbalanced = all(
+        len(set(counts)) == 1 for counts in position_counts
+    )
+    order_sha256 = hashlib.sha256(json.dumps(
+        orders, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()
+    core = {
+        "schema": OPTION_ORDER_DESIGN_SCHEMA,
+        "n_options": int(n_options),
+        "n_draws": int(n_draws),
+        "factorial_size": int(factorial_size),
+        "exact_full_factorial": bool(full_factorial),
+        "each_permutation_exactly_once": bool(full_factorial),
+        "position_counterbalanced": bool(position_counterbalanced),
+        "n_unique_orders": int(len(unique_orders)),
+        "generation_rule": (
+            "seeded_cyclic_prefix_then_lexicographic_full_factorial"
+            if full_factorial else "seeded_cyclic_position_blocks"
+        ),
+        "generation_seed": int(seed),
+        "cache_compatible_cyclic_prefix_size": int(n_options if full_factorial else 0),
+        "canonical_option_position_counts": position_counts,
+        "canonical_option_orders": orders,
+        "orders_sha256": order_sha256,
+        "query_seeds_by_condition": {
+            "annotations": [10_000 + draw for draw in range(n_draws)],
+            "no_demonstrations": [20_000 + draw for draw in range(n_draws)],
+            "shuffled_labels": [30_000 + draw for draw in range(n_draws)],
+        },
+        "shuffled_label_permutation_seeds": [
+            91_000 + draw for draw in range(n_draws)
+        ],
+    }
+    return {**core, "design_sha256": hashlib.sha256(json.dumps(
+        core, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()}
 
 
 def mcq_no_demo_choice_probabilities(
@@ -716,7 +793,11 @@ def mcq_no_demo_choice_probabilities(
         raise ValueError("no-demo calibration requires complete option-position blocks")
     if query_batch_size <= 0:
         raise ValueError("query_batch_size must be positive")
-    permutations = _balanced_option_permutations(n_options, n_draws)
+    option_order_design = mcq_option_order_design(n_options, n_draws)
+    permutations = [
+        np.asarray(order, dtype=int)
+        for order in option_order_design["canonical_option_orders"]
+    ]
     prompts = []
     for permutation in permutations:
         displayed = [descriptions[i] for i in permutation]
@@ -728,7 +809,7 @@ def mcq_no_demo_choice_probabilities(
             choices=choices,
             labels=", ".join(str(i + 1) for i in range(n_options)),
         ))
-    seeds = [20_000 + draw for draw in range(n_draws)]
+    seeds = option_order_design["query_seeds_by_condition"]["no_demonstrations"]
     displayed_rows = []
     choice_labels = [str(i + 1) for i in range(n_options)]
     for start in range(0, len(prompts), query_batch_size):
@@ -764,7 +845,8 @@ def mcq_no_demo_choice_probabilities(
         "total_variation_from_uniform": float(
             0.5 * np.abs(prior - 1.0 / n_options).sum()),
         "n_draws": int(n_draws),
-        "position_counterbalanced": True,
+        "position_counterbalanced": bool(option_order_design["position_counterbalanced"]),
+        "option_order_design": option_order_design,
         "query_sha256": [hashlib.sha256(prompt.encode("utf-8")).hexdigest()
                          for prompt in prompts],
     }
@@ -875,7 +957,11 @@ def _mcq_recon(backend, noun, examples, example_records, options, gold_idx, held
     else:
         canonical_descs = [(o.description or o.name) for o in options]
     n_options = len(options)
-    permutations = _balanced_option_permutations(n_options, R)
+    option_order_design = mcq_option_order_design(n_options, R)
+    permutations = [
+        np.asarray(order, dtype=int)
+        for order in option_order_design["canonical_option_orders"]
+    ]
     conditions = ["annotations"]
     if run_controls:
         conditions.extend(["no_demonstrations", "shuffled_labels"])
@@ -894,7 +980,9 @@ def _mcq_recon(backend, noun, examples, example_records, options, gold_idx, held
                 "annotations": examples,
                 "no_demonstrations": _RECON_MCQ_NO_DEMOS,
                 "shuffled_labels": _permuted_label_examples(
-                    example_records, seed=91_000 + r, max_chars=max_chars),
+                    example_records,
+                    seed=option_order_design["shuffled_label_permutation_seeds"][r],
+                    max_chars=max_chars),
             }
             for condition in conditions:
                 if for_logits:
@@ -933,7 +1021,10 @@ def _mcq_recon(backend, noun, examples, example_records, options, gold_idx, held
     if use_logits:
         specs = _build_specs(True)
         prompts = [spec[3] for spec in specs]
-        seeds = [10_000 * (conditions.index(spec[0]) + 1) + spec[1] for spec in specs]
+        seeds = [
+            option_order_design["query_seeds_by_condition"][spec[0]][spec[1]]
+            for spec in specs
+        ]
         try:
             probability_rows = np.asarray(recon.score_choices(
                 prompts,
@@ -964,7 +1055,10 @@ def _mcq_recon(backend, noun, examples, example_records, options, gold_idx, held
     if not use_logits:
         specs = _build_specs(False)
         prompts = [spec[3] for spec in specs]
-        seeds = [10_000 * (conditions.index(spec[0]) + 1) + spec[1] for spec in specs]
+        seeds = [
+            option_order_design["query_seeds_by_condition"][spec[0]][spec[1]]
+            for spec in specs
+        ]
         raw_outputs = recon.generate_batch(
             prompts,
             system=None,
@@ -1071,7 +1165,8 @@ def _mcq_recon(backend, noun, examples, example_records, options, gold_idx, held
         "annotation_lift_over_strongest_control": (
             float(main_score - strongest_control) if strongest_control is not None else None),
         "conditions": condition_reports,
-        "position_counterbalanced": bool(R % n_options == 0),
+        "position_counterbalanced": bool(option_order_design["position_counterbalanced"]),
+        "option_order_design": option_order_design,
         "target_position_counts": position_counts,
         "n_draws": int(R),
         "behavioral_replay_choice_rule": (
@@ -1420,7 +1515,11 @@ def mcq_logit_values_from_precomputed_behaviors(
     if (n_reconstruction_draws < n_options
             or n_reconstruction_draws % n_options != 0):
         raise ValueError("n_reconstruction_draws must be a positive multiple of option count")
-    permutations = _balanced_option_permutations(n_options, n_reconstruction_draws)
+    option_order_design = mcq_option_order_design(n_options, n_reconstruction_draws)
+    permutations = [
+        np.asarray(order, dtype=int)
+        for order in option_order_design["canonical_option_orders"]
+    ]
 
     if fixed_teaching_panel and len(idx) != n_examples:
         raise ValueError("fixed teaching panel must contain exactly n_examples ordered items")
@@ -1482,12 +1581,8 @@ def mcq_logit_values_from_precomputed_behaviors(
             choices=choices,
             labels=", ".join(str(i + 1) for i in range(n_options)),
         ))
-        condition_code = {
-            "annotations": 1,
-            "no_demonstrations": 2,
-            "shuffled_labels": 3,
-        }[condition]
-        query_seeds.append(10_000 * condition_code + draw)
+        query_seeds.append(
+            option_order_design["query_seeds_by_condition"][condition][draw])
         query_specs.append((candidate_index, condition, draw, permutation))
 
     # The no-demonstration query is independent of candidate p. Bootstrap evaluates it
@@ -1499,7 +1594,9 @@ def mcq_logit_values_from_precomputed_behaviors(
         for draw, permutation in enumerate(permutations):
             _add_query(candidate_index, "annotations", draw, permutation, case["examples"])
             shuffled = _permuted_label_examples(
-                case["records"], seed=91_000 + draw, max_chars=max_chars)
+                case["records"],
+                seed=option_order_design["shuffled_label_permutation_seeds"][draw],
+                max_chars=max_chars)
             _add_query(candidate_index, "shuffled_labels", draw, permutation, shuffled)
 
     displayed_probability_rows = []
@@ -1599,7 +1696,8 @@ def mcq_logit_values_from_precomputed_behaviors(
             "annotation_lift_over_shuffled_labels": float(main_score - shuffled_score),
             "annotation_lift_over_strongest_control": float(main_score - strongest_control),
             "conditions": condition_reports,
-            "position_counterbalanced": True,
+            "position_counterbalanced": bool(option_order_design["position_counterbalanced"]),
+            "option_order_design": option_order_design,
             "target_position_counts": position_counts,
             "n_draws": int(n_reconstruction_draws),
             "behavioral_replay_choice_rule": "argmax normalized choice probability",

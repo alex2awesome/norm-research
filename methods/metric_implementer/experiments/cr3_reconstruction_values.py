@@ -33,6 +33,7 @@ from ..recon_channel import (
     _kappa,
     mcq_no_demo_choice_probabilities,
     mcq_logit_values_from_precomputed_behaviors,
+    mcq_option_order_design,
     mcq_value_from_precomputed_behavior,
 )
 LEGACY_CODEBOOK_SCHEMA = "cr3-reconstruction-codebook-v3"
@@ -43,6 +44,16 @@ VALUE_SCHEMA = "cr3-reconstruction-values-v4"
 FINITE_STATE_SCORED_SCHEMA = "cr3-reconstruction-finite-state-scored-v1"
 FINITE_STATE_ENVELOPE_SCHEMA = "cr3-reconstruction-finite-state-envelope-v1"
 FIXED_TEACHING_SIZE = 8
+
+
+def _validated_option_order_design(
+    value: object, *, n_options: int, n_draws: int, label: str,
+) -> dict:
+    """Fail closed unless the stored block is the deterministic declared schedule."""
+    expected = mcq_option_order_design(int(n_options), int(n_draws))
+    if not isinstance(value, Mapping) or dict(value) != expected:
+        raise ValueError(f"{label} has an invalid or mutated option-order block")
+    return expected
 
 
 class CachedChoiceReconstructor:
@@ -569,7 +580,7 @@ def score_codebook_panel_priors(
     *,
     panel_plan: Mapping[str, object],
     noun: str,
-    n_draws: int = 4,
+    n_draws: int = 24,
     query_batch_size: int = 512,
     reconstructor_model: str,
     reconstructor_revision: str,
@@ -579,6 +590,7 @@ def score_codebook_panel_priors(
     observed_sha = str(plan.pop("plan_sha256", ""))
     if plan.get("schema") != PANEL_PLAN_SCHEMA or observed_sha != _payload_sha256(plan):
         raise ValueError("invalid or mutated MCQ panel plan")
+    option_order_design = mcq_option_order_design(int(plan["n_options"]), n_draws)
     rows = {}
     for target_key in plan["target_metric_keys"]:
         target_rows = []
@@ -589,6 +601,12 @@ def score_codebook_panel_priors(
                 option_descriptions=panel["option_descriptions"],
                 n_draws=n_draws,
                 query_batch_size=query_batch_size,
+            )
+            _validated_option_order_design(
+                prior.get("option_order_design"),
+                n_options=int(plan["n_options"]),
+                n_draws=n_draws,
+                label=f"blind prior for {target_key}/{panel['panel_id']}",
             )
             target_rows.append({
                 "panel_id": panel["panel_id"],
@@ -606,10 +624,14 @@ def score_codebook_panel_priors(
         "choice_readout_id": str(getattr(reconstructor, "choice_readout_id", "unverified")),
         "noun": str(noun),
         "n_draws": int(n_draws),
+        "option_order_design": option_order_design,
         "rows": rows,
         "premises": {
             "blind_unlabeled_menu": True,
-            "position_counterbalanced": True,
+            "position_counterbalanced": bool(
+                option_order_design["position_counterbalanced"]),
+            "exact_full_factorial_option_orders": bool(
+                option_order_design["exact_full_factorial"]),
             "uses_candidate_prompt_annotations": False,
             "uses_external_labels": False,
         },
@@ -635,6 +657,12 @@ def prior_balanced_panel_rows(
             or calibration_sha != _payload_sha256(calibration)
             or calibration.get("panel_plan_sha256") != plan_sha):
         raise ValueError("panel plan and prior calibration are invalid or mismatched")
+    option_order_design = _validated_option_order_design(
+        calibration.get("option_order_design"),
+        n_options=int(plan["n_options"]),
+        n_draws=int(calibration.get("n_draws", -1)),
+        label="prior calibration",
+    )
     if (not 0.0 < maximum_option_probability <= 1.0
             or not 0.0 <= target_probability_tolerance <= 1.0
             or not 0.0 <= minimum_normalized_entropy <= 1.0):
@@ -655,6 +683,12 @@ def prior_balanced_panel_rows(
             raise ValueError(f"no prior calibration rows for {target_key}")
         for row in rows:
             prior = row["prior"]
+            _validated_option_order_design(
+                prior.get("option_order_design"),
+                n_options=int(plan["n_options"]),
+                n_draws=int(calibration["n_draws"]),
+                label=f"blind prior for {target_key}/{row.get('panel_id')}",
+            )
             probabilities = _validated_probability_matrix(
                 prior.get("canonical_choice_probabilities"),
                 label=f"blind prior for {target_key}/{row.get('panel_id')}",
@@ -676,7 +710,8 @@ def prior_balanced_panel_rows(
                 "total_variation_from_uniform": total_variation,
             }
             if (int(prior.get("n_draws", -1)) != probabilities.shape[0]
-                    or not prior.get("position_counterbalanced")
+                    or bool(prior.get("position_counterbalanced")) != bool(
+                        option_order_design["position_counterbalanced"])
                     or not np.allclose(
                         np.asarray(prior.get("canonical_mean_prior"), float), mean_prior,
                         rtol=0.0, atol=1e-12)
@@ -957,7 +992,7 @@ def evaluate_scored_prompt_values(
     scored_path: str | Path,
     noun: str,
     n_examples: int = 8,
-    n_reconstruction_draws: int = 4,
+    n_reconstruction_draws: int = 24,
     max_chars: int = 600,
     choice_readout: str = "auto",
     query_batch_size: int = 512,
@@ -1083,11 +1118,23 @@ def evaluate_scored_prompt_values(
                 raise RuntimeError(
                     "identical hard annotation behavior produced inconsistent deterministic MCQ values")
     expected_indices = design_indices.astype(int).tolist()
+    option_order_design = _validated_option_order_design(
+        row_details[0]["identification"].get("option_order_design"),
+        n_options=int(codebook_manifest["n_options"]),
+        n_draws=n_reconstruction_draws,
+        label="prompt-value option-order block",
+    )
     for detail in row_details:
         design = detail.get("design") or {}
         if (design.get("indices_in_prompt_order") != expected_indices
                 or not design.get("fixed_ordered_teaching_panel")):
             raise RuntimeError("prompt value did not use the frozen ordered teaching panel")
+        _validated_option_order_design(
+            (detail.get("identification") or {}).get("option_order_design"),
+            n_options=int(codebook_manifest["n_options"]),
+            n_draws=n_reconstruction_draws,
+            label="prompt-value option-order block",
+        )
     return {
         "schema": VALUE_SCHEMA,
         "target_metric_key": target_metric_key,
@@ -1109,6 +1156,7 @@ def evaluate_scored_prompt_values(
                 "canonical_choice_probabilities"],
             float,
         ),
+        "option_order_design": option_order_design,
         "n_rows": len(values),
         "n_unique_prompt_behaviors_valued": len({
             (text, signature.tobytes())
@@ -1303,6 +1351,12 @@ def build_finite_state_envelope(
         label="finite-state frozen no-demonstration block",
         n_options=int(codebook_manifest["n_options"]),
     )
+    option_order_design = _validated_option_order_design(
+        value_payload.get("option_order_design"),
+        n_options=int(codebook_manifest["n_options"]),
+        n_draws=fixed_no_demo.shape[0],
+        label="finite-state value table",
+    )
     if raw_values.shape != values.shape or np.any(~np.isfinite(raw_values)):
         raise ValueError("finite-state raw-value table is incomplete")
     semantic_rows = []
@@ -1400,6 +1454,7 @@ def build_finite_state_envelope(
         "choice_readout_id": str(value_payload["choice_readout_id"]),
         "reconstructor_model": str(value_payload["reconstructor_model"]),
         "reconstructor_revision": str(value_payload["reconstructor_revision"]),
+        "option_order_design": option_order_design,
         "state_rows": semantic_rows,
     }
     state_function_semantic_sha256 = _payload_sha256(semantic_function)
@@ -1418,6 +1473,7 @@ def build_finite_state_envelope(
         "choice_readout_id": str(value_payload["choice_readout_id"]),
         "reconstructor_model": str(value_payload["reconstructor_model"]),
         "reconstructor_revision": str(value_payload["reconstructor_revision"]),
+        "option_order_design": option_order_design,
         "no_demonstration_target_probability": float(
             value_payload["no_demonstration_target_probability"]),
         "no_demonstration_channel_sha256": _payload_sha256({
@@ -1454,6 +1510,8 @@ def build_finite_state_envelope(
             "all_binary_transcripts_enumerated_exactly_once": True,
             "fixed_ordered_teaching_panel": True,
             "deterministic_content_cached_choice_readout": True,
+            "exact_full_factorial_option_orders": bool(
+                option_order_design["exact_full_factorial"]),
             "uses_external_labels": False,
             "maximizing_state_need_not_be_prompt_reachable": True,
         },
@@ -1545,6 +1603,7 @@ def lookup_scored_prompt_values(
             "no_demonstration_target_probability"],
         "fixed_no_demo_canonical_choice_probabilities": np.asarray(
             state_value_payload["fixed_no_demo_canonical_choice_probabilities"], float),
+        "option_order_design": dict(state_value_payload["option_order_design"]),
         "n_rows": len(values),
         "n_unique_prompt_behaviors_valued": len({
             (text, signature.tobytes())
@@ -1576,6 +1635,16 @@ def write_value_artifact(path: str | Path, payload: Mapping[str, object], *,
         raise FileExistsError(f"refusing to overwrite immutable value artifact {target}")
     if payload.get("schema") != VALUE_SCHEMA:
         raise ValueError("unexpected value payload schema")
+    fixed_no_demo = np.asarray(
+        payload["fixed_no_demo_canonical_choice_probabilities"], float)
+    if fixed_no_demo.ndim != 2:
+        raise ValueError("value payload lacks a two-dimensional no-demonstration block")
+    _validated_option_order_design(
+        payload.get("option_order_design"),
+        n_options=fixed_no_demo.shape[1],
+        n_draws=fixed_no_demo.shape[0],
+        label="value payload",
+    )
     target.parent.mkdir(parents=True, exist_ok=True)
     details_json = json.dumps(payload["details"], sort_keys=True, separators=(",", ":"))
     tmp = target.with_name(f".{target.name}.tmp-{os.getpid()}.npz")
@@ -1598,8 +1667,9 @@ def write_value_artifact(path: str | Path, payload: Mapping[str, object], *,
             choice_readout_id=np.asarray(payload["choice_readout_id"]),
             no_demonstration_target_probability=np.asarray(
                 payload["no_demonstration_target_probability"], float),
-            fixed_no_demo_canonical_choice_probabilities=np.asarray(
-                payload["fixed_no_demo_canonical_choice_probabilities"], float),
+            fixed_no_demo_canonical_choice_probabilities=fixed_no_demo,
+            option_order_design_json=np.asarray(json.dumps(
+                payload["option_order_design"], sort_keys=True, separators=(",", ":"))),
             reconstructor_model=np.asarray(str(reconstructor_model)),
             reconstructor_revision=np.asarray(str(reconstructor_revision)),
             premises_json=np.asarray(json.dumps(payload["premises"], sort_keys=True)),
@@ -1642,6 +1712,15 @@ def _validate_value_detail(
 ) -> dict:
     """Recompute one value mark from the stored full posterior matrices."""
     identification = detail.get("identification") or {}
+    option_order_design = _validated_option_order_design(
+        identification.get("option_order_design"),
+        n_options=expected_n_options,
+        n_draws=expected_no_demo.shape[0],
+        label=f"{label} identification",
+    )
+    if bool(identification.get("position_counterbalanced")) != bool(
+            option_order_design["position_counterbalanced"]):
+        raise ValueError(f"{label} has an inconsistent position-counterbalance flag")
     conditions = identification.get("conditions") or {}
     matrices = {}
     means = {}
@@ -1713,6 +1792,8 @@ def load_value_artifact(
     z = np.load(source, allow_pickle=True)
     if str(z["schema"]) != VALUE_SCHEMA:
         raise ValueError(f"unexpected value artifact schema in {source}")
+    if "option_order_design_json" not in z.files:
+        raise ValueError(f"value artifact lacks its option-order design in {source}")
     choice_readout_id = str(z["choice_readout_id"])
     if (expected_choice_readout_id is not None
             and choice_readout_id != str(expected_choice_readout_id)):
@@ -1755,6 +1836,12 @@ def load_value_artifact(
             or not np.isclose(
                 no_demo, float(np.mean(fixed_no_demo[:, 0])), rtol=0.0, atol=1e-12)):
         raise ValueError("value artifact has an invalid frozen-control global cap")
+    option_order_design = _validated_option_order_design(
+        json.loads(str(z["option_order_design_json"])),
+        n_options=fixed_no_demo.shape[1],
+        n_draws=fixed_no_demo.shape[0],
+        label="value artifact",
+    )
     details = json.loads(str(z["details_json"]))
     families = [str(value) for value in z["families"]]
     if (not isinstance(details, list) or len(details) != len(values)
@@ -1787,6 +1874,7 @@ def load_value_artifact(
         "choice_readout_id": choice_readout_id,
         "no_demonstration_target_probability": no_demo,
         "fixed_no_demo_canonical_choice_probabilities": fixed_no_demo,
+        "option_order_design": option_order_design,
         "reconstructor_model": reconstructor_model,
         "reconstructor_revision": reconstructor_revision,
         "premises": premises,

@@ -29,6 +29,10 @@ from methods.metric_implementer.experiments.cr3_reconstruction_values import (
     write_finite_state_scored_artifact,
     write_value_artifact,
 )
+from methods.metric_implementer.experiments.run_cr3_mining_loop import (
+    _mcq_calibration_matches_order_design,
+)
+from methods.metric_implementer.recon_channel import mcq_option_order_design
 from methods.metric_implementer.vllm_backend import (
     CHOICE_READOUT_ID,
     FAKE_CHOICE_READOUT_ID,
@@ -80,6 +84,19 @@ class _SemanticPriorSelector:
             ])
             rows.append((weights / weights.sum()).tolist())
         return rows
+
+
+class _CountingUniformSelector:
+    choice_readout_id = CHOICE_READOUT_ID
+
+    def __init__(self):
+        self.calls = 0
+        self.rows = 0
+
+    def score_choices(self, prompts, choices, **_kwargs):
+        self.calls += 1
+        self.rows += len(prompts)
+        return [[1.0 / len(choices)] * len(choices) for _ in prompts]
 
 
 def test_choice_probability_cache_freezes_cross_process_numeric_drift(tmp_path):
@@ -140,6 +157,63 @@ def test_v12_choice_cache_never_admits_a_v11_probability_row(tmp_path):
     observed = current.score_choices(["prompt"], ["1", "2"], seed=[4])
     assert np.allclose(observed, [[0.6, 0.4]])
     assert backend.calls == 1
+
+
+def test_four_row_calibration_is_not_transplanted_but_its_cache_prefix_is_reused(
+    tmp_path,
+):
+    plan = build_codebook_panel_plan(
+        _bootstraps(tmp_path / "bootstraps"),
+        target_metric_keys=["metric_0"],
+        n_options=4,
+        design_size=12,
+        min_design_disagreements=2,
+        candidate_pool_size=3,
+        max_panels_per_target=1,
+        seed=9,
+    )
+    old_backend = _CountingUniformSelector()
+    old_cache_path = tmp_path / "old" / "choice.sqlite"
+    old_cache = CachedChoiceReconstructor(
+        old_backend, old_cache_path, model="model", revision="revision")
+    old_calibration = score_codebook_panel_priors(
+        old_cache,
+        panel_plan=plan,
+        noun="story",
+        n_draws=4,
+        reconstructor_model="model",
+        reconstructor_revision="revision",
+    )
+    assert old_backend.rows == 4
+    expected_design = mcq_option_order_design(4, 24)
+    assert not _mcq_calibration_matches_order_design(
+        old_calibration, expected_design)
+    old_prior = old_calibration["rows"]["metric_0"][0]["prior"]
+    old_cache.connection.close()
+
+    new_cache_path = tmp_path / "new" / "choice.sqlite"
+    report = import_choice_probability_cache(old_cache_path, new_cache_path)
+    assert report["source_rows"] == 4
+    new_backend = _CountingUniformSelector()
+    new_cache = CachedChoiceReconstructor(
+        new_backend, new_cache_path, model="model", revision="revision")
+    new_calibration = score_codebook_panel_priors(
+        new_cache,
+        panel_plan=plan,
+        noun="story",
+        n_draws=24,
+        reconstructor_model="model",
+        reconstructor_revision="revision",
+    )
+    new_prior = new_calibration["rows"]["metric_0"][0]["prior"]
+    assert new_backend.calls == 1
+    assert new_backend.rows == 20
+    assert new_prior["query_sha256"][:4] == old_prior["query_sha256"]
+    assert new_prior["canonical_choice_probabilities"][:4] == (
+        old_prior["canonical_choice_probabilities"])
+    assert _mcq_calibration_matches_order_design(
+        new_calibration, expected_design)
+    new_cache.connection.close()
 
 
 def _write_bootstrap(root, key, target, description):
@@ -234,10 +308,12 @@ def test_prior_calibration_selects_a_balanced_menu_before_prompt_search(tmp_path
         _SemanticPriorSelector(),
         panel_plan=plan,
         noun="story",
-        n_draws=4,
+        n_draws=24,
         reconstructor_model="semantic-selector",
         reconstructor_revision="revision",
     )
+    assert calibration["option_order_design"]["exact_full_factorial"] is True
+    assert calibration["option_order_design"]["n_unique_orders"] == 24
     selections = select_prior_balanced_panels(
         plan,
         calibration,
@@ -341,6 +417,7 @@ def test_every_scored_row_receives_an_anchor_free_mcq_value(tmp_path):
     assert payload["no_demonstration_target_probability"] == pytest.approx(0.2)
     assert payload["value_cap"] == pytest.approx(0.8)
     assert payload["batched_logit_path"] is True
+    assert payload["option_order_design"]["exact_full_factorial"] is False
 
     artifact = tmp_path / "values.npz"
     write_value_artifact(
@@ -354,6 +431,19 @@ def test_every_scored_row_receives_an_anchor_free_mcq_value(tmp_path):
     assert loaded["values"].tolist() == pytest.approx([0.6, 0.6, 0.6])
     assert loaded["reconstructor_model"] == "fixed-reconstructor"
     assert loaded["value_cap"] == pytest.approx(0.8)
+    assert loaded["option_order_design"] == payload["option_order_design"]
+
+    tampered = dict(payload)
+    tampered["option_order_design"] = json.loads(json.dumps(
+        payload["option_order_design"]))
+    tampered["option_order_design"]["canonical_option_orders"][0] = [0, 1, 2, 3]
+    with pytest.raises(ValueError, match="mutated option-order block"):
+        write_value_artifact(
+            tmp_path / "tampered_values.npz",
+            tampered,
+            reconstructor_model="fixed-reconstructor",
+            reconstructor_revision="revision",
+        )
 
 
 def test_exhaustive_fixed_transcript_table_is_an_all_prompt_upper_envelope(tmp_path):
