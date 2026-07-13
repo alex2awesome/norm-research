@@ -60,6 +60,36 @@ CR3_BINARY_READOUT_ID = "rubric-first-pyes-allowed-two-token-processed-content-s
 FAKE_CR3_BINARY_READOUT_ID = "fake-synthetic-binary-signature-v1"
 
 
+def release_resident_engines() -> None:
+    """Release all process-local vLLM engines between model-resident campaign lanes.
+
+    vLLM versions expose different shutdown hooks, so invoke the available hooks and
+    always clear the strong references.  The explicit CUDA collection is best-effort and
+    keeps this helper importable on CPU-only test hosts.
+    """
+    import gc
+
+    engines = list(_ENGINE_CACHE.values())
+    _ENGINE_CACHE.clear()
+    for engine in engines:
+        for owner in (engine, getattr(engine, "llm_engine", None)):
+            shutdown = getattr(owner, "shutdown", None)
+            if callable(shutdown):
+                try:
+                    shutdown()
+                except Exception:
+                    pass
+    engines.clear()
+    gc.collect()
+    try:
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.synchronize()
+    except Exception:
+        pass
+
+
 def _resolve_model_path(model: str, *, home: str | None = None) -> str:
     """Map a HF hub id -> its local snapshot dir if cached, so vLLM loads OFFLINE without hub-id
     resolution (which fails in the shared sk3 cache: config.json resolves but transformers reports
@@ -67,18 +97,27 @@ def _resolve_model_path(model: str, *, home: str | None = None) -> str:
     not found. Verified 2026-06-13: unlocks Qwen2.5/Qwen3/Mixtral that fail by-id offline."""
     if os.path.isdir(model):
         return model
-    cache_home = os.environ.get("HF_HOME")
-    if cache_home is None:
-        cache_home = os.path.join(home or os.path.expanduser("~"), ".cache", "huggingface")
-    hub = os.path.join(cache_home, "hub")
-    d = os.path.join(hub, "models--" + model.replace("/", "--"))
-    try:
-        commit = open(os.path.join(d, "refs", "main")).read().strip()
-        snap = os.path.join(d, "snapshots", commit)
-        if os.path.isdir(snap):
-            return snap
-    except OSError:
-        pass
+    resolved_home = home or os.path.expanduser("~")
+    cache_home = os.environ.get("HF_HOME") or os.path.join(
+        resolved_home, ".cache", "huggingface"
+    )
+    roots = [
+        os.path.join(cache_home, "hub"),
+        cache_home,
+        os.path.join(resolved_home, ".huggingface", "hub"),
+        os.path.join(resolved_home, ".cache", "huggingface", "hub"),
+    ]
+    model_dir = "models--" + model.replace("/", "--")
+    for root in dict.fromkeys(roots):
+        d = os.path.join(root, model_dir)
+        try:
+            with open(os.path.join(d, "refs", "main"), encoding="utf-8") as handle:
+                commit = handle.read().strip()
+            snap = os.path.join(d, "snapshots", commit)
+            if os.path.isdir(snap):
+                return snap
+        except OSError:
+            pass
     return model
 
 

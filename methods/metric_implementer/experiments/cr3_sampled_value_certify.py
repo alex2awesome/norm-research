@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import itertools
 import json
 import math
 import os
@@ -31,6 +32,7 @@ import numpy as np
 from ..recon_channel import (
     mcq_logit_values_from_precomputed_behaviors,
     mcq_no_demo_choice_probabilities,
+    mcq_option_order_design,
 )
 from .cr3_reconstruction_values import (
     _binary_state_rows,
@@ -45,11 +47,27 @@ from .cr_audit import (
     dkw_expected_max_lower,
     dkw_expected_max_upper,
 )
+from .v13_value_cache import ValueCache, cache_key
 
 SAMPLED_VALUE_SCHEMA = "cr3-sampled-v13"
 PANEL_PLAN_SCHEMA = "cr3-sampled-panel-plan-v13"
 PER_PROMPT_TABLE_SCHEMA = "cr3-sampled-per-prompt-values-v13"
 RUN_MANIFEST_SCHEMA = "cr3-sampled-run-manifest-v13"
+
+# New campaigns use these schemas.  The v13 names above remain readable so the
+# historical 20-test instrument and already-written certificates do not change meaning.
+VALUE_BOUND_RELEASE = "v13.1"
+VALUE_BOUND_DESIGN_SCHEMA = "cr3-value-bound-design-v13.1"
+VALUE_BOUND_STATE_SCHEMA = "cr3-value-bound-state-tables-v13.1"
+VALUE_BOUND_CERTIFICATE_SCHEMA = "cr3-value-bound-certificate-v13.1"
+VALUE_BOUND_RESULTS_SCHEMA = "cr3-value-bound-results-v13.1"
+VALUE_BOUND_DESIGN_SALT = "cr3-v13.1-six-pool-design-20260713"
+N_DESIGN_POOLS = 6
+POOL_SIZE = 12
+MCQ_PANELS_PER_POOL = 12
+MCQ_PANEL_SIZE = 8
+BEHAVIORAL_PANELS_PER_POOL = 4
+BEHAVIORAL_PANEL_SIZE = 6
 
 # Headline gate constants. A resampled value only earns a headline when the blind menu
 # leaves genuine headroom AND the certified prompt's cross-panel interval is tight; both
@@ -1178,6 +1196,765 @@ def main(argv=None) -> int:
     manifest_path = out_root / "run_manifest.json"
     manifest_path.write_text(json.dumps(run_manifest, indent=2), encoding="utf-8")
     return 0
+
+
+# ======================================================================================
+# v13.1 shared finite-pool engine
+# ======================================================================================
+
+def _stable_digest(*parts: object) -> str:
+    return hashlib.sha256(
+        "\x1f".join(str(part) for part in parts).encode("utf-8")
+    ).hexdigest()
+
+
+def _stable_diversity_order(
+    indices: Sequence[int], behavior_columns: np.ndarray, *, salt: str,
+) -> list[int]:
+    """Interleave rare behavior patterns, with stable hashes for every tie.
+
+    The behavior columns are canonical bootstrap/executor behaviors only.  Candidate
+    prompt strings and candidate signatures never enter this design-time ordering.
+    """
+    values = np.asarray(behavior_columns, dtype=np.uint8)
+    if values.ndim != 2 or values.shape[1] != len(indices):
+        raise ValueError("behavior columns must align with the proposed design indices")
+    groups: dict[bytes, list[int]] = {}
+    for position, index in enumerate(indices):
+        pattern = values[:, position].tobytes()
+        groups.setdefault(pattern, []).append(int(index))
+    for pattern, members in groups.items():
+        members.sort(key=lambda index: _stable_digest(salt, pattern.hex(), index))
+    ordered_patterns = sorted(
+        groups,
+        key=lambda pattern: (
+            len(groups[pattern]), _stable_digest(salt, "pattern", pattern.hex())
+        ),
+    )
+    ordered: list[int] = []
+    while ordered_patterns:
+        next_patterns = []
+        for pattern in ordered_patterns:
+            members = groups[pattern]
+            if members:
+                ordered.append(members.pop(0))
+            if members:
+                next_patterns.append(pattern)
+        ordered_patterns = next_patterns
+    return ordered
+
+
+def _pool_positive_quotas(n_positive: int, n_negative: int) -> list[int]:
+    """Allocate the available target prevalence evenly without a balance gate."""
+    total = int(n_positive) + int(n_negative)
+    required = N_DESIGN_POOLS * POOL_SIZE
+    if total < required:
+        raise ValueError("the design split has fewer than 72 target verdicts")
+    desired_positive = int(round(required * int(n_positive) / total))
+    # Feasible prevalence-preserving sample: use every minority item when necessary,
+    # but never reject a metric merely because its canonical executor is imbalanced.
+    desired_positive = min(int(n_positive), max(required - int(n_negative), desired_positive))
+    quotas = [desired_positive // N_DESIGN_POOLS] * N_DESIGN_POOLS
+    for pool_index in range(desired_positive % N_DESIGN_POOLS):
+        quotas[pool_index] += 1
+    if any(value < 0 or value > POOL_SIZE for value in quotas):
+        raise RuntimeError("pool target-stratification quota is infeasible")
+    return quotas
+
+
+def _ordered_panel(
+    selected: Sequence[int], target_by_index: Mapping[int, int], *, salt: str,
+) -> list[int]:
+    by_label = {
+        label: sorted(
+            [int(index) for index in selected if int(target_by_index[int(index)]) == label],
+            key=lambda index: _stable_digest(salt, label, index),
+        )
+        for label in (0, 1)
+    }
+    first = min((0, 1), key=lambda label: (-len(by_label[label]), label))
+    ordered: list[int] = []
+    while by_label[0] or by_label[1]:
+        for label in (first, 1 - first):
+            if by_label[label]:
+                ordered.append(by_label[label].pop(0))
+    return ordered
+
+
+def _panel_family(
+    pool_indices: Sequence[int], target_by_index: Mapping[int, int], *, channel: str,
+    panel_size: int, n_panels: int, salt: str,
+) -> list[dict]:
+    combinations = []
+    for selected in itertools.combinations([int(index) for index in pool_indices], panel_size):
+        n_positive = sum(int(target_by_index[index]) for index in selected)
+        balance_error = abs(n_positive - panel_size / 2.0)
+        identity = _stable_digest(salt, channel, *selected)
+        combinations.append((balance_error, identity, selected))
+    combinations.sort(key=lambda row: (row[0], row[1]))
+    if len(combinations) < n_panels:
+        raise ValueError("pool is too small for the declared finite panel family")
+    panels = []
+    for panel_index, (_error, _identity, selected) in enumerate(combinations[:n_panels]):
+        ordered = _ordered_panel(
+            selected, target_by_index,
+            salt=f"{salt}|{channel}|panel={panel_index}",
+        )
+        target_scores = [int(target_by_index[index]) for index in ordered]
+        core = {
+            "channel": str(channel),
+            "panel_index_within_pool": int(panel_index),
+            "fixed_teaching_indices": ordered,
+            "fixed_teaching_target_scores": target_scores,
+            "fixed_teaching_target_state": int("".join(map(str, target_scores)), 2),
+            "selection_rule": (
+                "minimum target-verdict imbalance then stable SHA; ordered by alternating "
+                "target verdict with stable SHA ties"
+            ),
+        }
+        panels.append({**core, "panel_sha256": _payload_sha256(core)})
+    return panels
+
+
+def build_value_bound_design_manifest(
+    codebook_manifest: Mapping[str, object], *, target_metric_key: str,
+    heldout_size: int = 60, salt: str = VALUE_BOUND_DESIGN_SALT,
+) -> dict:
+    """Freeze the shared six-pool MCQ/behavioral design from bootstrap data only."""
+    validate_codebook_manifest(codebook_manifest)
+    target_metric_key = str(target_metric_key)
+    if heldout_size < 2:
+        raise ValueError("heldout_size must be at least two")
+    target = _bootstrap(codebook_manifest["metrics"][target_metric_key]["bootstrap_path"])
+    probe_texts = [str(text) for text in target["probe_texts"]]
+    n_probes = len(probe_texts)
+    design_indices = [int(index) for index in codebook_manifest["design_indices"]]
+    if len(design_indices) < N_DESIGN_POOLS * POOL_SIZE:
+        raise ValueError("the frozen design split has fewer than the required 72 texts")
+    if len(set(design_indices)) != len(design_indices):
+        raise ValueError("the frozen design split contains duplicate indices")
+
+    # Behavioral diversity is defined by the task-wide canonical metric bank.
+    behavior_rows = []
+    for metric_key in sorted(codebook_manifest["metrics"]):
+        view = _bootstrap(codebook_manifest["metrics"][metric_key]["bootstrap_path"])
+        if (view["sha256"]
+                != codebook_manifest["metrics"][metric_key]["bootstrap_sha256"]):
+            raise ValueError(f"bootstrap changed after freezing for {metric_key}")
+        if len(view["target"]) != n_probes:
+            raise ValueError("task metric bootstraps do not share the probe panel")
+        behavior_rows.append((np.asarray(view["target"])[design_indices] > 0.5).astype(np.uint8))
+    behavior_matrix = np.vstack(behavior_rows)
+    target_bits = (np.asarray(target["target"], dtype=float) > 0.5).astype(np.uint8)
+    target_by_index = {index: int(target_bits[index]) for index in design_indices}
+    positive = [index for index in design_indices if target_by_index[index] == 1]
+    negative = [index for index in design_indices if target_by_index[index] == 0]
+    quotas = _pool_positive_quotas(len(positive), len(negative))
+    design_position = {index: position for position, index in enumerate(design_indices)}
+
+    def diverse(indices: Sequence[int], label: int) -> list[int]:
+        positions = [design_position[int(index)] for index in indices]
+        return _stable_diversity_order(
+            indices, behavior_matrix[:, positions], salt=f"{salt}|label={label}"
+        )
+
+    positive_order = diverse(positive, 1)
+    negative_order = diverse(negative, 0)
+    pools = []
+    pos_cursor = neg_cursor = 0
+    for pool_index, n_positive in enumerate(quotas):
+        n_negative = POOL_SIZE - n_positive
+        members = [
+            *positive_order[pos_cursor:pos_cursor + n_positive],
+            *negative_order[neg_cursor:neg_cursor + n_negative],
+        ]
+        pos_cursor += n_positive
+        neg_cursor += n_negative
+        members = sorted(
+            members, key=lambda index: _stable_digest(salt, "pool", pool_index, index)
+        )
+        pool_core = {
+            "pool_index": int(pool_index),
+            "pool_id": f"pool_{pool_index + 1}",
+            "indices": members,
+            "target_scores": [int(target_by_index[index]) for index in members],
+            "probe_text_sha256": [
+                hashlib.sha256(probe_texts[index].encode("utf-8")).hexdigest()
+                for index in members
+            ],
+        }
+        pools.append({
+            **pool_core,
+            "pool_sha256": _payload_sha256(pool_core),
+            "mcq_panels": _panel_family(
+                members, target_by_index, channel="mcq", panel_size=MCQ_PANEL_SIZE,
+                n_panels=MCQ_PANELS_PER_POOL, salt=f"{salt}|pool={pool_index}",
+            ),
+            "behavioral_panels": _panel_family(
+                members, target_by_index, channel="behavioral",
+                panel_size=BEHAVIORAL_PANEL_SIZE,
+                n_panels=BEHAVIORAL_PANELS_PER_POOL,
+                salt=f"{salt}|pool={pool_index}",
+            ),
+        })
+    flat_pool_indices = [index for pool in pools for index in pool["indices"]]
+    if len(flat_pool_indices) != 72 or len(set(flat_pool_indices)) != 72:
+        raise RuntimeError("the six frozen pools are not disjoint 12-text sets")
+
+    design_set = set(design_indices)
+    heldout_candidates = [index for index in range(n_probes) if index not in design_set]
+    heldout_candidates.sort(
+        key=lambda index: _stable_digest(salt, "heldout", index, probe_texts[index])
+    )
+    if len(heldout_candidates) < heldout_size:
+        raise ValueError("the non-design split is too small for the frozen held-out set")
+    heldout_indices = heldout_candidates[:int(heldout_size)]
+    pool_membership = {
+        int(index): str(pool["pool_id"]) for pool in pools for index in pool["indices"]
+    }
+    heldout_set = set(heldout_indices)
+    split_membership = []
+    for index in range(n_probes):
+        if index in pool_membership:
+            split_membership.append(pool_membership[index])
+        elif index in design_set:
+            split_membership.append("design_unused")
+        elif index in heldout_set:
+            split_membership.append("heldout_H")
+        else:
+            split_membership.append("evaluation_unused")
+    permutation_design = mcq_option_order_design(
+        int(codebook_manifest["n_options"]), 8
+    )
+    core = {
+        "schema": VALUE_BOUND_DESIGN_SCHEMA,
+        "release": VALUE_BOUND_RELEASE,
+        "salt": str(salt),
+        "target_metric_key": target_metric_key,
+        "probe_sha256": str(codebook_manifest["probe_sha256"]),
+        "n_probes": int(n_probes),
+        "probe_text_sha256": [
+            hashlib.sha256(text.encode("utf-8")).hexdigest() for text in probe_texts
+        ],
+        "executor": {
+            "model": str(target["executor_model"]),
+            "revision": str(target["executor_model_revision"]),
+            "readout_id": str(target["readout_id"]),
+        },
+        "codebook_manifest_sha256": str(codebook_manifest["manifest_sha256"]),
+        "pools": pools,
+        "heldout": {
+            "name": "H",
+            "indices": heldout_indices,
+            "target_scores": target_bits[heldout_indices].astype(int).tolist(),
+            "probe_text_sha256": [
+                hashlib.sha256(probe_texts[index].encode("utf-8")).hexdigest()
+                for index in heldout_indices
+            ],
+        },
+        "split_membership": split_membership,
+        "mcq_permutation_design": permutation_design,
+        "tiers": {
+            "A": {
+                "active_pool_ids": [pool["pool_id"] for pool in pools],
+                "mcq_panels_per_pool": MCQ_PANELS_PER_POOL,
+                "behavioral_panels_per_pool": BEHAVIORAL_PANELS_PER_POOL,
+            },
+            "B": {
+                "active_pool_ids": [pool["pool_id"] for pool in pools[:3]],
+                "mcq_panels_per_pool": 8,
+                "behavioral_panels_per_pool": BEHAVIORAL_PANELS_PER_POOL,
+            },
+        },
+        "selection_contract": {
+            "pools_built_from_design_split_only": True,
+            "uses_canonical_executor_behaviors_for_stratification": True,
+            "uses_candidate_prompt_text_or_behavior": False,
+            "uses_external_labels": False,
+            "pools_disjoint": True,
+            "heldout_disjoint_from_all_pools": True,
+            "target_verdict_balance_is_diagnostic_not_a_gate": True,
+        },
+        "pool_target_stratification": {
+            "design_positive_count": int(len(positive)),
+            "design_negative_count": int(len(negative)),
+            "selected_positive_quotas": list(map(int, quotas)),
+            "selection_rule": (
+                "prevalence-proportional feasible total, distributed evenly across pools; "
+                "no minimum per-verdict qualification"
+            ),
+        },
+    }
+    return {**core, "design_manifest_sha256": _payload_sha256(core)}
+
+
+def active_panel_design(
+    design_manifest: Mapping[str, object], *, channel: str, tier: str,
+) -> dict:
+    if design_manifest.get("schema") != VALUE_BOUND_DESIGN_SCHEMA:
+        raise ValueError("unexpected v13.1 design schema")
+    tier = str(tier).upper()
+    if tier not in ("A", "B"):
+        raise ValueError("tier must be A or B")
+    if channel not in ("mcq", "behavioral"):
+        raise ValueError("channel must be mcq or behavioral")
+    tier_plan = design_manifest["tiers"][tier]
+    active_ids = set(tier_plan["active_pool_ids"])
+    panel_field = "mcq_panels" if channel == "mcq" else "behavioral_panels"
+    count_field = (
+        "mcq_panels_per_pool" if channel == "mcq" else "behavioral_panels_per_pool"
+    )
+    panels = []
+    pools = []
+    for pool in design_manifest["pools"]:
+        if pool["pool_id"] not in active_ids:
+            continue
+        selected = list(pool[panel_field])[:int(tier_plan[count_field])]
+        pool_position = len(pools)
+        pools.append(pool)
+        for panel in selected:
+            panels.append({**panel, "pool_position": pool_position, "pool_id": pool["pool_id"]})
+    return {"tier": tier, "channel": channel, "pools": pools, "panels": panels}
+
+
+def _pool_pattern_integers(signatures: np.ndarray, pool_indices: Sequence[int]) -> np.ndarray:
+    rows = np.asarray(signatures, dtype=float)
+    bits = (rows[:, np.asarray(pool_indices, dtype=int)] > 0.5).astype(np.int64)
+    weights = 1 << np.arange(POOL_SIZE - 1, -1, -1, dtype=np.int64)
+    return bits @ weights
+
+
+def enumerate_exact_pool_values(
+    design_manifest: Mapping[str, object], *, channel: str, tier: str,
+    state_values: np.ndarray, signatures: np.ndarray,
+) -> dict:
+    """Enumerate every 12-bit pattern and aggregate exact finite-family values."""
+    active = active_panel_design(design_manifest, channel=channel, tier=tier)
+    tables = np.asarray(state_values, dtype=float)
+    n_states = 256 if channel == "mcq" else 64
+    if tables.shape != (len(active["panels"]), n_states) or np.any(~np.isfinite(tables)):
+        raise ValueError("state tables are incomplete, non-finite, or misaligned to the design")
+    rows = np.asarray(signatures, dtype=float)
+    if rows.ndim != 2 or rows.shape[1] != int(design_manifest["n_probes"]):
+        raise ValueError("candidate signatures do not align with the frozen probe panel")
+    all_pool_bits = _binary_state_rows(POOL_SIZE).astype(np.int64)
+    panel_size = MCQ_PANEL_SIZE if channel == "mcq" else BEHAVIORAL_PANEL_SIZE
+    panel_weights = 1 << np.arange(panel_size - 1, -1, -1, dtype=np.int64)
+    pool_pattern_values = []
+    prompt_pool_values = []
+    prompt_panel_values = np.empty((len(rows), len(active["panels"])), dtype=float)
+    pool_caps = []
+    pool_achieved = []
+    panel_cursor = 0
+    for pool_position, pool in enumerate(active["pools"]):
+        pool_indices = [int(index) for index in pool["indices"]]
+        local_by_global = {index: position for position, index in enumerate(pool_indices)}
+        pool_panels = [
+            (panel_index, panel) for panel_index, panel in enumerate(active["panels"])
+            if int(panel["pool_position"]) == pool_position
+        ]
+        pattern_panel_values = []
+        prompt_patterns = _pool_pattern_integers(rows, pool_indices)
+        for panel_index, panel in pool_panels:
+            local = np.asarray([
+                local_by_global[int(index)] for index in panel["fixed_teaching_indices"]
+            ], dtype=int)
+            states = all_pool_bits[:, local] @ panel_weights
+            values = tables[panel_index, states]
+            pattern_panel_values.append(values)
+            prompt_panel_values[:, panel_index] = tables[
+                panel_index, states[prompt_patterns]
+            ]
+            panel_cursor += 1
+        pool_values = np.mean(np.vstack(pattern_panel_values), axis=0)
+        prompt_values = pool_values[prompt_patterns]
+        pool_pattern_values.append(pool_values)
+        prompt_pool_values.append(prompt_values)
+        pool_caps.append(float(np.max(pool_values)))
+        pool_achieved.append(float(np.max(prompt_values)))
+    if panel_cursor != len(active["panels"]):
+        raise RuntimeError("not every declared panel was aggregated exactly once")
+    pool_pattern_matrix = np.vstack(pool_pattern_values)
+    prompt_pool_matrix = np.vstack(prompt_pool_values).T
+    mean_prompt_value = np.mean(prompt_pool_matrix, axis=1)
+    achieved_index = int(np.argmax(mean_prompt_value))
+    achieved = float(mean_prompt_value[achieved_index])
+    exact_cap = float(np.mean(pool_caps))
+    if exact_cap + 1e-12 < float(np.max(mean_prompt_value)):
+        raise RuntimeError("exact structural cap fell below an observed prompt value")
+    achieved_pool_values = prompt_pool_matrix[achieved_index]
+    within_pool_variance = []
+    for pool_position in range(len(active["pools"])):
+        panel_columns = [
+            index for index, panel in enumerate(active["panels"])
+            if int(panel["pool_position"]) == pool_position
+        ]
+        within_pool_variance.append(float(np.var(
+            prompt_panel_values[achieved_index, panel_columns], ddof=0
+        )))
+    return {
+        "active_design": active,
+        "pool_pattern_values": pool_pattern_matrix,
+        "pool_caps": np.asarray(pool_caps, dtype=float),
+        "prompt_panel_values": prompt_panel_values,
+        "prompt_pool_values": prompt_pool_matrix,
+        "mean_prompt_value": mean_prompt_value,
+        "per_pool_achieved": np.asarray(pool_achieved, dtype=float),
+        "achieved_value": achieved,
+        "achieved_prompt_index": achieved_index,
+        "exact_structural_cap": exact_cap,
+        "exact_structural_gap": float(max(0.0, exact_cap - achieved)),
+        "worst_pool_achieved_value": float(np.min(achieved_pool_values)),
+        "achieved_pool_range": float(np.ptp(achieved_pool_values)),
+        "pool_variance": float(np.var(achieved_pool_values, ddof=0)),
+        "within_pool_panel_variance": np.asarray(within_pool_variance, dtype=float),
+        "mean_within_pool_panel_variance": float(np.mean(within_pool_variance)),
+        "recombination_slack": float(max(
+            0.0, np.mean(pool_achieved) - achieved
+        )),
+    }
+
+
+def _stream_value_marks(
+    signatures: np.ndarray, active: Mapping[str, object],
+    pool_pattern_values: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    patterns = np.column_stack([
+        _pool_pattern_integers(signatures, pool["indices"])
+        for pool in active["pools"]
+    ])
+    per_pool = np.column_stack([
+        pool_pattern_values[pool_index, patterns[:, pool_index]]
+        for pool_index in range(patterns.shape[1])
+    ])
+    return patterns, np.mean(per_pool, axis=1)
+
+
+def fixed_prefix_capture_recapture(
+    aggregation: Mapping[str, object], *, process_streams: Sequence[Mapping[str, object]] | None,
+    alpha: float = 0.05, horizons: Sequence[int] = (100, 300),
+) -> dict:
+    """CP/DKW bounds from a fixed discovery prefix and never-absorbed audit suffix.
+
+    Every audit draw is compared to the same frozen prefix.  The audit indicators are
+    therefore ordinary Bernoulli observations conditional on that prefix; the prefix is
+    never updated while walking the suffix.
+    """
+    if not process_streams:
+        return {
+            "available": False,
+            "reason": (
+                "legacy candidate bank has no frozen iid discovery-prefix / "
+                "never-absorbed-audit provenance"
+            ),
+            "exact_all_prompt_cap_and_achieved_gap_remain_available": True,
+        }
+    streams = []
+    n_probes = None
+    for raw in process_streams:
+        prefix = np.asarray(raw["discovery_prefix_signatures"], dtype=float)
+        audit = np.asarray(raw["audit_suffix_signatures"], dtype=float)
+        if (prefix.ndim != 2 or audit.ndim != 2 or prefix.shape[1] != audit.shape[1]
+                or len(prefix) == 0 or len(audit) == 0
+                or np.any(~np.isfinite(prefix)) or np.any(~np.isfinite(audit))):
+            raise ValueError("capture/recapture streams need nonempty aligned finite matrices")
+        if n_probes is None:
+            n_probes = prefix.shape[1]
+        if prefix.shape[1] != n_probes:
+            raise ValueError("capture/recapture streams use different probe panels")
+        streams.append({
+            "family": str(raw["family"]),
+            "prefix": prefix,
+            "audit": audit,
+            "provenance": dict(raw.get("provenance") or {}),
+        })
+    if len({stream["family"] for stream in streams}) != len(streams):
+        raise ValueError("capture/recapture family names must be unique")
+    active = aggregation["active_design"]
+    pool_values = np.asarray(aggregation["pool_pattern_values"], dtype=float)
+    n_pools = len(active["pools"])
+    component_alpha = float(alpha) / (len(streams) * (n_pools + 1))
+    family_rows = {}
+    audit_marks = {}
+    for stream in streams:
+        prefix_patterns, _ = _stream_value_marks(stream["prefix"], active, pool_values)
+        audit_patterns, marks = _stream_value_marks(stream["audit"], active, pool_values)
+        audit_marks[stream["family"]] = marks
+        per_pool = []
+        for pool_index in range(n_pools):
+            seen = set(map(int, prefix_patterns[:, pool_index]))
+            novelty = np.asarray([
+                int(pattern) not in seen for pattern in audit_patterns[:, pool_index]
+            ], dtype=bool)
+            z = int(np.sum(novelty))
+            n = int(len(novelty))
+            per_pool.append({
+                "pool_id": active["pools"][pool_index]["pool_id"],
+                "n_discovery_prefix": int(len(prefix_patterns)),
+                "n_never_absorbed_audit": n,
+                "n_audit_draws_unseen_relative_to_fixed_prefix": z,
+                "missing_mass_upper": float(clopper_pearson_upper(
+                    z, n, component_alpha
+                )),
+                "component_alpha": component_alpha,
+            })
+        prefix_joint = {tuple(map(int, row)) for row in prefix_patterns}
+        joint_novelty = np.asarray([
+            tuple(map(int, row)) not in prefix_joint for row in audit_patterns
+        ], dtype=bool)
+        z_joint = int(np.sum(joint_novelty))
+        joint = {
+            "n_discovery_prefix": int(len(prefix_patterns)),
+            "n_never_absorbed_audit": int(len(joint_novelty)),
+            "n_audit_draws_unseen_relative_to_fixed_prefix": z_joint,
+            "missing_mass_upper": float(clopper_pearson_upper(
+                z_joint, len(joint_novelty), component_alpha
+            )),
+            "component_alpha": component_alpha,
+        }
+        family_rows[stream["family"]] = {
+            "per_pool": per_pool,
+            "joint_pattern": joint,
+            "provenance": stream["provenance"],
+        }
+
+    family_sizes = {
+        stream["family"]: int(len(stream["prefix"])) for stream in streams
+    }
+    pool_caps = np.asarray(aggregation["pool_caps"], dtype=float)
+    pool_achieved = np.asarray(aggregation["per_pool_achieved"], dtype=float)
+    achieved = float(aggregation["achieved_value"])
+    exact_cap = float(aggregation["exact_structural_cap"])
+    slack = float(aggregation["recombination_slack"])
+    horizon_rows = {}
+    for horizon in map(int, horizons):
+        allocation = _allocate_horizon(family_sizes, horizon)
+        pool_gain_terms = []
+        per_pool_horizon = []
+        for pool_index in range(n_pools):
+            probability_none = 1.0
+            for family, future_n in allocation.items():
+                u0 = family_rows[family]["per_pool"][pool_index]["missing_mass_upper"]
+                probability_none *= (1.0 - float(u0)) ** int(future_n)
+            probability_any = float(1.0 - probability_none)
+            gain = probability_any * max(0.0, pool_caps[pool_index] - pool_achieved[pool_index])
+            pool_gain_terms.append(gain)
+            per_pool_horizon.append({
+                "pool_id": active["pools"][pool_index]["pool_id"],
+                "probability_any_prefix-unseen_pattern_upper": probability_any,
+                "gain_upper": float(gain),
+            })
+        pool_decomposed_gain = float(np.mean(pool_gain_terms) + slack)
+        joint_probability_none = 1.0
+        for family, future_n in allocation.items():
+            u0 = family_rows[family]["joint_pattern"]["missing_mass_upper"]
+            joint_probability_none *= (1.0 - float(u0)) ** int(future_n)
+        joint_probability_any = float(1.0 - joint_probability_none)
+        joint_gain = float(joint_probability_any * max(0.0, exact_cap - achieved))
+        dkw_upper, dkw_eps = dkw_expected_max_upper(
+            audit_marks, allocation, exact_cap, float(alpha) / len(streams)
+        )
+        dkw_lower, _ = dkw_expected_max_lower(
+            audit_marks, allocation, exact_cap, float(alpha) / len(streams)
+        )
+        dkw_gain_upper = float(max(0.0, dkw_upper - achieved))
+        dkw_gain_lower = float(dkw_lower - achieved)
+        horizon_rows[str(horizon)] = {
+            "horizon_allocation": allocation,
+            "pool_decomposed": {
+                "per_pool": per_pool_horizon,
+                "recombination_slack": slack,
+                "gain_upper": pool_decomposed_gain,
+            },
+            "joint_pattern": {
+                "probability_any_prefix-unseen_pattern_upper": joint_probability_any,
+                "gain_upper": joint_gain,
+            },
+            "dkw_future_budget": {
+                "expected_best_value_lower": float(dkw_lower),
+                "expected_best_value_upper": float(dkw_upper),
+                "expected_best_gain_lower": dkw_gain_lower,
+                "expected_best_gain_upper": dkw_gain_upper,
+                "epsilon_by_family": {
+                    family: float(value) for family, value in dkw_eps.items()
+                },
+            },
+            "headline_gain_upper_min_of_declared_bounds": float(min(
+                pool_decomposed_gain, joint_gain, dkw_gain_upper
+            )),
+        }
+    observed_audit_best = float(max(np.max(marks) for marks in audit_marks.values()))
+    return {
+        "available": True,
+        "method": "fixed-prefix never-absorbed-audit CP plus DKW",
+        "family_rows": family_rows,
+        "horizons": horizon_rows,
+        "observed_audit_best_value": observed_audit_best,
+        "premises": {
+            "audit_suffix_never_absorbed_into_discovery_prefix": True,
+            "every_audit_indicator_uses_the_same_fixed_prefix": True,
+            "sequential_first_contacts_not_treated_as_binomial": True,
+            "iid_within_homogeneous_generator_family": True,
+            "disjoint_pool_separability": True,
+            "no_smoothness_submodularity_or_cross-family_independence_assumption": True,
+        },
+    }
+
+
+def secondary_value_status(
+    *, achieved: float, exact_cap: float, process_bounds: Mapping[str, object],
+    epsilon: float,
+) -> str:
+    if exact_cap - achieved <= float(epsilon) + 1e-12:
+        return "RESOLVED"
+    if not process_bounds.get("available"):
+        return "UNRESOLVED"
+    horizon_rows = process_bounds.get("horizons") or {}
+    if not horizon_rows:
+        return "UNRESOLVED"
+    largest_horizon = horizon_rows[sorted(horizon_rows, key=int)[-1]]
+    if largest_horizon["headline_gain_upper_min_of_declared_bounds"] <= float(epsilon):
+        return "PLATEAUED"
+    if (float(process_bounds.get("observed_audit_best_value", achieved)) - achieved
+            > float(epsilon)):
+        return "RISING"
+    return "UNRESOLVED"
+
+
+def evaluate_mcq_state_tables_v13_1(
+    reconstructor, *, codebook_manifest: Mapping[str, object],
+    design_manifest: Mapping[str, object], target_metric_key: str, tier: str,
+    constructor_revision: str, cache: ValueCache, query_batch_size: int = 512,
+) -> dict:
+    """Fill every declared MCQ state table with state-cell persistent caching."""
+    menu = _codebook_menu(codebook_manifest, str(target_metric_key))
+    option_descriptions = list(menu["option_descriptions"])
+    option_ids = [str(target_metric_key), *menu["entry"]["distractor_metric_keys"]]
+    menu_sha = _payload_sha256({
+        "option_ids": option_ids, "option_descriptions": option_descriptions,
+    })
+    permutation_design = dict(design_manifest["mcq_permutation_design"])
+    permutation_sha = _payload_sha256(permutation_design)
+    blind_key = cache_key("mcq_blind", {
+        "constructor_revision": str(constructor_revision),
+        "menu_sha256": menu_sha,
+        "permutation_design_sha256": permutation_sha,
+    })
+    blind_payload = cache.get(blind_key)
+    if blind_payload is None:
+        blind = _blind_menu_prior(
+            reconstructor,
+            noun=str(codebook_manifest["reconstruction_noun"]),
+            option_descriptions=option_descriptions,
+            n_perms=int(permutation_design["n_draws"]),
+        )
+        blind_payload = cache.put(blind_key, "mcq_blind", {
+            "canonical_choice_probabilities": np.asarray(
+                blind["canonical_choice_probabilities"], dtype=float
+            ).tolist(),
+            "q0_target_probability": float(blind["q0_target_probability"]),
+            "value_cap": float(blind["value_cap"]),
+            "maximum_option_probability": float(blind["maximum_option_probability"]),
+            "normalized_entropy": float(blind["normalized_entropy"]),
+        })
+    blind_canonical = np.asarray(
+        blind_payload["canonical_choice_probabilities"], dtype=float
+    )
+    active = active_panel_design(design_manifest, channel="mcq", tier=tier)
+    target_bootstrap = menu["target_bootstrap"]
+    probe_texts = list(target_bootstrap["probe_texts"])
+    state_values = np.empty((len(active["panels"]), 256), dtype=float)
+    raw_values = np.empty_like(state_values)
+    shuffled_values = np.empty_like(state_values)
+    annotation_accuracy = np.empty_like(state_values)
+    cache_hits = cache_misses = 0
+    for panel_position, panel in enumerate(active["panels"]):
+        panel_indices = np.asarray(panel["fixed_teaching_indices"], dtype=int)
+        keys = [cache_key("mcq_state", {
+            "constructor_revision": str(constructor_revision),
+            "menu_sha256": menu_sha,
+            "panel_sha256": str(panel["panel_sha256"]),
+            "state": state,
+            "permutation_design_sha256": permutation_sha,
+        }) for state in range(256)]
+        payloads = [cache.get(key) for key in keys]
+        missing = [state for state, payload in enumerate(payloads) if payload is None]
+        cache_hits += 256 - len(missing)
+        cache_misses += len(missing)
+        if missing:
+            bits = _binary_state_rows(MCQ_PANEL_SIZE)[missing]
+            rows = np.zeros((len(missing), len(probe_texts)), dtype=float)
+            rows[:, panel_indices] = bits
+            details = mcq_logit_values_from_precomputed_behaviors(
+                reconstructor,
+                noun=str(codebook_manifest["reconstruction_noun"]),
+                candidate_prompt_texts=[f"finite MCQ state {state:08b}" for state in missing],
+                target_metric_id=str(target_metric_key),
+                target_description=str(menu["entry"]["target_description"]),
+                target_score_rows=rows,
+                probe_texts=probe_texts,
+                distractors=list(menu["distractors"]),
+                design_indices=panel_indices,
+                codebook_frozen_before_prompt_search=True,
+                n_examples=MCQ_PANEL_SIZE,
+                n_reconstruction_draws=int(permutation_design["n_draws"]),
+                max_chars=int(codebook_manifest["reconstruction_max_chars"]),
+                query_batch_size=int(query_batch_size),
+                fixed_no_demo_canonical_probabilities=blind_canonical,
+                fixed_teaching_panel=True,
+            )
+            for state, detail in zip(missing, details):
+                expected_indices = panel_indices.astype(int).tolist()
+                if detail["design"]["indices_in_prompt_order"] != expected_indices:
+                    raise RuntimeError("MCQ query changed the frozen panel order")
+                identification = detail["identification"]
+                payloads[state] = cache.put(keys[state], "mcq_state", {
+                    "value": float(detail["value_mark"]),
+                    "raw_target_probability": float(detail["raw_target_option_probability"]),
+                    "shuffled_target_probability": float(
+                        identification["shuffled_label_score"]
+                    ),
+                    "annotation_accuracy": float(identification["identification_acc"]),
+                    "panel_sha256": str(panel["panel_sha256"]),
+                    "state": int(state),
+                })
+        for state, payload in enumerate(payloads):
+            if payload is None:
+                raise RuntimeError("MCQ cache failed to fill a declared state")
+            state_values[panel_position, state] = float(payload["value"])
+            raw_values[panel_position, state] = float(payload["raw_target_probability"])
+            shuffled_values[panel_position, state] = float(
+                payload["shuffled_target_probability"]
+            )
+            annotation_accuracy[panel_position, state] = float(
+                payload["annotation_accuracy"]
+            )
+    if np.any(~np.isfinite(state_values)):
+        raise RuntimeError("MCQ state tables contain non-finite cells")
+    target_state_accuracy = [
+        annotation_accuracy[index, int(panel["fixed_teaching_target_state"])]
+        for index, panel in enumerate(active["panels"])
+    ]
+    return {
+        "schema": VALUE_BOUND_STATE_SCHEMA,
+        "channel": "mcq",
+        "tier": str(tier).upper(),
+        "active_design": active,
+        "state_values": state_values,
+        "raw_target_probabilities": raw_values,
+        "shuffled_target_probabilities": shuffled_values,
+        "annotation_accuracy": annotation_accuracy,
+        "blind": blind_payload,
+        "menu_sha256": menu_sha,
+        "permutation_design_sha256": permutation_sha,
+        "best_explanation_rate": float(np.mean(target_state_accuracy)),
+        "cache_hits": int(cache_hits),
+        "cache_misses": int(cache_misses),
+        "non_disclosure": {
+            "candidate_prompt_text_passed_to_query_builder": False,
+            "queries_are_functions_only_of_panel_texts_labels_and_frozen_menu": True,
+        },
+    }
 
 
 if __name__ == "__main__":
