@@ -323,6 +323,8 @@ def test_value_worker_writes_every_row_with_one_resident_fake_backend(tmp_path):
         "n_examples": 8,
         "n_reconstruction_draws": 4,
         "choice_readout": "auto",
+        "expected_reconstructor_model": "fake-reconstructor",
+        "expected_reconstructor_revision": "fake-reconstructor",
         "expected_choice_readout_id": FAKE_CHOICE_READOUT_ID,
         "out": str(output),
     }]))
@@ -336,3 +338,21 @@ def test_value_worker_writes_every_row_with_one_resident_fake_backend(tmp_path):
     assert len(loaded["values"]) == 2
     assert np.all((loaded["values"] >= 0.0) & (loaded["values"] <= 1.0))
     assert loaded["premises"]["every_scored_row_valued"] is True
+    with pytest.raises(ValueError, match="reconstructor revision"):
+        load_value_artifact(
+            output,
+            expected_reconstructor_model="fake-reconstructor",
+            expected_reconstructor_revision="different-revision",
+        )
+
+    bad_jobs = tmp_path / "bad_revision_jobs.json"
+    bad_jobs.write_text(json.dumps([{
+        "expected_reconstructor_model": "fake-reconstructor",
+        "expected_reconstructor_revision": "different-revision",
+        "expected_choice_readout_id": FAKE_CHOICE_READOUT_ID,
+        "out": str(tmp_path / "must_not_exist.npz"),
+    }]))
+    with pytest.raises(RuntimeError, match="revision differs from the frozen run manifest"):
+        stage_value(SimpleNamespace(
+            jobs=str(bad_jobs), model="fake-reconstructor", fake=True))
+    assert not (tmp_path / "must_not_exist.npz").exists()

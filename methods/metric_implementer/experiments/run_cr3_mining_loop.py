@@ -116,6 +116,37 @@ def expected_executor_readout_id(args) -> str:
             if getattr(args, "dry_run", False) else CR3_BINARY_READOUT_ID)
 
 
+def resolved_model_revision(args, model: str) -> str:
+    """Resolve one immutable model revision in the same HOME namespace as workers."""
+    if getattr(args, "dry_run", False):
+        return str(model)
+    return model_revision_id(
+        model, home=str(Path(args.worker_home).resolve()))
+
+
+def validate_reconstructor_artifact_contract(
+    payload: dict,
+    manifest: dict,
+    *,
+    role: str,
+) -> None:
+    """Fail closed if an MCQ artifact escaped the manifest's model namespace."""
+    required = {
+        "reconstructor_model": manifest["mcq_reconstructor"],
+        "reconstructor_revision": manifest["mcq_reconstructor_revision"],
+        "choice_readout_id": manifest["mcq_choice_readout_protocol"],
+    }
+    mismatches = {
+        field: {"expected": expected, "observed": payload.get(field)}
+        for field, expected in required.items()
+        if payload.get(field) != expected
+    }
+    if mismatches:
+        raise RuntimeError(
+            f"{role} is outside the frozen Reconstruction-MCQ namespace: "
+            f"{json.dumps(mismatches, sort_keys=True)}")
+
+
 def confirmation_alpha(
     args,
     *,
@@ -649,13 +680,17 @@ def _manifest_payload(args) -> dict:
         "family_tags": list(args.family_tags),
         "family_modes": list(args.family_modes),
         "executor": args.executor,
-        "executor_model_revision": (
-            args.executor if args.dry_run else model_revision_id(
-                args.executor, home=str(Path(args.worker_home).resolve()))
-        ),
+        "executor_model_revision": resolved_model_revision(args, args.executor),
         "executor_readout_protocol": expected_executor_readout_id(args),
+        "family_model_revisions": [
+            resolved_model_revision(args, model) for model in args.families
+        ],
         "value_mode": args.value_mode,
         "mcq_reconstructor": args.mcq_reconstructor,
+        "mcq_reconstructor_revision": (
+            resolved_model_revision(args, args.mcq_reconstructor)
+            if args.value_mode == "reconstruction_mcq" else None
+        ),
         "mcq_n_options": args.mcq_n_options,
         "mcq_design_size": args.mcq_design_size,
         "mcq_min_design_disagreements": args.mcq_min_design_disagreements,
@@ -762,10 +797,7 @@ def validate_numeric_reuse_manifest(root: str | Path, args, *, role: str) -> dic
     if not path.is_file():
         raise ValueError(f"{role} root must contain run_manifest.json")
     source = json.loads(path.read_text())
-    expected_revision = (
-        args.executor if args.dry_run else model_revision_id(
-            args.executor, home=str(Path(args.worker_home).resolve()))
-    )
+    expected_revision = resolved_model_revision(args, args.executor)
     required = {
         "schema": MANIFEST_SCHEMA,
         "executor": args.executor,
@@ -839,6 +871,23 @@ def _atomic_npz(path: Path, **arrays) -> None:
 def _dry_propose(items: list[dict], family: str, model: str, temperature: float) -> None:
     for job in items:
         proposal_mode = str(job.get("proposal_mode", "atomic"))
+        prompt_sha = hashlib.sha256(
+            f"dry proposal:{job['metric_name']}:{proposal_mode}".encode()).hexdigest()
+        prompt_template_id = f"dry-{proposal_mode}"
+        validator_id = f"dry-{proposal_mode}"
+        max_tokens = 80 if proposal_mode == "atomic" else 2048
+        config = {
+            "model": model,
+            "model_revision": model,
+            "temperature": float(temperature),
+            "prompt_sha256": prompt_sha,
+            "proposal_mode": proposal_mode,
+            "prompt_template_id": prompt_template_id,
+            "validator_id": validator_id,
+            "max_tokens": max_tokens,
+        }
+        config_sha = hashlib.sha256(
+            json.dumps(config, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         rows = []
         attempts = []
         for i in range(int(job["n"])):
@@ -854,10 +903,11 @@ def _dry_propose(items: list[dict], family: str, model: str, temperature: float)
                 "seed": seed,
                 "attempt_idx": i,
                 "accepted_idx": i,
-                "prompt_sha256": "dry-prompt",
-                "prompt_template_id": f"dry-{proposal_mode}",
-                "validator_id": f"dry-{proposal_mode}",
-                "generator_config_sha256": "dry-config",
+                "prompt_sha256": prompt_sha,
+                "prompt_template_id": prompt_template_id,
+                "validator_id": validator_id,
+                "max_tokens": max_tokens,
+                "generator_config_sha256": config_sha,
             }
             rows.append(row)
             attempts.append({**row, "valid": True, "raw_text": text, "raw_sha256": "dry"})
@@ -1015,8 +1065,16 @@ def run_stage(*, stage: str, items: list[dict], jobs_file: Path, model: str,
         attempt += 1
 
 
-def _validate_proposal(path: Path, family: str, n: int,
-                       proposal_mode: str | None = None) -> None:
+def _validate_proposal(
+    path: Path,
+    family: str,
+    n: int,
+    proposal_mode: str | None = None,
+    *,
+    expected_model: str | None = None,
+    expected_model_revision: str | None = None,
+    expected_temperature: float | None = None,
+) -> None:
     if not path.exists():
         raise RuntimeError(f"missing proposal transaction: {path}")
     rows = _read_jsonl(path)
@@ -1025,6 +1083,37 @@ def _validate_proposal(path: Path, family: str, n: int,
     if proposal_mode is not None and any(
             str(row.get("proposal_mode", "atomic")) != proposal_mode for row in rows):
         raise RuntimeError(f"proposal mode changed in {path}")
+    if expected_model is not None and any(
+            str(row.get("model")) != expected_model for row in rows):
+        raise RuntimeError(f"proposal model changed in {path}")
+    if expected_model_revision is not None and any(
+            str(row.get("model_revision")) != expected_model_revision for row in rows):
+        raise RuntimeError(f"proposal model revision changed in {path}")
+    if expected_temperature is not None and any(
+            float(row.get("temperature", np.nan)) != float(expected_temperature) for row in rows):
+        raise RuntimeError(f"proposal temperature changed in {path}")
+    for row in rows:
+        try:
+            config = {
+                "model": str(row["model"]),
+                "model_revision": str(row["model_revision"]),
+                "temperature": float(row["temperature"]),
+                "prompt_sha256": str(row["prompt_sha256"]),
+                "proposal_mode": str(row["proposal_mode"]),
+                "prompt_template_id": str(row["prompt_template_id"]),
+                "validator_id": str(row["validator_id"]),
+                "max_tokens": int(row["max_tokens"]),
+            }
+        except (KeyError, TypeError, ValueError) as exc:
+            raise RuntimeError(f"proposal has an incomplete generator configuration in {path}") from exc
+        if (not re.fullmatch(r"[0-9a-f]{64}", config["prompt_sha256"])
+                or not config["prompt_template_id"] or not config["validator_id"]
+                or config["max_tokens"] <= 0):
+            raise RuntimeError(f"proposal has an invalid generator configuration in {path}")
+        expected_config_sha = hashlib.sha256(
+            json.dumps(config, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        if str(row.get("generator_config_sha256")) != expected_config_sha:
+            raise RuntimeError(f"proposal generator configuration hash mismatch in {path}")
     seeds = [int(row["seed"]) for row in rows]
     if len(set(seeds)) != n:
         raise RuntimeError(f"non-unique per-draw seeds in {path}")
@@ -1340,7 +1429,7 @@ def prepare_mcq_codebook_bootstraps(root: Path, manifest: dict, args) -> dict[st
     return paths_by_task
 
 
-def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
+def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, args,
                           candidate_paths_by_task: dict[str, list[Path]]) -> None:
     if args.value_mode != "reconstruction_mcq":
         return
@@ -1408,7 +1497,9 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
                 "query_batch_size": args.mcq_value_query_batch_size,
                 "choice_probability_cache": str(
                     root / "mcq_query_cache" / "choice_probabilities.sqlite"),
-                "expected_choice_readout_id": expected_choice_readout_id(args),
+                "expected_reconstructor_model": manifest["mcq_reconstructor"],
+                "expected_reconstructor_revision": manifest["mcq_reconstructor_revision"],
+                "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
                 "out": str(calibration_path),
             })
         planned[task] = (task_states, paths, plan, calibration_path)
@@ -1428,8 +1519,8 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
         if not calibration_path.exists():
             raise RuntimeError(f"missing MCQ prior calibration for task {task}")
         calibration = json.loads(calibration_path.read_text())
-        if calibration.get("choice_readout_id") != expected_choice_readout_id(args):
-            raise RuntimeError(f"MCQ prior calibration readout mismatch for task {task}")
+        validate_reconstructor_artifact_contract(
+            calibration, manifest, role=f"MCQ prior calibration for {task}")
         selections = select_prior_balanced_panels(
             plan,
             calibration,
@@ -1465,7 +1556,8 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
 
 
 def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path], *,
-              phase: str, iteration: int, args, worlds: dict[str, dict]) -> dict[str, dict]:
+              phase: str, iteration: int, manifest: dict, args,
+              worlds: dict[str, dict]) -> dict[str, dict]:
     if args.value_mode != "reconstruction_mcq":
         return {}
     outputs: dict[str, Path] = {}
@@ -1491,7 +1583,9 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
             "query_batch_size": args.mcq_value_query_batch_size,
             "choice_probability_cache": str(
                 Path(args.out_root) / "mcq_query_cache" / "choice_probabilities.sqlite"),
-            "expected_choice_readout_id": expected_choice_readout_id(args),
+            "expected_reconstructor_model": manifest["mcq_reconstructor"],
+            "expected_reconstructor_revision": manifest["mcq_reconstructor_revision"],
+            "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
             "out": str(output),
         }
         if state.get("fixed_no_demo_canonical_choice_probabilities") is not None:
@@ -1514,7 +1608,9 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
             output,
             expected_source_scored_sha256=file_sha256(scored[key]),
             expected_codebook_manifest_sha256=states[key]["mcq_codebook_sha256"],
-            expected_choice_readout_id=expected_choice_readout_id(args),
+            expected_choice_readout_id=manifest["mcq_choice_readout_protocol"],
+            expected_reconstructor_model=manifest["mcq_reconstructor"],
+            expected_reconstructor_revision=manifest["mcq_reconstructor_revision"],
         )
         if payload["target_metric_key"] != key:
             raise RuntimeError(f"value artifact target mismatch in {output}")
@@ -1522,13 +1618,14 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
     return loaded
 
 
-def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
+def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, args,
                            worlds: dict[str, dict]) -> None:
     if args.value_mode != "reconstruction_mcq":
         return
     scored = {key: state["bootstrap_path"] for key, state in states.items()}
     bootstrap_values = value_all(
-        list(states), states, scored, phase="bootstrap", iteration=0, args=args, worlds=worlds)
+        list(states), states, scored, phase="bootstrap", iteration=0,
+        manifest=manifest, args=args, worlds=worlds)
     for key, state in states.items():
         payload = bootstrap_values[key]
         state["value_name"] = payload["value_name"]
@@ -1545,7 +1642,7 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
     }
     historical_values = value_all(
         list(historical_scored), states, historical_scored,
-        phase="historical", iteration=0, args=args, worlds=worlds,
+        phase="historical", iteration=0, manifest=manifest, args=args, worlds=worlds,
     ) if historical_scored else {}
 
     for key, state in states.items():
@@ -1578,7 +1675,9 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
                 value_path,
                 expected_source_scored_sha256=row["scored_sha256"],
                 expected_codebook_manifest_sha256=state["mcq_codebook_sha256"],
-                expected_choice_readout_id=expected_choice_readout_id(args),
+                expected_choice_readout_id=manifest["mcq_choice_readout_protocol"],
+                expected_reconstructor_model=manifest["mcq_reconstructor"],
+                expected_reconstructor_revision=manifest["mcq_reconstructor_revision"],
             )
             if file_sha256(value_path) != row.get("value_sha256"):
                 raise RuntimeError(f"absorbed value artifact hash mismatch: {value_path}")
@@ -1617,7 +1716,9 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
                 value_path,
                 expected_source_scored_sha256=run["confirmation_scored_sha256"],
                 expected_codebook_manifest_sha256=state["mcq_codebook_sha256"],
-                expected_choice_readout_id=expected_choice_readout_id(args),
+                expected_choice_readout_id=manifest["mcq_choice_readout_protocol"],
+                expected_reconstructor_model=manifest["mcq_reconstructor"],
+                expected_reconstructor_revision=manifest["mcq_reconstructor_revision"],
             )
             if loaded["sha256"] != run.get("confirmation_value_sha256"):
                 raise RuntimeError(f"MCQ confirmation value hash mismatch for {key}")
@@ -1870,20 +1971,29 @@ def propose_all(keys: list[str], states: dict[str, dict], *, phase: str, iterati
                 n_per_family: int, manifest: dict, args, worlds: dict[str, dict]) -> dict[str, list[str]]:
     outputs: dict[str, list[str]] = {key: [] for key in keys}
     jobs_dir = Path(args.out_root) / "jobs"
-    for family, model, proposal_mode in zip(
-            args.family_tags, args.families, args.family_modes):
+    for family, model, model_revision, proposal_mode in zip(
+            args.family_tags, args.families, manifest["family_model_revisions"],
+            args.family_modes):
         missing = []
         for key in keys:
             state = states[key]
             out = _proposal_path(state, phase, iteration, family)
             if out.exists():
-                _validate_proposal(out, family, n_per_family, proposal_mode)
+                _validate_proposal(
+                    out, family, n_per_family, proposal_mode,
+                    expected_model=model,
+                    expected_model_revision=model_revision,
+                    expected_temperature=manifest["temperature"],
+                )
             else:
                 missing.append({
                     "metric_name": state["name"],
                     "metric_description": state["description"],
                     "n": n_per_family,
                     "proposal_mode": proposal_mode,
+                    "expected_model": model,
+                    "expected_model_revision": model_revision,
+                    "expected_temperature": manifest["temperature"],
                     "base_seed": stable_seed(manifest["run_id"], key, phase, iteration, family),
                     "out": str(out),
                 })
@@ -1900,7 +2010,12 @@ def propose_all(keys: list[str], states: dict[str, dict], *, phase: str, iterati
         )
         for key in keys:
             out = _proposal_path(states[key], phase, iteration, family)
-            _validate_proposal(out, family, n_per_family, proposal_mode)
+            _validate_proposal(
+                out, family, n_per_family, proposal_mode,
+                expected_model=model,
+                expected_model_revision=model_revision,
+                expected_temperature=manifest["temperature"],
+            )
     return outputs
 
 
@@ -2191,7 +2306,8 @@ def write_checkpoint_certificates(
         keys, states, proposals, phase="checkpoint", iteration=iteration,
         expected_per_family=args.checkpoint_per_family, args=args, worlds=worlds)
     values = value_all(
-        keys, states, scored, phase="checkpoint", iteration=iteration, args=args, worlds=worlds)
+        keys, states, scored, phase="checkpoint", iteration=iteration,
+        manifest=manifest, args=args, worlds=worlds)
     for key in keys:
         state = states[key]
         cert, _ = _tiered_audit_certificate(
@@ -2556,9 +2672,9 @@ def main(argv=None) -> int:
             states[state["key"]] = state
             if world is not None:
                 worlds[state["key"]] = world
-        prepare_mcq_codebooks(root, states, args, codebook_candidate_paths)
+        prepare_mcq_codebooks(root, states, manifest, args, codebook_candidate_paths)
         prepare_historical_candidates(root, states, manifest, args, worlds)
-        attach_mcq_pool_values(root, states, args, worlds)
+        attach_mcq_pool_values(root, states, manifest, args, worlds)
         alpha_tiers = reporting_alpha_tiers(args, n_metrics=len(states))
 
         while True:
@@ -2587,7 +2703,7 @@ def main(argv=None) -> int:
                 expected_per_family=args.batch_per_family, args=args, worlds=worlds)
             values = value_all(
                 batch_keys, states, scored, phase="monitor", iteration=iteration,
-                args=args, worlds=worlds)
+                manifest=manifest, args=args, worlds=worlds)
             for key in batch_keys:
                 state = states[key]
                 cert, batch = _certificate(
@@ -2669,7 +2785,7 @@ def main(argv=None) -> int:
                 expected_per_family=args.confirm_per_family, args=args, worlds=worlds)
             values = value_all(
                 pending, states, scored, phase="confirmation", iteration=0,
-                args=args, worlds=worlds)
+                manifest=manifest, args=args, worlds=worlds)
             for key in pending:
                 state = states[key]
                 cert, _ = _tiered_audit_certificate(

@@ -780,6 +780,8 @@ def load_value_artifact(
     expected_source_scored_sha256: str | None = None,
     expected_codebook_manifest_sha256: str | None = None,
     expected_choice_readout_id: str | None = None,
+    expected_reconstructor_model: str | None = None,
+    expected_reconstructor_revision: str | None = None,
 ) -> dict:
     source = Path(path).resolve()
     z = np.load(source, allow_pickle=True)
@@ -789,6 +791,14 @@ def load_value_artifact(
     if (expected_choice_readout_id is not None
             and choice_readout_id != str(expected_choice_readout_id)):
         raise ValueError(f"unexpected Reconstruction-MCQ choice readout in {source}")
+    reconstructor_model = str(z["reconstructor_model"])
+    reconstructor_revision = str(z["reconstructor_revision"])
+    if (expected_reconstructor_model is not None
+            and reconstructor_model != str(expected_reconstructor_model)):
+        raise ValueError(f"unexpected Reconstruction-MCQ reconstructor model in {source}")
+    if (expected_reconstructor_revision is not None
+            and reconstructor_revision != str(expected_reconstructor_revision)):
+        raise ValueError(f"unexpected Reconstruction-MCQ reconstructor revision in {source}")
     source_sha = str(z["source_scored_sha256"])
     codebook_sha = str(z["codebook_manifest_sha256"])
     if expected_source_scored_sha256 is not None and source_sha != expected_source_scored_sha256:
@@ -833,7 +843,7 @@ def load_value_artifact(
         "choice_readout_id": choice_readout_id,
         "no_demonstration_target_probability": no_demo,
         "fixed_no_demo_canonical_choice_probabilities": fixed_no_demo,
-        "reconstructor_model": str(z["reconstructor_model"]),
-        "reconstructor_revision": str(z["reconstructor_revision"]),
+        "reconstructor_model": reconstructor_model,
+        "reconstructor_revision": reconstructor_revision,
         "premises": premises,
     }

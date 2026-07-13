@@ -106,6 +106,14 @@ def _normalize_output(text: str | None) -> str:
     return (text or "").strip().strip('"').strip()
 
 
+def _one_expected_job_value(jobs: list[dict], field: str, stage: str):
+    """Require one nonempty manifest-derived contract value across a worker batch."""
+    values = {job.get(field) for job in jobs}
+    if len(values) != 1 or next(iter(values), None) in (None, ""):
+        raise RuntimeError(f"{stage} jobs must declare one {field}")
+    return next(iter(values))
+
+
 def _fsync_directory(path: Path) -> None:
     fd = os.open(str(path), os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
     try:
@@ -172,7 +180,8 @@ def _atomic_npz(path: str, **arrays) -> None:
 def draw_valid_rows(backend, prompt: str, *, n: int, base_seed: int, family: str,
                     model: str, temperature: float, max_attempt_mult: int = 10,
                     max_tokens: int | None = None,
-                    proposal_mode: str = "atomic") -> tuple[list[dict], list[dict]]:
+                    proposal_mode: str = "atomic",
+                    model_revision: str | None = None) -> tuple[list[dict], list[dict]]:
     """Draw exactly ``n`` accepted rows using a distinct seed for every attempt."""
     if n <= 0:
         raise ValueError("n must be positive")
@@ -183,7 +192,8 @@ def draw_valid_rows(backend, prompt: str, *, n: int, base_seed: int, family: str
     prompt_sha = _sha256_text(prompt)
     config = {
         "model": model,
-        "model_revision": _model_revision(model),
+        "model_revision": str(
+            _model_revision(model) if model_revision is None else model_revision),
         "temperature": float(temperature),
         "prompt_sha256": prompt_sha,
         "proposal_mode": proposal_mode,
@@ -236,6 +246,7 @@ def draw_valid_rows(backend, prompt: str, *, n: int, base_seed: int, family: str
                     "proposal_mode": proposal_mode,
                     "prompt_template_id": mode["prompt_template_id"],
                     "validator_id": mode["validator_id"],
+                    "max_tokens": int(max_tokens),
                     "generator_config_sha256": config_sha,
                 })
         attempt_idx += batch_n
@@ -254,6 +265,18 @@ def stage_propose(args) -> None:
     cfg = ImplementerConfig()
     if getattr(cfg, "vllm_lfs_home", None):
         os.environ["HOME"] = str(cfg.vllm_lfs_home)
+    expected_model = str(_one_expected_job_value(jobs, "expected_model", "proposal"))
+    expected_revision = str(
+        _one_expected_job_value(jobs, "expected_model_revision", "proposal"))
+    expected_temperature = float(
+        _one_expected_job_value(jobs, "expected_temperature", "proposal"))
+    revision = _model_revision(args.model)
+    if args.model != expected_model:
+        raise RuntimeError("proposal worker model differs from the frozen run manifest")
+    if revision != expected_revision:
+        raise RuntimeError("proposal worker model revision differs from the frozen run manifest")
+    if float(args.temp) != expected_temperature:
+        raise RuntimeError("proposal temperature differs from the frozen run manifest")
     backend = make_judge_backend(args.model, cfg, args.temp)
     for job in jobs:
         description = str(job.get("metric_description") or job["metric_name"])
@@ -272,6 +295,7 @@ def stage_propose(args) -> None:
             temperature=args.temp,
             max_attempt_mult=args.max_attempt_mult,
             proposal_mode=proposal_mode,
+            model_revision=revision,
         )
         # Accepted rows contain the seed and attempt index needed to reproduce the
         # deterministic rejection-sampling path.  Keeping one atomic stream avoids a
@@ -581,8 +605,18 @@ def stage_value(args) -> None:
         cfg.vllm_fake = True
     if getattr(cfg, "vllm_lfs_home", None):
         os.environ["HOME"] = str(cfg.vllm_lfs_home)
-    reconstructor = make_judge_backend(args.model, cfg, 0.0)
     revision = _model_revision(args.model)
+    expected_model = str(
+        _one_expected_job_value(jobs, "expected_reconstructor_model", "value"))
+    expected_revision = str(
+        _one_expected_job_value(jobs, "expected_reconstructor_revision", "value"))
+    expected_readout = str(
+        _one_expected_job_value(jobs, "expected_choice_readout_id", "value"))
+    if args.model != expected_model:
+        raise RuntimeError("value worker model differs from the frozen run manifest")
+    if revision != expected_revision:
+        raise RuntimeError("value worker model revision differs from the frozen run manifest")
+    reconstructor = make_judge_backend(args.model, cfg, 0.0)
     cache_paths = {str(job.get("choice_probability_cache")) for job in jobs
                    if job.get("choice_probability_cache")}
     if len(cache_paths) > 1:
@@ -594,10 +628,7 @@ def stage_value(args) -> None:
             model=args.model,
             revision=revision,
         )
-    expected_readouts = {str(job.get("expected_choice_readout_id", "")) for job in jobs}
-    if len(expected_readouts) != 1 or "" in expected_readouts:
-        raise RuntimeError("value jobs must declare one expected choice readout id")
-    if reconstructor.choice_readout_id not in expected_readouts:
+    if reconstructor.choice_readout_id != expected_readout:
         raise RuntimeError("value backend does not implement the declared choice readout")
     for job in jobs:
         with open(job["codebook_manifest"], encoding="utf-8") as source:
@@ -640,8 +671,18 @@ def stage_codebook_prior(args) -> None:
         cfg.vllm_fake = True
     if getattr(cfg, "vllm_lfs_home", None):
         os.environ["HOME"] = str(cfg.vllm_lfs_home)
-    reconstructor = make_judge_backend(args.model, cfg, 0.0)
     revision = _model_revision(args.model)
+    expected_model = str(
+        _one_expected_job_value(jobs, "expected_reconstructor_model", "prior"))
+    expected_revision = str(
+        _one_expected_job_value(jobs, "expected_reconstructor_revision", "prior"))
+    expected_readout = str(
+        _one_expected_job_value(jobs, "expected_choice_readout_id", "prior"))
+    if args.model != expected_model:
+        raise RuntimeError("prior worker model differs from the frozen run manifest")
+    if revision != expected_revision:
+        raise RuntimeError("prior worker model revision differs from the frozen run manifest")
+    reconstructor = make_judge_backend(args.model, cfg, 0.0)
     cache_paths = {str(job.get("choice_probability_cache")) for job in jobs
                    if job.get("choice_probability_cache")}
     if len(cache_paths) > 1:
@@ -653,10 +694,7 @@ def stage_codebook_prior(args) -> None:
             model=args.model,
             revision=revision,
         )
-    expected_readouts = {str(job.get("expected_choice_readout_id", "")) for job in jobs}
-    if len(expected_readouts) != 1 or "" in expected_readouts:
-        raise RuntimeError("prior jobs must declare one expected choice readout id")
-    if reconstructor.choice_readout_id not in expected_readouts:
+    if reconstructor.choice_readout_id != expected_readout:
         raise RuntimeError("prior backend does not implement the declared choice readout")
     for job in jobs:
         with open(job["panel_plan"], encoding="utf-8") as source:

@@ -12,6 +12,7 @@ from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     _apply_publication_gate,
     _metric_task,
     _retryable_worker_failure,
+    _validate_proposal,
     _validate_level_matched_codebook_banks,
     _worker_environment,
     attach_reporting_tiers,
@@ -19,6 +20,7 @@ from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     mcq_instrument_quality,
     mcq_reported_global_status,
     reporting_alpha_tiers,
+    validate_reconstructor_artifact_contract,
     validate_numeric_reuse_manifest,
 )
 from methods.metric_implementer.experiments.cr3_evidence_store import build_evidence_store
@@ -371,6 +373,75 @@ def test_production_sampler_uses_unique_per_request_seeds_and_exact_quota():
     assert all(row["family"] == "family_a" for row in rows)
 
 
+def test_proposal_transaction_is_bound_to_manifest_model_revision_and_config(tmp_path):
+    rows, _ = draw_valid_rows(
+        _RecordingBackend(),
+        "Propose one criterion?",
+        n=4,
+        base_seed=123,
+        family="family_a",
+        model="fake/model",
+        model_revision="resolved-revision",
+        temperature=0.9,
+    )
+    path = tmp_path / "proposal.jsonl"
+    path.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    _validate_proposal(
+        path,
+        "family_a",
+        4,
+        "atomic",
+        expected_model="fake/model",
+        expected_model_revision="resolved-revision",
+        expected_temperature=0.9,
+    )
+
+    tampered = [dict(row) for row in rows]
+    tampered[0]["model_revision"] = "other-revision"
+    path.write_text("".join(json.dumps(row) + "\n" for row in tampered))
+    with np.testing.assert_raises_regex(RuntimeError, "model revision changed"):
+        _validate_proposal(
+            path,
+            "family_a",
+            4,
+            "atomic",
+            expected_model="fake/model",
+            expected_model_revision="resolved-revision",
+            expected_temperature=0.9,
+        )
+
+    tampered = [dict(row) for row in rows]
+    tampered[0]["generator_config_sha256"] = "0" * 64
+    path.write_text("".join(json.dumps(row) + "\n" for row in tampered))
+    with np.testing.assert_raises_regex(RuntimeError, "configuration hash mismatch"):
+        _validate_proposal(
+            path,
+            "family_a",
+            4,
+            "atomic",
+            expected_model="fake/model",
+            expected_model_revision="resolved-revision",
+            expected_temperature=0.9,
+        )
+
+
+def test_reconstructor_artifact_contract_rejects_revision_or_readout_drift():
+    manifest = {
+        "mcq_reconstructor": "fake-reconstructor",
+        "mcq_reconstructor_revision": "resolved-revision",
+        "mcq_choice_readout_protocol": "choice-readout-v1",
+    }
+    payload = {
+        "reconstructor_model": "fake-reconstructor",
+        "reconstructor_revision": "resolved-revision",
+        "choice_readout_id": "choice-readout-v1",
+    }
+    validate_reconstructor_artifact_contract(payload, manifest, role="test artifact")
+    payload["reconstructor_revision"] = "other-revision"
+    with np.testing.assert_raises_regex(RuntimeError, "frozen Reconstruction-MCQ namespace"):
+        validate_reconstructor_artifact_contract(payload, manifest, role="test artifact")
+
+
 def test_holistic_sampler_accepts_complete_long_rubrics_and_records_mode():
     rows, attempts = draw_valid_rows(
         _HolisticBackend(),
@@ -579,6 +650,8 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
     assert mining_main(argv) == 0
     run_manifest = json.loads((output / "run_manifest.json").read_text())
     assert run_manifest["family_modes"] == ["atomic", "holistic", "atomic"]
+    assert run_manifest["family_model_revisions"] == run_manifest["families"]
+    assert run_manifest["mcq_reconstructor_revision"] == run_manifest["mcq_reconstructor"]
     codebook = json.loads((output / "mcq_codebooks" / "creative-writing.json").read_text())
     assert codebook["premises"]["uses_external_labels"] is False
     assert len(codebook["metrics"]) == 5
