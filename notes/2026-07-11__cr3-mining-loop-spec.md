@@ -186,6 +186,18 @@ never hard-linked across runs.
 Supported existing R3 bank prefixes are creative writing, humor, news homepages, press
 releases, code review, Math StackExchange, grant funding, peer review, and legal outcome prediction.
 
+**Hierarchy population frame (added 2026-07-13).** The historical
+`*_r3_expanded.json` artifact is merge-only: `merged_groups` contains R2 concepts that the
+meta-merge joined to at least one other R2 concept, and omits every untouched R2 concept. It is a valid
+**multi-merge R3 stratum**, including for the frozen sentinel, but is not a census of the R3 level. Population
+comparisons across R1/R2/R3 must use a complete, outcome-independent frame. The complete R3 partition keeps
+the historical multi-node merges in their original order and appends each untouched frozen R2 input as a
+singleton carry-forward. It records `r3_membership_type` so multi-merge and singleton strata can be reported
+separately. `experiments/complete_r3_census.py` constructs the partition, binds both source-file hashes, and
+fails unless the result covers every frozen R2 input exactly once. Reconstruction, certificate, and external
+validation outcomes are not inputs to this construction. Per-metric prompt certificates are unaffected by
+the sampling frame; claims about an R-level distribution or pass rate are not.
+
 The legacy-to-bootstrap agreement is diagnostic only. Validity comes from defining the v2 target, pool,
 and every later audit signature in the same immutable namespace. Duplicate prompt strings, including
 recaptures in later worker processes, reuse the exact cached signature.

@@ -376,6 +376,22 @@ the existing R3 banks for creative writing,
 humor, news homepages, press releases, code review, Math StackExchange, grant funding, peer review, and legal
 outcome prediction. The nonblocking run lock fails immediately when another process owns a root.
 
+The historical `*_r3_expanded.json` files are **merge-only strata**, not complete R3 populations: they omit
+R2 concepts that were not merged again. Before estimating an R3-level distribution or selecting a population
+sample, materialize the complete partition:
+
+```bash
+python -m methods.metric_implementer.experiments.complete_r3_census \
+  --r2-as-r3-input <task>_r2_as_r3_input.json \
+  --r3-expanded <task>_r3_expanded.json \
+  --output <task>_r3_complete.json
+```
+
+The command preserves historical multi-merge indices, appends untouched R2 inputs as singleton carry-forwards,
+hash-binds both sources, and verifies exact coverage. Report `r3_membership_type` in population analyses. A
+certificate for an individual historical R3 metric remains valid for that metric; only an unqualified claim
+that the merge-only bank represents the whole R3 level is invalid.
+
 In Reconstruction-MCQ mode every finite prompt executable by the frozen wrapper maps to one of the 256
 enumerated transcripts, so `V_ann <= U_state <= 1-q_no_demo(target)`. Here `q_no_demo` is the exact mean
 over the frozen full-factorial 24-order block, not an estimated Bernoulli rate. The all-prompt inequality

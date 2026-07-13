@@ -2797,6 +2797,18 @@ The second and third bounds may be much tighter than `U_state,b`, but their prom
 dropped. Conversely, attaining `U_state,b` certifies all-string optimality even when behavioral discovery remains
 unsaturated: many distinct behaviors may map to the same maximal reconstruction value.
 
+**Metric-population scope is separate from prompt-space scope (2026-07-13).** The inequalities above are
+target-indexed: once metric `b` and its instrument are frozen, the certificate is valid regardless of how `b`
+entered the study. Aggregating certificates into statements such as “R3 metrics are more articulable than R2
+metrics” adds a distinct sampling-frame requirement. In the current hierarchy artifacts,
+`*_r3_expanded.json::merged_groups` contains only multi-node R2 merges and omits untouched R2 concepts. It can
+therefore support claims about the **multi-merge R3 stratum**, not the full R3 level. The complete R3 frame is
+the disjoint partition consisting of those historical multi-node merges plus every untouched frozen R2 concept
+carried forward as a singleton. This construction is frozen before viewing reconstruction or certificate
+outcomes, preserves the historical merge indices, and reports merge membership as a stratum. This correction
+does not weaken any per-metric `V*_{b,E}` bound; it prevents selection on “was mergeable” from being mistaken
+for an R-level population result.
+
 CR-3 confidence intervals and the exact range cap have different uncertainty status. The primary process
 certificate uses 95% simultaneous confidence across checkpoint/final cells for one metric; it is also
 simultaneous across declared metrics only when `--study-alpha 0.05` is supplied. A
