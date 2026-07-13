@@ -4,10 +4,11 @@ The historical metric-seam artifacts use several overlapping meanings of
 ``articulable``, ``verifiable`` and ``ground truth``.  This module is the canonical
 v2 vocabulary.  It deliberately keeps two questions separate:
 
-* articulability: can a prompt/LLM program reconstruct the frozen LLM reference?
+* articulability: can a prompt/LLM program implement the articulated relation?
 * verifiability: can executable code issue a replayable, scoped certificate?
 
-Isomorphism is agreement with the frozen reference, not a synonym for either axis.
+Reconstruction/isomorphism is agreement with the frozen reference, not a synonym for
+either axis.
 Executable code may disagree with the reference and still earn the stronger, narrowly
 scoped ``CONSTRUCTIVE_EXTENSION`` verdict, but only when a code-native certificate
 adjudicates the disagreement.  Correlation alone can never establish that verdict.

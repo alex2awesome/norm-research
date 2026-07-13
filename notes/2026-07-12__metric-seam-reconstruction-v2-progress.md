@@ -148,9 +148,10 @@ Two additive certificate instruments now run without reading `y`:
   nor statistical verification.
 
 The same-input prompt-articulability counterpart is frozen at
-`methods/metric_seam/science_claims_v2/articulability_prompt.json` but has not been run. The
-current science result is therefore code verifiability and evidence-surface extension, not a
-prompt/code isomorphism result.
+`methods/metric_seam/science_claims_v2/articulability_prompt.json`. It was not part of this
+code-verification result; a later bounded transport smoke is reported separately in Section 3.6.
+The 2,400-paper code result itself therefore remains code verifiability and evidence-surface
+extension, not a prompt/code isomorphism result.
 
 ### 3.4 Seeded Math, Patents, and technical replay
 
@@ -170,6 +171,122 @@ unchanged.
   canonical verifier-dominant disagreement extensions, and zero tacitness claims.
 
 See `outputs/metric_seam_pilot/technical_replay_v2/REPORT.md`.
+
+### 3.5 Additive continuation: fresh blind Math a216 and the active coding lane
+
+These two runs preserve the experiment's three-axis vocabulary. **Articulability** means a
+prompt/LLM program implementing the articulated relation; **verifiability** means a code program
+executing a scoped relation check; **isomorphism** is the separate comparison of either program
+with the frozen LLM judgement. A code program can therefore be more isomorphic to that reference
+than a prompt program without thereby proving that code is correct on their disagreements.
+
+#### Blind Math a216: automatic proposal, construct-fidelity preemption
+
+The second clean-room compiler run targeted the equation-numbering/label/reference graph. Its
+bundle contained only 150 opaque TRAIN `ctext` rows, the projected a216 contract, and the allowed
+base/math operations: no prompt fields, labels, reference scores, held-out IDs, or held-out text.
+The agentic compiler emitted and froze a code-only parser/graph score. A separately frozen
+construct adversary then evaluated that exact candidate before any held-out reference was
+opened.
+
+- The candidate passed 30/34 authored ordering pairs (0.8824) and 7/10 range anchors (0.7000),
+  with mean pair delta 0.4736 and output standard deviation 0.3573.
+- Aggregate sensitivity was not enough. It scored 0/1 on the semantic-target category and 1/3
+  on subequation grouping, making the minimum category pass rate 0.0 against the frozen 0.5
+  floor. The category-floor condition therefore failed.
+- Construct-fidelity failure preempted reference access. The 100-row held-out LLM reference was
+  deliberately left unopened, so this run has no held-out correlation and makes no isomorphism
+  claim.
+- The canonical outcome is `proxy_mismatch`: the run is a genuine automatic decomposition/program
+  proposal, but not a successful witness of code verifiability, isomorphic reconstruction, or
+  tacitness. It establishes only bounded non-discovery in this frozen program class and budget.
+
+An independent CPU recomputation reproduced all 34 pair decisions, 10 range decisions, summary
+statistics, and the canonical preemption outcome. The unopened held-out status is strongly
+supported by the artifact ordering and run contents, not represented as a hostile-process or OS
+sandbox proof. Canonical record:
+`outputs/metric_seam_pilot/reconstruction_v2/blind_math_a216_001/reconstruction_record.json`.
+
+#### Code-review a104: active census, provenance-corrected V3
+
+This is the **active coding lane**, not the old `f2p_mock/` prototype summarized in Section 3.2.
+The inputs are canonicalized unified PR diffs; although their raw files live under
+`datasets/code-review/pr_test_execution/batch_runs`, none of the legacy prototype programs,
+test-execution telemetry, or per-PR test outcomes was used. No repository checkout or submitted
+PR test execution occurred.
+
+Three poles were compared on the same 97-item common held-out support:
+
+- The frozen prompt-compiled baseline, selected from three prompt programs on TRAIN only,
+  reached rho = 0.5089.
+- The pre-existing deep static/AST checker reached rho = 0.6498 (delta = +0.1409,
+  `P(gate)=0.5615`, `P(beats)=0.9455`) and passes the current reconstruction gate.
+- The new relation h0 reached rho = 0.6064 (delta = +0.0975, `P(gate)=0.3235`,
+  `P(beats)=0.8495`). It is a positive but sub-gate retrospective seed and must not be tuned on
+  this held-out readout.
+
+V3 corrects the h0 provenance to `manual_mock_retrospective_seed` with label-unreferenced
+execution. Its evaluator projects `{datapoint_id, ctext}` before scoring and delays loading the
+articulated LLM judgement, but the program was manually authored after label-bearing files
+existed; it was not mechanically label-inaccessible and is not a blind-discovery result. The
+deep checker also predates this h0 process. An independent sanitized-input rerun reproduced the
+split, all six scorer/profile outputs with zero mismatches, all correlations, and both 2,000-draw
+paired bootstraps; its targeted audit passed 11/11 checks.
+
+This is a useful broadening result: on one active technical criterion, deeper code reconstructs
+the frozen articulated judgement better than the prompt-compiled pole. It is still a
+reconstruction result, not proof that code is substantively correct when the two disagree. The
+static evidence covers source/test presence and balance, AST name correspondence, and assertion
+structure; it does not certify behavioral intent, oracle validity, or test success. A
+repo-composition sensitivity is supportive but explicitly exploratory: on 92 rows from
+repositories with at least two held-out items, within-repository centered-midrank Spearman was
+0.299 for the prompt program, 0.581 for the deep checker, and 0.467 for the retrospective h0.
+It is neither a new gate nor a tuning result.
+
+No model inference or GPU was used in either continuation run. The a104 comparison nevertheless
+uses a pre-existing model-produced judgement as the frozen reconstruction reference and
+pre-existing model-produced prompt programs; “no inference in this run” does not mean that no
+model artifact was used. Canonical V3 report:
+`outputs/metric_seam_pilot/tasks/code_review/A104_CPU_SEALED_REPORT_V3.md`. Independent receipt:
+`outputs/metric_seam_pilot/tasks/code_review/A104_CPU_V3_INDEPENDENT_AUDIT_V1.md`.
+
+### 3.6 Full-paper science: bounded same-input prompt smoke
+
+The prompt counterpart now has a bounded execution receipt, but not a criterion-level result.
+The request builder projects every source row to exactly `paper_id + abstract + body`, never
+loads `y`, SHA-binds all 2,400 rendered requests, and compares the prompt and code channels as
+peers rather than treating either as ground truth. Versions 1--5 are preserved as failed or
+instrument-development attempts. Version 6 made only five serial remote API calls and launched
+neither a local model nor a GPU.
+
+The canonical additive replay applies the prompt's actual verbatim-span contract. It folds only
+whitespace runs needed for PDF line wrapping; case, punctuation, hyphenation, and Unicode must
+otherwise match the bound source literally. On the same five raw responses:
+
+- 2/5 passed request binding, schema checks, and the verbatim whitespace-canonical grounding
+  guard; 3/5 were rejected.
+- The rejects were one certificate evidence span absent from BODY, one certificate claim span
+  absent from ABSTRACT, and one weaker evidence-link span that was not a verbatim BODY span.
+- On the two accepted papers, prompt/code status agreement and strong-certificate-presence
+  agreement were each 1/2. There were 0 matched strong witnesses from 2 prompt versus 0 code
+  witnesses; neither accepted paper had a weaker link in either channel.
+- Reasoning was requested off, but provider telemetry reported 12,426 reasoning tokens for one
+  of five responses. Hidden reasoning text was not retained, so the run is described as
+  reasoning-off-requested rather than uniformly reasoning-free.
+
+This smoke establishes that the same-input comparison is executable and that its binding guard
+has teeth. It does not estimate full-corpus articulability or prompt/code isomorphism. More
+importantly, it identifies copied-text serialization as an avoidable nuisance variable: semantic
+relation selection can be sound while a model changes punctuation or dehyphenates a PDF span.
+Before a full run, the next additive prompt transport should expose pre-segmented source IDs and
+ask the model for addresses plus relation decisions; deterministic code should hydrate the exact
+claim/evidence spans. That preserves the evidence surface while moving source identity checking
+to code and leaving semantic selection prompt-side.
+
+Canonical receipt:
+`outputs/metric_seam_pilot/science_articulability_v6_openrouter_reasoning_off_prepared/evaluation_literal_guard_v4.json`.
+Report:
+`outputs/metric_seam_pilot/science_articulability_v6_openrouter_reasoning_off_prepared/REPORT_LITERAL_GUARD_V4.md`.
 
 ## 4. What claims are broader now
 
@@ -219,8 +336,10 @@ that the old single-axis reconstruction report hid:
 
 ## 6. Next confirmatory moves
 
-1. Run the frozen full-paper prompt counterpart on the exact same abstract+body representation;
-   compare prompt/code/hybrid relations without substituting accept/reject labels.
+1. Replace copied-text science responses with source-addressed claim/evidence selections that
+   code hydrates from the exact same abstract+body representation. Re-run a bounded transport
+   gate first; launch the full prompt counterpart only if binding and grounding are stable.
+   Compare prompt/code/hybrid relations without substituting accept/reject labels.
 2. Start a new blind hybrid compiler run on an untouched technical criterion and split only
    after prompt-result provenance is exactly bound at preparation time. Do not reuse the now
    opened a144 held-out split for confirmation.

@@ -5,8 +5,9 @@ frozen and are treated as exploratory or retrospective-replay artifacts.
 
 ## Canonical terms
 
-- **Articulability** is prompt-based. It measures whether a prompt/LLM program can recover
-  the frozen LLM judgement that operationalizes an articulated criterion.
+- **Articulability** is prompt-based. It measures whether a prompt/LLM program can implement
+  the articulated criterion or sub-relation. Agreement with the frozen LLM judgement is
+  evaluated separately as reconstruction/isomorphism.
 - **Verifiability** is code-based. It requires an executable, replayable, scoped certificate
   such as a symbolic derivation, program execution, type/flow invariant, date computation,
   or claim-dependency trace.
@@ -24,7 +25,7 @@ frozen and are treated as exploratory or retrospective-replay artifacts.
 
 The experiment is deliberately asymmetric:
 
-- A successful prompt/LLM reconstruction is an executable witness of **articulability**.
+- A successful prompt/LLM implementation is a finite witness of **articulability**.
 - A successful code-native certificate is an executable witness of **verifiability**.
 - Neither success is evidence for the other channel; prompt articulation is not a code
   certificate, and a code certificate is not prompt articulation.
