@@ -26,11 +26,14 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 import re
 
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+
 # Local mirror of sk3 /lfs/.../norm_embed/match_out (see notes/2026-05-19__structural-metrics.md).
-_STRUCT_DIR = os.path.join("outputs", "analyses", "structural_metrics")
-_CANON = os.path.join("outputs", "analyses", "canon_all_real_forms.jsonl")
+_STRUCT_DIR = str(_REPO_ROOT / "outputs" / "analyses" / "structural_metrics")
+_CANON = str(_REPO_ROOT / "outputs" / "analyses" / "canon_all_real_forms.jsonl")
 
 
 def _norm(s: str) -> str:
@@ -71,7 +74,7 @@ def r1_criteria(task: str):
 # ONE bucket per run to avoid double-counting the same cluster.
 # --------------------------------------------------------------------------------------------
 
-_HIER_DIR = os.path.join("outputs", "hierarchy")
+_HIER_DIR = str(_REPO_ROOT / "outputs" / "hierarchy")
 
 
 def _expanded_groups(task: str, bucket: str, level: str):

@@ -184,9 +184,13 @@ class OfflineVLLM(_BaseVLLM):
         # sk3 env (matches the repo's 137 canonical recipes): pin HOME to /lfs BEFORE importing
         # vllm/HF (nohup AFS-token safety [[feedback_sk3_afs_tokens]]); disable FlashInfer
         # version check (required across sk3 scripts); MoE-FP8 safety for Qwen.
-        # ImplementerConfig declares this field as None, so getattr(..., default)
-        # does not apply. Treat None as "use the sk3 runtime default" explicitly.
-        lfs_home = getattr(cfg, "vllm_lfs_home", None) or "/lfs/skampere3/0/alexspan"
+        # The orchestrator pins VLLM_LFS_HOME to its declared worker-home before
+        # this process imports vLLM. Keep the sk3 fallback for older entry points.
+        lfs_home = (
+            getattr(cfg, "vllm_lfs_home", None)
+            or os.environ.get("VLLM_LFS_HOME")
+            or "/lfs/skampere3/0/alexspan"
+        )
         if lfs_home:
             os.environ["HOME"] = lfs_home
         os.environ.setdefault("FLASHINFER_DISABLE_VERSION_CHECK", "1")

@@ -430,6 +430,7 @@ def _worker_environment(args) -> dict[str, str]:
     home = str(Path(args.worker_home).resolve())
     environment.update({
         "HOME": home,
+        "VLLM_LFS_HOME": home,
         "XDG_CACHE_HOME": str(Path(home) / ".cache"),
         "TRITON_CACHE_DIR": str(Path(home) / ".triton" / "cache"),
         "VLLM_CONFIG_ROOT": str(Path(home) / ".config" / "vllm"),
@@ -717,7 +718,7 @@ def _manifest_payload(args) -> dict:
         "worker_environment": {
             key: _worker_environment(args)[key]
             for key in (
-                "HOME", "XDG_CACHE_HOME", "TRITON_CACHE_DIR",
+                "HOME", "VLLM_LFS_HOME", "XDG_CACHE_HOME", "TRITON_CACHE_DIR",
                 "VLLM_CONFIG_ROOT", "VLLM_NO_USAGE_STATS",
             )
         },

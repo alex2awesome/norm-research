@@ -64,6 +64,29 @@ def test_offline_vllm_treats_none_lfs_home_as_sk3_default(monkeypatch):
     assert os.environ["HOME"] == "/lfs/skampere3/0/alexspan"
 
 
+def test_offline_vllm_honors_orchestrator_runtime_home(monkeypatch, tmp_path):
+    captured = {}
+    fake_vllm = types.ModuleType("vllm")
+
+    def fake_llm(**kwargs):
+        captured.update(kwargs)
+        return object()
+
+    fake_vllm.LLM = fake_llm
+    monkeypatch.setitem(sys.modules, "vllm", fake_vllm)
+    monkeypatch.setenv("HOME", "/afs/cs.stanford.edu/u/alexspan")
+    monkeypatch.setenv("VLLM_LFS_HOME", str(tmp_path))
+    cfg = ImplementerConfig()
+    cfg.vllm_lfs_home = None
+    _ENGINE_CACHE.clear()
+    try:
+        OfflineVLLM._engine("not/a/local/model", cfg)
+    finally:
+        _ENGINE_CACHE.clear()
+    assert captured["model"] == "not/a/local/model"
+    assert os.environ["HOME"] == str(tmp_path)
+
+
 class _BinaryTokenizer:
     all_special_ids = [0]
     _encoded = {
