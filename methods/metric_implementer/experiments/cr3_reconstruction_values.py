@@ -20,8 +20,10 @@ from __future__ import annotations
 import hashlib
 import itertools
 import json
+import math
 import os
 from pathlib import Path
+import re
 import sqlite3
 from typing import Mapping, Sequence
 
@@ -43,7 +45,13 @@ PRIOR_CALIBRATION_SCHEMA = "cr3-reconstruction-prior-calibration-v1"
 VALUE_SCHEMA = "cr3-reconstruction-values-v4"
 FINITE_STATE_SCORED_SCHEMA = "cr3-reconstruction-finite-state-scored-v1"
 FINITE_STATE_ENVELOPE_SCHEMA = "cr3-reconstruction-finite-state-envelope-v1"
+TEACHING_LIBRARY_SCHEMA = "cr3-reconstruction-teaching-library-v1"
+TEACHING_FINALIST_LOCK_SCHEMA = "cr3-reconstruction-teaching-finalist-lock-v1"
 FIXED_TEACHING_SIZE = 8
+TEACHING_LIBRARY_SIZE = 8
+TEACHING_SCREEN_DRAWS = 4
+TEACHING_MAX_MENUS = 4
+TEACHING_FULL_FINALISTS = 2
 
 
 def _validated_option_order_design(
@@ -298,6 +306,557 @@ def _bootstrap(path: str | Path) -> dict:
     }
 
 
+def _teaching_text_features(texts: Sequence[str]) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Return deterministic CPU-only surface features for prospective T8 design."""
+    token_rows = []
+    document_frequency: dict[str, int] = {}
+    for text in texts:
+        tokens = re.findall(r"[A-Za-z0-9]+", str(text).lower())
+        terms = [f"u:{token}" for token in tokens]
+        terms.extend(f"b:{left}_{right}" for left, right in zip(tokens, tokens[1:]))
+        token_rows.append(terms)
+        for term in set(terms):
+            document_frequency[term] = document_frequency.get(term, 0) + 1
+    max_features = 4096
+    ranked = sorted(document_frequency, key=lambda term: (-document_frequency[term], term))
+    vocabulary = sorted(ranked[:max_features])
+    positions = {term: index for index, term in enumerate(vocabulary)}
+    n_documents = len(texts)
+    idf = np.asarray([
+        math.log((1.0 + n_documents) / (1.0 + document_frequency[term])) + 1.0
+        for term in vocabulary
+    ], dtype=float)
+    matrix = np.zeros((n_documents, len(vocabulary)), dtype=float)
+    for row, terms in enumerate(token_rows):
+        counts: dict[int, int] = {}
+        for term in terms:
+            if term in positions:
+                index = positions[term]
+                counts[index] = counts.get(index, 0) + 1
+        for index, count in counts.items():
+            matrix[row, index] = (1.0 + math.log(count)) * idf[index]
+    norms = np.linalg.norm(matrix, axis=1)
+    nonzero = norms > 0.0
+    matrix[nonzero] /= norms[nonzero, None]
+    log_lengths = np.log1p(np.asarray([len(str(text)) for text in texts], dtype=float))
+    feature_manifest = {
+        "schema": "cr3-teaching-surface-features-v1",
+        "tokenizer": "lowercase ASCII alphanumeric unigrams+bigrams",
+        "tf": "1+log(count)",
+        "idf": "log((1+n_documents)/(1+document_frequency))+1",
+        "l2_normalized": True,
+        "max_features": max_features,
+        "n_documents": n_documents,
+        "n_features": len(vocabulary),
+        "vocabulary_sha256": _payload_sha256({"vocabulary": vocabulary}),
+        "idf_sha256": _payload_sha256({"idf_hex": [float(value).hex() for value in idf]}),
+        "log_character_lengths_sha256": _payload_sha256({
+            "values_hex": [float(value).hex() for value in log_lengths],
+        }),
+    }
+    return matrix, log_lengths, {
+        **feature_manifest,
+        "feature_manifest_sha256": _payload_sha256(feature_manifest),
+    }
+
+
+def _ordered_contrastive_pairs(
+    selected: Sequence[int], target_bits: np.ndarray, tfidf: np.ndarray,
+    log_lengths: np.ndarray, global_indices: np.ndarray,
+) -> list[int]:
+    """Place deterministic surface-matched opposite-label pairs next to each other."""
+    remaining = set(map(int, selected))
+    ordered: list[int] = []
+    while remaining:
+        pairs = []
+        for left in sorted(remaining):
+            for right in sorted(remaining):
+                if left >= right or target_bits[left] == target_bits[right]:
+                    continue
+                surface_cost = (
+                    1.0 - float(np.dot(tfidf[left], tfidf[right]))
+                    + 0.35 * abs(float(log_lengths[left] - log_lengths[right]))
+                )
+                pairs.append((surface_cost, min(int(global_indices[left]), int(global_indices[right])),
+                              max(int(global_indices[left]), int(global_indices[right])), left, right))
+        if not pairs:
+            ordered.extend(sorted(remaining, key=lambda index: int(global_indices[index])))
+            break
+        _, _, _, left, right = min(pairs)
+        pair = sorted((left, right), key=lambda index: int(global_indices[index]))
+        ordered.extend(pair)
+        remaining.remove(left)
+        remaining.remove(right)
+    return ordered
+
+
+def _teaching_panel_statistics(
+    ordered_local: Sequence[int], *, target_scores: np.ndarray,
+    option_scores: np.ndarray, tfidf: np.ndarray, log_lengths: np.ndarray,
+) -> dict:
+    selected = np.asarray(ordered_local, dtype=int)
+    hard = (option_scores[:, selected] > 0.5).astype(int)
+    target = hard[0]
+    disagreements = hard[1:] != target[None, :]
+    lengths = np.expm1(log_lengths[selected])
+    yes = target == 1
+    no = ~yes
+    pairwise = tfidf[selected] @ tfidf[selected].T
+    upper = pairwise[np.triu_indices(len(selected), 1)]
+    return {
+        "target_counts": {"0": int(no.sum()), "1": int(yes.sum())},
+        "target_is_balanced": bool(yes.sum() == no.sum()),
+        "per_distractor_disagreements": disagreements.sum(axis=1).astype(int).tolist(),
+        "per_distractor_directional_disagreements": [{
+            "target1_distractor0": int(np.sum((target == 1) & (hard[index + 1] == 0))),
+            "target0_distractor1": int(np.sum((target == 0) & (hard[index + 1] == 1))),
+        } for index in range(len(hard) - 1)],
+        "minimum_distractor_separation": int(disagreements.sum(axis=1).min()),
+        "mean_target_yes_characters": (
+            float(lengths[yes].mean()) if np.any(yes) else None),
+        "mean_target_no_characters": (
+            float(lengths[no].mean()) if np.any(no) else None),
+        "absolute_log_length_mean_difference": (
+            float(abs(log_lengths[selected][yes].mean() - log_lengths[selected][no].mean()))
+            if np.any(yes) and np.any(no) else None),
+        "mean_pairwise_tfidf_distance": (
+            float(np.mean(1.0 - upper)) if len(upper) else 0.0),
+        "mean_target_margin": float(np.mean(np.abs(target_scores[selected] - 0.5))),
+    }
+
+
+def _matched_pair_panel(
+    *, target_bits: np.ndarray, option_scores: np.ndarray, tfidf: np.ndarray,
+    log_lengths: np.ndarray, behavior_weight: float, margin_weight: float,
+) -> list[int] | None:
+    yes = np.flatnonzero(target_bits == 1)
+    no = np.flatnonzero(target_bits == 0)
+    if len(yes) < FIXED_TEACHING_SIZE // 2 or len(no) < FIXED_TEACHING_SIZE // 2:
+        return None
+    hard = (option_scores > 0.5).astype(int)
+    disagreement_count = np.sum(hard[1:] != hard[0][None, :], axis=0)
+    margins = np.mean(np.abs(option_scores - 0.5), axis=0)
+    pairs = []
+    for left in yes:
+        for right in no:
+            surface_cost = (
+                1.0 - float(np.dot(tfidf[left], tfidf[right]))
+                + 0.35 * abs(float(log_lengths[left] - log_lengths[right]))
+            )
+            reward = (
+                behavior_weight * float(disagreement_count[left] + disagreement_count[right])
+                + margin_weight * float(margins[left] + margins[right])
+            )
+            pairs.append((surface_cost - reward, int(left), int(right)))
+    selected_yes: set[int] = set()
+    selected_no: set[int] = set()
+    chosen_pairs = []
+    for _, left, right in sorted(pairs):
+        if left in selected_yes or right in selected_no:
+            continue
+        selected_yes.add(left)
+        selected_no.add(right)
+        chosen_pairs.append((left, right))
+        if len(chosen_pairs) == FIXED_TEACHING_SIZE // 2:
+            break
+    if len(chosen_pairs) != FIXED_TEACHING_SIZE // 2:
+        return None
+    return [index for pair in chosen_pairs for index in pair]
+
+
+def _milp_teaching_panel(
+    *, target_bits: np.ndarray, option_scores: np.ndarray, tfidf: np.ndarray,
+    log_lengths: np.ndarray, objective: str, excluded: Sequence[Sequence[int]],
+    exact_length_bins: bool,
+) -> list[int] | None:
+    """Solve one deterministic balanced/no-good panel arm from frozen design data."""
+    from scipy.optimize import Bounds, LinearConstraint, milp
+
+    n_items = len(target_bits)
+    hard = (option_scores > 0.5).astype(int)
+    disagreements = (hard[1:] != hard[0][None, :]).astype(float)
+    patterns = [tuple(int(value) for value in hard[:, index]) for index in range(n_items)]
+    pattern_counts = {pattern: patterns.count(pattern) for pattern in set(patterns)}
+    rarity = np.asarray([1.0 / pattern_counts[pattern] for pattern in patterns], float)
+    margins = np.mean(np.abs(option_scores - 0.5), axis=0)
+    centroid = tfidf.mean(axis=0)
+    centroid_norm = float(np.linalg.norm(centroid))
+    if centroid_norm > 0.0:
+        centroid /= centroid_norm
+    lexical_distance = 1.0 - tfidf @ centroid
+    behavior = disagreements.sum(axis=0) / max(1, disagreements.shape[0])
+    priority = (n_items - np.arange(n_items, dtype=float)) / (n_items + 1.0)
+    weights = {
+        "separation": (1.0, 0.10, 0.10, 0.05),
+        "margin": (0.75, 0.50, 0.10, 0.05),
+        "pattern": (0.75, 0.10, 1.00, 0.10),
+        "tfidf": (0.65, 0.10, 0.20, 1.00),
+        "hybrid": (0.75, 0.30, 0.50, 0.50),
+    }
+    if objective not in weights:
+        raise ValueError(f"unknown teaching-panel objective: {objective}")
+    wb, wm, wr, wt = weights[objective]
+    item_reward = wb * behavior + wm * margins + wr * rarity + wt * lexical_distance
+    item_reward += 1e-8 * priority
+
+    rows: list[np.ndarray] = []
+    lower: list[float] = []
+    upper: list[float] = []
+    rows.append(np.r_[np.ones(n_items), 0.0]); lower.append(FIXED_TEACHING_SIZE); upper.append(FIXED_TEACHING_SIZE)
+    if np.sum(target_bits == 1) >= 4 and np.sum(target_bits == 0) >= 4:
+        rows.append(np.r_[target_bits, 0.0]); lower.append(4.0); upper.append(4.0)
+    for disagreement in disagreements:
+        rows.append(np.r_[disagreement, -1.0]); lower.append(0.0); upper.append(np.inf)
+    for distractor in hard[1:]:
+        for target_value, distractor_value in ((1, 0), (0, 1)):
+            direction = ((target_bits == target_value) & (distractor == distractor_value)).astype(float)
+            if np.any(direction):
+                rows.append(np.r_[direction, 0.0]); lower.append(1.0); upper.append(np.inf)
+    if exact_length_bins and np.sum(target_bits == 1) >= 4 and np.sum(target_bits == 0) >= 4:
+        edges = np.quantile(log_lengths, [0.25, 0.50, 0.75])
+        bins = np.searchsorted(edges, log_lengths, side="right")
+        signed_target = 2 * target_bits - 1
+        for bin_index in range(4):
+            balance = ((bins == bin_index) * signed_target).astype(float)
+            rows.append(np.r_[balance, 0.0]); lower.append(0.0); upper.append(0.0)
+    for panel in excluded:
+        no_good = np.zeros(n_items, dtype=float)
+        no_good[np.asarray(panel, dtype=int)] = 1.0
+        rows.append(np.r_[no_good, 0.0]); lower.append(-np.inf); upper.append(FIXED_TEACHING_SIZE - 1)
+
+    result = milp(
+        np.r_[-item_reward, -100.0],
+        integrality=np.ones(n_items + 1, dtype=int),
+        bounds=Bounds(np.zeros(n_items + 1), np.r_[np.ones(n_items), FIXED_TEACHING_SIZE]),
+        constraints=LinearConstraint(np.asarray(rows), np.asarray(lower), np.asarray(upper)),
+    )
+    if not result.success:
+        return None
+    chosen = np.flatnonzero(result.x[:n_items] > 0.5)
+    return chosen.astype(int).tolist() if len(chosen) == FIXED_TEACHING_SIZE else None
+
+
+def _teaching_panel_record(
+    *, role: str, ordered_local: Sequence[int], candidate_indices: np.ndarray,
+    target_scores: np.ndarray, option_scores: np.ndarray, probe_texts: Sequence[str],
+    tfidf: np.ndarray, log_lengths: np.ndarray, selection_detail: Mapping[str, object],
+) -> dict:
+    ordered_local = [int(value) for value in ordered_local]
+    ordered_indices = candidate_indices[ordered_local].astype(int).tolist()
+    item_ids = [hashlib.sha256(str(probe_texts[index]).encode("utf-8")).hexdigest()[:20]
+                for index in ordered_indices]
+    target_bits = (target_scores[ordered_local] > 0.5).astype(int).tolist()
+    transcript = [{"item_id": item_id, "score": score}
+                  for item_id, score in zip(item_ids, target_bits)]
+    transcript_sha256 = hashlib.sha256(json.dumps(
+        transcript, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()
+    core = {
+        "role": str(role),
+        "ordered_candidate_local_indices": ordered_local,
+        "fixed_teaching_indices": ordered_indices,
+        "fixed_teaching_item_ids": item_ids,
+        "fixed_teaching_target_scores": target_bits,
+        "fixed_teaching_target_state": _binary_state_integer(target_bits),
+        "fixed_teaching_target_transcript_sha256": transcript_sha256,
+        "selection_detail": dict(selection_detail),
+        "design_statistics": _teaching_panel_statistics(
+            ordered_local,
+            target_scores=target_scores,
+            option_scores=option_scores,
+            tfidf=tfidf,
+            log_lengths=log_lengths,
+        ),
+    }
+    return {**core, "teaching_panel_sha256": _payload_sha256(core)}
+
+
+def build_teaching_panel_library(
+    baseline_codebook_manifest: Mapping[str, object], *, target_metric_key: str,
+    library_size: int = TEACHING_LIBRARY_SIZE,
+) -> dict:
+    """Build a prospective, bounded T8 library without prompt or external-label input."""
+    validate_codebook_manifest(baseline_codebook_manifest)
+    if library_size != TEACHING_LIBRARY_SIZE:
+        raise ValueError(f"bound-grade teaching library requires K={TEACHING_LIBRARY_SIZE}")
+    target_metric_key = str(target_metric_key)
+    entry = baseline_codebook_manifest["entries"].get(target_metric_key)
+    if not entry or not entry.get("valid"):
+        raise ValueError(f"target metric {target_metric_key!r} lacks a baseline teaching panel")
+    option_keys = [target_metric_key, *entry["distractor_metric_keys"]]
+    views = [_bootstrap(baseline_codebook_manifest["metrics"][key]["bootstrap_path"])
+             for key in option_keys]
+    for key, view in zip(option_keys, views):
+        metadata = baseline_codebook_manifest["metrics"][key]
+        if view["sha256"] != metadata["bootstrap_sha256"]:
+            raise ValueError("teaching-library bootstrap changed after codebook freezing")
+    candidate_indices = np.asarray(
+        baseline_codebook_manifest["fixed_teaching_protocol"]["candidate_indices"], dtype=int)
+    probe_texts = views[0]["probe_texts"]
+    texts = [probe_texts[index] for index in candidate_indices]
+    tfidf, log_lengths, feature_manifest = _teaching_text_features(texts)
+    option_scores = np.vstack([view["target"][candidate_indices] for view in views])
+    target_scores = option_scores[0]
+    target_bits = (target_scores > 0.5).astype(int)
+
+    baseline_global = [int(value) for value in entry["fixed_teaching_indices"]]
+    local_by_global = {int(value): index for index, value in enumerate(candidate_indices)}
+    baseline_local = [local_by_global[index] for index in baseline_global]
+    candidate_specs: list[tuple[str, list[int] | None, dict]] = [
+        ("baseline_exact", baseline_local, {
+            "method": "unchanged v12 exact max-min contrastive T8",
+            "byte_compatible_baseline": True,
+        }),
+        ("matched_pair_surface", _matched_pair_panel(
+            target_bits=target_bits, option_scores=option_scores, tfidf=tfidf,
+            log_lengths=log_lengths, behavior_weight=0.0, margin_weight=0.0), {
+                "method": "greedy disjoint opposite-label TF-IDF+log-length matched pairs",
+                "byte_compatible_baseline": False,
+            }),
+        ("matched_pair_behavior", _matched_pair_panel(
+            target_bits=target_bits, option_scores=option_scores, tfidf=tfidf,
+            log_lengths=log_lengths, behavior_weight=0.08, margin_weight=0.05), {
+                "method": "surface-matched pairs with frozen behavior/margin reward",
+                "byte_compatible_baseline": False,
+            }),
+    ]
+    excluded = [baseline_local]
+    for role, objective, exact_bins in (
+        ("nuisance_balanced_separation", "separation", True),
+        ("nuisance_balanced_margin", "margin", True),
+        ("pattern_diverse", "pattern", False),
+        ("tfidf_diverse", "tfidf", False),
+        ("hybrid_diverse", "hybrid", False),
+    ):
+        panel = _milp_teaching_panel(
+            target_bits=target_bits,
+            option_scores=option_scores,
+            tfidf=tfidf,
+            log_lengths=log_lengths,
+            objective=objective,
+            excluded=excluded,
+            exact_length_bins=exact_bins,
+        )
+        if panel is None and exact_bins:
+            panel = _milp_teaching_panel(
+                target_bits=target_bits,
+                option_scores=option_scores,
+                tfidf=tfidf,
+                log_lengths=log_lengths,
+                objective=objective,
+                excluded=excluded,
+                exact_length_bins=False,
+            )
+        candidate_specs.append((role, panel, {
+            "method": "deterministic mixed-integer balanced teaching design",
+            "objective": objective,
+            "exact_length_bin_matching_requested": exact_bins,
+            "byte_compatible_baseline": False,
+        }))
+        if panel is not None:
+            excluded.append(panel)
+
+    records = []
+    seen: set[tuple[int, ...]] = set()
+    for role, selected, detail in candidate_specs:
+        if selected is None or len(set(selected)) != FIXED_TEACHING_SIZE:
+            continue
+        if role == "baseline_exact":
+            ordered = list(selected)
+        else:
+            ordered = _ordered_contrastive_pairs(
+                selected, target_bits, tfidf, log_lengths, candidate_indices)
+        identity = tuple(candidate_indices[ordered].astype(int).tolist())
+        if identity in seen:
+            continue
+        seen.add(identity)
+        records.append(_teaching_panel_record(
+            role=role,
+            ordered_local=ordered,
+            candidate_indices=candidate_indices,
+            target_scores=target_scores,
+            option_scores=option_scores,
+            probe_texts=probe_texts,
+            tfidf=tfidf,
+            log_lengths=log_lengths,
+            selection_detail=detail,
+        ))
+
+    filler_index = 0
+    while len(records) < library_size:
+        panel = _milp_teaching_panel(
+            target_bits=target_bits,
+            option_scores=option_scores,
+            tfidf=tfidf,
+            log_lengths=log_lengths,
+            objective="hybrid",
+            excluded=[record["ordered_candidate_local_indices"] for record in records],
+            exact_length_bins=False,
+        )
+        if panel is None:
+            break
+        ordered = _ordered_contrastive_pairs(
+            panel, target_bits, tfidf, log_lengths, candidate_indices)
+        identity = tuple(candidate_indices[ordered].astype(int).tolist())
+        if identity in seen:
+            break
+        seen.add(identity)
+        records.append(_teaching_panel_record(
+            role=f"hybrid_no_good_{filler_index}",
+            ordered_local=ordered,
+            candidate_indices=candidate_indices,
+            target_scores=target_scores,
+            option_scores=option_scores,
+            probe_texts=probe_texts,
+            tfidf=tfidf,
+            log_lengths=log_lengths,
+            selection_detail={
+                "method": "deterministic hybrid MILP no-good filler",
+                "objective": "hybrid",
+                "byte_compatible_baseline": False,
+            },
+        ))
+        filler_index += 1
+    if len(records) != library_size:
+        raise ValueError(
+            f"could construct only {len(records)} unique teaching panels; expected {library_size}")
+    for index, record in enumerate(records):
+        record.pop("teaching_panel_sha256", None)
+        record["library_index"] = index
+        record["teaching_panel_sha256"] = _payload_sha256(record)
+
+    input_binding = {
+        "baseline_codebook_manifest_sha256": baseline_codebook_manifest["manifest_sha256"],
+        "prior_panel_id": str((entry.get("prior_calibration") or {}).get("panel_id", "")),
+        "target_metric_key": target_metric_key,
+        "option_metric_keys": option_keys,
+        "bootstrap_sha256": {
+            key: baseline_codebook_manifest["metrics"][key]["bootstrap_sha256"]
+            for key in option_keys
+        },
+        "probe_sha256": baseline_codebook_manifest["probe_sha256"],
+        "candidate_indices_sha256": _payload_sha256({
+            "candidate_indices": candidate_indices.astype(int).tolist(),
+        }),
+        "hard_behavior_sha256": _payload_sha256({
+            "option_hard_behavior": (option_scores > 0.5).astype(int).tolist(),
+        }),
+        "feature_manifest": feature_manifest,
+    }
+    core = {
+        "schema": TEACHING_LIBRARY_SCHEMA,
+        "library_size": library_size,
+        "teaching_size": FIXED_TEACHING_SIZE,
+        "input_binding": input_binding,
+        "panels": records,
+        "selection_contract": {
+            "built_before_candidate_prompt_search": True,
+            "uses_only_frozen_complement_texts_and_canonical_bootstrap_behaviors": True,
+            "uses_candidate_prompt_behavior": False,
+            "uses_external_labels": False,
+            "candidate_zero_is_exact_baseline": True,
+        },
+    }
+    return {**core, "library_sha256": _payload_sha256(core)}
+
+
+def validate_teaching_panel_library(
+    library: Mapping[str, object], baseline_codebook_manifest: Mapping[str, object],
+    *, target_metric_key: str,
+) -> None:
+    payload = dict(library)
+    observed = str(payload.pop("library_sha256", ""))
+    if payload.get("schema") != TEACHING_LIBRARY_SCHEMA or observed != _payload_sha256(payload):
+        raise ValueError("invalid or mutated teaching-panel library")
+    expected = build_teaching_panel_library(
+        baseline_codebook_manifest, target_metric_key=target_metric_key,
+        library_size=int(payload.get("library_size", -1)),
+    )
+    if dict(library) != expected:
+        raise ValueError("teaching-panel library does not reproduce from frozen inputs")
+
+
+def teaching_panel_selection_from_library(
+    library: Mapping[str, object], *, library_index: int,
+) -> dict:
+    """Bind one precomputed T8 arm for a provisional or final codebook."""
+    panels = list(library.get("panels") or [])
+    if not 0 <= int(library_index) < len(panels):
+        raise ValueError("teaching-panel library index is out of range")
+    binding = dict(library.get("input_binding") or {})
+    panel = dict(panels[int(library_index)])
+    panel_core = dict(panel)
+    panel_sha = str(panel_core.pop("teaching_panel_sha256", ""))
+    if panel_sha != _payload_sha256(panel_core):
+        raise ValueError("selected teaching panel has an invalid hash")
+    core = {
+        "schema": "cr3-reconstruction-teaching-selection-v1",
+        "library_sha256": str(library.get("library_sha256", "")),
+        "baseline_codebook_manifest_sha256": str(
+            binding.get("baseline_codebook_manifest_sha256", "")),
+        "prior_panel_id": str(binding.get("prior_panel_id", "")),
+        "target_metric_key": str(binding.get("target_metric_key", "")),
+        "option_metric_keys": list(binding.get("option_metric_keys") or []),
+        "bootstrap_sha256": dict(binding.get("bootstrap_sha256") or {}),
+        "candidate_indices_sha256": str(binding.get("candidate_indices_sha256", "")),
+        "library_index": int(library_index),
+        "panel": panel,
+        "uses_candidate_prompt_behavior": False,
+        "uses_external_labels": False,
+    }
+    return {**core, "selection_sha256": _payload_sha256(core)}
+
+
+def _validated_teaching_panel_override(
+    selection: Mapping[str, object], *, target: Mapping[str, object],
+    distractor_keys: Sequence[str], candidate_indices: np.ndarray,
+) -> dict:
+    payload = dict(selection)
+    observed = str(payload.pop("selection_sha256", ""))
+    if (payload.get("schema") != "cr3-reconstruction-teaching-selection-v1"
+            or observed != _payload_sha256(payload)
+            or payload.get("uses_candidate_prompt_behavior") is not False
+            or payload.get("uses_external_labels") is not False):
+        raise ValueError("invalid or mutated teaching-panel selection")
+    option_keys = [str(target["key"]), *map(str, distractor_keys)]
+    if (payload.get("target_metric_key") != target["key"]
+            or list(payload.get("option_metric_keys") or []) != option_keys
+            or payload.get("candidate_indices_sha256") != _payload_sha256({
+                "candidate_indices": candidate_indices.astype(int).tolist(),
+            })):
+        raise ValueError("teaching-panel selection is bound to a different instrument")
+    if payload.get("bootstrap_sha256", {}).get(target["key"]) != target["sha256"]:
+        raise ValueError("teaching-panel target bootstrap changed")
+    panel = dict(payload.get("panel") or {})
+    panel_core = dict(panel)
+    panel_sha = str(panel_core.pop("teaching_panel_sha256", ""))
+    if panel_sha != _payload_sha256(panel_core):
+        raise ValueError("teaching-panel selection contains a mutated panel")
+    indices = [int(value) for value in panel.get("fixed_teaching_indices", [])]
+    item_ids = [str(value) for value in panel.get("fixed_teaching_item_ids", [])]
+    scores = [int(value) for value in panel.get("fixed_teaching_target_scores", [])]
+    candidate_set = set(candidate_indices.astype(int).tolist())
+    if (len(indices) != FIXED_TEACHING_SIZE or len(set(indices)) != FIXED_TEACHING_SIZE
+            or not set(indices).issubset(candidate_set)
+            or len(item_ids) != FIXED_TEACHING_SIZE or len(scores) != FIXED_TEACHING_SIZE):
+        raise ValueError("teaching-panel selection has invalid ordered indices")
+    expected_item_ids = [hashlib.sha256(
+        str(target["probe_texts"][index]).encode("utf-8")
+    ).hexdigest()[:20] for index in indices]
+    expected_scores = (target["target"][indices] > 0.5).astype(int).tolist()
+    transcript = [{"item_id": item_id, "score": score}
+                  for item_id, score in zip(expected_item_ids, expected_scores)]
+    transcript_sha = hashlib.sha256(json.dumps(
+        transcript, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")).hexdigest()
+    if (item_ids != expected_item_ids or scores != expected_scores
+            or int(panel.get("fixed_teaching_target_state", -1))
+            != _binary_state_integer(expected_scores)
+            or panel.get("fixed_teaching_target_transcript_sha256") != transcript_sha):
+        raise ValueError("teaching-panel selection disagrees with frozen target behavior")
+    return {**payload, "selection_sha256": observed}
+
+
 def build_frozen_codebook_manifest(
     bootstrap_paths: Sequence[str | Path],
     *,
@@ -386,6 +945,7 @@ def build_frozen_codebook_manifest(
         else:
             selected = eligible[:n_options - 1]
         prior_calibration = selection.get("prior_calibration")
+        teaching_panel_selection = selection.get("teaching_panel_selection")
         entry = {
             "target_metric_key": target["key"],
             "target_description": target["description"],
@@ -411,23 +971,48 @@ def build_frozen_codebook_manifest(
             "failure": (None if len(selected) == n_options - 1 else
                         f"only {len(selected)} eligible distractors for {n_options - 1} required"),
         }
+        if selection.get("teaching_rescue_selection") is not None:
+            entry["teaching_rescue_selection"] = selection["teaching_rescue_selection"]
         if freeze_teaching_panels and entry["valid"]:
             selected_views = {
                 candidate["key"]: candidate for candidate in views
                 if candidate["key"] in entry["distractor_metric_keys"]
             }
-            distractor_vectors = [
-                selected_views[key]["target"][teaching_candidate_indices]
-                for key in entry["distractor_metric_keys"]
-            ]
-            chosen_local, teaching_design = _exact_contrastive_example_indices(
-                target["target"][teaching_candidate_indices],
-                distractor_vectors,
-                n_examples=teaching_size,
-                min_disagreements=0,
-                require_target_balance=False,
-            )
-            fixed_indices = teaching_candidate_indices[chosen_local]
+            if teaching_panel_selection:
+                validated_selection = _validated_teaching_panel_override(
+                    teaching_panel_selection,
+                    target=target,
+                    distractor_keys=entry["distractor_metric_keys"],
+                    candidate_indices=teaching_candidate_indices,
+                )
+                expected_bootstraps = {
+                    key: (target if key == target["key"] else selected_views[key])["sha256"]
+                    for key in [target["key"], *entry["distractor_metric_keys"]]
+                }
+                if validated_selection["bootstrap_sha256"] != expected_bootstraps:
+                    raise ValueError("teaching-panel option bootstraps changed")
+                panel = validated_selection["panel"]
+                fixed_indices = np.asarray(panel["fixed_teaching_indices"], dtype=int)
+                teaching_design = {
+                    **dict(panel["design_statistics"]),
+                    "solver": "prospective prehashed teaching-panel library",
+                    "library_index": int(validated_selection["library_index"]),
+                    "library_sha256": validated_selection["library_sha256"],
+                }
+                entry["teaching_panel_selection"] = validated_selection
+            else:
+                distractor_vectors = [
+                    selected_views[key]["target"][teaching_candidate_indices]
+                    for key in entry["distractor_metric_keys"]
+                ]
+                chosen_local, teaching_design = _exact_contrastive_example_indices(
+                    target["target"][teaching_candidate_indices],
+                    distractor_vectors,
+                    n_examples=teaching_size,
+                    min_disagreements=0,
+                    require_target_balance=False,
+                )
+                fixed_indices = teaching_candidate_indices[chosen_local]
             target_bits = (target["target"][fixed_indices] > 0.5).astype(np.uint8)
             item_ids = [hashlib.sha256(
                 str(target["probe_texts"][index]).encode("utf-8")
@@ -446,6 +1031,8 @@ def build_frozen_codebook_manifest(
                 ).encode("utf-8")).hexdigest(),
                 "fixed_teaching_design": teaching_design,
                 "fixed_teaching_selection_rule": (
+                    "prospective prehashed T8 library arm selected before prompt search"
+                    if teaching_panel_selection else
                     "exact max-min contrastive design on canonical target/distractor executor "
                     "behaviors in the disjoint panel-design complement"),
             })
@@ -908,6 +1495,281 @@ def select_state_capable_panels(
     return selections
 
 
+def capped_prior_passing_panel_rows(
+    rows: Sequence[Mapping[str, object]], *, max_menus: int = TEACHING_MAX_MENUS,
+) -> list[dict]:
+    """Prospectively cap prior-passing menus by behavior-only hardness."""
+    if int(max_menus) != TEACHING_MAX_MENUS:
+        raise ValueError(f"bound-grade teaching rescue requires M={TEACHING_MAX_MENUS}")
+    passing = [dict(row) for row in rows if row.get("passes_prior_balance")]
+    def rank(row: dict) -> tuple:
+        prior = row["prior"]
+        mean_prior = list(prior["canonical_mean_prior"])
+        chance = 1.0 / len(mean_prior)
+        return (
+            -float(prior["normalized_entropy"]),
+            float(prior["total_variation_from_uniform"]),
+            abs(float(prior["target_probability"]) - chance),
+            -float(row["behavioral_panel_statistics"]["selected_distractor_kappa_min"]),
+            -float(row["behavioral_panel_statistics"]["selected_distractor_kappa_mean"]),
+            -int(row["behavioral_panel_statistics"]["selected_distractor_disagreements_min"]),
+            str(row["panel_id"]),
+        )
+    passing.sort(key=rank)
+    return passing[:max_menus]
+
+
+def _canonical_identification_diagnostic(envelope: Mapping[str, object]) -> dict:
+    diagnostic = dict(envelope.get("operational_target_diagnostic") or {})
+    posterior = np.asarray(diagnostic.get("mean_annotation_option_posterior"), dtype=float)
+    if (posterior.ndim != 1 or len(posterior) < 2 or np.any(~np.isfinite(posterior))
+            or not np.isclose(posterior.sum(), 1.0, rtol=0.0, atol=1e-9)):
+        raise ValueError("state envelope lacks a valid canonical-target posterior")
+    value = float(diagnostic.get("value", np.nan))
+    if not np.isfinite(value) or value < 0.0:
+        raise ValueError("state envelope lacks a valid canonical-target value")
+    unique = bool(posterior[0] > float(np.max(posterior[1:])) + 1e-12)
+    positive = bool(value > 1e-12)
+    return {
+        "canonical_state": int(diagnostic["state"]),
+        "canonical_value": value,
+        "canonical_target_posterior": float(posterior[0]),
+        "canonical_posterior_margin": float(posterior[0] - np.max(posterior[1:])),
+        "positive_canonical_lift": positive,
+        "unique_target_posterior_argmax": unique,
+        "canonical_live": bool(positive and unique),
+        "design_only_not_achieved_prompt_evidence": True,
+    }
+
+
+def teaching_screen_candidate_record(
+    *, library: Mapping[str, object], library_index: int,
+    codebook_manifest: Mapping[str, object], target_metric_key: str,
+    envelope: Mapping[str, object],
+) -> dict:
+    """Bind one exact four-order state screen to its prospective T8 arm."""
+    validate_teaching_panel_library(
+        library, codebook_manifest if int(library_index) == 0 else _baseline_manifest_for_library(
+            library, codebook_manifest), target_metric_key=target_metric_key)
+    # Validation above deliberately replays from the byte-compatible baseline manifest. Variant
+    # codebooks contain the selected arm and therefore have a different manifest hash.
+    selection = teaching_panel_selection_from_library(
+        library, library_index=int(library_index))
+    panel = selection["panel"]
+    entry = codebook_manifest["entries"][str(target_metric_key)]
+    if (entry["fixed_teaching_indices"] != panel["fixed_teaching_indices"]
+            or entry["fixed_teaching_target_scores"] != panel["fixed_teaching_target_scores"]
+            or envelope.get("codebook_manifest_sha256")
+            != codebook_manifest["manifest_sha256"]
+            or envelope.get("target_metric_key") != str(target_metric_key)):
+        raise ValueError("teaching screen is bound to the wrong T8/codebook")
+    order_design = dict(envelope.get("option_order_design") or {})
+    _validated_option_order_design(
+        order_design,
+        n_options=int(codebook_manifest["n_options"]),
+        n_draws=TEACHING_SCREEN_DRAWS,
+        label="teaching rescue screen",
+    )
+    canonical = _canonical_identification_diagnostic(envelope)
+    core = {
+        "schema": "cr3-reconstruction-teaching-screen-candidate-v1",
+        "target_metric_key": str(target_metric_key),
+        "prior_panel_id": str(selection["prior_panel_id"]),
+        "library_sha256": str(selection["library_sha256"]),
+        "library_index": int(library_index),
+        "teaching_panel_sha256": str(panel["teaching_panel_sha256"]),
+        "teaching_panel_selection": selection,
+        "codebook_manifest_sha256": codebook_manifest["manifest_sha256"],
+        "instrument_sha256": str(envelope["instrument_sha256"]),
+        "envelope_summary_sha256": str(envelope["summary_sha256"]),
+        "state_function_semantic_sha256": str(envelope["state_function_semantic_sha256"]),
+        "screen_option_order_design": order_design,
+        "screen_finite_state_upper_bound": float(envelope["finite_state_upper_bound"]),
+        "canonical_identification": canonical,
+        "synthetic_envelope_live_diagnostic": bool(
+            (envelope.get("state_envelope_capability") or {}).get(
+                "has_positive_unique_target_maximizer")),
+        "uses_candidate_prompt_behavior": False,
+        "uses_external_labels": False,
+    }
+    return {**core, "screen_candidate_sha256": _payload_sha256(core)}
+
+
+def _baseline_manifest_for_library(
+    library: Mapping[str, object], variant_codebook_manifest: Mapping[str, object],
+) -> dict:
+    """Rebuild the exact baseline manifest needed to reproduce a variant's library."""
+    binding = dict(library.get("input_binding") or {})
+    target_key = str(binding.get("target_metric_key", ""))
+    variant_entry = variant_codebook_manifest["entries"][target_key]
+    prior = variant_entry.get("prior_calibration")
+    panel_selection = {
+        target_key: {
+            "distractor_metric_keys": list(variant_entry["distractor_metric_keys"]),
+            "prior_calibration": prior,
+        },
+    }
+    baseline = build_frozen_codebook_manifest(
+        [variant_codebook_manifest["metrics"][key]["bootstrap_path"]
+         for key in binding["option_metric_keys"]],
+        n_options=int(variant_codebook_manifest["n_options"]),
+        design_size=len(variant_codebook_manifest["design_indices"]),
+        min_design_disagreements=int(variant_codebook_manifest["min_design_disagreements"]),
+        seed=int(variant_codebook_manifest["design_seed"]),
+        panel_selections=panel_selection,
+        reconstruction_noun=str(variant_codebook_manifest["reconstruction_noun"]),
+        reconstruction_max_chars=int(variant_codebook_manifest["reconstruction_max_chars"]),
+    )
+    if baseline["manifest_sha256"] != binding.get("baseline_codebook_manifest_sha256"):
+        raise ValueError("cannot reproduce teaching library baseline from variant codebook")
+    return baseline
+
+
+def build_teaching_finalist_lock(
+    candidates: Sequence[Mapping[str, object]], *,
+    finalist_count: int = TEACHING_FULL_FINALISTS,
+) -> dict:
+    """Select and immutably lock F screen finalists before full-factorial scoring."""
+    if int(finalist_count) != TEACHING_FULL_FINALISTS:
+        raise ValueError(f"bound-grade teaching rescue requires F={TEACHING_FULL_FINALISTS}")
+    rows = [dict(row) for row in candidates]
+    if not rows:
+        raise ValueError("teaching rescue has no screen candidates")
+    target_keys = {str(row.get("target_metric_key")) for row in rows}
+    if len(target_keys) != 1:
+        raise ValueError("one finalist lock cannot mix target metrics")
+    menu_ids = {str(row.get("prior_panel_id")) for row in rows}
+    if len(menu_ids) > TEACHING_MAX_MENUS:
+        raise ValueError("teaching rescue exceeds its prospective menu cap")
+    for row in rows:
+        core = dict(row)
+        observed = str(core.pop("screen_candidate_sha256", ""))
+        if (core.get("schema") != "cr3-reconstruction-teaching-screen-candidate-v1"
+                or observed != _payload_sha256(core)
+                or core.get("uses_candidate_prompt_behavior") is not False
+                or core.get("uses_external_labels") is not False):
+            raise ValueError("invalid teaching screen candidate")
+    counts_by_menu = {
+        menu_id: sum(str(row["prior_panel_id"]) == menu_id for row in rows)
+        for menu_id in sorted(menu_ids)
+    }
+    if any(count != TEACHING_LIBRARY_SIZE for count in counts_by_menu.values()):
+        raise ValueError("every screened menu must contribute exactly K teaching panels")
+    rows.sort(key=lambda row: (
+        not bool(row["canonical_identification"]["canonical_live"]),
+        -float(row["canonical_identification"]["canonical_value"]),
+        -float(row["screen_finite_state_upper_bound"]),
+        str(row["prior_panel_id"]),
+        int(row["library_index"]),
+    ))
+    finalists = rows[:finalist_count]
+    if len(finalists) != finalist_count:
+        raise ValueError("teaching rescue lacks the declared number of finalists")
+    baseline_rows = [row for row in rows if int(row["library_index"]) == 0]
+    core = {
+        "schema": TEACHING_FINALIST_LOCK_SCHEMA,
+        "target_metric_key": next(iter(target_keys)),
+        "menu_cap": TEACHING_MAX_MENUS,
+        "library_size_per_menu": TEACHING_LIBRARY_SIZE,
+        "screen_draws": TEACHING_SCREEN_DRAWS,
+        "full_factorial_finalist_count": finalist_count,
+        "candidate_screen_sha256": sorted(
+            str(row["screen_candidate_sha256"]) for row in rows),
+        "n_screen_candidates": len(rows),
+        "screened_menu_ids": sorted(menu_ids),
+        "n_screened_menus": len(menu_ids),
+        "screen_candidates_per_menu": counts_by_menu,
+        "n_baseline_candidates": len(baseline_rows),
+        "finalists": finalists,
+        "baseline_canonical_live": any(
+            bool(row["canonical_identification"]["canonical_live"])
+            for row in baseline_rows),
+        "rescue_triggered": not any(
+            bool(row["canonical_identification"]["canonical_live"])
+            for row in baseline_rows),
+        "selection_rule": (
+            "canonical-live first; canonical value; U4; stable panel/library IDs"),
+        "canonical_behavior_role": "instrument design only; excluded from achieved lower bounds",
+        "uses_candidate_prompt_behavior": False,
+        "uses_external_labels": False,
+    }
+    return {**core, "finalist_lock_sha256": _payload_sha256(core)}
+
+
+def select_full24_teaching_instrument(
+    finalist_lock: Mapping[str, object],
+    full_envelopes: Mapping[str, Mapping[str, object]],
+) -> dict:
+    """Select the final exact instrument from the prelocked full24 finalists."""
+    lock = dict(finalist_lock)
+    observed_lock = str(lock.pop("finalist_lock_sha256", ""))
+    if (lock.get("schema") != TEACHING_FINALIST_LOCK_SCHEMA
+            or observed_lock != _payload_sha256(lock)
+            or lock.get("uses_candidate_prompt_behavior") is not False
+            or lock.get("uses_external_labels") is not False):
+        raise ValueError("invalid or mutated teaching finalist lock")
+    evaluated = []
+    for finalist in lock["finalists"]:
+        candidate_sha = str(finalist["screen_candidate_sha256"])
+        if candidate_sha not in full_envelopes:
+            raise ValueError("prelocked teaching finalist lacks a full24 envelope")
+        envelope = dict(full_envelopes[candidate_sha])
+        design = dict(envelope.get("option_order_design") or {})
+        _validated_option_order_design(
+            design, n_options=4, n_draws=24, label="teaching finalist full24 envelope")
+        if (envelope.get("target_metric_key") != lock["target_metric_key"]
+                or envelope.get("instrument_sha256") != finalist["instrument_sha256"]):
+            raise ValueError("full24 envelope is bound to the wrong teaching finalist")
+        canonical = _canonical_identification_diagnostic(envelope)
+        evaluated.append({
+            **dict(finalist),
+            "full24_envelope_summary_sha256": str(envelope["summary_sha256"]),
+            "full24_state_function_semantic_sha256": str(
+                envelope["state_function_semantic_sha256"]),
+            "full24_finite_state_upper_bound": float(envelope["finite_state_upper_bound"]),
+            "full24_canonical_identification": canonical,
+            "full24_synthetic_envelope_live_diagnostic": bool(
+                (envelope.get("state_envelope_capability") or {}).get(
+                    "has_positive_unique_target_maximizer")),
+        })
+    evaluated.sort(key=lambda row: (
+        not bool(row["full24_canonical_identification"]["canonical_live"]),
+        -float(row["full24_finite_state_upper_bound"]),
+        -float(row["full24_canonical_identification"]["canonical_value"]),
+        str(row["prior_panel_id"]),
+        int(row["library_index"]),
+    ))
+    chosen = evaluated[0]
+    any_live = any(row["full24_canonical_identification"]["canonical_live"]
+                   for row in evaluated)
+    core = {
+        "schema": "cr3-reconstruction-teaching-final-selection-v1",
+        "target_metric_key": lock["target_metric_key"],
+        "finalist_lock_sha256": observed_lock,
+        "passes_canonical_identification": bool(any_live),
+        "reporting_status": "HEADLINE_CANDIDATE" if any_live else "FORMAL_CERTIFICATE_ONLY",
+        "chosen_screen_candidate_sha256": chosen["screen_candidate_sha256"],
+        "chosen_prior_panel_id": chosen["prior_panel_id"],
+        "chosen_library_sha256": chosen["library_sha256"],
+        "chosen_library_index": int(chosen["library_index"]),
+        "chosen_teaching_panel_sha256": chosen["teaching_panel_sha256"],
+        "chosen_teaching_panel_selection": chosen["teaching_panel_selection"],
+        "chosen_finite_state_upper_bound": chosen["full24_finite_state_upper_bound"],
+        "chosen_envelope_summary_sha256": chosen["full24_envelope_summary_sha256"],
+        "chosen_state_function_semantic_sha256": chosen[
+            "full24_state_function_semantic_sha256"],
+        "chosen_canonical_identification": chosen["full24_canonical_identification"],
+        "chosen_synthetic_envelope_live_diagnostic": chosen[
+            "full24_synthetic_envelope_live_diagnostic"],
+        "evaluated_finalists": evaluated,
+        "selection_rule": "canonical-live first; U24; canonical value; stable IDs",
+        "canonical_behavior_role": "instrument design only; excluded from achieved lower bounds",
+        "uses_candidate_prompt_behavior": False,
+        "uses_external_labels": False,
+    }
+    return {**core, "final_selection_sha256": _payload_sha256(core)}
+
+
 def validate_codebook_manifest(manifest: Mapping[str, object]) -> None:
     payload = dict(manifest)
     observed = str(payload.pop("manifest_sha256", ""))
@@ -960,6 +1822,42 @@ def validate_codebook_manifest(manifest: Mapping[str, object]) -> None:
         if (_binary_state_integer(scores) != int(entry.get("fixed_teaching_target_state", -1))
                 or transcript_sha != entry.get("fixed_teaching_target_transcript_sha256")):
             raise ValueError(f"metric {key} has a mutated fixed target transcript")
+        if entry.get("teaching_panel_selection"):
+            metadata = payload["metrics"][key]
+            target = _bootstrap(metadata["bootstrap_path"])
+            if target["sha256"] != metadata["bootstrap_sha256"]:
+                raise ValueError(f"metric {key} teaching bootstrap changed")
+            selected = _validated_teaching_panel_override(
+                entry["teaching_panel_selection"],
+                target=target,
+                distractor_keys=entry["distractor_metric_keys"],
+                candidate_indices=np.asarray(candidates, dtype=int),
+            )
+            option_keys = [key, *entry["distractor_metric_keys"]]
+            expected_bootstraps = {}
+            for option_key in option_keys:
+                option_meta = payload["metrics"][option_key]
+                option = _bootstrap(option_meta["bootstrap_path"])
+                if option["sha256"] != option_meta["bootstrap_sha256"]:
+                    raise ValueError(f"metric {option_key} teaching bootstrap changed")
+                expected_bootstraps[option_key] = option["sha256"]
+            panel = selected["panel"]
+            if (selected["bootstrap_sha256"] != expected_bootstraps
+                    or panel["fixed_teaching_indices"] != indices
+                    or panel["fixed_teaching_item_ids"] != item_ids
+                    or panel["fixed_teaching_target_scores"] != scores):
+                raise ValueError(f"metric {key} teaching-panel selection is not the stored T8")
+        if entry.get("teaching_rescue_selection"):
+            rescue = dict(entry["teaching_rescue_selection"])
+            rescue_sha = str(rescue.pop("final_selection_sha256", ""))
+            if (rescue.get("schema") != "cr3-reconstruction-teaching-final-selection-v1"
+                    or rescue_sha != _payload_sha256(rescue)
+                    or rescue.get("target_metric_key") != key
+                    or rescue.get("uses_candidate_prompt_behavior") is not False
+                    or rescue.get("uses_external_labels") is not False
+                    or rescue.get("chosen_teaching_panel_selection")
+                    != entry.get("teaching_panel_selection")):
+                raise ValueError(f"metric {key} has an invalid teaching-rescue selection")
 
 
 def _load_scored_rows(path: str | Path, *, expected_probe_sha256: str) -> dict:
@@ -1498,10 +2396,14 @@ def build_finite_state_envelope(
             "mean_annotation_option_posterior": canonical_posterior.tolist(),
             "positive_annotation_lift": canonical_positive_lift,
             "unique_target_posterior_argmax": canonical_unique_argmax,
-            "is_headline_gate": False,
+            "is_instrument_identification_gate": True,
+            "is_headline_gate": True,
+            "eligible_as_achieved_prompt_lower_bound": False,
             "note": (
-                "replay of the frozen operational target/orbit behavior; neither ground truth, "
-                "necessarily realizable by one prompt, nor an oracle-capability requirement"),
+                "prospective design-only replay of the frozen operational target behavior. "
+                "Positive lift plus unique target identification is required for headline "
+                "instrument validity, but this replay is not ground truth and is excluded from "
+                "achieved prompt lower bounds"),
         },
         "bound_identity": (
             "for every finite executable prompt p, V(p)=v(s_T(p)) "

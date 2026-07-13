@@ -43,17 +43,28 @@ from methods.metric_implementer.experiments.cr_audit import (  # noqa: E402
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (  # noqa: E402
     CachedChoiceReconstructor,
     FIXED_TEACHING_SIZE,
+    TEACHING_FULL_FINALISTS,
+    TEACHING_LIBRARY_SIZE,
+    TEACHING_MAX_MENUS,
+    TEACHING_SCREEN_DRAWS,
     build_finite_state_envelope,
     build_codebook_panel_plan,
     build_frozen_codebook_manifest,
+    build_teaching_finalist_lock,
+    build_teaching_panel_library,
+    capped_prior_passing_panel_rows,
     import_choice_probability_cache,
     load_value_artifact,
     lookup_scored_prompt_values,
     prior_balanced_panel_rows,
     select_prior_balanced_panels,
+    select_full24_teaching_instrument,
     select_state_capable_panels,
+    teaching_panel_selection_from_library,
+    teaching_screen_candidate_record,
     validate_codebook_manifest,
     validate_finite_state_envelope,
+    validate_teaching_panel_library,
     write_finite_state_scored_artifact,
     write_value_artifact,
 )
@@ -430,15 +441,23 @@ def mcq_instrument_quality(state: dict, args) -> dict:
     reasons = []
     coarse_cap = float(state["coarse_range_cap"])
     capability = dict(state["finite_state_envelope"]["state_envelope_capability"])
+    operational = dict(state["finite_state_envelope"]["operational_target_diagnostic"])
+    state_selection = dict(entry.get("state_envelope_selection") or {})
+    canonical_live = bool(
+        operational.get("positive_annotation_lift")
+        and operational.get("unique_target_posterior_argmax"))
     if coarse_cap < args.mcq_min_headline_value_cap:
         reasons.append("frozen no-demo target prior leaves too little value headroom")
     if not prior_calibration.get("passes_prior_balance", False):
         reasons.append("no candidate menu passed the predeclared blind no-demo prior-balance gate")
     if state["value_cap"] < target_value_gap(args):
         reasons.append("finite-state envelope is below the predeclared value resolution")
-    if not capability.get("has_positive_unique_target_maximizer"):
+    if not state_selection.get("passes_canonical_identification", False):
         reasons.append(
-            "no envelope-maximizing transcript has positive lift and uniquely identifies the target")
+            "the prelocked full24 canonical target behavior does not positively and uniquely "
+            "identify the metric")
+    if bool(state_selection.get("passes_canonical_identification", False)) != canonical_live:
+        raise RuntimeError("final canonical-identification selection disagrees with its envelope")
     if (len(prior) != 4 or fixed.shape[0] != 24
             or not option_order_design["exact_full_factorial"]
             or not option_order_design["each_permutation_exactly_once"]):
@@ -463,9 +482,11 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "finite_state_global_value_cap": float(state["value_cap"]),
         "coarse_no_demo_range_cap": coarse_cap,
         "state_envelope_capability": capability,
+        "synthetic_envelope_maximizer_capability_is_headline_gate": False,
         "option_order_design": option_order_design,
-        "operational_target_diagnostic": state["finite_state_envelope"][
-            "operational_target_diagnostic"],
+        "operational_target_diagnostic": operational,
+        "canonical_target_identification_is_headline_gate": True,
+        "teaching_rescue_selection": entry.get("teaching_rescue_selection"),
         "target_design_yes_rate": float(entry["target_design_yes_rate"]),
         "selected_distractor_kappa_min": min_kappa,
         "selected_distractor_kappa_mean": float(np.mean(
@@ -476,10 +497,10 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "selected_distractor_kappa_is_headline_gate": False,
         "prior_calibration": prior_calibration,
         "scope": (
-            "blind-prior, coarse-headroom, and exhaustive finite-state target-identification "
-            "capability gates for scientific headline use; the operational target replay and "
-            "kappa are descriptive only. Gate failure does not invalidate the fixed-instrument "
-            "all-prompt finite-state inequality"),
+            "blind-prior, coarse-headroom, and canonical-target instrument-identification gates "
+            "for scientific headline use. The artificial envelope maximizer and kappa remain "
+            "descriptive; gate failure does not invalidate the fixed-instrument all-prompt "
+            "finite-state inequality"),
     }
 
 
@@ -487,6 +508,60 @@ def mcq_reported_global_status(formal_status: str, instrument_quality: dict) -> 
     """Prevent a valid but uninformative fixed-panel theorem from becoming a headline."""
     return (str(formal_status) if instrument_quality.get("headline_eligible")
             else "FORMAL_CERTIFICATE_ONLY")
+
+
+def _design_witness_value_evidence(
+    state: dict,
+    values: np.ndarray,
+    details: list[dict],
+) -> tuple[np.ndarray, list[dict], list[str], np.ndarray]:
+    """Exclude frozen target-form design inputs from achieved prompt evidence.
+
+    The target-form behaviors are legitimate prospective instrument-design inputs, but
+    replaying those same prompt texts is not independent evidence that prompt search
+    achieved their value.  The exhaustive all-state upper bound remains untouched.
+    """
+    observed = np.asarray(values, float)
+    if observed.ndim != 1 or len(observed) != len(details):
+        raise RuntimeError("MCQ value evidence and row details do not align")
+    witness_hashes = {
+        hashlib.sha256(str(text).encode("utf-8")).hexdigest()
+        for text in state["target_form_texts"]
+    }
+    if not witness_hashes:
+        raise RuntimeError("MCQ design-witness exclusion set is empty")
+    eligible = np.ones(len(observed), dtype=bool)
+    annotated = []
+    species = []
+    for index, detail in enumerate(details):
+        candidate_sha = str(detail.get("candidate_prompt_sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{64}", candidate_sha):
+            raise RuntimeError(
+                f"MCQ value row {index} lacks a bound candidate-prompt hash")
+        row_eligible = candidate_sha not in witness_hashes
+        eligible[index] = row_eligible
+        row = dict(detail)
+        row["achieved_prompt_evidence"] = {
+            "eligible": bool(row_eligible),
+            "policy": "exclude_all_frozen_target_form_text_sha256",
+            "candidate_prompt_sha256": candidate_sha,
+            "design_witness_sha256": sorted(witness_hashes),
+            "reason": (
+                None if row_eligible else
+                "prompt text was a prospective target-form instrument-design input"
+            ),
+        }
+        annotated.append(row)
+        transcript_sha = str((detail.get("design") or {}).get(
+            "teaching_transcript_sha256") or "")
+        if not re.fullmatch(r"[0-9a-f]{64}", transcript_sha):
+            raise RuntimeError(f"MCQ value row {index} lacks an exact value-species hash")
+        species.append(
+            transcript_sha if row_eligible else
+            f"design-witness-excluded:{candidate_sha}")
+    achieved = observed.copy()
+    achieved[~eligible] = 0.0
+    return achieved, annotated, species, eligible
 
 
 def _worker_environment(args) -> dict[str, str]:
@@ -742,6 +817,20 @@ def _manifest_payload(args) -> dict:
         "mcq_reconstruction_draws": args.mcq_reconstruction_draws,
         "mcq_option_order_design": mcq_option_order_design(
             args.mcq_n_options, args.mcq_reconstruction_draws),
+        "mcq_teaching_rescue": {
+            "menu_cap_per_target": TEACHING_MAX_MENUS,
+            "library_size_per_menu": TEACHING_LIBRARY_SIZE,
+            "screen_draws": TEACHING_SCREEN_DRAWS,
+            "screen_option_order_design": mcq_option_order_design(
+                args.mcq_n_options, TEACHING_SCREEN_DRAWS),
+            "full24_finalists_per_target": TEACHING_FULL_FINALISTS,
+            "canonical_live_gate": (
+                "positive canonical-target lift and unique target mean-posterior argmax"),
+            "canonical_behavior_role": (
+                "instrument design only; excluded from achieved prompt lower bounds"),
+            "uses_candidate_prompt_behavior": False,
+            "uses_external_labels": False,
+        },
         "mcq_headline_option_order_requirement": (
             "four options; all 24 permutations exactly once"),
         "mcq_max_chars": args.mcq_max_chars,
@@ -753,8 +842,8 @@ def _manifest_payload(args) -> dict:
         "mcq_distractor_kappa_role": "descriptive_near_clone_diagnostic_only",
         "mcq_fixed_hard_annotation_rule": "1 iff normalized pYES > 0.5; ties map to 0",
         "mcq_panel_selection_policy": (
-            "prior_pass -> positive_unique_target_envelope_maximizer -> max_U_state -> "
-            "behavioral_hardness -> panel_id"),
+            "M4 prior-pass menus -> K8 prospective T8 screen -> F2 prelocked full24 -> "
+            "canonical-live -> max_U_state -> stable IDs"),
         "mcq_candidate_value_mode": "exact_cpu_lookup_in_immutable_2^8_state_table",
         "mcq_prior_candidate_pool_size": args.mcq_prior_candidate_pool_size,
         "mcq_prior_max_panels_per_target": args.mcq_prior_max_panels_per_target,
@@ -1067,18 +1156,31 @@ def _dry_score(items: list[dict], worlds: dict[str, dict], executor: str) -> Non
 
 
 def _validate_mcq_stage_draw_contract(stage: str, items: list[dict], expected: int) -> None:
-    """Ensure production jobs never depend on the worker's legacy four-draw fallback."""
+    """Bind headline jobs to full24 and prospective T8 screens to their exact prefix."""
     field = {
         "codebook_prior": "n_draws",
         "value": "n_reconstruction_draws",
     }.get(stage)
     if field is None:
         return
-    invalid = [index for index, item in enumerate(items)
-               if field not in item or int(item[field]) != int(expected)]
+    invalid = []
+    for index, item in enumerate(items):
+        item_expected = (
+            TEACHING_SCREEN_DRAWS
+            if stage == "value" and item.get("instrument_role") == "teaching_rescue_screen"
+            else int(expected)
+        )
+        if field not in item or int(item[field]) != item_expected:
+            invalid.append(index)
     if invalid:
+        expected_text = (
+            f"{field}={int(expected)}"
+            if not any(stage == "value" and item.get("instrument_role")
+                       == "teaching_rescue_screen" for item in items)
+            else f"{field} in {{{TEACHING_SCREEN_DRAWS},{int(expected)}}} by instrument role"
+        )
         raise RuntimeError(
-            f"MCQ {stage} jobs {invalid} do not explicitly bind {field}={int(expected)}")
+            f"MCQ {stage} jobs {invalid} do not explicitly bind {expected_text}")
 
 
 def _mcq_calibration_matches_order_design(
@@ -1518,8 +1620,37 @@ def prepare_mcq_codebook_bootstraps(root: Path, manifest: dict, args) -> dict[st
     return paths_by_task
 
 
+def _frozen_prior_selection(target_key: str, row: dict, target_rows: list[dict],
+                            ranked: dict) -> dict:
+    passing = [candidate for candidate in target_rows if candidate["passes_prior_balance"]]
+    return {
+        target_key: {
+            "distractor_metric_keys": list(row["distractor_metric_keys"]),
+            "prior_calibration": {
+                "panel_id": str(row["panel_id"]),
+                "passes_prior_balance": bool(row["passes_prior_balance"]),
+                "prior": row["prior"],
+                "violations": row["prior_balance_violations"],
+                "thresholds": ranked["thresholds"],
+                "n_panels_evaluated": len(target_rows),
+                "n_panels_passing": len(passing),
+                "calibration_sha256": ranked["calibration_sha256"],
+            },
+        },
+    }
+
+
+def _write_or_validate_frozen_json(path: Path, payload: dict, *, label: str) -> None:
+    if path.exists():
+        if json.loads(path.read_text()) != payload:
+            raise RuntimeError(f"{label} changed across resume: {path}")
+    else:
+        _atomic_json(path, payload)
+
+
 def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, args,
                           candidate_paths_by_task: dict[str, list[Path]]) -> None:
+    """Freeze M4xK8 T8 screens, F2 full24 finalists, then one final instrument."""
     if args.value_mode != "reconstruction_mcq":
         return
     reuse_root = (Path(args.reuse_mcq_codebook_root).resolve()
@@ -1528,15 +1659,10 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
         source_cache = reuse_root / "mcq_query_cache" / "choice_probabilities.sqlite"
         if source_cache.exists():
             cache_report = import_choice_probability_cache(
-                source_cache,
-                root / "mcq_query_cache" / "choice_probabilities.sqlite",
-            )
-            cache_report_path = root / "mcq_query_cache" / "reuse_import.json"
-            if cache_report_path.exists():
-                if json.loads(cache_report_path.read_text()) != cache_report:
-                    raise RuntimeError("reused MCQ choice-cache import changed across resume")
-            else:
-                _atomic_json(cache_report_path, cache_report)
+                source_cache, root / "mcq_query_cache" / "choice_probabilities.sqlite")
+            _write_or_validate_frozen_json(
+                root / "mcq_query_cache" / "reuse_import.json", cache_report,
+                label="reused MCQ choice-cache import")
 
     by_task: dict[str, list[dict]] = {}
     for state in states.values():
@@ -1547,32 +1673,21 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
         paths = sorted(candidate_paths_by_task.get(task, []), key=lambda path: str(path))
         if not paths:
             raise RuntimeError(f"no frozen MCQ codebook candidates were prepared for task {task}")
-        expected_namespaces = {
-            (
-                state["probe_sha256"],
-                args.executor,
-                state["executor_model_revision"],
-                state["readout_id"],
-                state["cache_namespace_sha256"],
-            )
-            for state in task_states
-        }
+        expected_namespaces = {(
+            state["probe_sha256"], args.executor, state["executor_model_revision"],
+            state["readout_id"], state["cache_namespace_sha256"],
+        ) for state in task_states}
         if len(expected_namespaces) != 1:
             raise RuntimeError(f"target bootstraps do not share one executor namespace for {task}")
         expected_namespace = next(iter(expected_namespaces))
         for candidate_path in paths:
             z = np.load(candidate_path, allow_pickle=False)
             candidate_namespace = tuple(str(z[field]) for field in (
-                "probe_sha256",
-                "executor_model",
-                "executor_model_revision",
-                "readout_id",
-                "cache_namespace_sha256",
-            ))
+                "probe_sha256", "executor_model", "executor_model_revision",
+                "readout_id", "cache_namespace_sha256"))
             if candidate_namespace != expected_namespace:
                 raise RuntimeError(
-                    f"MCQ candidate executor namespace differs from target bootstrap: "
-                    f"{candidate_path}")
+                    f"MCQ candidate executor namespace differs from target bootstrap: {candidate_path}")
         plan = build_codebook_panel_plan(
             paths,
             target_metric_keys=[state["key"] for state in task_states],
@@ -1594,32 +1709,22 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
                 semantic.pop("plan_sha256", None)
                 semantic.pop("base_codebook_manifest_sha256", None)
             if semantic_old != semantic_new:
-                # Candidate bootstraps remain reusable when the prospective panel budget expands.
-                # Do not transplant the old calibration; exact rendered-query cache rows may still hit.
                 reusable_plan_payload = None
         plan_path = root / "mcq_codebooks" / f"{task}.panel_plan.json"
-        if plan_path.exists():
-            if json.loads(plan_path.read_text()) != plan:
-                raise RuntimeError(f"frozen MCQ panel plan changed for task {task}")
-        else:
-            _atomic_json(plan_path, plan)
+        _write_or_validate_frozen_json(plan_path, plan, label=f"MCQ panel plan for {task}")
         calibration_path = root / "mcq_codebooks" / f"{task}.prior_calibration.json"
         if (not calibration_path.exists() and reuse_root is not None
                 and reusable_plan_payload is not None):
-            reusable_calibration = (
-                reuse_root / "mcq_codebooks" / f"{task}.prior_calibration.json")
+            reusable_calibration = reuse_root / "mcq_codebooks" / f"{task}.prior_calibration.json"
             if reusable_calibration.exists():
                 observed_calibration = json.loads(reusable_calibration.read_text())
-                same_order_design = _mcq_calibration_matches_order_design(
-                    observed_calibration, manifest["mcq_option_order_design"])
-                if same_order_design:
+                if _mcq_calibration_matches_order_design(
+                        observed_calibration, manifest["mcq_option_order_design"]):
                     validate_reconstructor_artifact_contract(
                         observed_calibration, manifest,
                         role=f"reusable MCQ prior calibration for {task}")
-                    # Selection validates both the calibration checksum and exact plan binding.
                     select_prior_balanced_panels(
-                        reusable_plan_payload,
-                        observed_calibration,
+                        reusable_plan_payload, observed_calibration,
                         maximum_option_probability=args.mcq_prior_max_option_probability,
                         target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
                         minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
@@ -1633,18 +1738,13 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
                             calibration_core, sort_keys=True, separators=(",", ":")
                         ).encode("utf-8")).hexdigest(),
                     }
-                    # Numeric rows are reused exactly; only the root-bound plan hash changes.
                     select_prior_balanced_panels(
-                        plan,
-                        transplanted,
+                        plan, transplanted,
                         maximum_option_probability=args.mcq_prior_max_option_probability,
                         target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
                         minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
                     )
                     _atomic_json(calibration_path, transplanted)
-                # A nonmatching calibration is a different finite functional. Its query cache was
-                # already imported above, so the shared four-row prefix still hits while the worker
-                # computes only the missing factorial rows into this root's private cache.
         if not calibration_path.exists():
             calibration_jobs.append({
                 "panel_plan": str(plan_path),
@@ -1661,18 +1761,12 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
         planned[task] = (task_states, paths, plan, calibration_path)
 
     run_stage(
-        stage="codebook_prior",
-        items=calibration_jobs,
+        stage="codebook_prior", items=calibration_jobs,
         jobs_file=root / "jobs" / "codebook_prior.json",
-        model=args.mcq_reconstructor,
-        family="",
-        temperature=0.0,
-        args=args,
-        worlds={},
-    )
+        model=args.mcq_reconstructor, family="", temperature=0.0, args=args, worlds={})
 
-    panel_searches = {}
-    panel_value_jobs = []
+    task_searches = {}
+    screen_jobs = []
     for task, (task_states, paths, plan, calibration_path) in planned.items():
         if not calibration_path.exists():
             raise RuntimeError(f"missing MCQ prior calibration for task {task}")
@@ -1681,113 +1775,143 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
             calibration, manifest, role=f"MCQ prior calibration for {task}")
         if (calibration.get("noun") != manifest["mcq_task_nouns"][task]
                 or int(calibration.get("n_draws", -1)) != args.mcq_reconstruction_draws):
-            raise RuntimeError(
-                f"MCQ prior calibration rendering contract changed for task {task}")
+            raise RuntimeError(f"MCQ prior calibration rendering contract changed for task {task}")
         ranked = prior_balanced_panel_rows(
-            plan,
-            calibration,
+            plan, calibration,
+            maximum_option_probability=args.mcq_prior_max_option_probability,
+            target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+            minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+        )
+        fallback = select_prior_balanced_panels(
+            plan, calibration,
             maximum_option_probability=args.mcq_prior_max_option_probability,
             target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
             minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
         )
         path_by_key = {path.parents[1].name: path for path in paths}
-        reconstruction_noun = manifest["mcq_task_nouns"][task]
         records = []
         for target_key, target_rows in ranked["rows"].items():
-            passing = [row for row in target_rows if row["passes_prior_balance"]]
-            for row in passing:
+            menu_rows = capped_prior_passing_panel_rows(target_rows)
+            if not menu_rows:
+                fallback_id = fallback[target_key]["prior_calibration"]["panel_id"]
+                menu_rows = [next(row for row in target_rows if row["panel_id"] == fallback_id)]
+            for row in menu_rows:
                 panel_id = str(row["panel_id"])
                 selected_keys = [target_key, *row["distractor_metric_keys"]]
                 if any(key not in path_by_key for key in selected_keys):
                     raise RuntimeError(f"panel {panel_id} references an absent codebook metric")
-                provisional_selection = {
-                    target_key: {
-                        "distractor_metric_keys": list(row["distractor_metric_keys"]),
-                        "prior_calibration": {
-                            "panel_id": panel_id,
-                            "passes_prior_balance": True,
-                            "prior": row["prior"],
-                            "violations": row["prior_balance_violations"],
-                            "thresholds": ranked["thresholds"],
-                            "n_panels_evaluated": len(target_rows),
-                            "n_panels_passing": len(passing),
-                            "calibration_sha256": ranked["calibration_sha256"],
-                        },
-                    },
-                }
-                provisional = build_frozen_codebook_manifest(
+                baseline_selection = _frozen_prior_selection(
+                    target_key, row, target_rows, ranked)
+                baseline = build_frozen_codebook_manifest(
                     [path_by_key[key] for key in selected_keys],
                     n_options=args.mcq_n_options,
                     design_size=args.mcq_design_size,
                     min_design_disagreements=args.mcq_min_design_disagreements,
                     seed=stable_seed("mcq-codebook", task) % (2 ** 32),
-                    panel_selections=provisional_selection,
-                    reconstruction_noun=reconstruction_noun,
+                    panel_selections=baseline_selection,
+                    reconstruction_noun=manifest["mcq_task_nouns"][task],
                     reconstruction_max_chars=args.mcq_max_chars,
                 )
-                panel_dir = root / "mcq_panel_envelopes" / target_key / panel_id
-                codebook_path = panel_dir / "codebook.json"
-                if codebook_path.exists():
-                    observed = json.loads(codebook_path.read_text())
-                    validate_codebook_manifest(observed)
-                    if observed != provisional:
-                        raise RuntimeError(
-                            f"provisional codebook changed for {target_key}/{panel_id}")
+                library = build_teaching_panel_library(
+                    baseline, target_metric_key=target_key)
+                library_dir = root / "mcq_teaching_rescue" / target_key / panel_id
+                library_path = library_dir / "teaching_library.json"
+                if library_path.exists():
+                    observed_library = json.loads(library_path.read_text())
+                    validate_teaching_panel_library(
+                        observed_library, baseline, target_metric_key=target_key)
+                    if observed_library != library:
+                        raise RuntimeError(f"teaching library changed for {target_key}/{panel_id}")
                 else:
-                    _atomic_json(codebook_path, provisional)
-                state_path = panel_dir / "states.npz"
-                write_finite_state_scored_artifact(
-                    state_path,
-                    codebook_manifest=provisional,
-                    target_metric_key=target_key,
-                )
-                value_path = panel_dir / "values.npz"
-                if not value_path.exists():
-                    panel_value_jobs.append({
-                        "codebook_manifest": str(codebook_path),
+                    _atomic_json(library_path, library)
+                for library_index, panel in enumerate(library["panels"]):
+                    if library_index == 0:
+                        codebook = baseline
+                        candidate_dir = root / "mcq_panel_envelopes" / target_key / panel_id
+                    else:
+                        selection = _frozen_prior_selection(
+                            target_key, row, target_rows, ranked)
+                        selection[target_key]["teaching_panel_selection"] = (
+                            teaching_panel_selection_from_library(
+                                library, library_index=library_index))
+                        codebook = build_frozen_codebook_manifest(
+                            [path_by_key[key] for key in selected_keys],
+                            n_options=args.mcq_n_options,
+                            design_size=args.mcq_design_size,
+                            min_design_disagreements=args.mcq_min_design_disagreements,
+                            seed=stable_seed("mcq-codebook", task) % (2 ** 32),
+                            panel_selections=selection,
+                            reconstruction_noun=manifest["mcq_task_nouns"][task],
+                            reconstruction_max_chars=args.mcq_max_chars,
+                        )
+                        candidate_dir = library_dir / (
+                            f"candidate_{library_index:02d}_{panel['teaching_panel_sha256'][:12]}")
+                    codebook_path = candidate_dir / "codebook.json"
+                    if codebook_path.exists():
+                        observed = json.loads(codebook_path.read_text())
+                        validate_codebook_manifest(observed)
+                        if observed != codebook:
+                            raise RuntimeError(
+                                f"T8 codebook changed for {target_key}/{panel_id}/{library_index}")
+                    else:
+                        _atomic_json(codebook_path, codebook)
+                    state_path = candidate_dir / "states.npz"
+                    write_finite_state_scored_artifact(
+                        state_path, codebook_manifest=codebook,
+                        target_metric_key=target_key)
+                    screen_value_path = candidate_dir / "screen_values.npz"
+                    if not screen_value_path.exists():
+                        screen_jobs.append({
+                            "instrument_role": "teaching_rescue_screen",
+                            "codebook_manifest": str(codebook_path),
+                            "target_metric_key": target_key,
+                            "scored": str(state_path),
+                            "noun": manifest["mcq_task_nouns"][task],
+                            "n_examples": FIXED_TEACHING_SIZE,
+                            "n_reconstruction_draws": TEACHING_SCREEN_DRAWS,
+                            "max_chars": args.mcq_max_chars,
+                            "choice_readout": args.mcq_choice_readout,
+                            "query_batch_size": args.mcq_value_query_batch_size,
+                            "choice_probability_cache": str(
+                                root / "mcq_query_cache" / "choice_probabilities.sqlite"),
+                            "fixed_no_demo_canonical_choice_probabilities": row["prior"][
+                                "canonical_choice_probabilities"][:TEACHING_SCREEN_DRAWS],
+                            "expected_reconstructor_model": manifest["mcq_reconstructor"],
+                            "expected_reconstructor_revision": manifest[
+                                "mcq_reconstructor_revision"],
+                            "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
+                            "out": str(screen_value_path),
+                        })
+                    records.append({
                         "target_metric_key": target_key,
-                        "scored": str(state_path),
-                        "noun": reconstruction_noun,
-                        "n_examples": FIXED_TEACHING_SIZE,
-                        "n_reconstruction_draws": args.mcq_reconstruction_draws,
-                        "max_chars": args.mcq_max_chars,
-                        "choice_readout": args.mcq_choice_readout,
-                        "query_batch_size": args.mcq_value_query_batch_size,
-                        "choice_probability_cache": str(
-                            root / "mcq_query_cache" / "choice_probabilities.sqlite"),
-                        "fixed_no_demo_canonical_choice_probabilities": row["prior"][
-                            "canonical_choice_probabilities"],
-                        "expected_reconstructor_model": manifest["mcq_reconstructor"],
-                        "expected_reconstructor_revision": manifest[
-                            "mcq_reconstructor_revision"],
-                        "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
-                        "out": str(value_path),
+                        "panel_id": panel_id,
+                        "row": row,
+                        "library": library,
+                        "library_index": library_index,
+                        "candidate_dir": candidate_dir,
+                        "codebook": codebook,
+                        "codebook_path": codebook_path,
+                        "state_path": state_path,
+                        "screen_value_path": screen_value_path,
                     })
-                records.append({
-                    "target_metric_key": target_key,
-                    "panel_id": panel_id,
-                    "codebook": provisional,
-                    "state_path": state_path,
-                    "value_path": value_path,
-                })
-        panel_searches[task] = (task_states, paths, plan, calibration, records)
+        task_searches[task] = {
+            "task_states": task_states, "paths": paths, "plan": plan,
+            "calibration": calibration, "ranked": ranked, "records": records,
+        }
 
     run_stage(
-        stage="value",
-        items=panel_value_jobs,
-        jobs_file=root / "jobs" / "panel_envelope_values.json",
-        model=args.mcq_reconstructor,
-        family="",
-        temperature=0.0,
-        args=args,
-        worlds={},
-    )
+        stage="value", items=screen_jobs,
+        jobs_file=root / "jobs" / "teaching_rescue_screen_values.json",
+        model=args.mcq_reconstructor, family="", temperature=0.0, args=args, worlds={})
 
-    for task, (task_states, paths, plan, calibration, records) in panel_searches.items():
-        panel_envelopes: dict[str, dict[str, dict]] = {}
-        for record in records:
+    full24_jobs = []
+    finalist_records = {}
+    locks = {}
+    for task, search in task_searches.items():
+        by_target: dict[str, list[dict]] = {}
+        for record in search["records"]:
             values = load_value_artifact(
-                record["value_path"],
+                record["screen_value_path"],
                 expected_source_scored_sha256=file_sha256(record["state_path"]),
                 expected_codebook_manifest_sha256=record["codebook"]["manifest_sha256"],
                 expected_choice_readout_id=manifest["mcq_choice_readout_protocol"],
@@ -1797,32 +1921,159 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
             envelope = build_finite_state_envelope(
                 codebook_manifest=record["codebook"],
                 target_metric_key=record["target_metric_key"],
-                state_scored_path=record["state_path"],
-                value_payload=values,
-            )
-            envelope_path = record["value_path"].with_name("envelope.json")
+                state_scored_path=record["state_path"], value_payload=values)
+            envelope_path = record["candidate_dir"] / "screen_envelope.json"
             if envelope_path.exists():
                 validate_finite_state_envelope(
                     json.loads(envelope_path.read_text()),
                     codebook_manifest=record["codebook"],
                     target_metric_key=record["target_metric_key"],
-                    state_scored_path=record["state_path"],
-                    value_payload=values,
-                )
+                    state_scored_path=record["state_path"], value_payload=values)
             else:
                 _atomic_json(envelope_path, envelope)
-            panel_envelopes.setdefault(record["target_metric_key"], {})[
-                record["panel_id"]] = envelope
-        selections = select_state_capable_panels(
-            plan,
-            calibration,
-            panel_envelopes,
-            maximum_option_probability=args.mcq_prior_max_option_probability,
-            target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
-            minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
-        )
+            candidate = teaching_screen_candidate_record(
+                library=record["library"], library_index=record["library_index"],
+                codebook_manifest=record["codebook"],
+                target_metric_key=record["target_metric_key"], envelope=envelope)
+            record["screen_candidate"] = candidate
+            by_target.setdefault(record["target_metric_key"], []).append(record)
+        for target_key, target_records in by_target.items():
+            lock = build_teaching_finalist_lock(
+                [record["screen_candidate"] for record in target_records])
+            lock_path = root / "mcq_teaching_rescue" / target_key / "finalist_lock.json"
+            _write_or_validate_frozen_json(
+                lock_path, lock, label=f"teaching finalist lock for {target_key}")
+            locks[target_key] = lock
+            by_sha = {record["screen_candidate"]["screen_candidate_sha256"]: record
+                      for record in target_records}
+            for finalist in lock["finalists"]:
+                candidate_sha = finalist["screen_candidate_sha256"]
+                record = by_sha[candidate_sha]
+                full_value_path = (
+                    record["candidate_dir"] / "values.npz"
+                    if record["library_index"] == 0 else
+                    record["candidate_dir"] / "full24_values.npz")
+                record["full24_value_path"] = full_value_path
+                finalist_records[candidate_sha] = record
+                if not full_value_path.exists():
+                    full24_jobs.append({
+                        "instrument_role": "teaching_rescue_full24_finalist",
+                        "codebook_manifest": str(record["codebook_path"]),
+                        "target_metric_key": target_key,
+                        "scored": str(record["state_path"]),
+                        "noun": manifest["mcq_task_nouns"][task],
+                        "n_examples": FIXED_TEACHING_SIZE,
+                        "n_reconstruction_draws": args.mcq_reconstruction_draws,
+                        "max_chars": args.mcq_max_chars,
+                        "choice_readout": args.mcq_choice_readout,
+                        "query_batch_size": args.mcq_value_query_batch_size,
+                        "choice_probability_cache": str(
+                            root / "mcq_query_cache" / "choice_probabilities.sqlite"),
+                        "fixed_no_demo_canonical_choice_probabilities": record["row"]["prior"][
+                            "canonical_choice_probabilities"],
+                        "expected_reconstructor_model": manifest["mcq_reconstructor"],
+                        "expected_reconstructor_revision": manifest[
+                            "mcq_reconstructor_revision"],
+                        "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
+                        "out": str(full_value_path),
+                    })
+
+    run_stage(
+        stage="value", items=full24_jobs,
+        jobs_file=root / "jobs" / "teaching_rescue_full24_values.json",
+        model=args.mcq_reconstructor, family="", temperature=0.0, args=args, worlds={})
+
+    final_by_target = {}
+    for target_key, lock in locks.items():
+        envelopes = {}
+        for finalist in lock["finalists"]:
+            candidate_sha = finalist["screen_candidate_sha256"]
+            record = finalist_records[candidate_sha]
+            values = load_value_artifact(
+                record["full24_value_path"],
+                expected_source_scored_sha256=file_sha256(record["state_path"]),
+                expected_codebook_manifest_sha256=record["codebook"]["manifest_sha256"],
+                expected_choice_readout_id=manifest["mcq_choice_readout_protocol"],
+                expected_reconstructor_model=manifest["mcq_reconstructor"],
+                expected_reconstructor_revision=manifest["mcq_reconstructor_revision"],
+            )
+            envelope = build_finite_state_envelope(
+                codebook_manifest=record["codebook"], target_metric_key=target_key,
+                state_scored_path=record["state_path"], value_payload=values)
+            envelope_path = record["candidate_dir"] / (
+                "envelope.json" if record["library_index"] == 0 else "full24_envelope.json")
+            if envelope_path.exists():
+                validate_finite_state_envelope(
+                    json.loads(envelope_path.read_text()),
+                    codebook_manifest=record["codebook"], target_metric_key=target_key,
+                    state_scored_path=record["state_path"], value_payload=values)
+            else:
+                _atomic_json(envelope_path, envelope)
+            envelopes[candidate_sha] = envelope
+        selection = select_full24_teaching_instrument(lock, envelopes)
+        selection_path = root / "mcq_teaching_rescue" / target_key / "final_selection.json"
+        _write_or_validate_frozen_json(
+            selection_path, selection, label=f"teaching final selection for {target_key}")
+        final_by_target[target_key] = selection
+
+    for task, search in task_searches.items():
+        selections = {}
+        for state in search["task_states"]:
+            target_key = state["key"]
+            final = final_by_target[target_key]
+            panel_id = final["chosen_prior_panel_id"]
+            target_rows = search["ranked"]["rows"][target_key]
+            row = next(row for row in target_rows if row["panel_id"] == panel_id)
+            selection = _frozen_prior_selection(
+                target_key, row, target_rows, search["ranked"])[target_key]
+            selection["teaching_panel_selection"] = final["chosen_teaching_panel_selection"]
+            selection["teaching_rescue_selection"] = final
+            chosen = next(candidate for candidate in final["evaluated_finalists"]
+                          if candidate["screen_candidate_sha256"]
+                          == final["chosen_screen_candidate_sha256"])
+            selection["state_envelope_selection"] = {
+                "method": "prelocked_F2_full24; canonical-live_then_max_U_state",
+                "passes_canonical_identification": bool(
+                    final["passes_canonical_identification"]),
+                "passes_state_capability": bool(
+                    final["chosen_synthetic_envelope_live_diagnostic"]),
+                "chosen_panel_id": panel_id,
+                "chosen_finite_state_upper_bound": final[
+                    "chosen_finite_state_upper_bound"],
+                "chosen_envelope_summary_sha256": final[
+                    "chosen_envelope_summary_sha256"],
+                "chosen_state_function_semantic_sha256": final[
+                    "chosen_state_function_semantic_sha256"],
+                "chosen_canonical_identification": final[
+                    "chosen_canonical_identification"],
+                "n_prior_passing_panels": sum(
+                    bool(candidate["passes_prior_balance"]) for candidate in target_rows),
+                "n_screened_menus": int(locks[target_key]["n_screened_menus"]),
+                "n_screened_teaching_panels": int(
+                    locks[target_key]["n_screen_candidates"]),
+                "n_full24_finalists": len(final["evaluated_finalists"]),
+                "n_full24_canonical_live": sum(
+                    bool(candidate["full24_canonical_identification"]["canonical_live"])
+                    for candidate in final["evaluated_finalists"]),
+                "candidate_envelopes": [{
+                    "panel_id": candidate["prior_panel_id"],
+                    "library_index": candidate["library_index"],
+                    "finite_state_upper_bound": candidate[
+                        "full24_finite_state_upper_bound"],
+                    "canonical_live": candidate[
+                        "full24_canonical_identification"]["canonical_live"],
+                    "synthetic_envelope_live_diagnostic": candidate[
+                        "full24_synthetic_envelope_live_diagnostic"],
+                    "envelope_summary_sha256": candidate[
+                        "full24_envelope_summary_sha256"],
+                    "state_function_semantic_sha256": candidate[
+                        "full24_state_function_semantic_sha256"],
+                } for candidate in final["evaluated_finalists"]],
+                "chosen_screen_candidate_sha256": chosen["screen_candidate_sha256"],
+            }
+            selections[target_key] = selection
         expected = build_frozen_codebook_manifest(
-            paths,
+            search["paths"],
             n_options=args.mcq_n_options,
             design_size=args.mcq_design_size,
             min_design_disagreements=args.mcq_min_design_disagreements,
@@ -1832,14 +2083,9 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
             reconstruction_max_chars=args.mcq_max_chars,
         )
         path = root / "mcq_codebooks" / f"{task}.json"
-        if path.exists():
-            observed = json.loads(path.read_text())
-            validate_codebook_manifest(observed)
-            if observed["manifest_sha256"] != expected["manifest_sha256"]:
-                raise RuntimeError(f"frozen MCQ codebook changed for task {task}")
-        else:
-            _atomic_json(path, expected)
-        for state in task_states:
+        _write_or_validate_frozen_json(path, expected, label=f"final MCQ codebook for {task}")
+        validate_codebook_manifest(expected)
+        for state in search["task_states"]:
             entry = expected["entries"].get(state["key"])
             if not entry or not entry["valid"]:
                 raise RuntimeError(
@@ -1983,6 +2229,27 @@ def prepare_mcq_finite_state_tables(
                 summary["state_envelope_capability"][
                     "has_positive_unique_target_maximizer"]):
             raise RuntimeError(f"final state capability changed after panel selection for {key}")
+        operational = summary["operational_target_diagnostic"]
+        canonical_live = bool(
+            operational["positive_annotation_lift"]
+            and operational["unique_target_posterior_argmax"])
+        if (chosen_bound is not None
+                and bool(selection.get("passes_canonical_identification")) != canonical_live):
+            raise RuntimeError(
+                f"final canonical-target identification changed after panel selection for {key}")
+        chosen_canonical = selection.get("chosen_canonical_identification")
+        if chosen_canonical is not None:
+            posterior = np.asarray(operational["mean_annotation_option_posterior"], float)
+            if (int(chosen_canonical["canonical_state"]) != int(operational["state"])
+                    or not np.isclose(
+                        float(chosen_canonical["canonical_value"]),
+                        float(operational["value"]), rtol=0.0, atol=1e-12)
+                    or not np.isclose(
+                        float(chosen_canonical["canonical_target_posterior"]),
+                        float(posterior[0]), rtol=0.0, atol=1e-12)
+                    or bool(chosen_canonical["canonical_live"]) != canonical_live):
+                raise RuntimeError(
+                    f"final canonical-target diagnostic changed after panel selection for {key}")
         chosen_semantic = selection.get("chosen_state_function_semantic_sha256")
         if (chosen_semantic is not None
                 and str(chosen_semantic) != summary["state_function_semantic_sha256"]):
@@ -2082,7 +2349,10 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, 
                 and bool(absorbed["premises"].get("value_determined_by_exact_behavior")))
             values.append(absorbed["values"])
             details.extend(absorbed["details"])
-        state["pool_values"] = np.concatenate(values)
+        raw_pool_values = np.concatenate(values)
+        (state["pool_values"], details, state["pool_value_species"],
+         state["pool_value_eligibility"]) = _design_witness_value_evidence(
+            state, raw_pool_values, details)
         if np.any(state["pool_values"] > state["value_cap"] + 1e-12):
             raise RuntimeError(f"prompt value exceeds exhaustive finite-state envelope for {key}")
         if len(state["pool_values"]) != len(state["pool"]):
@@ -2090,10 +2360,11 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, 
         if len(details) != len(state["pool"]):
             raise RuntimeError(f"prompt/value-detail pool length mismatch for {key}")
         state["pool_value_details"] = details
-        state["pool_value_species"] = [
-            detail["design"]["teaching_transcript_sha256"] for detail in details
-        ]
-        state["value_determined_by_exact_behavior"] = value_determined_by_exact_behavior
+        state["n_design_witness_pool_rows_excluded"] = int(
+            np.sum(~state["pool_value_eligibility"]))
+        state["value_determined_by_exact_behavior"] = bool(
+            value_determined_by_exact_behavior
+            and np.all(state["pool_value_eligibility"]))
         confirmation_path = state["dir"] / "confirmation" / "certificate.json"
         if confirmation_path.exists():
             certificate = json.loads(confirmation_path.read_text())
@@ -2518,26 +2789,27 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             raise RuntimeError("Reconstruction-MCQ audit changed the frozen no-demo global cap")
         if np.any(np.asarray(value_payload["values"], float) > state["value_cap"] + 1e-12):
             raise RuntimeError("Reconstruction-MCQ audit value exceeds the finite-state envelope")
+        (audit_achieved_values, _audit_value_details, audit_value_species,
+         audit_value_eligibility) = _design_witness_value_evidence(
+            state, value_payload["values"], list(value_payload["details"]))
         value_determined_by_exact_behavior = (
             bool(state["value_determined_by_exact_behavior"])
-            and bool(value_payload["premises"].get("value_determined_by_exact_behavior")))
+            and bool(value_payload["premises"].get("value_determined_by_exact_behavior"))
+            and bool(np.all(audit_value_eligibility)))
         cert = prompt_articulation_certificate(
             state["pool"], audit, None, families,
             pool_values=state["pool_values"],
-            audit_values=value_payload["values"],
+            audit_values=audit_achieved_values,
             value_cap=state["value_cap"],
             value_name=state["value_name"],
             value_unit=state["value_unit"],
             value_determined_by_exact_behavior=value_determined_by_exact_behavior,
             pool_value_species=state["pool_value_species"],
-            audit_value_species=[
-                detail["design"]["teaching_transcript_sha256"]
-                for detail in value_payload["details"]
-            ],
+            audit_value_species=audit_value_species,
             **common,
         )
         pool_best = float(cert["certified"]["pool_best_prompt_value"])
-        audit_best = float(np.max(value_payload["values"]))
+        audit_best = float(np.max(audit_achieved_values))
         best = max(pool_best, audit_best)
         gap = float(max(0.0, state["value_cap"] - best))
         epsilon = target_value_gap(args)
@@ -2565,6 +2837,19 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             "best_evaluated_lower_bound": best,
             "absorbed_pool_best_lower_bound": pool_best,
             "current_audit_best_lower_bound": audit_best,
+            "achieved_evidence_exclusion": {
+                "policy": "exclude_all_frozen_target_form_text_sha256",
+                "design_witness_sha256": sorted({
+                    hashlib.sha256(str(text).encode("utf-8")).hexdigest()
+                    for text in state["target_form_texts"]
+                }),
+                "n_pool_rows_excluded": int(
+                    state["n_design_witness_pool_rows_excluded"]),
+                "n_current_audit_rows_excluded": int(
+                    np.sum(~audit_value_eligibility)),
+                "canonical_design_replay_is_not_achieved_evidence": True,
+                "all_state_upper_bound_is_unchanged": True,
+            },
             "current_audit_role": certificate_role,
             "anchor_free_global_upper_bound": state["value_cap"],
             "finite_state_upper_bound": state["value_cap"],
@@ -2803,12 +3088,31 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
     headline_by_task: dict[str, list[dict]] = {}
     selected = {}
     for key, state in states.items():
-        best_index = int(np.argmax(state["pool_values"]))
-        detail = state["pool_value_details"][best_index]
-        by_task.setdefault(state["task"], []).append(detail)
+        by_task.setdefault(state["task"], [])
+        headline_by_task.setdefault(state["task"], [])
+        eligible_indices = np.flatnonzero(state["pool_value_eligibility"])
         quality = mcq_instrument_quality(state, args)
+        if len(eligible_indices) == 0:
+            selected[key] = {
+                "pool_index": None,
+                "value": 0.0,
+                "candidate_prompt_sha256": None,
+                "teaching_transcript_sha256": None,
+                "instrument_quality_status": quality["status"],
+                "headline_eligible": False,
+                "headline_ineligibility_reasons": [
+                    *quality["reasons"],
+                    "no non-design prompt is available as achieved evidence",
+                ],
+                "n_design_witness_rows_excluded": int(
+                    state["n_design_witness_pool_rows_excluded"]),
+            }
+            continue
+        best_index = int(eligible_indices[np.argmax(state["pool_values"][eligible_indices])])
+        detail = state["pool_value_details"][best_index]
+        by_task[state["task"]].append(detail)
         if quality["headline_eligible"]:
-            headline_by_task.setdefault(state["task"], []).append(detail)
+            headline_by_task[state["task"]].append(detail)
         selected[key] = {
             "pool_index": best_index,
             "value": float(state["pool_values"][best_index]),
@@ -2817,6 +3121,8 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
             "instrument_quality_status": quality["status"],
             "headline_eligible": bool(quality["headline_eligible"]),
             "headline_ineligibility_reasons": list(quality["reasons"]),
+            "n_design_witness_rows_excluded": int(
+                state["n_design_witness_pool_rows_excluded"]),
         }
 
     def summarize_identity_channels(rows: list[dict]) -> dict:
@@ -2851,11 +3157,14 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
         headline_summary = summarize_identity_channels(eligible_rows)
         headline_valid = bool(
             headline_summary["channels"]["annotations"].get("valid"))
-        all_eligible = len(eligible_rows) == len(rows)
+        task_metric_count = sum(
+            state["task"] == task for state in states.values())
+        all_eligible = len(eligible_rows) == len(rows) == task_metric_count
         tasks[task] = {
             **summarize_identity_channels(rows),
             "hierarchy_level": next(iter(levels)),
-            "n_metrics": len(rows),
+            "n_metrics": task_metric_count,
+            "n_metrics_with_non_design_achieved_evidence": len(rows),
             "n_headline_eligible_metrics": len(eligible_rows),
             "unfiltered_channels_reporting_role": (
                 "headline_eligible" if all_eligible else
@@ -2999,6 +3308,9 @@ def main(argv=None) -> int:
     if (args.mcq_reconstruction_draws < args.mcq_n_options
             or args.mcq_reconstruction_draws % args.mcq_n_options != 0):
         parser.error("--mcq-reconstruction-draws must be a positive multiple of --mcq-n-options")
+    if (args.value_mode == "reconstruction_mcq"
+            and (args.mcq_n_options != 4 or args.mcq_reconstruction_draws != 24)):
+        parser.error("bound-grade teaching rescue requires exactly four options and all 24 orders")
     if args.mcq_max_chars <= 0 or args.mcq_value_query_batch_size <= 0:
         parser.error("MCQ character and value-query batch sizes must be positive")
     if (not 0.0 <= args.mcq_min_headline_value_cap <= 1.0
@@ -3166,16 +3478,22 @@ def main(argv=None) -> int:
                 _append_jsonl(state["dir"] / "absorption_ledger.jsonl", row)
                 state["pool"] = np.vstack([state["pool"], batch])
                 if key in values:
+                    (achieved_values, achieved_details, achieved_species,
+                     achieved_eligibility) = _design_witness_value_evidence(
+                        state, values[key]["values"], list(values[key]["details"]))
                     state["pool_values"] = np.concatenate([
-                        state["pool_values"], values[key]["values"]])
-                    state["pool_value_details"].extend(values[key]["details"])
-                    state["pool_value_species"].extend(
-                        detail["design"]["teaching_transcript_sha256"]
-                        for detail in values[key]["details"])
+                        state["pool_values"], achieved_values])
+                    state["pool_value_details"].extend(achieved_details)
+                    state["pool_value_species"].extend(achieved_species)
+                    state["pool_value_eligibility"] = np.concatenate([
+                        state["pool_value_eligibility"], achieved_eligibility])
+                    state["n_design_witness_pool_rows_excluded"] = int(
+                        np.sum(~state["pool_value_eligibility"]))
                     state["value_determined_by_exact_behavior"] = (
                         bool(state["value_determined_by_exact_behavior"])
                         and bool(values[key]["premises"].get(
-                            "value_determined_by_exact_behavior")))
+                            "value_determined_by_exact_behavior"))
+                        and bool(np.all(achieved_eligibility)))
                 state["iteration"] += 1
                 state["stopped"] = stopped
                 print(

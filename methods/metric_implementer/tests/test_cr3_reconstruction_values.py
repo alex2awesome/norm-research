@@ -488,7 +488,9 @@ def test_exhaustive_fixed_transcript_table_is_an_all_prompt_upper_envelope(tmp_p
     assert envelope["coarse_no_demo_range_cap"] == pytest.approx(0.8)
     assert envelope["state_envelope_capability"][
         "has_positive_unique_target_maximizer"] is True
-    assert envelope["operational_target_diagnostic"]["is_headline_gate"] is False
+    assert envelope["operational_target_diagnostic"]["is_headline_gate"] is True
+    assert envelope["operational_target_diagnostic"][
+        "eligible_as_achieved_prompt_lower_bound"] is False
     assert len(envelope["state_function_semantic_sha256"]) == 64
 
     target = np.load(paths[0], allow_pickle=True)["target"]

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 from types import SimpleNamespace
 
@@ -10,6 +11,7 @@ import numpy as np
 from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     _combined_tier_status,
     _apply_publication_gate,
+    _design_witness_value_evidence,
     _metric_task,
     _retryable_worker_failure,
     _validate_mcq_stage_draw_contract,
@@ -316,6 +318,11 @@ def test_mcq_gpu_jobs_explicitly_bind_factorial_draw_count():
         "codebook_prior", [{"n_draws": 24}], expected=24)
     _validate_mcq_stage_draw_contract(
         "value", [{"n_reconstruction_draws": 24}], expected=24)
+    _validate_mcq_stage_draw_contract(
+        "value", [{
+            "instrument_role": "teaching_rescue_screen",
+            "n_reconstruction_draws": 4,
+        }], expected=24)
     with np.testing.assert_raises_regex(RuntimeError, "explicitly bind n_draws=24"):
         _validate_mcq_stage_draw_contract("codebook_prior", [{}], expected=24)
     with np.testing.assert_raises_regex(
@@ -345,7 +352,12 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
             "state_envelope_capability": {
                 "has_positive_unique_target_maximizer": True,
             },
-            "operational_target_diagnostic": {"value": 0.0, "is_headline_gate": False},
+            "operational_target_diagnostic": {
+                "value": 0.1,
+                "positive_annotation_lift": True,
+                "unique_target_posterior_argmax": True,
+                "is_headline_gate": True,
+            },
         },
         "mcq_codebook_entry": {
             "target_design_yes_rate": 0.5,
@@ -353,6 +365,9 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
             "prior_calibration": {
                 "passes_prior_balance": True,
                 "prior": {"canonical_mean_prior": [0.25, 0.25, 0.25, 0.25]},
+            },
+            "state_envelope_selection": {
+                "passes_canonical_identification": True,
             },
         },
     }
@@ -366,6 +381,14 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
 
     state["finite_state_envelope"]["state_envelope_capability"][
         "has_positive_unique_target_maximizer"] = False
+    diagnostic = mcq_instrument_quality(state, args)
+    assert diagnostic["status"] == "HEADLINE_ELIGIBLE"
+    assert diagnostic["synthetic_envelope_maximizer_capability_is_headline_gate"] is False
+
+    state["finite_state_envelope"]["operational_target_diagnostic"][
+        "unique_target_posterior_argmax"] = False
+    state["mcq_codebook_entry"]["state_envelope_selection"][
+        "passes_canonical_identification"] = False
     diagnostic = mcq_instrument_quality(state, args)
     assert diagnostic["status"] == "FORMAL_CERTIFICATE_ONLY"
     assert diagnostic["headline_eligible"] is False
@@ -391,7 +414,12 @@ def test_nonfactorial_option_block_is_formal_only_despite_valid_state_bound():
             "state_envelope_capability": {
                 "has_positive_unique_target_maximizer": True,
             },
-            "operational_target_diagnostic": {"value": 0.1, "is_headline_gate": False},
+            "operational_target_diagnostic": {
+                "value": 0.1,
+                "positive_annotation_lift": True,
+                "unique_target_posterior_argmax": True,
+                "is_headline_gate": True,
+            },
         },
         "mcq_codebook_entry": {
             "target_design_yes_rate": 0.5,
@@ -403,6 +431,9 @@ def test_nonfactorial_option_block_is_formal_only_despite_valid_state_bound():
                 "passes_prior_balance": True,
                 "prior": {"canonical_mean_prior": [0.25, 0.25, 0.25, 0.25]},
             },
+            "state_envelope_selection": {
+                "passes_canonical_identification": True,
+            },
         },
     }
     diagnostic = mcq_instrument_quality(state, args)
@@ -411,6 +442,26 @@ def test_nonfactorial_option_block_is_formal_only_despite_valid_state_bound():
     assert diagnostic["reasons"] == [
         "headline Reconstruction-MCQ requires all 24 four-option orders exactly once"
     ]
+
+
+def test_target_form_design_witnesses_cannot_count_as_achieved_value():
+    target_forms = ["canonical metric", "paraphrased metric"]
+    witness_hash = hashlib.sha256(target_forms[1].encode()).hexdigest()
+    ordinary_hash = hashlib.sha256(b"independently mined prompt").hexdigest()
+    details = [{
+        "candidate_prompt_sha256": candidate_sha,
+        "design": {"teaching_transcript_sha256": transcript_sha},
+    } for candidate_sha, transcript_sha in (
+        (witness_hash, "1" * 64),
+        (ordinary_hash, "2" * 64),
+    )]
+    achieved, annotated, species, eligible = _design_witness_value_evidence(
+        {"target_form_texts": target_forms}, np.asarray([0.8, 0.6]), details)
+    assert achieved.tolist() == [0.0, 0.6]
+    assert eligible.tolist() == [False, True]
+    assert species == [f"design-witness-excluded:{witness_hash}", "2" * 64]
+    assert annotated[0]["achieved_prompt_evidence"]["eligible"] is False
+    assert annotated[1]["achieved_prompt_evidence"]["eligible"] is True
 
 
 def test_production_sampler_uses_unique_per_request_seeds_and_exact_quota():
@@ -703,7 +754,7 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
         "--family-modes", "atomic", "holistic", "atomic",
         "--mcq-design-size", "40",
         "--mcq-n-examples", "8",
-        "--mcq-reconstruction-draws", "4",
+        "--mcq-reconstruction-draws", "24",
     ]
     assert mining_main(argv) == 0
     run_manifest = json.loads((output / "run_manifest.json").read_text())
