@@ -54,9 +54,9 @@ _ENGINE_CACHE: Dict[str, object] = {}
 
 # Stable semantic protocol identifier for evidence/cache manifests. Any change to label
 # validation, constrained support, or posterior extraction must advance this value.
-CHOICE_READOUT_ID = "allowed-exact-single-token-choice-posterior-v1"
+CHOICE_READOUT_ID = "allowed-exact-single-token-choice-processed-posterior-v2"
 FAKE_CHOICE_READOUT_ID = "fake-hash-choice-probabilities-v1"
-CR3_BINARY_READOUT_ID = "rubric-first-pyes-allowed-two-token-content-seed-v2"
+CR3_BINARY_READOUT_ID = "rubric-first-pyes-allowed-two-token-processed-content-seed-v3"
 FAKE_CR3_BINARY_READOUT_ID = "fake-synthetic-binary-signature-v1"
 
 
@@ -184,11 +184,11 @@ class OfflineVLLM(_BaseVLLM):
         # sk3 env (matches the repo's 137 canonical recipes): pin HOME to /lfs BEFORE importing
         # vllm/HF (nohup AFS-token safety [[feedback_sk3_afs_tokens]]); disable FlashInfer
         # version check (required across sk3 scripts); MoE-FP8 safety for Qwen.
-        # The orchestrator pins VLLM_LFS_HOME to its declared worker-home before
+        # The orchestrator pins METRIC_IMPLEMENTER_LFS_HOME to its declared worker-home before
         # this process imports vLLM. Keep the sk3 fallback for older entry points.
         lfs_home = (
             getattr(cfg, "vllm_lfs_home", None)
-            or os.environ.get("VLLM_LFS_HOME")
+            or os.environ.get("METRIC_IMPLEMENTER_LFS_HOME")
             or "/lfs/skampere3/0/alexspan"
         )
         if lfs_home:
@@ -205,6 +205,10 @@ class OfflineVLLM(_BaseVLLM):
             dtype=getattr(cfg, "vllm_dtype", "auto"),   # 'auto' keeps FP8 weights / picks BF16
             trust_remote_code=True,
             enable_prefix_caching=True,                  # shared judge-system prefix reuse
+            # vLLM otherwise returns top-k raw model probabilities from before
+            # allowed_token_ids is applied. CR3 needs the complete posterior on
+            # the masked YES/NO or MCQ support.
+            logprobs_mode="processed_logprobs",
             tensor_parallel_size=getattr(cfg, "vllm_tp_size", 1),  # 1 GPU default (cluster rule)
         )
         # kv_cache_dtype='fp8' produces '!!!!' garbage on FP8 ckpts without calibrated attn

@@ -290,7 +290,7 @@ def test_worker_environment_is_pinned_before_gpu_subprocess_start(monkeypatch, t
     monkeypatch.setenv("TRITON_CACHE_DIR", "/afs/stale/triton")
     environment = _worker_environment(SimpleNamespace(worker_home=str(tmp_path)))
     assert environment["HOME"] == str(tmp_path.resolve())
-    assert environment["VLLM_LFS_HOME"] == str(tmp_path.resolve())
+    assert environment["METRIC_IMPLEMENTER_LFS_HOME"] == str(tmp_path.resolve())
     assert environment["XDG_CACHE_HOME"] == str(tmp_path.resolve() / ".cache")
     assert environment["TRITON_CACHE_DIR"] == str(tmp_path.resolve() / ".triton" / "cache")
     assert environment["VLLM_CONFIG_ROOT"] == str(tmp_path.resolve() / ".config" / "vllm")

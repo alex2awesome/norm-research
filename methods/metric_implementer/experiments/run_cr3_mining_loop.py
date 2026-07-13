@@ -18,6 +18,7 @@ import argparse
 import contextlib
 import fcntl
 import hashlib
+from importlib.metadata import PackageNotFoundError, version as package_version
 import json
 import os
 from pathlib import Path
@@ -430,13 +431,23 @@ def _worker_environment(args) -> dict[str, str]:
     home = str(Path(args.worker_home).resolve())
     environment.update({
         "HOME": home,
-        "VLLM_LFS_HOME": home,
+        "METRIC_IMPLEMENTER_LFS_HOME": home,
         "XDG_CACHE_HOME": str(Path(home) / ".cache"),
         "TRITON_CACHE_DIR": str(Path(home) / ".triton" / "cache"),
         "VLLM_CONFIG_ROOT": str(Path(home) / ".config" / "vllm"),
         "VLLM_NO_USAGE_STATS": "1",
     })
     return environment
+
+
+def _runtime_package_versions() -> dict[str, str]:
+    versions = {}
+    for package in ("vllm", "torch", "transformers", "numpy", "scipy"):
+        try:
+            versions[package] = package_version(package)
+        except PackageNotFoundError:
+            versions[package] = "not-installed"
+    return versions
 
 
 def _retryable_worker_failure(output: str) -> bool:
@@ -718,10 +729,11 @@ def _manifest_payload(args) -> dict:
         "worker_environment": {
             key: _worker_environment(args)[key]
             for key in (
-                "HOME", "VLLM_LFS_HOME", "XDG_CACHE_HOME", "TRITON_CACHE_DIR",
+                "HOME", "METRIC_IMPLEMENTER_LFS_HOME", "XDG_CACHE_HOME", "TRITON_CACHE_DIR",
                 "VLLM_CONFIG_ROOT", "VLLM_NO_USAGE_STATS",
             )
         },
+        "runtime_package_versions": _runtime_package_versions(),
         "worker_max_attempts": args.worker_max_attempts,
         "worker_retry_delay_seconds": args.worker_retry_delay_seconds,
         "code_sha256": {
