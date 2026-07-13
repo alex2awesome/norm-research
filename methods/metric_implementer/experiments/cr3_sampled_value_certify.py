@@ -33,13 +33,18 @@ from ..recon_channel import (
     mcq_no_demo_choice_probabilities,
 )
 from .cr3_reconstruction_values import (
+    _binary_state_rows,
     _bootstrap,
     _load_scored_rows,
     _payload_sha256,
     build_teaching_panel_library,
     validate_codebook_manifest,
 )
-from .cr_audit import dkw_expected_max_lower, dkw_expected_max_upper
+from .cr_audit import (
+    clopper_pearson_upper,
+    dkw_expected_max_lower,
+    dkw_expected_max_upper,
+)
 
 SAMPLED_VALUE_SCHEMA = "cr3-sampled-v13"
 PANEL_PLAN_SCHEMA = "cr3-sampled-panel-plan-v13"
@@ -100,6 +105,218 @@ def _allocate_horizon(sizes: Mapping[str, int], horizon: int) -> dict[str, int]:
     for family in order[:remainder]:
         allocation[family] += 1
     return allocation
+
+
+def _hard_state_integers(score_rows: np.ndarray, panel_indices: np.ndarray) -> np.ndarray:
+    """Per-prompt big-endian binary state over the panel's stored teaching order.
+
+    Matches ``_binary_state_integer``/``_binary_state_rows``: the first teaching item is
+    the most significant bit.
+    """
+    bits = (np.asarray(score_rows, dtype=float)[:, np.asarray(panel_indices, dtype=int)]
+            > 0.5).astype(np.int64)
+    weights = 1 << np.arange(bits.shape[1] - 1, -1, -1, dtype=np.int64)
+    return bits @ weights
+
+
+def _joint_tuple_species(panel_state_matrix: np.ndarray) -> list[str]:
+    """Serialize each prompt's per-panel state vector into one deterministic species key."""
+    matrix = np.asarray(panel_state_matrix, dtype=np.int64)
+    return ["-".join(str(int(state)) for state in row) for row in matrix]
+
+
+def _first_contact_novelty_counts(
+    species: Sequence[str], families: Sequence[str],
+) -> dict[str, dict]:
+    """Per-family first-contact counts of joint tuples against the family's own prefix.
+
+    A tuple new to the whole pool is necessarily new to its family, so the family-prefix
+    first-contact rate upper-bounds pool-level tuple novelty.
+    """
+    if len(species) != len(families):
+        raise ValueError("species and families must align one-to-one")
+    seen_by_family: dict[str, set[str]] = {}
+    counts: dict[str, dict] = {}
+    for tuple_key, family in zip(species, families):
+        family = str(family)
+        seen = seen_by_family.setdefault(family, set())
+        row = counts.setdefault(family, {
+            "n_draws": 0, "n_first_contact_novel_tuples": 0, "n_distinct_tuples": 0})
+        row["n_draws"] += 1
+        if tuple_key not in seen:
+            seen.add(tuple_key)
+            row["n_first_contact_novel_tuples"] += 1
+            row["n_distinct_tuples"] += 1
+    return counts
+
+
+def _unseen_tuple_probability_upper(u0_upper: float, horizon: int) -> float:
+    """P(any of ``horizon`` future family draws lands a never-seen joint tuple) <= this."""
+    if not 0.0 <= float(u0_upper) <= 1.0:
+        raise ValueError("u0_upper must lie in [0, 1]")
+    if int(horizon) < 0:
+        raise ValueError("horizon must be nonnegative")
+    return float(1.0 - (1.0 - float(u0_upper)) ** int(horizon))
+
+
+def _state_capture_recapture(
+    *,
+    panel_state_matrix: np.ndarray,
+    families: Sequence[str],
+    mined_indices: Sequence[int],
+    mean_value: np.ndarray,
+    value_cap: float,
+    alpha: float,
+    horizons: Sequence[int],
+    plan: Mapping[str, object],
+    draw_order_source: str,
+    state_values_by_panel: Sequence[np.ndarray] | None,
+) -> dict:
+    """The joint-tuple capture-recapture value-added block.
+
+    Novelty statistics run over MINED rows only; synthetic calibration controls are not
+    draws from the mining process. The free-recombination cap prices every enumerable
+    per-panel state, seen or not, so it dominates every achievable resampled mean value.
+    """
+    mined = np.asarray(mined_indices, dtype=int)
+    if len(mined) == 0:
+        raise ValueError("capture-recapture requires at least one mined pool row")
+    mined_species = _joint_tuple_species(np.asarray(panel_state_matrix)[mined])
+    mined_families = [str(families[index]) for index in mined]
+    counts = _first_contact_novelty_counts(mined_species, mined_families)
+    family_names = sorted(counts)
+    n_families = len(family_names)
+    per_family = {}
+    for family in family_names:
+        row = counts[family]
+        z = int(row["n_first_contact_novel_tuples"])
+        n = int(row["n_draws"])
+        per_family[family] = {
+            **row,
+            "missing_tuple_mass_upper_per_family_alpha": clopper_pearson_upper(
+                z, n, float(alpha)),
+            "missing_tuple_mass_upper_bonferroni_alpha": clopper_pearson_upper(
+                z, n, float(alpha) / n_families),
+        }
+
+    observed_best_mean_value_mined = float(np.max(np.asarray(mean_value, float)[mined]))
+    block: dict = {
+        "joint_tuple_species_definition": (
+            "hyphen-joined per-panel big-endian 8-bit state integers, in frozen panel-plan "
+            "order"),
+        "n_panels_R": int(np.asarray(panel_state_matrix).shape[1]),
+        "draw_order_source": str(draw_order_source),
+        "n_mined_draws": int(len(mined)),
+        "n_distinct_joint_tuples": int(len(set(mined_species))),
+        "observed_best_mean_value_mined": observed_best_mean_value_mined,
+        "per_family": per_family,
+        "premises": {
+            "joint_tuple_species_is_the_value_relevant_quotient": True,
+            "free_recombination_cap_is_conservative": True,
+            "u0_from_clopper_pearson_under_iid_within_family_exchangeability": True,
+            "family_prefix_first_contact_upper_bounds_pool_tuple_novelty": True,
+            "no_smoothness_lipschitz_or_submodularity_assumptions": True,
+            "controls_excluded_from_novelty_statistics": True,
+        },
+    }
+    if state_values_by_panel is None:
+        block["unseen_state_pricing"] = {
+            "computed": False,
+            "skip_reason": "unseen-state enumeration disabled by --skip-unseen-state-cap",
+        }
+        block["value_added_bounds"] = {
+            "computed": False,
+            "skip_reason": "the tuple-novelty gain formula requires the enumerated V-bar cap",
+        }
+        return block
+
+    n_panels = int(np.asarray(panel_state_matrix).shape[1])
+    if len(state_values_by_panel) != n_panels:
+        raise ValueError("state value tables must cover every panel")
+    per_panel = []
+    all_state_maxima = []
+    unseen_maxima = []
+    panels = list(plan["panels"])
+    for column in range(n_panels):
+        state_values = np.asarray(state_values_by_panel[column], dtype=float)
+        if state_values.shape != (256,) or np.any(~np.isfinite(state_values)):
+            raise ValueError("each panel needs one finite value per enumerated 8-bit state")
+        observed_states = set(
+            int(state) for state in np.asarray(panel_state_matrix)[mined, column])
+        unseen_states = [state for state in range(256) if state not in observed_states]
+        all_state_max = float(np.max(state_values))
+        unseen_state_max = (float(np.max(state_values[unseen_states]))
+                            if unseen_states else 0.0)
+        if unseen_state_max < 0.0:
+            raise RuntimeError("unseen-state maximum value left the [0, value_cap] range")
+        all_state_maxima.append(all_state_max)
+        unseen_maxima.append(unseen_state_max)
+        per_panel.append({
+            "panel_index": column,
+            "library_index": int(panels[column]["library_index"]),
+            "n_states": 256,
+            "n_pool_observed_states": len(observed_states),
+            "n_unseen_states": len(unseen_states),
+            "all_state_max_value": all_state_max,
+            "unseen_state_max_value": unseen_state_max,
+        })
+    v_bar_cap = float(np.mean(all_state_maxima))
+    if v_bar_cap < float(np.max(np.asarray(mean_value, float))) - 1e-9:
+        raise RuntimeError(
+            "free-recombination V-bar cap fell below an observed per-prompt mean value")
+    free_recombination_headroom = float(max(
+        0.0, v_bar_cap - observed_best_mean_value_mined))
+    block["unseen_state_pricing"] = {
+        "computed": True,
+        "n_states_per_panel": 256,
+        "state_encoding": "unsigned big-endian binary over the stored teaching order",
+        "per_panel": per_panel,
+        "mean_all_state_max_value_v_bar_cap": v_bar_cap,
+        "mean_unseen_state_max_value": float(np.mean(unseen_maxima)),
+        "value_cap": float(value_cap),
+        "free_recombination_headroom": free_recombination_headroom,
+    }
+
+    sizes = {family: int(counts[family]["n_draws"]) for family in family_names}
+    per_horizon = {}
+    for horizon in horizons:
+        family_rows = {}
+        for family in family_names:
+            u0_upper = per_family[family]["missing_tuple_mass_upper_per_family_alpha"]
+            probability_any = _unseen_tuple_probability_upper(u0_upper, int(horizon))
+            family_rows[family] = {
+                "family_horizon": int(horizon),
+                "component_alpha": float(alpha),
+                "missing_tuple_mass_upper": float(u0_upper),
+                "probability_any_unseen_tuple_upper": probability_any,
+                "unseen_tuple_gain_upper": float(
+                    probability_any * free_recombination_headroom),
+            }
+        allocation = _allocate_horizon(sizes, int(horizon))
+        pooled_no_unseen = 1.0
+        for family in family_names:
+            u0_bonferroni = per_family[family]["missing_tuple_mass_upper_bonferroni_alpha"]
+            pooled_no_unseen *= (1.0 - float(u0_bonferroni)) ** int(allocation[family])
+        pooled_probability_any = float(1.0 - pooled_no_unseen)
+        per_horizon[str(int(horizon))] = {
+            "per_family": family_rows,
+            "pooled": {
+                "horizon_allocation": {
+                    family: int(count) for family, count in allocation.items()},
+                "component_alpha": float(alpha) / n_families,
+                "probability_any_unseen_tuple_upper": pooled_probability_any,
+                "unseen_tuple_gain_upper": float(
+                    pooled_probability_any * free_recombination_headroom),
+            },
+        }
+    block["value_added_bounds"] = {
+        "computed": True,
+        "gain_formula": (
+            "probability_any_unseen_tuple_upper * max(0, v_bar_cap - "
+            "observed_best_mean_value_mined)"),
+        "per_horizon": per_horizon,
+    }
+    return block
 
 
 def _codebook_menu(codebook_manifest: Mapping[str, object], target_metric_key: str) -> dict:
@@ -279,6 +496,8 @@ def certify_sampled_value(
     query_batch_size: int = 512,
     planted_control: bool = False,
     degenerate_control: bool = False,
+    with_unseen_state_cap: bool = True,
+    codebook_provenance: Mapping[str, object] | None = None,
 ) -> dict:
     """Produce a v13 sampled-value certificate payload plus its per-prompt table arrays."""
     validate_codebook_manifest(codebook_manifest)
@@ -321,6 +540,10 @@ def certify_sampled_value(
     if len(families) != len(prompt_texts):
         raise ValueError("scored pool family tags are not aligned to prompt rows")
 
+    control_family_names = {PLANTED_CONTROL_FAMILY, DEGENERATE_CONTROL_FAMILY}
+    if control_family_names.intersection(str(family) for family in families):
+        raise ValueError("scored pool families collide with reserved control family names")
+    n_mined = len(prompt_texts)
     controls = _synthetic_control_rows(
         target_bootstrap=target_bootstrap,
         planted_control=bool(planted_control), degenerate_control=bool(degenerate_control))
@@ -329,8 +552,18 @@ def certify_sampled_value(
         score_rows = np.vstack([score_rows, np.asarray(controls["rows"], dtype=float)])
         families = families + controls["families"]
     n_prompts = len(prompt_texts)
-    if n_prompts == 0:
-        raise ValueError("the value certificate needs at least one prompt row")
+    if n_prompts == 0 or n_mined == 0:
+        raise ValueError("the value certificate needs at least one mined prompt row")
+    with np.load(scored["path"], allow_pickle=True) as pool_npz:
+        if "draw_order" in pool_npz.files:
+            draw_order = np.asarray(pool_npz["draw_order"], dtype=int)
+            if (draw_order.shape != (n_mined,)
+                    or sorted(int(value) for value in draw_order) != list(range(n_mined))):
+                raise ValueError("pool draw_order must be a permutation of its row indices")
+            draw_order_source = "pool_draw_order_field"
+        else:
+            draw_order = np.arange(n_mined, dtype=int)
+            draw_order_source = "pool_stored_order"
 
     plan = _panel_index_plan(
         codebook_manifest, target_metric_key, n_panels=int(n_panels))
@@ -339,7 +572,10 @@ def certify_sampled_value(
     value_cap = float(blind["value_cap"])
 
     value_matrix = np.empty((n_prompts, int(n_panels)), dtype=float)
+    panel_state_matrix = np.empty((n_prompts, int(n_panels)), dtype=np.int64)
+    state_values_by_panel: list[np.ndarray] | None = [] if with_unseen_state_cap else None
     for column, panel in enumerate(plan["panels"]):
+        panel_indices = np.asarray(panel["fixed_teaching_indices"], dtype=int)
         column_values = _panel_prompt_values(
             reconstructor,
             noun=noun,
@@ -349,7 +585,7 @@ def certify_sampled_value(
             probe_texts=probe_texts,
             prompt_texts=prompt_texts,
             score_rows=score_rows,
-            panel_indices=panel["fixed_teaching_indices"],
+            panel_indices=panel_indices,
             n_perms=int(n_perms),
             max_chars=int(max_chars),
             blind_canonical=blind["canonical_choice_probabilities"],
@@ -360,6 +596,45 @@ def certify_sampled_value(
         if np.any(column_values < -1e-12) or np.any(column_values > value_cap + 1e-12):
             raise RuntimeError("panel value column left the frozen [0, value_cap] range")
         value_matrix[:, column] = np.clip(column_values, 0.0, value_cap)
+        panel_state_matrix[:, column] = _hard_state_integers(score_rows, panel_indices)
+        if state_values_by_panel is not None:
+            # The exhaustive per-panel state population, priced through the SAME value
+            # path as pool prompts; mirrors write_finite_state_scored_artifact's rows.
+            state_bits = _binary_state_rows(len(panel_indices))
+            synthetic_rows = np.zeros((len(state_bits), len(probe_texts)), dtype=float)
+            synthetic_rows[:, panel_indices] = state_bits
+            synthetic_texts = [
+                f"finite-state transcript {state:0{len(panel_indices)}b}"
+                for state in range(len(state_bits))
+            ]
+            state_values = _panel_prompt_values(
+                reconstructor,
+                noun=noun,
+                target_metric_key=target_metric_key,
+                target_description=str(entry["target_description"]),
+                distractors=distractors,
+                probe_texts=probe_texts,
+                prompt_texts=synthetic_texts,
+                score_rows=synthetic_rows,
+                panel_indices=panel_indices,
+                n_perms=int(n_perms),
+                max_chars=int(max_chars),
+                blind_canonical=blind["canonical_choice_probabilities"],
+                query_batch_size=int(query_batch_size),
+            )
+            if (state_values.shape != (len(state_bits),)
+                    or np.any(~np.isfinite(state_values))
+                    or np.any(state_values < -1e-12)
+                    or np.any(state_values > value_cap + 1e-12)):
+                raise RuntimeError("state enumeration values left the frozen value range")
+            state_values = np.clip(state_values, 0.0, value_cap)
+            observed = value_matrix[:, column]
+            expected = state_values[panel_state_matrix[:, column]]
+            if not np.allclose(observed, expected, rtol=0.0, atol=1e-12):
+                raise RuntimeError(
+                    "pool prompt values disagree with their enumerated state values; the "
+                    "state factorization invariant failed")
+            state_values_by_panel.append(state_values)
 
     mean_value = value_matrix.mean(axis=1)
     primary_ci = _percentile_interval(value_matrix, PRIMARY_CI_PERCENTILES)
@@ -406,6 +681,19 @@ def certify_sampled_value(
         mean_value=mean_value, families=families, family_indices=family_indices,
         value_cap=value_cap, alpha=float(alpha), horizons=horizons)
 
+    state_capture_recapture = _state_capture_recapture(
+        panel_state_matrix=panel_state_matrix,
+        families=families,
+        mined_indices=draw_order,
+        mean_value=mean_value,
+        value_cap=value_cap,
+        alpha=float(alpha),
+        horizons=horizons,
+        plan=plan,
+        draw_order_source=draw_order_source,
+        state_values_by_panel=state_values_by_panel,
+    )
+
     per_prompt_table = {
         "schema": PER_PROMPT_TABLE_SCHEMA,
         "target_metric_key": target_metric_key,
@@ -422,7 +710,10 @@ def certify_sampled_value(
             [panel["library_index"] for panel in plan["panels"]], dtype=int),
         "panel_fixed_teaching_indices": np.asarray(
             [panel["fixed_teaching_indices"] for panel in plan["panels"]], dtype=int),
+        "panel_state_matrix": panel_state_matrix,
     }
+    if state_values_by_panel is not None:
+        per_prompt_table["state_values_by_panel"] = np.vstack(state_values_by_panel)
 
     certificate = {
         "schema": SAMPLED_VALUE_SCHEMA,
@@ -450,11 +741,14 @@ def certify_sampled_value(
         "panel_plan_sha256": plan["library_sha256"],
         "panel_plan": plan,
         "codebook_manifest_sha256": str(codebook_manifest["manifest_sha256"]),
+        "codebook_provenance": (dict(codebook_provenance)
+                                if codebook_provenance is not None else None),
         "source_scored_pool": {
             "path": str(scored["path"]),
             "sha256": str(scored["sha256"]),
             "n_scored_prompts": int(len(scored["texts"])),
             "n_prompts_including_controls": int(n_prompts),
+            "draw_order_source": draw_order_source,
         },
         "achieved_value": {
             "primary_95": {
@@ -490,6 +784,7 @@ def certify_sampled_value(
             ],
         },
         "gain_bounds": gain_bounds,
+        "state_capture_recapture": state_capture_recapture,
         "headline_gates": {
             "min_blind_headroom": HEADLINE_MIN_BLIND_HEADROOM,
             "max_achieved_value_ci_width": HEADLINE_MAX_ACHIEVED_VALUE_CI_WIDTH,
@@ -638,39 +933,115 @@ def _file_sha256(path: str | Path) -> str:
     return digest.hexdigest()
 
 
-def _resolve_metric_inputs(assets_root: Path, metric_argument: str) -> dict:
+def _resolve_metric_inputs(assets_root: Path, metric_argument: str, *, task: str) -> dict:
     """Resolve one ``--metrics`` entry to a codebook manifest and scored pool.
 
-    A bare metric key ``K`` binds ``<assets-root>/K/codebook.json`` and
-    ``<assets-root>/K/pool.npz``; a path to a ``.npz`` scored pool binds that pool and its
-    sibling ``codebook.json`` with the parent directory name as the metric key.
+    Two layouts are auto-detected and both are fail-closed:
+
+    - simple: ``<assets-root>/<metric>/codebook.json`` + ``<assets-root>/<metric>/pool.npz``;
+    - production (mining-loop consolidation store): ``<assets-root>/mcq_codebooks/<task>.json``
+      + ``<assets-root>/<metric>/historical/scored.npz``, with option bootstraps under
+      ``<assets-root>/mcq_codebook_candidates/<key>/bootstrap/scored.npz``.
+
+    A ``.npz`` argument binds its own pool: ``.../historical/scored.npz`` selects the
+    production layout (metric key = grandparent directory name); any other pool selects
+    the simple layout via its sibling ``codebook.json``. A bare metric key with BOTH
+    layouts complete is ambiguous and refuses to guess.
     """
     candidate = Path(metric_argument)
-    if candidate.suffix == ".npz" or (candidate.is_absolute() and candidate.exists()):
-        pool_path = candidate if candidate.is_absolute() else (assets_root / candidate)
-        pool_path = pool_path.resolve()
-        codebook_path = pool_path.parent / "codebook.json"
-        metric_key = pool_path.parent.name
-    else:
-        metric_directory = (assets_root / metric_argument).resolve()
-        pool_path = metric_directory / "pool.npz"
-        codebook_path = metric_directory / "codebook.json"
-        metric_key = metric_argument
-    if not codebook_path.exists():
-        raise FileNotFoundError(f"metric {metric_argument!r} lacks a codebook at {codebook_path}")
-    if not pool_path.exists():
-        raise FileNotFoundError(f"metric {metric_argument!r} lacks a scored pool at {pool_path}")
-    return {
-        "metric_key": metric_key,
-        "codebook_path": codebook_path,
-        "pool_path": pool_path,
-    }
+    if candidate.suffix == ".npz":
+        pool_path = (candidate if candidate.is_absolute() else assets_root / candidate).resolve()
+        if not pool_path.exists():
+            raise FileNotFoundError(
+                f"metric {metric_argument!r} lacks a scored pool at {pool_path}")
+        if pool_path.parent.name == "historical":
+            metric_key = pool_path.parent.parent.name
+            codebook_path = (assets_root / "mcq_codebooks" / f"{task}.json").resolve()
+            layout = "production"
+        else:
+            metric_key = pool_path.parent.name
+            codebook_path = pool_path.parent / "codebook.json"
+            layout = "simple"
+        if not codebook_path.exists():
+            raise FileNotFoundError(
+                f"metric {metric_argument!r} lacks a codebook at {codebook_path}")
+        return {"metric_key": metric_key, "codebook_path": codebook_path,
+                "pool_path": pool_path, "layout": layout}
+
+    metric_directory = (assets_root / metric_argument).resolve()
+    simple_codebook = metric_directory / "codebook.json"
+    simple_pool = metric_directory / "pool.npz"
+    production_codebook = (assets_root / "mcq_codebooks" / f"{task}.json").resolve()
+    production_pool = metric_directory / "historical" / "scored.npz"
+    simple_complete = simple_codebook.exists() and simple_pool.exists()
+    production_complete = production_codebook.exists() and production_pool.exists()
+    if simple_complete and production_complete:
+        raise RuntimeError(
+            f"metric {metric_argument!r} matches BOTH the simple and production layouts "
+            f"under {assets_root}; refusing to guess")
+    if simple_complete:
+        return {"metric_key": metric_argument, "codebook_path": simple_codebook,
+                "pool_path": simple_pool, "layout": "simple"}
+    if production_complete:
+        return {"metric_key": metric_argument, "codebook_path": production_codebook,
+                "pool_path": production_pool, "layout": "production"}
+    raise FileNotFoundError(
+        f"metric {metric_argument!r} matches neither layout under {assets_root}: "
+        f"simple needs {simple_codebook} + {simple_pool}; "
+        f"production needs {production_codebook} + {production_pool}")
 
 
 def _load_codebook(path: str | Path) -> dict:
     manifest = json.loads(Path(path).read_text(encoding="utf-8"))
     validate_codebook_manifest(manifest)
     return manifest
+
+
+def _load_production_codebook(path: str | Path, *, assets_root: Path) -> tuple[dict, dict]:
+    """Load a mining-loop codebook manifest, remapping bootstrap paths fail-closed.
+
+    Production manifests record absolute bootstrap paths from the machine that froze
+    them. Every remapped local file must hash to the manifest's recorded
+    ``bootstrap_sha256`` — content identity, not path identity, is the frozen contract.
+    The stored manifest hash is verified BEFORE any remap; the hash recomputed after the
+    remap covers an artifact whose only difference is verified-identical local content.
+    """
+    source = Path(path).resolve()
+    manifest = json.loads(source.read_text(encoding="utf-8"))
+    payload = {key: value for key, value in manifest.items() if key != "manifest_sha256"}
+    source_manifest_sha256 = str(manifest.get("manifest_sha256", ""))
+    if source_manifest_sha256 != _payload_sha256(payload):
+        raise ValueError(f"production codebook manifest {source} is invalid or mutated")
+    n_remapped = 0
+    for metric_key, metadata in payload.get("metrics", {}).items():
+        recorded_sha256 = str(metadata.get("bootstrap_sha256", ""))
+        candidates = [
+            Path(str(metadata.get("bootstrap_path", ""))),
+            assets_root / "mcq_codebook_candidates" / metric_key / "bootstrap" / "scored.npz",
+            assets_root / metric_key / "bootstrap" / "scored.npz",
+        ]
+        resolved = None
+        for candidate in candidates:
+            if candidate.is_file() and _file_sha256(candidate) == recorded_sha256:
+                resolved = candidate.resolve()
+                break
+        if resolved is None:
+            raise FileNotFoundError(
+                f"no local bootstrap for {metric_key!r} matches the frozen sha "
+                f"{recorded_sha256[:12]}...; searched {[str(c) for c in candidates]}")
+        if str(resolved) != str(metadata["bootstrap_path"]):
+            metadata["bootstrap_path"] = str(resolved)
+            n_remapped += 1
+    remapped = {**payload, "manifest_sha256": _payload_sha256(payload)}
+    validate_codebook_manifest(remapped)
+    provenance = {
+        "source_codebook_path": str(source),
+        "source_codebook_manifest_sha256": source_manifest_sha256,
+        "validated_codebook_manifest_sha256": remapped["manifest_sha256"],
+        "n_bootstrap_paths_remapped": int(n_remapped),
+        "bootstrap_content_sha256_verified": True,
+    }
+    return remapped, provenance
 
 
 def _build_reconstructor(args) -> dict:
@@ -708,6 +1079,9 @@ def _build_arg_parser() -> argparse.ArgumentParser:
                         help="append a recoverable calibration prompt to every metric pool")
     parser.add_argument("--degenerate-control", action="store_true",
                         help="append a constant-verdict calibration prompt to every metric pool")
+    parser.add_argument("--skip-unseen-state-cap", action="store_true",
+                        help="skip the exhaustive 256-state pricing (on by default); the "
+                             "capture-recapture gain bounds require it and are then omitted")
     return parser
 
 
@@ -722,7 +1096,8 @@ def main(argv=None) -> int:
     out_root = Path(args.out_root)
     if out_root.exists():
         raise FileExistsError(f"refusing to write into an existing out-root {out_root}")
-    resolved = [_resolve_metric_inputs(assets_root, metric) for metric in args.metrics]
+    resolved = [_resolve_metric_inputs(assets_root, metric, task=str(args.task))
+                for metric in args.metrics]
     keys = [item["metric_key"] for item in resolved]
     if len(set(keys)) != len(keys):
         raise RuntimeError("duplicate metric keys in --metrics")
@@ -731,9 +1106,17 @@ def main(argv=None) -> int:
     reconstructor = built["reconstructor"]
     out_root.mkdir(parents=True, exist_ok=False)
 
+    codebook_cache: dict[str, tuple[dict, dict | None]] = {}
     metric_records = []
     for item in resolved:
-        codebook_manifest = _load_codebook(item["codebook_path"])
+        cache_key = str(item["codebook_path"])
+        if cache_key not in codebook_cache:
+            if item["layout"] == "production":
+                codebook_cache[cache_key] = _load_production_codebook(
+                    item["codebook_path"], assets_root=assets_root)
+            else:
+                codebook_cache[cache_key] = (_load_codebook(item["codebook_path"]), None)
+        codebook_manifest, provenance = codebook_cache[cache_key]
         result = certify_sampled_value(
             reconstructor,
             codebook_manifest=codebook_manifest,
@@ -749,10 +1132,14 @@ def main(argv=None) -> int:
             query_batch_size=int(args.query_batch_size),
             planted_control=bool(args.planted_control),
             degenerate_control=bool(args.degenerate_control),
+            with_unseen_state_cap=not bool(args.skip_unseen_state_cap),
+            codebook_provenance=provenance,
         )
         certificate = write_sampled_value_certificate(out_root / item["metric_key"], result)
         metric_records.append({
             "metric_key": item["metric_key"],
+            "assets_layout": item["layout"],
+            "codebook_provenance": provenance,
             "panel_plan_sha256": certificate["panel_plan_sha256"],
             "certificate_sha256": certificate["certificate_sha256"],
             "primary_value_status": certificate["reporting"]["primary_95"]["value_status"],

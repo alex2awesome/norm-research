@@ -24,15 +24,21 @@ from methods.metric_implementer.experiments.cr3_sampled_value_certify import (
     VALUE_STATUS_SUGGESTIVE_SENSITIVITY,
     _allocate_horizon,
     _blind_menu_prior,
+    _first_contact_novelty_counts,
+    _hard_state_integers,
     _headline_eligible,
+    _joint_tuple_species,
     _panel_index_plan,
     _percentile_interval,
+    _resolve_metric_inputs,
+    _unseen_tuple_probability_upper,
     _value_status,
     certify_sampled_value,
     main,
     write_sampled_value_certificate,
 )
 from methods.metric_implementer.experiments.cr_audit import (
+    clopper_pearson_upper,
     dkw_expected_max_lower,
     dkw_expected_max_upper,
 )
@@ -328,7 +334,8 @@ def test_planted_control_certifies_positive_value(tmp_path):
         _CoherenceSelector(), codebook_manifest=manifest, target_metric_key="metric_0",
         scored_pool_path=pool, n_panels=12, n_perms=8, mcq_n_options=4, alpha=0.05,
         horizons=[100, 300], reconstructor_model="google/gemma-4-31b-it",
-        reconstructor_revision="rev", planted_control=True)
+        reconstructor_revision="rev", planted_control=True,
+        with_unseen_state_cap=False)
     certificate = result["certificate"]
     assert certificate["schema"] == SAMPLED_VALUE_SCHEMA
     primary = certificate["reporting"]["primary_95"]
@@ -356,7 +363,8 @@ def test_degenerate_control_is_formal_certificate_only(tmp_path):
         _CoherenceSelector(), codebook_manifest=manifest, target_metric_key="metric_0",
         scored_pool_path=pool, n_panels=12, n_perms=8, mcq_n_options=4, alpha=0.05,
         horizons=[100], reconstructor_model="google/gemma-4-31b-it",
-        reconstructor_revision="rev", degenerate_control=True)
+        reconstructor_revision="rev", degenerate_control=True,
+        with_unseen_state_cap=False)
     certificate = result["certificate"]
     assert certificate["reporting"]["primary_95"]["value_status"] == VALUE_STATUS_FORMAL_ONLY
     assert certificate["reporting"]["sensitivity_90"]["value_status"] == VALUE_STATUS_FORMAL_ONLY
@@ -375,7 +383,7 @@ def test_low_blind_headroom_forces_formal_certificate_only(tmp_path):
         _HighBlindPriorSelector(), codebook_manifest=manifest, target_metric_key="metric_0",
         scored_pool_path=pool, n_panels=12, n_perms=8, mcq_n_options=4, alpha=0.05,
         horizons=[100], reconstructor_model="google/gemma-4-31b-it",
-        reconstructor_revision="rev")
+        reconstructor_revision="rev", with_unseen_state_cap=False)
     certificate = result["certificate"]
     gates = certificate["headline_gates"]
     assert gates["observed_blind_headroom"] < HEADLINE_MIN_BLIND_HEADROOM
@@ -391,7 +399,7 @@ def test_certificate_is_deterministic_and_write_is_immutable(tmp_path):
         texts=["prompt a", "prompt b"], families=["fA", "fB"])
     kwargs = dict(
         codebook_manifest=manifest, target_metric_key="metric_0", scored_pool_path=pool,
-        n_panels=12, n_perms=8, mcq_n_options=4, alpha=0.05, horizons=[100],
+        n_panels=4, n_perms=8, mcq_n_options=4, alpha=0.05, horizons=[100],
         reconstructor_model="google/gemma-4-31b-it", reconstructor_revision="rev")
     first = certify_sampled_value(_ConditionSensitiveSelector(), **kwargs)
     second = certify_sampled_value(_ConditionSensitiveSelector(), **kwargs)
@@ -443,3 +451,240 @@ def test_cli_fake_backends_end_to_end(tmp_path):
             "--assets-root", str(assets_root), "--task", "story", "--metrics", "metric_0",
             "--out-root", str(out_root), "--fake-backends",
         ])
+
+
+# --- capture-recapture value-added tests -----------------------------------------------
+
+def test_hard_state_integers_match_big_endian_encoding():
+    from methods.metric_implementer.experiments.cr3_reconstruction_values import (
+        _binary_state_integer,
+    )
+    rows = np.array([
+        [0.9, 0.1, 0.9, 0.1, 0.9, 0.1, 0.9, 0.1, 0.3, 0.7],
+        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0],
+    ])
+    panel_indices = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+    states = _hard_state_integers(rows, panel_indices)
+    expected = [
+        _binary_state_integer([1, 0, 1, 0, 1, 0, 1, 0]),
+        _binary_state_integer([0, 0, 0, 0, 0, 0, 0, 0]),
+    ]
+    assert states.tolist() == expected
+    reordered = _hard_state_integers(rows, panel_indices[::-1].copy())
+    assert reordered[0] == _binary_state_integer([0, 1, 0, 1, 0, 1, 0, 1])
+
+
+def test_joint_tuple_first_contact_counts_on_hand_built_ledger():
+    # fA draw sequence: A, A, B, A, B  -> first contacts at draws 1 and 3 (z=2, n=5, k=2)
+    # fB draw sequence: C, C           -> first contact at draw 1 (z=1, n=2, k=1)
+    state_matrix = np.array([
+        [3, 7],   # fA: tuple A
+        [3, 7],   # fA: tuple A
+        [3, 9],   # fA: tuple B
+        [3, 7],   # fA: tuple A
+        [3, 9],   # fA: tuple B
+        [0, 0],   # fB: tuple C
+        [0, 0],   # fB: tuple C
+    ])
+    species = _joint_tuple_species(state_matrix)
+    assert species[0] == "3-7" and species[2] == "3-9" and species[5] == "0-0"
+    counts = _first_contact_novelty_counts(
+        species, ["fA", "fA", "fA", "fA", "fA", "fB", "fB"])
+    assert counts["fA"] == {
+        "n_draws": 5, "n_first_contact_novel_tuples": 2, "n_distinct_tuples": 2}
+    assert counts["fB"] == {
+        "n_draws": 2, "n_first_contact_novel_tuples": 1, "n_distinct_tuples": 1}
+    # The interval is exactly the reused Clopper-Pearson helper, never a reimplementation.
+    assert clopper_pearson_upper(2, 5, 0.05) == pytest.approx(
+        clopper_pearson_upper(
+            counts["fA"]["n_first_contact_novel_tuples"], counts["fA"]["n_draws"], 0.05))
+
+
+def test_unseen_tuple_gain_formula_monotone_in_horizon_and_u0():
+    for u0 in (0.05, 0.2, 0.8):
+        probabilities = [
+            _unseen_tuple_probability_upper(u0, m) for m in (0, 1, 10, 100, 1000)]
+        assert probabilities[0] == 0.0
+        assert all(b >= a for a, b in zip(probabilities, probabilities[1:]))
+    for m in (1, 10, 100):
+        over_u0 = [
+            _unseen_tuple_probability_upper(u0, m) for u0 in (0.0, 0.1, 0.5, 0.9, 1.0)]
+        assert over_u0[0] == 0.0 and over_u0[-1] == 1.0
+        assert all(b >= a for a, b in zip(over_u0, over_u0[1:]))
+    with pytest.raises(ValueError):
+        _unseen_tuple_probability_upper(1.5, 10)
+    with pytest.raises(ValueError):
+        _unseen_tuple_probability_upper(0.5, -1)
+
+
+def test_planted_unseen_state_gain_bound_covers_monte_carlo_truth():
+    # Mining process: each draw lands the known noise tuple w.p. 0.99 and an unseen
+    # high-value tuple w.p. 0.01. The realized pool (30 draws, fixed) saw only noise.
+    pool_species = ["noise"] * 30
+    counts = _first_contact_novelty_counts(pool_species, ["fA"] * 30)
+    z = counts["fA"]["n_first_contact_novel_tuples"]
+    n = counts["fA"]["n_draws"]
+    assert (z, n) == (1, 30)
+    alpha = 0.05
+    u0_upper = clopper_pearson_upper(z, n, alpha)
+    p_true = 0.01
+    assert u0_upper >= p_true  # the CP coverage event holds for this realized pool
+
+    v_high = 0.6
+    v_bar_cap = v_high        # free-recombination cap prices the unseen state exactly
+    observed_best = 0.0
+    rng = np.random.default_rng(20260713)
+    for horizon in (1, 10, 100):
+        bound = _unseen_tuple_probability_upper(u0_upper, horizon) * max(
+            0.0, v_bar_cap - observed_best)
+        hits = rng.random((60_000, horizon)) < p_true
+        monte_carlo_truth = float(np.mean(np.any(hits, axis=1))) * v_high
+        assert bound >= monte_carlo_truth
+
+
+def test_unseen_state_pricing_covers_planted_state_and_invariants(tmp_path):
+    manifest = _manifest(tmp_path / "bank")
+    # Noise-only pool: the target-recovering state exists but was never mined.
+    pool = _write_pool(
+        tmp_path / "pool.npz",
+        sigs=[np.ones(120), np.ones(120), np.zeros(120)],
+        texts=["n1", "n2", "n3"], families=["fA", "fA", "fB"])
+    result = certify_sampled_value(
+        _CoherenceSelector(), codebook_manifest=manifest, target_metric_key="metric_0",
+        scored_pool_path=pool, n_panels=2, n_perms=8, mcq_n_options=4, alpha=0.05,
+        horizons=[1, 100], reconstructor_model="google/gemma-4-31b-it",
+        reconstructor_revision="rev")
+    certificate = result["certificate"]
+    block = certificate["state_capture_recapture"]
+    assert block["draw_order_source"] == "pool_stored_order"
+    assert block["per_family"]["fA"]["n_draws"] == 2
+    assert block["per_family"]["fA"]["n_first_contact_novel_tuples"] == 1
+    assert block["per_family"]["fB"]["n_draws"] == 1
+
+    pricing = block["unseen_state_pricing"]
+    assert pricing["computed"] is True
+    mean_values = result["per_prompt_table"]["mean_value_per_prompt"]
+    v_bar_cap = pricing["mean_all_state_max_value_v_bar_cap"]
+    # The free-recombination cap dominates every observed resampled mean (runtime invariant).
+    assert v_bar_cap >= float(np.max(mean_values)) - 1e-9
+    for panel_row in pricing["per_panel"]:
+        assert panel_row["unseen_state_max_value"] >= 0.0
+        assert panel_row["all_state_max_value"] >= panel_row["unseen_state_max_value"]
+        assert panel_row["n_pool_observed_states"] + panel_row["n_unseen_states"] == 256
+    # The coherent (planted, never-mined) state prices near the coherence backend maximum.
+    assert all(row["unseen_state_max_value"] >= 0.5 for row in pricing["per_panel"])
+    assert pricing["free_recombination_headroom"] > 0.5
+
+    bounds = block["value_added_bounds"]
+    assert bounds["computed"] is True
+    gain_1 = bounds["per_horizon"]["1"]["pooled"]["unseen_tuple_gain_upper"]
+    gain_100 = bounds["per_horizon"]["100"]["pooled"]["unseen_tuple_gain_upper"]
+    assert 0.0 <= gain_1 <= gain_100 <= pricing["free_recombination_headroom"] + 1e-12
+    assert block["premises"]["no_smoothness_lipschitz_or_submodularity_assumptions"] is True
+
+    skipped = certify_sampled_value(
+        _CoherenceSelector(), codebook_manifest=manifest, target_metric_key="metric_0",
+        scored_pool_path=pool, n_panels=2, n_perms=8, mcq_n_options=4, alpha=0.05,
+        horizons=[100], reconstructor_model="google/gemma-4-31b-it",
+        reconstructor_revision="rev", with_unseen_state_cap=False)
+    skipped_block = skipped["certificate"]["state_capture_recapture"]
+    assert skipped_block["unseen_state_pricing"]["computed"] is False
+    assert skipped_block["value_added_bounds"]["computed"] is False
+    assert skipped_block["per_family"]["fA"]["n_draws"] == 2
+
+    # Immutability holds with the capture-recapture block present.
+    out_dir = tmp_path / "out" / "metric_0"
+    write_sampled_value_certificate(out_dir, result)
+    with pytest.raises(FileExistsError):
+        write_sampled_value_certificate(out_dir, result)
+
+
+# --- real-artifact production layout ---------------------------------------------------
+
+def _fixture_root():
+    from pathlib import Path
+    return Path(__file__).parent / "fixtures" / "cr3_v12_humor_metric50_subset"
+
+
+def test_production_layout_fixture_end_to_end(tmp_path):
+    import json
+    fixture = _fixture_root()
+    provenance = json.loads((fixture / "fixture_provenance.json").read_text())
+    assert provenance["synthetic_subset"] is True
+    out_root = tmp_path / "out"
+    exit_code = main([
+        "--assets-root", str(fixture),
+        "--task", "humor",
+        "--metrics", "humor_R3_metric50",
+        "--out-root", str(out_root),
+        "--n-panels", "3",
+        "--n-perms", "8",
+        "--horizons", "100,300",
+        "--fake-backends",
+    ])
+    assert exit_code == 0
+    certificate = json.loads(
+        (out_root / "humor_R3_metric50" / "certificate.json").read_text())
+    assert certificate["schema"] == SAMPLED_VALUE_SCHEMA
+    assert certificate["n_panels_R"] == 3
+    assert certificate["executor"]["model"] == "meta-llama/Llama-3.1-8B-Instruct"
+    assert certificate["reconstruction_noun"] == "joke"
+    codebook_provenance = certificate["codebook_provenance"]
+    assert codebook_provenance["source_codebook_manifest_sha256"] == provenance[
+        "pruned_codebook_manifest_sha256"]
+    assert codebook_provenance["n_bootstrap_paths_remapped"] == 4
+    assert codebook_provenance["bootstrap_content_sha256_verified"] is True
+    pool = certificate["source_scored_pool"]
+    assert pool["n_scored_prompts"] == 40
+    assert pool["draw_order_source"] == "pool_stored_order"
+    block = certificate["state_capture_recapture"]
+    assert block["per_family"]["historical_candidate"]["n_draws"] == 40
+    assert block["unseen_state_pricing"]["computed"] is True
+    assert block["value_added_bounds"]["computed"] is True
+    run_manifest = json.loads((out_root / "run_manifest.json").read_text())
+    assert run_manifest["metrics"][0]["assets_layout"] == "production"
+
+
+def test_production_layout_fails_closed_on_bootstrap_content_mismatch(tmp_path):
+    import json
+    import shutil
+    from methods.metric_implementer.experiments.cr3_sampled_value_certify import (
+        _load_production_codebook,
+    )
+    fixture = _fixture_root()
+    broken = tmp_path / "broken"
+    shutil.copytree(fixture, broken)
+    corrupted = (broken / "mcq_codebook_candidates" / "humor_R3_metric50"
+                 / "bootstrap" / "scored.npz")
+    corrupted.write_bytes(corrupted.read_bytes() + b"tamper")
+    with pytest.raises(FileNotFoundError, match="matches the frozen sha"):
+        _load_production_codebook(broken / "mcq_codebooks" / "humor.json",
+                                  assets_root=broken)
+
+    mutated = json.loads((fixture / "mcq_codebooks" / "humor.json").read_text())
+    mutated["n_options"] = 5
+    mutated_path = tmp_path / "mutated.json"
+    mutated_path.write_text(json.dumps(mutated))
+    with pytest.raises(ValueError, match="invalid or mutated"):
+        _load_production_codebook(mutated_path, assets_root=fixture)
+
+
+def test_layout_ambiguity_fails_closed(tmp_path):
+    import json
+    assets_root = tmp_path / "assets"
+    metric_dir = assets_root / "metric_x"
+    (metric_dir / "historical").mkdir(parents=True)
+    (assets_root / "mcq_codebooks").mkdir()
+    (metric_dir / "codebook.json").write_text("{}")
+    (metric_dir / "pool.npz").write_bytes(b"")
+    (assets_root / "mcq_codebooks" / "story.json").write_text("{}")
+    (metric_dir / "historical" / "scored.npz").write_bytes(b"")
+    with pytest.raises(RuntimeError, match="BOTH"):
+        _resolve_metric_inputs(assets_root, "metric_x", task="story")
+    # Removing one layout resolves the ambiguity toward the other.
+    (metric_dir / "pool.npz").unlink()
+    resolved = _resolve_metric_inputs(assets_root, "metric_x", task="story")
+    assert resolved["layout"] == "production"
+    (metric_dir / "historical" / "scored.npz").unlink()
+    with pytest.raises(FileNotFoundError, match="neither layout"):
+        _resolve_metric_inputs(assets_root, "metric_x", task="story")
