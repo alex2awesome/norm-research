@@ -12,13 +12,21 @@ import pytest
 
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (
     CachedChoiceReconstructor,
+    build_finite_state_envelope,
     build_codebook_panel_plan,
     build_frozen_codebook_manifest,
     evaluate_scored_prompt_values,
+    import_choice_probability_cache,
+    load_finite_state_scored_artifact,
     load_value_artifact,
+    lookup_scored_prompt_values,
+    prior_balanced_panel_rows,
     score_codebook_panel_priors,
     select_prior_balanced_panels,
+    select_state_capable_panels,
     validate_codebook_manifest,
+    validate_finite_state_envelope,
+    write_finite_state_scored_artifact,
     write_value_artifact,
 )
 from methods.metric_implementer.vllm_backend import (
@@ -88,6 +96,17 @@ def test_choice_probability_cache_freezes_cross_process_numeric_drift(tmp_path):
     replayed = second.score_choices(["prompt"], ["1", "2"], seed=[4])
     assert replayed == observed
     assert second_backend.calls == 0
+
+    imported_path = tmp_path / "private_copy.sqlite"
+    report = import_choice_probability_cache(path, imported_path)
+    assert report["source_rows"] == 1
+    assert report["writable_database_shared"] is False
+    imported_backend = _DriftingSelector(0.4)
+    imported = CachedChoiceReconstructor(
+        imported_backend, imported_path, model="model", revision="revision")
+    assert imported.score_choices(["prompt"], ["1", "2"], seed=[4]) == observed
+    assert imported_backend.calls == 0
+    assert imported.rows == {}
 
 
 def test_v12_choice_cache_never_admits_a_v11_probability_row(tmp_path):
@@ -159,8 +178,8 @@ def _bootstraps(tmp_path):
 
 def test_codebook_is_bootstrap_only_frozen_and_hash_validated(tmp_path):
     manifest = build_frozen_codebook_manifest(
-        _bootstraps(tmp_path), n_options=4, design_size=20,
-        min_design_disagreements=2, seed=4)
+        _bootstraps(tmp_path), n_options=4, design_size=12,
+        min_design_disagreements=2, seed=4, reconstruction_noun="story")
     validate_codebook_manifest(manifest)
     assert manifest["premises"]["built_from_bootstrap_only"] is True
     assert manifest["premises"]["uses_external_labels"] is False
@@ -172,6 +191,10 @@ def test_codebook_is_bootstrap_only_frozen_and_hash_validated(tmp_path):
             assert entry["selected_distractor_disagreements_min"] >= 1
     assert all(entry["valid"] for entry in manifest["entries"].values())
     assert len(manifest["entries"]["metric_0"]["distractor_metric_keys"]) == 3
+    design = set(manifest["design_indices"])
+    for entry in manifest["entries"].values():
+        assert len(entry["fixed_teaching_indices"]) == 8
+        assert design.isdisjoint(entry["fixed_teaching_indices"])
 
     mutated = dict(manifest)
     mutated["design_seed"] = 99
@@ -201,7 +224,7 @@ def test_prior_calibration_selects_a_balanced_menu_before_prompt_search(tmp_path
         paths,
         target_metric_keys=["metric_0"],
         n_options=4,
-        design_size=40,
+        design_size=24,
         min_design_disagreements=2,
         candidate_pool_size=6,
         max_panels_per_target=20,
@@ -238,21 +261,56 @@ def test_prior_calibration_selects_a_balanced_menu_before_prompt_search(tmp_path
     manifest = build_frozen_codebook_manifest(
         paths,
         n_options=4,
-        design_size=40,
+        design_size=24,
         min_design_disagreements=2,
         seed=9,
         panel_selections=selections,
+        reconstruction_noun="story",
     )
     validate_codebook_manifest(manifest)
     entry = manifest["entries"]["metric_0"]
     assert entry["selection_method"].startswith("blind_no_demo")
     assert entry["prior_calibration"]["passes_prior_balance"] is True
 
+    ranked = prior_balanced_panel_rows(
+        plan, calibration,
+        maximum_option_probability=1.0,
+        target_probability_tolerance=1.0,
+        minimum_normalized_entropy=0.0,
+    )
+    rows = ranked["rows"]["metric_0"]
+    assert len(rows) >= 3
+    envelopes = {"metric_0": {}}
+    for index, row in enumerate(rows):
+        envelopes["metric_0"][row["panel_id"]] = {
+            "target_metric_key": "metric_0",
+            "prior_panel_id": row["panel_id"],
+            "distractor_metric_keys": row["distractor_metric_keys"],
+            "finite_state_upper_bound": 0.1 + 0.01 * index,
+            "state_envelope_capability": {
+                "has_positive_unique_target_maximizer": index != len(rows) - 1,
+            },
+            "summary_sha256": f"summary-{index}",
+            "state_function_semantic_sha256": f"semantic-{index}",
+        }
+    chosen = select_state_capable_panels(
+        plan, calibration, envelopes,
+        maximum_option_probability=1.0,
+        target_probability_tolerance=1.0,
+        minimum_normalized_entropy=0.0,
+    )["metric_0"]
+    assert chosen["prior_calibration"]["panel_id"] == rows[-2]["panel_id"]
+    assert chosen["state_envelope_selection"]["passes_state_capability"] is True
+    assert chosen["state_envelope_selection"]["n_live_panels"] == len(rows) - 1
+    assert chosen["state_envelope_selection"][
+        "chosen_state_function_semantic_sha256"] == f"semantic-{len(rows) - 2}"
+
 
 def test_every_scored_row_receives_an_anchor_free_mcq_value(tmp_path):
     paths = _bootstraps(tmp_path)
     manifest = build_frozen_codebook_manifest(
-        paths, n_options=4, design_size=20, min_design_disagreements=2, seed=4)
+        paths, n_options=4, design_size=12, min_design_disagreements=2, seed=4,
+        reconstruction_noun="story")
     target = np.load(paths[0], allow_pickle=True)["target"]
     scored = tmp_path / "audit_scored.npz"
     rows = np.vstack([target, 1.0 - target, target])
@@ -298,10 +356,162 @@ def test_every_scored_row_receives_an_anchor_free_mcq_value(tmp_path):
     assert loaded["value_cap"] == pytest.approx(0.8)
 
 
+def test_exhaustive_fixed_transcript_table_is_an_all_prompt_upper_envelope(tmp_path):
+    paths = _bootstraps(tmp_path)
+    manifest = build_frozen_codebook_manifest(
+        paths, n_options=4, design_size=12, min_design_disagreements=2, seed=4,
+        reconstruction_noun="story")
+    state_path = tmp_path / "states.npz"
+    table = write_finite_state_scored_artifact(
+        state_path, codebook_manifest=manifest, target_metric_key="metric_0")
+    assert table["n_states"] == 256
+    assert np.array_equal(table["state_integers"], np.arange(256))
+    assert len({tuple(row) for row in table["state_bits"]}) == 256
+
+    state_values = evaluate_scored_prompt_values(
+        _ConditionSensitiveSelector(),
+        codebook_manifest=manifest,
+        target_metric_key="metric_0",
+        scored_path=state_path,
+        noun="story",
+        n_examples=8,
+        n_reconstruction_draws=4,
+        choice_readout="logits",
+        choice_probabilities_content_cached=True,
+    )
+    value_path = tmp_path / "state_values.npz"
+    write_value_artifact(
+        value_path, state_values,
+        reconstructor_model="fixed-reconstructor", reconstructor_revision="revision")
+    loaded_values = load_value_artifact(
+        value_path,
+        expected_source_scored_sha256=table["sha256"],
+        expected_codebook_manifest_sha256=manifest["manifest_sha256"],
+    )
+    envelope = build_finite_state_envelope(
+        codebook_manifest=manifest,
+        target_metric_key="metric_0",
+        state_scored_path=state_path,
+        value_payload=loaded_values,
+    )
+    assert envelope["finite_state_upper_bound"] == pytest.approx(0.6)
+    assert envelope["coarse_no_demo_range_cap"] == pytest.approx(0.8)
+    assert envelope["state_envelope_capability"][
+        "has_positive_unique_target_maximizer"] is True
+    assert envelope["operational_target_diagnostic"]["is_headline_gate"] is False
+    assert len(envelope["state_function_semantic_sha256"]) == 64
+
+    target = np.load(paths[0], allow_pickle=True)["target"]
+    candidate_path = tmp_path / "arbitrary_candidates.npz"
+    np.savez_compressed(
+        candidate_path,
+        sigs=np.vstack([target, 1.0 - target, np.zeros_like(target)]),
+        texts=np.asarray(["target", "inverse", "constant"], object),
+        probe_sha256=np.asarray("shared-probes"),
+    )
+    candidates = evaluate_scored_prompt_values(
+        _ConditionSensitiveSelector(),
+        codebook_manifest=manifest,
+        target_metric_key="metric_0",
+        scored_path=candidate_path,
+        noun="story",
+        n_examples=8,
+        n_reconstruction_draws=4,
+        choice_readout="logits",
+        choice_probabilities_content_cached=True,
+    )
+    assert np.all(candidates["values"] <= envelope["finite_state_upper_bound"] + 1e-12)
+    looked_up = lookup_scored_prompt_values(
+        codebook_manifest=manifest,
+        target_metric_key="metric_0",
+        scored_path=candidate_path,
+        state_scored_path=state_path,
+        state_value_payload=loaded_values,
+        envelope_summary=envelope,
+    )
+    assert looked_up["finite_state_lookup"] is True
+    assert looked_up["values"].tolist() == pytest.approx(candidates["values"].tolist())
+    assert looked_up["raw_target_option_probability"].tolist() == pytest.approx(
+        candidates["raw_target_option_probability"].tolist())
+    expected_indices = manifest["entries"]["metric_0"]["fixed_teaching_indices"]
+    assert all(
+        detail["design"]["indices_in_prompt_order"] == expected_indices
+        for detail in candidates["details"]
+    )
+
+    validate_finite_state_envelope(
+        envelope,
+        codebook_manifest=manifest,
+        target_metric_key="metric_0",
+        state_scored_path=state_path,
+        value_payload=loaded_values,
+    )
+    mutated_summary = json.loads(json.dumps(envelope))
+    mutated_summary["finite_state_upper_bound"] += 0.01
+    with pytest.raises(ValueError, match="mutated"):
+        validate_finite_state_envelope(
+            mutated_summary,
+            codebook_manifest=manifest,
+            target_metric_key="metric_0",
+            state_scored_path=state_path,
+            value_payload=loaded_values,
+        )
+
+    inconsistent_values = dict(loaded_values)
+    inconsistent_values["details"] = json.loads(json.dumps(loaded_values["details"]))
+    inconsistent_values["details"][0]["value_mark"] += 0.01
+    with pytest.raises(ValueError, match="inconsistent value_mark"):
+        build_finite_state_envelope(
+            codebook_manifest=manifest,
+            target_metric_key="metric_0",
+            state_scored_path=state_path,
+            value_payload=inconsistent_values,
+        )
+
+    inconsistent_matrix = dict(loaded_values)
+    inconsistent_matrix["details"] = json.loads(json.dumps(loaded_values["details"]))
+    probabilities = inconsistent_matrix["details"][0]["identification"]["conditions"][
+        "annotations"]["canonical_choice_probabilities"]
+    probabilities[0][0] += 0.01
+    probabilities[0][1] -= 0.01
+    with pytest.raises(ValueError, match="scalar summary inconsistent"):
+        build_finite_state_envelope(
+            codebook_manifest=manifest,
+            target_metric_key="metric_0",
+            state_scored_path=state_path,
+            value_payload=inconsistent_matrix,
+        )
+
+    forged_transcript = dict(loaded_values)
+    forged_transcript["details"] = json.loads(json.dumps(loaded_values["details"]))
+    forged_transcript["details"][0]["design"]["teaching_transcript_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="forged transcript hash"):
+        build_finite_state_envelope(
+            codebook_manifest=manifest,
+            target_metric_key="metric_0",
+            state_scored_path=state_path,
+            value_payload=forged_transcript,
+        )
+
+    with np.load(state_path, allow_pickle=True) as z:
+        mutated_payload = {name: z[name] for name in z.files}
+    mutated_payload["state_bits"] = mutated_payload["state_bits"].copy()
+    mutated_payload["state_bits"][3, 0] ^= 1
+    mutated_path = tmp_path / "mutated_states.npz"
+    np.savez_compressed(mutated_path, **mutated_payload)
+    with pytest.raises(ValueError, match="mutated"):
+        load_finite_state_scored_artifact(
+            mutated_path,
+            codebook_manifest=manifest,
+            target_metric_key="metric_0",
+        )
+
+
 def test_value_worker_writes_every_row_with_one_resident_fake_backend(tmp_path):
     paths = _bootstraps(tmp_path)
     manifest = build_frozen_codebook_manifest(
-        paths, n_options=4, design_size=20, min_design_disagreements=2, seed=4)
+        paths, n_options=4, design_size=12, min_design_disagreements=2, seed=4,
+        reconstruction_noun="story")
     manifest_path = tmp_path / "codebook.json"
     manifest_path.write_text(json.dumps(manifest))
     target = np.load(paths[0], allow_pickle=True)["target"]

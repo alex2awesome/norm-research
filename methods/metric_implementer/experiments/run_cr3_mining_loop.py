@@ -42,11 +42,20 @@ from methods.metric_implementer.experiments.cr_audit import (  # noqa: E402
 )
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (  # noqa: E402
     CachedChoiceReconstructor,
+    FIXED_TEACHING_SIZE,
+    build_finite_state_envelope,
     build_codebook_panel_plan,
     build_frozen_codebook_manifest,
+    import_choice_probability_cache,
     load_value_artifact,
+    lookup_scored_prompt_values,
+    prior_balanced_panel_rows,
     select_prior_balanced_panels,
+    select_state_capable_panels,
     validate_codebook_manifest,
+    validate_finite_state_envelope,
+    write_finite_state_scored_artifact,
+    write_value_artifact,
 )
 from methods.metric_implementer.experiments.cr3_evidence_store import (  # noqa: E402
     install_evidence_store,
@@ -413,12 +422,17 @@ def mcq_instrument_quality(state: dict, args) -> dict:
             np.asarray(calibrated_prior, float), prior, rtol=0.0, atol=1e-12):
         raise RuntimeError("frozen codebook prior calibration differs from the value channel")
     reasons = []
-    if state["value_cap"] < args.mcq_min_headline_value_cap:
+    coarse_cap = float(state["coarse_range_cap"])
+    capability = dict(state["finite_state_envelope"]["state_envelope_capability"])
+    if coarse_cap < args.mcq_min_headline_value_cap:
         reasons.append("frozen no-demo target prior leaves too little value headroom")
-    if min_kappa < args.mcq_min_headline_distractor_kappa:
-        reasons.append("selected distractor panel is behaviorally too easy")
     if not prior_calibration.get("passes_prior_balance", False):
         reasons.append("no candidate menu passed the predeclared blind no-demo prior-balance gate")
+    if state["value_cap"] < target_value_gap(args):
+        reasons.append("finite-state envelope is below the predeclared value resolution")
+    if not capability.get("has_positive_unique_target_maximizer"):
+        reasons.append(
+            "no envelope-maximizing transcript has positive lift and uniquely identifies the target")
     return {
         "status": "HEADLINE_ELIGIBLE" if not reasons else "FORMAL_CERTIFICATE_ONLY",
         "headline_eligible": not reasons,
@@ -426,7 +440,7 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "reasons": reasons,
         "thresholds": {
             "minimum_value_cap": float(args.mcq_min_headline_value_cap),
-            "minimum_selected_distractor_kappa": float(
+            "descriptive_clone_diagnostic_kappa": float(
                 args.mcq_min_headline_distractor_kappa),
         },
         "no_demo_canonical_option_prior": prior.tolist(),
@@ -435,7 +449,11 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "no_demo_prior_normalized_entropy": normalized_entropy,
         "no_demo_prior_total_variation_from_uniform": float(
             0.5 * np.abs(prior - 1.0 / len(prior)).sum()),
-        "global_value_cap": float(state["value_cap"]),
+        "finite_state_global_value_cap": float(state["value_cap"]),
+        "coarse_no_demo_range_cap": coarse_cap,
+        "state_envelope_capability": capability,
+        "operational_target_diagnostic": state["finite_state_envelope"][
+            "operational_target_diagnostic"],
         "target_design_yes_rate": float(entry["target_design_yes_rate"]),
         "selected_distractor_kappa_min": min_kappa,
         "selected_distractor_kappa_mean": float(np.mean(
@@ -443,10 +461,13 @@ def mcq_instrument_quality(state: dict, args) -> dict:
         "selected_distractor_disagreements_min": int(min(
             row["n_disagree"] for row in selected)),
         "selected_distractors": selected,
+        "selected_distractor_kappa_is_headline_gate": False,
         "prior_calibration": prior_calibration,
         "scope": (
-            "descriptive gate for scientific headline use; failure does not invalidate the "
-            "fixed-instrument all-prompt inequality"),
+            "blind-prior, coarse-headroom, and exhaustive finite-state target-identification "
+            "capability gates for scientific headline use; the operational target replay and "
+            "kappa are descriptive only. Gate failure does not invalidate the fixed-instrument "
+            "all-prompt finite-state inequality"),
     }
 
 
@@ -670,6 +691,17 @@ def _manifest_payload(args) -> dict:
     if args.value_mode == "reconstruction_mcq":
         _validate_level_matched_codebook_banks(
             codebook_metric_identity, allow_all_unknown=bool(args.dry_run))
+    mcq_task_nouns = {}
+    if args.value_mode == "reconstruction_mcq":
+        from methods.metric_implementer.config import ImplementerConfig, apply_task_preset
+        tasks = sorted({
+            str(identity["task"])
+            for identity in [*metric_identity.values(), *codebook_metric_identity.values()]
+        })
+        for task in tasks:
+            cfg = ImplementerConfig()
+            apply_task_preset(cfg, task)
+            mcq_task_nouns[task] = str(getattr(cfg, "item_noun", task))
     worker = str(Path(args.worker).resolve())
     core = {
         "schema": MANIFEST_SCHEMA,
@@ -696,10 +728,18 @@ def _manifest_payload(args) -> dict:
         "mcq_min_design_disagreements": args.mcq_min_design_disagreements,
         "mcq_n_examples": args.mcq_n_examples,
         "mcq_reconstruction_draws": args.mcq_reconstruction_draws,
+        "mcq_max_chars": args.mcq_max_chars,
+        "mcq_task_nouns": mcq_task_nouns,
         "mcq_choice_readout": args.mcq_choice_readout,
         "mcq_value_query_batch_size": args.mcq_value_query_batch_size,
         "mcq_min_headline_value_cap": args.mcq_min_headline_value_cap,
         "mcq_min_headline_distractor_kappa": args.mcq_min_headline_distractor_kappa,
+        "mcq_distractor_kappa_role": "descriptive_near_clone_diagnostic_only",
+        "mcq_fixed_hard_annotation_rule": "1 iff normalized pYES > 0.5; ties map to 0",
+        "mcq_panel_selection_policy": (
+            "prior_pass -> positive_unique_target_envelope_maximizer -> max_U_state -> "
+            "behavioral_hardness -> panel_id"),
+        "mcq_candidate_value_mode": "exact_cpu_lookup_in_immutable_2^8_state_table",
         "mcq_prior_candidate_pool_size": args.mcq_prior_candidate_pool_size,
         "mcq_prior_max_panels_per_target": args.mcq_prior_max_panels_per_target,
         "mcq_prior_max_option_probability": args.mcq_prior_max_option_probability,
@@ -781,6 +821,8 @@ def _manifest_payload(args) -> dict:
                 Path(__file__).with_name("cr3_evidence_store.py")),
             "vllm_backend": file_sha256(REPO / "methods" / "metric_implementer" / "vllm_backend.py"),
             "recon_channel": file_sha256(REPO / "methods" / "metric_implementer" / "recon_channel.py"),
+            "implementer_config": file_sha256(
+                REPO / "methods" / "metric_implementer" / "config.py"),
             "alpha_probe": file_sha256(Path(__file__).with_name("alpha_probe.py")),
         },
         "dry_run": bool(args.dry_run),
@@ -1433,7 +1475,21 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
                           candidate_paths_by_task: dict[str, list[Path]]) -> None:
     if args.value_mode != "reconstruction_mcq":
         return
-    from methods.metric_implementer.config import ImplementerConfig, apply_task_preset
+    reuse_root = (Path(args.reuse_mcq_codebook_root).resolve()
+                  if args.reuse_mcq_codebook_root else None)
+    if reuse_root is not None:
+        source_cache = reuse_root / "mcq_query_cache" / "choice_probabilities.sqlite"
+        if source_cache.exists():
+            cache_report = import_choice_probability_cache(
+                source_cache,
+                root / "mcq_query_cache" / "choice_probabilities.sqlite",
+            )
+            cache_report_path = root / "mcq_query_cache" / "reuse_import.json"
+            if cache_report_path.exists():
+                if json.loads(cache_report_path.read_text()) != cache_report:
+                    raise RuntimeError("reused MCQ choice-cache import changed across resume")
+            else:
+                _atomic_json(cache_report_path, cache_report)
 
     by_task: dict[str, list[dict]] = {}
     for state in states.values():
@@ -1480,6 +1536,20 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
             candidate_pool_size=args.mcq_prior_candidate_pool_size,
             max_panels_per_target=args.mcq_prior_max_panels_per_target,
         )
+        reusable_plan_payload = None
+        reusable_plan = (reuse_root / "mcq_codebooks" / f"{task}.panel_plan.json"
+                         if reuse_root is not None else None)
+        if reusable_plan is not None and reusable_plan.exists():
+            reusable_plan_payload = json.loads(reusable_plan.read_text())
+            semantic_old = dict(reusable_plan_payload)
+            semantic_new = dict(plan)
+            for semantic in (semantic_old, semantic_new):
+                semantic.pop("plan_sha256", None)
+                semantic.pop("base_codebook_manifest_sha256", None)
+            if semantic_old != semantic_new:
+                # Candidate bootstraps remain reusable when the prospective panel budget expands.
+                # Do not transplant the old calibration; exact rendered-query cache rows may still hit.
+                reusable_plan_payload = None
         plan_path = root / "mcq_codebooks" / f"{task}.panel_plan.json"
         if plan_path.exists():
             if json.loads(plan_path.read_text()) != plan:
@@ -1487,12 +1557,45 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
         else:
             _atomic_json(plan_path, plan)
         calibration_path = root / "mcq_codebooks" / f"{task}.prior_calibration.json"
+        if (not calibration_path.exists() and reuse_root is not None
+                and reusable_plan_payload is not None):
+            reusable_calibration = (
+                reuse_root / "mcq_codebooks" / f"{task}.prior_calibration.json")
+            if reusable_calibration.exists():
+                observed_calibration = json.loads(reusable_calibration.read_text())
+                validate_reconstructor_artifact_contract(
+                    observed_calibration, manifest,
+                    role=f"reusable MCQ prior calibration for {task}")
+                # Selection validates both the calibration checksum and exact plan binding.
+                select_prior_balanced_panels(
+                    reusable_plan_payload,
+                    observed_calibration,
+                    maximum_option_probability=args.mcq_prior_max_option_probability,
+                    target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+                    minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+                )
+                calibration_core = dict(observed_calibration)
+                calibration_core.pop("calibration_sha256", None)
+                calibration_core["panel_plan_sha256"] = plan["plan_sha256"]
+                transplanted = {
+                    **calibration_core,
+                    "calibration_sha256": hashlib.sha256(json.dumps(
+                        calibration_core, sort_keys=True, separators=(",", ":")
+                    ).encode("utf-8")).hexdigest(),
+                }
+                # The numeric query rows are reused exactly; only the root-bound plan hash changes.
+                select_prior_balanced_panels(
+                    plan,
+                    transplanted,
+                    maximum_option_probability=args.mcq_prior_max_option_probability,
+                    target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+                    minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+                )
+                _atomic_json(calibration_path, transplanted)
         if not calibration_path.exists():
-            cfg = ImplementerConfig()
-            apply_task_preset(cfg, task)
             calibration_jobs.append({
                 "panel_plan": str(plan_path),
-                "noun": str(getattr(cfg, "item_noun", task)),
+                "noun": manifest["mcq_task_nouns"][task],
                 "n_draws": args.mcq_reconstruction_draws,
                 "query_batch_size": args.mcq_value_query_batch_size,
                 "choice_probability_cache": str(
@@ -1515,15 +1618,152 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
         worlds={},
     )
 
+    panel_searches = {}
+    panel_value_jobs = []
     for task, (task_states, paths, plan, calibration_path) in planned.items():
         if not calibration_path.exists():
             raise RuntimeError(f"missing MCQ prior calibration for task {task}")
         calibration = json.loads(calibration_path.read_text())
         validate_reconstructor_artifact_contract(
             calibration, manifest, role=f"MCQ prior calibration for {task}")
-        selections = select_prior_balanced_panels(
+        if (calibration.get("noun") != manifest["mcq_task_nouns"][task]
+                or int(calibration.get("n_draws", -1)) != args.mcq_reconstruction_draws):
+            raise RuntimeError(
+                f"MCQ prior calibration rendering contract changed for task {task}")
+        ranked = prior_balanced_panel_rows(
             plan,
             calibration,
+            maximum_option_probability=args.mcq_prior_max_option_probability,
+            target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
+            minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
+        )
+        path_by_key = {path.parents[1].name: path for path in paths}
+        reconstruction_noun = manifest["mcq_task_nouns"][task]
+        records = []
+        for target_key, target_rows in ranked["rows"].items():
+            passing = [row for row in target_rows if row["passes_prior_balance"]]
+            for row in passing:
+                panel_id = str(row["panel_id"])
+                selected_keys = [target_key, *row["distractor_metric_keys"]]
+                if any(key not in path_by_key for key in selected_keys):
+                    raise RuntimeError(f"panel {panel_id} references an absent codebook metric")
+                provisional_selection = {
+                    target_key: {
+                        "distractor_metric_keys": list(row["distractor_metric_keys"]),
+                        "prior_calibration": {
+                            "panel_id": panel_id,
+                            "passes_prior_balance": True,
+                            "prior": row["prior"],
+                            "violations": row["prior_balance_violations"],
+                            "thresholds": ranked["thresholds"],
+                            "n_panels_evaluated": len(target_rows),
+                            "n_panels_passing": len(passing),
+                            "calibration_sha256": ranked["calibration_sha256"],
+                        },
+                    },
+                }
+                provisional = build_frozen_codebook_manifest(
+                    [path_by_key[key] for key in selected_keys],
+                    n_options=args.mcq_n_options,
+                    design_size=args.mcq_design_size,
+                    min_design_disagreements=args.mcq_min_design_disagreements,
+                    seed=stable_seed("mcq-codebook", task) % (2 ** 32),
+                    panel_selections=provisional_selection,
+                    reconstruction_noun=reconstruction_noun,
+                    reconstruction_max_chars=args.mcq_max_chars,
+                )
+                panel_dir = root / "mcq_panel_envelopes" / target_key / panel_id
+                codebook_path = panel_dir / "codebook.json"
+                if codebook_path.exists():
+                    observed = json.loads(codebook_path.read_text())
+                    validate_codebook_manifest(observed)
+                    if observed != provisional:
+                        raise RuntimeError(
+                            f"provisional codebook changed for {target_key}/{panel_id}")
+                else:
+                    _atomic_json(codebook_path, provisional)
+                state_path = panel_dir / "states.npz"
+                write_finite_state_scored_artifact(
+                    state_path,
+                    codebook_manifest=provisional,
+                    target_metric_key=target_key,
+                )
+                value_path = panel_dir / "values.npz"
+                if not value_path.exists():
+                    panel_value_jobs.append({
+                        "codebook_manifest": str(codebook_path),
+                        "target_metric_key": target_key,
+                        "scored": str(state_path),
+                        "noun": reconstruction_noun,
+                        "n_examples": FIXED_TEACHING_SIZE,
+                        "n_reconstruction_draws": args.mcq_reconstruction_draws,
+                        "max_chars": args.mcq_max_chars,
+                        "choice_readout": args.mcq_choice_readout,
+                        "query_batch_size": args.mcq_value_query_batch_size,
+                        "choice_probability_cache": str(
+                            root / "mcq_query_cache" / "choice_probabilities.sqlite"),
+                        "fixed_no_demo_canonical_choice_probabilities": row["prior"][
+                            "canonical_choice_probabilities"],
+                        "expected_reconstructor_model": manifest["mcq_reconstructor"],
+                        "expected_reconstructor_revision": manifest[
+                            "mcq_reconstructor_revision"],
+                        "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
+                        "out": str(value_path),
+                    })
+                records.append({
+                    "target_metric_key": target_key,
+                    "panel_id": panel_id,
+                    "codebook": provisional,
+                    "state_path": state_path,
+                    "value_path": value_path,
+                })
+        panel_searches[task] = (task_states, paths, plan, calibration, records)
+
+    run_stage(
+        stage="value",
+        items=panel_value_jobs,
+        jobs_file=root / "jobs" / "panel_envelope_values.json",
+        model=args.mcq_reconstructor,
+        family="",
+        temperature=0.0,
+        args=args,
+        worlds={},
+    )
+
+    for task, (task_states, paths, plan, calibration, records) in panel_searches.items():
+        panel_envelopes: dict[str, dict[str, dict]] = {}
+        for record in records:
+            values = load_value_artifact(
+                record["value_path"],
+                expected_source_scored_sha256=file_sha256(record["state_path"]),
+                expected_codebook_manifest_sha256=record["codebook"]["manifest_sha256"],
+                expected_choice_readout_id=manifest["mcq_choice_readout_protocol"],
+                expected_reconstructor_model=manifest["mcq_reconstructor"],
+                expected_reconstructor_revision=manifest["mcq_reconstructor_revision"],
+            )
+            envelope = build_finite_state_envelope(
+                codebook_manifest=record["codebook"],
+                target_metric_key=record["target_metric_key"],
+                state_scored_path=record["state_path"],
+                value_payload=values,
+            )
+            envelope_path = record["value_path"].with_name("envelope.json")
+            if envelope_path.exists():
+                validate_finite_state_envelope(
+                    json.loads(envelope_path.read_text()),
+                    codebook_manifest=record["codebook"],
+                    target_metric_key=record["target_metric_key"],
+                    state_scored_path=record["state_path"],
+                    value_payload=values,
+                )
+            else:
+                _atomic_json(envelope_path, envelope)
+            panel_envelopes.setdefault(record["target_metric_key"], {})[
+                record["panel_id"]] = envelope
+        selections = select_state_capable_panels(
+            plan,
+            calibration,
+            panel_envelopes,
             maximum_option_probability=args.mcq_prior_max_option_probability,
             target_probability_tolerance=args.mcq_prior_target_probability_tolerance,
             minimum_normalized_entropy=args.mcq_prior_min_normalized_entropy,
@@ -1535,6 +1775,8 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
             min_design_disagreements=args.mcq_min_design_disagreements,
             seed=stable_seed("mcq-codebook", task) % (2 ** 32),
             panel_selections=selections,
+            reconstruction_noun=manifest["mcq_task_nouns"][task],
+            reconstruction_max_chars=args.mcq_max_chars,
         )
         path = root / "mcq_codebooks" / f"{task}.json"
         if path.exists():
@@ -1568,14 +1810,28 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
         outputs[key] = output
         if output.exists():
             continue
-        from methods.metric_implementer.config import ImplementerConfig, apply_task_preset
-        cfg = ImplementerConfig()
-        apply_task_preset(cfg, state["task"])
+        if state.get("finite_state_value_payload") is not None:
+            codebook = json.loads(Path(state["mcq_codebook_path"]).read_text())
+            lookup_payload = lookup_scored_prompt_values(
+                codebook_manifest=codebook,
+                target_metric_key=key,
+                scored_path=scored[key],
+                state_scored_path=state["finite_state_scored_path"],
+                state_value_payload=state["finite_state_value_payload"],
+                envelope_summary=state["finite_state_envelope"],
+            )
+            write_value_artifact(
+                output,
+                lookup_payload,
+                reconstructor_model=manifest["mcq_reconstructor"],
+                reconstructor_revision=manifest["mcq_reconstructor_revision"],
+            )
+            continue
         item = {
             "codebook_manifest": str(state["mcq_codebook_path"]),
             "target_metric_key": key,
             "scored": str(scored[key]),
-            "noun": str(getattr(cfg, "item_noun", state["task"])),
+            "noun": manifest["mcq_task_nouns"][state["task"]],
             "n_examples": args.mcq_n_examples,
             "n_reconstruction_draws": args.mcq_reconstruction_draws,
             "max_chars": args.mcq_max_chars,
@@ -1618,6 +1874,80 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
     return loaded
 
 
+def prepare_mcq_finite_state_tables(
+    root: Path,
+    states: dict[str, dict],
+    manifest: dict,
+    args,
+    worlds: dict[str, dict],
+) -> None:
+    """Enumerate and value all 2^8 transcripts before any prompt-value search."""
+    if args.value_mode != "reconstruction_mcq":
+        return
+    scored = {}
+    codebooks = {}
+    for key, state in states.items():
+        codebook = json.loads(Path(state["mcq_codebook_path"]).read_text())
+        validate_codebook_manifest(codebook)
+        path = root / "mcq_state_tables" / key / "states.npz"
+        write_finite_state_scored_artifact(
+            path,
+            codebook_manifest=codebook,
+            target_metric_key=key,
+        )
+        scored[key] = path
+        codebooks[key] = codebook
+    values = value_all(
+        list(states), states, scored,
+        phase="finite_state", iteration=0, manifest=manifest, args=args, worlds=worlds,
+    )
+    for key, state in states.items():
+        summary = build_finite_state_envelope(
+            codebook_manifest=codebooks[key],
+            target_metric_key=key,
+            state_scored_path=scored[key],
+            value_payload=values[key],
+        )
+        summary_path = root / "mcq_state_tables" / key / "envelope.json"
+        if summary_path.exists():
+            observed = json.loads(summary_path.read_text())
+            validate_finite_state_envelope(
+                observed,
+                codebook_manifest=codebooks[key],
+                target_metric_key=key,
+                state_scored_path=scored[key],
+                value_payload=values[key],
+            )
+        else:
+            _atomic_json(summary_path, summary)
+        selection = state["mcq_codebook_entry"].get("state_envelope_selection") or {}
+        chosen_bound = selection.get("chosen_finite_state_upper_bound")
+        if chosen_bound is not None and not np.isclose(
+                float(chosen_bound), float(summary["finite_state_upper_bound"]),
+                rtol=0.0, atol=1e-12):
+            raise RuntimeError(f"final state envelope changed after panel selection for {key}")
+        if chosen_bound is not None and bool(selection.get("passes_state_capability")) != bool(
+                summary["state_envelope_capability"][
+                    "has_positive_unique_target_maximizer"]):
+            raise RuntimeError(f"final state capability changed after panel selection for {key}")
+        chosen_semantic = selection.get("chosen_state_function_semantic_sha256")
+        if (chosen_semantic is not None
+                and str(chosen_semantic) != summary["state_function_semantic_sha256"]):
+            raise RuntimeError(
+                f"final state function changed semantically after panel selection for {key}")
+        state["finite_state_envelope"] = summary
+        state["finite_state_envelope_path"] = summary_path
+        state["finite_state_envelope_sha256"] = summary["summary_sha256"]
+        state["finite_state_scored_path"] = scored[key]
+        state["finite_state_value_payload"] = values[key]
+        state["coarse_range_cap"] = float(summary["coarse_no_demo_range_cap"])
+        state["value_cap"] = float(summary["finite_state_upper_bound"])
+        state["no_demonstration_target_probability"] = float(
+            values[key]["no_demonstration_target_probability"])
+        state["fixed_no_demo_canonical_choice_probabilities"] = np.asarray(
+            values[key]["fixed_no_demo_canonical_choice_probabilities"], float)
+
+
 def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, args,
                            worlds: dict[str, dict]) -> None:
     if args.value_mode != "reconstruction_mcq":
@@ -1628,13 +1958,17 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, 
         manifest=manifest, args=args, worlds=worlds)
     for key, state in states.items():
         payload = bootstrap_values[key]
+        if (not np.isclose(payload["value_cap"], state["coarse_range_cap"],
+                           rtol=0.0, atol=1e-12)
+                or not np.isclose(
+                    payload["no_demonstration_target_probability"],
+                    state["no_demonstration_target_probability"], rtol=0.0, atol=1e-12)
+                or not np.array_equal(
+                    payload["fixed_no_demo_canonical_choice_probabilities"],
+                    state["fixed_no_demo_canonical_choice_probabilities"])):
+            raise RuntimeError(f"frozen finite-state control changed in bootstrap values for {key}")
         state["value_name"] = payload["value_name"]
         state["value_unit"] = payload["value_unit"]
-        state["value_cap"] = float(payload["value_cap"])
-        state["no_demonstration_target_probability"] = float(
-            payload["no_demonstration_target_probability"])
-        state["fixed_no_demo_canonical_choice_probabilities"] = np.asarray(
-            payload["fixed_no_demo_canonical_choice_probabilities"], float)
 
     historical_scored = {
         key: state["historical_scored_path"]
@@ -1649,7 +1983,7 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, 
         payload = bootstrap_values[key]
         values = [payload["values"]]
         details = list(payload["details"])
-        value_cap = state["value_cap"]
+        value_cap = state["coarse_range_cap"]
         no_demo = state["no_demonstration_target_probability"]
         fixed_no_demo = state["fixed_no_demo_canonical_choice_probabilities"]
         value_determined_by_exact_behavior = bool(
@@ -1695,6 +2029,8 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, 
             values.append(absorbed["values"])
             details.extend(absorbed["details"])
         state["pool_values"] = np.concatenate(values)
+        if np.any(state["pool_values"] > state["value_cap"] + 1e-12):
+            raise RuntimeError(f"prompt value exceeds exhaustive finite-state envelope for {key}")
         if len(state["pool_values"]) != len(state["pool"]):
             raise RuntimeError(f"prompt/value pool length mismatch for {key}")
         if len(details) != len(state["pool"]):
@@ -2116,7 +2452,7 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
     if args.value_mode == "reconstruction_mcq":
         if value_payload is None or len(value_payload["values"]) != len(audit):
             raise RuntimeError("Reconstruction-MCQ certificate requires one value mark per audit row")
-        if (not np.isclose(value_payload["value_cap"], state["value_cap"],
+        if (not np.isclose(value_payload["value_cap"], state["coarse_range_cap"],
                            rtol=0.0, atol=1e-12)
                 or not np.isclose(
                     value_payload["no_demonstration_target_probability"],
@@ -2126,6 +2462,8 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
                     value_payload["fixed_no_demo_canonical_choice_probabilities"],
                     state["fixed_no_demo_canonical_choice_probabilities"])):
             raise RuntimeError("Reconstruction-MCQ audit changed the frozen no-demo global cap")
+        if np.any(np.asarray(value_payload["values"], float) > state["value_cap"] + 1e-12):
+            raise RuntimeError("Reconstruction-MCQ audit value exceeds the finite-state envelope")
         value_determined_by_exact_behavior = (
             bool(state["value_determined_by_exact_behavior"])
             and bool(value_payload["premises"].get("value_determined_by_exact_behavior")))
@@ -2161,7 +2499,7 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
         if args.dry_run:
             reported_global_status = "SYNTHETIC_TEST_ONLY"
         cert["all_finite_prompt_certificate"] = {
-            "schema": "reconstruction-mcq-all-prompts-cap-v4",
+            "schema": "reconstruction-mcq-all-prompts-cap-v5",
             "status": reported_global_status,
             "formal_mathematical_status": global_status,
             "headline_eligible": bool(instrument_quality["headline_eligible"]),
@@ -2175,18 +2513,31 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             "current_audit_best_lower_bound": audit_best,
             "current_audit_role": certificate_role,
             "anchor_free_global_upper_bound": state["value_cap"],
+            "finite_state_upper_bound": state["value_cap"],
+            "coarse_no_demo_range_cap": state["coarse_range_cap"],
             "global_optimization_gap_UCB": gap,
             "epsilon": epsilon,
             "identified_interval": [best, state["value_cap"]],
             "no_demonstration_target_probability": state[
                 "no_demonstration_target_probability"],
+            "finite_state_envelope_path": str(state["finite_state_envelope_path"]),
+            "finite_state_envelope_sha256": state["finite_state_envelope_sha256"],
+            "finite_state_instrument_sha256": state["finite_state_envelope"][
+                "instrument_sha256"],
+            "n_fixed_teaching_items": state["finite_state_envelope"]["n_teaching_items"],
+            "n_exhaustive_binary_states": state["finite_state_envelope"]["n_states"],
+            "state_envelope_capability": state["finite_state_envelope"][
+                "state_envelope_capability"],
+            "operational_target_diagnostic": state["finite_state_envelope"][
+                "operational_target_diagnostic"],
             "bound_identity": (
-                "V_ann(p) <= 1 - q_no_demo(b) for every finite p in Dom(E_wrapper)"),
+                "V_ann(p)=v(s_T(p)) <= max_{s in {0,1}^8} v(s) <= "
+                "1-q_no_demo(b) for every finite p in Dom(E_wrapper)"),
             "note": (
-                "the frozen no-demonstration control is independent of candidate prompts; "
-                "without additional executor structure, finite black-box observations cannot "
-                "lower this all-strings cap further. CR-3 separately tightens the declared "
-                "proposer-process horizon/support scope"),
+                "the ordered eight-item teaching panel is frozen before prompt search and all "
+                "256 binary annotation transcripts are valued exactly. The maximizing transcript "
+                "need not be reachable by a prompt, so this is an upper envelope rather than an "
+                "attainment claim. CR-3 separately tightens proposer-process discovery bounds"),
             "uses_external_labels": False,
             "instrument_quality": instrument_quality,
         }
@@ -2511,7 +2862,10 @@ def main(argv=None) -> int:
     parser.add_argument("--mcq-value-query-batch-size", type=int, default=512)
     parser.add_argument("--mcq-max-chars", type=int, default=600)
     parser.add_argument("--mcq-min-headline-value-cap", type=float, default=0.10)
-    parser.add_argument("--mcq-min-headline-distractor-kappa", type=float, default=0.50)
+    parser.add_argument(
+        "--mcq-min-headline-distractor-kappa", type=float, default=0.50,
+        help="descriptive near-clone diagnostic retained for compatibility; not a headline gate",
+    )
     parser.add_argument("--mcq-prior-candidate-pool-size", type=int, default=16)
     parser.add_argument("--mcq-prior-max-panels-per-target", type=int, default=256)
     parser.add_argument("--mcq-prior-max-option-probability", type=float, default=0.35)
@@ -2580,10 +2934,12 @@ def main(argv=None) -> int:
         parser.error("per-family batch sizes must exceed one")
     if args.ceiling_horizon_per_family < 0:
         parser.error("--ceiling-horizon-per-family must be nonnegative")
-    if not 2 <= args.mcq_n_options or not 2 <= args.mcq_design_size <= 300:
-        parser.error("MCQ requires n-options >=2 and design-size in [2,300]")
-    if (args.mcq_min_design_disagreements < 1 or args.mcq_n_examples < 2
-            or args.mcq_n_examples > args.mcq_design_size):
+    if (not 2 <= args.mcq_n_options
+            or not 2 <= args.mcq_design_size <= 300 - FIXED_TEACHING_SIZE):
+        parser.error(
+            f"MCQ requires n-options >=2 and design-size in [2,{300 - FIXED_TEACHING_SIZE}]")
+    if (args.mcq_min_design_disagreements < 1
+            or args.mcq_n_examples != FIXED_TEACHING_SIZE):
         parser.error("invalid MCQ disagreement/example design")
     if (args.mcq_reconstruction_draws < args.mcq_n_options
             or args.mcq_reconstruction_draws % args.mcq_n_options != 0):
@@ -2673,6 +3029,7 @@ def main(argv=None) -> int:
             if world is not None:
                 worlds[state["key"]] = world
         prepare_mcq_codebooks(root, states, manifest, args, codebook_candidate_paths)
+        prepare_mcq_finite_state_tables(root, states, manifest, args, worlds)
         prepare_historical_candidates(root, states, manifest, args, worlds)
         attach_mcq_pool_values(root, states, manifest, args, worlds)
         alpha_tiers = reporting_alpha_tiers(args, n_metrics=len(states))

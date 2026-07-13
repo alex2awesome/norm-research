@@ -195,26 +195,40 @@ Ownership: `experiments/run_cr3_mining_loop.py` is the only end-to-end entrypoin
 `scripts/tools/cr3_mining_worker.py` is its GPU child process; and `experiments/cr_audit.py` is the CPU
 certificate library. These add a bound-grade path. They do not delete CR-2/GEPA/value-census code. The DPI
 certificate is authoritative only for the auxiliary fixed-target objective. The primary Reconstruction-MCQ
-all-string result uses the frozen-control cap `1 - q_no_demo(target)`. CR-3 is authoritative only for its declared
-proposer-process horizon/support scope.
+all-string result uses the exact fixed-eight state envelope described below; `1-q_no_demo(target)` remains
+its coarser range cap. CR-3 is authoritative only for its declared proposer-process horizon/support scope.
 
 For the primary anchor-free objective, add `--value-mode reconstruction_mcq`. The orchestrator then freezes
 task-and-hierarchy-level option codebooks from bootstrap behavior before mining, and the worker's `value` stage applies
 `experiments/cr3_reconstruction_values.py` to every pool/audit prompt. The CR mark is annotation-attributable
 MCQ target-option lift over no-demo/shuffled controls, bounded by the prompt-independent global cap
-`1 - q_no_demo(target)`. Behavior signatures still define capture species. On the deterministic-logit path,
-candidate wording is never shown to the reconstructor and teaching selection/order is a function of hard
-behavior. A persistent content-addressed choice-probability cache removes cross-process numeric drift, and
+`1 - q_no_demo(target)`. For every prior-passing menu, codebook v4 constructs a target-specific ordered
+eight-item teaching panel from the complement of the 120-item menu-design split and its exhaustive envelope;
+the final menu and associated panel are selected and frozen jointly. Every prompt uses those same selected
+items and order.
+The loop values all 256 binary transcripts before prompt search and certifies
+`V_best <= V*_{b,E} <= U_state <= 1-q_no_demo`. Behavior signatures still define capture species. Candidate
+wording is never shown to the reconstructor. The reconstruction noun, `--mcq-max-chars`, model/tokenizer/chat
+template, option block, deterministic seeds, and exact rendered queries are part of the frozen evaluator
+namespace. A persistent content-addressed choice-probability cache removes cross-process numeric drift, and
 repeated exact patterns are required to have identical value; only then may exact-support
 exhaustion be promoted to a proposer-support value ceiling. `legacy_fixed_target` remains available only for
 the historical `I(M_fixed;E(p,X))` experiment.
 
-The production certificate also tracks the exact teaching-transcript hash as a coarser value-state
-partition. With a separately defended `--value-p-min`, exhausting those states proves the
+The executor backend records normalized YES/NO probabilities, then applies the frozen hard readout `YES`
+iff `pYES>0.5` (ties are `NO`). The finite state is the resulting ordered eight-bit transcript. Once its
+table is frozen, bootstrap, historical, monitor, checkpoint, and confirmation `a_value` artifacts are
+created by validated CPU lookup, not new Qwen calls. The table itself is evaluated directly by Qwen and
+lookup-versus-direct replay is covered by tests.
+
+The production certificate tracks the exact fixed teaching-transcript hash as its value-state partition.
+The all-prompt `U_state` theorem is unconditional because all 256 states are enumerated. Separately, with a
+defended `--value-p-min`, capture-recapture exhaustion of observed proposer draws proves the
 proposer-support Reconstruction-MCQ value ceiling even if full 300-bit executor patterns remain diverse.
 
-The all-string MCQ result and CR-3 answer different questions. `1-q_no_demo(target)` is a range cap that
-holds for every finite prompt without a proposer assumption. CR-3 estimates unseen behavior/value-state
+The all-string MCQ result and CR-3 answer different questions. `U_state` is the exact upper envelope over
+the fixed instrument's complete binary transcript population and holds for every finite prompt without a
+proposer assumption; `1-q_no_demo(target)` is its coarser range audit. CR-3 estimates unseen behavior/value-state
 mass and future gain under the declared proposer mixture, so it explains and predictably tightens the
 search-process result but cannot see zero- or arbitrarily-low-probability prompts. Report both scopes.
 
@@ -233,10 +247,17 @@ subset is a different and usually easier reconstruction estimand.
 
 V11 enumerates behaviorally hard panels and runs the exact blind no-demonstration query before any prompt
 is valued. The default prior-balance gate requires maximum option probability `<=0.35`, target probability
-within `0.10` of chance, and normalized prior entropy `>=0.90`; among passing menus it freezes the
-behaviorally hardest. If none passes, the least-violating menu is retained only as
-`FORMAL_CERTIFICATE_ONLY`. The calibration and value stages share the same rendered queries, seeds,
+within `0.10` of chance, and normalized prior entropy `>=0.90`. The fixed-state v12 release then enumerates
+the complete T8 envelope for every prior-passing menu, retains state-live menus, and selects the largest
+`U_state`; behavioral hardness and panel ID are tie-breakers only. This maximizes measurable dynamic range
+and is conservative against easy certification. If no passing panel is live, the maximum-range passing
+menu is formal-only; if no panel passes the prior gates, the least-violating menu is formal-only. The
+calibration and value stages share the same frozen noun, rendering limit, rendered queries, seeds,
 reconstructor revision, and choice cache, and the loop verifies their probability matrices agree exactly.
+Each prior-passing panel costs 2,048 batched annotation/shuffled choice queries at the default four draws;
+fixed panels do not rerun teaching-set MILPs per state. `--mcq-prior-max-panels-per-target` is the prospective
+compute budget. Increasing it preserves executor artifacts and rendered-query cache hits but produces a new
+plan/final-codebook namespace.
 
 Historical prompts for the same target can be reused without laundering them into fresh data. First build
 one immutable evidence store, then pass it to a new run:
@@ -254,10 +275,13 @@ used as checkpoint or confirmation observations.
 
 Formal optimality is not automatically a headline articulability result. The global payload's
 `instrument_quality` reports the full no-demo option prior, entropy, value headroom, selected-distractor
-kappas, and disagreement counts. By default, cap `<0.10` or minimum selected kappa `<0.50` yields
-`FORMAL_CERTIFICATE_ONLY`: the all-prompt inequality remains true, but the panel is prior-degenerate or too
-easy for the substantive claim. Thresholds are predeclared with `--mcq-min-headline-value-cap` and
-`--mcq-min-headline-distractor-kappa`.
+kappas, disagreement counts, exhaustive state capability, and operational target/orbit diagnostic. A
+headline requires the blind-prior gates, coarse headroom `>=0.10`, `U_state` above the predeclared value
+resolution, and at least one envelope-maximizing transcript with positive lift and a unique target-option
+posterior argmax. For one-form targets the operational diagnostic is the canonical-description behavior; for
+orbit targets it is the hard readout of the declared orbit average and need not be realizable by one prompt.
+It is diagnostic only. The historical universal
+kappa `>=0.50` threshold is retained as a descriptive near-clone diagnostic, not a headline gate.
 
 ```bash
 # CPU certificate, production-path, value-census, and resume tests:
@@ -265,18 +289,20 @@ PYTHONPATH=. pytest -q \
   methods/metric_implementer/tests/test_cr_audit.py \
   methods/metric_implementer/tests/test_cr3_evidence_store.py \
   methods/metric_implementer/tests/test_cr3_mining_loop.py \
+  methods/metric_implementer/tests/test_cr3_reconstruction_values.py \
   methods/metric_implementer/tests/test_value_census.py
 
 # adaptive mine-until-bound loop (sk3, one GPU at a time):
 CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr3_mining_loop.py \
   --metrics <..._sigs.npz ...> \
+  --out-root /lfs/skampere3/0/alexspan/outputs/<new-immutable-v12-fixed-t8-root> \
   --mcq-codebook-metrics <full frozen task-and-level checkpoint bank ...> \
   --reuse-bootstrap-root <verified-prior-cr3-root> \
   --reuse-mcq-codebook-root <optional prior root with the same candidate bank> \
   --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
-  --mcq-choice-readout logits --mcq-value-query-batch-size 512 \
+  --mcq-choice-readout logits --mcq-n-examples 8 --mcq-value-query-batch-size 512 \
   --families microsoft/phi-4 microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
   --family-tags phi4_atomic phi4_holistic qwen14_atomic llama8_holistic \
   --family-modes atomic holistic atomic holistic \
@@ -292,6 +318,13 @@ prompts through the same ordered probe panel and persistent content-addressed ex
 checkpoint hash, resolved metric identity, probe/executor/readout namespace, model snapshot, scoring-code
 hashes, and artifact schema. V12 rejects pre-v12 numeric roots rather than migrating them. Historical prompt
 text remains reusable through `--reuse-evidence-root`, where it is re-scored in the current namespace.
+For the fixed-eight release, validated e601 target bootstraps, canonical codebook-candidate bootstraps,
+300-probe prompt signatures, menu rows, and exact no-demo query results remain reusable only when the frozen
+reconstruction noun, rendering limit, reconstructor/readout namespace, and rendered-query identities match.
+The root-bound panel-plan provenance is regenerated and prior rows are transplanted only after semantic-plan and checksum
+validation. Final codebook v4, the 256-state table, and every candidate `values.npz` are new. Never resume or
+mutate the e601 root, migrate an old value artifact, or hard-link a writable SQLite cache; use a private
+validated snapshot when exact query-cache reuse is needed.
 Use aligned `--family-modes` to distinguish `atomic` one-question criteria from `holistic` complete rubrics.
 Repeat a model with distinct tags (for example `phi4_atomic` and `phi4_holistic`) when both modes are
 required; they remain separate C/R strata. An atomic-family plateau cannot be reported as an unrestricted
@@ -302,7 +335,7 @@ ledger, and a never-absorbed confirmation namespace are enforced. The final payl
 `<root>/<metric>/confirmation/certificate.json`; monitor rows select stopping and must not be quoted as
 certificates. In legacy fixed-target mode, read `all_finite_prompt_certificate` for the auxiliary
 unrestricted DPI/identity result. In Reconstruction-MCQ mode it reports the anchor-free global interval
-`[V_best, 1-q_no_demo(target)]` and its optimization-gap bound.
+`[V_best,U_state]`, the coarser `1-q_no_demo(target)` range cap, and the optimization-gap bound.
 Read top-level `certified` for the process-relative CR-3 result. The source pool remains atomic, while known target-form
 prompts are evaluated separately in the unrestricted certificate. This prevents an exact identity witness
 from erasing the unit-discovery experiment. `assumption_dependent.exact_support` is usable only when its
@@ -311,7 +344,8 @@ stated external `p_min` premise is scientifically defended.
 ### Release contract
 
 Existing v10/v11 roots remain frozen and receive no migrator. V12 adds total constrained behavior and MCQ
-choice readouts, dual 95%/90% reporting, and task-and-hierarchy-level matched MCQ banks. V11 added
+choice readouts, fixed-eight codebook v4 state enumeration, dual 95%/90% reporting, and
+task-and-hierarchy-level matched MCQ banks. V11 added
 prior-balanced menu construction and candidate-only historical evidence reuse, so it always writes a new
 immutable output root. Every run
 records exact code SHA-256 values and must resume from the same release overlay; even a whitespace edit is
@@ -322,10 +356,9 @@ the existing R3 banks for creative writing,
 humor, news homepages, press releases, code review, Math StackExchange, grant funding, peer review, and legal
 outcome prediction. The nonblocking run lock fails immediately when another process owns a root.
 
-In Reconstruction-MCQ mode the unrestricted object uses the frozen no-demonstration control: every finite
-prompt executable by the frozen wrapper obeys `V_ann <= 1-q_no_demo(target)`. Here `q_no_demo` is the exact
-mean over the frozen complete counterbalancing block, not an estimated Bernoulli rate. Without additional executor structure, finite prompt queries
-cannot lower that cap further. `prompt_evolution_status` is issued only from
+In Reconstruction-MCQ mode every finite prompt executable by the frozen wrapper maps to one of the 256
+enumerated transcripts, so `V_ann <= U_state <= 1-q_no_demo(target)`. Here `q_no_demo` is the exact mean
+over the frozen complete counterbalancing block, not an estimated Bernoulli rate. `prompt_evolution_status` is issued only from
 never-absorbed checkpoint/final audits and separately reports behavior `SATURATED/UNSATURATED/UNRESOLVED`
 and value `RISING/PLATEAUED/UNRESOLVED`. These are fixed-executor prompt-evolution statuses, not OSL labels.
 `reporting_tiers.primary_95` is the only source of process-evolution `CERTIFIED_*` labels. The same immutable audit is also

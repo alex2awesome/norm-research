@@ -2600,15 +2600,15 @@ checklist-tail, and design-effect quantities remain descriptive; none participat
 ### P. Primary object: anchor-free Reconstruction-MCQ prompt optimality
 
 Fix metric identity `b`, executor `E`, reconstructor `W`, item distribution, readout, a frozen option
-codebook `C_b` containing `b`, a teaching-set design rule, and a finite counterbalanced query block
-`B={(pi_r,s_r)}_{r=1}^R` of option orders and deterministic seeds. A candidate prompt `p` may be any finite
+codebook `\mathcal C_b` containing `b`, a teaching-set design rule, and a finite counterbalanced query block
+`\mathcal Q_b={(pi_r,s_r)}_{r=1}^R` of option orders and deterministic seeds. A candidate prompt `p` may be any finite
 string accepted by the frozen executor wrapper; there is no analyst-chosen prompt-length budget. It generates
 only its own annotations:
 
 ```
 Z_{E,p}(x) = readout(E(p,x)),
-D_p        = Design({(x,Z_{E,p}(x))}, C_b),
-q_p(j)     = W(j | D_p, C_b).
+D_p        = Design({(x,Z_{E,p}(x))}, \mathcal C_b),
+q_p(j)     = W(j | D_p, \mathcal C_b).
 ```
 
 `W` sees the selected target `(item, annotation)` demonstrations and option descriptions. It never sees
@@ -2617,7 +2617,7 @@ that the demonstrations can separate the frozen options. Define the raw and anno
 per-metric reconstruction values
 
 ```
-qbar_c,b,E(p) = (1/R) sum_{r in B} q_c,p,r(b)                 for each condition c,
+qbar_c,b,E(p) = (1/R) sum_{r in \mathcal Q_b} q_c,p,r(b)      for each condition c,
 V_raw,b,E(p)  = qbar_annotations,b,E(p),
 V_ann,b,E(p)  = [qbar_annotations,b,E(p)
                   - max{qbar_no-demo,b,E(p), qbar_shuffled,b,E(p)}]_+.
@@ -2625,18 +2625,22 @@ V_ann,b,E(p)  = [qbar_annotations,b,E(p)
 
 In the bound-grade production path this is an **exact arithmetic mean over the frozen finite block**, not an
 iid estimate of a random-order or stochastic-reconstructor population. Normalized deterministic choice
-logits, the model/tokenizer/chat-template namespace, every rendered query, and every row of the block are
-content-addressed. Consequently `qbar` has no binomial standard error and panel selection among exact frozen
-blocks creates no inferential uncertainty for the selected operational functional. A different claim over
+logits, the model/tokenizer/chat-template namespace, reconstruction noun, per-item rendering limit
+`max_chars`, every rendered query, and every row of the block are frozen and content-addressed. Consequently,
+`qbar` has no binomial standard error, and panel selection among exact frozen blocks creates no inferential
+uncertainty for the selected operational functional. A different claim over
 random menus, random item panels, or stochastic reconstructor runs would be a different estimand requiring
 an independent selection/certification design and simultaneous bounds on both achieved value and controls.
 `V_ann` is primary for prompt optimization because it cannot reward a target option that the reconstructor
 already prefers without annotations. Both values lie in `[0,1]` and use no external labels: `b` is known by
 experimental construction.
 
-The production readout is total on its declared output alphabet. Executor behavior is the exact conditional
-probability on the two allowed single-token verdicts, and MCQ value is the exact normalized probability on
-all allowed single-token option labels; masking occurs before log-softmax. A label that is not one exact
+The production readout is total on its declared output alphabet. The backend first computes the exact
+normalized conditional probability on the two allowed single-token verdicts. A frozen deterministic hard
+readout then maps each item to one annotation bit: `Z=1` iff normalized `pYES>0.5`, with an exact tie mapped
+to `0`. MCQ value is the exact normalized probability on all allowed single-token option labels; masking
+occurs before log-softmax. The 256-state theorem below is for this declared hard-annotation functional,
+not for the continuum of soft executor probabilities. A label that is not one exact
 round-tripping token, a backend without constrained-token support, a missing allowed-token log probability,
 or a nonfinite row invalidates the run rather than producing a `NaN` or an imputed zero. Readout protocol IDs
 are part of signature/value cache keys, so an older top-logprob-window row cannot be promoted into this
@@ -2649,24 +2653,47 @@ M*_{b,E}   := Z_{E,p*_{b,E}}.
 ```
 
 For one fixed `b`, target-option probability is a conditional reconstruction value, not mutual information
-because `b` has zero entropy. Across an equal-weight randomized panel `B` of metric identities, the primary
-bank-level information quantity is the stored selection channel `I(B;Bhat)`. This is how the work continues
-to maximize MI without inventing anchor labels. Per-metric `V_ann` and bank-level identity MI must both be
-reported; neither is the secondary canonical-body replay `I(Z_{E,p};Z_selected)`.
+because `b` has zero entropy. Across an equal-weight randomized panel `B` of metric identities, the companion
+bank-level information quantity is the stored selection channel `I(B;Bhat)`. The current production search
+optimizes and certifies per-metric `V_ann`, then reports the achieved bank-level identity MI of those selected
+prompts. It does **not** claim that separate per-metric lift maximization jointly maximizes or certifies
+`I(B;Bhat)`; that would require a separate joint state-row optimization and bound. This preserves an
+anchor-free MI readout without inventing labels. Per-metric `V_ann` and achieved bank-level identity MI must
+both be reported; neither is the secondary canonical-body replay `I(Z_{E,p};Z_selected)`.
+
+#### P.1a Fixed-eight production instantiation (2026-07-13)
+
+The bound-grade production instrument freezes more than the option menu. Before any candidate prompt is
+searched or valued, every prior-passing candidate menu receives its own target-specific ordered teaching
+panel `T_b=(x_1,...,x_8)` and exhaustive state envelope. The final menu and its associated `T_b` are then
+selected jointly by the prospective state-live/max-`U_state` rule and frozen together. Each panel is chosen
+contrastively using only the operational target/distractor executor behaviors (canonical or orbit-averaged,
+as declared by the bootstrap) in the sorted complement of the 120-item menu-design split. The two splits are
+disjoint and exhaustive over the 300 probes. Every candidate prompt is evaluated on the same selected eight
+items in the same order; neither its text nor its annotations may select or reorder examples. Thus
+
+```
+s_b,E(p) = (Z_E,p(x_1),...,Z_E,p(x_8)) in {0,1}^8,
+V_ann,b,E(p) = v_b(s_b,E(p)),
+```
+
+where `v_b` is the fixed deterministic Reconstruction-MCQ query/control functional. This is a production
+instantiation of the reconstruction measurement, not a claim that eight examples are universally best.
+Changing `T_b`, its order, or its size changes the estimand and requires a new immutable namespace.
 
 There is a sharper anchor-free all-prompt cap than one. Let
 `c_0,b = qbar_no-demo,b(b)`. Because the option codebook, reconstructor, option counterbalancing, and
 no-demonstration query are frozen before prompt search, `c_0,b` is independent of candidate `p`. Therefore
 
 ```
-V_ann,b,E(p) <= 1 - c_0,b =: C_b                         for every p in Dom(E).
+V_ann,b,E(p) <= 1 - c_0,b =: U_range,b                   for every p in Dom(E).
 ```
 
 > **Theorem P.1 (frozen-control global certificate).** If the no-demonstration channel is frozen and
-> candidate-independent, `[V_best,C_b]` is an identified interval for `V*_{b,E}` over all finite prompts
+> candidate-independent, `[V_best,U_range,b]` is an identified interval for `V*_{b,E}` over all finite prompts
 > executable by the frozen wrapper,
-> and `C_b-V_best` is a certified global optimization-gap upper bound for the declared Reconstruction-MCQ
-> functional. Attaining `C_b` proves global optimality.
+> and `U_range,b-V_best` is a certified global optimization-gap upper bound for the declared
+> Reconstruction-MCQ functional. Attaining `U_range,b` proves global optimality.
 >
 > **Proof.** Target-option probability is at most one, while the strongest-control term is at least the
 > fixed no-demonstration probability `c_0,b`. Positive clipping preserves the inequality. The achieved
@@ -2674,12 +2701,39 @@ V_ann,b,E(p) <= 1 - c_0,b =: C_b                         for every p in Dom(E).
 > is used. The inequality is pointwise for the selected finite-block functional; it does not claim
 > generalization to another item panel, codebook, reconstructor, query block, or execution namespace. ∎
 
+> **Theorem P.2 (exact finite-state all-prompt envelope; 2026-07-13).** Exhaustively evaluate all
+> `2^8=256` transcripts and define
+>
+> ```
+> U_state,b = max_{s in {0,1}^8} v_b(s).
+> ```
+>
+> Then, for the fixed-eight production instrument,
+>
+> ```
+> V_best <= V*_{b,E} <= U_state,b <= U_range,b = 1-c_0,b.
+> ```
+>
+> **Proof.** Every finite prompt executable by the frozen wrapper induces exactly one member of
+> `{0,1}^8`, and its value is a function only of that transcript. Its value therefore cannot exceed the
+> maximum over the exhaustively enumerated state population. Theorem P.1 supplies the final inequality.
+> No proposer distribution, capture premise, prompt-length budget, reachability assumption, or external
+> label is used. The maximizing transcript need not be realizable by any prompt, so `U_state,b` is an
+> upper envelope, not an attainment claim. Its scope does not transfer to another teaching panel,
+> codebook, executor, reconstructor, readout, or query block. ∎
+
 This cap is partly instrument-defined, so raw target-option probability and `c_0,b` must be reported beside
-the lift. Without verified executor structure, finite black-box prompt observations cannot lower `C_b`
+the lift. Without verified executor structure, finite black-box prompt observations cannot lower `U_range,b`
 further: an unseen string can attain target probability one and shuffled-control probability at most
 `c_0,b` while preserving all queried results. CR-3 supplies additional, potentially tighter bounds for
 (i) a declared finite future horizon under frozen proposer families and, with additional assumptions,
 (ii) their support. It does not turn capture-recapture into an all-strings theorem.
+
+> **Correction (2026-07-13).** The preceding no-free-lunch sentence is retained as the historical result
+> for the candidate-adaptive or otherwise unbounded teaching-state instrument. It is superseded for the
+> fixed-`T_b` production instrument by Theorem P.2. Finite observations of arbitrary prompt strings still
+> cannot tighten an unenumerated state space, but exhaustive evaluation of this complete 256-state
+> population can and does tighten `U_range,b`. Theorem P.1 remains the coarse range cap and a required audit.
 
 **Why the range cap and capture-recapture are complementary.** The frozen-control inequality is a
 distribution-free **range bound**: it uses only that a normalized target-option probability cannot exceed
@@ -2693,31 +2747,32 @@ valuable prompt may have arbitrarily small mass. No common positive mass floor e
 support. Therefore the valid combined reports are
 
 ```
-all executable finite prompts: V_best <= V*_{b,E} <= C_b,
-fixed future Q-horizon m:    E[V_best after m] <= min(C_b, U_CR3,m),
-support(Q), with positivity: sup_{p in Omega union support(Q)} V(p) <= min(C_b, U_CR3,support).
+all executable finite prompts: V_best <= V*_{b,E} <= U_state,b <= U_range,b,
+fixed future Q-horizon m:    E[V_best after m] <= min(U_state,b, U_CR3,m),
+support(Q), with positivity: sup_{p in Omega union support(Q)} V(p) <= min(U_state,b, U_CR3,support).
 ```
 
-The second and third bounds may be much tighter than `C_b`, but their prompt-class qualifiers cannot be
-dropped. Conversely, attaining `C_b` certifies all-string optimality even when behavioral discovery remains
+The second and third bounds may be much tighter than `U_state,b`, but their prompt-class qualifiers cannot be
+dropped. Conversely, attaining `U_state,b` certifies all-string optimality even when behavioral discovery remains
 unsaturated: many distinct behaviors may map to the same maximal reconstruction value.
 
 CR-3 confidence intervals and the exact range cap have different uncertainty status. The primary process
 certificate uses 95% simultaneous confidence across checkpoint/final cells for one metric; it is also
 simultaneous across declared metrics only when `--study-alpha 0.05` is supplied. A
 prospectively declared 90% recomputation of the same never-absorbed audit may issue only `SUGGESTIVE_*`
-labels and cannot overwrite the 95% result. The finite-block inequality `V_ann<=C_b` is pointwise and is not
+labels and cannot overwrite the 95% result. The finite-block inequality `V_ann<=U_range,b` is pointwise and is not
 confidence-tiered.
 
-The codebook-quality gate applies symmetrically to the range and CR-3 value claims. If the frozen menu is
-prior-degenerate or behaviorally too easy, the fixed-instrument inequalities remain formally true but both
+The instrument-quality gate applies symmetrically to the range and CR-3 value claims. If the frozen menu is
+prior-degenerate, lacks coarse headroom, or the exhaustive state functional lacks predeclared target-identification
+capability, the fixed-instrument inequalities remain formally true but both
 global and directionally resolved process-value headlines are `FORMAL_CERTIFICATE_ONLY`; a statistically
 unresolved process-value axis remains `UNRESOLVED` rather than acquiring a conclusion from the quality
 gate. Behavioral missing-mass conclusions are unchanged. Synthetic/fake runs are never instances of these
 empirical theorems and carry no publishable status.
 
 **Codebook scope is part of the estimand.** An easy four-option panel can yield a valid but scientifically
-weak all-string certificate because `C_b` and `V_ann` are defined for that panel. Production codebooks are
+weak all-string certificate because `U_range,b` and `V_ann` are defined for that panel. Production codebooks are
 therefore frozen from a broader task-and-hierarchy-level candidate bank before target prompt search. A bank-only metric
 contributes only its canonical executor behavior on the design panel; its historical prompt pool is not
 automatically admitted into another target's search. Separately, prompts previously generated **for the
@@ -2729,21 +2784,33 @@ For each target, the implementation first enumerates behaviorally hard non-clone
 design split. Before any candidate prompt is valued, it evaluates each unlabeled menu with the exact blind
 no-demonstration query and counterbalanced option positions. A panel is headline-eligible only if the
 predeclared full-posterior gates pass (default maximum option probability `0.35`, target probability within
-`0.10` of chance, and normalized entropy at least `0.90`). Among passing panels it freezes the behaviorally
-hardest; if none pass, it retains the least-violating panel only for a formally valid, explicitly
-`FORMAL_CERTIFICATE_ONLY` estimand. The teaching-set optimizer then maximizes demonstrated separation and
-label balance. The reconstructor still sees only option descriptions and the target prompt's
-self-annotations. Changing the bank or selected panel changes the reconstruction instrument, so easy-panel
-and hard-bank values must be reported as different estimands rather than pooled.
+`0.10` of chance, and normalized entropy at least `0.90`). Behavioral hardness supplies only enumeration
+order and the later tie-break. For **every** prior-passing panel, the teaching-set optimizer freezes
+eight contrastive items from the disjoint complement and the reconstructor values all 256 transcripts. A
+panel is state-live when an envelope-maximizing transcript has positive lift and the target is its unique
+posterior argmax. The final prospective rule retains state-live panels, maximizes `U_state` (maximal measurable
+dynamic range, conservative against easy certification), and uses behavioral hardness then panel ID only as
+tie-breakers. It never selects the smallest cap. If no prior-passing panel is live, the maximum-range passing
+panel remains formal-only; if no panel passes the prior gates, the least-violating fallback remains
+formal-only. The reconstructor still sees only option descriptions and the target prompt's self-annotations
+on the fixed panel. Changing the bank, selected panel, or teaching panel changes the reconstruction
+instrument, so those values must be reported as different estimands rather than pooled.
 
 Formal validity and scientific informativeness are separate. A frozen codebook may give the target option
-nearly unit no-demo probability, leaving a tiny `C_b`; attaining that cap is a correct global theorem but a
+nearly unit no-demo probability, leaving a tiny `U_range,b`; attaining that cap is a correct global theorem but a
 trivial articulation result. Likewise, a target with no behaviorally close bank member has an easy MCQ
 panel. Certificates therefore retain the formal interval for every valid frozen instrument but mark a
-result headline-eligible only when the predeclared minimum value headroom and minimum selected-distractor
-kappa both pass. Raw target probability, the complete no-demo option prior, normalized prior entropy,
-shuffled control, selected kappas, and directional disagreements remain visible. This quality gate changes
-interpretation, not the inequality in Theorem P.1.
+result headline-eligible only when the blind-prior gates and minimum coarse value headroom pass, the exact
+`U_state,b` clears the predeclared value resolution, and at least one envelope-maximizing transcript has
+positive attributable lift with the target as its unique posterior argmax. The stored operational-target
+transcript is reported only as a diagnostic: for a one-form target it is the canonical-description behavior;
+for an orbit target it is the hard readout of the declared orbit-averaged behavior and need not be realized by
+any single prompt. It is neither an anchor nor an oracle requirement, and weak canonical prompting is part of
+the optimization problem. The historical universal
+selected-distractor kappa threshold is demoted to a descriptive near-clone diagnostic; it is not a headline
+gate. Raw target probability, the complete no-demo option prior, normalized prior entropy, shuffled control,
+selected kappas, and directional disagreements remain visible. These gates change interpretation, not the
+inequalities in Theorems P.1-P.2.
 
 > **Implementation correction (v11 to v12, 2026-07-12).** V11 still obtained behavior probabilities from
 > an unconstrained top-logprob window. A mined numeric rubric caused one checkpoint row to contain neither
@@ -2753,6 +2820,19 @@ interpretation, not the inequality in Theorem P.1.
 > their signatures and choice-cache rows are not migrated. Numeric hard-link reuse now requires the exact
 > v12 schema, executor snapshot, readout protocol, and scoring-code hashes; MCQ candidates must additionally
 > match the target bootstrap's full probe/executor/cache namespace.
+
+> **Implementation correction (fixed-state v12 release, 2026-07-13).** The final codebook schema is v4.
+> It binds each target's ordered eight-item panel, target transcript, disjoint split provenance,
+> reconstruction noun, `max_chars`, and final codebook hash. A separate immutable state artifact contains
+> exactly 256 unique transcripts in declared binary order; its value table and summary bind the probe,
+> codebook, instrument, readout, controls, and reconstructor hashes. A missing/duplicate state, changed
+> bit/order/hash, inconsistent transcript value,
+> or candidate value above `U_state,b` fails closed. Existing e601 executor bootstraps and scored prompt
+> signatures remain reusable after validation, but v3 codebooks and their candidate value artifacts are
+> not promoted: the final v4 codebook/state table is rebuilt and all candidate values are recomputed. Once
+> the table is frozen, later candidate values are validated CPU lookups by their exact eight-bit state; they
+> do not issue new reconstructor queries. Direct table construction/replay tests retain the Qwen path and
+> verify lookup equality.
 
 ### A. Auxiliary fixed-target behavioral channel (historical identity theorem retained)
 
@@ -2976,7 +3056,7 @@ Its model, conditioning data, sampling law, future quota, and family tag must be
 stage and before its confirmation audit. The family then receives its own empirical-Bernstein and DKW
 components. Post-hoc weights based on observed gains are forbidden. The value-tilted family can raise
 `V_Omega` faster and, after improvements are absorbed and a new audit is drawn, shrink the residual
-`B=C_b-V_Omega`; it does not broaden a process-relative theorem to all strings.
+`B=U_range,b-V_Omega`; it does not broaden a process-relative theorem to all strings.
 
 ### D. Capture mass and exact-support exhaustion
 

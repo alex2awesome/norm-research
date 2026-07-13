@@ -1,4 +1,4 @@
-# CR-3 executor-indexed prompt-ceiling loop (authoritative v12, 2026-07-12)
+# CR-3 executor-indexed prompt-ceiling loop (authoritative v12 fixed-state release, 2026-07-13)
 
 ## Objective
 
@@ -7,11 +7,11 @@ proposer families `Q_f`, bound the best **single-prompt** value under a declared
 measurement `V`:
 
 ```
-V*_{b,E}(P) = sup_{p in P} V_{b,E}(p),  P = Omega_N union support(Q).
+V*_{b,E} = sup_{p in Dom(E)} V_{b,E}(p).
 ```
 
 The primary `V` is Reconstruction-MCQ: the candidate prompt supplies its own executor annotations; a frozen
-reconstructor sees only contrastively selected `(item, annotation)` demonstrations and a frozen option
+reconstructor sees only one fixed ordered eight-item `(item, annotation)` panel and a frozen option
 codebook; normalized target-option probability and annotation-attributable lift are recorded. No anchor,
 silver label, human label, or outcome enters. Across randomized target metrics, the companion bank-level
 quantity is identity `I(J;Jhat)`.
@@ -20,23 +20,24 @@ The v2 fixed-target value `I(M_fixed ; binarize(E(p,X)))` remains supported as a
 discovery diagnostic**. It is the value used by the currently running `cr3_mining_v2` job and must not be
 reported as the final Reconstruction-MCQ optimum.
 
-Every declared value has a predeclared finite cap. For MCQ target-option probability the cap is one; for
-the primary annotation-attributable lift it is the sharper frozen-control cap
-`1 - q_no_demo(target)`; for legacy binary MI it is `H(M_fixed)`. CR-3 can tighten that cap in two declared
-scopes:
+Every declared value has a predeclared finite cap. For the primary annotation-attributable lift, codebook
+v4 freezes `T_8` before prompt search and exactly values all `2^8` binary transcripts. Therefore
+`V_best <= V*_{b,E} <= U_state <= 1-q_no_demo(target)` for every finite prompt executable by the frozen
+wrapper. The final term is the coarse range cap; `U_state` is the exact finite-state upper envelope. CR-3
+can further tighten the achieved-to-ceiling interval in two proposer-relative scopes:
 
 1. a finite future mining budget: an upper confidence bound on the **expected** best prompt after fixed
    counts `m_f` of additional draws from each family;
 2. the entire proposer support: only when exact-pattern missing mass is below an externally justified
    minimum support mass `p_min`.
 
-It does not bound arbitrary strings, multi-prompt checklists, or the latent ideal `M*` unless those objects
+CR-3 itself does not bound arbitrary strings, multi-prompt checklists, or the latent ideal `M*` unless those objects
 are separately identified and placed inside the declared prompt/readout class. In particular, capture-
 recapture broadens beyond the discovered pool to a frozen proposer process; it does not silently become an
 all-strings theorem.
 
-These are complementary bounds. The MCQ frozen-control cap is an assumption-light range bound covering
-every finite prompt but contains no search-rate information. CR-3 is a discovery/gain bound that can tighten
+These are complementary bounds. The exact finite-state envelope covers every finite prompt for this fixed
+instrument but contains no search-rate information. CR-3 is a discovery/gain bound that can tighten
 predictably with additional fresh draws, but only for a fixed proposer horizon or, with an external mass
 floor, its support. Full support over strings does not repair this distinction: a valuable unseen prompt can
 have arbitrarily small proposer mass.
@@ -53,8 +54,10 @@ have arbitrarily small proposer mass.
   prompts through the persistent executor cache. Its `value` stage holds one frozen reconstructor resident
   and assigns the repaired MCQ/control value to every scored row. It does not replace the general vLLM
   backend, GEPA, or ordinary metric scoring.
-- `experiments/cr3_reconstruction_values.py` freezes bootstrap-only codebooks and validates/serializes the
-  all-row MCQ value transaction. It supplies values to `cr_audit.py`; it is not a second certificate engine.
+- `experiments/cr3_reconstruction_values.py` freezes bootstrap-only codebooks and ordered teaching panels,
+  enumerates and validates the complete 256-state population, and serializes hash-bound MCQ value
+  transactions/envelope summaries. It supplies the exact cap and prompt values to `cr_audit.py`; it is not
+  a second capture-recapture certificate engine.
 - `experiments/cr3_evidence_store.py` consolidates historical prompt generations and content-addressed
   executor/MCQ caches. Imported prompts are permanently candidate-only: after current-namespace rescoring
   and current-codebook revaluation they may raise `V_Omega`, but they cannot serve as audit or confirmation
@@ -69,7 +72,8 @@ have arbitrarily small proposer mass.
 The v12 end-to-end path is:
 
 ```
-source checkpoints -> bootstrap/cache -> propose -> score behaviors -> measure frozen MCQ value marks
+source checkpoints -> bootstrap/cache -> codebook v4 -> exhaustive 256-state value envelope
+                  -> propose -> score behaviors -> measure frozen MCQ value marks
                   -> monitor -> ledger absorb -> ... repeat ...
                   -> never-absorbed checkpoints/final confirmation -> certified trajectory
 ```
@@ -105,22 +109,53 @@ versions through the evidence store because they are re-scored and revalued befo
 Candidate panels are enumerated by behavioral hardness on the design split, then scored with the exact
 blind no-demonstration query before prompt-value search. Complete-block position counterbalancing is
 mandatory. The default gate requires maximum mean option probability at most `0.35`, target prior within
-`0.10` of chance, and normalized menu-prior entropy at least `0.90`. The behaviorally hardest passing panel
-is frozen. If none passes, the least-violating panel remains available only as
-`FORMAL_CERTIFICATE_ONLY`; the full metric denominator is preserved without treating a prior-answerable
-menu as an articulability result.
+`0.10` of chance, and normalized menu-prior entropy at least `0.90`. Every prior-passing panel then receives
+its own fixed-T8 exhaustive state envelope. Retain state-live panels, select the largest `U_state`, and use
+behavioral hardness then panel ID only as tie-breaks. This maximizes measurable dynamic range and avoids
+selecting an artificially small ceiling. If no passing panel is live, retain the maximum-range passing
+panel only as `FORMAL_CERTIFICATE_ONLY`; if none passes the prior gates, retain the least-violating fallback
+as formal-only. The full metric denominator is preserved without treating a prior-answerable or state-dead
+menu as an articulability result. Menu and teaching-panel selection are therefore one joint prospective
+operation: each prior-passing menu is paired with its own `T_8` before the state-live/max-`U_state` rule picks
+the final pair.
+
+For each candidate pair, an exact contrastive optimizer chooses the ordered eight-item teaching panel using
+only operational target/distractor executor behavior (canonical or orbit-averaged as declared by each
+bootstrap) in the sorted complement of the menu-design split.
+The 120-item design split and 180-item teaching-candidate split are disjoint and exhaustive over the 300
+probes. Every prompt uses those same eight items in the stored order. The final v4 codebook binds their
+indices, item IDs, target transcript, split provenance, and instrument hash before any prompt-value search.
+The executor cache stores exact normalized YES/NO probabilities; the fixed hard annotation is one iff
+`pYES>0.5`, with ties mapped to zero. The 256 states are transcripts of that binary functional, not soft
+probability vectors. The reconstruction noun and `--mcq-max-chars` rendering limit are frozen with the final
+codebook; together with the model/tokenizer/chat template, option block, deterministic seeds, and exact
+rendered queries, they define the evaluator namespace. After direct Qwen evaluation freezes the state table,
+every prompt value is a validated CPU lookup by transcript. A direct-replay regression test checks lookup
+equality.
+
+At four counterbalanced draws, one candidate panel requires `256 * 2 * 4 = 2,048` annotation/shuffled
+choice queries; no-demo rows come from prior calibration. These queries are batched and content-cached, and
+fixed panels bypass per-state MILP selection. Total pre-search work scales with the number of prior-passing
+panels, so `--mcq-prior-max-panels-per-target` is a prospective compute budget (default 256). Expanding that
+budget regenerates the plan/calibration provenance but reuses identical rendered-query cache rows; it does
+not invalidate executor bootstraps.
 
 Historical prompts for the **same target metric** are a separate input. `--reuse-evidence-root` installs
 validated cache entries and copies a deduplicated candidate manifest into the new root. Those prompts are
 rescored/revalued and inserted after bootstrap but before the adaptive absorption ledger. Their role never
 changes to audit evidence, even when their source file came from a historical monitor or confirmation.
 
-**Release freeze (2026-07-12).** Existing v10/v11 roots remain immutable and are not migrated. V11 added
-prior-balanced panel selection and candidate-only evidence reuse. V12 adds total constrained behavior/choice
+**Release freeze (updated 2026-07-13).** Existing v10/v11/e601 roots remain immutable and are not migrated.
+V11 added prior-balanced panel selection and candidate-only evidence reuse. V12 adds total constrained behavior/choice
 readouts, new signature and choice-cache namespaces, level-matched codebook banks, and predeclared dual
-95%/90% reporting. Within each release, exact code and source hashes remain load-bearing, so a changed
+95%/90% reporting; the fixed-state v12 release adds codebook v4 and exhaustive `T_8` enumeration. Within
+each release, exact code and source hashes remain load-bearing, so a changed
 release cannot resume an old root. V11 prompt texts may be imported as candidate-only evidence and rescored;
-v11 signatures and choice probabilities are never promoted into the v12 namespace.
+old candidate value artifacts are never promoted into the v4 namespace. Validated e601 target and codebook
+bootstraps, scored 300-probe prompt signatures, semantic panel designs, and exact prior query rows are
+reusable only under the same frozen noun/rendering and reconstructor/readout namespace; final codebooks,
+state tables, and all prompt values are rebuilt. Writable SQLite databases are
+never hard-linked across runs.
 Supported existing R3 bank prefixes are creative writing, humor, news homepages, press
 releases, code review, Math StackExchange, grant funding, peer review, and legal outcome prediction.
 
@@ -148,7 +183,8 @@ each family receives its own confidence component.
 ## Certificate
 
 Let `V_Omega` be the exact best single-prompt value in the bootstrapped/absorbed pool and
-`G(p)=max(0,V(p)-V_Omega)`, bounded by `B=value_cap-V_Omega`. Every audit draw receives a value mark,
+`G(p)=max(0,V(p)-V_Omega)`, bounded by `B=U_state-V_Omega` in fixed-state MCQ mode (or the declared
+finite cap in legacy mode). Every audit draw receives a value mark,
 whether or not its behavior is novel. Therefore the finite-horizon value theorem does not assume fuzzy-
 species or exact-pattern substitutability.
 
@@ -243,6 +279,13 @@ points; monitor rows are explicitly excluded.
 <root>/mcq_codebooks/<task>.panel_plan.json
 <root>/mcq_codebooks/<task>.prior_calibration.json
 <root>/mcq_codebook_candidates/<metric>/bootstrap/scored.npz
+<root>/mcq_panel_envelopes/<metric>/<panel_id>/codebook.json
+<root>/mcq_panel_envelopes/<metric>/<panel_id>/states.npz
+<root>/mcq_panel_envelopes/<metric>/<panel_id>/values.npz
+<root>/mcq_panel_envelopes/<metric>/<panel_id>/envelope.json
+<root>/mcq_state_tables/<metric>/states.npz
+<root>/mcq_state_tables/<metric>/values.npz
+<root>/mcq_state_tables/<metric>/envelope.json
 <root>/signature_cache/<namespace>/<prompt_sha>.npz
 <root>/<metric>/bootstrap/scored.npz
 <root>/<metric>/bootstrap/values.npz
@@ -281,10 +324,13 @@ no Clopper-Pearson interval. A claim over random menus, items, or reconstructor 
 The all-prompt lower endpoint is the best value among the absorbed pool and the current fresh audit. The
 fresh audit remains excluded from the pool used by CR-3 gain/missing-mass calculations; using an observed
 audit prompt as an achieved global lower bound does not alter that conditioning. Every MCQ global payload
-also contains `instrument_quality`. A low-headroom or behaviorally easy panel retains a formally valid
-fixed-instrument interval but is marked `FORMAL_CERTIFICATE_ONLY`; it cannot supply the scientific headline.
-The defaults are a value cap of at least `0.10` and minimum selected-distractor kappa of at least `0.50`,
-both hashed in the run manifest and configurable before data collection.
+also contains `instrument_quality`. Headline gates are the blind prior, coarse headroom of at least `0.10`,
+`U_state` above the predeclared resolution, and a positive unique-target envelope maximizer. The stored
+operational-target transcript is diagnostic only: it is canonical-description behavior for a one-form target,
+but for an orbit target it is the hard readout of the declared orbit average and need not be realized by one
+prompt. The historical selected-distractor kappa `0.50` threshold remains hashed and reported as a descriptive
+near-clone diagnostic; it does not gate
+headlines. A failed gate retains a formally valid interval as `FORMAL_CERTIFICATE_ONLY`.
 
 ### Reporting tiers (declared before v11 audit results; implemented in v12)
 
@@ -314,6 +360,8 @@ Fake/dry runs set every global/process/trajectory/bank status to `SYNTHETIC_TEST
   underlying novelty/gain center at a fixed pool.
 - **Set the horizon scientifically:** a smaller bound for 100 future prompts does not certify 10,000.
 - **Broaden proposer families:** strengthens prompt-class scope but may reveal new mass and loosen the bound.
+- **Change teaching-panel size only prospectively:** `k=10` has 1,024 states and may change instrument
+  resolution, but it is a different estimand and release namespace, not a post-result tightening knob.
 - **Increase/resample probes:** required for deployment-distribution generalization; use a new run namespace
   and an independent item-lockbox confidence layer rather than mixing panels.
 - **Justify positivity externally:** only a defensible `p_min` turns exact missing mass into full-support
@@ -325,13 +373,14 @@ Fake/dry runs set every global/process/trajectory/bank status to `SYNTHETIC_TEST
 ```bash
 CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr3_mining_loop.py \
   --metrics <..._sigs.npz ...> \
+  --out-root /lfs/skampere3/0/alexspan/outputs/<new-immutable-v12-fixed-t8-root> \
   --mcq-codebook-metrics <full frozen task-and-level checkpoint bank ...> \
   --reuse-bootstrap-root <verified-prior-cr3-root> \
   --reuse-mcq-codebook-root <optional prior root with the same candidate bank> \
   --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
-  --mcq-choice-readout logits --mcq-value-query-batch-size 512 \
+  --mcq-choice-readout logits --mcq-n-examples 8 --mcq-value-query-batch-size 512 \
   --families microsoft/phi-4 microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
   --family-tags phi4_atomic phi4_holistic qwen14_atomic llama8_holistic \
   --family-modes atomic holistic atomic holistic \

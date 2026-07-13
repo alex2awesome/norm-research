@@ -313,6 +313,7 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     args = SimpleNamespace(
         mcq_min_headline_value_cap=0.10,
         mcq_min_headline_distractor_kappa=0.50,
+        target_value_gap=0.02,
     )
     selected = [
         {"metric_key": "d1", "kappa": 0.20, "n_disagree": 5},
@@ -321,38 +322,41 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     ]
     state = {
         "fixed_no_demo_canonical_choice_probabilities": np.tile(
-            np.asarray([[0.99, 0.005, 0.003, 0.002]]), (4, 1)),
-        "value_cap": 0.01,
+            np.asarray([[0.25, 0.25, 0.25, 0.25]]), (4, 1)),
+        "value_cap": 0.60,
+        "coarse_range_cap": 0.75,
+        "finite_state_envelope": {
+            "state_envelope_capability": {
+                "has_positive_unique_target_maximizer": True,
+            },
+            "operational_target_diagnostic": {"value": 0.0, "is_headline_gate": False},
+        },
         "mcq_codebook_entry": {
             "target_design_yes_rate": 0.5,
             "distractor_design_statistics": selected,
             "prior_calibration": {
                 "passes_prior_balance": True,
-                "prior": {"canonical_mean_prior": [0.99, 0.005, 0.003, 0.002]},
+                "prior": {"canonical_mean_prior": [0.25, 0.25, 0.25, 0.25]},
             },
         },
     }
     diagnostic = mcq_instrument_quality(state, args)
-    assert diagnostic["status"] == "FORMAL_CERTIFICATE_ONLY"
-    assert diagnostic["formal_all_prompt_bound_valid"] is True
-    assert len(diagnostic["reasons"]) == 2
-    assert mcq_reported_global_status(
-        "CERTIFIED_EPSILON_GLOBAL_OPTIMUM", diagnostic
-    ) == "FORMAL_CERTIFICATE_ONLY"
-
-    state["fixed_no_demo_canonical_choice_probabilities"] = np.tile(
-        np.asarray([[0.25, 0.25, 0.25, 0.25]]), (4, 1))
-    state["value_cap"] = 0.75
-    state["mcq_codebook_entry"]["prior_calibration"]["prior"][
-        "canonical_mean_prior"] = [0.25, 0.25, 0.25, 0.25]
-    for row in selected:
-        row["kappa"] += 0.50
-    diagnostic = mcq_instrument_quality(state, args)
     assert diagnostic["status"] == "HEADLINE_ELIGIBLE"
-    assert diagnostic["headline_eligible"] is True
+    assert diagnostic["formal_all_prompt_bound_valid"] is True
+    assert diagnostic["selected_distractor_kappa_is_headline_gate"] is False
     assert mcq_reported_global_status(
         "CERTIFIED_EPSILON_GLOBAL_OPTIMUM", diagnostic
     ) == "CERTIFIED_EPSILON_GLOBAL_OPTIMUM"
+
+    state["finite_state_envelope"]["state_envelope_capability"][
+        "has_positive_unique_target_maximizer"] = False
+    diagnostic = mcq_instrument_quality(state, args)
+    assert diagnostic["status"] == "FORMAL_CERTIFICATE_ONLY"
+    assert diagnostic["headline_eligible"] is False
+    assert len(diagnostic["reasons"]) == 1
+    assert mcq_reported_global_status(
+        "CERTIFIED_EPSILON_GLOBAL_OPTIMUM", diagnostic
+    ) == "FORMAL_CERTIFICATE_ONLY"
 
 
 def test_production_sampler_uses_unique_per_request_seeds_and_exact_quota():
@@ -644,7 +648,7 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
         "--mcq-n-options", "4",
         "--family-modes", "atomic", "holistic", "atomic",
         "--mcq-design-size", "40",
-        "--mcq-n-examples", "4",
+        "--mcq-n-examples", "8",
         "--mcq-reconstruction-draws", "4",
     ]
     assert mining_main(argv) == 0
@@ -699,16 +703,25 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
         assert certificate["estimand"]["value_name"] == (
             "annotation-attributable Reconstruction-MCQ target-option lift")
         global_certificate = certificate["all_finite_prompt_certificate"]
-        assert global_certificate["synthetic_diagnostic_status"] == (
-            "CERTIFIED_GLOBAL_GAP_BOUND")
+        assert global_certificate["synthetic_diagnostic_status"] in {
+            "CERTIFIED_GLOBAL_GAP_BOUND",
+            "CERTIFIED_EPSILON_GLOBAL_OPTIMUM",
+            "CERTIFIED_GLOBAL_OPTIMUM",
+        }
         assert global_certificate["status"] == "SYNTHETIC_TEST_ONLY"
         assert global_certificate["publication_eligible"] is False
         assert certificate["publication_eligible"] is False
         assert certificate["prompt_evolution_status"]["headline_status"] == (
             "SYNTHETIC_TEST_ONLY")
         assert np.isclose(
-            global_certificate["anchor_free_global_upper_bound"],
+            global_certificate["coarse_no_demo_range_cap"],
             1.0 - global_certificate["no_demonstration_target_probability"])
+        assert global_certificate["anchor_free_global_upper_bound"] <= (
+            global_certificate["coarse_no_demo_range_cap"] + 1e-12)
+        assert global_certificate["n_fixed_teaching_items"] == 8
+        assert global_certificate["n_exhaustive_binary_states"] == 256
+        assert (output / "mcq_state_tables" / f"creative-writing_metric{index}"
+                / "envelope.json").exists()
         assert global_certificate["identified_interval"][0] <= (
             global_certificate["identified_interval"][1])
         assert global_certificate["best_evaluated_lower_bound"] == max(

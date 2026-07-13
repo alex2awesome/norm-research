@@ -397,6 +397,40 @@ def _exact_contrastive_example_indices(
     }
 
 
+def _fixed_teaching_panel_design(
+    target_pyes: np.ndarray, distractor_pyes: list[np.ndarray]
+) -> dict:
+    """Describe an already-frozen panel without rerunning candidate-specific MILPs."""
+    target = np.asarray(target_pyes, dtype=float)
+    alternatives = [np.asarray(value, dtype=float) for value in distractor_pyes]
+    if (target.ndim != 1 or not alternatives
+            or any(value.shape != target.shape for value in alternatives)
+            or np.any(~np.isfinite(target))
+            or any(np.any(~np.isfinite(value)) for value in alternatives)):
+        raise ValueError("fixed teaching panel requires aligned finite option behaviors")
+    target_hard = (target > 0.5).astype(int)
+    disagreement = np.vstack([
+        (value > 0.5).astype(int) != target_hard for value in alternatives
+    ])
+    achieved = disagreement.sum(axis=1).astype(int)
+    return {
+        "solver": "frozen ordered teaching panel; no per-candidate optimization",
+        "n_complete_design_items": int(len(target)),
+        "n_examples": int(len(target)),
+        "min_disagreements_required": 0,
+        "per_distractor_disagreements_available": achieved.tolist(),
+        "per_distractor_disagreements_demonstrated": achieved.tolist(),
+        "minimum_demonstrated_separation": int(achieved.min()),
+        "target_example_counts": {
+            "0": int(np.sum(target_hard == 0)),
+            "1": int(np.sum(target_hard == 1)),
+        },
+        "target_is_degenerate_on_design": bool(np.unique(target_hard).size < 2),
+        "target_balance_required": False,
+        "tie_break": "not applicable; item order was frozen before prompt search",
+    }
+
+
 def induce_free(backend, noun, examples, seed, max_tokens=450) -> dict:
     # seed MUST be forwarded: generate() defaults seed=0, so without this every reconstruction is
     # identical (no recovery diversity). generate_batch threads the seed -> R distinct inductions.
@@ -1149,6 +1183,7 @@ def mcq_value_from_precomputed_behavior(
     n_reconstruction_draws: int = 4,
     max_chars: int = 600,
     choice_readout: str = "auto",
+    fixed_teaching_panel: bool = False,
 ) -> dict:
     """Value one prompt from a precomputed executor signature, with no external labels.
 
@@ -1213,27 +1248,35 @@ def mcq_value_from_precomputed_behavior(
         raise ValueError(
             "n_reconstruction_draws must be a positive multiple of option count")
 
-    selected_local, teaching_design = _exact_contrastive_example_indices(
-        scores[idx],
-        [vector[idx] for vector in distractor_scores],
-        n_examples=n_examples,
-        min_disagreements=0,
-        require_target_balance=False,
-    )
-    selected_global = idx[selected_local]
+    if fixed_teaching_panel and len(idx) != n_examples:
+        raise ValueError("fixed teaching panel must contain exactly n_examples ordered items")
+    if fixed_teaching_panel:
+        selected_global = idx
+        teaching_design = _fixed_teaching_panel_design(
+            scores[idx], [vector[idx] for vector in distractor_scores])
+    else:
+        selected_local, teaching_design = _exact_contrastive_example_indices(
+            scores[idx],
+            [vector[idx] for vector in distractor_scores],
+            n_examples=n_examples,
+            min_disagreements=0,
+            require_target_balance=False,
+        )
+        selected_global = idx[selected_local]
     records = [
         (int(i), str(probe_texts[i]), int(scores[i] > 0.5))
         for i in selected_global
     ]
-    order_payload = [
-        (str(item_ids[int(i)]), int(scores[int(i)] > 0.5))
-        for i in selected_global
-    ]
-    order_seed = int(hashlib.sha256(json.dumps(
-        order_payload, sort_keys=True, separators=(",", ":")
-    ).encode("utf-8")).hexdigest()[:8], 16)
-    order = np.random.default_rng(order_seed).permutation(len(records))
-    records = [records[i] for i in order]
+    if not fixed_teaching_panel:
+        order_payload = [
+            (str(item_ids[int(i)]), int(scores[int(i)] > 0.5))
+            for i in selected_global
+        ]
+        order_seed = int(hashlib.sha256(json.dumps(
+            order_payload, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")).hexdigest()[:8], 16)
+        order = np.random.default_rng(order_seed).permutation(len(records))
+        records = [records[i] for i in order]
     rendered_examples = _format_example_records(records, max_chars=max_chars)
 
     class _NoReplayExecutor:
@@ -1297,6 +1340,7 @@ def mcq_value_from_precomputed_behavior(
             "uses_external_labels": False,
             "behavioral_vectors_shown_to_reconstructor": False,
             "candidate_prompt_text_affects_teaching_order": False,
+            "fixed_ordered_teaching_panel": bool(fixed_teaching_panel),
         },
         "scope": (
             "fixed executor signature panel, fixed MCQ codebook, fixed reconstructor and design rule; "
@@ -1322,6 +1366,7 @@ def mcq_logit_values_from_precomputed_behaviors(
     max_chars: int = 600,
     query_batch_size: int = 512,
     fixed_no_demo_canonical_probabilities: np.ndarray | None = None,
+    fixed_teaching_panel: bool = False,
 ) -> list[dict]:
     """Batched deterministic-logit version of the CR-3 MCQ value instrument.
 
@@ -1377,29 +1422,37 @@ def mcq_logit_values_from_precomputed_behaviors(
         raise ValueError("n_reconstruction_draws must be a positive multiple of option count")
     permutations = _balanced_option_permutations(n_options, n_reconstruction_draws)
 
+    if fixed_teaching_panel and len(idx) != n_examples:
+        raise ValueError("fixed teaching panel must contain exactly n_examples ordered items")
     prepared = []
     for candidate_text, scores in zip(texts, rows):
-        selected_local, teaching_design = _exact_contrastive_example_indices(
-            scores[idx],
-            [vector[idx] for vector in distractor_scores],
-            n_examples=n_examples,
-            min_disagreements=0,
-            require_target_balance=False,
-        )
-        selected_global = idx[selected_local]
+        if fixed_teaching_panel:
+            selected_global = idx
+            teaching_design = _fixed_teaching_panel_design(
+                scores[idx], [vector[idx] for vector in distractor_scores])
+        else:
+            selected_local, teaching_design = _exact_contrastive_example_indices(
+                scores[idx],
+                [vector[idx] for vector in distractor_scores],
+                n_examples=n_examples,
+                min_disagreements=0,
+                require_target_balance=False,
+            )
+            selected_global = idx[selected_local]
         records = [
             (int(i), str(probe_texts[i]), int(scores[i] > 0.5))
             for i in selected_global
         ]
-        order_payload = [
-            (str(item_ids[int(i)]), int(scores[int(i)] > 0.5))
-            for i in selected_global
-        ]
-        order_seed = int(hashlib.sha256(json.dumps(
-            order_payload, sort_keys=True, separators=(",", ":")
-        ).encode("utf-8")).hexdigest()[:8], 16)
-        order = np.random.default_rng(order_seed).permutation(len(records))
-        records = [records[i] for i in order]
+        if not fixed_teaching_panel:
+            order_payload = [
+                (str(item_ids[int(i)]), int(scores[int(i)] > 0.5))
+                for i in selected_global
+            ]
+            order_seed = int(hashlib.sha256(json.dumps(
+                order_payload, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")).hexdigest()[:8], 16)
+            order = np.random.default_rng(order_seed).permutation(len(records))
+            records = [records[i] for i in order]
         transcript = [
             {"item_id": str(item_ids[record[0]]), "score": int(record[2])}
             for record in records
@@ -1593,6 +1646,7 @@ def mcq_logit_values_from_precomputed_behaviors(
                 "uses_external_labels": False,
                 "behavioral_vectors_shown_to_reconstructor": False,
                 "candidate_prompt_text_affects_teaching_order": False,
+                "fixed_ordered_teaching_panel": bool(fixed_teaching_panel),
             },
             "scope": (
                 "fixed executor signature panel, fixed MCQ codebook, fixed reconstructor and "
