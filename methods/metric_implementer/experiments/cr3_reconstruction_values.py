@@ -583,10 +583,15 @@ def build_teaching_panel_library(
     baseline_codebook_manifest: Mapping[str, object], *, target_metric_key: str,
     library_size: int = TEACHING_LIBRARY_SIZE,
 ) -> dict:
-    """Build a prospective, bounded T8 library without prompt or external-label input."""
+    """Build a prospective, bounded T8 library without prompt or external-label input.
+
+    ``library_size`` is the requested number of panels R. The default reproduces the
+    v12 bound-grade library byte-for-byte; resampled callers may request R in [2, 64].
+    """
     validate_codebook_manifest(baseline_codebook_manifest)
-    if library_size != TEACHING_LIBRARY_SIZE:
-        raise ValueError(f"bound-grade teaching library requires K={TEACHING_LIBRARY_SIZE}")
+    library_size = int(library_size)
+    if not 2 <= library_size <= 64:
+        raise ValueError("teaching library size must lie in [2, 64]")
     target_metric_key = str(target_metric_key)
     entry = baseline_codebook_manifest["entries"].get(target_metric_key)
     if not entry or not entry.get("valid"):
@@ -667,6 +672,8 @@ def build_teaching_panel_library(
     records = []
     seen: set[tuple[int, ...]] = set()
     for role, selected, detail in candidate_specs:
+        if len(records) >= library_size:  # honor a requested R below the fixed-role count
+            break
         if selected is None or len(set(selected)) != FIXED_TEACHING_SIZE:
             continue
         if role == "baseline_exact":
