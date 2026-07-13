@@ -247,23 +247,26 @@ subset is a different and usually easier reconstruction estimand.
 
 V11 enumerates behaviorally hard panels and runs the exact blind no-demonstration query before any prompt
 is valued. The default prior-balance gate requires maximum option probability `<=0.35`, target probability
-within `0.10` of chance, and normalized prior entropy `>=0.90`. The fixed-state v12 release then enumerates
-the complete T8 envelope for every prior-passing menu, retains state-live menus, and selects the largest
-`U_state`; behavioral hardness and panel ID are tie-breakers only. This maximizes measurable dynamic range
-and is conservative against easy certification. If no passing panel is live, the maximum-range passing
-menu is formal-only; if no panel passes the prior gates, the least-violating menu is formal-only. The
-calibration and value stages share the same frozen noun, rendering limit, rendered queries, seeds,
-reconstructor revision, and choice cache, and the loop verifies their probability matrices agree exactly.
+within `0.10` of chance, and normalized prior entropy `>=0.90`. V12 prospectively keeps at most four passing
+menus per target, ordered by normalized prior entropy, total variation from uniform, target-prior distance
+from chance, behavioral hardness, and stable panel ID. Each menu receives a prehashed eight-arm T8 library
+built only from the frozen teaching complement and canonical bootstrap behaviors. All 256 states receive an
+exact four-order screen; the two finalists locked from that screen alone are revalued over all 24 orders.
+Only this full-24 result is reportable. Final selection requires positive canonical-target lift and a unique
+target posterior argmax, then maximizes `U_state`; the artificial envelope-maximizer diagnostic is not a
+gate. If no finalist is canonically live, the exact fixed-instrument inequality remains
+`FORMAL_CERTIFICATE_ONLY`. The calibration and value stages share the frozen noun, rendering limit,
+rendered queries, seeds, reconstructor revision, and choice cache.
 For the four-option headline instrument, the query block contains every one of the `4!=24` option orders
 exactly once. Its first four rows are the historical seed-7 cyclic block and the remaining 20 are appended
 deterministically, preserving those existing rendered-query cache keys. The complete order list and SHA-256
 are stored in the run manifest, prior calibration, value artifacts, state envelope, and final certificate.
 The old four-row calibration artifact is a different functional and is not transplanted; its private choice
 cache supplies the identical prefix rows while only the missing 20 orders are scored.
-Each prior-passing panel costs 12,288 batched annotation/shuffled choice queries at 24 draws;
-fixed panels do not rerun teaching-set MILPs per state. `--mcq-prior-max-panels-per-target` is the prospective
-compute budget. Increasing it preserves executor artifacts and rendered-query cache hits but produces a new
-plan/final-codebook namespace.
+The four-order screens are non-reportable selection data. Their rendered queries are an exact prefix of the
+full-24 block, so finalist evaluation reuses them from the content cache. Changing the menu/library/finalist
+budgets creates a new plan and final-codebook namespace while preserving compatible executor and query-cache
+artifacts.
 
 Historical prompts for the same target can be reused without laundering them into fresh data. First build
 one immutable evidence store, then pass it to a new run:
@@ -283,12 +286,16 @@ Formal optimality is not automatically a headline articulability result. The glo
 `instrument_quality` reports the full no-demo option prior, entropy, value headroom, selected-distractor
 kappas, disagreement counts, exhaustive state capability, and operational target/orbit diagnostic. A
 headline requires the blind-prior gates, coarse headroom `>=0.10`, `U_state` above the predeclared value
-resolution, and at least one envelope-maximizing transcript with positive lift and a unique target-option
-posterior argmax. It also requires the recorded exact 24-order factorial block; a smaller cyclic block keeps
+resolution, and positive lift plus a unique target-option posterior argmax for the frozen canonical/orbit
+target replay. It also requires the recorded exact 24-order factorial block; a smaller cyclic block keeps
 the fixed-instrument inequality but is explicitly `FORMAL_CERTIFICATE_ONLY`. For one-form targets the
 operational diagnostic is the canonical-description behavior; for orbit targets it is the hard readout of
 the declared orbit average and need not be realizable by one prompt.
-It is diagnostic only. The historical universal
+The canonical replay is a prospective instrument-identification gate, not an external label or achieved
+prompt-search result. Raw values and exact value species are retained in all C/R gain calculations. A
+second independent-search certificate removes preloaded target-form witnesses from the pool only while
+retaining every fresh audit mark; a global optimum supported only by a design witness is reported
+`DESIGN_WITNESS_ONLY`, not as a scientific epsilon-optimal headline. The historical universal
 kappa `>=0.50` threshold is retained as a descriptive near-clone diagnostic, not a headline gate.
 
 ```bash
@@ -320,6 +327,9 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
   --ceiling-horizon-per-family 100 \
   --target-u0 0.10 --target-value-gap 0.02 --max-iter 12 --patience 3
 ```
+
+The orchestrator runs `scripts/tools/cr3_reconstruction_calibration_worker.py` automatically before menu
+prior calibration; do not launch that worker separately.
 
 The loop first resolves the substantive hierarchy description and bootstraps the target plus all source
 prompts through the same ordered probe panel and persistent content-addressed executor cache.

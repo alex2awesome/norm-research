@@ -31,17 +31,22 @@ import numpy as np
 
 from ..recon_channel import (
     CLONE_CAP,
+    _RECON_MCQ_LOGITS,
+    _RECON_MCQ_NO_DEMOS,
     _exact_contrastive_example_indices,
     _kappa,
     mcq_no_demo_choice_probabilities,
+    mcq_no_demo_choice_probabilities_many,
     mcq_logit_values_from_precomputed_behaviors,
     mcq_option_order_design,
     mcq_value_from_precomputed_behavior,
 )
 LEGACY_CODEBOOK_SCHEMA = "cr3-reconstruction-codebook-v3"
 CODEBOOK_SCHEMA = "cr3-reconstruction-codebook-v4"
-PANEL_PLAN_SCHEMA = "cr3-reconstruction-panel-plan-v1"
+PANEL_PLAN_SCHEMA = "cr3-reconstruction-panel-plan-v2"
 PRIOR_CALIBRATION_SCHEMA = "cr3-reconstruction-prior-calibration-v1"
+CENTRALNESS_PLAN_SCHEMA = "cr3-reconstruction-centralness-plan-v1"
+CENTRALNESS_CALIBRATION_SCHEMA = "cr3-reconstruction-centralness-calibration-v1"
 VALUE_SCHEMA = "cr3-reconstruction-values-v4"
 FINITE_STATE_SCORED_SCHEMA = "cr3-reconstruction-finite-state-scored-v1"
 FINITE_STATE_ENVELOPE_SCHEMA = "cr3-reconstruction-finite-state-envelope-v1"
@@ -52,6 +57,9 @@ TEACHING_LIBRARY_SIZE = 8
 TEACHING_SCREEN_DRAWS = 4
 TEACHING_MAX_MENUS = 4
 TEACHING_FULL_FINALISTS = 2
+CENTRALNESS_REFERENCE_CONTEXTS = 4
+CENTRALNESS_REFERENCE_DRAWS = 4
+CENTRALNESS_LOG_PROBABILITY_FLOOR = 1e-12
 
 
 def _validated_option_order_design(
@@ -971,6 +979,8 @@ def build_frozen_codebook_manifest(
             "failure": (None if len(selected) == n_options - 1 else
                         f"only {len(selected)} eligible distractors for {n_options - 1} required"),
         }
+        if selection.get("panel_plan_selection") is not None:
+            entry["panel_plan_selection"] = selection["panel_plan_selection"]
         if selection.get("teaching_rescue_selection") is not None:
             entry["teaching_rescue_selection"] = selection["teaching_rescue_selection"]
         if freeze_teaching_panels and entry["valid"]:
@@ -1083,9 +1093,361 @@ def build_frozen_codebook_manifest(
     return {**core, "manifest_sha256": _payload_sha256(core)}
 
 
+def _validated_centralness_plan(plan: Mapping[str, object]) -> tuple[dict, str]:
+    core = dict(plan)
+    observed_sha = str(core.pop("plan_sha256", ""))
+    if (core.get("schema") != CENTRALNESS_PLAN_SCHEMA
+            or observed_sha != _payload_sha256(core)):
+        raise ValueError("invalid or mutated MCQ centralness reference plan")
+    if (int(core.get("n_options", -1)) != 4
+            or int(core.get("contexts_per_metric", -1)) != CENTRALNESS_REFERENCE_CONTEXTS
+            or int(core.get("n_draws", -1)) != CENTRALNESS_REFERENCE_DRAWS):
+        raise ValueError("centralness reference must use the frozen 4x4 design")
+    _validated_option_order_design(
+        core.get("option_order_design"),
+        n_options=4,
+        n_draws=CENTRALNESS_REFERENCE_DRAWS,
+        label="centralness reference",
+    )
+    metrics = core.get("metrics") or {}
+    premises = core.get("premises") or {}
+    target_keys = list(core.get("metric_keys") or [])
+    contexts = core.get("contexts") or {}
+    if (target_keys != sorted(metrics) or set(contexts) != set(target_keys)
+            or len(target_keys) < 4):
+        raise ValueError("centralness reference has an invalid task-wide metric bank")
+    if (not premises.get("uses_bootstrap_descriptions_and_frozen_provenance_only")
+            or premises.get("uses_candidate_prompt_annotations")
+            or premises.get("uses_external_labels")):
+        raise ValueError("centralness reference violates its prospective input contract")
+    for target_key in target_keys:
+        rows = list(contexts.get(target_key) or [])
+        if len(rows) != CENTRALNESS_REFERENCE_CONTEXTS:
+            raise ValueError(f"centralness reference has the wrong context count for {target_key}")
+        for context_index, row in enumerate(rows):
+            option_keys = [str(value) for value in row.get("option_metric_keys") or []]
+            descriptions = [str(value) for value in row.get("option_descriptions") or []]
+            expected_id = _payload_sha256({
+                "bank_sha256": core["bank_sha256"],
+                "target_metric_key": target_key,
+                "context_index": context_index,
+                "option_metric_keys": option_keys,
+            })
+            if (int(row.get("context_index", -1)) != context_index
+                    or row.get("context_id") != expected_id
+                    or len(option_keys) != 4 or len(set(option_keys)) != 4
+                    or option_keys[0] != target_key
+                    or any(key not in metrics for key in option_keys)
+                    or descriptions != [str(metrics[key]["description"]) for key in option_keys]):
+                raise ValueError(f"invalid centralness context for {target_key}/{context_index}")
+    return core, observed_sha
+
+
+def build_task_centralness_reference_plan(
+    bootstrap_paths: Sequence[str | Path],
+    *,
+    seed: int = 0,
+) -> dict:
+    """Freeze four blind reference contexts per metric across one task-level bank.
+
+    The reference is task-wide: context anchors come from four deterministic global
+    orderings of the complete bank, not from target-specific panel outcomes. It consumes
+    descriptions and bootstrap provenance only; no prompt-search annotations or labels
+    enter the plan.
+    """
+    views = sorted((_bootstrap(path) for path in bootstrap_paths), key=lambda row: row["key"])
+    if len(views) < 4 or len({view["key"] for view in views}) != len(views):
+        raise ValueError("centralness reference needs at least four unique bootstrap metrics")
+    namespaces = {
+        (view["probe_sha256"], view["executor_model"],
+         view["executor_model_revision"], view["readout_id"])
+        for view in views
+    }
+    if len(namespaces) != 1:
+        raise ValueError("centralness reference metrics must share probe/executor/readout")
+    metrics = {
+        view["key"]: {
+            "bootstrap_sha256": view["sha256"],
+            "description": view["description"],
+            "description_sha256": hashlib.sha256(
+                view["description"].encode("utf-8")).hexdigest(),
+        }
+        for view in views
+    }
+    metric_keys = sorted(metrics)
+    bank_sha = _payload_sha256({
+        "metrics": metrics,
+        "probe_sha256": views[0]["probe_sha256"],
+        "executor_model": views[0]["executor_model"],
+        "executor_model_revision": views[0]["executor_model_revision"],
+        "readout_id": views[0]["readout_id"],
+    })
+    anchor_orders = [
+        sorted(metric_keys, key=lambda key: hashlib.sha256(
+            f"{int(seed)}\x1f{bank_sha}\x1f{context_index}\x1f{key}".encode("utf-8")
+        ).hexdigest())
+        for context_index in range(CENTRALNESS_REFERENCE_CONTEXTS)
+    ]
+    contexts = {}
+    for target_key in metric_keys:
+        target_rows = []
+        seen_anchor_sets = set()
+        for context_index, anchor_order in enumerate(anchor_orders):
+            eligible = [key for key in anchor_order if key != target_key]
+            chosen = tuple(eligible[:3])
+            if chosen in seen_anchor_sets and len(eligible) > 3:
+                for offset in range(1, len(eligible)):
+                    candidate = tuple(
+                        eligible[(offset + index) % len(eligible)] for index in range(3))
+                    if len(set(candidate)) == 3 and candidate not in seen_anchor_sets:
+                        chosen = candidate
+                        break
+            seen_anchor_sets.add(chosen)
+            option_keys = [target_key, *chosen]
+            context_id = _payload_sha256({
+                "bank_sha256": bank_sha,
+                "target_metric_key": target_key,
+                "context_index": context_index,
+                "option_metric_keys": option_keys,
+            })
+            target_rows.append({
+                "context_index": context_index,
+                "context_id": context_id,
+                "option_metric_keys": option_keys,
+                "option_descriptions": [metrics[key]["description"] for key in option_keys],
+            })
+        contexts[target_key] = target_rows
+    order_design = mcq_option_order_design(4, CENTRALNESS_REFERENCE_DRAWS)
+    core = {
+        "schema": CENTRALNESS_PLAN_SCHEMA,
+        "bank_sha256": bank_sha,
+        "metric_keys": metric_keys,
+        "metrics": metrics,
+        "probe_sha256": views[0]["probe_sha256"],
+        "executor_model": views[0]["executor_model"],
+        "executor_model_revision": views[0]["executor_model_revision"],
+        "readout_id": views[0]["readout_id"],
+        "seed": int(seed),
+        "n_options": 4,
+        "contexts_per_metric": CENTRALNESS_REFERENCE_CONTEXTS,
+        "n_draws": CENTRALNESS_REFERENCE_DRAWS,
+        "option_order_design": order_design,
+        "contexts": contexts,
+        "premises": {
+            "task_wide_reference_frozen_before_target_panel_priors": True,
+            "uses_bootstrap_descriptions_and_frozen_provenance_only": True,
+            "scalar_context_mean_is_menu_search_efficiency_heuristic": True,
+            "centralness_scalar_is_not_a_certificate_premise": True,
+            "reference_anchor_exposure_need_not_be_balanced": True,
+            "uses_candidate_prompt_annotations": False,
+            "uses_external_labels": False,
+            "design_only_not_a_certificate": True,
+        },
+    }
+    payload = {**core, "plan_sha256": _payload_sha256(core)}
+    _validated_centralness_plan(payload)
+    return payload
+
+
+def _validate_blind_prior_rendering(
+    prior: Mapping[str, object], *, option_descriptions: Sequence[str], noun: str,
+    label: str,
+) -> np.ndarray:
+    """Reconstruct canonical rows and rendered query hashes from displayed rows."""
+    design = _validated_option_order_design(
+        prior.get("option_order_design"), n_options=4,
+        n_draws=CENTRALNESS_REFERENCE_DRAWS, label=label)
+    displayed = _validated_probability_matrix(
+        prior.get("displayed_choice_probabilities"), label=label, n_options=4)
+    canonical = _validated_probability_matrix(
+        prior.get("canonical_choice_probabilities"), label=label, n_options=4)
+    if displayed.shape != (CENTRALNESS_REFERENCE_DRAWS, 4):
+        raise ValueError(f"{label} has the wrong displayed-probability shape")
+    reconstructed = np.empty_like(displayed)
+    expected_hashes = []
+    descriptions = [str(value) for value in option_descriptions]
+    for draw, order in enumerate(design["canonical_option_orders"]):
+        permutation = np.asarray(order, dtype=int)
+        reconstructed[draw, permutation] = displayed[draw]
+        shown = [descriptions[index] for index in permutation]
+        choices = "\n".join(
+            f"{index + 1}. {description[:200]}"
+            for index, description in enumerate(shown)
+        )
+        prompt = _RECON_MCQ_LOGITS.format(
+            noun=str(noun), examples=_RECON_MCQ_NO_DEMOS, choices=choices,
+            labels="1, 2, 3, 4",
+        )
+        expected_hashes.append(hashlib.sha256(prompt.encode("utf-8")).hexdigest())
+    if (not np.allclose(canonical, reconstructed, rtol=0.0, atol=1e-12)
+            or list(prior.get("query_sha256") or []) != expected_hashes):
+        raise ValueError(f"{label} disagrees with displayed rows or rendered queries")
+    return canonical
+
+
+def _centralness_contribution(probabilities: np.ndarray) -> float:
+    clipped = np.maximum(np.asarray(probabilities, dtype=float),
+                         CENTRALNESS_LOG_PROBABILITY_FLOOR)
+    log_probabilities = np.log(clipped)
+    return float(log_probabilities[0] - np.mean(log_probabilities[1:]))
+
+
+def score_task_centralness_reference(
+    reconstructor,
+    *,
+    reference_plan: Mapping[str, object],
+    noun: str,
+    query_batch_size: int = 512,
+    reconstructor_model: str,
+    reconstructor_revision: str,
+) -> dict:
+    """Score the frozen four-context blind-centralness reference in one batched pass."""
+    plan, plan_sha = _validated_centralness_plan(reference_plan)
+    ordered_contexts = [
+        (target_key, row)
+        for target_key in plan["metric_keys"]
+        for row in plan["contexts"][target_key]
+    ]
+    priors = mcq_no_demo_choice_probabilities_many(
+        reconstructor,
+        noun=str(noun),
+        option_description_batches=[row["option_descriptions"] for _, row in ordered_contexts],
+        n_draws=CENTRALNESS_REFERENCE_DRAWS,
+        query_batch_size=query_batch_size,
+    )
+    rows = {target_key: [] for target_key in plan["metric_keys"]}
+    for (target_key, context), prior in zip(ordered_contexts, priors):
+        _validated_option_order_design(
+            prior.get("option_order_design"),
+            n_options=4,
+            n_draws=CENTRALNESS_REFERENCE_DRAWS,
+            label=f"centralness prior for {target_key}/{context['context_id']}",
+        )
+        contribution = _centralness_contribution(
+            np.asarray(prior["canonical_mean_prior"], dtype=float))
+        rows[target_key].append({
+            "context_index": int(context["context_index"]),
+            "context_id": context["context_id"],
+            "option_metric_keys": list(context["option_metric_keys"]),
+            "prior": prior,
+            "centered_log_probability": contribution,
+        })
+    centralness = {}
+    for target_key, target_rows in rows.items():
+        values = np.asarray(
+            [row["centered_log_probability"] for row in target_rows], dtype=float)
+        centralness[target_key] = {
+            "score": float(np.mean(values)),
+            "context_min": float(np.min(values)),
+            "context_max": float(np.max(values)),
+            "context_std": float(np.std(values)),
+            "n_contexts": len(values),
+        }
+    core = {
+        "schema": CENTRALNESS_CALIBRATION_SCHEMA,
+        "reference_plan_sha256": plan_sha,
+        "reconstructor_model": str(reconstructor_model),
+        "reconstructor_revision": str(reconstructor_revision),
+        "choice_readout_id": str(getattr(reconstructor, "choice_readout_id", "unverified")),
+        "noun": str(noun),
+        "n_draws": CENTRALNESS_REFERENCE_DRAWS,
+        "option_order_design": plan["option_order_design"],
+        "log_probability_floor": CENTRALNESS_LOG_PROBABILITY_FLOOR,
+        "rows": rows,
+        "centralness": centralness,
+        "premises": {
+            "blind_unlabeled_reference_menus": True,
+            "task_wide_reference_precedes_target_panel_priors": True,
+            "uses_candidate_prompt_annotations": False,
+            "uses_external_labels": False,
+            "design_only_not_a_certificate": True,
+        },
+    }
+    payload = {**core, "calibration_sha256": _payload_sha256(core)}
+    validate_task_centralness_calibration(reference_plan, payload)
+    return payload
+
+
+def validate_task_centralness_calibration(
+    reference_plan: Mapping[str, object],
+    calibration: Mapping[str, object],
+) -> dict[str, float]:
+    """Fail closed unless every centralness score recomputes from its frozen rows."""
+    plan, plan_sha = _validated_centralness_plan(reference_plan)
+    core = dict(calibration)
+    observed_sha = str(core.pop("calibration_sha256", ""))
+    if (core.get("schema") != CENTRALNESS_CALIBRATION_SCHEMA
+            or observed_sha != _payload_sha256(core)
+            or core.get("reference_plan_sha256") != plan_sha
+            or int(core.get("n_draws", -1)) != CENTRALNESS_REFERENCE_DRAWS
+            or float(core.get("log_probability_floor", np.nan))
+            != CENTRALNESS_LOG_PROBABILITY_FLOOR):
+        raise ValueError("invalid or mismatched MCQ centralness calibration")
+    _validated_option_order_design(
+        core.get("option_order_design"), n_options=4,
+        n_draws=CENTRALNESS_REFERENCE_DRAWS, label="centralness calibration")
+    observed_rows = core.get("rows") or {}
+    observed_centralness = core.get("centralness") or {}
+    if set(observed_rows) != set(plan["metric_keys"]):
+        raise ValueError("centralness calibration does not cover the frozen metric bank")
+    scores = {}
+    for target_key in plan["metric_keys"]:
+        rows = list(observed_rows[target_key])
+        expected_contexts = list(plan["contexts"][target_key])
+        if len(rows) != len(expected_contexts):
+            raise ValueError(f"centralness calibration is incomplete for {target_key}")
+        contributions = []
+        for row, context in zip(rows, expected_contexts):
+            prior = row.get("prior") or {}
+            probabilities = _validate_blind_prior_rendering(
+                prior,
+                option_descriptions=context["option_descriptions"],
+                noun=str(core.get("noun", "")),
+                label=f"centralness prior for {target_key}/{context['context_id']}",
+            )
+            mean_prior = probabilities.mean(axis=0)
+            mean_prior = mean_prior / mean_prior.sum()
+            contribution = _centralness_contribution(mean_prior)
+            if (row.get("context_id") != context["context_id"]
+                    or int(row.get("context_index", -1)) != context["context_index"]
+                    or list(row.get("option_metric_keys") or [])
+                    != context["option_metric_keys"]
+                    or not np.allclose(
+                        np.asarray(prior.get("canonical_mean_prior"), dtype=float),
+                        mean_prior, rtol=0.0, atol=1e-12)
+                    or not np.isclose(
+                        float(row.get("centered_log_probability", np.nan)), contribution,
+                        rtol=0.0, atol=1e-12)):
+                raise ValueError(f"centralness calibration row changed for {target_key}")
+            _validated_option_order_design(
+                prior.get("option_order_design"), n_options=4,
+                n_draws=CENTRALNESS_REFERENCE_DRAWS,
+                label=f"centralness prior for {target_key}/{context['context_id']}")
+            contributions.append(contribution)
+        summary = observed_centralness.get(target_key) or {}
+        values = np.asarray(contributions, dtype=float)
+        expected = {
+            "score": float(np.mean(values)),
+            "context_min": float(np.min(values)),
+            "context_max": float(np.max(values)),
+            "context_std": float(np.std(values)),
+            "n_contexts": len(values),
+        }
+        if (int(summary.get("n_contexts", -1)) != expected["n_contexts"]
+                or any(not np.isclose(
+                    float(summary.get(field, np.nan)), expected[field],
+                    rtol=0.0, atol=1e-12)
+                    for field in ("score", "context_min", "context_max", "context_std"))):
+            raise ValueError(f"centralness summary changed for {target_key}")
+        scores[target_key] = expected["score"]
+    return scores
+
+
 def build_codebook_panel_plan(
     bootstrap_paths: Sequence[str | Path],
     *,
+    centralness_reference_plan: Mapping[str, object],
+    centralness_calibration: Mapping[str, object],
     target_metric_keys: Sequence[str],
     n_options: int = 4,
     design_size: int = 120,
@@ -1093,10 +1455,28 @@ def build_codebook_panel_plan(
     seed: int = 0,
     candidate_pool_size: int = 16,
     max_panels_per_target: int = 256,
+    centralness_candidate_pool_size: int = 32,
+    centralness_fallback_panels_per_target: int = 64,
 ) -> dict:
-    """Enumerate hard candidate menus using bootstrap behavior only."""
+    """Prelock legacy-hard and blind-centralness fallback menus for every target.
+
+    The legacy primary prefix is unchanged: it is still the first
+    ``max_panels_per_target`` combinations of the behavior-nearest candidate pool. The
+    bounded fallback arm is appended from a separately frozen, task-wide centralness
+    reference. Both arms exist before any target-specific menu prior is observed.
+    """
+    if n_options != 4:
+        raise ValueError("the blind-centralness fallback is frozen for four-option MCQ")
     if candidate_pool_size < n_options - 1 or max_panels_per_target < 1:
         raise ValueError("panel search needs enough candidates and a positive panel budget")
+    if (centralness_candidate_pool_size < n_options - 1
+            or centralness_fallback_panels_per_target < 0):
+        raise ValueError("invalid centralness fallback pool or panel budget")
+    centralness_plan, centralness_plan_sha = _validated_centralness_plan(
+        centralness_reference_plan)
+    centralness_scores = validate_task_centralness_calibration(
+        centralness_reference_plan, centralness_calibration)
+    centralness_calibration_sha = str(centralness_calibration["calibration_sha256"])
     base = build_frozen_codebook_manifest(
         bootstrap_paths,
         n_options=n_options,
@@ -1105,16 +1485,26 @@ def build_codebook_panel_plan(
         seed=seed,
         freeze_teaching_panels=False,
     )
+    if (set(base["metrics"]) != set(centralness_plan["metrics"])
+            or any(
+                base["metrics"][key]["bootstrap_sha256"]
+                != centralness_plan["metrics"][key]["bootstrap_sha256"]
+                or base["metrics"][key]["description"]
+                != centralness_plan["metrics"][key]["description"]
+                for key in base["metrics"]
+            )):
+        raise ValueError("centralness reference is bound to a different codebook bank")
     targets = [str(value) for value in target_metric_keys]
     if len(set(targets)) != len(targets):
         raise ValueError("target_metric_keys must be unique")
     panels = {}
+    panel_arms = {}
     for target_key in targets:
         if target_key not in base["entries"]:
             raise ValueError(f"panel target {target_key!r} is absent from the candidate bank")
         entry = base["entries"][target_key]
         eligible = list(entry["eligible_distractor_statistics"])[:candidate_pool_size]
-        combinations = []
+        primary_combinations = []
         for combo in itertools.combinations(eligible, n_options - 1):
             keys = [str(candidate["metric_key"]) for candidate in combo]
             behavior = {
@@ -1123,7 +1513,7 @@ def build_codebook_panel_plan(
                 "selected_distractor_disagreements_min": int(
                     min(c["n_disagree"] for c in combo)),
             }
-            combinations.append({
+            primary_combinations.append({
                 "distractor_metric_keys": keys,
                 "option_metric_keys": [target_key, *keys],
                 "option_descriptions": [
@@ -1131,30 +1521,129 @@ def build_codebook_panel_plan(
                 ],
                 "behavioral_panel_statistics": behavior,
             })
-        combinations.sort(key=lambda panel: (
+        primary_combinations.sort(key=lambda panel: (
             -panel["behavioral_panel_statistics"]["selected_distractor_kappa_min"],
             -panel["behavioral_panel_statistics"]["selected_distractor_kappa_mean"],
             -panel["behavioral_panel_statistics"]["selected_distractor_disagreements_min"],
             panel["distractor_metric_keys"],
         ))
-        kept = combinations[:max_panels_per_target]
-        for panel in kept:
+        primary = primary_combinations[:max_panels_per_target]
+        for panel in primary:
             panel["panel_id"] = _payload_sha256({
                 "target_metric_key": target_key,
                 "distractor_metric_keys": panel["distractor_metric_keys"],
             })
-        panels[target_key] = kept
+
+        centralness_eligible = sorted(
+            entry["eligible_distractor_statistics"],
+            key=lambda candidate: (
+                abs(centralness_scores[candidate["metric_key"]]
+                    - centralness_scores[target_key]),
+                -candidate["kappa"],
+                -candidate["n_disagree"],
+                candidate["metric_key"],
+            ),
+        )[:centralness_candidate_pool_size]
+        fallback_candidates = []
+        primary_sets = {
+            tuple(sorted(panel["distractor_metric_keys"])) for panel in primary
+        }
+        for combo in itertools.combinations(centralness_eligible, n_options - 1):
+            keys = [str(candidate["metric_key"]) for candidate in combo]
+            if tuple(sorted(keys)) in primary_sets:
+                continue
+            option_scores = np.asarray(
+                [centralness_scores[target_key], *[centralness_scores[key] for key in keys]],
+                dtype=float,
+            )
+            behavior = {
+                "selected_distractor_kappa_min": float(min(c["kappa"] for c in combo)),
+                "selected_distractor_kappa_mean": float(np.mean([c["kappa"] for c in combo])),
+                "selected_distractor_disagreements_min": int(
+                    min(c["n_disagree"] for c in combo)),
+            }
+            fallback_candidates.append((
+                (
+                    float(np.max(option_scores) - np.min(option_scores)),
+                    float(abs(centralness_scores[target_key] - np.mean(option_scores))),
+                    -behavior["selected_distractor_kappa_min"],
+                    -behavior["selected_distractor_kappa_mean"],
+                    -behavior["selected_distractor_disagreements_min"],
+                    keys,
+                ),
+                {
+                    "distractor_metric_keys": keys,
+                    "option_metric_keys": [target_key, *keys],
+                    "option_descriptions": [
+                        base["metrics"][key]["description"] for key in [target_key, *keys]
+                    ],
+                    "behavioral_panel_statistics": behavior,
+                },
+                {
+                    "option_centralness_scores": option_scores.tolist(),
+                    "option_centralness_range": float(
+                        np.max(option_scores) - np.min(option_scores)),
+                    "target_to_panel_mean_centralness": float(
+                        abs(centralness_scores[target_key] - np.mean(option_scores))),
+                },
+            ))
+        fallback_candidates.sort(key=lambda row: row[0])
+        fallback = []
+        fallback_provenance = {}
+        for _, panel, centralness_statistics in fallback_candidates[
+                :centralness_fallback_panels_per_target]:
+            panel["panel_id"] = _payload_sha256({
+                "target_metric_key": target_key,
+                "distractor_metric_keys": panel["distractor_metric_keys"],
+            })
+            fallback.append(panel)
+            fallback_provenance[panel["panel_id"]] = centralness_statistics
+
+        combined = [*primary, *fallback]
+        panels[target_key] = combined
+        arm_rows = {}
+        for rank, panel in enumerate(primary):
+            arm_rows[panel["panel_id"]] = {
+                "arm": "legacy_behavior_primary",
+                "arm_rank": rank,
+            }
+        for rank, panel in enumerate(fallback):
+            arm_rows[panel["panel_id"]] = {
+                "arm": "blind_centralness_fallback",
+                "arm_rank": rank,
+                **fallback_provenance[panel["panel_id"]],
+            }
+        panel_arms[target_key] = {
+            "n_primary": len(primary),
+            "n_fallback": len(fallback),
+            "n_total": len(combined),
+            "centralness_candidate_metric_keys": [
+                row["metric_key"] for row in centralness_eligible
+            ],
+            "by_panel_id": arm_rows,
+        }
 
     core = {
         "schema": PANEL_PLAN_SCHEMA,
         "base_codebook_manifest_sha256": base["manifest_sha256"],
+        "centralness_reference_plan_sha256": centralness_plan_sha,
+        "centralness_calibration_sha256": centralness_calibration_sha,
         "n_options": int(n_options),
         "target_metric_keys": targets,
         "candidate_pool_size": int(candidate_pool_size),
         "max_panels_per_target": int(max_panels_per_target),
+        "legacy_primary_panel_budget_per_target": int(max_panels_per_target),
+        "centralness_candidate_pool_size": int(centralness_candidate_pool_size),
+        "centralness_fallback_panel_budget_per_target": int(
+            centralness_fallback_panels_per_target),
         "panels": panels,
+        "panel_arms": panel_arms,
         "premises": {
             "uses_bootstrap_behavior_only": True,
+            "task_wide_centralness_frozen_before_target_panel_priors": True,
+            "primary_and_fallback_arms_prelocked_for_every_target": True,
+            "fallback_is_not_conditioned_on_primary_gate_results": True,
+            "legacy_primary_panel_ids_and_order_preserved": True,
             "uses_candidate_prompt_annotations": False,
             "uses_external_labels": False,
         },
@@ -1200,6 +1689,8 @@ def score_codebook_panel_priors(
                 "target_metric_key": target_key,
                 "distractor_metric_keys": panel["distractor_metric_keys"],
                 "behavioral_panel_statistics": panel["behavioral_panel_statistics"],
+                "panel_plan_provenance": plan["panel_arms"][target_key][
+                    "by_panel_id"][panel["panel_id"]],
                 "prior": prior,
             })
         rows[target_key] = target_rows
@@ -1212,6 +1703,9 @@ def score_codebook_panel_priors(
         "noun": str(noun),
         "n_draws": int(n_draws),
         "option_order_design": option_order_design,
+        "centralness_reference_plan_sha256": plan[
+            "centralness_reference_plan_sha256"],
+        "centralness_calibration_sha256": plan["centralness_calibration_sha256"],
         "rows": rows,
         "premises": {
             "blind_unlabeled_menu": True,
@@ -1326,6 +1820,10 @@ def prior_balanced_panel_rows(
         "rows": annotated,
         "thresholds": thresholds,
         "calibration_sha256": calibration_sha,
+        "panel_plan_sha256": plan_sha,
+        "centralness_reference_plan_sha256": plan[
+            "centralness_reference_plan_sha256"],
+        "centralness_calibration_sha256": plan["centralness_calibration_sha256"],
     }
 
 
@@ -1498,7 +1996,7 @@ def select_state_capable_panels(
 def capped_prior_passing_panel_rows(
     rows: Sequence[Mapping[str, object]], *, max_menus: int = TEACHING_MAX_MENUS,
 ) -> list[dict]:
-    """Prospectively cap prior-passing menus by behavior-only hardness."""
+    """Cap prior-passing menus by prior balance, then behavioral hardness."""
     if int(max_menus) != TEACHING_MAX_MENUS:
         raise ValueError(f"bound-grade teaching rescue requires M={TEACHING_MAX_MENUS}")
     passing = [dict(row) for row in rows if row.get("passes_prior_balance")]
@@ -1607,6 +2105,7 @@ def _baseline_manifest_for_library(
         target_key: {
             "distractor_metric_keys": list(variant_entry["distractor_metric_keys"]),
             "prior_calibration": prior,
+            "panel_plan_selection": variant_entry.get("panel_plan_selection"),
         },
     }
     baseline = build_frozen_codebook_manifest(
@@ -1858,6 +2357,24 @@ def validate_codebook_manifest(manifest: Mapping[str, object]) -> None:
                     or rescue.get("chosen_teaching_panel_selection")
                     != entry.get("teaching_panel_selection")):
                 raise ValueError(f"metric {key} has an invalid teaching-rescue selection")
+        panel_selection = entry.get("panel_plan_selection")
+        if panel_selection is not None:
+            arm = str(panel_selection.get("arm", ""))
+            hashes = [
+                str(panel_selection.get(field, ""))
+                for field in (
+                    "panel_plan_sha256",
+                    "centralness_reference_plan_sha256",
+                    "centralness_calibration_sha256",
+                )
+            ]
+            if (panel_selection.get("panel_id")
+                    != (entry.get("prior_calibration") or {}).get("panel_id")
+                    or arm not in {
+                        "legacy_behavior_primary", "blind_centralness_fallback"}
+                    or int(panel_selection.get("arm_rank", -1)) < 0
+                    or any(not re.fullmatch(r"[0-9a-f]{64}", value) for value in hashes)):
+                raise ValueError(f"metric {key} has invalid panel-plan provenance")
 
 
 def _load_scored_rows(path: str | Path, *, expected_probe_sha256: str) -> dict:

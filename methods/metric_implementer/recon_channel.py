@@ -787,8 +787,38 @@ def mcq_no_demo_choice_probabilities(
     is tracked only after scoring so callers can diagnose the target prior without
     disclosing it to the reconstructor.
     """
-    descriptions = [str(value) for value in option_descriptions]
-    n_options = len(descriptions)
+    return mcq_no_demo_choice_probabilities_many(
+        reconstructor,
+        noun=noun,
+        option_description_batches=[option_descriptions],
+        n_draws=n_draws,
+        query_batch_size=query_batch_size,
+    )[0]
+
+
+def mcq_no_demo_choice_probabilities_many(
+    reconstructor,
+    *,
+    noun: str,
+    option_description_batches,
+    n_draws: int,
+    query_batch_size: int = 512,
+) -> list[dict]:
+    """Batch blind MCQ priors for many menus without changing rendered queries.
+
+    Menus are flattened only for backend throughput. Each returned row is byte-for-byte
+    the same finite functional produced by :func:`mcq_no_demo_choice_probabilities` for
+    that menu, including the option-order schedule and query seeds.
+    """
+    batches = [
+        [str(value) for value in descriptions]
+        for descriptions in option_description_batches
+    ]
+    if not batches:
+        return []
+    n_options = len(batches[0])
+    if any(len(descriptions) != n_options for descriptions in batches):
+        raise ValueError("all no-demo menus in one batch must have the same option count")
     if n_options < 2 or n_draws < n_options or n_draws % n_options != 0:
         raise ValueError("no-demo calibration requires complete option-position blocks")
     if query_batch_size <= 0:
@@ -798,18 +828,25 @@ def mcq_no_demo_choice_probabilities(
         np.asarray(order, dtype=int)
         for order in option_order_design["canonical_option_orders"]
     ]
-    prompts = []
-    for permutation in permutations:
-        displayed = [descriptions[i] for i in permutation]
-        choices = "\n".join(
-            f"{i + 1}. {description[:200]}" for i, description in enumerate(displayed))
-        prompts.append(_RECON_MCQ_LOGITS.format(
-            noun=noun,
-            examples=_RECON_MCQ_NO_DEMOS,
-            choices=choices,
-            labels=", ".join(str(i + 1) for i in range(n_options)),
-        ))
-    seeds = option_order_design["query_seeds_by_condition"]["no_demonstrations"]
+    prompts_by_menu = []
+    for descriptions in batches:
+        menu_prompts = []
+        for permutation in permutations:
+            displayed = [descriptions[i] for i in permutation]
+            choices = "\n".join(
+                f"{i + 1}. {description[:200]}"
+                for i, description in enumerate(displayed)
+            )
+            menu_prompts.append(_RECON_MCQ_LOGITS.format(
+                noun=noun,
+                examples=_RECON_MCQ_NO_DEMOS,
+                choices=choices,
+                labels=", ".join(str(i + 1) for i in range(n_options)),
+            ))
+        prompts_by_menu.append(menu_prompts)
+    prompts = [prompt for menu in prompts_by_menu for prompt in menu]
+    draw_seeds = option_order_design["query_seeds_by_condition"]["no_demonstrations"]
+    seeds = draw_seeds * len(batches)
     displayed_rows = []
     choice_labels = [str(i + 1) for i in range(n_options)]
     for start in range(0, len(prompts), query_batch_size):
@@ -827,29 +864,36 @@ def mcq_no_demo_choice_probabilities(
         batch = batch / batch.sum(axis=1, keepdims=True)
         displayed_rows.extend(batch.tolist())
 
-    displayed_probabilities = np.asarray(displayed_rows, dtype=float)
-    canonical_probabilities = np.empty_like(displayed_probabilities)
-    for draw, permutation in enumerate(permutations):
-        canonical_probabilities[draw, permutation] = displayed_probabilities[draw]
-    prior = canonical_probabilities.mean(axis=0)
-    prior = prior / prior.sum()
-    positive = prior > 0.0
-    entropy = float(-np.sum(prior[positive] * np.log2(prior[positive])))
-    return {
-        "canonical_choice_probabilities": canonical_probabilities.tolist(),
-        "displayed_choice_probabilities": displayed_probabilities.tolist(),
-        "canonical_mean_prior": prior.tolist(),
-        "target_probability": float(prior[0]),
-        "maximum_option_probability": float(np.max(prior)),
-        "normalized_entropy": float(entropy / np.log2(n_options)),
-        "total_variation_from_uniform": float(
-            0.5 * np.abs(prior - 1.0 / n_options).sum()),
-        "n_draws": int(n_draws),
-        "position_counterbalanced": bool(option_order_design["position_counterbalanced"]),
-        "option_order_design": option_order_design,
-        "query_sha256": [hashlib.sha256(prompt.encode("utf-8")).hexdigest()
-                         for prompt in prompts],
-    }
+    displayed_all = np.asarray(displayed_rows, dtype=float).reshape(
+        len(batches), n_draws, n_options)
+    reports = []
+    for menu_index, displayed_probabilities in enumerate(displayed_all):
+        canonical_probabilities = np.empty_like(displayed_probabilities)
+        for draw, permutation in enumerate(permutations):
+            canonical_probabilities[draw, permutation] = displayed_probabilities[draw]
+        prior = canonical_probabilities.mean(axis=0)
+        prior = prior / prior.sum()
+        positive = prior > 0.0
+        entropy = float(-np.sum(prior[positive] * np.log2(prior[positive])))
+        reports.append({
+            "canonical_choice_probabilities": canonical_probabilities.tolist(),
+            "displayed_choice_probabilities": displayed_probabilities.tolist(),
+            "canonical_mean_prior": prior.tolist(),
+            "target_probability": float(prior[0]),
+            "maximum_option_probability": float(np.max(prior)),
+            "normalized_entropy": float(entropy / np.log2(n_options)),
+            "total_variation_from_uniform": float(
+                0.5 * np.abs(prior - 1.0 / n_options).sum()),
+            "n_draws": int(n_draws),
+            "position_counterbalanced": bool(
+                option_order_design["position_counterbalanced"]),
+            "option_order_design": option_order_design,
+            "query_sha256": [
+                hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+                for prompt in prompts_by_menu[menu_index]
+            ],
+        })
+    return reports
 
 
 def _verdict_vec(pyes) -> np.ndarray:

@@ -42,6 +42,8 @@ from methods.metric_implementer.experiments.cr_audit import (  # noqa: E402
 )
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (  # noqa: E402
     CachedChoiceReconstructor,
+    CENTRALNESS_REFERENCE_CONTEXTS,
+    CENTRALNESS_REFERENCE_DRAWS,
     FIXED_TEACHING_SIZE,
     TEACHING_FULL_FINALISTS,
     TEACHING_LIBRARY_SIZE,
@@ -53,6 +55,7 @@ from methods.metric_implementer.experiments.cr3_reconstruction_values import (  
     build_teaching_finalist_lock,
     build_teaching_panel_library,
     capped_prior_passing_panel_rows,
+    build_task_centralness_reference_plan,
     import_choice_probability_cache,
     load_value_artifact,
     lookup_scored_prompt_values,
@@ -62,6 +65,7 @@ from methods.metric_implementer.experiments.cr3_reconstruction_values import (  
     select_state_capable_panels,
     teaching_panel_selection_from_library,
     teaching_screen_candidate_record,
+    validate_task_centralness_calibration,
     validate_codebook_manifest,
     validate_finite_state_envelope,
     validate_teaching_panel_library,
@@ -90,6 +94,8 @@ from methods.metric_implementer.vllm_backend import (  # noqa: E402
 )
 
 DEFAULT_WORKER = REPO / "scripts" / "tools" / "cr3_mining_worker.py"
+DEFAULT_CENTRALNESS_WORKER = (
+    REPO / "scripts" / "tools" / "cr3_reconstruction_calibration_worker.py")
 DEFAULT_PYTHON = Path("/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python")
 DEFAULT_WORKER_HOME = Path("/lfs/skampere3/0/alexspan")
 LEDGER_SCHEMA = "cr3-ledger-v3"
@@ -244,7 +250,9 @@ def _apply_mcq_value_quality_gate(status: dict, certificate: dict) -> dict:
     result = json.loads(json.dumps(status))
     quality = ((certificate.get("all_finite_prompt_certificate") or {}).get(
         "instrument_quality") or {})
-    if quality and not quality.get("headline_eligible", False):
+    independent_process = certificate.get("independent_search_process_certificate", True)
+    quality_failed = bool(quality and not quality.get("headline_eligible", False))
+    if quality_failed or not independent_process:
         formal_status = result["value_status"]
         result["formal_mathematical_value_status"] = formal_status
         if formal_status != "UNRESOLVED":
@@ -258,7 +266,12 @@ def _apply_mcq_value_quality_gate(status: dict, certificate: dict) -> dict:
                 headline = "UNRESOLVED"
             result["headline_status"] = headline
         result["value_headline_eligible"] = False
-        result["value_headline_ineligibility_reasons"] = list(quality.get("reasons", []))
+        result["value_headline_ineligibility_reasons"] = [
+            *list(quality.get("reasons", [])),
+            *([] if independent_process else [
+                "independent-search process status requires a non-design pool prompt",
+            ]),
+        ]
     else:
         result["value_headline_eligible"] = True
     return result
@@ -515,11 +528,12 @@ def _design_witness_value_evidence(
     values: np.ndarray,
     details: list[dict],
 ) -> tuple[np.ndarray, list[dict], list[str], np.ndarray]:
-    """Exclude frozen target-form design inputs from achieved prompt evidence.
+    """Tag frozen target-form design inputs without changing their values or species.
 
     The target-form behaviors are legitimate prospective instrument-design inputs, but
-    replaying those same prompt texts is not independent evidence that prompt search
-    achieved their value.  The exhaustive all-state upper bound remains untouched.
+    replaying those same prompt texts is not independent scientific evidence that prompt
+    search achieved their value. They remain real executable prompts, however, so their
+    raw values must remain in all CR-3 gain and value-support calculations.
     """
     observed = np.asarray(values, float)
     if observed.ndim != 1 or len(observed) != len(details):
@@ -556,12 +570,8 @@ def _design_witness_value_evidence(
             "teaching_transcript_sha256") or "")
         if not re.fullmatch(r"[0-9a-f]{64}", transcript_sha):
             raise RuntimeError(f"MCQ value row {index} lacks an exact value-species hash")
-        species.append(
-            transcript_sha if row_eligible else
-            f"design-witness-excluded:{candidate_sha}")
-    achieved = observed.copy()
-    achieved[~eligible] = 0.0
-    return achieved, annotated, species, eligible
+        species.append(transcript_sha)
+    return observed.copy(), annotated, species, eligible
 
 
 def _worker_environment(args) -> dict[str, str]:
@@ -790,6 +800,7 @@ def _manifest_payload(args) -> dict:
             apply_task_preset(cfg, task)
             mcq_task_nouns[task] = str(getattr(cfg, "item_noun", task))
     worker = str(Path(args.worker).resolve())
+    centralness_worker = str(Path(args.centralness_worker).resolve())
     core = {
         "schema": MANIFEST_SCHEMA,
         "metrics": metrics,
@@ -842,11 +853,21 @@ def _manifest_payload(args) -> dict:
         "mcq_distractor_kappa_role": "descriptive_near_clone_diagnostic_only",
         "mcq_fixed_hard_annotation_rule": "1 iff normalized pYES > 0.5; ties map to 0",
         "mcq_panel_selection_policy": (
-            "M4 prior-pass menus -> K8 prospective T8 screen -> F2 prelocked full24 -> "
-            "canonical-live -> max_U_state -> stable IDs"),
+            "prelocked legacy-behavior primary + blind-centralness fallback -> combined "
+            "full24 prior calibration -> capped M4 prior-pass menus -> K8 prospective T8 "
+            "screen -> F2 prelocked full24 -> canonical-live -> max_U_state -> stable IDs"),
         "mcq_candidate_value_mode": "exact_cpu_lookup_in_immutable_2^8_state_table",
+        "mcq_centralness_reference_contexts_per_metric": CENTRALNESS_REFERENCE_CONTEXTS,
+        "mcq_centralness_reference_draws": CENTRALNESS_REFERENCE_DRAWS,
+        "mcq_centralness_reference_option_order_design": mcq_option_order_design(
+            args.mcq_n_options, CENTRALNESS_REFERENCE_DRAWS),
         "mcq_prior_candidate_pool_size": args.mcq_prior_candidate_pool_size,
         "mcq_prior_max_panels_per_target": args.mcq_prior_max_panels_per_target,
+        "mcq_prior_legacy_primary_panel_budget_per_target": (
+            args.mcq_prior_max_panels_per_target),
+        "mcq_centralness_candidate_pool_size": args.mcq_centralness_candidate_pool_size,
+        "mcq_centralness_fallback_panels_per_target": (
+            args.mcq_centralness_fallback_panels_per_target),
         "mcq_prior_max_option_probability": args.mcq_prior_max_option_probability,
         "mcq_prior_target_probability_tolerance": args.mcq_prior_target_probability_tolerance,
         "mcq_prior_min_normalized_entropy": args.mcq_prior_min_normalized_entropy,
@@ -906,6 +927,7 @@ def _manifest_payload(args) -> dict:
             if args.reuse_evidence_root else None),
         "r2_bucket": args.r2_bucket,
         "worker": worker,
+        "centralness_worker": centralness_worker,
         "worker_environment": {
             key: _worker_environment(args)[key]
             for key in (
@@ -918,6 +940,7 @@ def _manifest_payload(args) -> dict:
         "worker_retry_delay_seconds": args.worker_retry_delay_seconds,
         "code_sha256": {
             "worker": file_sha256(worker),
+            "centralness_worker": file_sha256(centralness_worker),
             "orchestrator": file_sha256(__file__),
             "certificate": file_sha256(Path(__file__).with_name("cr_audit.py")),
             "reconstruction_values": file_sha256(
@@ -1159,6 +1182,7 @@ def _validate_mcq_stage_draw_contract(stage: str, items: list[dict], expected: i
     """Bind headline jobs to full24 and prospective T8 screens to their exact prefix."""
     field = {
         "codebook_prior": "n_draws",
+        "codebook_centralness": "n_draws",
         "value": "n_reconstruction_draws",
     }.get(stage)
     if field is None:
@@ -1201,8 +1225,11 @@ def run_stage(*, stage: str, items: list[dict], jobs_file: Path, model: str,
               family: str, temperature: float, args, worlds: dict[str, dict]) -> None:
     if not items:
         return
-    _validate_mcq_stage_draw_contract(
-        stage, items, int(getattr(args, "mcq_reconstruction_draws", 24)))
+    expected_draws = (
+        CENTRALNESS_REFERENCE_DRAWS if stage == "codebook_centralness"
+        else int(getattr(args, "mcq_reconstruction_draws", 24))
+    )
+    _validate_mcq_stage_draw_contract(stage, items, expected_draws)
     digest = hashlib.sha256(
         json.dumps(items, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()[:12]
@@ -1217,13 +1244,20 @@ def run_stage(*, stage: str, items: list[dict], jobs_file: Path, model: str,
             from types import SimpleNamespace
             from scripts.tools.cr3_mining_worker import stage_value
             stage_value(SimpleNamespace(jobs=str(jobs_file), model=model, fake=True))
+        elif stage == "codebook_centralness":
+            from scripts.tools.cr3_reconstruction_calibration_worker import run
+            run(jobs_file, model=model, fake=True)
         else:
             from types import SimpleNamespace
             from scripts.tools.cr3_mining_worker import stage_codebook_prior
             stage_codebook_prior(SimpleNamespace(jobs=str(jobs_file), model=model, fake=True))
         return
-    cmd = [args.worker_python, args.worker, "--stage", stage, "--jobs", str(jobs_file),
-           "--model", model]
+    if stage == "codebook_centralness":
+        cmd = [args.worker_python, args.centralness_worker, "--jobs", str(jobs_file),
+               "--model", model]
+    else:
+        cmd = [args.worker_python, args.worker, "--stage", stage, "--jobs", str(jobs_file),
+               "--model", model]
     if stage == "propose":
         cmd += ["--family", family, "--temp", str(temperature)]
     attempt = 1
@@ -1636,6 +1670,15 @@ def _frozen_prior_selection(target_key: str, row: dict, target_rows: list[dict],
                 "n_panels_passing": len(passing),
                 "calibration_sha256": ranked["calibration_sha256"],
             },
+            "panel_plan_selection": {
+                "panel_id": str(row["panel_id"]),
+                **dict(row["panel_plan_provenance"]),
+                "panel_plan_sha256": ranked["panel_plan_sha256"],
+                "centralness_reference_plan_sha256": ranked[
+                    "centralness_reference_plan_sha256"],
+                "centralness_calibration_sha256": ranked[
+                    "centralness_calibration_sha256"],
+            },
         },
     }
 
@@ -1667,8 +1710,8 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
     by_task: dict[str, list[dict]] = {}
     for state in states.values():
         by_task.setdefault(state["task"], []).append(state)
-    planned = {}
-    calibration_jobs = []
+    centralness_planned = {}
+    centralness_jobs = []
     for task, task_states in by_task.items():
         paths = sorted(candidate_paths_by_task.get(task, []), key=lambda path: str(path))
         if not paths:
@@ -1687,9 +1730,85 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
                 "readout_id", "cache_namespace_sha256"))
             if candidate_namespace != expected_namespace:
                 raise RuntimeError(
-                    f"MCQ candidate executor namespace differs from target bootstrap: {candidate_path}")
+                    f"MCQ candidate executor namespace differs from target bootstrap: "
+                    f"{candidate_path}")
+        centralness_plan = build_task_centralness_reference_plan(
+            paths,
+            seed=stable_seed("mcq-centralness", task) % (2 ** 32),
+        )
+        centralness_plan_path = (
+            root / "mcq_codebooks" / f"{task}.centralness_plan.json")
+        if centralness_plan_path.exists():
+            if json.loads(centralness_plan_path.read_text()) != centralness_plan:
+                raise RuntimeError(f"frozen MCQ centralness plan changed for task {task}")
+        else:
+            _atomic_json(centralness_plan_path, centralness_plan)
+        centralness_calibration_path = (
+            root / "mcq_codebooks" / f"{task}.centralness_calibration.json")
+        if not centralness_calibration_path.exists() and reuse_root is not None:
+            reusable_plan_path = (
+                reuse_root / "mcq_codebooks" / f"{task}.centralness_plan.json")
+            reusable_calibration_path = (
+                reuse_root / "mcq_codebooks" / f"{task}.centralness_calibration.json")
+            if reusable_plan_path.exists() and reusable_calibration_path.exists():
+                reusable_plan = json.loads(reusable_plan_path.read_text())
+                reusable_calibration = json.loads(reusable_calibration_path.read_text())
+                if reusable_plan == centralness_plan:
+                    validate_task_centralness_calibration(
+                        centralness_plan, reusable_calibration)
+                    validate_reconstructor_artifact_contract(
+                        reusable_calibration, manifest,
+                        role=f"reusable MCQ centralness calibration for {task}")
+                    if (reusable_calibration.get("noun")
+                            != manifest["mcq_task_nouns"][task]):
+                        raise RuntimeError(
+                            f"reusable MCQ centralness noun changed for task {task}")
+                    _atomic_json(centralness_calibration_path, reusable_calibration)
+        if not centralness_calibration_path.exists():
+            centralness_jobs.append({
+                "centralness_plan": str(centralness_plan_path),
+                "noun": manifest["mcq_task_nouns"][task],
+                "n_draws": CENTRALNESS_REFERENCE_DRAWS,
+                "query_batch_size": args.mcq_value_query_batch_size,
+                "choice_probability_cache": str(
+                    root / "mcq_query_cache" / "choice_probabilities.sqlite"),
+                "expected_reconstructor_model": manifest["mcq_reconstructor"],
+                "expected_reconstructor_revision": manifest["mcq_reconstructor_revision"],
+                "expected_choice_readout_id": manifest["mcq_choice_readout_protocol"],
+                "out": str(centralness_calibration_path),
+            })
+        centralness_planned[task] = (
+            task_states, paths, centralness_plan, centralness_calibration_path)
+
+    run_stage(
+        stage="codebook_centralness",
+        items=centralness_jobs,
+        jobs_file=root / "jobs" / "codebook_centralness.json",
+        model=args.mcq_reconstructor,
+        family="",
+        temperature=0.0,
+        args=args,
+        worlds={},
+    )
+
+    planned = {}
+    calibration_jobs = []
+    for task, (task_states, paths, centralness_plan,
+               centralness_calibration_path) in centralness_planned.items():
+        if not centralness_calibration_path.exists():
+            raise RuntimeError(f"missing MCQ centralness calibration for task {task}")
+        centralness_calibration = json.loads(centralness_calibration_path.read_text())
+        validate_task_centralness_calibration(
+            centralness_plan, centralness_calibration)
+        validate_reconstructor_artifact_contract(
+            centralness_calibration, manifest,
+            role=f"MCQ centralness calibration for {task}")
+        if centralness_calibration.get("noun") != manifest["mcq_task_nouns"][task]:
+            raise RuntimeError(f"MCQ centralness noun changed for task {task}")
         plan = build_codebook_panel_plan(
             paths,
+            centralness_reference_plan=centralness_plan,
+            centralness_calibration=centralness_calibration,
             target_metric_keys=[state["key"] for state in task_states],
             n_options=args.mcq_n_options,
             design_size=args.mcq_design_size,
@@ -1697,6 +1816,9 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], manifest: dict, a
             seed=stable_seed("mcq-codebook", task) % (2 ** 32),
             candidate_pool_size=args.mcq_prior_candidate_pool_size,
             max_panels_per_target=args.mcq_prior_max_panels_per_target,
+            centralness_candidate_pool_size=args.mcq_centralness_candidate_pool_size,
+            centralness_fallback_panels_per_target=(
+                args.mcq_centralness_fallback_panels_per_target),
         )
         reusable_plan_payload = None
         reusable_plan = (reuse_root / "mcq_codebooks" / f"{task}.panel_plan.json"
@@ -2360,11 +2482,10 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], manifest: dict, 
         if len(details) != len(state["pool"]):
             raise RuntimeError(f"prompt/value-detail pool length mismatch for {key}")
         state["pool_value_details"] = details
-        state["n_design_witness_pool_rows_excluded"] = int(
+        state["n_design_witness_pool_rows"] = int(
             np.sum(~state["pool_value_eligibility"]))
         state["value_determined_by_exact_behavior"] = bool(
-            value_determined_by_exact_behavior
-            and np.all(state["pool_value_eligibility"]))
+            value_determined_by_exact_behavior)
         confirmation_path = state["dir"] / "confirmation" / "certificate.json"
         if confirmation_path.exists():
             certificate = json.loads(confirmation_path.read_text())
@@ -2789,17 +2910,16 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             raise RuntimeError("Reconstruction-MCQ audit changed the frozen no-demo global cap")
         if np.any(np.asarray(value_payload["values"], float) > state["value_cap"] + 1e-12):
             raise RuntimeError("Reconstruction-MCQ audit value exceeds the finite-state envelope")
-        (audit_achieved_values, _audit_value_details, audit_value_species,
+        (audit_values, _audit_value_details, audit_value_species,
          audit_value_eligibility) = _design_witness_value_evidence(
             state, value_payload["values"], list(value_payload["details"]))
         value_determined_by_exact_behavior = (
             bool(state["value_determined_by_exact_behavior"])
-            and bool(value_payload["premises"].get("value_determined_by_exact_behavior"))
-            and bool(np.all(audit_value_eligibility)))
-        cert = prompt_articulation_certificate(
+            and bool(value_payload["premises"].get("value_determined_by_exact_behavior")))
+        formal_available_pool_cert = prompt_articulation_certificate(
             state["pool"], audit, None, families,
             pool_values=state["pool_values"],
-            audit_values=audit_achieved_values,
+            audit_values=audit_values,
             value_cap=state["value_cap"],
             value_name=state["value_name"],
             value_unit=state["value_unit"],
@@ -2808,10 +2928,51 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             audit_value_species=audit_value_species,
             **common,
         )
-        pool_best = float(cert["certified"]["pool_best_prompt_value"])
-        audit_best = float(np.max(audit_achieved_values))
+        eligible_pool = np.flatnonzero(state["pool_value_eligibility"])
+        if len(eligible_pool):
+            independent_common = dict(common)
+            independent_common["scope"] = {
+                **dict(common["scope"]),
+                "prompt_class": (
+                    "frozen discovery pool excluding prospective target-form design witnesses "
+                    "union declared proposer-mixture support"),
+                "design_witness_pool_rows_excluded": int(
+                    len(state["pool"]) - len(eligible_pool)),
+                "fresh_audit_marks_include_all_raw_proposer_draws": True,
+            }
+            cert = prompt_articulation_certificate(
+                state["pool"][eligible_pool], audit, None, families,
+                pool_values=state["pool_values"][eligible_pool],
+                audit_values=audit_values,
+                value_cap=state["value_cap"],
+                value_name=state["value_name"],
+                value_unit=state["value_unit"],
+                value_determined_by_exact_behavior=value_determined_by_exact_behavior,
+                pool_value_species=[
+                    state["pool_value_species"][index] for index in eligible_pool],
+                audit_value_species=audit_value_species,
+                **independent_common,
+            )
+            cert["formal_available_pool_including_design_witnesses_certificate"] = (
+                formal_available_pool_cert)
+            cert["independent_search_process_certificate"] = True
+        else:
+            cert = formal_available_pool_cert
+            cert["independent_search_process_certificate"] = False
+            cert["independent_search_process_withheld_reason"] = (
+                "the frozen pool contains no non-design prompt witness")
+        pool_best = float(formal_available_pool_cert["certified"][
+            "pool_best_prompt_value"])
+        audit_best = float(np.max(audit_values))
         best = max(pool_best, audit_best)
         gap = float(max(0.0, state["value_cap"] - best))
+        eligible_audit = np.flatnonzero(audit_value_eligibility)
+        independent_pool_best = float(
+            cert["certified"]["pool_best_prompt_value"] if len(eligible_pool) else 0.0)
+        independent_audit_best = float(
+            np.max(audit_values[eligible_audit]) if len(eligible_audit) else 0.0)
+        independent_best = max(independent_pool_best, independent_audit_best)
+        independent_gap = float(max(0.0, state["value_cap"] - independent_best))
         epsilon = target_value_gap(args)
         if gap <= 1e-12:
             global_status = "CERTIFIED_GLOBAL_OPTIMUM"
@@ -2820,15 +2981,21 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
         else:
             global_status = "CERTIFIED_GLOBAL_GAP_BOUND"
         instrument_quality = mcq_instrument_quality(state, args)
-        reported_global_status = mcq_reported_global_status(
-            global_status, instrument_quality)
+        design_witness_only = bool(gap <= epsilon + 1e-12
+                                   and independent_gap > epsilon + 1e-12)
+        if design_witness_only and instrument_quality["headline_eligible"]:
+            reported_global_status = "DESIGN_WITNESS_ONLY"
+        else:
+            reported_global_status = mcq_reported_global_status(
+                global_status, instrument_quality)
         if args.dry_run:
             reported_global_status = "SYNTHETIC_TEST_ONLY"
         cert["all_finite_prompt_certificate"] = {
             "schema": "reconstruction-mcq-all-prompts-cap-v5",
             "status": reported_global_status,
             "formal_mathematical_status": global_status,
-            "headline_eligible": bool(instrument_quality["headline_eligible"]),
+            "headline_eligible": bool(
+                instrument_quality["headline_eligible"] and not design_witness_only),
             "publication_eligible": not args.dry_run,
             "artifact_role": (
                 "synthetic_test_only" if args.dry_run else "empirical_certificate"),
@@ -2837,17 +3004,24 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             "best_evaluated_lower_bound": best,
             "absorbed_pool_best_lower_bound": pool_best,
             "current_audit_best_lower_bound": audit_best,
-            "achieved_evidence_exclusion": {
-                "policy": "exclude_all_frozen_target_form_text_sha256",
+            "best_independent_lower_bound": independent_best,
+            "absorbed_pool_best_independent_lower_bound": independent_pool_best,
+            "current_audit_best_independent_lower_bound": independent_audit_best,
+            "achieved_evidence_provenance": {
+                "policy": "tag_all_frozen_target_form_text_sha256",
                 "design_witness_sha256": sorted({
                     hashlib.sha256(str(text).encode("utf-8")).hexdigest()
                     for text in state["target_form_texts"]
                 }),
-                "n_pool_rows_excluded": int(
-                    state["n_design_witness_pool_rows_excluded"]),
-                "n_current_audit_rows_excluded": int(
+                "n_pool_design_witness_rows": int(
+                    state["n_design_witness_pool_rows"]),
+                "n_current_audit_design_witness_rows": int(
                     np.sum(~audit_value_eligibility)),
                 "canonical_design_replay_is_not_achieved_evidence": True,
+                "raw_values_and_species_preserved_for_capture_recapture": True,
+                "formal_prompt_lower_bound_includes_real_executable_design_witnesses": True,
+                "scientific_epsilon_headline_requires_independent_witness": True,
+                "design_witness_only": design_witness_only,
                 "all_state_upper_bound_is_unchanged": True,
             },
             "current_audit_role": certificate_role,
@@ -2855,8 +3029,11 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             "finite_state_upper_bound": state["value_cap"],
             "coarse_no_demo_range_cap": state["coarse_range_cap"],
             "global_optimization_gap_UCB": gap,
+            "independent_witness_optimization_gap_UCB": independent_gap,
             "epsilon": epsilon,
             "identified_interval": [best, state["value_cap"]],
+            "independent_witness_identified_interval": [
+                independent_best, state["value_cap"]],
             "no_demonstration_target_probability": state[
                 "no_demonstration_target_probability"],
             "finite_state_envelope_path": str(state["finite_state_envelope_path"]),
@@ -3105,7 +3282,7 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
                     "no non-design prompt is available as achieved evidence",
                 ],
                 "n_design_witness_rows_excluded": int(
-                    state["n_design_witness_pool_rows_excluded"]),
+                    state["n_design_witness_pool_rows"]),
             }
             continue
         best_index = int(eligible_indices[np.argmax(state["pool_values"][eligible_indices])])
@@ -3122,7 +3299,7 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
             "headline_eligible": bool(quality["headline_eligible"]),
             "headline_ineligibility_reasons": list(quality["reasons"]),
             "n_design_witness_rows_excluded": int(
-                state["n_design_witness_pool_rows_excluded"]),
+                state["n_design_witness_pool_rows"]),
         }
 
     def summarize_identity_channels(rows: list[dict]) -> dict:
@@ -3232,6 +3409,8 @@ def main(argv=None) -> int:
     )
     parser.add_argument("--mcq-prior-candidate-pool-size", type=int, default=16)
     parser.add_argument("--mcq-prior-max-panels-per-target", type=int, default=256)
+    parser.add_argument("--mcq-centralness-candidate-pool-size", type=int, default=32)
+    parser.add_argument("--mcq-centralness-fallback-panels-per-target", type=int, default=64)
     parser.add_argument("--mcq-prior-max-option-probability", type=float, default=0.35)
     parser.add_argument("--mcq-prior-target-probability-tolerance", type=float, default=0.10)
     parser.add_argument("--mcq-prior-min-normalized-entropy", type=float, default=0.90)
@@ -3276,6 +3455,7 @@ def main(argv=None) -> int:
     parser.add_argument("--temp", type=float, default=0.90)
     parser.add_argument("--out-root", default="/lfs/skampere3/0/alexspan/outputs/cr3_mining_v2")
     parser.add_argument("--worker", default=str(DEFAULT_WORKER))
+    parser.add_argument("--centralness-worker", default=str(DEFAULT_CENTRALNESS_WORKER))
     parser.add_argument("--worker-python", default=str(DEFAULT_PYTHON))
     parser.add_argument("--worker-home", default=str(DEFAULT_WORKER_HOME),
                         help="writable HOME/cache root inherited from GPU process startup")
@@ -3317,7 +3497,9 @@ def main(argv=None) -> int:
             or not -1.0 <= args.mcq_min_headline_distractor_kappa <= 1.0):
         parser.error("invalid MCQ headline-quality thresholds")
     if (args.mcq_prior_candidate_pool_size < args.mcq_n_options - 1
-            or args.mcq_prior_max_panels_per_target < 1):
+            or args.mcq_prior_max_panels_per_target < 1
+            or args.mcq_centralness_candidate_pool_size < args.mcq_n_options - 1
+            or args.mcq_centralness_fallback_panels_per_target < 0):
         parser.error("invalid MCQ prior-calibration search budget")
     if (not 0.0 < args.mcq_prior_max_option_probability <= 1.0
             or not 0.0 <= args.mcq_prior_target_probability_tolerance <= 1.0
@@ -3350,6 +3532,8 @@ def main(argv=None) -> int:
         parser.error("--mcq-codebook-metrics is defined only for reconstruction_mcq mode")
     if args.value_mode == "reconstruction_mcq" and args.mcq_choice_readout != "logits":
         parser.error("bound-grade Reconstruction-MCQ requires deterministic normalized logits")
+    if args.value_mode == "reconstruction_mcq" and args.mcq_n_options != 4:
+        parser.error("the v12 blind-centralness instrument requires exactly four MCQ options")
     if args.reuse_mcq_codebook_root is not None and args.value_mode != "reconstruction_mcq":
         parser.error("--reuse-mcq-codebook-root is defined only for reconstruction_mcq mode")
     if args.reuse_bootstrap_root:
@@ -3487,13 +3671,12 @@ def main(argv=None) -> int:
                     state["pool_value_species"].extend(achieved_species)
                     state["pool_value_eligibility"] = np.concatenate([
                         state["pool_value_eligibility"], achieved_eligibility])
-                    state["n_design_witness_pool_rows_excluded"] = int(
+                    state["n_design_witness_pool_rows"] = int(
                         np.sum(~state["pool_value_eligibility"]))
                     state["value_determined_by_exact_behavior"] = (
                         bool(state["value_determined_by_exact_behavior"])
                         and bool(values[key]["premises"].get(
-                            "value_determined_by_exact_behavior"))
-                        and bool(np.all(achieved_eligibility)))
+                            "value_determined_by_exact_behavior")))
                 state["iteration"] += 1
                 state["stopped"] = stopped
                 print(

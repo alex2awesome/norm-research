@@ -47,8 +47,13 @@ moved into the shared layer (see refactor below).
   untouched items is a separate secondary readout; see theory §11.1a.
 - **`cr3_reconstruction_values.py`** — the anchor-free value bridge for prompt mining. It freezes one
   bootstrap-only metric codebook per target, values every scored prompt with the same MCQ/control protocol,
-  and emits immutable `[0,1]` marks for `cr_audit.py`. It never drops constant/collinear audit draws and
-  never accepts external labels. `cr3_mining_worker.py --stage value` runs it with one resident reconstructor.
+  and emits immutable `[0,1]` marks for `cr_audit.py`. The panel plan prelocks the complete legacy
+  behavior-hard prefix plus 64 fallback menus from a four-context task-wide blind-centralness reference;
+  the reference is design-only and every menu still faces the unchanged 24-order gate. It never drops
+  constant/collinear audit draws and never accepts external labels. The additive
+  `scripts/tools/cr3_reconstruction_calibration_worker.py` scores centralness without changing the
+  load-bearing `cr3_mining_worker.py`; the CR-3 orchestrator invokes the calibration worker automatically,
+  and the existing worker continues to run prompt values.
 - **`omega_certificate.py`** + **`small_omega_brute_force.py`** + **`large_omega.py`** — the within-class
   subset engine (the legacy certificate). `OmegaCertificate.run()` → exact (K≤15) or large-Ω fallback.
 - **`run_real_test.py`** — the GEPA+Ω **builder** shared by the legacy certificate: `phase_a_gepa`

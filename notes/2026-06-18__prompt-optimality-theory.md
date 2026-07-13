@@ -2643,6 +2643,39 @@ ordered list, seeds, and SHA-256 are part of the instrument. A smaller cyclic bl
 finite functional to which Theorems P.1-P.2 apply, but it does not average all order interactions and is
 therefore ineligible for the scientific headline.
 
+> **Prospective menu-support repair (2026-07-13).** Behavioral-nearest distractors alone can leave an option
+> menu prior-answerable even after every menu in that local pool is tried. Before any target-specific menu
+> prior is observed, production now freezes a task-bank-wide blind-centralness reference: every
+> codebook description is compared in four deterministic reference contexts under the four-row cyclic prefix.
+> Its centered log option probability is used only to construct a bounded 64-menu fallback from the 32
+> centralness-nearest behaviorally eligible metrics. The complete legacy behavior-hard arm and this fallback
+> arm are both prelocked for every target, then every candidate faces the unchanged 24-order prior gate.
+> Thus the repair enlarges prospective menu support without relaxing the gate, conditioning expansion on a
+> failed result, or introducing an anchor label. The four-order centralness score is not a ceiling and never
+> enters Theorems P.1-P.2; only the final frozen 24-order menu and exhaustive state table do.
+
+> **V12 joint menu/T8 selection correction (2026-07-13; supersedes the later historical
+> max-over-all-panels wording without deleting it).** The four centralness contexts are target-indexed design
+> calibrations frozen before any candidate-panel prior/gate outcome. Their scalar centered-log-probability
+> mean is only an efficient menu-search coordinate; unequal anchor exposure is allowed and is not a premise of
+> Theorems P.1-P.2. A connected exposure-balanced PL/BT estimator is future tightening, not required for v12.
+> After the unchanged full-24 prior gate, the protocol keeps at most `M=4` menus by normalized prior entropy
+> (descending), total variation from uniform, absolute target-prior distance from chance, behavioral hardness,
+> and stable panel ID. Each receives a prehashed `K=8` T8 library built only from frozen complement texts and
+> bootstrap behaviors. The exact four-order prefix screens all 256 states but is never reportable; it locks
+> `F=2` finalists by canonical-live, canonical value, `U_4`, and stable IDs. Only their full-24 evaluations may
+> be selected, by canonical-live, `U_24`, canonical value, and stable IDs. The synthetic envelope maximizer is
+> descriptive. No full-24 canonical-live finalist implies `FORMAL_CERTIFICATE_ONLY`; the exact all-state
+> theorem itself is unchanged.
+
+> The canonical/orbit replay is design-only instrument calibration. Its prompt texts are provenance-tagged:
+> raw values and exact transcript species remain untouched in all capture/recapture and fresh-audit gain
+> calculations. Formal all-prompt lower bounds may include these real executable prompts. Scientific
+> independent-search reporting additionally removes preloaded design witnesses from the pool (never from the
+> audit marks); a formally tight endpoint supported only by such a witness is `DESIGN_WITNESS_ONLY`, not a
+> scientific epsilon-optimal result. Final codebooks bind the selected primary/fallback arm and rank plus the
+> centralness plan/calibration hashes.
+
 The production readout is total on its declared output alphabet. The backend first computes the exact
 normalized conditional probability on the two allowed single-token verdicts. A frozen deterministic hard
 readout then maps each item to one annotation bit: `Z=1` iff normalized `pYES>0.5`, with an exact tie mapped

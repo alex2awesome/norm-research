@@ -106,27 +106,47 @@ checkpoint hash, metric identity, exact model snapshot, constrained readout/scor
 artifact schema. Pre-v12 numeric artifacts are rejected, not migrated. Candidate prompts may still cross
 versions through the evidence store because they are re-scored and revalued before entering the achieved pool.
 
-Candidate panels are enumerated by behavioral hardness on the design split, then scored with the exact
-blind no-demonstration query before prompt-value search. The four-option headline instrument uses the full
+Candidate panels are prelocked in two arms before any target-specific menu prior is observed. The primary
+arm is the unchanged behavioral-hardness prefix: `--mcq-prior-max-panels-per-target` retains its historical
+meaning, ordering, and panel IDs, so all matching cached queries remain reusable. The bounded fallback arm
+adds at most `--mcq-centralness-fallback-panels-per-target` menus (default 64) from the 32 behaviorally
+eligible metrics nearest the target under a frozen task-bank-wide blind-centralness reference.
+That reference presents every bank metric in four deterministic task-wide anchor contexts and scores the
+exact seed-7 four-order cyclic block. These are target-indexed centralness calibrations, not an assertion of
+target-independent anchor exposure. Their scalar centered-log-probability summary is a design-only menu
+search heuristic: it is not a bound, certificate premise, headline prior gate, or external label. A
+connected exposure-balanced PL/BT estimate is a possible future efficiency improvement, not part of v12.
+Reference plan, probabilities, model/revision/readout/noun, budgets, and hashes are frozen before either
+arm's candidate-panel prior/gate outcome. Both
+arms are constructed for every target regardless of whether the primary arm would pass; a failed combined
+bank is retained as formal-only and is never conditionally expanded within the protocol.
+
+Every prelocked candidate panel is then scored with the exact blind no-demonstration query before
+prompt-value search. The four-option headline instrument uses the full
 `S_4` block: all `4!=24` option orders exactly once. The first four rows reproduce the historical seed-7
 cyclic block and the remaining 20 unique orders are appended deterministically, so existing prefix query
 cache keys remain reusable. A four-row calibration artifact itself is not transplanted into the 24-row
 functional; the imported private cache supplies the identical prefix and the worker fills only missing rows.
 The ordered list and its hash are frozen in every relevant artifact. The default
 gate requires maximum mean option probability at most `0.35`, target prior within
-`0.10` of chance, and normalized menu-prior entropy at least `0.90`. Every prior-passing panel then receives
-its own fixed-T8 exhaustive state envelope. Retain state-live panels, select the largest `U_state`, and use
-behavioral hardness then panel ID only as tie-breaks. This maximizes measurable dynamic range and avoids
-selecting an artificially small ceiling. If no passing panel is live, retain the maximum-range passing
-panel only as `FORMAL_CERTIFICATE_ONLY`; if none passes the prior gates, retain the least-violating fallback
-as formal-only. The full metric denominator is preserved without treating a prior-answerable or state-dead
-menu as an articulability result. Menu and teaching-panel selection are therefore one joint prospective
-operation: each prior-passing menu is paired with its own `T_8` before the state-live/max-`U_state` rule picks
-the final pair.
+`0.10` of chance, and normalized menu-prior entropy at least `0.90`. At most four passing menus are kept by
+the frozen order: normalized entropy descending, total variation from uniform ascending, absolute target
+prior distance from chance ascending, behavioral hardness descending, then panel ID. If none passes, the
+least-violating menu is carried only to diagnose a formal-only instrument.
 
-For each candidate pair, an exact contrastive optimizer chooses the ordered eight-item teaching panel using
-only operational target/distractor executor behavior (canonical or orbit-averaged as declared by each
-bootstrap) in the sorted complement of the menu-design split.
+Each retained menu receives exactly eight prospectively prehashed T8 candidates: the unchanged historical
+baseline plus surface-matched, behavior-matched, nuisance-balanced, behavior-pattern-diverse, TF-IDF-diverse,
+and deterministic no-good variants. They use only the sorted teaching complement's texts and the frozen
+canonical/orbit-averaged option behaviors; candidate prompts and external labels are unavailable. Candidate
+zero is byte-identical to the old baseline T8. Every arm enumerates all 256 transcripts under the exact
+four-order prefix. This screen is selection-only and can never be quoted as a certificate. It ranks
+canonical-live first (positive canonical lift and unique target mean-posterior argmax), then canonical value,
+`U_4`, and stable IDs. Exactly two finalists are atomically locked before any full-24 result is read.
+
+Those two finalists alone receive all 24 option orders. Final selection again requires canonical-live, then
+maximizes `U_24`, then canonical value and stable IDs. The synthetic envelope-maximizer state is retained as
+a descriptive capability diagnostic, not a gate. If neither finalist is canonically live, the exact
+fixed-instrument inequality remains valid but the result is `FORMAL_CERTIFICATE_ONLY`.
 The 120-item design split and 180-item teaching-candidate split are disjoint and exhaustive over the 300
 probes. Every prompt uses those same eight items in the stored order. The final v4 codebook binds their
 indices, item IDs, target transcript, split provenance, and instrument hash before any prompt-value search.
@@ -138,12 +158,13 @@ rendered queries, they define the evaluator namespace. After direct Qwen evaluat
 every prompt value is a validated CPU lookup by transcript. A direct-replay regression test checks lookup
 equality.
 
-At 24 factorial draws, one candidate panel requires `256 * 2 * 24 = 12,288` annotation/shuffled
-choice queries; the 24 no-demo rows come from prior calibration. These queries are batched and content-cached,
-and fixed panels bypass per-state MILP selection. Total pre-search work scales with the number of prior-passing
-panels, so `--mcq-prior-max-panels-per-target` is a prospective compute budget (default 256). Expanding that
-budget regenerates the plan/calibration provenance but reuses identical rendered-query cache rows; it does
-not invalidate executor bootstraps.
+The four-order state screens are exact prefixes of the full-24 queries, so a finalist reuses every screened
+row from the immutable content cache. The legacy primary budget and the centralness fallback budget are bound
+separately in the run and panel manifests; final codebook entries also bind the selected arm/rank and both
+centralness hashes. Expanding any prospective budget regenerates selection provenance but reuses identical
+executor and rendered-query cache rows. Centralness calibration runs through
+the additive `scripts/tools/cr3_reconstruction_calibration_worker.py`; the load-bearing
+`cr3_mining_worker.py` remains byte-identical, preserving the numeric executor-bootstrap namespace.
 
 Historical prompts for the **same target metric** are a separate input. `--reuse-evidence-root` installs
 validated cache entries and copies a deduplicated candidate manifest into the new root. Those prompts are
@@ -331,12 +352,15 @@ The all-prompt lower endpoint is the best value among the absorbed pool and the 
 fresh audit remains excluded from the pool used by CR-3 gain/missing-mass calculations; using an observed
 audit prompt as an achieved global lower bound does not alter that conditioning. Every MCQ global payload
 also contains `instrument_quality`. Headline gates are the blind prior, coarse headroom of at least `0.10`,
-`U_state` above the predeclared resolution, a positive unique-target envelope maximizer, and the exact
+`U_state` above the predeclared resolution, positive lift plus unique target identification for the frozen
+canonical/orbit target replay, and the exact
 four-option 24-order block. A different frozen finite block still defines a valid formal finite-state
 functional and upper envelope, but it is reported only as `FORMAL_CERTIFICATE_ONLY`. The stored
-operational-target transcript is diagnostic only: it is canonical-description behavior for a one-form target,
-but for an orbit target it is the hard readout of the declared orbit average and need not be realized by one
-prompt. The historical selected-distractor kappa `0.50` threshold remains hashed and reported as a descriptive
+operational-target transcript is a prospective instrument gate but is neither an external anchor nor achieved
+prompt-search evidence. Raw witness values/species remain in all C/R gain calculations. Prompt-evolution
+status is computed from a second pool that removes preloaded target-form witnesses while retaining every raw
+fresh-audit mark; an all-prompt optimum supported only by a design witness is `DESIGN_WITNESS_ONLY` and not a
+scientific epsilon-optimal headline. The historical selected-distractor kappa `0.50` threshold remains hashed and reported as a descriptive
 near-clone diagnostic; it does not gate
 headlines. A failed gate retains a formally valid interval as `FORMAL_CERTIFICATE_ONLY`.
 
@@ -349,8 +373,9 @@ Both intervals and the unchanged point estimates are reported, so the 90% tier c
 95% result or be selected metric by metric. This secondary computation is CPU-only and does not change the
 frozen GPU run, its stopping rule, or its evidence ledger.
 
-Instrument quality gates apply to both global and process-value conclusions. A prior-degenerate or
-behaviorally easy MCQ panel retains its formal fixed-instrument mathematics, but its value status is
+Instrument quality gates apply to both global and process-value conclusions. A prior-degenerate,
+canonical-state-dead, low-headroom, or nonfactorial MCQ instrument retains its formal fixed-instrument
+mathematics, but its value status is
 `FORMAL_CERTIFICATE_ONLY` only when the statistical value axis was directionally resolved; an unresolved
 axis remains `UNRESOLVED`. Independent behavioral `SATURATED/UNSATURATED` conclusions remain reportable.
 Fake/dry runs set every global/process/trajectory/bank status to `SYNTHETIC_TEST_ONLY` and

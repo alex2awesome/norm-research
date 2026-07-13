@@ -26,6 +26,10 @@ from methods.metric_implementer.experiments.run_cr3_mining_loop import (
     validate_reconstructor_artifact_contract,
     validate_numeric_reuse_manifest,
 )
+from methods.metric_implementer.experiments.cr_audit import (
+    classify_prompt_evolution,
+    prompt_articulation_certificate,
+)
 from methods.metric_implementer.experiments.cr3_evidence_store import build_evidence_store
 from methods.metric_implementer.recon_channel import mcq_option_order_design
 from scripts.tools.cr3_mining_worker import (
@@ -315,6 +319,8 @@ def test_worker_retry_filter_is_narrow_to_vllm_memory_profile_race():
 
 def test_mcq_gpu_jobs_explicitly_bind_factorial_draw_count():
     _validate_mcq_stage_draw_contract(
+        "codebook_centralness", [{"n_draws": 4}], expected=4)
+    _validate_mcq_stage_draw_contract(
         "codebook_prior", [{"n_draws": 24}], expected=24)
     _validate_mcq_stage_draw_contract(
         "value", [{"n_reconstruction_draws": 24}], expected=24)
@@ -329,6 +335,9 @@ def test_mcq_gpu_jobs_explicitly_bind_factorial_draw_count():
             RuntimeError, "explicitly bind n_reconstruction_draws=24"):
         _validate_mcq_stage_draw_contract(
             "value", [{"n_reconstruction_draws": 4}], expected=24)
+    with np.testing.assert_raises_regex(RuntimeError, "explicitly bind n_draws=4"):
+        _validate_mcq_stage_draw_contract(
+            "codebook_centralness", [{"n_draws": 24}], expected=4)
 
 
 def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
@@ -457,11 +466,52 @@ def test_target_form_design_witnesses_cannot_count_as_achieved_value():
     )]
     achieved, annotated, species, eligible = _design_witness_value_evidence(
         {"target_form_texts": target_forms}, np.asarray([0.8, 0.6]), details)
-    assert achieved.tolist() == [0.0, 0.6]
+    assert achieved.tolist() == [0.8, 0.6]
     assert eligible.tolist() == [False, True]
-    assert species == [f"design-witness-excluded:{witness_hash}", "2" * 64]
+    assert species == ["1" * 64, "2" * 64]
     assert annotated[0]["achieved_prompt_evidence"]["eligible"] is False
     assert annotated[1]["achieved_prompt_evidence"]["eligible"] is True
+
+
+def test_fresh_high_value_design_witness_keeps_raw_gain_and_cannot_certify_plateau():
+    target_text = "canonical metric"
+    candidate_sha = hashlib.sha256(target_text.encode()).hexdigest()
+    n_audit = 200
+    details = [{
+        "candidate_prompt_sha256": candidate_sha,
+        "design": {"teaching_transcript_sha256": "3" * 64},
+    } for _ in range(n_audit)]
+    audit_values, _, audit_species, eligible = _design_witness_value_evidence(
+        {"target_form_texts": [target_text]}, np.full(n_audit, 0.8), details)
+    assert not np.any(eligible)
+    assert np.all(audit_values == 0.8)
+    assert set(audit_species) == {"3" * 64}
+
+    certificate = prompt_articulation_certificate(
+        np.zeros((1, 4), dtype=np.uint8),
+        np.zeros((n_audit, 4), dtype=np.uint8),
+        None,
+        ["family"] * n_audit,
+        family_names=["family"],
+        horizon_per_family=1,
+        pool_values=np.asarray([0.1]),
+        audit_values=audit_values,
+        value_cap=1.0,
+        value_name="test value",
+        value_unit="probability",
+        value_determined_by_exact_behavior=False,
+        pool_value_species=["pool-state"],
+        audit_value_species=audit_species,
+    )
+    assert certificate["certified"]["one_draw_expected_gain_UCB"] >= 0.69
+    status = classify_prompt_evolution(
+        certificate,
+        confirmation_is_never_absorbed=True,
+        stopping_rule_frozen_before_confirmation=True,
+        plateau_epsilon=0.02,
+        saturation_missing_mass=0.10,
+    )
+    assert status["value_status"] == "CERTIFIED_RISING"
 
 
 def test_production_sampler_uses_unique_per_request_seeds_and_exact_quota():
