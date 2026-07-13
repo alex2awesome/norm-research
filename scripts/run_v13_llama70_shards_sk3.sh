@@ -45,7 +45,13 @@ fi
 
 launch_shard() {
     local shard=$1
-    local device=${DEVICES[$shard]}
+    local device=${V13_DEVICE_OVERRIDE:-${DEVICES[$shard]}}
+    case "$device" in
+        1|2|3|4)
+            echo "refusing prohibited sk3 GPU $device; only GPUs 0, 5, 6, and 7 are allowed" >&2
+            return 3
+            ;;
+    esac
     local lane="llama33_70b_shard_$shard"
     local output="$OUT/lanes/$lane"
     local pid_file="$LOGS/$lane.pid"
