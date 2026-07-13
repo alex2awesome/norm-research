@@ -52,16 +52,25 @@ class CallStats:
 # GPU; vLLM pre-allocates ~90% for KV cache and does not release it on in-process model switch.)
 _ENGINE_CACHE: Dict[str, object] = {}
 
+# Stable semantic protocol identifier for evidence/cache manifests. Any change to label
+# validation, constrained support, or posterior extraction must advance this value.
+CHOICE_READOUT_ID = "allowed-exact-single-token-choice-posterior-v1"
+FAKE_CHOICE_READOUT_ID = "fake-hash-choice-probabilities-v1"
+CR3_BINARY_READOUT_ID = "rubric-first-pyes-allowed-two-token-content-seed-v2"
+FAKE_CR3_BINARY_READOUT_ID = "fake-synthetic-binary-signature-v1"
 
-def _resolve_model_path(model: str) -> str:
+
+def _resolve_model_path(model: str, *, home: str | None = None) -> str:
     """Map a HF hub id -> its local snapshot dir if cached, so vLLM loads OFFLINE without hub-id
     resolution (which fails in the shared sk3 cache: config.json resolves but transformers reports
     'not cached' — a .no_exist / revision artifact). Returns the id unchanged if already a path or
     not found. Verified 2026-06-13: unlocks Qwen2.5/Qwen3/Mixtral that fail by-id offline."""
     if os.path.isdir(model):
         return model
-    hub = os.path.join(os.environ.get("HF_HOME") or
-                       os.path.expanduser("~/.cache/huggingface"), "hub")
+    cache_home = os.environ.get("HF_HOME")
+    if cache_home is None:
+        cache_home = os.path.join(home or os.path.expanduser("~"), ".cache", "huggingface")
+    hub = os.path.join(cache_home, "hub")
     d = os.path.join(hub, "models--" + model.replace("/", "--"))
     try:
         commit = open(os.path.join(d, "refs", "main")).read().strip()
@@ -71,6 +80,42 @@ def _resolve_model_path(model: str) -> str:
     except OSError:
         pass
     return model
+
+
+def model_revision_id(model: str, *, home: str | None = None) -> str:
+    """Resolve the immutable local snapshot revision used by an offline worker."""
+    resolved = os.path.abspath(_resolve_model_path(model, home=home))
+    if os.path.isdir(resolved) and os.path.basename(os.path.dirname(resolved)) == "snapshots":
+        return os.path.basename(resolved)
+    return resolved if os.path.isdir(resolved) else str(_resolve_model_path(model, home=home))
+
+
+def _single_token_label_id(tokenizer, label: str) -> int:
+    """Resolve an exact output label to one non-special tokenizer token or fail closed."""
+    literal = str(label)
+    if not literal or literal != literal.strip():
+        raise ValueError(f"binary label must be a nonempty, unpadded literal: {label!r}")
+    try:
+        token_ids = tokenizer.encode(literal, add_special_tokens=False)
+    except TypeError:
+        token_ids = tokenizer.encode(literal)
+    token_ids = list(token_ids)
+    if len(token_ids) != 1:
+        raise ValueError(
+            f"binary label {literal!r} must encode as exactly one token; got {token_ids}")
+    token_id = int(token_ids[0])
+    if token_id in set(getattr(tokenizer, "all_special_ids", ()) or ()):
+        raise ValueError(f"binary label {literal!r} resolves to special token id {token_id}")
+    try:
+        decoded = tokenizer.decode(
+            [token_id], skip_special_tokens=False, clean_up_tokenization_spaces=False)
+    except TypeError:
+        decoded = tokenizer.decode([token_id], skip_special_tokens=False)
+    if str(decoded) != literal:
+        raise ValueError(
+            f"binary label {literal!r} does not round-trip through token id {token_id}: "
+            f"{decoded!r}")
+    return token_id
 
 
 class _BaseVLLM:
@@ -129,6 +174,8 @@ class _BaseVLLM:
 
 class OfflineVLLM(_BaseVLLM):
     """Real resident-model vLLM. Imports vllm lazily so the module loads on a laptop."""
+
+    choice_readout_id = CHOICE_READOUT_ID
 
     @classmethod
     def _engine(cls, model: str, cfg):
@@ -247,24 +294,128 @@ class OfflineVLLM(_BaseVLLM):
             res.append(ppos / (ppos + pneg) if (ppos + pneg) > 0 else float("nan"))
         return res
 
-    def score_choices(self, prompts: List[str], choices: Sequence[str],
-                      system: Optional[str] = None,
-                      seed: int | Sequence[int] = 0) -> List[List[float]]:
-        """Normalized first-token probabilities over a small declared choice vocabulary.
+    def score_binary_constrained(self, prompts: List[str], system: Optional[str] = None,
+                                 pos: str = "YES", neg: str = "NO",
+                                 seed: int | Sequence[int] = 0) -> List[float]:
+        """Return the exact first-token conditional probability ``P(pos | {pos, neg})``.
 
-        The caller must prompt for one of the literal single-token choices (MCQ uses digits). Values
-        are normalized over the declared alternatives, so they are a lower-variance replacement for
-        repeatedly sampling A/B/C/D. A row is all-NaN if a choice token falls outside vLLM's returned
-        top-logprob set; callers fail closed or fall back to sampled choices rather than imputing it.
+        Unlike the legacy top-logprob readout above, this path constrains vLLM's first-token
+        support to two declared token IDs before its log-softmax.  It therefore remains total when
+        an unconstrained model would prefer ``0``, ``1``, or prose.  Labels must be distinct exact
+        single-token literals; invalid labels or incomplete engine evidence raise rather than
+        producing a NaN or an imputed score.
         """
         import math
         from vllm import SamplingParams
 
-        labels = [str(choice).strip() for choice in choices]
+        if not prompts:
+            return []
+        eng = self._engine(self.model, self.cfg)
+        tok = eng.get_tokenizer()
+        pos_id = _single_token_label_id(tok, pos)
+        neg_id = _single_token_label_id(tok, neg)
+        if pos_id == neg_id:
+            raise ValueError(
+                f"binary labels {pos!r} and {neg!r} resolve to the same token id {pos_id}")
+        allowed_ids = [pos_id, neg_id]
+
+        texts = []
+        for prompt in prompts:
+            msgs = ([{"role": "system", "content": system}] if system else []) + \
+                   [{"role": "user", "content": prompt}]
+            try:
+                rendered = tok.apply_chat_template(
+                    msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+            except TypeError:
+                rendered = tok.apply_chat_template(
+                    msgs, tokenize=False, add_generation_prompt=True)
+            texts.append(rendered)
+
+        def sampling_params(item_seed: int):
+            try:
+                return SamplingParams(
+                    temperature=0.0,
+                    max_tokens=1,
+                    logprobs=2,
+                    seed=int(item_seed),
+                    allowed_token_ids=allowed_ids,
+                )
+            except TypeError as exc:
+                raise RuntimeError(
+                    "installed vLLM lacks SamplingParams.allowed_token_ids; "
+                    "constrained binary scoring cannot run safely") from exc
+
+        if isinstance(seed, Sequence) and not isinstance(seed, (str, bytes)):
+            seeds = [int(item_seed) for item_seed in seed]
+            if len(seeds) != len(texts):
+                raise ValueError(f"got {len(seeds)} seeds for {len(texts)} prompts")
+            params = [sampling_params(item_seed) for item_seed in seeds]
+        else:
+            params = sampling_params(int(seed))
+        outputs = eng.generate(texts, params)
+        self.stats.n_calls += 1
+        self.stats.n_prompts += len(prompts)
+        if len(outputs) != len(prompts):
+            raise RuntimeError(
+                f"vLLM returned {len(outputs)} constrained binary outputs for {len(prompts)} prompts")
+
+        scores: List[float] = []
+        for row_index, output in enumerate(outputs):
+            logprobs = (
+                output.outputs[0].logprobs[0]
+                if output.outputs and output.outputs[0].logprobs
+                else None
+            )
+            if not logprobs:
+                raise RuntimeError(
+                    f"constrained binary output {row_index} has no first-token logprobs")
+            missing = [token_id for token_id in allowed_ids if token_id not in logprobs]
+            if missing:
+                raise RuntimeError(
+                    f"constrained binary output {row_index} omitted allowed token ids {missing}")
+            pos_logprob = float(logprobs[pos_id].logprob)
+            neg_logprob = float(logprobs[neg_id].logprob)
+            if not (math.isfinite(pos_logprob) and math.isfinite(neg_logprob)):
+                raise RuntimeError(
+                    f"constrained binary output {row_index} returned non-finite label logprobs")
+            # Stable two-class normalization. vLLM already normalizes after applying the allowed
+            # token mask; repeating the ratio here makes the intended conditional explicit and is
+            # robust to an engine returning logits shifted by a shared constant.
+            if pos_logprob >= neg_logprob:
+                score = 1.0 / (1.0 + math.exp(neg_logprob - pos_logprob))
+            else:
+                ratio = math.exp(pos_logprob - neg_logprob)
+                score = ratio / (1.0 + ratio)
+            if not math.isfinite(score):
+                raise RuntimeError(
+                    f"constrained binary output {row_index} produced a non-finite score")
+            scores.append(score)
+        return scores
+
+    def score_choices(self, prompts: List[str], choices: Sequence[str],
+                      system: Optional[str] = None,
+                      seed: int | Sequence[int] = 0) -> List[List[float]]:
+        """Exact first-token probabilities conditional on the declared choice vocabulary.
+
+        Protocol: ``CHOICE_READOUT_ID``. Every choice must be a distinct exact single-token
+        literal (CR3 MCQ uses digits). vLLM
+        masks all other tokens before its log-softmax, and every declared token must be present in
+        the returned evidence. This never imputes zero probability for a top-k omission: invalid
+        labels, unsupported vLLM versions, and incomplete outputs fail closed.
+        """
+        import math
+        from vllm import SamplingParams
+
+        if not prompts:
+            return []
+        labels = [str(choice) for choice in choices]
         if len(labels) < 2 or len(set(labels)) != len(labels):
             raise ValueError("score_choices needs at least two unique literal choices")
         eng = self._engine(self.model, self.cfg)
         tok = eng.get_tokenizer()
+        token_ids = [_single_token_label_id(tok, label) for label in labels]
+        if len(set(token_ids)) != len(token_ids):
+            raise ValueError("score_choices literals must resolve to distinct token ids")
         texts = []
         for p in prompts:
             msgs = ([{"role": "system", "content": system}] if system else []) + \
@@ -275,32 +426,62 @@ class OfflineVLLM(_BaseVLLM):
             except TypeError:
                 rendered = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
             texts.append(rendered)
-        n_logprobs = max(20, len(labels) * 4)
+        def sampling_params(item_seed: int):
+            try:
+                return SamplingParams(
+                    temperature=0.0,
+                    max_tokens=1,
+                    logprobs=len(token_ids),
+                    seed=int(item_seed),
+                    allowed_token_ids=token_ids,
+                )
+            except TypeError as exc:
+                raise RuntimeError(
+                    "installed vLLM lacks SamplingParams.allowed_token_ids; "
+                    "constrained choice scoring cannot run safely") from exc
+
         if isinstance(seed, Sequence) and not isinstance(seed, (str, bytes)):
             seeds = [int(s) for s in seed]
             if len(seeds) != len(texts):
                 raise ValueError(f"got {len(seeds)} seeds for {len(texts)} prompts")
-            params = [SamplingParams(
-                temperature=0.0, max_tokens=1, logprobs=n_logprobs, seed=s) for s in seeds]
+            params = [sampling_params(item_seed) for item_seed in seeds]
         else:
-            params = SamplingParams(
-                temperature=0.0, max_tokens=1, logprobs=n_logprobs, seed=int(seed))
+            params = sampling_params(int(seed))
         outputs = eng.generate(texts, params)
         self.stats.n_calls += 1
         self.stats.n_prompts += len(prompts)
+        if len(outputs) != len(prompts):
+            raise RuntimeError(
+                f"vLLM returned {len(outputs)} constrained choice outputs for {len(prompts)} prompts")
         rows = []
-        for output in outputs:
-            logprobs = (output.outputs[0].logprobs[0]
-                        if output.outputs and output.outputs[0].logprobs else {}) or {}
-            masses = {label: 0.0 for label in labels}
-            for candidate in logprobs.values():
-                token = (getattr(candidate, "decoded_token", "") or "").strip()
-                if token in masses:
-                    masses[token] += math.exp(candidate.logprob)
-            values = [masses[label] for label in labels]
-            total = sum(values)
-            rows.append([value / total for value in values] if total > 0.0
-                        else [float("nan")] * len(labels))
+        for row_index, output in enumerate(outputs):
+            logprobs = (
+                output.outputs[0].logprobs[0]
+                if output.outputs and output.outputs[0].logprobs
+                else None
+            )
+            if not logprobs:
+                raise RuntimeError(
+                    f"constrained choice output {row_index} has no first-token logprobs")
+            missing = [token_id for token_id in token_ids if token_id not in logprobs]
+            if missing:
+                raise RuntimeError(
+                    f"constrained choice output {row_index} omitted allowed token ids {missing}")
+            values = [float(logprobs[token_id].logprob) for token_id in token_ids]
+            if not all(math.isfinite(value) for value in values):
+                raise RuntimeError(
+                    f"constrained choice output {row_index} returned non-finite label logprobs")
+            shift = max(values)
+            masses = [math.exp(value - shift) for value in values]
+            total = math.fsum(masses)
+            if not math.isfinite(total) or total <= 0.0:
+                raise RuntimeError(
+                    f"constrained choice output {row_index} produced invalid total mass")
+            row = [mass / total for mass in masses]
+            if not all(math.isfinite(value) for value in row):
+                raise RuntimeError(
+                    f"constrained choice output {row_index} produced non-finite probabilities")
+            rows.append(row)
         return rows
 
 
@@ -311,6 +492,9 @@ class FakeVLLM(_BaseVLLM):
     the long table — all with zero spend. Scores are a hash of the prompt (stable per seed)."""
 
     _OPS = ["CLARIFY", "MECHANIZE", "FEWSHOT+", "ANCHOR", "EDGE", "PRUNE", "DECOMPOSE"]
+    # Deliberately not CHOICE_READOUT_ID: this hash stub is useful for dry-runs but is not
+    # evidence from the constrained vLLM token posterior and must never receive a bound-grade tag.
+    choice_readout_id = FAKE_CHOICE_READOUT_ID
 
     def _flush(self, prompts, system, max_tokens, temperature, seed):
         out = []
@@ -362,6 +546,12 @@ class FakeVLLM(_BaseVLLM):
             h = int(hashlib.sha256((p + str(item_seed)).encode()).hexdigest(), 16)
             out.append(round((h % 1000) / 999.0, 3))
         return out
+
+    def score_binary_constrained(self, prompts, system=None, pos="YES", neg="NO", seed=0):
+        """CPU stand-in for the bound-grade CR3 readout; always finite and deterministic."""
+        if not str(pos).strip() or not str(neg).strip() or str(pos) == str(neg):
+            raise ValueError("constrained binary labels must be two distinct nonempty literals")
+        return self.score_binary(prompts, system=system, pos=pos, neg=neg, seed=seed)
 
     def score_choices(self, prompts, choices, system=None, seed=0):
         labels = [str(choice) for choice in choices]

@@ -1208,8 +1208,10 @@ def mcq_value_from_precomputed_behavior(
         distractor_scores.append(vector)
     if len(options) < 2:
         raise ValueError("the frozen MCQ codebook needs at least one distractor")
-    if n_reconstruction_draws < len(options):
-        raise ValueError("n_reconstruction_draws must cover every option position")
+    if (n_reconstruction_draws < len(options)
+            or n_reconstruction_draws % len(options) != 0):
+        raise ValueError(
+            "n_reconstruction_draws must be a positive multiple of option count")
 
     selected_local, teaching_design = _exact_contrastive_example_indices(
         scores[idx],

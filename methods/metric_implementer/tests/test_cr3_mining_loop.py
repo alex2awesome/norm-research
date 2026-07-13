@@ -8,14 +8,23 @@ from types import SimpleNamespace
 import numpy as np
 
 from methods.metric_implementer.experiments.run_cr3_mining_loop import (
+    _combined_tier_status,
+    _apply_publication_gate,
     _metric_task,
     _retryable_worker_failure,
+    _validate_level_matched_codebook_banks,
     _worker_environment,
+    attach_reporting_tiers,
     main as mining_main,
     mcq_instrument_quality,
+    mcq_reported_global_status,
+    reporting_alpha_tiers,
+    validate_numeric_reuse_manifest,
 )
 from methods.metric_implementer.experiments.cr3_evidence_store import build_evidence_store
 from scripts.tools.cr3_mining_worker import (
+    READOUT_ID,
+    _checked_signature,
     _content_cached_signature,
     draw_valid_rows,
     score_unique_texts,
@@ -46,6 +55,211 @@ class _HolisticBackend:
              f"coherently rather than matching one isolated cue. Independent draw {int(value)}.")
             for value in seed
         ]
+
+
+def _status_certificate(mass_interval, gain_interval, *, pool_best=0.2):
+    return {
+        "scope": {"iid_provenance_established": True},
+        "certified": {
+            "pool_best_prompt_value": pool_best,
+            "pool_best_prompt_recovery_bits": pool_best,
+            "future_draws_per_family": {"family": 100},
+        },
+        "status_evidence": {
+            "simultaneous_confidence": 0.95,
+            "behavioral_missing_mass_interval": list(mass_interval),
+            "finite_horizon_expected_best_gain_interval": list(gain_interval),
+        },
+        "estimand": {"value_unit": "probability"},
+    }
+
+
+def test_predeclared_reporting_tiers_allocate_across_metrics_and_slots():
+    args = SimpleNamespace(
+        alpha=0.05,
+        study_alpha=0.05,
+        checkpoint_iters="0,2",
+        max_iter=3,
+    )
+    tiers = reporting_alpha_tiers(args, n_metrics=4)
+    assert tiers["primary_95"]["cell_alpha"] == 0.05 / 12
+    assert tiers["sensitivity_90"]["cell_alpha"] == 0.10 / 12
+    assert tiers["primary_95"]["scope"]["overall_simultaneous_confidence"] == 0.95
+    assert tiers["sensitivity_90"]["scope"]["overall_simultaneous_confidence"] == 0.90
+
+
+def test_90_percent_only_resolution_is_suggestive_and_never_relabels_primary():
+    primary = _status_certificate((0.05, 0.15), (0.0, 0.03))
+    sensitivity = _status_certificate((0.06, 0.09), (0.0, 0.015))
+    attach_reporting_tiers(
+        primary,
+        sensitivity,
+        primary_scope={"overall_simultaneous_confidence": 0.95},
+        sensitivity_scope={"overall_simultaneous_confidence": 0.90},
+        plateau_epsilon=0.02,
+        saturation_missing_mass=0.10,
+    )
+    assert primary["prompt_evolution_status"]["headline_status"] == "UNRESOLVED"
+    secondary = primary["reporting_tiers"]["sensitivity_90"]["status"]
+    assert secondary["behavior_status"] == "SUGGESTIVE_SATURATED"
+    assert secondary["value_status"] == "SUGGESTIVE_PLATEAUED"
+    combined = primary["reporting_tiers"]["combined_reporting_status"]
+    assert combined["behavior_status"] == "SUGGESTIVE_SATURATED"
+    assert combined["value_status"] == "SUGGESTIVE_PLATEAUED"
+    assert primary["reporting_tiers"][
+        "all_prompt_cap_is_exact_and_not_confidence_tiered"] is True
+
+
+def test_primary_axis_conclusion_dominates_matching_sensitivity_conclusion():
+    primary = {
+        "behavior_status": "CERTIFIED_UNSATURATED",
+        "value_status": "UNRESOLVED",
+    }
+    sensitivity = {
+        "behavior_status": "SUGGESTIVE_UNSATURATED",
+        "value_status": "SUGGESTIVE_RISING",
+    }
+    combined = _combined_tier_status(primary, sensitivity)
+    assert combined["behavior_status"] == "CERTIFIED_UNSATURATED"
+    assert combined["value_status"] == "SUGGESTIVE_RISING"
+
+
+def test_formal_only_mcq_panel_demotes_value_status_but_preserves_behavior_status():
+    primary = _status_certificate((0.11, 0.20), (0.0, 0.01))
+    sensitivity = _status_certificate((0.12, 0.18), (0.0, 0.008))
+    for certificate in (primary, sensitivity):
+        certificate["all_finite_prompt_certificate"] = {
+            "instrument_quality": {
+                "headline_eligible": False,
+                "reasons": ["prior-degenerate panel"],
+            },
+        }
+    attach_reporting_tiers(
+        primary,
+        sensitivity,
+        primary_scope={"overall_simultaneous_confidence": 0.95},
+        sensitivity_scope={"overall_simultaneous_confidence": 0.90},
+        plateau_epsilon=0.02,
+        saturation_missing_mass=0.10,
+    )
+    status = primary["prompt_evolution_status"]
+    assert status["behavior_status"] == "CERTIFIED_UNSATURATED"
+    assert status["formal_mathematical_value_status"] == "CERTIFIED_PLATEAUED"
+    assert status["value_status"] == "FORMAL_CERTIFICATE_ONLY"
+    assert status["headline_status"] == (
+        "CERTIFIED_BEHAVIORALLY_UNSATURATED_VALUE_FORMAL_ONLY")
+    assert status["value_headline_eligible"] is False
+
+
+def test_bad_mcq_panel_does_not_turn_unresolved_value_evidence_into_a_conclusion():
+    primary = _status_certificate((0.11, 0.20), (0.0, 0.03))
+    sensitivity = _status_certificate((0.12, 0.18), (0.0, 0.025))
+    for certificate in (primary, sensitivity):
+        certificate["all_finite_prompt_certificate"] = {
+            "instrument_quality": {
+                "headline_eligible": False,
+                "reasons": ["prior-degenerate panel"],
+            },
+        }
+    attach_reporting_tiers(
+        primary,
+        sensitivity,
+        primary_scope={"overall_simultaneous_confidence": 0.95},
+        sensitivity_scope={"overall_simultaneous_confidence": 0.90},
+        plateau_epsilon=0.02,
+        saturation_missing_mass=0.10,
+    )
+    status = primary["prompt_evolution_status"]
+    assert status["value_status"] == "UNRESOLVED"
+    assert status["formal_mathematical_value_status"] == "UNRESOLVED"
+    assert "VALUE_FORMAL_ONLY" not in status["headline_status"]
+    combined = primary["reporting_tiers"]["combined_reporting_status"]
+    assert combined["value_status"] == "UNRESOLVED"
+    assert "FORMAL_CERTIFICATE_ONLY" not in combined["conclusions"]
+
+
+def test_bad_mcq_panel_keeps_90_percent_value_direction_formal_and_non_headline():
+    primary = _status_certificate((0.11, 0.20), (0.0, 0.03))
+    sensitivity = _status_certificate((0.12, 0.18), (0.0, 0.015))
+    for certificate in (primary, sensitivity):
+        certificate["all_finite_prompt_certificate"] = {
+            "instrument_quality": {
+                "headline_eligible": False,
+                "reasons": ["prior-degenerate panel"],
+            },
+        }
+    attach_reporting_tiers(
+        primary,
+        sensitivity,
+        primary_scope={"overall_simultaneous_confidence": 0.95},
+        sensitivity_scope={"overall_simultaneous_confidence": 0.90},
+        plateau_epsilon=0.02,
+        saturation_missing_mass=0.10,
+    )
+    combined = primary["reporting_tiers"]["combined_reporting_status"]
+    assert combined["value_status"] == "UNRESOLVED"
+    assert combined["formal_mathematical_value_status"] == "SUGGESTIVE_PLATEAUED"
+    assert "FORMAL_CERTIFICATE_ONLY" not in combined["conclusions"]
+
+
+def test_numeric_reuse_rejects_pre_v12_or_unpinned_executor_manifest(tmp_path):
+    root = tmp_path / "legacy"
+    root.mkdir()
+    (root / "run_manifest.json").write_text(json.dumps({
+        "schema": "cr3-run-v11",
+        "executor": "fake-executor",
+        "dry_run": True,
+    }))
+    args = SimpleNamespace(
+        executor="fake-executor",
+        dry_run=True,
+        worker="scripts/tools/cr3_mining_worker.py",
+        worker_home=str(tmp_path),
+    )
+    with np.testing.assert_raises_regex(ValueError, "outside the current executor namespace"):
+        validate_numeric_reuse_manifest(root, args, role="test reuse")
+
+
+def test_publication_gate_fails_closed_when_iid_provenance_is_missing():
+    gated = _apply_publication_gate({
+        "headline_status": "CERTIFIED_PLATEAUED",
+        "behavior_status": "UNRESOLVED",
+        "value_status": "CERTIFIED_PLATEAUED",
+    }, {})
+    assert gated["headline_status"] == "SYNTHETIC_TEST_ONLY"
+    assert gated["publication_eligible"] is False
+
+
+def test_mcq_codebook_banks_reject_mixed_hierarchy_levels():
+    _validate_level_matched_codebook_banks({
+        "a": {"task": "humor", "level": "R3"},
+        "b": {"task": "news-homepages", "level": "R2"},
+        "c": {"task": "news-homepages", "level": "R2"},
+    })
+    with np.testing.assert_raises_regex(ValueError, "mixes hierarchy levels"):
+        _validate_level_matched_codebook_banks({
+            "a": {"task": "humor", "level": "R3"},
+            "b": {"task": "humor", "level": "R2"},
+        })
+    with np.testing.assert_raises_regex(ValueError, "no explicit R1/R2/R3 level"):
+        _validate_level_matched_codebook_banks({
+            "a": {"task": "humor", "level": None},
+            "b": {"task": "humor", "level": None},
+        })
+    _validate_level_matched_codebook_banks({
+        "a": {"task": "humor", "level": None},
+        "b": {"task": "humor", "level": None},
+    }, allow_all_unknown=True)
+
+
+def test_bound_grade_mcq_rejects_sampled_choice_readout_before_any_run():
+    with np.testing.assert_raises(SystemExit):
+        mining_main([
+            "--metrics", "does-not-need-to-exist.npz",
+            "--value-mode", "reconstruction_mcq",
+            "--mcq-choice-readout", "sampled",
+            "--dry-run",
+        ])
 
 
 def test_metric_task_accepts_every_existing_r3_bank_prefix_and_rejects_substrings():
@@ -119,6 +333,9 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     assert diagnostic["status"] == "FORMAL_CERTIFICATE_ONLY"
     assert diagnostic["formal_all_prompt_bound_valid"] is True
     assert len(diagnostic["reasons"]) == 2
+    assert mcq_reported_global_status(
+        "CERTIFIED_EPSILON_GLOBAL_OPTIMUM", diagnostic
+    ) == "FORMAL_CERTIFICATE_ONLY"
 
     state["fixed_no_demo_canonical_choice_probabilities"] = np.tile(
         np.asarray([[0.25, 0.25, 0.25, 0.25]]), (4, 1))
@@ -130,6 +347,9 @@ def test_mcq_instrument_quality_separates_formal_bound_from_headline_gate():
     diagnostic = mcq_instrument_quality(state, args)
     assert diagnostic["status"] == "HEADLINE_ELIGIBLE"
     assert diagnostic["headline_eligible"] is True
+    assert mcq_reported_global_status(
+        "CERTIFIED_EPSILON_GLOBAL_OPTIMUM", diagnostic
+    ) == "CERTIFIED_EPSILON_GLOBAL_OPTIMUM"
 
 
 def test_production_sampler_uses_unique_per_request_seeds_and_exact_quota():
@@ -167,6 +387,24 @@ def test_holistic_sampler_accepts_complete_long_rubrics_and_records_mode():
     assert all(row["prompt_template_id"] == "holistic-rubric-v1-description" for row in rows)
     assert all(row["validator_id"] == "holistic-rubric-80-8000-v1" for row in rows)
     assert all(80 <= len(row["text"]) <= 8000 for row in rows)
+
+
+def test_cr3_signature_uses_only_the_total_constrained_binary_readout():
+    class Executor:
+        def score_binary(self, *_args, **_kwargs):
+            raise AssertionError("CR3 must not use the legacy top-logprob readout")
+
+        def score_binary_constrained(self, prompts, *, pos, neg, seed):
+            assert (pos, neg) == ("YES", "NO")
+            assert len(prompts) == len(seed) == 3
+            assert len(set(seed)) == 3
+            return [0.1, 0.5, 0.9]
+
+    signature = _checked_signature(
+        Executor(), "Use a conflicting 0/1 rubric.", ["a", "b", "c"], 4000, "namespace")
+
+    assert np.array_equal(signature, np.asarray([0.1, 0.5, 0.9]))
+    assert "allowed-two-token" in READOUT_ID
 
 
 def test_duplicate_prompt_text_is_scored_once_and_reuses_identical_signature():
@@ -269,6 +507,9 @@ def test_dry_loop_resume_never_absorbs_or_overwrites_confirmation(tmp_path):
     assert "confirmation" not in ledger[0]["scored_path"]
     payload = json.loads(certificate_path.read_text())
     assert payload["run"]["never_absorbed"] is True
+    assert payload["publication_eligible"] is False
+    assert payload["prompt_evolution_status"]["headline_status"] == "SYNTHETIC_TEST_ONLY"
+    assert payload["prompt_evolution_status"]["publication_eligible"] is False
     assert payload["run"]["alpha_scope"]["scope"].startswith("familywise simultaneous")
     assert "prompt_evolution_status" in payload
     assert payload["estimand"]["prompt_class"] == (
@@ -276,7 +517,9 @@ def test_dry_loop_resume_never_absorbs_or_overwrites_confirmation(tmp_path):
     global_cert = payload["all_finite_prompt_certificate"]
     assert global_cert["estimand"]["prompt_class"] == (
         "all finite prompts Sigma*; no prompt-length budget")
-    assert global_cert["certificate"]["status"] == (
+    assert global_cert["publication_eligible"] is False
+    assert global_cert["certificate"]["status"] == "SYNTHETIC_TEST_ONLY"
+    assert global_cert["certificate"]["synthetic_diagnostic_status"] == (
         "PROVABLY_OPTIMAL_DPI_ATTAINED_FIXED_PANEL")
     assert global_cert["certificate"]["certified_optimization_gap_UCB_bits"] == 0.0
     assert global_cert["proof_scope"]["population_exact_by_construction"] is False
@@ -287,6 +530,7 @@ def test_dry_loop_resume_never_absorbs_or_overwrites_confirmation(tmp_path):
     assert [point["phase"] for point in trajectory["points"]] == [
         "checkpoint", "final_confirmation"]
     assert trajectory["monitor_rows_are_certificates"] is False
+    assert trajectory["publication_eligible"] is False
 
     # A completed resume is a no-op: no second absorption and no confirmation rewrite.
     assert mining_main(argv) == 0
@@ -357,7 +601,19 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
     assert qwen_proposal["proposal_mode"] == "holistic"
     bank_identity = json.loads((output / "mcq_identity_final.json").read_text())
     assert bank_identity["uses_external_labels"] is False
+    assert bank_identity["status"] == "SYNTHETIC_TEST_ONLY"
+    assert bank_identity["publication_eligible"] is False
     assert bank_identity["tasks"]["creative-writing"]["channels"]["annotations"]["valid"] is True
+    assert "hierarchy_level" in bank_identity["tasks"]["creative-writing"]
+    assert bank_identity["tasks"]["creative-writing"][
+        "unfiltered_channels_publication_eligible"] is False
+    assert bank_identity["tasks"]["creative-writing"]["headline_eligible_only"][
+        "publication_eligible"] is False
+    assert "headline_eligible_only" in bank_identity["tasks"]["creative-writing"]
+    assert all(
+        "headline_eligible" in selected
+        for selected in bank_identity["selected_prompts"].values()
+    )
     immutable_before_resume = {}
     for index in range(4):
         metric_dir = output / f"creative-writing_metric{index}"
@@ -369,7 +625,13 @@ def test_dry_reconstruction_mcq_mode_values_every_prompt_and_uses_external_value
         assert certificate["estimand"]["value_name"] == (
             "annotation-attributable Reconstruction-MCQ target-option lift")
         global_certificate = certificate["all_finite_prompt_certificate"]
-        assert global_certificate["status"] == "CERTIFIED_GLOBAL_GAP_BOUND"
+        assert global_certificate["synthetic_diagnostic_status"] == (
+            "CERTIFIED_GLOBAL_GAP_BOUND")
+        assert global_certificate["status"] == "SYNTHETIC_TEST_ONLY"
+        assert global_certificate["publication_eligible"] is False
+        assert certificate["publication_eligible"] is False
+        assert certificate["prompt_evolution_status"]["headline_status"] == (
+            "SYNTHETIC_TEST_ONLY")
         assert np.isclose(
             global_certificate["anchor_free_global_upper_bound"],
             1.0 - global_certificate["no_demonstration_target_probability"])

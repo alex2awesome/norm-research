@@ -40,6 +40,7 @@ from methods.metric_implementer.experiments.cr_audit import (  # noqa: E402
     prompt_articulation_certificate,
 )
 from methods.metric_implementer.experiments.cr3_reconstruction_values import (  # noqa: E402
+    CachedChoiceReconstructor,
     build_codebook_panel_plan,
     build_frozen_codebook_manifest,
     load_value_artifact,
@@ -56,12 +57,19 @@ from methods.metric_implementer.experiments.mine_clusters import (  # noqa: E402
     r3_groups,
 )
 from methods.metric_implementer.recon_channel import mcq_identity_channel  # noqa: E402
+from methods.metric_implementer.vllm_backend import (  # noqa: E402
+    CHOICE_READOUT_ID,
+    CR3_BINARY_READOUT_ID,
+    FAKE_CR3_BINARY_READOUT_ID,
+    FAKE_CHOICE_READOUT_ID,
+    model_revision_id,
+)
 
 DEFAULT_WORKER = REPO / "scripts" / "tools" / "cr3_mining_worker.py"
 DEFAULT_PYTHON = Path("/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python")
 DEFAULT_WORKER_HOME = Path("/lfs/skampere3/0/alexspan")
 LEDGER_SCHEMA = "cr3-ledger-v3"
-MANIFEST_SCHEMA = "cr3-run-v11"
+MANIFEST_SCHEMA = "cr3-run-v12"
 BOOTSTRAP_SCHEMA = "cr3-bootstrap-v2"
 CODEBOOK_BOOTSTRAP_SCHEMA = "cr3-codebook-bootstrap-v1"
 AUDIT_SIG_SCHEMA = "cr3-audit-signatures-v2"
@@ -96,25 +104,255 @@ def checkpoint_iterations(args) -> tuple[int, ...]:
     return values
 
 
-def confirmation_alpha(args, *, n_metrics: int) -> tuple[float, dict]:
+def expected_choice_readout_id(args) -> str:
+    """Exact MCQ choice protocol expected from a production or fake dry run."""
+    return FAKE_CHOICE_READOUT_ID if getattr(args, "dry_run", False) else CHOICE_READOUT_ID
+
+
+def expected_executor_readout_id(args) -> str:
+    """Exact behavior-signature protocol expected from a production or fake dry run."""
+    return (FAKE_CR3_BINARY_READOUT_ID
+            if getattr(args, "dry_run", False) else CR3_BINARY_READOUT_ID)
+
+
+def confirmation_alpha(
+    args,
+    *,
+    n_metrics: int,
+    overall_alpha: float | None = None,
+) -> tuple[float, dict]:
     """Alpha per immutable checkpoint/final cell and its declared simultaneity scope."""
     n_slots = len(checkpoint_iterations(args)) + 1  # checkpoints plus final confirmation
     study_alpha = getattr(args, "study_alpha", None)
+    requested_alpha = float(
+        (args.alpha if study_alpha is None else study_alpha)
+        if overall_alpha is None else overall_alpha
+    )
+    if not 0.0 < requested_alpha < 1.0:
+        raise ValueError("overall alpha must lie in (0, 1)")
     if study_alpha is None:
-        cell_alpha = float(args.alpha) / n_slots
+        cell_alpha = requested_alpha / n_slots
         scope = "simultaneous over all checkpoint/final claims for one metric"
-        overall_alpha = float(args.alpha)
     else:
-        cell_alpha = float(study_alpha) / (int(n_metrics) * n_slots)
+        cell_alpha = requested_alpha / (int(n_metrics) * n_slots)
         scope = "familywise simultaneous over all declared metrics and checkpoint/final claims"
-        overall_alpha = float(study_alpha)
     return cell_alpha, {
         "scope": scope,
-        "overall_alpha": overall_alpha,
+        "overall_alpha": requested_alpha,
+        "overall_simultaneous_confidence": 1.0 - requested_alpha,
         "cell_alpha": cell_alpha,
+        "cell_confidence": 1.0 - cell_alpha,
         "n_metrics": int(n_metrics),
         "n_slots_per_metric": int(n_slots),
         "checkpoint_iterations": list(checkpoint_iterations(args)),
+    }
+
+
+def reporting_alpha_tiers(args, *, n_metrics: int) -> dict[str, dict]:
+    """Predeclared 95% primary and 90% sensitivity allocations on the same audits."""
+    primary_cell, primary_scope = confirmation_alpha(args, n_metrics=n_metrics)
+    sensitivity_cell, sensitivity_scope = confirmation_alpha(
+        args, n_metrics=n_metrics, overall_alpha=0.10)
+    if not np.isclose(primary_scope["overall_alpha"], 0.05, rtol=0.0, atol=1e-12):
+        raise ValueError(
+            "v12 reporting requires a 95% primary familywise/per-metric confidence level")
+    return {
+        "primary_95": {"cell_alpha": primary_cell, "scope": primary_scope},
+        "sensitivity_90": {
+            "cell_alpha": sensitivity_cell,
+            "scope": sensitivity_scope,
+        },
+    }
+
+
+def _suggestive_status(status: dict) -> dict:
+    """Relabel a 90%-only status without presenting it as a 95% certificate."""
+    result = json.loads(json.dumps(status))
+    for field in (
+        "headline_status",
+        "behavior_status",
+        "value_status",
+        "formal_mathematical_value_status",
+    ):
+        if field not in result:
+            continue
+        value = str(result[field])
+        if value.startswith("CERTIFIED_"):
+            result[field] = "SUGGESTIVE_" + value.removeprefix("CERTIFIED_")
+    result["reporting_tier"] = "secondary_90_percent_sensitivity"
+    result["is_primary_certificate"] = False
+    return result
+
+
+def _apply_mcq_value_quality_gate(status: dict, certificate: dict) -> dict:
+    """Demote value claims from a prior-degenerate/easy MCQ panel; keep behavior claims."""
+    result = json.loads(json.dumps(status))
+    quality = ((certificate.get("all_finite_prompt_certificate") or {}).get(
+        "instrument_quality") or {})
+    if quality and not quality.get("headline_eligible", False):
+        formal_status = result["value_status"]
+        result["formal_mathematical_value_status"] = formal_status
+        if formal_status != "UNRESOLVED":
+            result["value_status"] = "FORMAL_CERTIFICATE_ONLY"
+            behavior = result["behavior_status"]
+            if behavior == "CERTIFIED_UNSATURATED":
+                headline = "CERTIFIED_BEHAVIORALLY_UNSATURATED_VALUE_FORMAL_ONLY"
+            elif behavior == "CERTIFIED_SATURATED":
+                headline = "CERTIFIED_BEHAVIORALLY_SATURATED_VALUE_FORMAL_ONLY"
+            else:
+                headline = "UNRESOLVED"
+            result["headline_status"] = headline
+        result["value_headline_eligible"] = False
+        result["value_headline_ineligibility_reasons"] = list(quality.get("reasons", []))
+    else:
+        result["value_headline_eligible"] = True
+    return result
+
+
+def _apply_publication_gate(status: dict, certificate: dict) -> dict:
+    """Make synthetic dry-run statuses impossible to mistake for empirical certificates."""
+    result = json.loads(json.dumps(status))
+    empirical = ((certificate.get("scope") or {}).get(
+        "iid_provenance_established") is True)
+    if empirical:
+        result["publication_eligible"] = True
+        return result
+    result["synthetic_diagnostic_status"] = {
+        field: result.get(field)
+        for field in (
+            "headline_status",
+            "behavior_status",
+            "value_status",
+            "formal_mathematical_value_status",
+        )
+        if field in result
+    }
+    for field in ("headline_status", "behavior_status", "value_status"):
+        result[field] = "SYNTHETIC_TEST_ONLY"
+    result.pop("formal_mathematical_value_status", None)
+    result["publication_eligible"] = False
+    result["publication_block_reason"] = "fake/dry-run observations have no empirical provenance"
+    return result
+
+
+def _combined_tier_status(primary: dict, sensitivity: dict) -> dict:
+    if primary.get("publication_eligible") is False:
+        return {
+            "behavior_status": "SYNTHETIC_TEST_ONLY",
+            "value_status": "SYNTHETIC_TEST_ONLY",
+            "headline_status": "SYNTHETIC_TEST_ONLY",
+            "conclusions": [],
+            "publication_eligible": False,
+            "rule": "fake/dry-run diagnostics cannot issue empirical reporting labels",
+        }
+
+    def choose(axis: str) -> str:
+        value = str(primary[axis])
+        if value != "UNRESOLVED":
+            return value
+        sensitivity_value = str(sensitivity[axis])
+        # A failed instrument-quality gate is eligibility metadata, not a
+        # directional 90% statistical conclusion.
+        return "UNRESOLVED" if sensitivity_value == "FORMAL_CERTIFICATE_ONLY" else sensitivity_value
+
+    behavior = choose("behavior_status")
+    value = choose("value_status")
+    conclusions = [
+        item for item in (behavior, value)
+        if item not in {"UNRESOLVED", "FORMAL_CERTIFICATE_ONLY"}
+    ]
+    result = {
+        "behavior_status": behavior,
+        "value_status": value,
+        "headline_status": "__".join(conclusions) if conclusions else "UNRESOLVED",
+        "conclusions": conclusions,
+        "rule": (
+            "use the 95% conclusion on each axis when resolved; otherwise report a "
+            "predeclared 90%-only result as SUGGESTIVE"
+        ),
+    }
+    primary_formal = primary.get("formal_mathematical_value_status")
+    sensitivity_formal = sensitivity.get("formal_mathematical_value_status")
+    if primary_formal is not None or sensitivity_formal is not None:
+        result["formal_mathematical_value_status"] = (
+            sensitivity_formal
+            if primary_formal in {None, "UNRESOLVED"} and sensitivity_formal is not None
+            else primary_formal
+        )
+    return result
+
+
+def attach_reporting_tiers(
+    certificate: dict,
+    sensitivity_certificate: dict,
+    *,
+    primary_scope: dict,
+    sensitivity_scope: dict,
+    plateau_epsilon: float,
+    saturation_missing_mass: float,
+) -> None:
+    """Attach dual-confidence CR evidence; the exact all-prompt cap is unchanged."""
+    primary_raw = classify_prompt_evolution(
+        certificate,
+        confirmation_is_never_absorbed=True,
+        stopping_rule_frozen_before_confirmation=True,
+        plateau_epsilon=plateau_epsilon,
+        saturation_missing_mass=saturation_missing_mass,
+    )
+    sensitivity_raw = classify_prompt_evolution(
+        sensitivity_certificate,
+        confirmation_is_never_absorbed=True,
+        stopping_rule_frozen_before_confirmation=True,
+        plateau_epsilon=plateau_epsilon,
+        saturation_missing_mass=saturation_missing_mass,
+    )
+    primary_mass = np.asarray(
+        primary_raw["evidence"]["behavioral_missing_mass_interval"], float)
+    sensitivity_mass = np.asarray(
+        sensitivity_raw["evidence"]["behavioral_missing_mass_interval"], float)
+    primary_gain = np.asarray(
+        primary_raw["evidence"]["finite_horizon_expected_best_gain_interval"], float)
+    sensitivity_gain = np.asarray(
+        sensitivity_raw["evidence"]["finite_horizon_expected_best_gain_interval"], float)
+    if not (
+        primary_mass[0] <= sensitivity_mass[0] + 1e-12
+        and sensitivity_mass[1] <= primary_mass[1] + 1e-12
+        and primary_gain[0] <= sensitivity_gain[0] + 1e-12
+        and sensitivity_gain[1] <= primary_gain[1] + 1e-12
+    ):
+        raise RuntimeError("90% sensitivity intervals are not nested inside 95% intervals")
+    if not np.isclose(
+        certificate["certified"]["pool_best_prompt_value"],
+        sensitivity_certificate["certified"]["pool_best_prompt_value"],
+        rtol=0.0,
+        atol=1e-12,
+    ):
+        raise RuntimeError("confidence-tier recomputation changed the achieved point estimate")
+
+    primary = _apply_mcq_value_quality_gate(primary_raw, certificate)
+    sensitivity_gated = _apply_mcq_value_quality_gate(
+        sensitivity_raw, sensitivity_certificate)
+    sensitivity = _suggestive_status(sensitivity_gated)
+    primary = _apply_publication_gate(primary, certificate)
+    sensitivity = _apply_publication_gate(sensitivity, sensitivity_certificate)
+    certificate["prompt_evolution_status"] = primary
+    certificate["reporting_tiers"] = {
+        "schema": "cr3-confidence-reporting-v1",
+        "primary_95": {
+            "alpha_scope": primary_scope,
+            "status": primary,
+            "certified": certificate["certified"],
+            "status_evidence": certificate["status_evidence"],
+        },
+        "sensitivity_90": {
+            "alpha_scope": sensitivity_scope,
+            "status": sensitivity,
+            "certified": sensitivity_certificate["certified"],
+            "status_evidence": sensitivity_certificate["status_evidence"],
+        },
+        "combined_reporting_status": _combined_tier_status(primary, sensitivity),
+        "all_prompt_cap_is_exact_and_not_confidence_tiered": True,
+        "same_never_absorbed_observations_used_for_both_tiers": True,
     }
 
 
@@ -178,6 +416,12 @@ def mcq_instrument_quality(state: dict, args) -> dict:
             "descriptive gate for scientific headline use; failure does not invalidate the "
             "fixed-instrument all-prompt inequality"),
     }
+
+
+def mcq_reported_global_status(formal_status: str, instrument_quality: dict) -> str:
+    """Prevent a valid but uninformative fixed-panel theorem from becoming a headline."""
+    return (str(formal_status) if instrument_quality.get("headline_eligible")
+            else "FORMAL_CERTIFICATE_ONLY")
 
 
 def _worker_environment(args) -> dict[str, str]:
@@ -352,19 +596,52 @@ def _mcq_codebook_metric_paths(args) -> list[str]:
     return _resolved_unique_paths([*args.metrics, *args.mcq_codebook_metrics])
 
 
+def _validate_level_matched_codebook_banks(
+    identities: dict[str, dict], *, allow_all_unknown: bool = False
+) -> None:
+    """Prevent hierarchy granularity from becoming an MCQ answer cue."""
+    by_task: dict[str, list[dict]] = {}
+    for identity in identities.values():
+        by_task.setdefault(str(identity["task"]), []).append(identity)
+    for task, rows in by_task.items():
+        levels = {row.get("level") for row in rows}
+        nonnull = {level for level in levels if level}
+        if not nonnull and not allow_all_unknown:
+            raise ValueError(
+                f"MCQ codebook bank {task!r} has no explicit R1/R2/R3 level in its filenames")
+        if len(nonnull) > 1 or (nonnull and None in levels):
+            rendered = sorted("unknown" if level is None else str(level) for level in levels)
+            raise ValueError(
+                f"MCQ codebook bank {task!r} mixes hierarchy levels {rendered}; "
+                "run each task/granularity in a separate frozen bank"
+            )
+
+
 def _manifest_payload(args) -> dict:
     metrics = _resolved_unique_paths(args.metrics)
     codebook_metrics = _mcq_codebook_metric_paths(args)
+    metric_identity = {p: _metric_identity(p, args.r2_bucket) for p in metrics}
+    codebook_metric_identity = {
+        path: _metric_identity(path, args.r2_bucket) for path in codebook_metrics
+    }
+    if args.value_mode == "reconstruction_mcq":
+        _validate_level_matched_codebook_banks(
+            codebook_metric_identity, allow_all_unknown=bool(args.dry_run))
     worker = str(Path(args.worker).resolve())
     core = {
         "schema": MANIFEST_SCHEMA,
         "metrics": metrics,
         "metric_sha256": {p: file_sha256(p) for p in metrics},
-        "metric_identity": {p: _metric_identity(p, args.r2_bucket) for p in metrics},
+        "metric_identity": metric_identity,
         "families": list(args.families),
         "family_tags": list(args.family_tags),
         "family_modes": list(args.family_modes),
         "executor": args.executor,
+        "executor_model_revision": (
+            args.executor if args.dry_run else model_revision_id(
+                args.executor, home=str(Path(args.worker_home).resolve()))
+        ),
+        "executor_readout_protocol": expected_executor_readout_id(args),
         "value_mode": args.value_mode,
         "mcq_reconstructor": args.mcq_reconstructor,
         "mcq_n_options": args.mcq_n_options,
@@ -385,10 +662,9 @@ def _manifest_payload(args) -> dict:
         "mcq_codebook_metric_sha256": {
             path: file_sha256(path) for path in codebook_metrics
         },
-        "mcq_codebook_metric_identity": {
-            path: _metric_identity(path, args.r2_bucket) for path in codebook_metrics
-        },
-        "mcq_choice_probability_cache_schema": "cr3-choice-probability-cache-v1",
+        "mcq_codebook_metric_identity": codebook_metric_identity,
+        "mcq_choice_probability_cache_schema": CachedChoiceReconstructor.SCHEMA,
+        "mcq_choice_readout_protocol": expected_choice_readout_id(args),
         "temperature": args.temp,
         "batch_per_family": args.batch_per_family,
         "confirm_per_family": args.confirm_per_family,
@@ -404,6 +680,13 @@ def _manifest_payload(args) -> dict:
         "min_delta_bits": args.min_delta_bits,
         "alpha": args.alpha,
         "study_alpha": args.study_alpha,
+        "confidence_reporting": {
+            "schema": "cr3-confidence-reporting-v1",
+            "primary_overall_alpha": 0.05,
+            "secondary_overall_alpha": 0.10,
+            "secondary_label": "SUGGESTIVE",
+            "same_never_absorbed_audit": True,
+        },
         "tau": args.tau,
         "tau_strict": args.tau_strict,
         "p_min": args.p_min,
@@ -458,6 +741,48 @@ def _manifest_payload(args) -> dict:
         json.dumps(core, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()[:16]
     return core
+
+
+def validate_numeric_reuse_manifest(root: str | Path, args, *, role: str) -> dict:
+    """Reject numeric reuse unless the frozen executor protocol is exactly compatible."""
+    path = Path(root).resolve() / "run_manifest.json"
+    if not path.is_file():
+        raise ValueError(f"{role} root must contain run_manifest.json")
+    source = json.loads(path.read_text())
+    expected_revision = (
+        args.executor if args.dry_run else model_revision_id(
+            args.executor, home=str(Path(args.worker_home).resolve()))
+    )
+    required = {
+        "schema": MANIFEST_SCHEMA,
+        "executor": args.executor,
+        "executor_model_revision": expected_revision,
+        "executor_readout_protocol": expected_executor_readout_id(args),
+        "dry_run": bool(args.dry_run),
+    }
+    mismatches = {
+        field: {"expected": expected, "observed": source.get(field)}
+        for field, expected in required.items()
+        if source.get(field) != expected
+    }
+    current_code = {
+        "worker": file_sha256(Path(args.worker).resolve()),
+        "vllm_backend": file_sha256(
+            REPO / "methods" / "metric_implementer" / "vllm_backend.py"),
+    }
+    source_code = source.get("code_sha256") or {}
+    for field, expected in current_code.items():
+        if source_code.get(field) != expected:
+            mismatches[f"code_sha256.{field}"] = {
+                "expected": expected,
+                "observed": source_code.get(field),
+            }
+    if mismatches:
+        raise ValueError(
+            f"{role} numeric artifacts are outside the current executor namespace: "
+            f"{json.dumps(mismatches, sort_keys=True)}"
+        )
+    return source
 
 
 def prepare_manifest(root: Path, args) -> dict:
@@ -578,7 +903,7 @@ def _dry_score(items: list[dict], worlds: dict[str, dict], executor: str) -> Non
                 executor_model=np.asarray(executor),
                 executor_model_revision=np.asarray(executor),
                 executor_temperature=np.asarray(0.0),
-                readout_id=np.asarray("dry"),
+                readout_id=np.asarray(FAKE_CR3_BINARY_READOUT_ID),
                 cache_namespace_sha256=np.asarray("dry-cache"),
                 source_checkpoint=np.asarray(job["orig_npz"]),
                 source_checkpoint_sha256=np.asarray(file_sha256(job["orig_npz"])),
@@ -614,7 +939,7 @@ def _dry_score(items: list[dict], worlds: dict[str, dict], executor: str) -> Non
             executor_model_revision=np.asarray(
                 job.get("expected_executor_model_revision", executor)),
             executor_temperature=np.asarray(0.0),
-            readout_id=np.asarray("dry"),
+            readout_id=np.asarray(FAKE_CR3_BINARY_READOUT_ID),
             cache_namespace_sha256=np.asarray("dry-cache"),
             source_criteria=np.asarray(job["criteria"], object),
         )
@@ -692,12 +1017,24 @@ def _validate_proposal(path: Path, family: str, n: int,
         raise RuntimeError(f"non-unique per-draw seeds in {path}")
 
 
-def load_scored(path: Path, family_names: list[str], expected_per_family: int) -> tuple[np.ndarray, list[str], dict]:
+def load_scored(
+    path: Path,
+    family_names: list[str],
+    expected_per_family: int,
+    *,
+    expected_readout_id: str = CR3_BINARY_READOUT_ID,
+    expected_executor_model: str | None = None,
+) -> tuple[np.ndarray, list[str], dict]:
     if not path.exists():
         raise FileNotFoundError(path)
     z = np.load(path, allow_pickle=True)
     if str(z["schema"]) != AUDIT_SIG_SCHEMA:
         raise RuntimeError(f"unexpected audit-signature schema in {path}")
+    if "readout_id" not in z.files or str(z["readout_id"]) != expected_readout_id:
+        raise RuntimeError(f"audit artifact has the wrong executor readout: {path}")
+    if (expected_executor_model is not None
+            and str(z["executor_model"]) != expected_executor_model):
+        raise RuntimeError(f"audit artifact has the wrong executor model: {path}")
     sigs = np.asarray(z["sigs"], float)
     families = [str(x) for x in z["families"]]
     if sigs.ndim != 2 or np.any(~np.isfinite(sigs)):
@@ -728,12 +1065,24 @@ def load_scored(path: Path, family_names: list[str], expected_per_family: int) -
     return binary, families, meta
 
 
-def load_bootstrap(path: Path, identity: dict, source_sha256: str) -> tuple[np.ndarray, np.ndarray, dict]:
+def load_bootstrap(
+    path: Path,
+    identity: dict,
+    source_sha256: str,
+    *,
+    expected_readout_id: str = CR3_BINARY_READOUT_ID,
+    expected_executor_model: str | None = None,
+) -> tuple[np.ndarray, np.ndarray, dict]:
     if not path.exists():
         raise FileNotFoundError(path)
     z = np.load(path, allow_pickle=True)
     if str(z["schema"]) != BOOTSTRAP_SCHEMA:
         raise RuntimeError(f"unexpected bootstrap schema in {path}")
+    if "readout_id" not in z.files or str(z["readout_id"]) != expected_readout_id:
+        raise RuntimeError(f"bootstrap has the wrong executor readout: {path}")
+    if (expected_executor_model is not None
+            and str(z["executor_model"]) != expected_executor_model):
+        raise RuntimeError(f"bootstrap has the wrong executor model: {path}")
     if str(z["source_checkpoint_sha256"]) != source_sha256:
         raise RuntimeError(f"bootstrap source hash mismatch in {path}")
     if str(z["metric_description"]) != identity["description"]:
@@ -777,13 +1126,25 @@ def load_bootstrap(path: Path, identity: dict, source_sha256: str) -> tuple[np.n
     return binary, (target > 0.5).astype(np.uint8), meta
 
 
-def load_codebook_bootstrap(path: Path, identity: dict, source_sha256: str) -> dict:
+def load_codebook_bootstrap(
+    path: Path,
+    identity: dict,
+    source_sha256: str,
+    *,
+    expected_readout_id: str = CR3_BINARY_READOUT_ID,
+    expected_executor_model: str | None = None,
+) -> dict:
     """Validate a lightweight canonical-behavior artifact used only for MCQ design."""
     if not path.exists():
         raise FileNotFoundError(path)
     z = np.load(path, allow_pickle=True)
     if str(z["schema"]) != CODEBOOK_BOOTSTRAP_SCHEMA:
         raise RuntimeError(f"unexpected MCQ codebook bootstrap schema in {path}")
+    if "readout_id" not in z.files or str(z["readout_id"]) != expected_readout_id:
+        raise RuntimeError(f"MCQ codebook bootstrap has the wrong executor readout: {path}")
+    if (expected_executor_model is not None
+            and str(z["executor_model"]) != expected_executor_model):
+        raise RuntimeError(f"MCQ codebook bootstrap has the wrong executor model: {path}")
     if str(z["source_checkpoint_sha256"]) != source_sha256:
         raise RuntimeError(f"MCQ codebook bootstrap source hash mismatch in {path}")
     if str(z["metric_key"]) != identity["key"]:
@@ -821,6 +1182,7 @@ def load_codebook_bootstrap(path: Path, identity: dict, source_sha256: str) -> d
 
 
 def prepare_bootstraps(root: Path, manifest: dict, args) -> None:
+    expected_readout = expected_executor_readout_id(args)
     if args.reuse_bootstrap_root:
         source_root = Path(args.reuse_bootstrap_root).resolve()
         if source_root == root:
@@ -833,7 +1195,13 @@ def prepare_bootstraps(root: Path, manifest: dict, args) -> None:
             source = source_root / identity["key"] / "bootstrap" / "scored.npz"
             if not source.exists():
                 raise RuntimeError(f"reusable bootstrap is missing: {source}")
-            load_bootstrap(source, identity, manifest["metric_sha256"][source_text])
+            load_bootstrap(
+                source,
+                identity,
+                manifest["metric_sha256"][source_text],
+                expected_readout_id=expected_readout,
+                expected_executor_model=args.executor,
+            )
             destination.parent.mkdir(parents=True, exist_ok=True)
             os.link(source, destination)
             _fsync_directory(destination.parent)
@@ -843,7 +1211,13 @@ def prepare_bootstraps(root: Path, manifest: dict, args) -> None:
         identity = manifest["metric_identity"][source_text]
         out = root / identity["key"] / "bootstrap" / "scored.npz"
         if out.exists():
-            load_bootstrap(out, identity, manifest["metric_sha256"][source_text])
+            load_bootstrap(
+                out,
+                identity,
+                manifest["metric_sha256"][source_text],
+                expected_readout_id=expected_readout,
+                expected_executor_model=args.executor,
+            )
             continue
         items.append({
             "mode": "bootstrap",
@@ -870,6 +1244,8 @@ def prepare_bootstraps(root: Path, manifest: dict, args) -> None:
             root / identity["key"] / "bootstrap" / "scored.npz",
             identity,
             manifest["metric_sha256"][source_text],
+            expected_readout_id=expected_readout,
+            expected_executor_model=args.executor,
         )
 
 
@@ -879,6 +1255,7 @@ def prepare_mcq_codebook_bootstraps(root: Path, manifest: dict, args) -> dict[st
         return {}
     reuse_root = (Path(args.reuse_mcq_codebook_root).resolve()
                   if args.reuse_mcq_codebook_root else None)
+    expected_readout = expected_executor_readout_id(args)
     if reuse_root == root:
         raise RuntimeError("--reuse-mcq-codebook-root must differ from --out-root")
     items = []
@@ -894,14 +1271,26 @@ def prepare_mcq_codebook_bootstraps(root: Path, manifest: dict, args) -> dict[st
         paths_by_task.setdefault(identity["task"], []).append(out)
         source_sha = manifest["mcq_codebook_metric_sha256"][source_text]
         if out.exists():
-            load_codebook_bootstrap(out, identity, source_sha)
+            load_codebook_bootstrap(
+                out,
+                identity,
+                source_sha,
+                expected_readout_id=expected_readout,
+                expected_executor_model=args.executor,
+            )
             continue
         if reuse_root is not None:
             reusable = (reuse_root / "mcq_codebook_candidates" / identity["key"]
                         / "bootstrap" / "scored.npz")
             if not reusable.exists():
                 raise RuntimeError(f"reusable MCQ codebook bootstrap is missing: {reusable}")
-            load_codebook_bootstrap(reusable, identity, source_sha)
+            load_codebook_bootstrap(
+                reusable,
+                identity,
+                source_sha,
+                expected_readout_id=expected_readout,
+                expected_executor_model=args.executor,
+            )
             out.parent.mkdir(parents=True, exist_ok=True)
             os.link(reusable, out)
             _fsync_directory(out.parent)
@@ -932,6 +1321,8 @@ def prepare_mcq_codebook_bootstraps(root: Path, manifest: dict, args) -> dict[st
             root / "mcq_codebook_candidates" / identity["key"] / "bootstrap" / "scored.npz",
             identity,
             manifest["mcq_codebook_metric_sha256"][source_text],
+            expected_readout_id=expected_readout,
+            expected_executor_model=args.executor,
         )
     return paths_by_task
 
@@ -951,6 +1342,32 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
         paths = sorted(candidate_paths_by_task.get(task, []), key=lambda path: str(path))
         if not paths:
             raise RuntimeError(f"no frozen MCQ codebook candidates were prepared for task {task}")
+        expected_namespaces = {
+            (
+                state["probe_sha256"],
+                args.executor,
+                state["executor_model_revision"],
+                state["readout_id"],
+                state["cache_namespace_sha256"],
+            )
+            for state in task_states
+        }
+        if len(expected_namespaces) != 1:
+            raise RuntimeError(f"target bootstraps do not share one executor namespace for {task}")
+        expected_namespace = next(iter(expected_namespaces))
+        for candidate_path in paths:
+            z = np.load(candidate_path, allow_pickle=False)
+            candidate_namespace = tuple(str(z[field]) for field in (
+                "probe_sha256",
+                "executor_model",
+                "executor_model_revision",
+                "readout_id",
+                "cache_namespace_sha256",
+            ))
+            if candidate_namespace != expected_namespace:
+                raise RuntimeError(
+                    f"MCQ candidate executor namespace differs from target bootstrap: "
+                    f"{candidate_path}")
         plan = build_codebook_panel_plan(
             paths,
             target_metric_keys=[state["key"] for state in task_states],
@@ -978,6 +1395,7 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
                 "query_batch_size": args.mcq_value_query_batch_size,
                 "choice_probability_cache": str(
                     root / "mcq_query_cache" / "choice_probabilities.sqlite"),
+                "expected_choice_readout_id": expected_choice_readout_id(args),
                 "out": str(calibration_path),
             })
         planned[task] = (task_states, paths, plan, calibration_path)
@@ -997,6 +1415,8 @@ def prepare_mcq_codebooks(root: Path, states: dict[str, dict], args,
         if not calibration_path.exists():
             raise RuntimeError(f"missing MCQ prior calibration for task {task}")
         calibration = json.loads(calibration_path.read_text())
+        if calibration.get("choice_readout_id") != expected_choice_readout_id(args):
+            raise RuntimeError(f"MCQ prior calibration readout mismatch for task {task}")
         selections = select_prior_balanced_panels(
             plan,
             calibration,
@@ -1058,6 +1478,7 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
             "query_batch_size": args.mcq_value_query_batch_size,
             "choice_probability_cache": str(
                 Path(args.out_root) / "mcq_query_cache" / "choice_probabilities.sqlite"),
+            "expected_choice_readout_id": expected_choice_readout_id(args),
             "out": str(output),
         }
         if state.get("fixed_no_demo_canonical_choice_probabilities") is not None:
@@ -1080,6 +1501,7 @@ def value_all(keys: list[str], states: dict[str, dict], scored: dict[str, Path],
             output,
             expected_source_scored_sha256=file_sha256(scored[key]),
             expected_codebook_manifest_sha256=states[key]["mcq_codebook_sha256"],
+            expected_choice_readout_id=expected_choice_readout_id(args),
         )
         if payload["target_metric_key"] != key:
             raise RuntimeError(f"value artifact target mismatch in {output}")
@@ -1143,6 +1565,7 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
                 value_path,
                 expected_source_scored_sha256=row["scored_sha256"],
                 expected_codebook_manifest_sha256=state["mcq_codebook_sha256"],
+                expected_choice_readout_id=expected_choice_readout_id(args),
             )
             if file_sha256(value_path) != row.get("value_sha256"):
                 raise RuntimeError(f"absorbed value artifact hash mismatch: {value_path}")
@@ -1181,6 +1604,7 @@ def attach_mcq_pool_values(root: Path, states: dict[str, dict], args,
                 value_path,
                 expected_source_scored_sha256=run["confirmation_scored_sha256"],
                 expected_codebook_manifest_sha256=state["mcq_codebook_sha256"],
+                expected_choice_readout_id=expected_choice_readout_id(args),
             )
             if loaded["sha256"] != run.get("confirmation_value_sha256"):
                 raise RuntimeError(f"MCQ confirmation value hash mismatch for {key}")
@@ -1205,7 +1629,12 @@ def _load_historical_import(root: Path, state: dict, manifest: dict) -> np.ndarr
             or file_sha256(scored_path) != record["scored_sha256"]):
         raise RuntimeError(f"historical evidence changed for {state['key']}")
     batch, _, meta = load_scored(
-        scored_path, ["historical_candidate"], int(record["n_candidates"]))
+        scored_path,
+        ["historical_candidate"],
+        int(record["n_candidates"]),
+        expected_readout_id=state["readout_id"],
+        expected_executor_model=manifest["executor"],
+    )
     for field in ("probe_sha256", "executor_model_revision", "readout_id",
                   "cache_namespace_sha256"):
         if meta[field] != state[field]:
@@ -1283,7 +1712,13 @@ def prepare_historical_candidates(
     )
     for key, (candidate, scored, import_path, n_candidates) in pending.items():
         state = states[key]
-        _, _, meta = load_scored(scored, ["historical_candidate"], n_candidates)
+        _, _, meta = load_scored(
+            scored,
+            ["historical_candidate"],
+            n_candidates,
+            expected_readout_id=state["readout_id"],
+            expected_executor_model=args.executor,
+        )
         for field in ("probe_sha256", "executor_model_revision", "readout_id",
                       "cache_namespace_sha256"):
             if meta[field] != state[field]:
@@ -1321,12 +1756,20 @@ def _load_metric(path: str, root: Path, dry_run: bool, manifest: dict) -> tuple[
     directory.mkdir(parents=True, exist_ok=True)
     bootstrap_path = directory / "bootstrap" / "scored.npz"
     pool, target, bootstrap_meta = load_bootstrap(
-        bootstrap_path, identity, manifest["metric_sha256"][source_text])
+        bootstrap_path,
+        identity,
+        manifest["metric_sha256"][source_text],
+        expected_readout_id=manifest["executor_readout_protocol"],
+        expected_executor_model=manifest["executor"],
+    )
     if bootstrap_meta["executor_model"] != manifest["executor"]:
         raise RuntimeError(f"bootstrap executor mismatch for {key}")
+    if bootstrap_meta["executor_model_revision"] != manifest["executor_model_revision"]:
+        raise RuntimeError(f"bootstrap executor revision mismatch for {key}")
     state = {
         "key": key,
         "task": identity["task"],
+        "level": identity["level"],
         "name": identity["name"],
         "description": identity["description"],
         "orig": str(source),
@@ -1365,7 +1808,13 @@ def _load_metric(path: str, root: Path, dry_run: bool, manifest: dict) -> tuple[
         scored = root / row["scored_path"]
         if file_sha256(scored) != row["scored_sha256"]:
             raise RuntimeError(f"scored artifact hash mismatch: {scored}")
-        batch, _, meta = load_scored(scored, row["family_names"], int(row["expected_per_family"]))
+        batch, _, meta = load_scored(
+            scored,
+            row["family_names"],
+            int(row["expected_per_family"]),
+            expected_readout_id=state["readout_id"],
+            expected_executor_model=manifest["executor"],
+        )
         for field in ("probe_sha256", "executor_model_revision", "readout_id", "cache_namespace_sha256"):
             if meta[field] != state[field]:
                 raise RuntimeError(f"{field} changed in absorbed artifact {scored}")
@@ -1477,8 +1926,14 @@ def score_all(keys: list[str], states: dict[str, dict], proposals: dict[str, lis
         worlds=worlds,
     )
     for key, path in outputs.items():
-        _, _, meta = load_scored(path, list(args.family_tags), expected_per_family)
         state = states[key]
+        _, _, meta = load_scored(
+            path,
+            list(args.family_tags),
+            expected_per_family,
+            expected_readout_id=state["readout_id"],
+            expected_executor_model=args.executor,
+        )
         for field in ("probe_sha256", "executor_model_revision", "readout_id", "cache_namespace_sha256"):
             if meta[field] != state[field]:
                 raise RuntimeError(f"{field} changed in {path}")
@@ -1489,7 +1944,13 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
                  *, alpha_override: float | None = None,
                  certificate_role: str = "monitor",
                  value_payload: dict | None = None) -> tuple[dict, np.ndarray]:
-    audit, families, meta = load_scored(scored, list(args.family_tags), expected_per_family)
+    audit, families, meta = load_scored(
+        scored,
+        list(args.family_tags),
+        expected_per_family,
+        expected_readout_id=state["readout_id"],
+        expected_executor_model=args.executor,
+    )
     common = dict(
         family_names=args.family_tags,
         horizon_per_family=args.ceiling_horizon_per_family,
@@ -1566,10 +2027,21 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             global_status = "CERTIFIED_EPSILON_GLOBAL_OPTIMUM"
         else:
             global_status = "CERTIFIED_GLOBAL_GAP_BOUND"
+        instrument_quality = mcq_instrument_quality(state, args)
+        reported_global_status = mcq_reported_global_status(
+            global_status, instrument_quality)
+        if args.dry_run:
+            reported_global_status = "SYNTHETIC_TEST_ONLY"
         cert["all_finite_prompt_certificate"] = {
-            "schema": "reconstruction-mcq-all-prompts-cap-v3",
-            "status": global_status,
-            "prompt_class": "all finite prompts Sigma*; no prompt-length budget",
+            "schema": "reconstruction-mcq-all-prompts-cap-v4",
+            "status": reported_global_status,
+            "formal_mathematical_status": global_status,
+            "headline_eligible": bool(instrument_quality["headline_eligible"]),
+            "publication_eligible": not args.dry_run,
+            "artifact_role": (
+                "synthetic_test_only" if args.dry_run else "empirical_certificate"),
+            "prompt_class": (
+                "all finite prompts in Dom(E_wrapper); no analyst-chosen prompt-length budget"),
             "best_evaluated_lower_bound": best,
             "absorbed_pool_best_lower_bound": pool_best,
             "current_audit_best_lower_bound": audit_best,
@@ -1580,15 +2052,23 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
             "identified_interval": [best, state["value_cap"]],
             "no_demonstration_target_probability": state[
                 "no_demonstration_target_probability"],
-            "bound_identity": "V_ann(p) <= 1 - q_no_demo(b) for every finite prompt p",
+            "bound_identity": (
+                "V_ann(p) <= 1 - q_no_demo(b) for every finite p in Dom(E_wrapper)"),
             "note": (
                 "the frozen no-demonstration control is independent of candidate prompts; "
                 "without additional executor structure, finite black-box observations cannot "
                 "lower this all-strings cap further. CR-3 separately tightens the declared "
                 "proposer-process horizon/support scope"),
             "uses_external_labels": False,
-            "instrument_quality": mcq_instrument_quality(state, args),
+            "instrument_quality": instrument_quality,
         }
+        if args.dry_run:
+            global_payload = cert["all_finite_prompt_certificate"]
+            global_payload["synthetic_diagnostic_status"] = global_payload.pop(
+                "formal_mathematical_status")
+        cert["publication_eligible"] = not args.dry_run
+        cert["artifact_role"] = (
+            "synthetic_test_only" if args.dry_run else "empirical_certificate")
         return cert, audit
 
     cert = prompt_articulation_certificate(
@@ -1619,7 +2099,61 @@ def _certificate(state: dict, scored: Path, expected_per_family: int, manifest: 
                                         for text in state["target_form_texts"]],
         },
     )
+    cert["publication_eligible"] = not args.dry_run
+    cert["artifact_role"] = (
+        "synthetic_test_only" if args.dry_run else "empirical_certificate")
+    cert["all_finite_prompt_certificate"]["publication_eligible"] = not args.dry_run
+    if args.dry_run:
+        dpi_status = cert["all_finite_prompt_certificate"]["certificate"]
+        dpi_status["synthetic_diagnostic_status"] = dpi_status.get("status")
+        dpi_status["status"] = "SYNTHETIC_TEST_ONLY"
+        cert["all_finite_prompt_certificate"]["artifact_role"] = "synthetic_test_only"
     return cert, audit
+
+
+def _tiered_audit_certificate(
+    state: dict,
+    scored: Path,
+    expected_per_family: int,
+    manifest: dict,
+    args,
+    *,
+    certificate_role: str,
+    value_payload: dict | None,
+    alpha_tiers: dict[str, dict],
+) -> tuple[dict, np.ndarray]:
+    """Evaluate identical immutable observations at the predeclared 95% and 90% tiers."""
+    primary, audit = _certificate(
+        state,
+        scored,
+        expected_per_family,
+        manifest,
+        args,
+        alpha_override=float(alpha_tiers["primary_95"]["cell_alpha"]),
+        certificate_role=certificate_role,
+        value_payload=value_payload,
+    )
+    sensitivity, sensitivity_audit = _certificate(
+        state,
+        scored,
+        expected_per_family,
+        manifest,
+        args,
+        alpha_override=float(alpha_tiers["sensitivity_90"]["cell_alpha"]),
+        certificate_role=certificate_role,
+        value_payload=value_payload,
+    )
+    if not np.array_equal(audit, sensitivity_audit):
+        raise RuntimeError("confidence-tier recomputation changed the immutable audit rows")
+    attach_reporting_tiers(
+        primary,
+        sensitivity,
+        primary_scope=alpha_tiers["primary_95"]["scope"],
+        sensitivity_scope=alpha_tiers["sensitivity_90"]["scope"],
+        plateau_epsilon=target_value_gap(args),
+        saturation_missing_mass=args.target_u0,
+    )
+    return primary, audit
 
 
 def write_checkpoint_certificates(
@@ -1630,8 +2164,7 @@ def write_checkpoint_certificates(
     manifest: dict,
     args,
     worlds: dict[str, dict],
-    cell_alpha: float,
-    alpha_scope: dict,
+    alpha_tiers: dict[str, dict],
 ) -> None:
     """Create immutable, never-absorbed certificates at a predeclared pool size."""
     if not keys:
@@ -1648,10 +2181,10 @@ def write_checkpoint_certificates(
         keys, states, scored, phase="checkpoint", iteration=iteration, args=args, worlds=worlds)
     for key in keys:
         state = states[key]
-        cert, _ = _certificate(
+        cert, _ = _tiered_audit_certificate(
             state, scored[key], args.checkpoint_per_family, manifest, args,
-            alpha_override=cell_alpha, certificate_role="checkpoint",
-            value_payload=values.get(key))
+            certificate_role="checkpoint", value_payload=values.get(key),
+            alpha_tiers=alpha_tiers)
         cert["run"] = {
             "phase": "checkpoint",
             "iterations_absorbed": int(iteration),
@@ -1659,19 +2192,13 @@ def write_checkpoint_certificates(
             "checkpoint_scored_path": str(scored[key].relative_to(Path(args.out_root))),
             "checkpoint_scored_sha256": file_sha256(scored[key]),
             "never_absorbed": True,
-            "alpha_scope": alpha_scope,
+            "alpha_scope": alpha_tiers["primary_95"]["scope"],
+            "confidence_reporting": alpha_tiers,
         }
         if key in values:
             cert["run"]["checkpoint_value_path"] = str(
                 Path(values[key]["path"]).relative_to(Path(args.out_root)))
             cert["run"]["checkpoint_value_sha256"] = values[key]["sha256"]
-        cert["prompt_evolution_status"] = classify_prompt_evolution(
-            cert,
-            confirmation_is_never_absorbed=True,
-            stopping_rule_frozen_before_confirmation=True,
-            plateau_epsilon=target_value_gap(args),
-            saturation_missing_mass=args.target_u0,
-        )
         path = state["dir"] / "checkpoint" / f"iter_{iteration:03d}" / "certificate.json"
         _atomic_json(path, cert)
         status = cert["prompt_evolution_status"]
@@ -1681,7 +2208,7 @@ def write_checkpoint_certificates(
               flush=True)
 
 
-def write_certified_trajectories(states: dict[str, dict], args, alpha_scope: dict) -> None:
+def write_certified_trajectories(states: dict[str, dict], args, alpha_tiers: dict) -> None:
     """Collect immutable checkpoint/final certificates into one report per metric."""
     for key, state in states.items():
         points = []
@@ -1695,6 +2222,9 @@ def write_certified_trajectories(states: dict[str, dict], args, alpha_scope: dic
                 "iterations_absorbed": iteration,
                 "pool_size": cert["run"]["pool_size"],
                 "status": cert["prompt_evolution_status"],
+                "sensitivity_90_status": cert["reporting_tiers"]["sensitivity_90"]["status"],
+                "combined_reporting_status": cert["reporting_tiers"][
+                    "combined_reporting_status"],
                 "prompt_ceiling_UCB": cert["certified"][
                     "finite_horizon_expected_prompt_ceiling_UCB"],
             })
@@ -1706,6 +2236,9 @@ def write_certified_trajectories(states: dict[str, dict], args, alpha_scope: dic
                 "iterations_absorbed": cert["run"]["iterations_absorbed"],
                 "pool_size": cert["run"]["final_pool_size"],
                 "status": cert["prompt_evolution_status"],
+                "sensitivity_90_status": cert["reporting_tiers"]["sensitivity_90"]["status"],
+                "combined_reporting_status": cert["reporting_tiers"][
+                    "combined_reporting_status"],
                 "prompt_ceiling_UCB": cert["certified"][
                     "finite_horizon_expected_prompt_ceiling_UCB"],
             })
@@ -1715,9 +2248,13 @@ def write_certified_trajectories(states: dict[str, dict], args, alpha_scope: dic
             "executor": args.executor,
             "axis": "prompt evolution at fixed executor",
             "value_unit": state.get("value_unit", "bits"),
-            "alpha_scope": alpha_scope,
+            "alpha_scope": alpha_tiers["primary_95"]["scope"],
+            "confidence_reporting": alpha_tiers,
             "points": sorted(points, key=lambda point: point["iterations_absorbed"]),
             "monitor_rows_are_certificates": False,
+            "publication_eligible": not args.dry_run,
+            "artifact_role": (
+                "synthetic_test_only" if args.dry_run else "empirical_certificate"),
             "does_not_cover": ["all finite prompts", "OSL executor scaling", "external validity"],
         }
         _atomic_json(state["dir"] / "certified_trajectory.json", payload)
@@ -1728,20 +2265,26 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
     if args.value_mode != "reconstruction_mcq":
         return
     by_task: dict[str, list[dict]] = {}
+    headline_by_task: dict[str, list[dict]] = {}
     selected = {}
     for key, state in states.items():
         best_index = int(np.argmax(state["pool_values"]))
         detail = state["pool_value_details"][best_index]
         by_task.setdefault(state["task"], []).append(detail)
+        quality = mcq_instrument_quality(state, args)
+        if quality["headline_eligible"]:
+            headline_by_task.setdefault(state["task"], []).append(detail)
         selected[key] = {
             "pool_index": best_index,
             "value": float(state["pool_values"][best_index]),
             "candidate_prompt_sha256": detail["candidate_prompt_sha256"],
             "teaching_transcript_sha256": detail["design"]["teaching_transcript_sha256"],
+            "instrument_quality_status": quality["status"],
+            "headline_eligible": bool(quality["headline_eligible"]),
+            "headline_ineligibility_reasons": list(quality["reasons"]),
         }
 
-    tasks = {}
-    for task, rows in sorted(by_task.items()):
+    def summarize_identity_channels(rows: list[dict]) -> dict:
         channels = {
             condition: mcq_identity_channel(rows, condition=condition)
             for condition in ("annotations", "no_demonstrations", "shuffled_labels")
@@ -1753,7 +2296,7 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
              for name in ("no_demonstrations", "shuffled_labels")),
             default=0.0,
         )
-        tasks[task] = {
+        return {
             "channels": channels,
             "annotation_attributable_identity_mi_lift_bits": (
                 max(0.0, float(annotation["mutual_information_bits"]) - control_mi)
@@ -1763,8 +2306,49 @@ def write_mcq_bank_identity_summary(root: Path, states: dict[str, dict], args) -
                 if annotation.get("valid") else None),
             "n_valid_channels": len(valid),
         }
+
+    tasks = {}
+    for task, rows in sorted(by_task.items()):
+        eligible_rows = headline_by_task.get(task, [])
+        levels = {state["level"] for state in states.values() if state["task"] == task}
+        if len(levels) != 1:
+            raise RuntimeError(f"summary encountered a mixed hierarchy-level bank for {task}")
+        headline_summary = summarize_identity_channels(eligible_rows)
+        headline_valid = bool(
+            headline_summary["channels"]["annotations"].get("valid"))
+        all_eligible = len(eligible_rows) == len(rows)
+        tasks[task] = {
+            **summarize_identity_channels(rows),
+            "hierarchy_level": next(iter(levels)),
+            "n_metrics": len(rows),
+            "n_headline_eligible_metrics": len(eligible_rows),
+            "unfiltered_channels_reporting_role": (
+                "headline_eligible" if all_eligible else
+                "diagnostic_includes_instrument-ineligible_panels"),
+            "unfiltered_channels_publication_eligible": bool(
+                not args.dry_run and all_eligible),
+            "headline_eligible_only": {
+                **headline_summary,
+                "status": (
+                    "SYNTHETIC_TEST_ONLY" if args.dry_run else
+                    "ACHIEVED_MEASUREMENT" if headline_valid else
+                    "INSUFFICIENT_HEADLINE_ELIGIBLE_METRICS"),
+                "publication_eligible": bool(not args.dry_run and headline_valid),
+            },
+        }
+    any_headline_valid = any(
+        task["headline_eligible_only"]["publication_eligible"]
+        for task in tasks.values()
+    )
     payload = {
         "schema": "cr3-reconstruction-bank-identity-v1",
+        "status": (
+            "SYNTHETIC_TEST_ONLY" if args.dry_run else
+            "ACHIEVED_MEASUREMENT" if any_headline_valid else
+            "INSUFFICIENT_HEADLINE_ELIGIBLE_METRICS"),
+        "publication_eligible": bool(not args.dry_run and any_headline_valid),
+        "artifact_role": (
+            "synthetic_test_only" if args.dry_run else "empirical_measurement"),
         "selection": "independent per-metric argmax of anchor-free V_ann in the final absorbed pool",
         "tasks": tasks,
         "selected_prompts": selected,
@@ -1793,7 +2377,7 @@ def main(argv=None) -> int:
     parser.add_argument("--mcq-min-design-disagreements", type=int, default=2)
     parser.add_argument("--mcq-n-examples", type=int, default=8)
     parser.add_argument("--mcq-reconstruction-draws", type=int, default=4)
-    parser.add_argument("--mcq-choice-readout", default="auto",
+    parser.add_argument("--mcq-choice-readout", default="logits",
                         choices=["auto", "logits", "sampled"])
     parser.add_argument("--mcq-value-query-batch-size", type=int, default=512)
     parser.add_argument("--mcq-max-chars", type=int, default=600)
@@ -1806,8 +2390,8 @@ def main(argv=None) -> int:
     parser.add_argument("--mcq-prior-min-normalized-entropy", type=float, default=0.90)
     parser.add_argument(
         "--mcq-codebook-metrics", nargs="+", default=None,
-        help=("frozen task-level candidate bank for hard MCQ distractors; targets are added "
-              "automatically and only canonical candidate behaviors are scored"),
+        help=("frozen task-and-hierarchy-level candidate bank for hard MCQ distractors; "
+              "targets are added automatically and only canonical candidate behaviors are scored"),
     )
     parser.add_argument("--batch-per-family", type=int, default=150)
     parser.add_argument("--confirm-per-family", type=int, default=100)
@@ -1895,6 +2479,9 @@ def main(argv=None) -> int:
         parser.error("--alpha must lie in (0, 1)")
     if args.study_alpha is not None and not 0.0 < args.study_alpha < 1.0:
         parser.error("--study-alpha must lie in (0, 1)")
+    primary_alpha = args.alpha if args.study_alpha is None else args.study_alpha
+    if not np.isclose(primary_alpha, 0.05, rtol=0.0, atol=1e-12):
+        parser.error("v12 requires a 95% primary confidence level (--alpha/--study-alpha 0.05)")
     if not 0.0 <= args.tau <= args.tau_strict <= 1.0:
         parser.error("require 0 <= --tau <= --tau-strict <= 1")
     if not 0.0 <= args.target_u0 <= 1.0 or target_value_gap(args) < 0.0:
@@ -1909,16 +2496,22 @@ def main(argv=None) -> int:
         parser.error("--value-p-min is defined only for reconstruction_mcq value states")
     if args.mcq_codebook_metrics is not None and args.value_mode != "reconstruction_mcq":
         parser.error("--mcq-codebook-metrics is defined only for reconstruction_mcq mode")
+    if args.value_mode == "reconstruction_mcq" and args.mcq_choice_readout != "logits":
+        parser.error("bound-grade Reconstruction-MCQ requires deterministic normalized logits")
     if args.reuse_mcq_codebook_root is not None and args.value_mode != "reconstruction_mcq":
         parser.error("--reuse-mcq-codebook-root is defined only for reconstruction_mcq mode")
     if args.reuse_bootstrap_root:
-        reuse_manifest = Path(args.reuse_bootstrap_root).resolve() / "run_manifest.json"
-        if not reuse_manifest.is_file():
-            parser.error("--reuse-bootstrap-root must contain run_manifest.json")
+        try:
+            validate_numeric_reuse_manifest(
+                args.reuse_bootstrap_root, args, role="bootstrap reuse")
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            parser.error(f"invalid --reuse-bootstrap-root: {exc}")
     if args.reuse_mcq_codebook_root:
-        reuse_manifest = Path(args.reuse_mcq_codebook_root).resolve() / "run_manifest.json"
-        if not reuse_manifest.is_file():
-            parser.error("--reuse-mcq-codebook-root must contain run_manifest.json")
+        try:
+            validate_numeric_reuse_manifest(
+                args.reuse_mcq_codebook_root, args, role="MCQ codebook reuse")
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            parser.error(f"invalid --reuse-mcq-codebook-root: {exc}")
     if args.reuse_evidence_root:
         try:
             load_evidence_manifest(args.reuse_evidence_root)
@@ -1953,7 +2546,7 @@ def main(argv=None) -> int:
         prepare_mcq_codebooks(root, states, args, codebook_candidate_paths)
         prepare_historical_candidates(root, states, manifest, args, worlds)
         attach_mcq_pool_values(root, states, args, worlds)
-        cell_alpha, alpha_scope = confirmation_alpha(args, n_metrics=len(states))
+        alpha_tiers = reporting_alpha_tiers(args, n_metrics=len(states))
 
         while True:
             active = [key for key, state in states.items()
@@ -1970,8 +2563,7 @@ def main(argv=None) -> int:
                     manifest=manifest,
                     args=args,
                     worlds=worlds,
-                    cell_alpha=cell_alpha,
-                    alpha_scope=alpha_scope,
+                    alpha_tiers=alpha_tiers,
                 )
             print(f"=== monitor iteration {iteration}: {len(batch_keys)} metrics ===", flush=True)
             proposals = propose_all(
@@ -2067,10 +2659,10 @@ def main(argv=None) -> int:
                 args=args, worlds=worlds)
             for key in pending:
                 state = states[key]
-                cert, _ = _certificate(
+                cert, _ = _tiered_audit_certificate(
                     state, scored[key], args.confirm_per_family, manifest, args,
-                    alpha_override=cell_alpha, certificate_role="final_confirmation",
-                    value_payload=values.get(key))
+                    certificate_role="final_confirmation", value_payload=values.get(key),
+                    alpha_tiers=alpha_tiers)
                 cert["run"] = {
                     "stopped": state["stopped"],
                     "iterations_absorbed": state["iteration"],
@@ -2078,19 +2670,13 @@ def main(argv=None) -> int:
                     "confirmation_scored_path": str(scored[key].relative_to(root)),
                     "confirmation_scored_sha256": file_sha256(scored[key]),
                     "never_absorbed": True,
-                    "alpha_scope": alpha_scope,
+                    "alpha_scope": alpha_tiers["primary_95"]["scope"],
+                    "confidence_reporting": alpha_tiers,
                 }
                 if key in values:
                     cert["run"]["confirmation_value_path"] = str(
                         Path(values[key]["path"]).relative_to(root))
                     cert["run"]["confirmation_value_sha256"] = values[key]["sha256"]
-                cert["prompt_evolution_status"] = classify_prompt_evolution(
-                    cert,
-                    confirmation_is_never_absorbed=True,
-                    stopping_rule_frozen_before_confirmation=True,
-                    plateau_epsilon=target_value_gap(args),
-                    saturation_missing_mass=args.target_u0,
-                )
                 path = state["dir"] / "confirmation" / "certificate.json"
                 _atomic_json(path, cert)
                 state["confirmed"] = True
@@ -2101,7 +2687,7 @@ def main(argv=None) -> int:
                     f"{state.get('value_unit', 'bits')}",
                     flush=True,
                 )
-        write_certified_trajectories(states, args, alpha_scope)
+        write_certified_trajectories(states, args, alpha_tiers)
         write_mcq_bank_identity_summary(root, states, args)
         print("CR3 PROMPT-CEILING LOOP DONE", flush=True)
     return 0

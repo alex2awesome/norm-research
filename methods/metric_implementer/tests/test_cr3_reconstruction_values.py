@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
+import sqlite3
 from types import SimpleNamespace
 
 import numpy as np
@@ -18,6 +20,10 @@ from methods.metric_implementer.experiments.cr3_reconstruction_values import (
     select_prior_balanced_panels,
     validate_codebook_manifest,
     write_value_artifact,
+)
+from methods.metric_implementer.vllm_backend import (
+    CHOICE_READOUT_ID,
+    FAKE_CHOICE_READOUT_ID,
 )
 from scripts.tools.cr3_mining_worker import stage_value
 
@@ -42,6 +48,8 @@ class _ConditionSensitiveSelector:
 
 
 class _DriftingSelector:
+    choice_readout_id = CHOICE_READOUT_ID
+
     def __init__(self, target_probability):
         self.target_probability = float(target_probability)
         self.calls = 0
@@ -80,6 +88,39 @@ def test_choice_probability_cache_freezes_cross_process_numeric_drift(tmp_path):
     replayed = second.score_choices(["prompt"], ["1", "2"], seed=[4])
     assert replayed == observed
     assert second_backend.calls == 0
+
+
+def test_v12_choice_cache_never_admits_a_v11_probability_row(tmp_path):
+    path = tmp_path / "choice.sqlite"
+    old_payload = {
+        "schema": "cr3-choice-probability-cache-v1",
+        "model": "model",
+        "revision": "revision",
+        "prompt": "prompt",
+        "choices": ["1", "2"],
+        "system": None,
+        "seed": 4,
+    }
+    old_key = hashlib.sha256(json.dumps(
+        old_payload, sort_keys=True, separators=(",", ":")
+    ).encode()).hexdigest()
+    connection = sqlite3.connect(path)
+    connection.execute(
+        "CREATE TABLE choice_rows (cache_key TEXT PRIMARY KEY, "
+        "probabilities_json TEXT NOT NULL) WITHOUT ROWID")
+    connection.execute(
+        "INSERT INTO choice_rows(cache_key, probabilities_json) VALUES (?, ?)",
+        (old_key, "[0.99,0.01]"),
+    )
+    connection.commit()
+    connection.close()
+
+    backend = _DriftingSelector(0.6)
+    current = CachedChoiceReconstructor(
+        backend, path, model="model", revision="revision")
+    observed = current.score_choices(["prompt"], ["1", "2"], seed=[4])
+    assert np.allclose(observed, [[0.6, 0.4]])
+    assert backend.calls == 1
 
 
 def _write_bootstrap(root, key, target, description):
@@ -282,6 +323,7 @@ def test_value_worker_writes_every_row_with_one_resident_fake_backend(tmp_path):
         "n_examples": 8,
         "n_reconstruction_draws": 4,
         "choice_readout": "auto",
+        "expected_choice_readout_id": FAKE_CHOICE_READOUT_ID,
         "out": str(output),
     }]))
     stage_value(SimpleNamespace(

@@ -1,4 +1,4 @@
-# CR-3 executor-indexed prompt-ceiling loop (authoritative v11, 2026-07-12)
+# CR-3 executor-indexed prompt-ceiling loop (authoritative v12, 2026-07-12)
 
 ## Objective
 
@@ -62,10 +62,11 @@ have arbitrarily small proposer mass.
 - `experiments/run_cr3_mining_loop.py` is the user-facing orchestrator. It owns the immutable manifest,
   bootstrap transaction, monitor/absorption ledger, stopping rule, resume behavior, and isolated
   confirmation audit. It invokes the worker one model per subprocess, then calls `cr_audit.py` on CPU.
-- `vllm_backend.py` remains the shared backend. CR-3 only extends it compatibly so one batch can carry a
-  distinct seed per request and deterministic seeds for binary readout.
+- `vllm_backend.py` remains the shared backend. CR-3 adds release-namespaced total behavior and MCQ
+  readouts: vLLM masks generation to the declared exact single-token labels before log-softmax, and any
+  missing or nonfinite allowed-token evidence fails closed. Legacy callers keep their existing methods.
 
-The v11 end-to-end path is:
+The v12 end-to-end path is:
 
 ```
 source checkpoints -> bootstrap/cache -> propose -> score behaviors -> measure frozen MCQ value marks
@@ -92,12 +93,14 @@ Before mining, every metric gets `bootstrap/scored.npz`:
   `(probe hash, executor revision, readout/template hash, max length, prompt text)`.
 
 The target set and MCQ candidate bank are separate immutable inputs. `--metrics` declares prompts whose
-values are optimized. `--mcq-codebook-metrics` declares the broader task-level bank from which each target's
+values are optimized. `--mcq-codebook-metrics` declares the broader task-and-hierarchy-level bank from which each target's
 closest behaviorally distinguishable distractors are frozen. Every bank member receives one lightweight
 `mcq_codebook_candidates/<metric>/bootstrap/scored.npz` containing only its canonical/orbit-averaged target
 behavior; its historical source prompts are neither rescored nor admitted into target search. A prior
 candidate bank may be hard-linked with `--reuse-mcq-codebook-root` only after validating the source
-checkpoint hash, metric identity, executor namespace, and artifact schema.
+checkpoint hash, metric identity, exact model snapshot, constrained readout/scoring-code namespace, and
+artifact schema. Pre-v12 numeric artifacts are rejected, not migrated. Candidate prompts may still cross
+versions through the evidence store because they are re-scored and revalued before entering the achieved pool.
 
 Candidate panels are enumerated by behavioral hardness on the design split, then scored with the exact
 blind no-demonstration query before prompt-value search. Complete-block position counterbalancing is
@@ -112,9 +115,12 @@ validated cache entries and copies a deduplicated candidate manifest into the ne
 rescored/revalued and inserted after bootstrap but before the adaptive absorption ledger. Their role never
 changes to audit evidence, even when their source file came from a historical monitor or confirmation.
 
-**Release freeze (2026-07-12).** Existing v10 roots remain immutable and are not migrated. V11 adds
-prior-balanced panel selection and candidate-only evidence reuse; it always writes a new root. Within each
-release, exact code and source hashes remain load-bearing, so a changed release cannot resume an old root.
+**Release freeze (2026-07-12).** Existing v10/v11 roots remain immutable and are not migrated. V11 added
+prior-balanced panel selection and candidate-only evidence reuse. V12 adds total constrained behavior/choice
+readouts, new signature and choice-cache namespaces, level-matched codebook banks, and predeclared dual
+95%/90% reporting. Within each release, exact code and source hashes remain load-bearing, so a changed
+release cannot resume an old root. V11 prompt texts may be imported as candidate-only evidence and rescored;
+v11 signatures and choice probabilities are never promoted into the v12 namespace.
 Supported existing R3 bank prefixes are creative writing, humor, news homepages, press
 releases, code review, Math StackExchange, grant funding, peer review, and legal outcome prediction.
 
@@ -190,7 +196,7 @@ teaching-transcript hash ever has two values; fuzzy similarity is never used for
 
 ### Confirmation-only status lattice
 
-At every immutable confirmation, v4 constructs one simultaneous two-sided evidence bundle
+At every immutable confirmation, the v5 certificate constructs one simultaneous two-sided evidence bundle
 using the other half of total `alpha`:
 
 - behavioral missing mass interval `[L_mass,U_mass]`;
@@ -268,7 +274,9 @@ bank-level MI readout but is not itself a prompt-space upper bound.
 The query cache is part of the value definition, not a speed-only convenience: identical frozen teaching
 transcripts receive byte-identical choice probabilities across bootstrap, monitor, checkpoint, confirmation,
 and resume. Value evaluation batches rendered queries and evaluates the prompt-independent no-demo channel
-only once per metric.
+only once per metric. V12 cache keys include the exact constrained-choice protocol ID. Frozen `q_no_demo`
+is an exact arithmetic mean over a finite complete counterbalancing block, not a binomial estimate; it has
+no Clopper-Pearson interval. A claim over random menus, items, or reconstructor runs is a separate estimand.
 
 The all-prompt lower endpoint is the best value among the absorbed pool and the current fresh audit. The
 fresh audit remains excluded from the pool used by CR-3 gain/missing-mass calculations; using an observed
@@ -278,7 +286,7 @@ fixed-instrument interval but is marked `FORMAL_CERTIFICATE_ONLY`; it cannot sup
 The defaults are a value cap of at least `0.10` and minimum selected-distractor kappa of at least `0.50`,
 both hashed in the run manifest and configurable before data collection.
 
-### Prospective reporting tiers (declared 2026-07-12 before v11 audit results)
+### Reporting tiers (declared before v11 audit results; implemented in v12)
 
 The primary certificate and every `CERTIFIED_*` label use 95% simultaneous confidence at the scope recorded
 in the payload. The same never-absorbed audit may additionally be recomputed at 90% confidence as a
@@ -286,6 +294,13 @@ predeclared sensitivity tier. A label that passes only there is written `SUGGEST
 Both intervals and the unchanged point estimates are reported, so the 90% tier cannot replace an unfavorable
 95% result or be selected metric by metric. This secondary computation is CPU-only and does not change the
 frozen GPU run, its stopping rule, or its evidence ledger.
+
+Instrument quality gates apply to both global and process-value conclusions. A prior-degenerate or
+behaviorally easy MCQ panel retains its formal fixed-instrument mathematics, but its value status is
+`FORMAL_CERTIFICATE_ONLY` only when the statistical value axis was directionally resolved; an unresolved
+axis remains `UNRESOLVED`. Independent behavioral `SATURATED/UNSATURATED` conclusions remain reportable.
+Fake/dry runs set every global/process/trajectory/bank status to `SYNTHETIC_TEST_ONLY` and
+`publication_eligible=false`; their diagnostic numbers are regression fixtures, never empirical results.
 
 ## Tightening levers
 
@@ -310,16 +325,16 @@ frozen GPU run, its stopping rule, or its evidence ledger.
 ```bash
 CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr3_mining_loop.py \
   --metrics <..._sigs.npz ...> \
-  --mcq-codebook-metrics <full frozen task-level checkpoint bank ...> \
+  --mcq-codebook-metrics <full frozen task-and-level checkpoint bank ...> \
   --reuse-bootstrap-root <verified-prior-cr3-root> \
   --reuse-mcq-codebook-root <optional prior root with the same candidate bank> \
   --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
   --mcq-choice-readout logits --mcq-value-query-batch-size 512 \
-  --families microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
-  --family-tags phi4 qwen14 llama8 \
-  --family-modes atomic holistic atomic \
+  --families microsoft/phi-4 microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
+  --family-tags phi4_atomic phi4_holistic qwen14_atomic llama8_holistic \
+  --family-modes atomic holistic atomic holistic \
   --batch-per-family 150 --confirm-per-family 300 --checkpoint-per-family 300 \
   --checkpoint-iters 0,1,2,4,8 --study-alpha 0.05 \
   --ceiling-horizon-per-family 100 \
@@ -329,6 +344,13 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
 The July-11 live run used one shared seed for a batch of identical prompts and silently omitted some
 family quotas. It was terminated. Its monitor values and all pilot-v2 intervals lacking iid provenance are
 historical diagnostics, not evidence for a prompt ceiling.
+
+The v11 breadth sentinel later failed closed during its first news checkpoint because an admissible mined
+rubric elicited neither `YES` nor `NO` inside the legacy top-logprob window. The six humor checkpoint
+matrices completed before that task-order failure remain immutable never-absorbed audits and may receive
+per-metric v11 certificates; they cannot define a six-of-twelve population pass rate. V12 prevents recurrence
+with its total two-token behavior readout. This changes the behavior functional, so v11 prompt texts are
+reusable only after v12 rescoring, not by copying their cached signatures.
 
 The `cr3_mining_v2` run launched on 2026-07-12 predates the Reconstruction-MCQ value-mark and certified-
 checkpoint integration. Its fresh final audit can support an individually scoped legacy fixed-target

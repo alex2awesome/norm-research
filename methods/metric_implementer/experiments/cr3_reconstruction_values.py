@@ -34,12 +34,10 @@ from ..recon_channel import (
     mcq_logit_values_from_precomputed_behaviors,
     mcq_value_from_precomputed_behavior,
 )
-
-
 CODEBOOK_SCHEMA = "cr3-reconstruction-codebook-v3"
 PANEL_PLAN_SCHEMA = "cr3-reconstruction-panel-plan-v1"
 PRIOR_CALIBRATION_SCHEMA = "cr3-reconstruction-prior-calibration-v1"
-VALUE_SCHEMA = "cr3-reconstruction-values-v3"
+VALUE_SCHEMA = "cr3-reconstruction-values-v4"
 
 
 class CachedChoiceReconstructor:
@@ -51,7 +49,7 @@ class CachedChoiceReconstructor:
     declared choices, model revision, and protocol, then reuses the first finite row.
     """
 
-    SCHEMA = "cr3-choice-probability-cache-v1"
+    SCHEMA = "cr3-choice-probability-cache-v2"
 
     def __init__(self, backend, path: str | Path, *, model: str, revision: str):
         self.backend = backend
@@ -59,6 +57,9 @@ class CachedChoiceReconstructor:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.model = str(model)
         self.revision = str(revision)
+        self.choice_readout_id = str(getattr(backend, "choice_readout_id", ""))
+        if not self.choice_readout_id:
+            raise ValueError("choice-probability cache requires an explicit backend readout id")
         self.connection = sqlite3.connect(self.path)
         self.connection.execute("PRAGMA journal_mode=WAL")
         self.connection.execute("PRAGMA synchronous=FULL")
@@ -80,6 +81,7 @@ class CachedChoiceReconstructor:
             "schema": self.SCHEMA,
             "model": self.model,
             "revision": self.revision,
+            "choice_readout_id": self.choice_readout_id,
             "prompt": str(prompt),
             "choices": [str(choice) for choice in choices],
             "system": system,
@@ -125,6 +127,19 @@ class CachedChoiceReconstructor:
                 inserts,
             )
             self.connection.commit()
+            # A concurrent worker may have won INSERT OR IGNORE. Reload the committed rows so
+            # every process uses the same first-writer value rather than its private observation.
+            for key in missing_keys:
+                stored = self.connection.execute(
+                    "SELECT probabilities_json FROM choice_rows WHERE cache_key = ?", (key,)
+                ).fetchone()
+                if stored is None:
+                    raise RuntimeError("choice-probability cache commit lost a requested row")
+                values = np.asarray(json.loads(str(stored[0])), float)
+                if (values.shape != (len(choices),) or np.any(~np.isfinite(values))
+                        or np.any(values < 0.0) or values.sum() <= 0.0):
+                    raise RuntimeError("choice-probability cache contains an invalid committed row")
+                self.rows[key] = (values / values.sum()).tolist()
         return [list(self.rows[key]) for key in keys]
 
 
@@ -412,6 +427,7 @@ def score_codebook_panel_priors(
         "panel_plan_sha256": observed_sha,
         "reconstructor_model": str(reconstructor_model),
         "reconstructor_revision": str(reconstructor_revision),
+        "choice_readout_id": str(getattr(reconstructor, "choice_readout_id", "unverified")),
         "noun": str(noun),
         "n_draws": int(n_draws),
         "rows": rows,
@@ -680,6 +696,7 @@ def evaluate_scored_prompt_values(
         "value_name": "annotation-attributable Reconstruction-MCQ target-option lift",
         "value_unit": "probability",
         "value_cap": value_cap,
+        "choice_readout_id": str(getattr(reconstructor, "choice_readout_id", "unverified")),
         "no_demonstration_target_probability": float(no_demo_scores[0]),
         "fixed_no_demo_canonical_choice_probabilities": np.asarray(
             row_details[0]["identification"]["conditions"]["no_demonstrations"][
@@ -735,6 +752,7 @@ def write_value_artifact(path: str | Path, payload: Mapping[str, object], *,
             value_name=np.asarray(payload["value_name"]),
             value_unit=np.asarray(payload["value_unit"]),
             value_cap=np.asarray(payload["value_cap"], float),
+            choice_readout_id=np.asarray(payload["choice_readout_id"]),
             no_demonstration_target_probability=np.asarray(
                 payload["no_demonstration_target_probability"], float),
             fixed_no_demo_canonical_choice_probabilities=np.asarray(
@@ -761,11 +779,16 @@ def load_value_artifact(
     *,
     expected_source_scored_sha256: str | None = None,
     expected_codebook_manifest_sha256: str | None = None,
+    expected_choice_readout_id: str | None = None,
 ) -> dict:
     source = Path(path).resolve()
     z = np.load(source, allow_pickle=True)
     if str(z["schema"]) != VALUE_SCHEMA:
         raise ValueError(f"unexpected value artifact schema in {source}")
+    choice_readout_id = str(z["choice_readout_id"])
+    if (expected_choice_readout_id is not None
+            and choice_readout_id != str(expected_choice_readout_id)):
+        raise ValueError(f"unexpected Reconstruction-MCQ choice readout in {source}")
     source_sha = str(z["source_scored_sha256"])
     codebook_sha = str(z["codebook_manifest_sha256"])
     if expected_source_scored_sha256 is not None and source_sha != expected_source_scored_sha256:
@@ -807,6 +830,7 @@ def load_value_artifact(
         "value_name": str(z["value_name"]),
         "value_unit": str(z["value_unit"]),
         "value_cap": cap,
+        "choice_readout_id": choice_readout_id,
         "no_demonstration_target_probability": no_demo,
         "fixed_no_demo_canonical_choice_probabilities": fixed_no_demo,
         "reconstructor_model": str(z["reconstructor_model"]),

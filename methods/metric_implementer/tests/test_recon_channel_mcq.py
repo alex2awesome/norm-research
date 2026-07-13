@@ -15,6 +15,7 @@ from methods.metric_implementer.recon_channel import (
     _permuted_label_examples,
     mcq_identity_channel,
     mcq_logit_values_from_precomputed_behaviors,
+    mcq_no_demo_choice_probabilities,
     mcq_value_from_precomputed_behavior,
     run_metric,
 )
@@ -89,6 +90,45 @@ def test_option_permutations_are_exactly_counterbalanced_in_complete_blocks():
         positions = [int(np.flatnonzero(p == canonical_option)[0]) for p in permutations]
         assert [positions.count(pos) for pos in range(4)] == [3, 3, 3, 3]
     assert all(sorted(p.tolist()) == [0, 1, 2, 3] for p in permutations)
+
+
+def test_blind_no_demo_query_discloses_no_target_and_canonicalizes_after_scoring():
+    class RecordingPrior:
+        def __init__(self):
+            self.prompts = []
+
+        def score_choices(self, prompts, choices, **_kwargs):
+            self.prompts.extend(prompts)
+            assert choices == ["1", "2", "3", "4"]
+            return [[0.1, 0.2, 0.3, 0.4] for _ in prompts]
+
+    reconstructor = RecordingPrior()
+    descriptions = [
+        "Whether the joke directs criticism upward",
+        "Whether the joke relies on social awkwardness",
+        "Whether the joke uses a surprising reversal",
+        "Whether the joke contains detailed scene setting",
+    ]
+    report = mcq_no_demo_choice_probabilities(
+        reconstructor,
+        noun="joke",
+        option_descriptions=descriptions,
+        n_draws=4,
+    )
+
+    assert len(reconstructor.prompts) == 4
+    for prompt in reconstructor.prompts:
+        lowered = prompt.lower()
+        assert "(no scored examples are provided.)" in lowered
+        assert "target" not in lowered
+        assert "gold" not in lowered
+        assert "correct option" not in lowered
+        assert all(description in prompt for description in descriptions)
+    canonical = np.asarray(report["canonical_choice_probabilities"])
+    for option in range(4):
+        assert sorted(canonical[:, option].tolist()) == pytest.approx([0.1, 0.2, 0.3, 0.4])
+    assert report["canonical_mean_prior"] == pytest.approx([0.25] * 4)
+    assert report["target_probability"] == pytest.approx(0.25)
 
 
 def test_shuffled_label_control_preserves_marginal_but_breaks_pairing():
@@ -339,6 +379,30 @@ def test_precomputed_prompt_value_requires_a_frozen_codebook():
             design_indices=np.arange(8),
             codebook_frozen_before_prompt_search=False,
             n_examples=4,
+        )
+
+
+def test_precomputed_prompt_value_requires_complete_counterbalance_blocks():
+    n = 12
+    with pytest.raises(ValueError, match="positive multiple of option count"):
+        mcq_value_from_precomputed_behavior(
+            _ConditionSensitiveLogitSelector(),
+            noun="story",
+            candidate_prompt_text="candidate",
+            target_metric_id="target",
+            target_description="TARGET criterion",
+            target_scores=np.tile([0.0, 1.0], n // 2),
+            probe_texts=[f"item {i}" for i in range(n)],
+            distractors=[{
+                "metric_id": f"d{i}",
+                "description": f"distractor {i}",
+                "scores": np.roll(np.tile([0.0, 1.0], n // 2), i + 1),
+            } for i in range(3)],
+            design_indices=np.arange(n),
+            codebook_frozen_before_prompt_search=True,
+            n_examples=4,
+            n_reconstruction_draws=5,
+            choice_readout="logits",
         )
 
 

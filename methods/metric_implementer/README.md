@@ -172,6 +172,8 @@ Use `--mcq-choice-readout auto` (default): local vLLM reconstructors use normali
 reconstructors without logprobs use stochastic choices. Use a multiple of `--n-options` for exact position
 counterbalancing. The per-metric JSONL persists the complete design/control/replay artifact, and the driver
 also writes `<task>_<bucket>_mcq_identity_channel.json`.
+This fallback applies to the comparative `run_r2_recovery` measurement only. Bound-grade CR-3 v12 requires
+`--mcq-choice-readout logits` and a backend whose recorded constrained-choice protocol ID matches the run.
 
 ## Executor-indexed prompt certificates and CR-3 (2026-07-12)
 
@@ -197,7 +199,7 @@ all-string result uses the frozen-control cap `1 - q_no_demo(target)`. CR-3 is a
 proposer-process horizon/support scope.
 
 For the primary anchor-free objective, add `--value-mode reconstruction_mcq`. The orchestrator then freezes
-task-level option codebooks from bootstrap behavior before mining, and the worker's `value` stage applies
+task-and-hierarchy-level option codebooks from bootstrap behavior before mining, and the worker's `value` stage applies
 `experiments/cr3_reconstruction_values.py` to every pool/audit prompt. The CR mark is annotation-attributable
 MCQ target-option lift over no-demo/shuffled controls, bounded by the prompt-independent global cap
 `1 - q_no_demo(target)`. Behavior signatures still define capture species. On the deterministic-logit path,
@@ -222,7 +224,7 @@ legacy `recon_channel.py --normalize-options` path is exploratory and always rep
 different, secondary behavioral-replay MI estimand on a fresh lockbox. It is tested and retained for that
 separate experiment, but is deliberately not imported to tighten or relabel the primary v10 certificate.
 
-Use `--mcq-codebook-metrics` to separate the metrics being optimized from a broader frozen task-level
+Use `--mcq-codebook-metrics` to separate the metrics being optimized from a broader frozen task-and-level
 distractor bank. Each bank-only checkpoint contributes one canonical/orbit-averaged executor signature;
 its historical prompts never enter the mining pool. `--reuse-mcq-codebook-root` may hard-link those
 lightweight artifacts after full hash, identity, schema, and executor-namespace validation. This is the
@@ -268,15 +270,16 @@ PYTHONPATH=. pytest -q \
 # adaptive mine-until-bound loop (sk3, one GPU at a time):
 CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr3_mining_loop.py \
   --metrics <..._sigs.npz ...> \
-  --mcq-codebook-metrics <full frozen task-level checkpoint bank ...> \
+  --mcq-codebook-metrics <full frozen task-and-level checkpoint bank ...> \
   --reuse-bootstrap-root <verified-prior-cr3-root> \
   --reuse-mcq-codebook-root <optional prior root with the same candidate bank> \
   --reuse-evidence-root <optional immutable historical evidence store> \
   --value-mode reconstruction_mcq \
   --mcq-reconstructor Qwen/Qwen2.5-14B-Instruct \
   --mcq-choice-readout logits --mcq-value-query-batch-size 512 \
-  --families microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
-  --family-tags phi4 qwen14 llama8 \
+  --families microsoft/phi-4 microsoft/phi-4 Qwen/Qwen2.5-14B-Instruct meta-llama/Llama-3.1-8B-Instruct \
+  --family-tags phi4_atomic phi4_holistic qwen14_atomic llama8_holistic \
+  --family-modes atomic holistic atomic holistic \
   --batch-per-family 150 --confirm-per-family 300 \
   --checkpoint-per-family 300 --checkpoint-iters 0,1,2,4,8 --study-alpha 0.05 \
   --ceiling-horizon-per-family 100 \
@@ -286,7 +289,9 @@ CUDA_VISIBLE_DEVICES=<free> python methods/metric_implementer/experiments/run_cr
 The loop first resolves the substantive hierarchy description and bootstraps the target plus all source
 prompts through the same ordered probe panel and persistent content-addressed executor cache.
 `--reuse-bootstrap-root` may hard-link an existing immutable bootstrap only after revalidating the source
-checkpoint hash, resolved metric identity, probe/executor/readout namespace, and artifact schema.
+checkpoint hash, resolved metric identity, probe/executor/readout namespace, model snapshot, scoring-code
+hashes, and artifact schema. V12 rejects pre-v12 numeric roots rather than migrating them. Historical prompt
+text remains reusable through `--reuse-evidence-root`, where it is re-scored in the current namespace.
 Use aligned `--family-modes` to distinguish `atomic` one-question criteria from `holistic` complete rubrics.
 Repeat a model with distinct tags (for example `phi4_atomic` and `phi4_holistic`) when both modes are
 required; they remain separate C/R strata. An atomic-family plateau cannot be reported as an unrestricted
@@ -305,23 +310,37 @@ stated external `p_min` premise is scientifically defended.
 
 ### Release contract
 
-Existing v10 roots remain frozen and receive no migrator. V11 adds prior-balanced menu construction and
-candidate-only historical evidence reuse, so it always writes a new immutable output root. Every run
+Existing v10/v11 roots remain frozen and receive no migrator. V12 adds total constrained behavior and MCQ
+choice readouts, dual 95%/90% reporting, and task-and-hierarchy-level matched MCQ banks. V11 added
+prior-balanced menu construction and candidate-only historical evidence reuse, so it always writes a new
+immutable output root. Every run
 records exact code SHA-256 values and must resume from the same release overlay; even a whitespace edit is
 intentionally rejected. New runs may hard-link hash-compatible bootstraps and codebook candidates and may
-reuse content-addressed signature/choice caches, but never rewrite an older root. The orchestrator accepts
+reuse only content-addressed caches whose release readout IDs match; old prompt texts may be rescored as
+candidate-only evidence, but v11 signature/choice rows are never relabeled as v12. The orchestrator accepts
 the existing R3 banks for creative writing,
 humor, news homepages, press releases, code review, Math StackExchange, grant funding, peer review, and legal
 outcome prediction. The nonblocking run lock fails immediately when another process owns a root.
 
 In Reconstruction-MCQ mode the unrestricted object uses the frozen no-demonstration control: every finite
-prompt obeys `V_ann <= 1-q_no_demo(target)`. Without additional executor structure, finite prompt queries
+prompt executable by the frozen wrapper obeys `V_ann <= 1-q_no_demo(target)`. Here `q_no_demo` is the exact
+mean over the frozen complete counterbalancing block, not an estimated Bernoulli rate. Without additional executor structure, finite prompt queries
 cannot lower that cap further. `prompt_evolution_status` is issued only from
 never-absorbed checkpoint/final audits and separately reports behavior `SATURATED/UNSATURATED/UNRESOLVED`
 and value `RISING/PLATEAUED/UNRESOLVED`. These are fixed-executor prompt-evolution statuses, not OSL labels.
+`reporting_tiers.primary_95` is the only source of process-evolution `CERTIFIED_*` labels. The same immutable audit is also
+recomputed prospectively at 90% under `reporting_tiers.sensitivity_90`; conclusions unique to that tier are
+spelled `SUGGESTIVE_*` and never overwrite the 95% status. The exact all-prompt frozen-control cap is not
+confidence-tiered.
+The same panel-quality gate also demotes process-value `RISING/PLATEAUED` labels to
+`FORMAL_CERTIFICATE_ONLY` while leaving independent behavioral-coverage labels intact. A statistically
+`UNRESOLVED` value axis stays unresolved; failed panel quality is never counted as resolution. Dry/fake outputs are
+marked `SYNTHETIC_TEST_ONLY` and `publication_eligible=false` in certificates, trajectories, and bank
+summaries.
 The final `mcq_identity_final.json` also reports achieved bank-level `I(J;Jhat)` for the best pool prompt
 per metric and its no-demo/shuffled controls; that companion MI is an achieved reconstruction result, not
-an upper bound.
+an upper bound. Its task records state the R1/R2/R3 level and separately mark the all-panel diagnostic and
+the headline-eligible subset, so weak panels cannot enter a publishable bank summary silently.
 
 For a non-identity orbit/composite target, select and orient one candidate using discovery/calibration data,
 then score it once on an untouched iid item lockbox. Feed those paired hard verdicts to

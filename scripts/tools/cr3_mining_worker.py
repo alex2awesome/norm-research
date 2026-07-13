@@ -38,9 +38,13 @@ from methods.metric_implementer.experiments.cr3_reconstruction_values import (  
 )
 from methods.metric_implementer.recon_channel import _YESNO_TEMPLATE  # noqa: E402
 from methods.metric_implementer.experiments.run_real_test import _load_texts  # noqa: E402
-from methods.metric_implementer.vllm_backend import make_judge_backend, _resolve_model_path  # noqa: E402
+from methods.metric_implementer.vllm_backend import (  # noqa: E402
+    CR3_BINARY_READOUT_ID,
+    make_judge_backend,
+    model_revision_id,
+)
 
-READOUT_ID = "rubric-first-pyes-content-seed-v1"
+READOUT_ID = CR3_BINARY_READOUT_ID
 ATOMIC_PROPOSE_INSTRUCTION = (
     'You are sampling candidate articulations of an evaluation metric.\n'
     'Metric name: "{name}"\n'
@@ -81,10 +85,7 @@ def _sha256_text(text: str) -> str:
 
 
 def _model_revision(model: str) -> str:
-    resolved = Path(_resolve_model_path(model))
-    if resolved.is_dir() and resolved.parent.name == "snapshots":
-        return resolved.name
-    return str(resolved)
+    return model_revision_id(model)
 
 
 def _stable_seed(base_seed: int, attempt_idx: int) -> int:
@@ -297,7 +298,10 @@ def _checked_signature(executor, criterion: str, probes: list[str], max_chars: i
                        namespace_sha256: str) -> np.ndarray:
     prompts = [_YESNO_TEMPLATE.format(rubric=criterion, text=text[:max_chars]) for text in probes]
     seeds = [_score_seed(namespace_sha256, criterion, i) for i in range(len(probes))]
-    raw = np.asarray(executor.score_binary(prompts, pos="YES", neg="NO", seed=seeds), float)
+    raw = np.asarray(
+        executor.score_binary_constrained(prompts, pos="YES", neg="NO", seed=seeds),
+        float,
+    )
     if raw.shape != (len(probes),):
         raise RuntimeError(f"signature shape {raw.shape} != ({len(probes)},)")
     if np.any(~np.isfinite(raw)):
@@ -590,6 +594,11 @@ def stage_value(args) -> None:
             model=args.model,
             revision=revision,
         )
+    expected_readouts = {str(job.get("expected_choice_readout_id", "")) for job in jobs}
+    if len(expected_readouts) != 1 or "" in expected_readouts:
+        raise RuntimeError("value jobs must declare one expected choice readout id")
+    if reconstructor.choice_readout_id not in expected_readouts:
+        raise RuntimeError("value backend does not implement the declared choice readout")
     for job in jobs:
         with open(job["codebook_manifest"], encoding="utf-8") as source:
             codebook = json.load(source)
@@ -644,6 +653,11 @@ def stage_codebook_prior(args) -> None:
             model=args.model,
             revision=revision,
         )
+    expected_readouts = {str(job.get("expected_choice_readout_id", "")) for job in jobs}
+    if len(expected_readouts) != 1 or "" in expected_readouts:
+        raise RuntimeError("prior jobs must declare one expected choice readout id")
+    if reconstructor.choice_readout_id not in expected_readouts:
+        raise RuntimeError("prior backend does not implement the declared choice readout")
     for job in jobs:
         with open(job["panel_plan"], encoding="utf-8") as source:
             plan = json.load(source)
