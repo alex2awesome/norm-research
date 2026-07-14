@@ -1,6 +1,6 @@
 # v13.1 value-bound campaign: live runbook
 
-Last operational snapshot: **2026-07-13 19:40 PDT**.
+Last operational snapshot: **2026-07-13 20:39 PDT**.
 
 ## 19:40 PDT recovery update
 
@@ -53,6 +53,24 @@ completion markers, stopping point, and artifact paths below remain current.
   ssh sk3 'V13_SHARD_IDS=0 V13_DEVICE_OVERRIDE=0 \
     /lfs/skampere3/0/alexspan/cr3-v13.1/scripts/run_v13_llama70_shards_sk3.sh'
   ```
+
+### 20:39 PDT follow-up
+
+- Shards 4 and 5 remain complete. Shards 1 and 2 are constructing on allowed sk3 devices 6 and
+  7. Shard 3 finished all constructor cells, hit the expected pre-fix executor-start failure, and
+  was resumed from its content-addressed cache as PID `3393889` on allowed device 5 through the
+  corrected launcher. Its live environment was verified to contain
+  `CUDA_VISIBLE_DEVICES=5`, `CUDA_DEVICE_ORDER=PCI_BUS_ID`, spawn mode, and the durable `/lfs`
+  home.
+- Shard 0 remains paused with its constructor cache complete. The unrelated codability job still
+  owns device 0, so no shard-0 retry is queued. After shard 3 completes, shard 0 may instead be
+  resumed on device 5 if device 0 is still occupied.
+- The sk2 Llama, Qwen, and Phi lanes remain live. The Llama lane has completed all 35 MCQ metrics
+  and is filling fixed-executor behavioral cells; Qwen and Phi are finishing their last MCQ and
+  constructor metrics. None has a campaign manifest yet.
+- In parallel, v14 is performing CPU-only design preparation. It has no exposed CUDA device and
+  cannot begin a GPU phase until this Tier B run has nine lane manifests, consolidates to exactly
+  280 rows, and is reported.
 
 This note is the durable handoff for the currently running v13.1 campaign. PIDs and row counts
 below are a point-in-time snapshot; the paths, completion markers, restrictions, and monitoring
@@ -164,11 +182,11 @@ completion markers, because channel phases can advance at different rates.
 ```bash
 ssh sk2 'ps -eo user,pid,ppid,etimes,stat,args | rg "run_v13_value_campaign|schedule_v13_tier_b|orchestrate_v13_completion"'
 ssh sk3 'ps -eo user,pid,ppid,etimes,stat,args | rg "run_v13_value_campaign|resume_v13_tier_b"'
-ssh sk3 'nvidia-smi --query-gpu=index,utilization.gpu,memory.used --format=csv,noheader; nvidia-smi pmon -c 1'
 ```
 
 The process command line, owner, and `CUDA_VISIBLE_DEVICES` are more reliable than a process
-name alone. To inspect the assigned device for one of our main PIDs:
+name alone. Do not use a global `nvidia-smi` enumeration on sk3 for this campaign; inspect only a
+known campaign PID's environment. To inspect the assigned device for one of our main PIDs:
 
 ```bash
 ssh sk3 'tr "\000" "\n" </proc/PID/environ | rg "^CUDA_VISIBLE_DEVICES="'

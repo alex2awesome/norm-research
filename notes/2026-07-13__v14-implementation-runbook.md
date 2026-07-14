@@ -3,28 +3,33 @@
 Implementation entry point:
 `methods/metric_implementer/experiments/run_v14_value_campaign.py`.
 
-## Live execution state (2026-07-13 19:56 PDT)
+## Live execution state (2026-07-13 20:39 PDT)
 
 - Staged code root: `/lfs/skampere3/0/alexspan/cr3-v14/code`.
 - Campaign output root: `/lfs/skampere3/0/alexspan/cr3-v14/outputs/campaign`.
 - Source population manifest:
   `/lfs/skampere3/0/alexspan/cr3-v13.1/assets/tier_b/tier_b_metrics.json` (220 raw
   R3 metrics; the v14 design freezes the certified subset).
-- Scientific design code and deterministic panel seed: `5db95c9442f08aed2a664a8ad6d0f7bd2106ffac`.
-  The post-design release code is `bfb17f831ed96d72046836ba5bd046b54a03f512`; its later
-  changes pin launch paths and preregister model fallbacks, and do not change or restart completed
-  scientific design cells.
-- CPU-only certified design construction is running on sk3. At this snapshot 7 of 35 metric
-  design manifests existed and no v14 GPU process had started. Check with:
+- The current scientific release and deterministic panel seed is
+  `3a17d1a6690139216c0e20e35d8fb7b15b6fcffb`. This release reserves one panel-feasible
+  development metric per task before allocating certification quotas. That reservation is
+  required for the metric-level holdout: without it, all four feasible legal metrics were
+  consumed by certification and the seven-task development population was impossible.
+- CPU-only certified design construction is running on sk3, and no v14 GPU process has started.
+  Check with:
 
   ```bash
   ssh sk3 'find /lfs/skampere3/0/alexspan/cr3-v14/outputs/campaign/designs \
     -name design_manifest.json | wc -l'
   ```
 
-- The hard 3--5 label-balance feasibility audit found only three eligible legal metrics under the
-  frozen design seed. The 35-metric quota is therefore legal 3, creative writing 7, and 5 for each of the other
-  five tasks. The design index records all exclusions and the deterministic quota reallocation.
+- The hard 3--5 label-balance feasibility audit found four panel-feasible legal metrics. One is
+  reserved for decoder development, so the 35-metric certification quota is legal 3, creative
+  writing 6, humor 6 (the six required sentinels), and 5 for each of code review, news, peer
+  review, and math. The design index records all exclusions and deterministic quota reallocation.
+- Two prior CPU-only roots are preserved for audit and must not be resumed:
+  `campaign.invalid_pre_freeze_20260713_2015` (sentinel/dev overlap) and
+  `campaign.invalid_no_dev_reserve_20260713_2038` (no feasible seven-task dev holdout).
 - V14 GPU work remains blocked on the verified 280-row v13.1 Tier B consolidation. Tier B is
   currently using only sk3 devices 0, 5, 6, and 7; the V14 wrapper will not be invoked until those
   lanes exit and consolidation succeeds.
