@@ -292,6 +292,12 @@ def length_bucketed_indices(
     return [index for batch_index in batch_order for index in batches[batch_index]]
 
 
+def nonfinite_window_limit(expected_steps: int, maximum_fraction: float) -> int:
+    if expected_steps <= 0 or not 0 < maximum_fraction <= 0.05:
+        raise ValueError("invalid non-finite window limit inputs")
+    return max(1, math.ceil(expected_steps * maximum_fraction))
+
+
 def validate_trainable_scope(model: Any) -> dict[str, Any]:
     trainable = [(name, parameter) for name, parameter in model.named_parameters() if parameter.requires_grad]
     if (
@@ -392,6 +398,7 @@ def train(
     generator.manual_seed(args.seed)
     micro_steps = math.ceil(len(encoded) / args.batch_size)
     expected_steps = math.ceil(micro_steps / args.gradient_accumulation_steps) * args.epochs
+    maximum_nonfinite_windows = nonfinite_window_limit(expected_steps, args.max_nonfinite_fraction)
     step = 0
     attempted_steps = 0
     traces: list[dict[str, Any]] = []
@@ -452,10 +459,11 @@ def train(
                     numerical_quarantine.append(record)
                     print(json.dumps({"numerical_quarantine": record}), flush=True)
                     optimizer.zero_grad(set_to_none=True)
-                    if len(numerical_quarantine) > args.max_nonfinite_windows:
+                    if len(numerical_quarantine) > maximum_nonfinite_windows:
                         raise FloatingPointError(
                             f"non-finite gradient window limit exceeded: "
-                            f"{len(numerical_quarantine)} > {args.max_nonfinite_windows}"
+                            f"{len(numerical_quarantine)} > {maximum_nonfinite_windows} "
+                            f"({args.max_nonfinite_fraction:.3%} of attempted windows)"
                         )
                     window = 0
                     window_loss = 0.0
@@ -497,7 +505,8 @@ def train(
         "attempted_steps": attempted_steps,
         "numerical_quarantine": {
             "skipped_windows": len(numerical_quarantine),
-            "maximum_allowed": args.max_nonfinite_windows,
+            "maximum_allowed": maximum_nonfinite_windows,
+            "maximum_fraction": args.max_nonfinite_fraction,
             "records": numerical_quarantine,
         },
         "loss": {"first": traces[0], "last": traces[-1], "minimum": min(row["mean_microbatch_loss"] for row in traces)},
@@ -529,7 +538,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--weight-decay", type=float, default=0.0)
     parser.add_argument("--max-grad-norm", type=float, default=1.0)
-    parser.add_argument("--max-nonfinite-windows", type=int, default=5)
+    parser.add_argument("--max-nonfinite-fraction", type=float, default=0.01)
     parser.add_argument("--lora-r", type=int, default=16)
     parser.add_argument("--lora-alpha", type=int, default=32)
     parser.add_argument("--lora-dropout", type=float, default=0.05)
@@ -542,6 +551,8 @@ def parse_args() -> argparse.Namespace:
         parser.error("task-local training requires --init-adapter from the pooled level model")
     if args.primary_only and args.auxiliary_only:
         parser.error("choose only one teacher scope")
+    if not 0 < args.max_nonfinite_fraction <= 0.05:
+        parser.error("--max-nonfinite-fraction must be in (0, 0.05]")
     return args
 
 
@@ -589,7 +600,7 @@ def main() -> None:
             "batch_size": args.batch_size,
             "gradient_accumulation_steps": args.gradient_accumulation_steps,
             "learning_rate": args.learning_rate,
-            "max_nonfinite_windows": args.max_nonfinite_windows,
+            "max_nonfinite_fraction": args.max_nonfinite_fraction,
             "max_length": args.max_length,
             "lora_r": args.lora_r,
             "lora_alpha": args.lora_alpha,

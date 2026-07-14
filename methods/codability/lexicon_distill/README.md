@@ -56,10 +56,11 @@ Gemma-4's BF16 backward pass can produce a non-finite gradient on a rare,
 deterministic accumulation window even when the loss is finite. Trainable LoRA
 weights and optimizer state therefore remain FP32. Batches are shuffled in
 length-local buckets, and explicit position IDs make left padding invariant to
-the other prompts in a batch. A fit may quarantine at most five residual
-non-finite windows; every skipped example ID and order view is written into the
-training report, and a sixth event fails the fit. No non-finite update is ever
-applied or silently counted as a completed optimizer step.
+the other prompts in a batch. A fit may quarantine at most 1% of its residual
+non-finite accumulation windows; every skipped example ID and order view is
+written into the training report, and exceeding that scale-aware ceiling fails
+the fit. No non-finite update is ever applied or silently counted as a
+completed optimizer step.
 
 Evaluation reports three-way macro-F1, Cohen's kappa, SAME precision/recall/F1,
 ordinal error, Brier score, calibration, input-order consistency, protocol

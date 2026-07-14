@@ -7,6 +7,7 @@ from methods.codability.lexicon_distill.train_gemma4_similarity_lora import (
     collate,
     label_token_ids,
     length_bucketed_indices,
+    nonfinite_window_limit,
     promote_trainable_parameters_to_fp32,
     read_rows,
 )
@@ -84,6 +85,13 @@ def test_length_bucketed_order_is_complete_deterministic_and_local() -> None:
     for start in range(0, len(first), 4):
         lengths = [len(encoded[index]["input_ids"]) for index in first[start : start + 4]]
         assert max(lengths) - min(lengths) <= 3
+
+
+def test_nonfinite_window_ceiling_scales_with_fit_size() -> None:
+    assert nonfinite_window_limit(9, 0.01) == 1
+    assert nonfinite_window_limit(488, 0.01) == 5
+    assert nonfinite_window_limit(1092, 0.01) == 11
+    assert nonfinite_window_limit(13008, 0.01) == 131
 
 
 def test_only_trainable_parameters_are_promoted_to_fp32() -> None:
