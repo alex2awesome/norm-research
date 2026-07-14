@@ -1506,6 +1506,7 @@ def mcq_logit_values_from_precomputed_behaviors(
     query_batch_size: int = 512,
     fixed_no_demo_canonical_probabilities: np.ndarray | None = None,
     fixed_teaching_panel: bool = False,
+    mcq_prompt_template: str | None = None,
 ) -> list[dict]:
     """Batched deterministic-logit version of the CR-3 MCQ value instrument.
 
@@ -1611,6 +1612,12 @@ def mcq_logit_values_from_precomputed_behaviors(
             ).encode("utf-8")).hexdigest(),
         })
 
+    prompt_template = _RECON_MCQ_LOGITS if mcq_prompt_template is None else str(mcq_prompt_template)
+    required_fields = ("{noun}", "{examples}", "{choices}", "{labels}")
+    if any(field not in prompt_template for field in required_fields):
+        raise ValueError(
+            "mcq_prompt_template must contain {noun}, {examples}, {choices}, and {labels}"
+        )
     query_prompts: list[str] = []
     query_seeds: list[int] = []
     query_specs: list[tuple[int | None, str, int, np.ndarray]] = []
@@ -1619,7 +1626,7 @@ def mcq_logit_values_from_precomputed_behaviors(
         displayed = [option_descriptions[i] for i in permutation]
         choices = "\n".join(f"{i + 1}. {description[:200]}"
                             for i, description in enumerate(displayed))
-        query_prompts.append(_RECON_MCQ_LOGITS.format(
+        query_prompts.append(prompt_template.format(
             noun=noun,
             examples=examples,
             choices=choices,

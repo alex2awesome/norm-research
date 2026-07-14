@@ -23,6 +23,7 @@ import numpy as np
 
 SCHEMA_VERSION = "cr3-evidence-store-v1"
 CANDIDATE_SCHEMA = "cr3-historical-candidate-v1"
+CELL_STORE_SCHEMA = "cr3-evidence-cells-v14"
 
 
 def file_sha256(path: str | Path) -> str:
@@ -37,6 +38,117 @@ def _payload_sha256(payload: object) -> str:
     return hashlib.sha256(json.dumps(
         payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
     ).encode("utf-8")).hexdigest()
+
+
+def evidence_cell_key(kind: str, fields: dict) -> str:
+    """Content key for one immutable v14 induction or rule/probe cell."""
+    return _payload_sha256({
+        "schema": CELL_STORE_SCHEMA,
+        "kind": str(kind),
+        "fields": dict(fields),
+    })
+
+
+class EvidenceCellStore:
+    """Append-only cell cache shared by v14 inductions and executor scoring.
+
+    A held-out vector is intentionally not a cache unit: rule execution is stored one
+    probe at a time so expanding H never invalidates already-scored evidence.
+    """
+
+    def __init__(self, path: str | Path):
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.connection = sqlite3.connect(self.path, timeout=120.0)
+        self.connection.execute("PRAGMA journal_mode=WAL")
+        self.connection.execute("PRAGMA synchronous=FULL")
+        self.connection.execute(
+            "CREATE TABLE IF NOT EXISTS evidence_cells ("
+            "cache_key TEXT PRIMARY KEY, kind TEXT NOT NULL, payload_json TEXT NOT NULL, "
+            "payload_sha256 TEXT NOT NULL) WITHOUT ROWID"
+        )
+        self.connection.commit()
+
+    def close(self) -> None:
+        self.connection.close()
+
+    def __enter__(self) -> "EvidenceCellStore":
+        return self
+
+    def __exit__(self, *_exc) -> None:
+        self.close()
+
+    @staticmethod
+    def induction_key(
+        *, template_sha256: str, decoder_revision: str, arm: str,
+        panel_sha256: str, state: int,
+    ) -> str:
+        return evidence_cell_key("induction", {
+            "template_sha256": str(template_sha256),
+            "decoder_revision": str(decoder_revision),
+            "arm": str(arm),
+            "panel_sha256": str(panel_sha256),
+            "state": int(state),
+        })
+
+    @staticmethod
+    def rule_probe_key(
+        *, rule_sha256: str, probe_sha256: str, executor_revision: str,
+        readout_id: str, execution_template_sha256: str,
+    ) -> str:
+        return evidence_cell_key("rule_probe", {
+            "rule_sha256": str(rule_sha256),
+            "probe_sha256": str(probe_sha256),
+            "executor_revision": str(executor_revision),
+            "readout_id": str(readout_id),
+            "execution_template_sha256": str(execution_template_sha256),
+        })
+
+    def get(self, key: str) -> dict | None:
+        row = self.connection.execute(
+            "SELECT payload_json, payload_sha256 FROM evidence_cells WHERE cache_key=?",
+            (str(key),),
+        ).fetchone()
+        if row is None:
+            return None
+        payload_json, observed_sha = map(str, row)
+        if hashlib.sha256(payload_json.encode("utf-8")).hexdigest() != observed_sha:
+            raise RuntimeError(f"evidence cell checksum mismatch for {key}")
+        payload = json.loads(payload_json)
+        canonical = json.dumps(
+            payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+            allow_nan=False,
+        )
+        if canonical != payload_json:
+            raise RuntimeError(f"evidence cell is not canonical for {key}")
+        return payload
+
+    def put(self, key: str, kind: str, payload: dict) -> dict:
+        payload_dict = dict(payload)
+        payload_json = json.dumps(
+            payload_dict, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+            allow_nan=False,
+        )
+        digest = hashlib.sha256(payload_json.encode("utf-8")).hexdigest()
+        self.connection.execute(
+            "INSERT OR IGNORE INTO evidence_cells"
+            "(cache_key,kind,payload_json,payload_sha256) VALUES (?,?,?,?)",
+            (str(key), str(kind), payload_json, digest),
+        )
+        self.connection.commit()
+        stored = self.get(key)
+        if stored != payload_dict:
+            raise RuntimeError(f"repeated evidence key {key} disagrees for {kind}")
+        return stored
+
+    def count(self, kind: str | None = None) -> int:
+        if kind is None:
+            row = self.connection.execute("SELECT COUNT(*) FROM evidence_cells").fetchone()
+        else:
+            row = self.connection.execute(
+                "SELECT COUNT(*) FROM evidence_cells WHERE kind=?", (str(kind),)
+            ).fetchone()
+        return int(row[0])
 
 
 def _fsync_directory(path: Path) -> None:
