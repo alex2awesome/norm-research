@@ -132,6 +132,10 @@ def main() -> None:
             # the auxiliary-initialized headline fit continues on GPU 0.
             # Keeping both on GPU 0 needlessly serialized the longest jobs.
             training_gpu = 6 if level == "R1" and variant == "primary" else gpu_for_level[level]
+            if level == "R1" and variant == "primary":
+                # Let the much shorter R3 fit establish its adapter before R1
+                # occupies their shared lane for several hours.
+                dependencies = [*dependencies, "pooled_R3_full"]
             jobs.append(
                 {
                     "job_id": job_id,

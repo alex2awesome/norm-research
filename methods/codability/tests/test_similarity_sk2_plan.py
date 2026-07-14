@@ -59,4 +59,4 @@ def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeyp
     assert jobs["pooled_R1_full"]["gpu"] == 0
     assert jobs["pooled_R1_primary"]["gpu"] == 6
     assert jobs["pooled_R1_full"]["depends_on"] == ["pooled_R1_auxiliary"]
-    assert jobs["pooled_R1_primary"]["depends_on"] == ["preflight_R1"]
+    assert jobs["pooled_R1_primary"]["depends_on"] == ["preflight_R1", "pooled_R3_full"]
