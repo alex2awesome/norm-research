@@ -124,10 +124,15 @@ def _probabilities(value: object, context: str) -> dict[str, float]:
 
 
 def _winning_label(probabilities: Mapping[str, float], context: str) -> str:
+    """Return a deterministic, precision-preserving winner.
+
+    BF16 inference can produce exact equal logits.  LABELS is ordered from the
+    least to the most merge-permissive relation, so selecting its first maximum
+    makes an exact tie conservative instead of making a completed inference run
+    unwriteable.
+    """
     maximum = max(probabilities.values())
     winners = [label for label in LABELS if probabilities[label] == maximum]
-    if len(winners) != 1:
-        raise ValueError(f"{context} has no unique winning label")
     return winners[0]
 
 

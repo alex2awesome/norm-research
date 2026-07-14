@@ -93,7 +93,14 @@ def _encode(
 
 
 def _label(probabilities: Mapping[str, float]) -> str:
+    # LABELS is conservative-to-permissive; max() retains the first label on an
+    # exact BF16 tie, matching the persisted contract.
     return max(LABELS, key=lambda label: probabilities[label])
+
+
+def _is_tied_maximum(probabilities: Mapping[str, float]) -> bool:
+    maximum = max(probabilities.values())
+    return sum(value == maximum for value in probabilities.values()) > 1
 
 
 def assemble_outputs(
@@ -212,6 +219,16 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "inputs": {"path": str(inputs_path), "sha256": sha256_file(inputs_path)},
         "outputs": {"path": str(outputs_path), "sha256": sha256_file(outputs_path)},
         "validation": validation,
+        "exact_probability_ties": {
+            "order_views": sum(
+                _is_tied_maximum(output["order_views"][view]["probabilities"])
+                for output in outputs for view in ("ab", "ba")
+            ),
+            "averaged_predictions": sum(
+                _is_tied_maximum(output["probabilities"]) for output in outputs
+            ),
+            "policy": "choose first maximum in DIFFERENT, RELATED, SAME order",
+        },
     }
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
