@@ -1,0 +1,34 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from methods.codability.lexicon_distill import freeze_sk2_jobs
+
+
+def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
+    inventory = tmp_path / "inventory.json"
+    manifest = tmp_path / "manifest.json"
+    inventory.write_text(json.dumps({"powered_cells": []}), encoding="utf-8")
+    manifest.write_text("{}", encoding="utf-8")
+    output = tmp_path / "jobs.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest), "--output", str(output)],
+    )
+    freeze_sk2_jobs.main()
+    plan = json.loads(output.read_text())
+    assert plan["sk3_forbidden"] is True
+    assert "skampere2" in plan["model"]
+    assert all("skampere3" not in " ".join(job["argv"]) for job in plan["jobs"])
+    assert {job["job_id"] for job in plan["jobs"]}.issuperset({"preflight_R1", "preflight_R2", "preflight_R3"})
+    jobs = {job["job_id"]: job for job in plan["jobs"]}
+    # The empty fixture has no auxiliary rows, so the headline adapter is a
+    # direct primary-family fit and no meaningless ablation is scheduled.
+    assert jobs["pooled_R1_full"]["depends_on"] == ["preflight_R1"]
+    assert "--primary-only" in jobs["pooled_R1_full"]["argv"]
+    assert "--init-adapter" not in jobs["pooled_R1_full"]["argv"]
+    batch_index = jobs["pooled_R1_full"]["argv"].index("--batch-size")
+    accumulation_index = jobs["pooled_R1_full"]["argv"].index("--gradient-accumulation-steps")
+    assert jobs["pooled_R1_full"]["argv"][batch_index + 1] == "8"
+    assert jobs["pooled_R1_full"]["argv"][accumulation_index + 1] == "2"
