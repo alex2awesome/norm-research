@@ -15,7 +15,8 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     output = tmp_path / "jobs.json"
     monkeypatch.setattr(
         "sys.argv",
-        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest), "--output", str(output)],
+        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest),
+         "--output", str(output)],
     )
     freeze_sk2_jobs.main()
     plan = json.loads(output.read_text())
@@ -70,7 +71,8 @@ def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeyp
     output = tmp_path / "jobs.json"
     monkeypatch.setattr(
         "sys.argv",
-        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest), "--output", str(output)],
+        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest),
+         "--output", str(output), "--include-r1-auxiliary"],
     )
 
     freeze_sk2_jobs.main()

@@ -48,6 +48,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--repo", default=DEFAULT_REPO)
     parser.add_argument("--python", default=DEFAULT_PYTHON)
     parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument(
+        "--include-r1-auxiliary", action="store_true",
+        help="opt in to the numerically fragile R1 auxiliary curriculum (off by default)",
+    )
     parser.add_argument("--replace", action="store_true")
     return parser.parse_args()
 
@@ -118,14 +122,16 @@ def main() -> None:
             }
         )
         local_train_path = inventory_path.parent / f"{level}_train.jsonl"
-        auxiliary_available = has_auxiliary_targets(local_train_path)
-        auxiliary_by_level[level] = auxiliary_available
+        raw_auxiliary_available = has_auxiliary_targets(local_train_path)
+        auxiliary_available = raw_auxiliary_available and not (
+            level == "R1" and not args.include_r1_auxiliary)
+        auxiliary_by_level[level] = raw_auxiliary_available
         # Auxiliary curricula are ablations, not critical-path dependencies.  R1's much larger
         # primary corpus is independently sufficient and its auxiliary initialization has proved
         # numerically fragile, so downstream work follows the primary-only fit.  Other levels keep
         # the historical full name when no split exists.
         headline_variant_by_level[level] = (
-            "primary" if level == "R1" and auxiliary_available else "full"
+            "primary" if level == "R1" and raw_auxiliary_available else "full"
         )
         variants: list[tuple[str, list[str], list[str]]] = []
         if auxiliary_available:
@@ -156,6 +162,8 @@ def main() -> None:
                     ("primary", ["--primary-only"], [preflight_id]),
                 ]
             )
+        elif raw_auxiliary_available:
+            variants.append(("primary", ["--primary-only"], [preflight_id]))
         else:
             variants.append(("full", ["--primary-only"], [preflight_id]))
         for variant, extra, dependencies in variants:
@@ -181,7 +189,12 @@ def main() -> None:
                     "outputs": [str(adapter / "adapter_model.safetensors"), str(report)],
                 }
             )
-        eval_variants = ("base", "full", "primary") if auxiliary_available else ("base", "full")
+        if auxiliary_available:
+            eval_variants = ("base", "full", "primary")
+        elif raw_auxiliary_available:
+            eval_variants = ("base", "primary")
+        else:
+            eval_variants = ("base", "full")
         for variant in eval_variants:
             job_id = f"eval_{level}_{variant}"
             predictions = run / "predictions" / f"{job_id}.jsonl"
