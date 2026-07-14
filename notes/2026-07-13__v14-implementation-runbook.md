@@ -19,8 +19,14 @@ scripts/run_v14_campaign_sk3.sh 7 ...
 ```
 
 The wrapper rejects every other `sk3` device and takes a per-device process lock before exposing
-CUDA. The Python launcher independently verifies the declared physical IDs. Do not invoke a GPU
-phase directly on `sk3`.
+CUDA. It pins CUDA enumeration to PCI-bus order, forces vLLM workers to use `spawn`, and moves
+`HOME` to durable `/lfs` storage. The Python launcher independently verifies the declared
+physical IDs. Do not invoke a GPU phase directly on `sk3`.
+
+The campaign has a hard **four-GPU total cap across all hosts**. Using sk3 GPUs 0, 5, 6, and 7
+therefore consumes the entire allowance: while those four lanes run, no v14 GPU lane may run on
+sk1 or sk2. This is a cross-host scheduling invariant and cannot be enforced by the per-host
+wrapper alone.
 
 ## Finite execution order
 

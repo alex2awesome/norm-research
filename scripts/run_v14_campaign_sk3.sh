@@ -40,6 +40,9 @@ for gpu in "${physical_ids[@]}"; do
   lock_index=$((lock_index + 1))
 done
 
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+export HOME=/lfs/skampere3/0/alexspan
 export CUDA_VISIBLE_DEVICES="$physical_csv"
 export V14_PHYSICAL_GPUS="$physical_csv"
 
