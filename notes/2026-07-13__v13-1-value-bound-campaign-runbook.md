@@ -29,6 +29,17 @@ completion markers, stopping point, and artifact paths below remain current.
   wrapper may use only devices 0, 5, 6, and 7, and nothing may run on sk1/sk2 while those four v14
   lanes are resident.
 
+### 19:56 PDT follow-up
+
+- Shards 4 and 5 completed successfully. Their manifests triggered the cached shard 1 and shard 2
+  resumes on sk3 devices 6 and 7. At this snapshot the active 70B PIDs were `1441737` (shard 0),
+  `1457789` (shard 3), `1968952` (shard 1), and `1844392` (shard 2), corresponding only to sk3
+  devices 0, 5, 6, and 7.
+- Spawned EngineCore processes also inherit the parent's current directory. The restricted sk3
+  launcher now changes into `/lfs/skampere3/0/alexspan/cr3-v13.1/code` before launching; this
+  prevents an expired AFS current directory from killing a `spawn` worker. The resumed sk2 Llama
+  lane was likewise launched from its `/lfs` code root as PID `1224489`.
+
 This note is the durable handoff for the currently running v13.1 campaign. PIDs and row counts
 below are a point-in-time snapshot; the paths, completion markers, restrictions, and monitoring
 commands are the durable source of truth.
