@@ -174,10 +174,10 @@ def _completion_balance_feasible(
 
 def _eligible_subset(
     teaching_indices: Sequence[int], *, run_sha: str, metric_key: str,
-    trial: int, attempt: int, fraction: float, panel_size: int,
+    trial: int, attempt: int, fraction: float, panel_size: int, target: np.ndarray,
 ) -> list[int]:
     size = max(panel_size, int(round(len(teaching_indices) * float(fraction))))
-    return sorted(
+    ranked = sorted(
         teaching_indices,
         key=lambda index: (
             canonical_sha256({
@@ -186,7 +186,19 @@ def _eligible_subset(
             }),
             int(index),
         ),
-    )[:size]
+    )
+    # Preserve the stable-hash subsample while making the downstream hard 3--5
+    # target balance feasible. This is a deterministic stratified subsample, not
+    # an adaptive retry based on decoder output.
+    required = []
+    for label in (0, 1):
+        label_rows = [index for index in ranked if int(target[int(index)]) == label]
+        if len(label_rows) < 3:
+            raise ValueError("teaching split has fewer than three examples of one target class")
+        required.extend(label_rows[:3])
+    selected = list(dict.fromkeys(required))
+    selected.extend(index for index in ranked if index not in selected)
+    return sorted(selected[:size])
 
 
 def _greedy_panel(
@@ -326,7 +338,7 @@ def build_panel_design(
         for attempt in range(int(max_attempts)):
             eligible = _eligible_subset(
                 teaching, run_sha=str(run_sha), metric_key=str(metric_key), trial=trial,
-                attempt=attempt, fraction=fraction, panel_size=panel_size,
+                attempt=attempt, fraction=fraction, panel_size=panel_size, target=target,
             )
             candidate = _greedy_panel(
                 signatures, int(target_index), eligible, usage, panel_size=panel_size,

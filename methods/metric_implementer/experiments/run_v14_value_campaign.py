@@ -227,18 +227,72 @@ def _design_path(out_root: Path, metric_key: str) -> Path:
     return out_root / "designs" / _safe(metric_key) / "design_manifest.json"
 
 
+def _panel_balance_candidates(
+    entries: Sequence[Mapping[str, object]], *, base: Path, run_sha: str,
+) -> tuple[list[dict], list[dict]]:
+    """Filter metrics whose frozen teaching split cannot meet the hard 3--5 balance."""
+    codebooks: dict[tuple[str, str, str], dict] = {}
+    eligible = []
+    excluded = []
+    for source in entries:
+        row = dict(source)
+        codebook_key = (
+            str(row.get("codebook_path")), str(row.get("assets_root")),
+            str(row.get("codebook_layout") or "production"),
+        )
+        if codebook_key not in codebooks:
+            codebooks[codebook_key] = _load_codebook_for_entry(row, base)
+        codebook = codebooks[codebook_key]
+        metric_key = str(row["metric_key"])
+        target = _bootstrap(codebook["metrics"][metric_key]["bootstrap_path"])
+        target_bits = (np.asarray(target["target"], dtype=float) > 0.5).astype(np.uint8)
+        probe_texts = list(map(str, target["probe_texts"]))
+        split = freeze_probe_split(
+            _probe_ids(probe_texts), run_sha=str(run_sha), metric_key=metric_key,
+        )
+        teaching = np.asarray(split["teaching"]["indices"], dtype=int)
+        yes = int(np.sum(target_bits[teaching]))
+        no = int(len(teaching) - yes)
+        report = {
+            "teaching_yes": yes, "teaching_no": no,
+            "minimum_per_class_required": 3,
+            "eligible": min(yes, no) >= 3,
+        }
+        row["target_entropy_bits"] = _binary_entropy(target_bits)
+        row["v14_panel_balance"] = report
+        (eligible if report["eligible"] else excluded).append(row)
+    return eligible, excluded
+
+
 def build_designs(
     *, metrics_manifest_path: str | Path, out_root: str | Path, run_sha: str,
     metric_keys: Sequence[str] | None = None,
 ) -> list[dict]:
     """CPU-only v14 split/panel freeze over the existing 300-probe assets."""
     manifest, base = load_metrics_manifest(metrics_manifest_path)
-    entries = select_metric_entries(manifest, base)
     requested = None if metric_keys is None else set(map(str, metric_keys))
+    selection_report = None
     if requested is not None:
+        unselected_manifest = {**manifest, "selection": {}}
+        entries = select_metric_entries(unselected_manifest, base)
         entries = [entry for entry in entries if str(entry["metric_key"]) in requested]
         if {str(entry["metric_key"]) for entry in entries} != requested:
             raise ValueError("requested metric key is absent from the selected manifest")
+    elif (manifest.get("selection") or {}).get("mode") == "target_entropy_quintiles":
+        feasible, excluded = _panel_balance_candidates(
+            manifest["metrics"], base=base, run_sha=str(run_sha),
+        )
+        filtered_manifest = {**manifest, "metrics": feasible}
+        entries = select_metric_entries(filtered_manifest, base)
+        selection_report = {
+            "mode": "target_entropy_quintiles_after_hard_panel_balance_filter",
+            "n_eligible": len(feasible), "n_excluded": len(excluded),
+            "excluded": [{
+                "metric_key": row["metric_key"], **row["v14_panel_balance"],
+            } for row in excluded],
+        }
+    else:
+        entries = select_metric_entries(manifest, base)
     out = Path(out_root).resolve()
     results = []
     for entry in entries:
@@ -314,6 +368,8 @@ def build_designs(
             "sha256": row["design_manifest_sha256"],
         } for row in results],
     }
+    if selection_report is not None:
+        index["selection"] = selection_report
     index["index_sha256"] = canonical_sha256(index)
     _atomic_json(out / "design_index.json", index)
     return results
@@ -365,10 +421,11 @@ def prepare_development_population(
     certified = load_designs(certified_out_root)
     certified_keys = [str(row["metric_key"]) for row in certified]
     manifest, base = load_metrics_manifest(dev_metrics_manifest_path)
-    candidates = [dict(row) for row in manifest["metrics"]]
+    candidates, panel_ineligible = _panel_balance_candidates(
+        manifest["metrics"], base=base, run_sha=f"{run_sha}:dev",
+    )
     by_task = {}
     for row in candidates:
-        row["target_entropy_bits"] = _target_entropy_for_entry(row, base)
         by_task.setdefault(str(row["task"]), []).append(row)
     for task_rows in by_task.values():
         ranked = sorted(task_rows, key=lambda row: (
@@ -448,6 +505,9 @@ def prepare_development_population(
         "selected_manifest": str(selected_path),
         "selected_manifest_sha256": file_sha256(selected_path),
         "references": reference_rows,
+        "panel_balance_exclusions": [{
+            "metric_key": row["metric_key"], **row["v14_panel_balance"],
+        } for row in panel_ineligible],
     }
     if not index["metric_level_disjoint"]:
         raise RuntimeError("development and certified metric populations overlap")

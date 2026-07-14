@@ -6,12 +6,26 @@ import numpy as np
 import pytest
 
 from methods.metric_implementer.experiments.v14_panel_design import (
+    _eligible_subset,
     build_panel_design,
     freeze_probe_split,
     identification_diagnostic,
     validate_panel_design,
     validate_probe_split,
 )
+
+
+def test_eligible_subset_is_hash_stable_and_balance_feasible():
+    target = np.zeros(120, dtype=np.uint8)
+    target[[3, 40, 117]] = 1
+    kwargs = dict(
+        teaching_indices=list(range(120)), run_sha="release", metric_key="metric",
+        trial=0, attempt=0, fraction=0.4, panel_size=8, target=target,
+    )
+    first = _eligible_subset(**kwargs)
+    assert first == _eligible_subset(**kwargs)
+    assert len(first) == 48
+    assert int(np.sum(target[first])) >= 3
 
 
 def _fixture():
@@ -62,4 +76,3 @@ def test_identification_entropy_is_explicitly_not_a_behavioral_ceiling():
     result = identification_diagnostic(signatures, range(8), target_index=0)
     assert 0.0 <= result["identification_mi_bits"] <= 8.0
     assert result["scope"] == "identification_only_not_a_behavioral_value_ceiling"
-
