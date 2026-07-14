@@ -173,6 +173,7 @@ def run_evaluation(args: argparse.Namespace) -> None:
                 "level": row["level"],
                 "protocol_id": row["protocol_id"],
                 "split": row["split"],
+                "teacher_families": sorted((row.get("family_distributions") or {}).keys()),
                 "truth": truth,
                 "prediction": prediction,
                 "target_probs": row["target_probs"],
@@ -195,6 +196,15 @@ def run_evaluation(args: argparse.Namespace) -> None:
         protocol: metrics([row for row in predictions if row["protocol_id"] == protocol])
         for protocol in sorted({row["protocol_id"] for row in predictions})
     }
+    by_teacher_family = {
+        family_set: metrics(
+            [
+                row for row in predictions
+                if "+".join(row["teacher_families"]) == family_set
+            ]
+        )
+        for family_set in sorted({"+".join(row["teacher_families"]) for row in predictions})
+    }
     report = {
         "schema_version": "gemma4-similarity-eval-v1",
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -214,6 +224,7 @@ def run_evaluation(args: argparse.Namespace) -> None:
         "by_task": by_task,
         "by_split": by_split,
         "by_protocol": by_protocol,
+        "by_teacher_family": by_teacher_family,
         "predictions": file_ref(prediction_path),
     }
     write_json_new(Path(args.report), report)

@@ -63,5 +63,6 @@ applied or silently counted as a completed optimizer step.
 
 Evaluation reports three-way macro-F1, Cohen's kappa, SAME precision/recall/F1,
 ordinal error, Brier score, calibration, input-order consistency, protocol
-breakdowns, and cold-concept performance. A task adapter is promoted only if
-it clears the predeclared paired-bootstrap and non-regression gates.
+breakdowns, teacher-family breakdowns, and cold-concept performance. A task
+adapter is promoted only if it clears the predeclared paired-bootstrap and
+non-regression gates.
