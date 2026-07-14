@@ -9,6 +9,10 @@ fi
 
 gpu=$1
 shift
+case "$(hostname -s | tr '[:upper:]' '[:lower:]')" in
+  sk2|skampere2|skampere2-*) ;;
+  *) echo "R1 application queue is sk2-only" >&2; exit 1 ;;
+esac
 repo=/lfs/skampere2/0/alexspan/norm-research
 python=/lfs/skampere2/0/alexspan/envs/gemma4-similarity-lora-v1/bin/python
 model=/lfs/skampere2/0/shared_hf_cache/models--google--gemma-4-31b-it/snapshots/518276fb130dc81caf9a4f772e65e63ef2526493
@@ -58,6 +62,28 @@ for task in "$@"; do
       --protocols "$data/protocols.json" --model "$model" --adapter "$adapter" \
       --batch-size 16 --max-length 1024
   fi
+  "$python" - "$inputs" "$outputs" "$scoring" \
+    "$adapter/adapter_model.safetensors" "$data/protocols.json" <<'PY'
+import json, sys
+from pathlib import Path
+from methods.codability.lexicon_distill.hierarchy_contracts import sha256_file, validate_pair_files
+inputs, outputs, report_path, adapter, protocols = map(Path, sys.argv[1:])
+report = json.load(open(report_path))
+validation = validate_pair_files(inputs, outputs)
+expected = {
+    "adapter": (adapter, report["adapter"]["sha256"]),
+    "protocols": (protocols, report["protocols"]["sha256"]),
+    "inputs": (inputs, report["inputs"]["sha256"]),
+    "outputs": (outputs, report["outputs"]["sha256"]),
+}
+for label, (path, recorded) in expected.items():
+    if sha256_file(path) != recorded:
+        raise SystemExit(f"stale R1 scoring {label}: {path}")
+if validation != report["validation"]:
+    raise SystemExit("R1 scoring validation report drift")
+if validation["adapter_sha256"] != sha256_file(adapter):
+    raise SystemExit("R1 score adapter differs from current adapter")
+PY
 
   while [[ ! -f "$calibration" ]]; do sleep 60; done
   "$python" - "$calibration" <<'PY'
@@ -76,5 +102,19 @@ PY
       --pair-outputs "$outputs" --calibration "$calibration" \
       --partition "$partition" --report "$graph"
   fi
+  "$python" - "$cell/nodes.json" "$inputs" "$outputs" "$calibration" \
+    "$partition" "$graph" <<'PY'
+import json, sys
+from pathlib import Path
+from methods.codability.lexicon_distill.hierarchy_contracts import sha256_file
+inventory, inputs, outputs, calibration, partition, graph = map(Path, sys.argv[1:])
+report = json.load(open(graph))
+for key, path in (("inventory", inventory), ("pair_inputs", inputs),
+                  ("pair_outputs", outputs), ("calibration", calibration),
+                  ("partition", partition)):
+    reference = report[key]
+    if Path(reference["path"]).resolve() != path.resolve() or sha256_file(path) != reference["sha256"]:
+        raise SystemExit(f"stale R1 graph {key}: {path}")
+PY
   echo "[$(date -Is)] completed $task/R1"
 done
