@@ -3,6 +3,31 @@
 Implementation entry point:
 `methods/metric_implementer/experiments/run_v14_value_campaign.py`.
 
+## Live execution state (2026-07-13 19:56 PDT)
+
+- Staged code root: `/lfs/skampere3/0/alexspan/cr3-v14/code`.
+- Campaign output root: `/lfs/skampere3/0/alexspan/cr3-v14/outputs/campaign`.
+- Source population manifest:
+  `/lfs/skampere3/0/alexspan/cr3-v13.1/assets/tier_b/tier_b_metrics.json` (220 raw
+  R3 metrics; the v14 design freezes the certified subset).
+- Scientific design code and deterministic panel seed: `5db95c9442f08aed2a664a8ad6d0f7bd2106ffac`.
+  Operational launcher hardening is commit `2406c804adbd4852f32fcf719c741b4866725ea6`;
+  it does not change or restart completed scientific design cells.
+- CPU-only certified design construction is running on sk3. At this snapshot 7 of 35 metric
+  design manifests existed and no v14 GPU process had started. Check with:
+
+  ```bash
+  ssh sk3 'find /lfs/skampere3/0/alexspan/cr3-v14/outputs/campaign/designs \
+    -name design_manifest.json | wc -l'
+  ```
+
+- The hard 3--5 label-balance feasibility audit found only four eligible legal metrics. The
+  frozen 35-metric quota is therefore legal 4, creative writing 6, and 5 for each of the other
+  five tasks. The design index records all exclusions and the deterministic quota reallocation.
+- V14 GPU work remains blocked on the verified 280-row v13.1 Tier B consolidation. Tier B is
+  currently using only sk3 devices 0, 5, 6, and 7; the V14 wrapper will not be invoked until those
+  lanes exit and consolidation succeeds.
+
 The current v13.1 Tier B run remains authoritative and must finish, consolidate to 280 rows,
 stop, and be reported before any v14 GPU phase starts. CPU-only v14 design work may be prepared
 in parallel. The v13 runbook is `notes/2026-07-13__v13-1-value-bound-campaign-runbook.md`.
