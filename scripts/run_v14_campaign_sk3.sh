@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+code_root=$(cd -- "$script_dir/.." && pwd)
+
 if [[ $# -lt 2 ]]; then
   echo "usage: $0 PHYSICAL_GPU_CSV <run_v14_value_campaign arguments...>" >&2
   exit 2
@@ -46,6 +49,8 @@ export HOME=/lfs/skampere3/0/alexspan
 export CUDA_VISIBLE_DEVICES="$physical_csv"
 export V14_PHYSICAL_GPUS="$physical_csv"
 V14_PYTHON=${V14_PYTHON:-/lfs/skampere3/0/alexspan/miniconda3/bin/python}
+export PYTHONPATH="$code_root${PYTHONPATH:+:$PYTHONPATH}"
+cd "$code_root"
 
 exec "$V14_PYTHON" -m methods.metric_implementer.experiments.run_v14_value_campaign \
   --physical-gpus "$physical_csv" "$@"

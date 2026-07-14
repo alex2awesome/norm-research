@@ -22,6 +22,8 @@ The wrapper rejects every other `sk3` device and takes a per-device process lock
 CUDA. It pins CUDA enumeration to PCI-bus order, forces vLLM workers to use `spawn`, and moves
 `HOME` to durable `/lfs` storage. It also uses the pinned sk3 miniconda interpreter because a
 noninteractive sk3 shell has no bare `python` on `PATH`; `V14_PYTHON` may override that path.
+Before spawning vLLM, it changes into its own `/lfs` code root and pins that root on `PYTHONPATH`,
+so an expired AFS working directory cannot poison a spawned EngineCore.
 The Python launcher independently verifies the declared
 physical IDs. Do not invoke a GPU phase directly on `sk3`.
 
