@@ -105,6 +105,11 @@ DEFAULT_DECODER_MODELS = {
     "llama": "meta-llama/Llama-3.3-70B-Instruct",
     "mistral": "mistralai/Mistral-Small-24B-Instruct-2501",
 }
+FALLBACK_DECODER_MODELS = {
+    "qwen": "Qwen/Qwen2.5-32B-Instruct",
+    "llama": "meta-llama/Llama-3.1-8B-Instruct",
+    "mistral": "mistralai/Mistral-7B-Instruct-v0.3",
+}
 
 
 def _safe(value: str) -> str:
@@ -819,8 +824,14 @@ def freeze_production_instrument(
             raise ValueError("qualification spec must be family=primary[,fallback]")
         family, paths = spec.split("=", 1)
         candidates = paths.split(",")
+        if family not in DEFAULT_DECODER_MODELS or not 1 <= len(candidates) <= 2:
+            raise ValueError("qualification spec has an undeclared family or model count")
         primary = json.loads(Path(candidates[0]).read_text())
         fallback = json.loads(Path(candidates[1]).read_text()) if len(candidates) > 1 else None
+        if str(primary.get("model")) != DEFAULT_DECODER_MODELS[family]:
+            raise ValueError(f"{family} primary qualification uses an undeclared model")
+        if fallback is not None and str(fallback.get("model")) != FALLBACK_DECODER_MODELS[family]:
+            raise ValueError(f"{family} fallback qualification uses an undeclared model")
         selections.append(choose_qualified_decoder(
             family=family, primary=primary, fallback=fallback,
         ))

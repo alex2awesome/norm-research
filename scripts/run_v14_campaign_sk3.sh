@@ -50,7 +50,7 @@ export HF_HOME=/lfs/skampere3/0/alexspan/.cache/huggingface
 export METRIC_IMPLEMENTER_LFS_HOME=/lfs/skampere3/0/alexspan
 export CUDA_VISIBLE_DEVICES="$physical_csv"
 export V14_PHYSICAL_GPUS="$physical_csv"
-export V14_MODEL_PATH_OVERRIDES_JSON=${V14_MODEL_PATH_OVERRIDES_JSON:-'{"meta-llama/Llama-3.3-70B-Instruct":"/lfs/skampere3/0/shared_hf_cache/hub/models--meta-llama--Llama-3.3-70B-Instruct/snapshots/6f6073b423013f6a7d4d9f39144961bfbfbc386b","mistralai/Mistral-Small-24B-Instruct-2501":"/lfs/skampere3/0/shared_hf_cache/hub/models--mistralai--Mistral-Small-24B-Instruct-2501/snapshots/9527884be6e5616bdd54de542f9ae13384489724"}'}
+export V14_MODEL_PATH_OVERRIDES_JSON=${V14_MODEL_PATH_OVERRIDES_JSON:-'{"meta-llama/Llama-3.3-70B-Instruct":"/lfs/skampere3/0/shared_hf_cache/hub/models--meta-llama--Llama-3.3-70B-Instruct/snapshots/6f6073b423013f6a7d4d9f39144961bfbfbc386b","mistralai/Mistral-Small-24B-Instruct-2501":"/lfs/skampere3/0/shared_hf_cache/hub/models--mistralai--Mistral-Small-24B-Instruct-2501/snapshots/9527884be6e5616bdd54de542f9ae13384489724","Qwen/Qwen2.5-32B-Instruct":"/lfs/skampere3/0/shared_hf_cache/hub/models--Qwen--Qwen2.5-32B-Instruct/snapshots/5ede1c97bbab6ce5cda5812749b4c0bdf79b18dd","mistralai/Mistral-7B-Instruct-v0.3":"/lfs/skampere3/0/shared_hf_cache/hub/models--mistralai--Mistral-7B-Instruct-v0.3/snapshots/c170c708c41dac9275d15a8fff4eca08d52bab71"}'}
 V14_PYTHON=${V14_PYTHON:-/lfs/skampere3/0/alexspan/miniconda3/bin/python}
 export PYTHONPATH="$code_root${PYTHONPATH:+:$PYTHONPATH}"
 cd "$code_root"

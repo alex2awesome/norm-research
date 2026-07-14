@@ -80,6 +80,14 @@ Set `ROOT` to a new immutable v14 output root, `CERTIFIED` to the 35-metric brea
    then the fixed executor once. If it fails, run exactly the declared same-lineage fallback once;
    never search additional models.
 
+   The frozen primary → fallback pairs are:
+
+   - Qwen2.5-14B-Instruct → Qwen2.5-32B-Instruct.
+   - Llama-3.3-70B-Instruct → Llama-3.1-8B-Instruct.
+   - Mistral-Small-24B-Instruct-2501 → Mistral-7B-Instruct-v0.3.
+
+   Qualification freeze rejects any other model path or more than one fallback.
+
 3. Run exactly three bounded tuning jobs: MCQ, behavioral unconstrained, and behavioral
    no-verbatim. Each has eight candidates per round and at most four rounds. The implementation
    batches a full round by resident model and stops on the preregistered gain/transfer/residual
