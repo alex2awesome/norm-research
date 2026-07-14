@@ -3,7 +3,12 @@ import json
 
 import pytest
 
-from methods.codability.lexicon_distill.frontier_calibration import assemble, prepare
+from methods.codability.lexicon_distill.frontier_calibration import (
+    assemble,
+    prepare,
+    prepare_disagreements,
+    run_judge,
+)
 from methods.codability.lexicon_distill.hierarchy_contracts import PAIR_INPUT_SCHEMA, PAIR_OUTPUT_SCHEMA, pair_input_sha256
 
 
@@ -78,3 +83,55 @@ def test_frontier_panel_rejects_same_judge_artifact(tmp_path):
         assemble(manifest_path=out / "manifest.json", votes_a_path=votes, votes_b_path=votes,
                  tiebreak_votes_path=None, predictions_path=out / "dev.jsonl",
                  report_path=out / "assembly.json")
+
+
+def test_openrouter_judge_resumes_under_cap_and_stages_only_disagreements(tmp_path, monkeypatch):
+    inputs, outputs, protocol = _files(tmp_path)
+    panel = tmp_path / "panel"
+    prepare(pair_inputs_path=inputs, pair_outputs_path=outputs,
+            protocol_path=protocol, output_dir=panel, per_shard=1)
+    api_key = tmp_path / "key.txt"
+    api_key.write_text("test-secret")
+    calls = []
+
+    def fake_completion(**kwargs):
+        batch = json.loads(kwargs["messages"][1]["content"])
+        assert all(set(row) == {"pair_id", "task", "level", "concept_a", "concept_b"}
+                   for row in batch)
+        calls.append(batch)
+        return json.dumps({"decisions": [
+            {"pair_id": row["pair_id"], "score": int(row["pair_id"][-1])}
+            for row in batch
+        ]})
+
+    from scripts.tools.silver_match_v3 import adjudicate_gemma_api
+    monkeypatch.setattr(adjudicate_gemma_api, "chat_completion", fake_completion)
+    judge_dir = tmp_path / "sonnet"
+    first = run_judge(
+        manifest_path=panel / "manifest.json", output_dir=judge_dir,
+        model="anthropic/claude-sonnet-test", api_key_file=api_key, request_cap=1)
+    assert first["complete"] is False and first["n_votes"] == 1
+    second = run_judge(
+        manifest_path=panel / "manifest.json", output_dir=judge_dir,
+        model="anthropic/claude-sonnet-test", api_key_file=api_key, request_cap=2)
+    assert second["complete"] is True and second["requests_made_this_run"] == 2
+    assert len(calls) == 3 and len(second["raw_transcript_sha256"]) == 3
+
+    votes_a = [json.loads(line) for line in (judge_dir / "votes.jsonl").read_text().splitlines()]
+    votes_b = tmp_path / "gpt5_votes.jsonl"
+    changed = [{**row, "score": ((row["score"] + 1) % 3 if index == 0 else row["score"])}
+               for index, row in enumerate(votes_a)]
+    _write(votes_b, changed)
+    tie_panel = tmp_path / "tiebreak"
+    tie_manifest = prepare_disagreements(
+        manifest_path=panel / "manifest.json", votes_a_path=judge_dir / "votes.jsonl",
+        votes_b_path=votes_b, output_dir=tie_panel, per_shard=1)
+    assert tie_manifest["n_pairs"] == 1
+    tie_rows = [json.loads(line) for line in (tie_panel / "audit.jsonl").read_text().splitlines()]
+    assert [row["pair_id"] for row in tie_rows] == [votes_a[0]["pair_id"]]
+    assert all("prediction" not in row and "probabilities" not in row for row in tie_rows)
+
+    tie_result = run_judge(
+        manifest_path=tie_panel / "manifest.json", output_dir=tmp_path / "third",
+        model="openai/gpt-5-test", api_key_file=api_key, request_cap=1)
+    assert tie_result["complete"] is True and tie_result["n_votes"] == 1
