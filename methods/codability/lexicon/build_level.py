@@ -25,6 +25,7 @@ import math
 import os
 import random
 import re
+import tempfile
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
@@ -47,6 +48,15 @@ RELATIONS = {
            "Two themes share the SAME TOP-LEVEL CATEGORY — the coarsest grouping the domain uses."),
 }
 PREV = {"R1": "L0v2", "R2": "R1", "R3": "R2"}
+_PARENT_MANIFEST_FIELDS = (
+    "parent_partition_path", "parent_partition_sha256",
+    "parent_names_path", "parent_names_sha256",
+)
+_CANONICAL_PARTITION_RE = re.compile(r"^partition_.+_(?:L0v\d+|R[123])\.json$")
+
+
+class LevelManifestError(RuntimeError):
+    pass
 
 
 def _h(*p: str) -> str:
@@ -66,11 +76,67 @@ def _file_sha256(path: str) -> str:
     return h.hexdigest()
 
 
+def _atomic_json_write(path: str, payload) -> None:
+    """Replace a JSON artifact atomically; never expose a half-written lineage file."""
+    directory = os.path.dirname(os.path.abspath(path))
+    os.makedirs(directory, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=f".{os.path.basename(path)}.", dir=directory)
+    try:
+        with os.fdopen(fd, "w") as fh:
+            json.dump(payload, fh, indent=1)
+            fh.write("\n")
+        os.replace(temporary, path)
+    except BaseException:
+        try:
+            os.remove(temporary)
+        except FileNotFoundError:
+            pass
+        raise
+
+
+def _manifest_path(task: str, level: str) -> str:
+    if level not in PREV:
+        raise ValueError(f"unknown hierarchy level: {level!r}")
+    return os.path.join(OUT, f"level_manifest_{task}_{level}.json")
+
+
+def _canonical_partition_path(task: str, level: str) -> str:
+    if level not in PREV:
+        raise ValueError(f"unknown hierarchy level: {level!r}")
+    return os.path.join(OUT, f"partition_{task}_{level}.json")
+
+
+def _candidate_output_path(task: str, level: str, output_path: str) -> str:
+    """Accept only an explicit, non-canonical candidate destination."""
+    if not output_path or not str(output_path).strip():
+        raise ValueError("an explicit non-canonical output_path is required")
+    destination = os.fspath(output_path)
+    canonical = _canonical_partition_path(task, level)
+    if (_CANONICAL_PARTITION_RE.fullmatch(os.path.basename(destination))
+            or os.path.realpath(destination) == os.path.realpath(canonical)):
+        raise ValueError(
+            f"refusing to write a build directly to canonical-looking destination {destination!r}; "
+            "write an immutable candidate name, then use promote_partition/partition-promote")
+    return destination
+
+
+def _validate_manifest_identity(manifest: dict, task: str, level: str) -> None:
+    if manifest.get("task", task) != task or manifest.get("level", level) != level:
+        raise LevelManifestError(
+            f"[{task}/{level}] manifest identity disagrees with its filename: "
+            f"task={manifest.get('task')!r}, level={manifest.get('level')!r}")
+
+
 def _parent_partition(task: str, level: str) -> tuple[str, str]:
     """Exact parent partition path/hash, frozen by a level manifest when available."""
-    manifest_path = os.path.join(OUT, f"level_manifest_{task}_{level}.json")
+    manifest_path = _manifest_path(task, level)
     manifest = json.load(open(manifest_path)) if os.path.exists(manifest_path) else {}
+    _validate_manifest_identity(manifest, task, level)
     path = manifest.get("parent_partition_path")
+    frozen_digest = manifest.get("parent_partition_sha256")
+    if bool(path) != bool(frozen_digest):
+        raise LevelManifestError(
+            f"[{task}/{level}] parent partition pin is partial; path and sha256 are both required")
     if path and not os.path.isabs(path):
         path = os.path.join(ROOT, path)
     if not path:
@@ -81,7 +147,6 @@ def _parent_partition(task: str, level: str) -> tuple[str, str]:
         else:
             path = os.path.join(OUT, f"partition_{task}_{prev}.json")
     digest = _file_sha256(path)
-    frozen_digest = manifest.get("parent_partition_sha256")
     if frozen_digest and frozen_digest != digest:
         raise RuntimeError(f"[{task}/{level}] frozen parent partition changed on disk: {path}")
     return path, digest
@@ -105,35 +170,47 @@ def _default_parent_names(task: str, level: str, parent_path: str) -> str:
 
 
 def _parent_names(task: str, level: str, parent_path: str) -> tuple[str, str]:
-    manifest_path = os.path.join(OUT, f"level_manifest_{task}_{level}.json")
+    manifest_path = _manifest_path(task, level)
     manifest = json.load(open(manifest_path)) if os.path.exists(manifest_path) else {}
+    _validate_manifest_identity(manifest, task, level)
     path = manifest.get("parent_names_path")
+    frozen = manifest.get("parent_names_sha256")
+    if bool(path) != bool(frozen):
+        raise LevelManifestError(
+            f"[{task}/{level}] parent names pin is partial; path and sha256 are both required")
     if path and not os.path.isabs(path):
         path = os.path.join(ROOT, path)
     path = path or _default_parent_names(task, level, parent_path)
     digest = _file_sha256(path)
-    frozen = manifest.get("parent_names_sha256")
     if frozen and frozen != digest:
         raise RuntimeError(f"[{task}/{level}] frozen parent semantic names changed on disk: {path}")
     return path, digest
 
 
 def _freeze_parent_for_new_build(task: str, level: str) -> None:
-    """Resolve "latest" once at build creation, then freeze its path/hash in the manifest."""
-    manifest_path = os.path.join(OUT, f"level_manifest_{task}_{level}.json")
+    """Freeze the complete L0->parent lineage before creating a build at ``level``."""
+    if level not in PREV:
+        raise ValueError(f"unknown hierarchy level: {level!r}")
+    previous = PREV[level]
+    if previous in PREV:
+        _freeze_parent_for_new_build(task, previous)
+
+    manifest_path = _manifest_path(task, level)
     manifest = json.load(open(manifest_path)) if os.path.exists(manifest_path) else {
         "task": task, "level": level}
-    if manifest.get("parent_partition_path"):
-        parent, _ = _parent_partition(task, level)
-        names, names_digest = _parent_names(task, level, parent)
-        if not manifest.get("parent_names_path"):
-            manifest.update(parent_names_path=os.path.relpath(names, ROOT),
-                            parent_names_sha256=names_digest)
-            with open(manifest_path, "w") as fh:
-                json.dump(manifest, fh, indent=1)
-        return
-    prev = PREV[level]
-    if prev == "L0v2":
+    _validate_manifest_identity(manifest, task, level)
+    manifest.setdefault("task", task)
+    manifest.setdefault("level", level)
+
+    parent_path_present = bool(manifest.get("parent_partition_path"))
+    parent_hash_present = bool(manifest.get("parent_partition_sha256"))
+    if parent_path_present != parent_hash_present:
+        raise LevelManifestError(
+            f"[{task}/{level}] refusing to complete a partial parent partition pin; "
+            "path and sha256 must be created together")
+    if parent_path_present:
+        parent, parent_digest = _parent_partition(task, level)
+    elif previous == "L0v2":
         versions = []
         for path in glob.glob(os.path.join(OUT, f"partition_{task}_L0v*.json")):
             m = re.search(r"_L0v(\d+)\.json$", path)
@@ -142,24 +219,49 @@ def _freeze_parent_for_new_build(task: str, level: str) -> None:
         if not versions:
             raise FileNotFoundError(f"no L0vN parent exists for {task}/{level}")
         parent = max(versions)[1]
+        parent_digest = _file_sha256(parent)
     else:
-        parent = os.path.join(OUT, f"partition_{task}_{prev}.json")
-    names = _default_parent_names(task, level, parent)
-    manifest.update(parent_partition_path=os.path.relpath(parent, ROOT),
-                    parent_partition_sha256=_file_sha256(parent),
-                    parent_names_path=os.path.relpath(names, ROOT),
-                    parent_names_sha256=_file_sha256(names))
-    with open(manifest_path, "w") as fh:
-        json.dump(manifest, fh, indent=1)
+        parent = _canonical_partition_path(task, previous)
+        parent_digest = _file_sha256(parent)
+
+    names_path_present = bool(manifest.get("parent_names_path"))
+    names_hash_present = bool(manifest.get("parent_names_sha256"))
+    if names_path_present != names_hash_present:
+        raise LevelManifestError(
+            f"[{task}/{level}] refusing to complete a partial parent names pin; "
+            "path and sha256 must be created together")
+    if names_path_present:
+        names, names_digest = _parent_names(task, level, parent)
+    else:
+        names = _default_parent_names(task, level, parent)
+        names_digest = _file_sha256(names)
+
+    updated = dict(manifest)
+    updated.update(parent_partition_path=os.path.relpath(parent, ROOT),
+                   parent_partition_sha256=parent_digest,
+                   parent_names_path=os.path.relpath(names, ROOT),
+                   parent_names_sha256=names_digest)
+    if updated != manifest:
+        _atomic_json_write(manifest_path, updated)
+    _validate_level_manifest(task, level, require_frozen_parent=True)
 
 
-def _validate_level_manifest(task: str, level: str) -> None:
-    manifest_path = os.path.join(OUT, f"level_manifest_{task}_{level}.json")
+def _validate_level_manifest(task: str, level: str, *,
+                             require_frozen_parent: bool = True) -> None:
+    manifest_path = _manifest_path(task, level)
     if not os.path.exists(manifest_path):
+        if require_frozen_parent:
+            raise LevelManifestError(
+                f"[{task}/{level}] no level manifest; freeze lineage before reading or building")
         return
     manifest = json.load(open(manifest_path))
+    _validate_manifest_identity(manifest, task, level)
+    missing = [field for field in _PARENT_MANIFEST_FIELDS if not manifest.get(field)]
+    if require_frozen_parent and missing:
+        raise LevelManifestError(
+            f"[{task}/{level}] manifest does not fully freeze its parent; missing={missing}")
     parent, _ = _parent_partition(task, level)
-    if manifest.get("parent_names_path") or manifest.get("parent_names_sha256"):
+    if require_frozen_parent or manifest.get("parent_names_path") or manifest.get("parent_names_sha256"):
         _parent_names(task, level, parent)
     eval_rel, eval_hash = manifest.get("eval_path"), manifest.get("eval_sha256")
     if eval_rel and eval_hash:
@@ -174,19 +276,22 @@ def _validate_level_manifest(task: str, level: str) -> None:
         if _file_sha256(protocol_path) != protocol_hash:
             raise RuntimeError(f"[{task}/{level}] frozen verify protocol changed on disk: "
                                f"{protocol_path}")
+    previous = PREV[level]
+    if require_frozen_parent and previous in PREV:
+        _validate_level_manifest(task, previous, require_frozen_parent=True)
 
 
 def _update_level_manifest(task: str, level: str, **fields) -> None:
-    path = os.path.join(OUT, f"level_manifest_{task}_{level}.json")
-    manifest = json.load(open(path)) if os.path.exists(path) else {"task": task, "level": level}
+    path = _manifest_path(task, level)
+    _validate_level_manifest(task, level, require_frozen_parent=True)
+    manifest = json.load(open(path))
     parent, digest = _parent_partition(task, level)
     names, names_digest = _parent_names(task, level, parent)
     manifest.update(parent_partition_path=os.path.relpath(parent, ROOT),
                     parent_partition_sha256=digest,
                     parent_names_path=os.path.relpath(names, ROOT),
                     parent_names_sha256=names_digest, **fields)
-    with open(path, "w") as fh:
-        json.dump(manifest, fh, indent=1)
+    _atomic_json_write(path, manifest)
 
 
 def _validate_semantic_nodes(task: str, level: str, nodes: List[dict]) -> None:
@@ -205,6 +310,7 @@ def _validate_semantic_nodes(task: str, level: str, nodes: List[dict]) -> None:
 def nodes_from_level(task: str, level: str) -> Tuple[List[dict], Dict[str, set]]:
     """Return (nodes, node->original-keys). nodes = [{node_id,name,gloss}] = the GROUPS of the
     previous level, named. Composes keys down to L0 rubric items for later census."""
+    _validate_level_manifest(task, level, require_frozen_parent=True)
     prev = PREV[level]
     if prev == "L0v2":
         # Use the manifest-frozen parent when present; legacy builds retain their historical v3->v2
@@ -282,9 +388,11 @@ def emit_group_payloads(task: str, level: str, per_bucket: int = 1) -> int:
     return n
 
 
-def ingest_groups(task: str, level: str) -> Dict[str, str]:
+def ingest_groups(task: str, level: str, *, output_path: str) -> Dict[str, str]:
     """Proposer outputs -> P_{level} (node_id -> group_id). Buckets are non-overlapping, so each
-    node appears in exactly one bucket's groups -> one group. Unassigned nodes become singletons."""
+    node appears in exactly one bucket's groups -> one group. Unassigned nodes become singletons.
+    This always writes an immutable candidate; canonical replacement is promotion-only."""
+    destination = _candidate_output_path(task, level, output_path)
     nodes, _ = nodes_from_level(task, level)
     ids = [n["node_id"] for n in nodes]
     assign: Dict[str, str] = {}
@@ -303,7 +411,7 @@ def ingest_groups(task: str, level: str) -> Dict[str, str]:
                         assign[nid] = f"{task}_{level}_g{bi}_{gi}"
     for nid in ids:
         assign.setdefault(nid, f"{task}_{level}_solo_{nid}")
-    json.dump(assign, open(os.path.join(OUT, f"partition_{task}_{level}.json"), "w"))
+    _atomic_json_write(destination, assign)
     ng = len(set(assign.values()))
     print(f"[{task}/{level}] grouped {len(ids)} nodes -> {ng} {RELATIONS[level][0]} groups "
           f"(collapse {len(ids)}->{ng}, {100*(1-ng/len(ids)):.0f}%)")
@@ -752,7 +860,7 @@ class AnchorGateFailure(RuntimeError):
 def apply_pairwise(task: str, level: str, pos_gate: float = 0.8, neg_gate: float = 0.9,
                    exclude_from_gate=None, *, resolution: float = 1.0,
                    related_weight: float = 0.0,
-                   output_path: str | None = None) -> dict:
+                   output_path: str) -> dict:
     """Verified node pairs -> weighted LOUVAIN community detection over the node graph.
 
     Score-2 SAME pairs always have weight 1.  By default score-1 RELATED pairs are absent, exactly
@@ -760,8 +868,9 @@ def apply_pairwise(task: str, level: str, pos_gate: float = 0.8, neg_gate: float
     judgments only as weaker community-structure evidence; it does not relabel them SAME.  This is
     useful when a sparse hard-edge graph cannot recover held-out members of otherwise coherent
     constructs.  Any such candidate still has to pass the independent global LLM precision audit
-    and whole-group certification gates. Writes partition_<task>_<level>.json unless an explicit
-    candidate ``output_path`` is supplied.
+    and whole-group certification gates. ``output_path`` is required and must be an immutable,
+    non-canonical candidate name. Canonical replacement is available only through
+    :func:`promote_partition`.
 
     exclude_from_gate: optional set of anchor pair_ids to drop from the GATE's accuracy/coverage
     math only (e.g. a disputed gold label, confirmed by independent multi-judge agreement to be a
@@ -789,7 +898,8 @@ def apply_pairwise(task: str, level: str, pos_gate: float = 0.8, neg_gate: float
         edge regardless of gate outcome.
     (3) Div-by-zero guard if a level ever has 0 nodes.
     """
-    _validate_level_manifest(task, level)
+    destination = _candidate_output_path(task, level, output_path)
+    _validate_level_manifest(task, level, require_frozen_parent=True)
     nodes, _ = nodes_from_level(task, level)
     ids = [n["node_id"] for n in nodes]
     pay = {}
@@ -937,9 +1047,7 @@ def apply_pairwise(task: str, level: str, pos_gate: float = 0.8, neg_gate: float
             G, seed=0, resolution=resolution, weight="weight")):
         for nd in comm:
             group[nd] = f"{task}_{level}_g{i}"
-    destination = output_path or os.path.join(OUT, f"partition_{task}_{level}.json")
-    with open(destination, "w") as fh:
-        json.dump(group, fh)
+    _atomic_json_write(destination, group)
     ng = len(set(group.values()))
     collapse = round(1 - ng / len(ids), 3) if ids else None
     pct = f"{100 * (1 - ng / len(ids)):.0f}%" if ids else "n/a"
@@ -952,6 +1060,63 @@ def apply_pairwise(task: str, level: str, pos_gate: float = 0.8, neg_gate: float
             "resolution": resolution, "partition_path": destination,
             "anchor_pos_acc": round(pos_acc, 3) if pos_acc is not None else None,
             "anchor_neg_acc": round(neg_acc, 3) if neg_acc is not None else None}
+
+
+def promote_partition(task: str, level: str, candidate_path: str, *,
+                      replace: bool = False) -> dict:
+    """Validate and atomically promote one immutable candidate to the canonical partition.
+
+    Replacing a different canonical partition requires ``replace=True`` and automatically banks the
+    old file under a content-addressed ``precanon`` name. Direct builders cannot use this path.
+    """
+    _validate_level_manifest(task, level, require_frozen_parent=True)
+    candidate_path = _candidate_output_path(task, level, candidate_path)
+    if not os.path.isfile(candidate_path):
+        raise FileNotFoundError(candidate_path)
+    candidate = _load_partition(candidate_path)
+    nodes, _ = nodes_from_level(task, level)
+    expected = {n["node_id"] for n in nodes}
+    missing = sorted(expected - set(candidate))
+    extra = sorted(set(candidate) - expected)
+    if missing or extra:
+        raise ValueError(
+            f"[{task}/{level}] candidate node inventory mismatch: missing={len(missing)}, "
+            f"extra={len(extra)}, missing_sample={missing[:5]}, extra_sample={extra[:5]}")
+    if not all(isinstance(group_id, str) and group_id.strip() for group_id in candidate.values()):
+        raise ValueError(f"[{task}/{level}] every promoted node needs a non-empty string group id")
+
+    canonical = _canonical_partition_path(task, level)
+    candidate_digest = _file_sha256(candidate_path)
+    prior_digest = _file_sha256(canonical) if os.path.exists(canonical) else None
+    prior = _load_partition(canonical) if prior_digest else None
+    replacing_different_content = prior is not None and prior != candidate
+    backup_path = None
+    if replacing_different_content:
+        if not replace:
+            raise FileExistsError(
+                f"[{task}/{level}] canonical partition already exists with different content; "
+                "pass replace=True/--replace-canonical for an intentional, backed-up promotion")
+        backup_path = os.path.join(
+            OUT, f"partition_{task}_{level}_precanon_{prior_digest[:12]}.json")
+        if not os.path.exists(backup_path):
+            _atomic_json_write(backup_path, prior)
+
+    _atomic_json_write(canonical, candidate)
+    canonical_digest = _file_sha256(canonical)
+    _update_level_manifest(
+        task, level,
+        canonical_partition_path=os.path.relpath(canonical, ROOT),
+        canonical_partition_sha256=canonical_digest,
+        promoted_from_path=os.path.relpath(os.path.abspath(candidate_path), ROOT),
+        promoted_from_sha256=candidate_digest,
+        previous_canonical_partition_sha256=prior_digest,
+        previous_canonical_backup_path=(os.path.relpath(backup_path, ROOT)
+                                            if backup_path else None),
+    )
+    return {"task": task, "level": level, "candidate_path": candidate_path,
+            "candidate_sha256": candidate_digest, "canonical_path": canonical,
+            "canonical_sha256": canonical_digest, "replaced": replacing_different_content,
+            "backup_path": backup_path}
 
 
 def bucket_ceiling(task: str, level: str) -> dict:
@@ -1010,13 +1175,16 @@ def write_protocols():
 if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["protocols", "group-emit", "group-ingest", "eval-emit",
-                                    "arb-emit", "pairwise-apply", "score"])
+    ap.add_argument("cmd", choices=["protocols", "lineage-freeze", "group-emit", "group-ingest",
+                                    "eval-emit", "arb-emit", "pairwise-apply",
+                                    "partition-promote", "score"])
     ap.add_argument("--task"); ap.add_argument("--level", default="R1")
     ap.add_argument("--resolution", type=float, default=1.0)
     ap.add_argument("--related-weight", type=float, default=0.0)
     ap.add_argument("--output-path")
     ap.add_argument("--partition-path")
+    ap.add_argument("--replace-canonical", action="store_true",
+                    help="partition-promote only: bank and replace a different canonical file")
     ap.add_argument("--arbiter-vote-path", action="append",
                     help="explicit isolated truth-vote JSONL (repeatable); bypasses canonical glob")
     ap.add_argument("--allow-incomplete", action="store_true",
@@ -1024,18 +1192,31 @@ if __name__ == "__main__":
     a = ap.parse_args()
     if a.cmd == "protocols":
         write_protocols()
+    elif a.cmd == "lineage-freeze":
+        _freeze_parent_for_new_build(a.task, a.level)
+        print(json.dumps({"task": a.task, "level": a.level,
+                          "manifest_path": _manifest_path(a.task, a.level)}, indent=1))
     elif a.cmd == "group-emit":
         emit_group_payloads(a.task, a.level)
     elif a.cmd == "group-ingest":
-        ingest_groups(a.task, a.level)
+        if not a.output_path:
+            ap.error("group-ingest requires --output-path with a non-canonical candidate name")
+        ingest_groups(a.task, a.level, output_path=a.output_path)
     elif a.cmd == "eval-emit":
         emit_level_eval(a.task, a.level)
     elif a.cmd == "arb-emit":
         emit_arbiter_payloads(a.task, a.level)
     elif a.cmd == "pairwise-apply":
+        if not a.output_path:
+            ap.error("pairwise-apply requires --output-path with a non-canonical candidate name")
         print(json.dumps(apply_pairwise(a.task, a.level, resolution=a.resolution,
                                         related_weight=a.related_weight,
                                         output_path=a.output_path), indent=1))
+    elif a.cmd == "partition-promote":
+        if not a.partition_path:
+            ap.error("partition-promote requires --partition-path pointing to a candidate")
+        print(json.dumps(promote_partition(a.task, a.level, a.partition_path,
+                                           replace=a.replace_canonical), indent=1))
     elif a.cmd == "score":
         print(json.dumps(score(a.task, a.level, require_complete=not a.allow_incomplete,
                                partition_path=a.partition_path,

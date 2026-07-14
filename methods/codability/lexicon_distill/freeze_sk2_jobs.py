@@ -81,6 +81,11 @@ def main() -> None:
         "methods/codability/lexicon_distill/dataset.py",
         "methods/codability/lexicon_distill/train_gemma4_similarity_lora.py",
         "methods/codability/lexicon_distill/evaluate_similarity_lora.py",
+        "methods/codability/lexicon_distill/calibrate_threshold.py",
+        "methods/codability/lexicon_distill/hierarchy_contracts.py",
+        "methods/codability/lexicon_distill/score_hierarchy_pairs.py",
+        "methods/codability/lexicon_distill/build_hierarchy_candidate.py",
+        "methods/codability/lexicon_distill/frontier_calibration.py",
         "methods/codability/lexicon_distill/freeze_sk2_jobs.py",
         "methods/codability/lexicon_distill/run_sk2_jobs.py",
     )
@@ -89,6 +94,8 @@ def main() -> None:
     # evaluation GPU 2; shorter R2/R3 evaluations serialize on GPU 3.
     eval_gpu_for_level = {"R1": 2, "R2": 3, "R3": 3}
     jobs: list[dict[str, Any]] = []
+    auxiliary_by_level: dict[str, bool] = {}
+    headline_variant_by_level: dict[str, str] = {}
     for level in ("R1", "R2", "R3"):
         base = [
             args.python, "-m", trainer,
@@ -112,6 +119,14 @@ def main() -> None:
         )
         local_train_path = inventory_path.parent / f"{level}_train.jsonl"
         auxiliary_available = has_auxiliary_targets(local_train_path)
+        auxiliary_by_level[level] = auxiliary_available
+        # Auxiliary curricula are ablations, not critical-path dependencies.  R1's much larger
+        # primary corpus is independently sufficient and its auxiliary initialization has proved
+        # numerically fragile, so downstream work follows the primary-only fit.  Other levels keep
+        # the historical full name when no split exists.
+        headline_variant_by_level[level] = (
+            "primary" if level == "R1" and auxiliary_available else "full"
+        )
         variants: list[tuple[str, list[str], list[str]]] = []
         if auxiliary_available:
             auxiliary_id = f"pooled_{level}_auxiliary"
@@ -190,6 +205,46 @@ def main() -> None:
                     "outputs": [str(predictions), str(report)],
                 }
             )
+            if variant != "base" and level in {"R1", "R3"}:
+                dev_id = f"eval_{level}_{variant}_dev"
+                dev_predictions = run / "predictions" / f"{dev_id}.jsonl"
+                dev_report = run / "reports" / f"{dev_id}.json"
+                jobs.append({
+                    "job_id": dev_id, "kind": "evaluate_development",
+                    "gpu": eval_gpu_for_level[level],
+                    "depends_on": [f"pooled_{level}_{variant}"],
+                    "argv": [
+                        args.python, "-m", evaluator, "evaluate",
+                        "--dataset", str(data / f"{level}_pair_dev.jsonl"),
+                        "--protocols", str(data / "protocols.json"),
+                        "--model", args.model, "--level", level,
+                        "--adapter", str(run / "adapters" / f"pooled_{level}_{variant}"),
+                        "--predictions", str(dev_predictions), "--report", str(dev_report),
+                        "--batch-size", "16",
+                    ],
+                    "outputs": [str(dev_predictions), str(dev_report)],
+                })
+                calibration_id = f"calibrate_{level}_{variant}"
+                calibration_report = run / "reports" / f"{calibration_id}.json"
+                protocol_id = (
+                    "r1-narrow-construct-v1" if level == "R1"
+                    else "r3-top-level-category-v1"
+                )
+                jobs.append({
+                    "job_id": calibration_id, "kind": "calibrate_threshold", "gpu": None,
+                    "depends_on": [dev_id],
+                    "argv": [
+                        args.python, "-m", "methods.codability.lexicon_distill.calibrate_threshold",
+                        "--predictions", str(dev_predictions), "--report", str(calibration_report),
+                        "--target-precision", "0.60", "--minimum-recall", "0.50",
+                        "--protocol-id", protocol_id,
+                        "--adapter-file",
+                        str(run / "adapters" / f"pooled_{level}_{variant}"
+                            / "adapter_model.safetensors"),
+                        "--protocols", str(data / "protocols.json"),
+                    ],
+                    "outputs": [str(calibration_report)],
+                })
         variant_comparisons = [("full_vs_base", "base", "full")]
         if auxiliary_available:
             variant_comparisons.extend(
@@ -224,7 +279,8 @@ def main() -> None:
         task, level = cell["task"], cell["level"]
         slug = task.replace("-", "_")
         job_id = f"task_{slug}_{level}"
-        pooled_id = f"pooled_{level}_full"
+        headline_variant = headline_variant_by_level[level]
+        pooled_id = f"pooled_{level}_{headline_variant}"
         adapter = run / "adapters" / job_id
         report = run / "reports" / f"{job_id}.train.json"
         jobs.append(
@@ -269,7 +325,8 @@ def main() -> None:
         compare_id = f"compare_{slug}_{level}"
         compare_argv = [
             args.python, "-m", evaluator, "compare",
-            "--pooled-predictions", str(run / "predictions" / f"eval_{level}_full.jsonl"),
+            "--pooled-predictions",
+            str(run / "predictions" / f"eval_{level}_{headline_variant}.jsonl"),
             "--task-predictions", str(predictions),
             "--report", str(run / "reports" / f"{compare_id}.json"),
         ]
@@ -278,7 +335,7 @@ def main() -> None:
         jobs.append(
             {
                 "job_id": compare_id, "kind": "compare", "gpu": None,
-                "depends_on": [eval_id, f"eval_{level}_full"],
+                "depends_on": [eval_id, f"eval_{level}_{headline_variant}"],
                 "argv": compare_argv,
                 "outputs": [str(run / "reports" / f"{compare_id}.json")],
             }
@@ -313,6 +370,8 @@ def main() -> None:
         },
         "powered_cells": powered,
         "task_cells": task_cells,
+        "headline_variant_by_level": headline_variant_by_level,
+        "auxiliary_available_by_level": auxiliary_by_level,
         "jobs": jobs,
     }
     output.parent.mkdir(parents=True, exist_ok=True)

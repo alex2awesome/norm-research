@@ -102,6 +102,7 @@ def validate_frozen_inputs(plan: dict[str, Any]) -> None:
         "protocols.json", "inventory.json",
         *(f"{level}_train.jsonl" for level in ("R1", "R2", "R3")),
         *(f"{level}_eval.jsonl" for level in ("R1", "R2", "R3")),
+        "R1_pair_dev.jsonl", "R3_pair_dev.jsonl",
     }
     for name in required:
         path = root / name

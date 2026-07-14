@@ -26,6 +26,11 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
         "methods/codability/lexicon_distill/dataset.py",
         "methods/codability/lexicon_distill/train_gemma4_similarity_lora.py",
         "methods/codability/lexicon_distill/evaluate_similarity_lora.py",
+        "methods/codability/lexicon_distill/calibrate_threshold.py",
+        "methods/codability/lexicon_distill/hierarchy_contracts.py",
+        "methods/codability/lexicon_distill/score_hierarchy_pairs.py",
+        "methods/codability/lexicon_distill/build_hierarchy_candidate.py",
+        "methods/codability/lexicon_distill/frontier_calibration.py",
         "methods/codability/lexicon_distill/freeze_sk2_jobs.py",
         "methods/codability/lexicon_distill/run_sk2_jobs.py",
     }
@@ -47,6 +52,9 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     assert jobs["pooled_R1_full"]["gpu"] == 0
     assert jobs["eval_R1_base"]["gpu"] == 2
     assert jobs["eval_R2_base"]["gpu"] == 3
+    assert jobs["eval_R1_full_dev"]["depends_on"] == ["pooled_R1_full"]
+    assert jobs["calibrate_R1_full"]["depends_on"] == ["eval_R1_full_dev"]
+    assert "calibrate_R2_full" not in jobs  # focused R2-v2.1 needs its own fresh calibration panel
 
 
 def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeypatch) -> None:
@@ -129,3 +137,39 @@ def test_underpowered_trainable_cells_get_descriptive_task_comparisons(
     assert "task_peer_review_R1" not in jobs
     assert "--descriptive-only" not in jobs["compare_math_stackexchange_R2"]["argv"]
     assert "--descriptive-only" in jobs["compare_humor_R2"]["argv"]
+
+
+def test_r1_task_work_uses_primary_only_headline_when_auxiliary_fails_independently(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    inventory = tmp_path / "inventory.json"
+    manifest = tmp_path / "manifest.json"
+    inventory.write_text(
+        json.dumps({"powered_cells": [{
+            "task": "math-stackexchange", "level": "R1", "weighted_train_pairs": 1000,
+            "test_pairs": 900, "test_same": 100, "powered": True,
+        }]}), encoding="utf-8")
+    manifest.write_text("{}", encoding="utf-8")
+    (tmp_path / "sk2_model_inventory.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "R1_train.jsonl").write_text(
+        json.dumps({"family_distributions": {"sonnet": [0, 0, 1], "opus": [0, 1, 0]}}) + "\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "jobs.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest),
+         "--output", str(output)],
+    )
+
+    freeze_sk2_jobs.main()
+
+    plan = json.loads(output.read_text())
+    jobs = {job["job_id"]: job for job in plan["jobs"]}
+    assert plan["headline_variant_by_level"]["R1"] == "primary"
+    assert jobs["task_math_stackexchange_R1"]["depends_on"] == ["pooled_R1_primary"]
+    assert jobs["compare_math_stackexchange_R1"]["depends_on"] == [
+        "eval_math_stackexchange_R1_task", "eval_R1_primary"]
+    pooled_index = jobs["compare_math_stackexchange_R1"]["argv"].index("--pooled-predictions")
+    assert jobs["compare_math_stackexchange_R1"]["argv"][pooled_index + 1].endswith(
+        "eval_R1_primary.jsonl")

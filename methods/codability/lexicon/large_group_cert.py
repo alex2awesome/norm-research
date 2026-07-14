@@ -54,8 +54,8 @@ def prepare(task: str, level: str, partition_path: str, threshold: int = 30,
                     {"path": path, "sha256": _file_sha256(path)} for path in paths],
                 "decision": ("independent LLM must certify full-group coherence or repartition"
                              if required_judges == 1 else
-                             "two independent LLMs certify or repartition; disagreements use the "
-                             "common refinement, so neither judge's requested split is erased"),
+                             "Sonnet and GPT-5 independently certify or repartition; a third "
+                             "frontier judge is required only when their decisions differ"),
                 "output_schema": {"group_id": "string", "certified": "boolean",
                                   "shared_concept": ("nonempty string when certified=true; "
                                                      "null allowed when certified=false"),
@@ -117,6 +117,31 @@ def _common_refinement(expected: set[str], left: None | list[list[str]],
     return list(buckets.values())
 
 
+def _decision_key(decision: None | list[list[str]]) -> tuple:
+    """Canonical equality key independent of group and member ordering."""
+    if decision is None:
+        return ("certified",)
+    return ("split", tuple(sorted(tuple(sorted(group)) for group in decision)))
+
+
+def _adjudicate_decisions(expected: set[str], first, second, third=None, *, third_supplied=False):
+    """Use two judges directly when they agree; otherwise require a third frontier decision."""
+    if _decision_key(first) == _decision_key(second):
+        if third is not None:
+            raise ValueError("third large-cluster decision supplied despite judge agreement")
+        return first
+    if not third_supplied:
+        raise ValueError("third large-cluster decision required for judge disagreement")
+    decisions = (first, second, third)
+    if sum(decision is None for decision in decisions) >= 2:
+        return None
+    splits = [decision for decision in decisions if decision is not None]
+    combined = splits[0]
+    for decision in splits[1:]:
+        combined = _common_refinement(expected, combined, decision)
+    return combined
+
+
 def _apply_decisions(part: dict[str, str],
                      decisions: dict[str, None | list[list[str]]]) -> dict[str, str]:
     out = dict(part)
@@ -152,6 +177,7 @@ def apply(task: str, level: str, tag: str = "") -> dict:
     part = {str(k): str(v) for k, v in _load_partition(manifest["partition_path"]).items()}
     required_judges = int(manifest.get("required_judges", 1))
     decisions = {}; judge_a_decisions = {}; judge_b_decisions = {}; malformed = 0
+    tiebreak_decisions = {}
     exact_certification_agreement = 0
     common_refinements = 0
     for p in manifest["payload_paths"]:
@@ -170,9 +196,23 @@ def apply(task: str, level: str, tag: str = "") -> dict:
             malformed += 1
             continue
         judge_b_decisions[gid] = second
-        exact_certification_agreement += int((first is None) == (second is None))
-        combined = _common_refinement(expected, first, second)
-        common_refinements += int(first is not None and second is not None and first != second)
+        exact_agreement = _decision_key(first) == _decision_key(second)
+        exact_certification_agreement += int(exact_agreement)
+        third = None
+        if not exact_agreement:
+            third, valid = _load_decision(payload, ROOT / "tiebreak_votes" / Path(p).name)
+            if not valid:
+                malformed += 1
+                continue
+            tiebreak_decisions[gid] = third
+        try:
+            combined = _adjudicate_decisions(
+                expected, first, second, third, third_supplied=not exact_agreement)
+        except ValueError:
+            malformed += 1
+            continue
+        common_refinements += int(combined is not None and sum(
+            decision is not None for decision in (first, second, third)) >= 2)
         decisions[gid] = combined
     if len(decisions) != manifest["n_oversized"] or malformed:
         raise ValueError(f"[{task}/{level}] incomplete certificates "
@@ -201,6 +241,7 @@ def apply(task: str, level: str, tag: str = "") -> dict:
                                                   if required_judges == 2 and
                                                   manifest["n_oversized"] else None),
               "common_refinements": common_refinements,
+              "tiebreaks_used": len(tiebreak_decisions),
               "certified_oversized": sum(v is None for v in decisions.values()),
               "repartitioned_oversized": sum(v is not None for v in decisions.values()),
               "groups_before": manifest["n_groups"], "groups_after": diagnostics["n_groups"],
@@ -208,9 +249,10 @@ def apply(task: str, level: str, tag: str = "") -> dict:
               "max_group_size": diagnostics["max_group_size"],
               "partition_path": str(out_path), "partition_sha256": _file_sha256(str(out_path)),
               "candidate_partitions": candidates,
-              "selection_rule": ("measure judge_a, judge_b, and consensus independently with "
-                                  "fresh LLM recall/precision gates; do not assume the conservative "
-                                  "common refinement is recall-optimal" if required_judges == 2 else
+              "selection_rule": ("two independent frontier judges; invoke a third only when their "
+                                  "full-group certificate/repartition decisions differ; majority "
+                                  "decides intact-vs-split and split proposals use common refinement"
+                                  if required_judges == 2 else
                                   "single certified candidate")}
     (ROOT / f"{stem}_apply_report.json").write_text(json.dumps(report, indent=2) + "\n")
     return report
@@ -224,7 +266,7 @@ def main() -> None:
     prep.add_argument("level")
     prep.add_argument("partition_path")
     prep.add_argument("--threshold", type=int, default=30)
-    prep.add_argument("--required-judges", type=int, choices=(1, 2), default=1)
+    prep.add_argument("--required-judges", type=int, choices=(1, 2), default=2)
     prep.add_argument("--tag", default="")
     app = subparsers.add_parser("apply")
     app.add_argument("task")

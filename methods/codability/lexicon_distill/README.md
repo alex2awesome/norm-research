@@ -67,3 +67,35 @@ ordinal error, Brier score, calibration, input-order consistency, protocol
 breakdowns, teacher-family breakdowns, and cold-concept performance. A task
 adapter is promoted only if it clears the predeclared paired-bootstrap and
 non-regression gates.
+
+## Offline hierarchy contracts
+
+`hierarchy_contracts.py` defines the fail-closed boundary between candidate
+retrieval, Gemma scoring, graph construction, and naming. A pair input binds
+the task, rung, exact protocol, node IDs/text, and source-node hashes. Its
+output contains DIFFERENT/RELATED/SAME probabilities for both input orders,
+their mean, order consistency, and the adapter/protocol hashes.
+
+Validate an input batch, or its aligned outputs, without loading a model:
+
+```bash
+PYTHONPATH=. python -m methods.codability.lexicon_distill.hierarchy_contracts \
+  validate-pairs --inputs candidate_pairs.jsonl --outputs pair_scores.jsonl
+```
+
+Each JSONL batch is exactly one task/level/protocol cell. In particular,
+legacy R2, R2-v2, and R2-v2.1 cannot be pooled. `build-manifest` validates full
+node coverage, parent and node hashes, score lineage, exact group-name
+coverage, and all configuration artifacts before writing a new immutable
+candidate manifest. It refuses to overwrite any path and has no canonical
+promotion operation.
+
+`build_hierarchy_candidate.py` materializes a manifest-frozen parent inventory, retrieves a
+symmetric semantic-kNN pair net (exhaustive for small upper rungs), and applies a certified Gemma
+SAME threshold with deterministic weighted Louvain. `score_hierarchy_pairs.py` performs the actual
+two-order sk2 inference. Neither command can write a canonical partition.
+
+`calibrate_threshold.py` selects thresholds on development labels only, maximizing recall subject
+to SAME precision >= .60 and recall >= .50. R2-v2.1 currently has no frozen development split, so
+`frontier_calibration.py` stages a fresh blind Sonnet/GPT-5 panel and uses a third frontier pass only
+for disagreements. The 1,255 existing R2-v2.1 external examples remain untouched test data.

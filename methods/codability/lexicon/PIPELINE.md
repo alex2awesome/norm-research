@@ -24,19 +24,28 @@ PARTITION, never see labels; no human subjects.
   - **R1** = *same construct* — facets of ONE underlying quality; a reader treats them as one dimension.
   - **R2** = *same theme* — belong to one broad evaluative area/family.
   - **R3** = *same category* — top-level subsumption.
-- **Truth** at each level = a frozen eval set of node-pairs, labeled 0/1/2 by an **arbiter** (single
-  independent-family frontier pass; the arbiter *defines* truth at R-levels). `pair_id = sha1(sorted
-  node keys joined by "||")[:16]`.
+- **Final measurement** at each level = a post-candidate-freeze sample of node pairs independently
+  labeled 0/1/2 by Sonnet and GPT-5, with a third frontier pass only on disagreements. Preserve each
+  judge's label as well as the adjudicated label; no single model family defines truth. Historical
+  preselected evals remain immutable secondary tests, not the primary promotion instrument.
+  `pair_id = sha1(sorted node keys joined by "||")[:16]`.
+- **Gemma scorer input** = `pair_id`, task, level, protocol ID, the two named/glossed node texts,
+  and source-node hashes. **Output** = DIFFERENT/RELATED/SAME probabilities in both input orders,
+  winning label, order-consistency flag, adapter hash, and protocol hash. It emits no cluster ID,
+  hierarchy name, free-form rationale, or ground-truth label.
 
 ## 1. Stage order (load-bearing)
 
 ```
-P0 frozen eval  →  P1 arbiter truth  →  P2 L0 repair (loop-until-dry)  →  L0 freeze + rename
-   →  R1 (build → apply → score → name)  →  R2  →  R3
+L0 repair → freeze + name
+  → R1 (freeze lineage → retrieve → Gemma score → candidate freeze → audit → promote → name)
+  → R2 (same, from promoted R1)
+  → R3 (same, from promoted R2)
 ```
 Building an R-level on *unrepaired* L0 measures the repair debt, not the relation. Each level prints
 BOTH recall and precision; neither may silently sag (L0 repair is a deliberate recall-ward move whose
-precision cost compounds up-tree).
+precision cost compounds up-tree). R2 cannot begin until R1 is promoted and manifest-frozen; R3
+cannot begin until R2 is. Parent drift is an error, never an implicit rebuild.
 
 ## 2. L0 build + repair (`repair.py`)
 
@@ -68,24 +77,17 @@ composition rule for splits.
 
 For each level R1→R3, in order:
 
-1. **`eval-emit`** → `emit_level_eval` writes ~900 frozen node-pair truth candidates
-   (`level_eval_<task>_<level>.jsonl`).
-2. **`arb-emit`** → `emit_arbiter_payloads` chunks the eval pairs into arbiter shards
-   (`level_arbiter/<task>_<level>_NNN.jsonl`). The **arbiter fleet** (Sonnet-or-better, `ARBITER_
-   PROTOCOL_<level>` = that level's relation) writes `level_votes/arb_<task>_<level>_NNN.jsonl`.
-   No anchors here — the arbiter *is* the truth definer.
-3. **`emit_verify_net`** — build (dedup) candidate net:
-   - Global **TF-IDF kNN** (k=20, cosine) over node `rep_text = "name. gloss"`. *(Not an embedding
-     model — see §7; for these short jargon-dense strings TF-IDF beats BGE.)*
-   - **EXCLUDE the eval pairs** from the build net (verify & arbiter are the same Sonnet-5 family
-     since 2026-07-07; overlapping them is correlated-error optimism, not measurement).
-   - Rank by cosine, take top `cap` (band). Report `topband_ceiling_vs_eval_same` (recall ceiling).
-   - Ride-along **blinded QC anchors** (a few arbiter score==2 and score==0 eval pairs), persisted to
-     `level_anchor_ids_<task>_<level>.json`. **⚠ DESTRUCTIVE**: it deletes+rewrites the verify payload
-     shards. Never call it for diagnostics — use a read-only ceiling calc.
-4. **Verify fleet** (Sonnet, TERSE score-only, ~300–400 pairs/shard) → `level_votes/vrf_<task>_
-   <level>_NNN.jsonl`.
-5. **`apply_pairwise`** — fail-closed, in order:
+1. **Freeze lineage.** Run `lineage-freeze` before emitting or applying a build. It recursively pins
+   the exact parent partition and semantic-name artifacts for every ancestor by path and SHA-256.
+   Missing, partial, mismatched, or drifted R1/R2/R3 manifests fail closed.
+2. **Retrieve a high-recall proposal net.** Semantic embeddings and/or lexical kNN expose economical
+   candidate pairs. Retrieval proposes what to score; it never supplies a semantic judgment. Record
+   the retriever, node inventory, parameters, and pair IDs in the candidate manifest.
+3. **Score with the level-specific Gemma LoRA.** Use the pooled R1, R2-v2.1, or R3 scorer as the
+   high-volume builder. Score both A→B and B→A and retain all DIFFERENT/RELATED/SAME probabilities,
+   winning labels, order consistency, model hash, and protocol hash. Task LoRAs are exceptions that
+   require a fresh paired audit; they are not selected because their training loss is lower.
+4. **`apply_pairwise` writes an immutable candidate**, never canonical state. It is fail-closed:
    - **Completeness check**: every non-anchor net pair must have ≥1 well-formed vote (by pair_id, not
      shard count) → else `IncompleteVotesError`.
    - **Anchor gate**: positive-anchor accuracy ≥ 0.8, negative ≥ 0.9 → else `AnchorGateFailure`.
@@ -96,29 +98,63 @@ For each level R1→R3, in order:
      `related_weight=0` exactly preserves this hard-edge graph. A preregistered positive value may
      use LLM score-1 RELATED pairs as weaker weighted structure evidence, never as SAME labels; that
      candidate still requires the independent uniform LLM precision audit and every >30-member
-     whole-group certification. Write `partition_<task>_<level>.json`.
-6. **`score`** → recall/precision vs arbiter truth on the FULL node set (never edges-only — that
-   inflates the number).
-7. **`level_naming`**: `emit_group_names` (payloads of each multi-member group's members) → Sonnet
-   name fleet → `ingest_group_names` writes `node_names_<task>_<level>.json` (singletons inherit their
-   member's name). Required before the next level can build.
+     whole-group certification. `--output-path` is mandatory and canonical-looking destinations are
+     rejected.
+5. **Freeze the candidate, then draw its final audit.** The candidate partition, parent, node
+   inventory, edge probabilities, thresholds, and graph configuration receive SHA-256 pins before
+   any final pair is sampled. The audit stratifies co-clustered pairs, nearest cross-cluster
+   boundaries, high-Gemma-SAME cross-cluster pairs, and random pairs. Sampling continues until about
+   150 adjudicated SAME pairs are obtained or the preregistered cap is reached; retain sampling
+   weights for population estimates.
+6. **Frontier LLMs measure and certify.** Sonnet and GPT-5 judge independently; a third frontier pass
+   adjudicates disagreements. Near-threshold and order-inconsistent Gemma pairs may be sent to these
+   judges for a *new candidate*, but final-audit labels can never mutate the candidate they evaluate.
+   Every cluster over 30 members requires a complete-member Sonnet/GPT-5 certification artifact.
+7. **Central score and promotion.** `build_level.score()` is the sole scorer allowed to place a
+   number in the ledger. Record the candidate, parent, audit, protocol, judge, and scorer hashes plus
+   Cohen κ, SAME precision/recall/F1, macro-F1, confidence intervals, and sampling strata. Do not
+   report a rescue module's private definition of “precision,” and do not select on the deprecated
+   recall-only quantity. `partition-promote` is the sole canonical writer: it validates exact node
+   coverage, atomically replaces the canonical file, and banks the previous canonical by content
+   hash when `--replace-canonical` is explicitly supplied.
+8. **Name only the promoted partition.** `level_naming` emits complete member inventories for the
+   Sonnet naming pass and writes `node_names_<task>_<level>.json`; singletons inherit their member's
+   name. Freeze these names before building the next rung.
 
 **No confirm stage at R-levels** — the R1 bridge-confirm judged bridges at ≈chance (60% anchor) and
 killed 94% of them (recall .673→.537 flat precision); REVERTED. (The L0 screen→confirm is a different,
 sanctioned confirm — don't conflate.)
 
-## 4. The two gates (measured at EVERY level)
+**Gemma's authority boundary is strict.** Gemma retrieves/scores enough edges to build economically.
+It does not define truth, certify a cluster, name a group, or support a reported comparison by itself.
+All final measurements and model/partition comparisons are based on persisted frontier-LLM judgments.
 
-- **Recall gate = net/bucket ceiling ≥ ~0.9** = `P(same-band | arbiter-SAME)`: what the candidate net
-  CAPS recall at. Usually a *cap* artifact before a *net-type* problem — raise the cap/width first and
-  re-measure (net diffuseness grows up-tree). E.g. CW R1 `.675@cap9000 → .946@full`.
-- **Precision gate = verify/split pass** — arbiter re-judges within-group member pairs and splits out
-  non-SAME. Applied whenever score precision sags.
+## 4. Certification gates (measured at EVERY level)
+
+- **Scorer gate:** on frozen held-out LLM labels, SAME precision and recall must each be ≥ .50.
+  Calibrate the edge threshold on development data to maximize recall subject to a target SAME
+  precision ≥ .60; never tune it on the final audit.
+- **Retrieval gate:** after the audit is labeled, report what fraction of adjudicated SAME pairs the
+  retriever exposed. This diagnoses a missed-candidate problem but does not authorize inserting those
+  audit edges into the evaluated candidate.
+- **Partition gate:** promote only when paired ΔCohen κ and ΔSAME-F1 beat the current canonical on
+  the same audit with a 95% paired interval above zero, neither precision nor recall regresses by
+  >.02, and cold-concept performance does not materially regress. A tie retains the current
+  canonical. A task LoRA additionally needs Δκ and ΔSAME-F1 ≥ +.03.
+- **Judge-ceiling gate:** “at ceiling” requires the absolute precision/recall floors and a κ deficit
+  no larger than .03 from the reliable-judge benchmark, with paired uncertainty excluding a material
+  deficit. Low test–retest reliability is a finding, not permission to quote an unstable point score.
+- **Large-cluster gate:** every group over 30 members needs its complete-member independent
+  Sonnet/GPT-5 certification before promotion. Size alone is not evidence that a cluster is wrong.
 
 ## 5. Judge placement & throughput (fixed by measurement, not cost)
 
-- Sonnet-or-better judges R-levels; **GLM is L0-only** (over-merges R1: 46% SAME → precision .78→.60),
-  run with the ≥2-edge gate. Arbiter = an independent-family frontier model told its ruling IS truth.
+- Gemma LoRAs on **sk2 only** are the high-volume R-level builders. sk3 is out of scope. The pooled
+  level scorer is the default; task-specific continuations require the paired promotion evidence in
+  §4. **GLM remains L0-only** because it over-merged R1 in the historical runs.
+- Sonnet and GPT-5 independently label calibration, disputed boundaries, cluster certifications, and
+  final comparisons. A third frontier pass sees only their disagreements. Keep individual and
+  adjudicated labels; never silently replace one pass with a consensus field.
 - **Blinded anchors in every judging batch** are the tripwire — every failure caught so far (resumed-
   judge drift; 60%-anchor confirm) was caught by anchors. Use the 0/1/2 scale + calibrated exemplars.
 - TERSE output (score only) validated at ~400 pairs/shard; consolidated multi-file agents hit a 64k
@@ -132,42 +168,70 @@ sanctioned confirm — don't conflate.)
   verify, count, or cross-check your output — the orchestrator runs the completeness + per-shard 0-fraction
   distribution checks downstream, so agent self-QC is pure wasted latency; (e) no repo search/exploration;
   (f) snap-judge each pair, terse {pair_id,score} only. This cut ~4-5× the tool calls per shard.
-  BIGGER lever (if 2-3× isn't enough): the ledger's sanctioned speedup = local Gemma/Llama offline-batch
-  vLLM on sk3 SCREENS the net (drops the obvious 0s, ~50-70% of pairs), Claude judges only screen-positives
-  → ~2-3× Claude cut; keep Sonnet as the actual R-level judge (local models over-merge at R1).
+  The scale lever is now the persisted Gemma builder: frontier calls are reserved for calibration,
+  uncertain boundaries, certification, and final measurement rather than repeated full-net judging.
 
 ## 6. Reproduce (news R1 example)
 
 ```bash
-PYTHONPATH=. python3 -m methods.codability.lexicon.build_level eval-emit --task news-homepages --level R1
-PYTHONPATH=. python3 -m methods.codability.lexicon.build_level arb-emit  --task news-homepages --level R1
-#   → arbiter fleet judges level_arbiter/news-homepages_R1_NNN.jsonl → level_votes/arb_...
-PYTHONPATH=. python3 -c "from methods.codability.lexicon import build_level as b; b.emit_verify_net('news-homepages','R1')"
-#   → verify fleet judges level_arbiter/news-homepages_R1_verify_NNN.jsonl → level_votes/vrf_...
-PYTHONPATH=. python3 -c "from methods.codability.lexicon import build_level as b, json; print(b.apply_pairwise('news-homepages','R1', exclude_from_gate={'ec28b299f4a77434'}))"  # NOTE: anchor exclusions are REQUIRED to reproduce stored partitions where a generous-arbiter gold anchor tripped the gate (documented per use in the ledger): news R1 {ec28b299f4a77434}; math R1 {7cf850530f358a75, efff06cae9aeff08}; math R3 {52b039191ba50b7d}. Without them apply_pairwise raises AnchorGateFailure (working as designed).
-PYTHONPATH=. python3 -m methods.codability.lexicon.build_level score --task news-homepages --level R1
-#   then level_naming.emit_group_names / ingest_group_names before R2.
+PYTHONPATH=. python3 -m methods.codability.lexicon.build_level lineage-freeze \
+  --task news-homepages --level R1
+
+# Retrieval + pooled Gemma-R1 inference writes the frozen candidate-pair scores consumed below.
+PYTHONPATH=. python3 -m methods.codability.lexicon.build_level pairwise-apply \
+  --task news-homepages --level R1 \
+  --output-path outputs/lexicon/partition_news-homepages_R1_candidate_gemma_pooled_v1.json
+
+# Freeze the candidate hash, draw/register the audit afterward, persist both judge passes, and set
+# ADJUDICATED_VOTES to the corresponding consensus/third-pass vote artifact.
+PYTHONPATH=. python3 -m methods.codability.lexicon.build_level score \
+  --task news-homepages --level R1 \
+  --partition-path outputs/lexicon/partition_news-homepages_R1_candidate_gemma_pooled_v1.json \
+  --arbiter-vote-path "$ADJUDICATED_VOTES"
+
+# Run only after the central ledger's paired promotion gates and >30-member certifications pass.
+PYTHONPATH=. python3 -m methods.codability.lexicon.build_level partition-promote \
+  --task news-homepages --level R1 \
+  --partition-path outputs/lexicon/partition_news-homepages_R1_candidate_gemma_pooled_v1.json \
+  --replace-canonical
+# Then name the promoted R1, freeze those names, and begin R2.
 ```
 
-## 7. Empirical findings that shape interpretation (2026-07-10)
+## 7. Historical preselected-eval workflow (legacy, do not resume)
 
-- **R-level arbiter truth is systematically GENEROUS (over-calls SAME).** Cross-family blind
+Runs from 2026-07-10 through 2026-07-12 selected and labeled the eval before construction, then
+deleted every eval pair from `emit_verify_net`. Preserve those payloads, votes, partitions, and notes
+for reproducibility, but do not use that workflow for new candidates. It protected against direct
+train/test reuse at the cost of grading the build on pairs it was forbidden to propose: “recall” then
+measured whether Louvain happened to reconnect an excluded pair through transitive closure. Sparse R2
+graphs suffered most, while coarse R3 partitions reconnected pairs almost automatically. The old R2
+trough is therefore a mixture of semantic difficulty, retrieval, verifier strictness, and this
+measurement design—not an identified property of themes.
+
+The legacy findings below remain useful diagnostics, not current promotion evidence:
+
+- **The single-pass R-level arbiter was systematically generous (over-called SAME).** Cross-family blind
   validation (Codex gpt-5.6-sol, a different family, 120 held-out pairs/task) agrees with the single-
   pass Sonnet arbiter's "same construct = 2" only **28% (news) / 33% (math)** of the time; the verify
   fleet shows the same strictness. ⇒ **low R-level recall is deflated by truth generosity, not (only)
   build failure**; precision stays high because what the strict build merges is clean. A de-noised
   truth (multi-pass / cross-family arbiter) would raise apparent recall — a methodology change that
   needs sign-off. Read every R-recall with this caveat.
-- **Recall is net-band-capped as node count grows.** The recall ceiling ≈ `f(#nodes, cap)`. math R1
+- **Legacy transitive recall was net-band-capped as node count grew.** The diagnostic ceiling was
+  approximately `f(#nodes, cap)`. math R1
   (2893 nodes, full net 27,826) at cap=9000 ceils recall at **0.623**; widening cap→21,000 lifts it to
   **0.891** (~40 more verify shards). news R1 (1225 nodes) at cap=9000 already ceils at 0.926. Log the
   cap (no silent caps).
-- **TF-IDF ≥ embeddings for these node reps.** BGE-large kNN on math R1 nodes reached only 0.52 full-
+- **TF-IDF beat the tested generic BGE retriever on these node reps.** BGE-large kNN on math R1 nodes reached only 0.52 full-
   net ceiling vs TF-IDF's 0.913 (and adds 1/138 truth-SAME pairs TF-IDF misses): short jargon-dense
   criteria collapse into a generic neighborhood under a general-English embedder, losing the
   discriminating rare terms TF-IDF keys on. Only add embedding nets if TF-IDF *measurably* decays.
 
-## 8. Results ledger (recall / precision, band cap=9000 unless noted)
+## 8. Legacy results snapshot (not commensurable with the current audit)
+
+These values came from the preselected-eval/excluded-edge workflow and several historical build
+variants. They must not enter the current ledger as headline comparisons or be compared directly
+with post-freeze audit estimates. They are retained solely to reproduce earlier notes.
 
 | task | L0v3 | R1 | R2 | R3 |
 |---|---|---|---|---|
@@ -177,12 +241,12 @@ PYTHONPATH=. python3 -m methods.codability.lexicon.build_level score --task news
 | creative-writing | ~.90 | .620 / .678 | .384 / .682 | .729 / .670 (anchored) |
 | peer-review | .850 / .748 | .587 / .677 | .259 / .658 | .756 / .749 (classify-derive) |
 
-**Chance-corrected recall** (historical key `recall_kappa`, retained only as a deprecated alias) —
+**Legacy chance-corrected recall** (historical key `recall_kappa`, retained only as a deprecated alias) —
 peer-review: L0v3 .850 → R1 **.576** → R2 **.241** → R3 **.691**. This is
 `(recall-p0)/(1-p0)`, NOT Cohen's κ; `score()` now reports actual binary Cohen κ separately plus
 Wilson uncertainty and high-sim/random eval strata.
 
-**R2 remains a measured trough, but its cause is not identified by the old ceiling diagnostic.** The
+**The legacy R2 run showed a trough, but its cause is not identified by the old ceiling diagnostic.** The
 eval set is deliberately TF-IDF enriched and the candidate net uses the same representation. For
 peer-review R2, the `.829` aggregate ceiling consists of 157/157 high-similarity positives but only
 3/36 random positives. Therefore it does not establish `.829` population findability. The candidate
@@ -191,7 +255,7 @@ graph has 1,103 edges (avg degree 5.7, 43 isolates); the LLM verifier retains 29
 disjoint partitioning, and Louvain fragmentation. `recall/ceiling` is not a clean stage-conditional
 probability because held-out eval pairs never contribute build edges.
 
-**Fresh blind R2 cross-family audit (2026-07-12):** 120 pairs/task, balanced 40/40/40 over Sonnet
+**Historical blind R2 cross-family audit (2026-07-12):** 120 pairs/task, balanced 40/40/40 over Sonnet
 scores 0/1/2; independent Codex-family LLM judges saw no Sonnet labels. `P(Codex SAME | Sonnet SAME)`:
 math `.525`, creative-writing `.800`, humor `.850`, news `.775`, peer-review `.850`. Binary SAME/not
 agreement: `.758/.892/.858/.758/.850`; binary Cohen κ on this deliberately balanced diagnostic sample:
@@ -206,4 +270,6 @@ the proposed taxonomy. Report the observed R2 trough, but do not call it an intr
 themes until an independent LLM-proposed candidate comparison and an evaluation sample not selected by
 the build representation reproduce it. Themes may also overlap; Louvain's disjoint equivalence
 partition is itself a hypothesis to test.
-Full, current numbers live in the ledger. Update BOTH this table and the ledger when a cell lands.
+Do not update this table with new cells. Current results belong only in the centralized ledger and
+must be reproducible by `build_level.score()` from the frozen candidate and persisted final-audit
+judgments. A ledger row without partition, parent, audit, protocol, judge, and scorer hashes is invalid.

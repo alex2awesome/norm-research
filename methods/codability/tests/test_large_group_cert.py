@@ -179,12 +179,14 @@ def test_tagged_two_judge_apply_uses_common_refinement(monkeypatch, tmp_path):
         "demo", "R1", str(source), threshold=2, required_judges=2, tag="crossed")
     _vote(root, manifest, "votes", [["a", "b"], ["c", "d"]])
     _vote(root, manifest, "replicate_votes", [["a", "c"], ["b", "d"]])
+    _vote(root, manifest, "tiebreak_votes", [["a", "b"], ["c", "d"]])
 
     report = cert.apply("demo", "R1", tag="crossed")
     consensus = json.loads(Path(report["partition_path"]).read_text())
 
     assert len(set(consensus.values())) == 4
     assert report["common_refinements"] == 1
+    assert report["tiebreaks_used"] == 1
     assert report["candidate_partitions"]["judge_a"]["n_groups"] == 2
     assert report["candidate_partitions"]["judge_b"]["n_groups"] == 2
     assert Path(report["partition_path"]) == out / "partition_demo_R1_crossed_certified.json"
@@ -192,3 +194,20 @@ def test_tagged_two_judge_apply_uses_common_refinement(monkeypatch, tmp_path):
         out / "partition_demo_R1_crossed_certified_judge_a.json")
     assert Path(report["candidate_partitions"]["judge_b"]["partition_path"]) == (
         out / "partition_demo_R1_crossed_certified_judge_b.json")
+
+
+def test_two_judge_disagreement_requires_tiebreak(monkeypatch, tmp_path):
+    _, root = _sandbox(monkeypatch, tmp_path)
+    source = _partition(tmp_path / "candidate.json", "group")
+    manifest = cert.prepare(
+        "demo", "R1", str(source), threshold=2, required_judges=2, tag="needs_tie")
+    _vote(root, manifest, "votes")
+    _vote(root, manifest, "replicate_votes", [["a", "b"], ["c", "d"]])
+
+    with pytest.raises(ValueError, match="incomplete certificates"):
+        cert.apply("demo", "R1", tag="needs_tie")
+
+    _vote(root, manifest, "tiebreak_votes")
+    report = cert.apply("demo", "R1", tag="needs_tie")
+    assert report["tiebreaks_used"] == 1
+    assert report["certified_oversized"] == 1
