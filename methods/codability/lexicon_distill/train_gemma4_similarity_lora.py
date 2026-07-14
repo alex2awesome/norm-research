@@ -352,8 +352,9 @@ def train(
     if scope["trainable_dtypes"] != ["torch.float32"]:
         raise RuntimeError(f"LoRA optimizer parameters are not FP32: {scope['trainable_dtypes']}")
     scope["promoted_to_fp32_tensors"] = promoted_tensors
+    trainable_parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
     optimizer = torch.optim.AdamW(
-        (parameter for parameter in model.parameters() if parameter.requires_grad),
+        trainable_parameters,
         lr=args.learning_rate,
         weight_decay=args.weight_decay,
     )
@@ -363,15 +364,21 @@ def train(
     micro_steps = math.ceil(len(encoded) / args.batch_size)
     expected_steps = math.ceil(micro_steps / args.gradient_accumulation_steps) * args.epochs
     step = 0
+    attempted_steps = 0
     traces: list[dict[str, Any]] = []
+    numerical_quarantine: list[dict[str, Any]] = []
     model.train()
     optimizer.zero_grad(set_to_none=True)
     for epoch in range(args.epochs):
         indices = torch.randperm(len(encoded), generator=generator).tolist()
         window = 0
         window_loss = 0.0
+        window_examples: list[dict[str, str]] = []
         for micro_step, start in enumerate(range(0, len(indices), args.batch_size), 1):
             rows = [encoded[index] for index in indices[start : start + args.batch_size]]
+            window_examples.extend(
+                {"example_id": str(row["example_id"]), "view": str(row["view"])} for row in rows
+            )
             batch = {key: value.to(device, non_blocking=True) for key, value in collate(rows, int(tokenizer.pad_token_id)).items()}
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
                 logits = model(
@@ -392,19 +399,36 @@ def train(
             window_loss += float(raw_loss.detach().cpu())
             epoch_end = micro_step == micro_steps
             if window == args.gradient_accumulation_steps or epoch_end:
+                attempted_steps += 1
                 if window < args.gradient_accumulation_steps:
                     correction = args.gradient_accumulation_steps / window
                     for parameter in model.parameters():
                         if parameter.grad is not None:
                             parameter.grad.mul_(correction)
                 norm = torch.nn.utils.clip_grad_norm_(
-                    (parameter for parameter in model.parameters() if parameter.requires_grad),
+                    trainable_parameters,
                     args.max_grad_norm,
                 )
                 if not torch.isfinite(norm):
-                    raise FloatingPointError(
-                        f"non-finite gradient norm at epoch={epoch + 1} optimizer_step={step + 1}"
-                    )
+                    record = {
+                        "epoch": epoch + 1,
+                        "attempted_optimizer_step": attempted_steps,
+                        "reason": "non_finite_gradient_norm",
+                        "mean_microbatch_loss": window_loss / window,
+                        "examples": list(window_examples),
+                    }
+                    numerical_quarantine.append(record)
+                    print(json.dumps({"numerical_quarantine": record}), flush=True)
+                    optimizer.zero_grad(set_to_none=True)
+                    if len(numerical_quarantine) > args.max_nonfinite_windows:
+                        raise FloatingPointError(
+                            f"non-finite gradient window limit exceeded: "
+                            f"{len(numerical_quarantine)} > {args.max_nonfinite_windows}"
+                        )
+                    window = 0
+                    window_loss = 0.0
+                    window_examples = []
+                    continue
                 optimizer.step()
                 optimizer.zero_grad(set_to_none=True)
                 step += 1
@@ -419,8 +443,12 @@ def train(
                     print(json.dumps({"training_progress": record}), flush=True)
                 window = 0
                 window_loss = 0.0
-    if step != expected_steps:
-        raise AssertionError(f"optimizer step mismatch {step} != {expected_steps}")
+                window_examples = []
+    if attempted_steps != expected_steps or step != expected_steps - len(numerical_quarantine):
+        raise AssertionError(
+            f"optimizer step mismatch attempted={attempted_steps}/{expected_steps} "
+            f"completed={step} skipped={len(numerical_quarantine)}"
+        )
     output.mkdir(parents=False)
     model.save_pretrained(output, safe_serialization=True)
     config = output / "adapter_config.json"
@@ -434,6 +462,12 @@ def train(
         "completed_at": datetime.now(timezone.utc).isoformat(),
         "scope": scope,
         "steps": step,
+        "attempted_steps": attempted_steps,
+        "numerical_quarantine": {
+            "skipped_windows": len(numerical_quarantine),
+            "maximum_allowed": args.max_nonfinite_windows,
+            "records": numerical_quarantine,
+        },
         "loss": {"first": traces[0], "last": traces[-1], "minimum": min(row["mean_microbatch_loss"] for row in traces)},
         "adapter": {"directory": str(output), "config": file_ref(config), "weights": file_ref(weights)},
     }
@@ -463,6 +497,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--weight-decay", type=float, default=0.0)
     parser.add_argument("--max-grad-norm", type=float, default=1.0)
+    parser.add_argument("--max-nonfinite-windows", type=int, default=5)
     parser.add_argument("--lora-r", type=int, default=16)
     parser.add_argument("--lora-alpha", type=int, default=32)
     parser.add_argument("--lora-dropout", type=float, default=0.05)
@@ -521,6 +556,7 @@ def main() -> None:
             "batch_size": args.batch_size,
             "gradient_accumulation_steps": args.gradient_accumulation_steps,
             "learning_rate": args.learning_rate,
+            "max_nonfinite_windows": args.max_nonfinite_windows,
             "max_length": args.max_length,
             "lora_r": args.lora_r,
             "lora_alpha": args.lora_alpha,

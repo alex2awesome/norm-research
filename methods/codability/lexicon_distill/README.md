@@ -49,6 +49,13 @@ auxiliary-data ablation. Primary fits use `2e-5`; the auxiliary curriculum uses
 comparison. Every powered task-level cell continues on primary labels from its
 pooled adapter.
 
+Gemma-4's BF16 backward pass can produce a non-finite gradient on a rare,
+deterministic accumulation window even when the loss is finite. Trainable LoRA
+weights and optimizer state therefore remain FP32. A fit may quarantine at most
+five such windows; every skipped example ID and order view is written into the
+training report, and a sixth event fails the fit. No non-finite update is ever
+applied or silently counted as a completed optimizer step.
+
 Evaluation reports three-way macro-F1, Cohen's kappa, SAME precision/recall/F1,
 ordinal error, Brier score, calibration, input-order consistency, protocol
 breakdowns, and cold-concept performance. A task adapter is promoted only if
