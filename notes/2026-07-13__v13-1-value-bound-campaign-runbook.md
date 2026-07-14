@@ -1,6 +1,33 @@
 # v13.1 value-bound campaign: live runbook
 
-Last operational snapshot: **2026-07-13 16:24 PDT**.
+Last operational snapshot: **2026-07-13 19:40 PDT**.
+
+## 19:40 PDT recovery update
+
+This update supersedes the PID/state tables later in this note; the experiment definition,
+completion markers, stopping point, and artifact paths below remain current.
+
+- Commit `1f162e5` adds a deterministic fail-closed redaction for the residual case where a
+  no-verbatim induced rule still contains a 12-word demo shingle after both model repair passes.
+  Only the copied span is removed, the fallback is recorded in the induction cache payload, and
+  the final leakage assertion remains active. The focused test passed, and the code is staged on
+  both sk2 and sk3.
+- The sk2 Tier B lanes are running as PIDs `347907` (`llama31_8b`, resumed from cache), `2031614`
+  (`qwen25_14b`), and `2031615` (`phi4`). The Llama lane is on **sk2** device 4; the prohibition
+  on devices 1--4 applies to **sk3**.
+- The sk3 launcher now pins `CUDA_DEVICE_ORDER=PCI_BUS_ID`,
+  `VLLM_WORKER_MULTIPROC_METHOD=spawn`, and `HOME=/lfs/skampere3/0/alexspan`. Tier B 70B shards
+  0, 3, 4, and 5 are running as PIDs `1441737`, `1457789`, `1597568`, and `1597569` on sk3
+  devices 0, 5, 6, and 7 respectively. No campaign work is permitted on sk3 devices 1--4.
+- Recovery supervisor PID `1121368` remains queued to resume shard 1 on device 6 after shard 4
+  completes, and shard 2 on device 7 after shard 5 completes. All resumes preserve the existing
+  content-addressed caches.
+- The old sk2 completion orchestrator cannot authenticate onward to sk3 and has exited. Final
+  copying and consolidation will instead be performed explicitly from the authenticated local
+  session after all nine lane manifests exist. No Tier A upgrades will be launched.
+- V14 remains ordered after the verified 280-row Tier B consolidated artifact. Its guarded sk3
+  wrapper may use only devices 0, 5, 6, and 7, and nothing may run on sk1/sk2 while those four v14
+  lanes are resident.
 
 This note is the durable handoff for the currently running v13.1 campaign. PIDs and row counts
 below are a point-in-time snapshot; the paths, completion markers, restrictions, and monitoring
