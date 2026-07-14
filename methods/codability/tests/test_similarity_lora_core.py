@@ -6,6 +6,7 @@ import json
 from methods.codability.lexicon_distill.train_gemma4_similarity_lora import (
     collate,
     label_token_ids,
+    length_bucketed_indices,
     promote_trainable_parameters_to_fp32,
     read_rows,
 )
@@ -62,6 +63,27 @@ def test_collate_left_pads_so_last_position_is_always_prompt_token() -> None:
     )
     assert batch["input_ids"].tolist() == [[4, 5], [0, 6]]
     assert batch["attention_mask"].tolist() == [[1, 1], [0, 1]]
+    assert batch["position_ids"].tolist() == [[0, 1], [0, 0]]
+
+
+def test_length_bucketed_order_is_complete_deterministic_and_local() -> None:
+    torch = pytest.importorskip("torch")
+    encoded = [{"input_ids": list(range(length))} for length in range(1, 33)]
+    first_generator = torch.Generator(device="cpu").manual_seed(17)
+    second_generator = torch.Generator(device="cpu").manual_seed(17)
+
+    first = length_bucketed_indices(
+        encoded, batch_size=4, bucket_batches=8, generator=first_generator,
+    )
+    second = length_bucketed_indices(
+        encoded, batch_size=4, bucket_batches=8, generator=second_generator,
+    )
+
+    assert first == second
+    assert sorted(first) == list(range(len(encoded)))
+    for start in range(0, len(first), 4):
+        lengths = [len(encoded[index]["input_ids"]) for index in first[start : start + 4]]
+        assert max(lengths) - min(lengths) <= 3
 
 
 def test_only_trainable_parameters_are_promoted_to_fp32() -> None:

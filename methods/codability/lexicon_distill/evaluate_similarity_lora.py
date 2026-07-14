@@ -151,6 +151,7 @@ def run_evaluation(args: argparse.Namespace) -> None:
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
                 logits = model(
                     input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                    position_ids=batch["position_ids"],
                     logits_to_keep=1,
                 ).logits
             probabilities = torch.softmax(logits[:, -1, :][:, label_tensor].float(), dim=-1).cpu().tolist()

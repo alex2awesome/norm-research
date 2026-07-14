@@ -255,12 +255,41 @@ def collate(rows: Sequence[Mapping[str, Any]], pad_token_id: int) -> dict[str, A
         # vocabulary logits at all earlier positions via logits_to_keep=1.
         input_ids.append([pad_token_id] * padding + ids)
         masks.append([0] * padding + [1] * len(ids))
+    attention_mask = torch.tensor(masks, dtype=torch.long)
+    position_ids = attention_mask.cumsum(dim=-1) - 1
+    position_ids.masked_fill_(attention_mask == 0, 0)
     return {
         "input_ids": torch.tensor(input_ids, dtype=torch.long),
-        "attention_mask": torch.tensor(masks, dtype=torch.long),
+        "attention_mask": attention_mask,
+        # Left-padded content must still start at position zero.  Relying on a
+        # shared arange silently shifts shorter examples by their pad width.
+        "position_ids": position_ids,
         "target_probs": torch.tensor([row["target_probs"] for row in rows], dtype=torch.float32),
         "weights": torch.tensor([row["weight"] for row in rows], dtype=torch.float32),
     }
+
+
+def length_bucketed_indices(
+    encoded: Sequence[Mapping[str, Any]],
+    *,
+    batch_size: int,
+    generator: Any,
+    bucket_batches: int = 64,
+) -> list[int]:
+    """Shuffle batches while keeping prompt lengths close inside each batch."""
+    import torch
+
+    if batch_size <= 0 or bucket_batches <= 0:
+        raise ValueError("batch and bucket sizes must be positive")
+    permutation = torch.randperm(len(encoded), generator=generator).tolist()
+    batches: list[list[int]] = []
+    pool_size = batch_size * bucket_batches
+    for start in range(0, len(permutation), pool_size):
+        pool = permutation[start : start + pool_size]
+        pool.sort(key=lambda index: len(encoded[index]["input_ids"]))
+        batches.extend(pool[offset : offset + batch_size] for offset in range(0, len(pool), batch_size))
+    batch_order = torch.randperm(len(batches), generator=generator).tolist()
+    return [index for batch_index in batch_order for index in batches[batch_index]]
 
 
 def validate_trainable_scope(model: Any) -> dict[str, Any]:
@@ -370,7 +399,9 @@ def train(
     model.train()
     optimizer.zero_grad(set_to_none=True)
     for epoch in range(args.epochs):
-        indices = torch.randperm(len(encoded), generator=generator).tolist()
+        indices = length_bucketed_indices(
+            encoded, batch_size=args.batch_size, generator=generator,
+        )
         window = 0
         window_loss = 0.0
         window_examples: list[dict[str, str]] = []
@@ -383,6 +414,7 @@ def train(
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
                 logits = model(
                     input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                    position_ids=batch["position_ids"],
                     logits_to_keep=1,
                 ).logits
                 constrained = logits[:, -1, :][:, label_tensor]
