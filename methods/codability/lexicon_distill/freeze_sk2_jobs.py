@@ -264,14 +264,17 @@ def main() -> None:
                     ],
                     "outputs": [str(calibration_report)],
                 })
-        variant_comparisons = [("full_vs_base", "base", "full")]
-        if auxiliary_available:
-            variant_comparisons.extend(
-                [
-                    ("primary_vs_base", "base", "primary"),
-                    ("full_vs_primary", "primary", "full"),
-                ]
-            )
+        # Only compare variants that this plan actually schedules.  In the
+        # default R1 primary-only plan there is deliberately no ``full`` job;
+        # retaining its comparison creates a dependency on a nonexistent job
+        # and crashes the supervisor after it has launched training.
+        variant_comparisons = []
+        if "full" in eval_variants:
+            variant_comparisons.append(("full_vs_base", "base", "full"))
+        if "primary" in eval_variants:
+            variant_comparisons.append(("primary_vs_base", "base", "primary"))
+        if {"full", "primary"}.issubset(eval_variants):
+            variant_comparisons.append(("full_vs_primary", "primary", "full"))
         for comparison, reference, candidate in variant_comparisons:
             job_id = f"compare_{level}_{comparison}"
             report = run / "reports" / f"{job_id}.json"

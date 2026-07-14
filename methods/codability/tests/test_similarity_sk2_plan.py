@@ -171,6 +171,13 @@ def test_r1_task_work_uses_primary_only_headline_when_auxiliary_fails_independen
     plan = json.loads(output.read_text())
     jobs = {job["job_id"]: job for job in plan["jobs"]}
     assert plan["headline_variant_by_level"]["R1"] == "primary"
+    assert "compare_R1_full_vs_base" not in jobs
+    assert "compare_R1_primary_vs_base" in jobs
+    assert all(
+        dependency in jobs
+        for job in jobs.values()
+        for dependency in job["depends_on"]
+    )
     assert jobs["task_math_stackexchange_R1"]["depends_on"] == ["pooled_R1_primary"]
     assert jobs["compare_math_stackexchange_R1"]["depends_on"] == [
         "eval_math_stackexchange_R1_task", "eval_R1_primary"]
