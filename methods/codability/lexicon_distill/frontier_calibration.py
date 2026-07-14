@@ -13,6 +13,7 @@ from .hierarchy_contracts import sha256_file, validate_pair_files
 
 VERSION = "frontier-similarity-calibration-panel-v1"
 TIEBREAK_VERSION = "frontier-similarity-calibration-disagreements-v1"
+POSTFREEZE_VERSION = "postfreeze-hierarchy-audit-v1"
 _BLIND_KEYS = {"pair_id", "task", "level", "concept_a", "concept_b"}
 
 
@@ -36,12 +37,18 @@ def _validate_frozen_panel(manifest_path: Path) -> tuple[dict[str, Any], list[di
     """Authenticate a base panel or disagreement-only derivative before any API request."""
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     schema = manifest.get("schema_version")
-    if schema not in {VERSION, TIEBREAK_VERSION}:
+    if schema not in {VERSION, TIEBREAK_VERSION, POSTFREEZE_VERSION}:
         raise ValueError("unsupported calibration manifest")
-    fields = ("pair_inputs", "pair_outputs", "protocol", "audit", "key") if schema == VERSION else (
-        "source_panel", "protocol", "audit")
+    if schema == VERSION:
+        fields = ("pair_inputs", "pair_outputs", "protocol", "audit", "key")
+    elif schema == POSTFREEZE_VERSION:
+        fields = ("candidate", "reference", "nodes", "gemma_scores", "protocol", "audit", "key")
+    else:
+        fields = ("source_panel", "protocol", "audit")
     for field in fields:
         reference = manifest[field]
+        if reference is None:
+            continue
         if sha256_file(Path(reference["path"])) != reference["sha256"]:
             raise ValueError(f"frozen calibration {field} changed")
     if schema == TIEBREAK_VERSION:
@@ -102,14 +109,75 @@ def _judge_prompt(protocol: str) -> str:
     )
 
 
+def _direct_completion(
+    *, provider: str, model: str, messages: list[dict[str, str]], api_key: str,
+    max_tokens: int, timeout: float, reasoning_effort: str | None,
+) -> str:
+    """Call an owned provider API while keeping the frozen judge contract unchanged."""
+    if provider == "openai":
+        from openai import OpenAI
+
+        client = OpenAI(api_key=api_key, timeout=timeout, max_retries=0)
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,  # type: ignore[arg-type]
+            max_completion_tokens=max_tokens,
+            reasoning_effort=reasoning_effort,
+            response_format={"type": "json_object"},
+        )
+        return str(response.choices[0].message.content or "")
+    if provider == "anthropic":
+        from anthropic import Anthropic
+
+        system = "\n\n".join(row["content"] for row in messages if row["role"] == "system")
+        conversation = [row for row in messages if row["role"] != "system"]
+        client = Anthropic(api_key=api_key, timeout=timeout, max_retries=0)
+        response = client.messages.create(
+            model=model, system=system, messages=conversation,  # type: ignore[arg-type]
+            max_tokens=max_tokens,
+            output_config={
+                "effort": reasoning_effort or "low",
+                "format": {
+                    "type": "json_schema",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "decisions": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pair_id": {"type": "string"},
+                                        "score": {"type": "integer", "enum": [0, 1, 2]},
+                                    },
+                                    "required": ["pair_id", "score"],
+                                    "additionalProperties": False,
+                                },
+                            }
+                        },
+                        "required": ["decisions"],
+                        "additionalProperties": False,
+                    },
+                },
+            },
+        )
+        return "".join(
+            str(block.text) for block in response.content if getattr(block, "type", None) == "text"
+        )
+    raise ValueError(f"unsupported direct provider: {provider}")
+
+
 def run_judge(
     *, manifest_path: str | Path, output_dir: str | Path, model: str,
     api_key_file: str | Path, request_cap: int, max_tokens: int = 4000,
     timeout: float = 180.0, reasoning_effort: str | None = None,
+    provider: str = "openrouter",
 ) -> dict[str, Any]:
-    """Resume a capped OpenRouter pass over authenticated blind payload shards."""
+    """Resume a capped provider pass over authenticated blind payload shards."""
     if not isinstance(model, str) or not model.strip():
-        raise ValueError("an explicit OpenRouter model is required")
+        raise ValueError("an explicit judge model is required")
+    if provider not in {"openrouter", "openai", "anthropic"}:
+        raise ValueError("provider must be openrouter, openai, or anthropic")
     if request_cap < 1 or max_tokens < 1 or timeout <= 0:
         raise ValueError("request cap, max tokens, and timeout must be positive")
     manifest_file = Path(manifest_path).expanduser().resolve()
@@ -122,8 +190,12 @@ def run_judge(
         "schema_version": "frontier-openrouter-judge-run-v1",
         "source_manifest": {"path": str(manifest_file), "sha256": sha256_file(manifest_file)},
         "source_schema_version": manifest["schema_version"],
-        "cell": manifest["cell"],
+        "cell": manifest.get("cell") or {
+            "task": manifest["task"], "level": manifest["level"],
+            "protocol_sha256": manifest["protocol"]["sha256"],
+        },
         "protocol": dict(protocol_ref),
+        "provider": provider,
         "model": model,
     }
     if destination.exists():
@@ -162,18 +234,25 @@ def run_judge(
         elif requests_made >= request_cap:
             break
         else:
-            raw = chat_completion(
-                base_url="https://openrouter.ai/api/v1", model=model,
-                messages=[
-                    {"role": "system", "content": _judge_prompt(protocol)},
-                    {"role": "user", "content": json.dumps(batch, ensure_ascii=False,
-                                                               separators=(",", ":"))},
-                ],
-                max_tokens=max_tokens, seed=20260714 + index, timeout=timeout,
-                transport_retries=0, api_key=api_key,
-                reasoning_effort=reasoning_effort, reasoning_exclude=True,
-                force_json_object=True,
-            )
+            messages = [
+                {"role": "system", "content": _judge_prompt(protocol)},
+                {"role": "user", "content": json.dumps(batch, ensure_ascii=False,
+                                                           separators=(",", ":"))},
+            ]
+            if provider == "openrouter":
+                raw = chat_completion(
+                    base_url="https://openrouter.ai/api/v1", model=model,
+                    messages=messages,
+                    max_tokens=max_tokens, seed=20260714 + index, timeout=timeout,
+                    transport_retries=0, api_key=api_key,
+                    reasoning_effort=reasoning_effort, reasoning_exclude=True,
+                    force_json_object=True,
+                )
+            else:
+                raw = _direct_completion(
+                    provider=provider, model=model, messages=messages, api_key=api_key,
+                    max_tokens=max_tokens, timeout=timeout, reasoning_effort=reasoning_effort,
+                )
             # Validate before persisting: a malformed transcript must never count as a completed
             # shard or silently consume a semantic vote artifact.
             _parse_judge_response(raw, expected)
@@ -188,6 +267,7 @@ def run_judge(
     execution = {
         "schema_version": "frontier-openrouter-judge-execution-v1",
         "judge_manifest": {"path": str(run_manifest_path), "sha256": sha256_file(run_manifest_path)},
+        "provider": provider,
         "model": model,
         "request_cap_this_run": request_cap,
         "requests_made_this_run": requests_made,
@@ -308,8 +388,8 @@ def prepare_disagreements(
         raise ValueError("per_shard must be positive")
     manifest_file = Path(manifest_path).expanduser().resolve()
     manifest, _ = _validate_frozen_panel(manifest_file)
-    if manifest["schema_version"] != VERSION:
-        raise ValueError("disagreements must derive from the original two-family panel")
+    if manifest["schema_version"] not in {VERSION, POSTFREEZE_VERSION}:
+        raise ValueError("disagreements must derive from a complete two-family panel")
     path_a = Path(votes_a_path).expanduser().resolve()
     path_b = Path(votes_b_path).expanduser().resolve()
     if path_a == path_b:
@@ -338,7 +418,10 @@ def prepare_disagreements(
         payloads.append({"path": str(path), "sha256": sha256_file(path)})
     result = {
         "schema_version": TIEBREAK_VERSION,
-        "cell": manifest["cell"],
+        "cell": manifest.get("cell") or {
+            "task": manifest["task"], "level": manifest["level"],
+            "protocol_sha256": manifest["protocol"]["sha256"],
+        },
         "source_panel": {"path": str(manifest_file), "sha256": sha256_file(manifest_file)},
         "source_votes": {
             "judge_a": {"path": str(path_a), "sha256": sha256_file(path_a)},
@@ -447,6 +530,8 @@ def main() -> None:
     judge = sub.add_parser("judge")
     judge.add_argument("--manifest", required=True); judge.add_argument("--output-dir", required=True)
     judge.add_argument("--model", required=True); judge.add_argument("--api-key-file", required=True)
+    judge.add_argument("--provider", choices=("openrouter", "openai", "anthropic"),
+                       default="openrouter")
     judge.add_argument("--request-cap", required=True, type=int)
     judge.add_argument("--max-tokens", type=int, default=4000)
     judge.add_argument("--timeout", type=float, default=180.0)
@@ -470,7 +555,7 @@ def main() -> None:
             manifest_path=args.manifest, output_dir=args.output_dir, model=args.model,
             api_key_file=args.api_key_file, request_cap=args.request_cap,
             max_tokens=args.max_tokens, timeout=args.timeout,
-            reasoning_effort=args.reasoning_effort,
+            reasoning_effort=args.reasoning_effort, provider=args.provider,
         )
     elif args.command == "prepare-disagreements":
         result = prepare_disagreements(
