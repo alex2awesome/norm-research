@@ -283,7 +283,7 @@ def _select_v14_certification_metrics(
     candidates: Sequence[Mapping[str, object]], *, total: int = 35,
     required_metric_keys: Sequence[str] = DEFAULT_SENTINEL_METRIC_KEYS,
 ) -> tuple[list[dict], dict[str, int]]:
-    """Select an entropy-spread population after enforcing panel feasibility."""
+    """Select certification metrics while reserving one feasible dev metric per task."""
     grouped: dict[str, list[dict]] = {}
     for source in candidates:
         grouped.setdefault(str(source["task"]), []).append(dict(source))
@@ -297,18 +297,29 @@ def _select_v14_certification_metrics(
         task: sum(str(row["metric_key"]) in required for row in rows)
         for task, rows in grouped.items()
     }
+    # Metric-level holdout is load-bearing for decoder tuning.  Reserve one
+    # panel-feasible metric from every task before allocating certification
+    # quotas so the later seven-task development population is constructible.
+    capacities = {task: len(rows) - 1 for task, rows in grouped.items()}
+    if any(
+        capacities[task] < max(1, required_counts[task])
+        for task in grouped
+    ):
+        raise ValueError(
+            "certification cannot reserve one panel-feasible development metric per task"
+        )
     quotas = {
-        task: max(min(5, len(rows)), required_counts[task])
+        task: max(min(5, capacities[task]), required_counts[task])
         for task, rows in grouped.items()
     }
     while sum(quotas.values()) < int(total):
         choices = [
-            task for task, rows in grouped.items() if quotas[task] < len(rows)
+            task for task in grouped if quotas[task] < capacities[task]
         ]
         if not choices:
             raise ValueError("fewer than 35 panel-feasible certification metrics remain")
         task = min(choices, key=lambda name: (
-            -(len(grouped[name]) - quotas[name]), name,
+            -(capacities[name] - quotas[name]), name,
         ))
         quotas[task] += 1
     while sum(quotas.values()) > int(total):
@@ -374,8 +385,9 @@ def build_designs(
             "n_selected": len(entries), "task_quotas": quotas,
             "required_sentinel_metric_keys": list(DEFAULT_SENTINEL_METRIC_KEYS),
             "quota_reallocation": (
-                "start at min(5, feasible task population), then assign deficits to the "
-                "task with the largest remaining feasible population; stable task-name tie-break"
+                "reserve one panel-feasible development metric per task; start at min(5, "
+                "the remaining feasible task population), then assign deficits to the task "
+                "with the largest remaining feasible population; stable task-name tie-break"
             ),
             "excluded": [{
                 "metric_key": row["metric_key"], **row["v14_panel_balance"],

@@ -12,6 +12,7 @@ from methods.metric_implementer.experiments.cr3_evidence_store import EvidenceCe
 from methods.metric_implementer.experiments.run_v14_value_campaign import (
     _metric_context,
     _qualification_panel,
+    _select_v14_certification_metrics,
     assert_gpu_authorized,
     build_designs,
     validate_metric_design,
@@ -147,6 +148,28 @@ def test_gpu_guard_and_no_verbatim_hard_reject():
         corpus_token_counts={word: 10 for word in "alpha beta gamma delta epsilon zeta eta theta".split()},
     )
     assert "eight_word_demo_shingle" in violations
+
+
+def test_certification_reserves_one_feasible_dev_metric_per_task():
+    task_sizes = {
+        "humor": 12, "creative-writing": 20, "code-review": 10,
+        "news-homepages": 8, "peer-review": 10,
+        "legal-outcome-prediction": 4, "math-stackexchange": 11,
+    }
+    required = [f"humor_R3_metric{index}" for index in (0, 10, 11, 12, 34, 50)]
+    candidates = []
+    for task, size in task_sizes.items():
+        keys = required if task == "humor" else []
+        keys = [*keys, *(f"{task}_R3_extra{index}" for index in range(size - len(keys)))]
+        candidates.extend({
+            "task": task, "metric_key": key, "target_entropy_bits": rank / size,
+        } for rank, key in enumerate(keys))
+    selected, quotas = _select_v14_certification_metrics(
+        candidates, total=35, required_metric_keys=required,
+    )
+    assert len(selected) == 35
+    assert quotas["legal-outcome-prediction"] == 3
+    assert all(quotas[task] <= size - 1 for task, size in task_sizes.items())
 
 
 def test_qualification_and_sentinel_gate_only_declared_liveness_failures():
