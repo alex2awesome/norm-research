@@ -83,6 +83,8 @@ def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeyp
     assert jobs["pooled_R1_primary"]["gpu"] == 6
     assert jobs["pooled_R1_full"]["depends_on"] == ["pooled_R1_auxiliary"]
     assert jobs["pooled_R1_primary"]["depends_on"] == ["preflight_R1", "pooled_R3_full"]
+    cap_index = jobs["pooled_R1_primary"]["argv"].index("--max-nonfinite-fraction")
+    assert jobs["pooled_R1_primary"]["argv"][cap_index + 1] == "0.05"
     auxiliary_rates = [
         jobs["pooled_R1_auxiliary"]["argv"][index + 1]
         for index, value in enumerate(jobs["pooled_R1_auxiliary"]["argv"])

@@ -179,6 +179,12 @@ def main() -> None:
                 # Let the much shorter R3 fit establish its adapter before R1
                 # occupies their shared lane for several hours.
                 dependencies = [*dependencies, "pooled_R3_full"]
+                # The 104k-row R1 fit has rare BF16 backward overflows even
+                # though its loss remains finite and the FP32 LoRA optimizer is
+                # stable. Quarantine those windows instead of discarding a
+                # multi-hour fit; every skip remains recorded and the trainer
+                # still fails closed if the rate exceeds five percent.
+                extra = [*extra, "--max-nonfinite-fraction", "0.05"]
             jobs.append(
                 {
                     "job_id": job_id,
