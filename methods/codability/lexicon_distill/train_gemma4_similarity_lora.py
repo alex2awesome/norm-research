@@ -281,7 +281,20 @@ def validate_trainable_scope(model: Any) -> dict[str, Any]:
         "trainable_tensors": len(trainable),
         "trainable_parameters": sum(parameter.numel() for _name, parameter in trainable),
         "adapted_text_linears": len(modules),
+        "trainable_dtypes": sorted({str(parameter.dtype) for _name, parameter in trainable}),
     }
+
+
+def promote_trainable_parameters_to_fp32(model: Any) -> int:
+    """Keep the frozen base compact while stabilizing LoRA Adam updates."""
+    import torch
+
+    promoted = 0
+    for parameter in model.parameters():
+        if parameter.requires_grad and parameter.dtype != torch.float32:
+            parameter.data = parameter.data.float()
+            promoted += 1
+    return promoted
 
 
 def _load_model(args: argparse.Namespace) -> Any:
@@ -334,7 +347,11 @@ def train(
     device = torch.device("cuda", 0)
     model = _load_model(args)
     model.to(device)
+    promoted_tensors = promote_trainable_parameters_to_fp32(model)
     scope = validate_trainable_scope(model)
+    if scope["trainable_dtypes"] != ["torch.float32"]:
+        raise RuntimeError(f"LoRA optimizer parameters are not FP32: {scope['trainable_dtypes']}")
+    scope["promoted_to_fp32_tensors"] = promoted_tensors
     optimizer = torch.optim.AdamW(
         (parameter for parameter in model.parameters() if parameter.requires_grad),
         lr=args.learning_rate,
@@ -366,6 +383,10 @@ def train(
                 row_losses = -(batch["target_probs"] * log_probs).sum(dim=-1)
                 raw_loss = (row_losses * batch["weights"]).sum() / batch["weights"].sum()
                 loss = raw_loss / args.gradient_accumulation_steps
+            if not torch.isfinite(raw_loss):
+                raise FloatingPointError(
+                    f"non-finite loss at epoch={epoch + 1} micro_step={micro_step} optimizer_step={step}"
+                )
             loss.backward()
             window += 1
             window_loss += float(raw_loss.detach().cpu())
@@ -380,6 +401,10 @@ def train(
                     (parameter for parameter in model.parameters() if parameter.requires_grad),
                     args.max_grad_norm,
                 )
+                if not torch.isfinite(norm):
+                    raise FloatingPointError(
+                        f"non-finite gradient norm at epoch={epoch + 1} optimizer_step={step + 1}"
+                    )
                 optimizer.step()
                 optimizer.zero_grad(set_to_none=True)
                 step += 1

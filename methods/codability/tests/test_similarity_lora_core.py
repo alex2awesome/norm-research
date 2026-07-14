@@ -6,6 +6,7 @@ import json
 from methods.codability.lexicon_distill.train_gemma4_similarity_lora import (
     collate,
     label_token_ids,
+    promote_trainable_parameters_to_fp32,
     read_rows,
 )
 
@@ -61,3 +62,16 @@ def test_collate_left_pads_so_last_position_is_always_prompt_token() -> None:
     )
     assert batch["input_ids"].tolist() == [[4, 5], [0, 6]]
     assert batch["attention_mask"].tolist() == [[1, 1], [0, 1]]
+
+
+def test_only_trainable_parameters_are_promoted_to_fp32() -> None:
+    torch = pytest.importorskip("torch")
+    model = torch.nn.Sequential(torch.nn.Linear(2, 2), torch.nn.Linear(2, 2)).to(torch.bfloat16)
+    for parameter in model[0].parameters():
+        parameter.requires_grad = False
+
+    promoted = promote_trainable_parameters_to_fp32(model)
+
+    assert promoted == 2
+    assert {parameter.dtype for parameter in model[0].parameters()} == {torch.bfloat16}
+    assert {parameter.dtype for parameter in model[1].parameters()} == {torch.float32}
