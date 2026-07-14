@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import os
 import socket
@@ -60,9 +61,34 @@ def validate_frozen_inputs(plan: dict[str, Any]) -> None:
         path = Path(reference["remote_path"])
         if not path.is_file() or sha256_file(path) != reference["sha256"]:
             raise RuntimeError(f"frozen {key} missing or hash-drifted: {path}")
-    model_inventory = Path(plan["model_inventory_remote_path"])
-    if not model_inventory.is_file():
-        raise RuntimeError(f"missing sk2 model inventory: {model_inventory}")
+    model_reference = plan.get("model_inventory")
+    if not isinstance(model_reference, dict):
+        raise RuntimeError("job plan does not bind the model inventory")
+    model_inventory = Path(model_reference["remote_path"])
+    if not model_inventory.is_file() or sha256_file(model_inventory) != model_reference["sha256"]:
+        raise RuntimeError(f"missing or hash-drifted sk2 model inventory: {model_inventory}")
+    frozen_model = json.loads(model_inventory.read_text(encoding="utf-8"))
+    model_root = Path(frozen_model["model"])
+    if str(model_root.resolve()) != str(Path(plan["model"]).resolve()):
+        raise RuntimeError("model path differs from its frozen inventory")
+    for name, reference in frozen_model["files"].items():
+        path = model_root / name
+        if (
+            not path.is_file()
+            or path.stat().st_size != int(reference["bytes"])
+            or sha256_file(path) != reference["sha256"]
+        ):
+            raise RuntimeError(f"model snapshot file missing or hash-drifted: {path}")
+    runtime = frozen_model["runtime"]
+    import torch
+    installed = {
+        "torch": str(torch.__version__),
+        "transformers": importlib.metadata.version("transformers"),
+        "peft": importlib.metadata.version("peft"),
+        "accelerate": importlib.metadata.version("accelerate"),
+    }
+    if installed != runtime:
+        raise RuntimeError(f"runtime drift: installed={installed} frozen={runtime}")
     implementation_files = plan.get("implementation_files")
     if not isinstance(implementation_files, dict) or not implementation_files:
         raise RuntimeError("job plan does not bind implementation files")

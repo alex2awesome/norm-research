@@ -11,6 +11,7 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     manifest = tmp_path / "manifest.json"
     inventory.write_text(json.dumps({"powered_cells": []}), encoding="utf-8")
     manifest.write_text("{}", encoding="utf-8")
+    (tmp_path / "sk2_model_inventory.json").write_text("{}", encoding="utf-8")
     output = tmp_path / "jobs.json"
     monkeypatch.setattr(
         "sys.argv",
@@ -20,6 +21,7 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     plan = json.loads(output.read_text())
     assert plan["sk3_forbidden"] is True
     assert "skampere2" in plan["model"]
+    assert len(plan["model_inventory"]["sha256"]) == 64
     assert set(plan["implementation_files"]) == {
         "methods/codability/lexicon_distill/dataset.py",
         "methods/codability/lexicon_distill/train_gemma4_similarity_lora.py",
@@ -52,6 +54,7 @@ def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeyp
     manifest = tmp_path / "manifest.json"
     inventory.write_text(json.dumps({"powered_cells": []}), encoding="utf-8")
     manifest.write_text("{}", encoding="utf-8")
+    (tmp_path / "sk2_model_inventory.json").write_text("{}", encoding="utf-8")
     (tmp_path / "R1_train.jsonl").write_text(
         json.dumps({"family_distributions": {"sonnet": [0, 0, 1], "opus": [0, 1, 0]}}) + "\n",
         encoding="utf-8",

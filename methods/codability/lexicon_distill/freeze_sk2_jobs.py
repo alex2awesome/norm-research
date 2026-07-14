@@ -64,6 +64,9 @@ def main() -> None:
     repo = Path(args.repo)
     data = repo / "outputs/lexicon/similarity_distill_v1"
     model_inventory = data / "sk2_model_inventory.json"
+    local_model_inventory = inventory_path.parent / "sk2_model_inventory.json"
+    if not local_model_inventory.is_file():
+        raise FileNotFoundError(local_model_inventory)
     run = repo / "outputs/lexicon/similarity_lora_v1"
     trainer = "methods.codability.lexicon_distill.train_gemma4_similarity_lora"
     evaluator = "methods.codability.lexicon_distill.evaluate_similarity_lora"
@@ -260,6 +263,10 @@ def main() -> None:
             "sha256": sha256_file(manifest_path),
         },
         "model_inventory_remote_path": str(model_inventory),
+        "model_inventory": {
+            "remote_path": str(model_inventory),
+            "sha256": sha256_file(local_model_inventory),
+        },
         "implementation_files": {
             relative: {
                 "sha256": sha256_file(local_repo / relative),
