@@ -115,7 +115,9 @@ def _load_model(model_path: str, adapter: str | None) -> Any:
     if adapter:
         from peft import PeftModel
         model = PeftModel.from_pretrained(model, adapter, is_trainable=False)
-    model.config.use_cache = True
+    # Full prompts are scored in one pass; returning a KV cache only consumes
+    # memory and cannot accelerate this non-autoregressive readout.
+    model.config.use_cache = False
     return model
 
 
