@@ -70,3 +70,11 @@ Local verification on 2026-07-14:
 The execution-manifest SHA-256 at final local freeze is
 `a3cc3e52129ee9364ec281b698dff60075e834561414929f2cf646c77916910c`.
 
+## Execution status
+
+The full calibration-then-lockbox run launched on sk3 physical GPU 5 at
+`2026-07-14T02:01:23-07:00`, PID `3178271`.  It runs from the isolated code snapshot
+`/lfs/skampere3/0/alexspan/policy_isomorphism_snapshots/concluding_policy_a3cc3e52`, so it cannot
+change the code used by the simultaneous breadth job.  The authoritative invocation record and
+log are `concluding_policy_confirmation_v1/launch_record.env` and
+`concluding_policy_confirmation_v1/logs/full_run.log` under the data directory above.
