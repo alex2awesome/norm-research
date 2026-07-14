@@ -11,8 +11,9 @@ Implementation entry point:
   `/lfs/skampere3/0/alexspan/cr3-v13.1/assets/tier_b/tier_b_metrics.json` (220 raw
   R3 metrics; the v14 design freezes the certified subset).
 - Scientific design code and deterministic panel seed: `5db95c9442f08aed2a664a8ad6d0f7bd2106ffac`.
-  Operational launcher hardening is commit `2406c804adbd4852f32fcf719c741b4866725ea6`;
-  it does not change or restart completed scientific design cells.
+  The post-design release code is `bfb17f831ed96d72046836ba5bd046b54a03f512`; its later
+  changes pin launch paths and preregister model fallbacks, and do not change or restart completed
+  scientific design cells.
 - CPU-only certified design construction is running on sk3. At this snapshot 7 of 35 metric
   design manifests existed and no v14 GPU process had started. Check with:
 
@@ -21,8 +22,8 @@ Implementation entry point:
     -name design_manifest.json | wc -l'
   ```
 
-- The hard 3--5 label-balance feasibility audit found only four eligible legal metrics. The
-  frozen 35-metric quota is therefore legal 4, creative writing 6, and 5 for each of the other
+- The hard 3--5 label-balance feasibility audit found only three eligible legal metrics under the
+  frozen design seed. The 35-metric quota is therefore legal 3, creative writing 7, and 5 for each of the other
   five tasks. The design index records all exclusions and the deterministic quota reallocation.
 - V14 GPU work remains blocked on the verified 280-row v13.1 Tier B consolidation. Tier B is
   currently using only sk3 devices 0, 5, 6, and 7; the V14 wrapper will not be invoked until those
