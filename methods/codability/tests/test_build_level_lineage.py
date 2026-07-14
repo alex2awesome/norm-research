@@ -118,3 +118,25 @@ def test_promotion_rejects_incomplete_node_inventory(isolated_lexicon):
     with pytest.raises(ValueError, match="node inventory mismatch"):
         build.promote_partition("demo", "R1", str(candidate))
     assert not (out / "partition_demo_R1.json").exists()
+
+
+def test_freeze_upper_parent_rejects_stale_inventory_and_missing_names(isolated_lexicon):
+    out = isolated_lexicon
+    _seed_l0(out)
+    _write(out / "partition_demo_R1.json", {"l0-a": "r1-a", "obsolete": "r1-b"})
+    _write(out / "node_names_demo_R1.json", {
+        "r1-a": {"name": "R1 A", "gloss": "First R1 group"},
+        "r1-b": {"name": "R1 B", "gloss": "Second R1 group"},
+    })
+
+    with pytest.raises(build.LevelManifestError, match="node inventory mismatch"):
+        build._freeze_parent_for_new_build("demo", "R2")
+    assert not (out / "level_manifest_demo_R2.json").exists()
+
+    _write(out / "partition_demo_R1.json", {"l0-a": "r1-a", "l0-b": "r1-b"})
+    _write(out / "node_names_demo_R1.json", {
+        "r1-a": {"name": "R1 A", "gloss": "First R1 group"},
+    })
+    with pytest.raises(build.LevelManifestError, match="unnamed groups"):
+        build._freeze_parent_for_new_build("demo", "R2")
+    assert not (out / "level_manifest_demo_R2.json").exists()

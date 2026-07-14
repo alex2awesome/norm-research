@@ -187,6 +187,45 @@ def _parent_names(task: str, level: str, parent_path: str) -> tuple[str, str]:
     return path, digest
 
 
+def _validate_upper_parent_material(task: str, level: str, parent_path: str,
+                                    names_path: str) -> None:
+    """Fail closed before a legacy R1/R2 canonical becomes an upper-level parent."""
+    previous = PREV[level]
+    if previous not in PREV:
+        return
+    directory, basename = os.path.split(os.path.abspath(parent_path))
+    if basename not in os.listdir(directory):
+        raise LevelManifestError(
+            f"[{task}/{level}] upper parent path is not present with exact case: {parent_path}")
+
+    lower_parent_path, _ = _parent_partition(task, previous)
+    expected_ids = set(_load_partition(lower_parent_path).values())
+    parent = _load_partition(parent_path)
+    missing = sorted(expected_ids - set(parent))
+    extra = sorted(set(parent) - expected_ids)
+    if missing or extra:
+        raise LevelManifestError(
+            f"[{task}/{level}] upper parent node inventory mismatch: missing={len(missing)}, "
+            f"extra={len(extra)}, missing_sample={missing[:5]}, extra_sample={extra[:5]}")
+
+    names = json.load(open(names_path))
+    group_ids = set(parent.values())
+    missing_names = sorted(group_ids - set(names))
+    if missing_names:
+        raise LevelManifestError(
+            f"[{task}/{level}] upper parent has {len(missing_names)} unnamed groups; "
+            f"sample={missing_names[:5]}")
+    semantic_nodes = []
+    for group_id in sorted(group_ids):
+        row = names[group_id]
+        if not isinstance(row, dict):
+            raise LevelManifestError(
+                f"[{task}/{level}] semantic name for {group_id!r} must be a JSON object")
+        semantic_nodes.append({"node_id": group_id, "name": row.get("name", group_id),
+                               "gloss": row.get("gloss", "")})
+    _validate_semantic_nodes(task, level, semantic_nodes)
+
+
 def _freeze_parent_for_new_build(task: str, level: str) -> None:
     """Freeze the complete L0->parent lineage before creating a build at ``level``."""
     if level not in PREV:
@@ -235,6 +274,8 @@ def _freeze_parent_for_new_build(task: str, level: str) -> None:
     else:
         names = _default_parent_names(task, level, parent)
         names_digest = _file_sha256(names)
+
+    _validate_upper_parent_material(task, level, parent, names)
 
     updated = dict(manifest)
     updated.update(parent_partition_path=os.path.relpath(parent, ROOT),
