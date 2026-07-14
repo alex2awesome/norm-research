@@ -13,6 +13,8 @@ import pytest
 from methods.metric_implementer.config import ImplementerConfig
 from methods.metric_implementer.experiments.behavioral_value_channel import (
     BEHAVIORAL_ARMS,
+    _redact_verbatim_example_shingles,
+    contains_verbatim_example,
     evaluate_behavioral_state_tables,
 )
 from methods.metric_implementer.experiments.assemble_v13_release_results import (
@@ -47,6 +49,16 @@ FIXTURE = (
     Path(__file__).parent / "fixtures" / "cr3_v12_humor_metric50_subset"
 )
 METRIC = "humor_R3_metric50"
+
+
+def test_no_verbatim_fallback_removes_only_copied_spans():
+    example = "one two three four five six seven eight nine ten eleven twelve thirteen"
+    rule = f"Prefer concise setups. {example}. Reward a surprising final contrast."
+    cleaned = _redact_verbatim_example_shingles(rule, [example])
+    assert not contains_verbatim_example(cleaned, [example])
+    assert "Prefer concise setups" in cleaned
+    assert "Reward a surprising final contrast" in cleaned
+    assert "example-specific phrase omitted" in cleaned
 
 
 def _codebook():

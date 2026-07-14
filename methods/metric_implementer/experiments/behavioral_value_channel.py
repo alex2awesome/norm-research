@@ -142,6 +142,47 @@ def contains_verbatim_example(
     return False
 
 
+def _redact_verbatim_example_shingles(
+    rule: str,
+    example_texts: Sequence[str],
+    *,
+    shingle_words: int = NO_VERBATIM_SHINGLE_WORDS,
+) -> str:
+    """Remove copied spans after bounded model repair, preserving fail-closed disclosure."""
+    example_shingles: set[tuple[str, ...]] = set()
+    for text in example_texts:
+        words = re.findall(r"[a-z0-9]+", str(text).lower())
+        example_shingles.update(
+            tuple(words[start:start + shingle_words])
+            for start in range(len(words) - shingle_words + 1)
+        )
+
+    redacted = str(rule)
+    while True:
+        matches = list(re.finditer(r"[a-z0-9]+", redacted, flags=re.IGNORECASE))
+        words = [match.group(0).lower() for match in matches]
+        bad_ranges = [
+            (matches[start].start(), matches[start + shingle_words - 1].end())
+            for start in range(len(words) - shingle_words + 1)
+            if tuple(words[start:start + shingle_words]) in example_shingles
+        ]
+        if not bad_ranges:
+            cleaned = re.sub(r"\s+", " ", redacted).strip()
+            return cleaned or (
+                "Classify unseen texts using generalizable semantic and structural properties "
+                "that distinguish the positive class from the negative class."
+            )
+
+        merged: list[list[int]] = []
+        for start, end in bad_ranges:
+            if merged and start <= merged[-1][1]:
+                merged[-1][1] = max(merged[-1][1], end)
+            else:
+                merged.append([start, end])
+        for start, end in reversed(merged):
+            redacted = redacted[:start] + " [example-specific phrase omitted] " + redacted[end:]
+
+
 def _repair_prompt(rule: str, example_texts: Sequence[str]) -> str:
     hashes = [hashlib.sha256(str(text).encode("utf-8")).hexdigest()[:12] for text in example_texts]
     return (
@@ -184,6 +225,7 @@ def _induce_missing(
     if len(raws) != len(requests):
         raise RuntimeError("constructor returned an incomplete induction batch")
     rules = [_normalized_rule(raw) for raw in raws]
+    fallback_redacted = [False] * len(rules)
     # Deterministic repair passes enforce the second declared prompt arm structurally.
     for _attempt in range(2):
         bad = [
@@ -203,8 +245,15 @@ def _induce_missing(
         )
         for index, raw in zip(bad, repaired):
             rules[index] = _normalized_rule(raw)
+    for index, (request, rule) in enumerate(zip(requests, rules)):
+        if (request["arm"] == "no_verbatim_examples"
+                and contains_verbatim_example(rule, request["example_texts"])):
+            rules[index] = _redact_verbatim_example_shingles(
+                rule, request["example_texts"]
+            )
+            fallback_redacted[index] = True
     output = {}
-    for request, rule in zip(requests, rules):
+    for index, (request, rule) in enumerate(zip(requests, rules)):
         if (request["arm"] == "no_verbatim_examples"
                 and contains_verbatim_example(rule, request["example_texts"])):
             raise RuntimeError("no-verbatim induction still contains a demo-text shingle")
@@ -218,6 +267,7 @@ def _induce_missing(
             ).hexdigest(),
             "rule_sha256": rule_sha,
             "no_verbatim_enforced": str(request["arm"]) == "no_verbatim_examples",
+            "no_verbatim_fallback_redacted": fallback_redacted[index],
         })
         output[str(request["cache_key"])] = payload
     return output
