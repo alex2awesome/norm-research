@@ -17,6 +17,7 @@ import numpy as np
 
 SCHEMA_VERSION = "cr3-v14-panel-design-v1"
 DEFAULT_SPLIT_SIZES = {"teaching": 120, "decoder_development": 30, "heldout": 150}
+V14_1_SPLIT_SIZES = {"teaching": 120, "decoder_development": 30, "heldout": 240}
 ELIGIBLE_FRACTIONS = (0.40, 0.45, 0.50, 0.55, 0.60)
 
 

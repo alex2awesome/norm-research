@@ -40,6 +40,15 @@ def audit_release(root: str | Path, *, expected_metrics: int = 35) -> dict:
     for required in ("template_freeze.json", "preregistration.json", "sentinel_report.json"):
         if not (source / required).is_file():
             failures.append(f"missing campaign freeze artifact {required}")
+    mhat_manifest = source / "mhat_archive" / "manifest.json"
+    if not mhat_manifest.is_file():
+        failures.append("missing release-blocking full M-hat archive")
+    else:
+        archive = json.loads(mhat_manifest.read_text())
+        if archive.get("schema") != "cr3-v14-mhat-archive-v1" or int(
+            archive.get("n_identity_rows", 0)
+        ) <= 0:
+            failures.append("invalid or empty M-hat archive")
     sentinel_path = source / "sentinel_report.json"
     if sentinel_path.is_file() and not bool(json.loads(sentinel_path.read_text()).get("passed")):
         failures.append("control-based sentinel liveness report did not pass")
@@ -70,8 +79,9 @@ def audit_release(root: str | Path, *, expected_metrics: int = 35) -> dict:
             with np.load(table_path, allow_pickle=False) as state:
                 try:
                     validate_state_tables(state["raw_lift"], state["clipped_value"])
-                    if np.asarray(state["raw_lift"]).shape != (50, 256):
-                        failures.append(f"state table is not exhaustive 50x256: {table_path}")
+                    shape = np.asarray(state["raw_lift"]).shape
+                    if len(shape) != 2 or shape[0] != 50 or shape[1] not in {64, 256}:
+                        failures.append(f"state table is not exhaustive 50x64/256: {table_path}")
                 except Exception as exc:
                     failures.append(f"invalid state table {table_path}: {exc}")
         if prompt_path.is_file():

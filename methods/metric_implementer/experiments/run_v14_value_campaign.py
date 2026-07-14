@@ -95,6 +95,10 @@ from .v14_liveness_controls import (
     finish_liveness_executor_controls,
     run_liveness_constructor_controls,
 )
+from .v14_probe_extension import (
+    append_extension_to_split, load_extension, load_task_candidates,
+    score_extension_codebook, select_extension_texts, write_extension,
+)
 
 
 CAMPAIGN_SCHEMA = "cr3-v14-campaign-v1"
@@ -237,6 +241,60 @@ def _design_path(out_root: Path, metric_key: str) -> Path:
     return out_root / "designs" / _safe(metric_key) / "design_manifest.json"
 
 
+def build_probe_extensions(
+    *, metrics_manifest_path: str | Path, corpus_manifest_path: str | Path,
+    out_root: str | Path, run_sha: str, fake_backends: bool,
+    physical_gpu_ids: Sequence[int], query_batch_size: int = 2048,
+) -> dict:
+    """Select and score one shared 90-text append-only extension per task."""
+    assert_gpu_authorized(physical_gpu_ids, fake_backends=fake_backends)
+    manifest, base = load_metrics_manifest(metrics_manifest_path)
+    entries = select_metric_entries({**manifest, "selection": {}}, base)
+    corpus_path = Path(corpus_manifest_path).resolve()
+    corpus = json.loads(corpus_path.read_text(encoding="utf-8"))
+    task_specs = corpus.get("tasks", corpus)
+    by_task = {}
+    for entry in entries:
+        by_task.setdefault(str(entry["task"]), entry)
+    executor, revision = _backend(FIXED_EXECUTOR, fake=fake_backends)
+    destination = Path(out_root).resolve()
+    rows = []
+    try:
+        for task, entry in sorted(by_task.items()):
+            output = destination / f"{task}.npz"
+            if output.is_file():
+                extension = load_extension(output)
+                rows.append({"task": task, "path": str(output), "sha256": extension["sha256"]})
+                continue
+            codebook = _load_codebook_for_entry(entry, base)
+            target_key = str(entry["metric_key"])
+            existing = list(map(str, _bootstrap(
+                codebook["metrics"][target_key]["bootstrap_path"]
+            )["probe_texts"]))
+            candidates = load_task_candidates(task_specs[task], base=corpus_path.parent)
+            texts = select_extension_texts(
+                candidates, existing_texts=existing, task=task, run_sha=run_sha,
+            )
+            payload = score_extension_codebook(
+                executor, codebook=codebook, extension_texts=texts,
+                executor_revision=revision, readout_id=CR3_BINARY_READOUT_ID,
+                query_batch_size=query_batch_size,
+            )
+            write_extension(output, payload)
+            extension = load_extension(output)
+            rows.append({"task": task, "path": str(output), "sha256": extension["sha256"]})
+    finally:
+        release_resident_engines()
+    result = {
+        "schema": "cr3-v14-probe-extension-index-v1", "run_sha": str(run_sha),
+        "base_n": 300, "extension_n": 90, "combined_n": 390,
+        "executor": FIXED_EXECUTOR, "executor_revision": revision, "tasks": rows,
+    }
+    result["sha256"] = canonical_sha256(result)
+    _atomic_json(destination / "index.json", result)
+    return result
+
+
 def _panel_balance_candidates(
     entries: Sequence[Mapping[str, object]], *, base: Path, run_sha: str,
 ) -> tuple[list[dict], list[dict]]:
@@ -362,9 +420,9 @@ def _select_v14_certification_metrics(
 
 def build_designs(
     *, metrics_manifest_path: str | Path, out_root: str | Path, run_sha: str,
-    metric_keys: Sequence[str] | None = None,
+    metric_keys: Sequence[str] | None = None, probe_extension_root: str | Path | None = None,
 ) -> list[dict]:
-    """CPU-only v14 split/panel freeze over the existing 300-probe assets."""
+    """CPU-only v14 split/panel freeze over append-only 390-probe assets."""
     manifest, base = load_metrics_manifest(metrics_manifest_path)
     requested = None if metric_keys is None else set(map(str, metric_keys))
     selection_report = None
@@ -395,6 +453,16 @@ def build_designs(
         }
     else:
         entries = select_metric_entries(manifest, base)
+    by_task_for_caps: dict[str, list[str]] = {}
+    for entry in entries:
+        by_task_for_caps.setdefault(str(entry["task"]), []).append(str(entry["metric_key"]))
+    cap_sentinels = set(DEFAULT_SENTINEL_METRIC_KEYS)
+    for task, keys in by_task_for_caps.items():
+        cap_sentinels.add(min(
+            keys, key=lambda key: hashlib.sha256(
+                f"{run_sha}\x1f{task}\x1fcap-sentinel\x1f{key}".encode()
+            ).hexdigest(),
+        ))
     out = Path(out_root).resolve()
     results = []
     for entry in entries:
@@ -407,24 +475,47 @@ def build_designs(
             continue
         codebook = _load_codebook_for_entry(entry, base)
         target_bootstrap = _bootstrap(codebook["metrics"][metric_key]["bootstrap_path"])
-        probe_texts = list(map(str, target_bootstrap["probe_texts"]))
-        if len(probe_texts) != 300:
+        base_probe_texts = list(map(str, target_bootstrap["probe_texts"]))
+        if len(base_probe_texts) != 300:
             raise ValueError(f"v14 requires the 300-probe bank for {metric_key}")
+        if probe_extension_root is None:
+            raise ValueError("v14.1 design requires --probe-extension-root with 90 appended probes")
+        extension_path = Path(probe_extension_root) / f"{entry['task']}.npz"
+        extension = load_extension(extension_path)
+        extension_keys = list(map(str, extension["metric_keys"]))
+        if metric_key not in extension_keys:
+            raise ValueError(f"probe extension lacks {metric_key}")
+        probe_texts = [*base_probe_texts, *map(str, extension["texts"])]
         ids = _probe_ids(probe_texts)
-        target_bits = (
-            np.asarray(target_bootstrap["target"], dtype=float) > 0.5
-        ).astype(np.uint8)
+        base_scores = np.asarray(target_bootstrap["target"], dtype=float)
+        target_scores = np.concatenate([
+            base_scores,
+            np.asarray(extension["scores"], dtype=float)[extension_keys.index(metric_key)],
+        ])
+        target_bits = (target_scores > 0.5).astype(np.uint8)
+        base_ids = ids[:300]
         split = ensure_teaching_label_balance(
-            freeze_probe_split(ids, run_sha=run_sha, metric_key=metric_key),
-            target_bits,
+            freeze_probe_split(
+                base_ids, run_sha=run_sha, metric_key=metric_key,
+                split_sizes={"teaching": 120, "decoder_development": 30, "heldout": 150},
+            ),
+            target_bits[:300],
         )
-        codebook_keys, signatures = _codebook_signatures(codebook)
+        split = append_extension_to_split(split, ids)
+        validate_probe_split(split)
+        codebook_keys, base_signatures = _codebook_signatures(codebook)
+        if codebook_keys != extension_keys:
+            raise ValueError(f"probe extension codebook identity mismatch for {entry['task']}")
+        signatures = np.concatenate([
+            base_signatures, np.asarray(extension["scores"], dtype=float)
+        ], axis=1)
         target_index = codebook_keys.index(metric_key)
         panel = build_panel_design(
             signatures, target_index=target_index,
             teaching_indices=split["teaching"]["indices"], run_sha=run_sha,
             metric_key=metric_key, probe_ids=ids,
             decoder_families=("qwen", "llama", "mistral"),
+            panel_size=8 if metric_key in cap_sentinels else 6,
         )
         materialized_entry = dict(entry)
         for field in ("codebook_path", "assets_root", "candidate_bank_path"):
@@ -456,8 +547,18 @@ def build_designs(
                 np.ascontiguousarray((signatures > 0.5).astype(np.uint8)).tobytes()
             ).hexdigest(),
             "target_entropy_on_h_bits": _binary_entropy(
-                np.asarray(target_bootstrap["target"])[split["heldout"]["indices"]] > 0.5
+                target_scores[split["heldout"]["indices"]] > 0.5
             ),
+            "probe_extension": {
+                "path": str(extension_path.resolve()), "sha256": extension["sha256"],
+                "append_only": True, "base_n": 300, "extension_n": 90,
+            },
+            "throughput_design": {
+                "cap_sentinel": metric_key in cap_sentinels,
+                "panel_size": 8 if metric_key in cap_sentinels else 6,
+                "menu_permutations": 8 if metric_key in cap_sentinels else 4,
+                "headline_cap": "exact_enumerated" if metric_key in cap_sentinels else "target_entropy",
+            },
             "executor": {
                 "model": str(target_bootstrap.get("executor_model", FIXED_EXECUTOR)),
                 "revision": str(target_bootstrap.get("executor_model_revision", "unknown")),
@@ -1093,14 +1194,39 @@ def _metric_context(design: Mapping[str, object]) -> dict:
     entry = design["entry"]
     codebook = _load_codebook_for_entry(entry, Path("/"))
     metric_key = str(design["metric_key"])
-    target = _bootstrap(codebook["metrics"][metric_key]["bootstrap_path"])
-    probe_texts = list(map(str, target["probe_texts"]))
+    target = dict(_bootstrap(codebook["metrics"][metric_key]["bootstrap_path"]))
+    base_probe_texts = list(map(str, target["probe_texts"]))
+    probe_texts = base_probe_texts
+    extension_row = design.get("probe_extension")
+    if extension_row:
+        extension = load_extension(extension_row["path"])
+        keys = list(map(str, extension["metric_keys"]))
+        if metric_key not in keys:
+            raise RuntimeError(f"probe extension lacks target {metric_key}")
+        probe_texts = [*base_probe_texts, *map(str, extension["texts"])]
+        target["target"] = np.concatenate([
+            np.asarray(target["target"], dtype=float),
+            np.asarray(extension["scores"], dtype=float)[keys.index(metric_key)],
+        ])
+        target["probe_texts"] = np.asarray(probe_texts, dtype=object)
     population = load_candidate_population(
-        entry, Path("/"), n_probes=len(probe_texts), probe_sha256=str(target["probe_sha256"]),
+        entry, Path("/"), n_probes=len(base_probe_texts), probe_sha256=str(target["probe_sha256"]),
     )
+    menu = _codebook_menu(codebook, metric_key)
+    if extension_row:
+        extension = load_extension(extension_row["path"])
+        extension_keys = list(map(str, extension["metric_keys"]))
+        for distractor in menu["distractors"]:
+            key = str(distractor["metric_id"])
+            if key not in extension_keys:
+                raise RuntimeError(f"probe extension lacks distractor {key}")
+            distractor["scores"] = np.concatenate([
+                np.asarray(distractor["scores"], dtype=float),
+                np.asarray(extension["scores"], dtype=float)[extension_keys.index(key)],
+            ])
     return {
         "codebook": codebook, "target": target, "probe_texts": probe_texts,
-        "population": population, "menu": _codebook_menu(codebook, metric_key),
+        "population": population, "menu": menu,
     }
 
 
@@ -1158,7 +1284,11 @@ def run_constructor_stage(
                                 constructor_revision=revision, store=store,
                                 template=str(templates["mcq"]),
                                 max_chars=int(context["codebook"]["reconstruction_max_chars"]),
-                                n_reconstruction_draws=8,
+                                n_reconstruction_draws=int(
+                                    design.get("throughput_design", {}).get(
+                                        "menu_permutations", 8
+                                    )
+                                ),
                                 query_batch_size=int(query_batch_size),
                             )
                             _atomic_npz(
@@ -1934,13 +2064,15 @@ def _selected_constructor_model(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", required=True, choices=[
-        "design", "prepare-dev", "prepare-sentinel", "qualify-constructor",
+        "extend-probes", "design", "prepare-dev", "prepare-sentinel", "qualify-constructor",
         "qualify-executor", "tune", "freeze", "seed-freeze", "constructor", "executor",
         "sentinel-constructor", "sentinel-executor", "sentinel-aggregate",
         "liveness-constructor", "liveness-executor", "sentinel-gate",
         "audit-proposer", "audit-score", "aggregate", "report",
     ])
     parser.add_argument("--metrics-manifest")
+    parser.add_argument("--probe-extension-root")
+    parser.add_argument("--probe-corpus-manifest")
     parser.add_argument("--dev-metrics-manifest")
     parser.add_argument("--sentinel-metrics-manifest")
     parser.add_argument(
@@ -1972,12 +2104,24 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     root = Path(args.out_root).resolve()
-    if args.phase == "design":
+    if args.phase == "extend-probes":
+        if not args.metrics_manifest or not args.probe_corpus_manifest:
+            raise ValueError("extend-probes requires --metrics-manifest and --probe-corpus-manifest")
+        build_probe_extensions(
+            metrics_manifest_path=args.metrics_manifest,
+            corpus_manifest_path=args.probe_corpus_manifest,
+            out_root=args.probe_extension_root or root / "probe_extensions",
+            run_sha=args.run_sha, fake_backends=args.fake_backends,
+            physical_gpu_ids=parse_physical_gpu_ids(args.physical_gpus),
+            query_batch_size=args.query_batch_size,
+        )
+    elif args.phase == "design":
         if not args.metrics_manifest:
             raise ValueError("design phase requires --metrics-manifest")
         build_designs(
             metrics_manifest_path=args.metrics_manifest, out_root=root,
             run_sha=args.run_sha, metric_keys=args.metric_keys,
+            probe_extension_root=args.probe_extension_root,
         )
     elif args.phase == "prepare-dev":
         if not args.dev_metrics_manifest:
