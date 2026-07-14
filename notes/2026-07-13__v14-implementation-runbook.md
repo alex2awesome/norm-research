@@ -49,6 +49,8 @@ CUDA. It pins CUDA enumeration to PCI-bus order, forces vLLM workers to use `spa
 noninteractive sk3 shell has no bare `python` on `PATH`; `V14_PYTHON` may override that path.
 Before spawning vLLM, it changes into its own `/lfs` code root and pins that root on `PYTHONPATH`,
 so an expired AFS working directory cannot poison a spawned EngineCore.
+It pins the private Hugging Face cache and supplies immutable shared-cache snapshot overrides for
+Llama-3.3-70B and Mistral-Small-24B, avoiding duplicate model downloads.
 The Python launcher independently verifies the declared
 physical IDs. Do not invoke a GPU phase directly on `sk3`.
 
