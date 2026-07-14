@@ -1,0 +1,114 @@
+{
+ "schema": "fresh_item_partition_protocol/v2_tacit_breadth",
+ "status": "frozen-before-tacit-breadth-model-scoring",
+ "salt": "tacit-breadth-r123-search-validation-v1",
+ "emit_practice_targets": false,
+ "anchor_policy": "unsupervised model-to-model policy reconstruction only",
+ "domains": {
+  "code-review": {
+   "task": "code-review",
+   "source_group": {"strategy": "columns", "columns": ["paper_id"], "tag": "pull_request"},
+   "holdout_grade": "pull-request-group-disjoint when paper_id is available; otherwise deduplicated-item-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "creative-writing": {
+   "task": "creative-writing",
+   "source_group": {"strategy": "text_prefix", "separator": "\n\nSTORY:", "tag": "writing_prompt"},
+   "holdout_grade": "writing-prompt-group-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "grant-funding": {
+   "task": "grant-funding",
+   "source_group": {"strategy": "columns", "columns": ["author", "institution"], "tag": "applicant"},
+   "holdout_grade": "applicant-group-disjoint when author/institution metadata is present; otherwise deduplicated-item-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "humor": {
+   "task": "humor",
+   "source_group": {"strategy": "item_hash"},
+   "holdout_grade": "deduplicated-item-disjoint; no author identifier is available",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "legal-outcome-prediction": {
+   "task": "legal-outcome-prediction",
+   "source_group": {"strategy": "columns", "columns": ["opinion_id"], "tag": "opinion"},
+   "holdout_grade": "judicial-opinion-group-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "math-stackexchange": {
+   "task": "math-stackexchange",
+   "source_group": {"strategy": "text_prefix", "separator": "\n\nAnswer:", "tag": "question"},
+   "holdout_grade": "Math.SE-question-group-disjoint when the question/answer separator is present",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "news-homepages": {
+   "task": "news-homepages",
+   "source_group": {"strategy": "columns", "columns": ["snapshot_id"], "tag": "homepage_snapshot"},
+   "holdout_grade": "homepage-snapshot-group-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "notice-and-comment": {
+   "task": "notice-and-comment",
+   "source_group": {"strategy": "item_hash"},
+   "holdout_grade": "deduplicated-comment-disjoint; no docket identifier is present in the modeling corpus",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "patents": {
+   "task": "patents",
+   "source_group": {"strategy": "item_hash"},
+   "holdout_grade": "deduplicated-patent-text-disjoint; no family identifier is present in the modeling corpus",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "peer-review": {
+   "task": "peer-review",
+   "source_group": {"strategy": "columns", "columns": ["paper_id"], "tag": "paper"},
+   "holdout_grade": "paper-group-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  },
+  "press-releases": {
+   "task": "press-releases",
+   "source_group": {"strategy": "columns", "columns": ["group"], "tag": "company"},
+   "holdout_grade": "company-group-disjoint and native-split-disjoint",
+   "label": "no dataset label is read, emitted, or used"
+  }
+ },
+ "partitions": [
+  {
+   "id": "tacit_breadth_search",
+   "n": 200,
+   "n_by_domain": {"grant-funding": 100},
+   "domains": ["code-review", "creative-writing", "grant-funding", "humor", "legal-outcome-prediction", "math-stackexchange", "news-homepages", "notice-and-comment", "patents", "peer-review", "press-releases"],
+   "visibility": "public articulation-search and decomposition partition",
+   "source_split": {"press-releases": ["train"]}
+  },
+  {
+   "id": "tacit_breadth_validation",
+   "n": 200,
+   "n_by_domain": {"grant-funding": 100},
+   "domains": ["code-review", "creative-writing", "grant-funding", "humor", "legal-outcome-prediction", "math-stackexchange", "news-homepages", "notice-and-comment", "patents", "peer-review", "press-releases"],
+   "visibility": "held out from arm selection; score only after a selection artifact is frozen",
+   "source_split": {"press-releases": ["val"]}
+  }
+ ],
+ "legacy_exclusion": {
+  "enabled": false,
+  "sampling_seed": 7,
+  "gepa_reserve": 60,
+  "n_probes": 300,
+  "claim": "Legacy windows may be reused for public search because metric sampling and source-only arms are outcome-blind. They cannot serve as a new confirmation panel."
+ },
+ "exclude_packet_manifests": [
+  {
+   "path": "notebooks/data/two_faces_20260702/fresh_item_partitions_v1_sk3_packet_manifest.json",
+   "sha256": "9f2b01d85ffaa5f88718ee3733bd2a0049d892c5f8311a7e7984b8324616928a",
+   "domains": ["creative-writing", "humor", "math-stackexchange", "press-releases"],
+   "domain_aliases": {"creative-writing": "cw", "math-stackexchange": "math", "press-releases": "pr"}
+  },
+  {
+   "path": "notebooks/data/two_faces_20260702/same_version_upper_item_partitions_v1/packet_manifest.json",
+   "sha256": "54a96684baeb0e873860a960468fc53cda456303f8a1b5e27271e8b05d2bba36",
+   "domains": ["humor"]
+  }
+ ],
+ "separation_rule": "Search and validation are item/source-group disjoint. Practice outcomes are absent. Validation is not a final lockbox; a later confirmation packet must also exclude both partitions."
+}

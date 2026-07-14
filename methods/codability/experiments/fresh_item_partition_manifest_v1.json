@@ -1,0 +1,55 @@
+{
+  "schema": "fresh_item_partition_manifest/v1",
+  "status": "frozen-before-confirmatory-item-selection",
+  "salt": "tacit-articulation-confirmatory-v1__2026-07-12",
+  "legacy_exclusion": {
+    "sampling_seed": 7,
+    "gepa_reserve": 60,
+    "n_probes": 300,
+    "claim": "Reconstruct and exclude the exact legacy seed-7 60+300 corpus sample on the current dataset revision; record the dataset hash and reconstructed exclusion hash."
+  },
+  "domains": {
+    "humor": {
+      "task": "humor",
+      "source_group": "content_hash_only",
+      "holdout_grade": "deduplicated-item-disjoint; not source-group-disjoint",
+      "label": "Reddit audience preference after length/format/topic stratification"
+    },
+    "cw": {
+      "task": "creative-writing",
+      "source_group": "writing_prompt_prefix",
+      "holdout_grade": "writing-prompt-group-disjoint",
+      "label": "WritingPrompts community preference proxy"
+    },
+    "pr": {
+      "task": "press-releases",
+      "source_group": "group_column",
+      "holdout_grade": "company-group-disjoint native train/val/test split",
+      "label": "observed pickup by a tracked news outlet; outcome proxy, not professional rating"
+    },
+    "math": {
+      "task": "math",
+      "source_group": "question_prefix",
+      "holdout_grade": "Math.SE-question-group-disjoint",
+      "label": "Math.SE community answer-quality preference"
+    }
+  },
+  "partitions": [
+    {"id": "residual_unit_certification", "n": 200, "domains": ["humor", "cw", "pr"], "visibility": "teacher-visible-after-source-telling-freeze", "source_split": {"pr": ["train"]}},
+    {"id": "residual_prompt_selection", "n": 200, "domains": ["humor", "cw", "pr"], "visibility": "selector-visible", "source_split": {"pr": ["val"]}},
+    {"id": "residual_lockbox", "n": 400, "domains": ["humor", "cw", "pr"], "visibility": "sealed-until-final-read", "source_split": {"pr": ["test"]}},
+    {"id": "gestalt_development", "n": 200, "domains": ["humor", "cw", "pr", "math"], "visibility": "teacher-visible", "source_split": {"pr": ["train"]}},
+    {"id": "gestalt_unit_certification", "n": 200, "domains": ["humor", "cw", "pr", "math"], "visibility": "certifier-visible", "source_split": {"pr": ["train"]}},
+    {"id": "gestalt_prompt_selection", "n": 200, "domains": ["humor", "cw", "pr", "math"], "visibility": "selector-visible", "source_split": {"pr": ["val"]}},
+    {"id": "gestalt_lockbox", "n": 600, "domains": ["humor", "cw", "pr", "math"], "visibility": "sealed-until-final-read", "source_split": {"pr": ["test"]}},
+    {"id": "human_validity", "n": 200, "domains": ["humor", "cw", "pr", "math"], "visibility": "human-study-only", "source_split": {"pr": ["test"]}}
+  ],
+  "hard_checks": [
+    "exact text hashes are unique across every partition and excluded legacy probes",
+    "source groups are unique across partitions whenever a source group can be reconstructed",
+    "item texts and practice labels are stored separately",
+    "sealed partition contents are never printed in logs",
+    "dataset, partition-file, and ordered item-set SHA-256 values are recorded",
+    "item-disjoint humor evidence is never described as source-group-disjoint"
+  ]
+}
