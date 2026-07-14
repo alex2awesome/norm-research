@@ -282,7 +282,7 @@ def compare_predictions(args: argparse.Namespace) -> None:
             "n": len(cold_ids), "pooled": pooled_cold, "task_specific": task_cold,
             "delta_cohen_kappa": cold_delta, "minimum_allowed_delta": -0.02,
         }
-    promoted = (
+    clears_metric_gates = (
         delta_kappa >= 0.03
         and delta_same_f1 >= 0.03
         and kappa_ci[0] > 0
@@ -290,6 +290,7 @@ def compare_predictions(args: argparse.Namespace) -> None:
         and recall_drop <= 0.02
         and cold_gate
     )
+    promoted = clears_metric_gates and not args.descriptive_only
     report = {
         "schema_version": "gemma4-similarity-pooled-task-comparison-v1",
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -306,6 +307,9 @@ def compare_predictions(args: argparse.Namespace) -> None:
         "cold_concept_comparison": cold_comparison,
         "promotion_gate": {
             "promoted": promoted,
+            "eligible_for_promotion": not args.descriptive_only,
+            "clears_metric_gates": clears_metric_gates,
+            "ineligibility_reason": "underpowered_training_cell" if args.descriptive_only else None,
             "requirements": {
                 "minimum_kappa_delta": 0.03,
                 "minimum_same_f1_delta": 0.03,
@@ -340,6 +344,7 @@ def parse_args() -> argparse.Namespace:
     compare.add_argument("--report", required=True)
     compare.add_argument("--bootstrap-samples", type=int, default=1000)
     compare.add_argument("--seed", type=int, default=94137)
+    compare.add_argument("--descriptive-only", action="store_true")
     return parser.parse_args()
 
 

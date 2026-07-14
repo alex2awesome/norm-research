@@ -61,6 +61,12 @@ def main() -> None:
         raise FileExistsError(output)
     inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
     powered = [row for row in inventory["powered_cells"] if row["powered"]]
+    task_cells = [
+        row for row in inventory["powered_cells"]
+        if float(row["weighted_train_pairs"]) > 0
+        and int(row["test_pairs"]) >= 100
+        and int(row["test_same"]) >= 20
+    ]
     repo = Path(args.repo)
     data = repo / "outputs/lexicon/similarity_distill_v1"
     model_inventory = data / "sk2_model_inventory.json"
@@ -186,7 +192,7 @@ def main() -> None:
             )
     task_gpus = (0, 1, 6)
     task_eval_gpus = (2, 3)
-    for index, cell in enumerate(powered):
+    for index, cell in enumerate(task_cells):
         task, level = cell["task"], cell["level"]
         slug = task.replace("-", "_")
         job_id = f"task_{slug}_{level}"
@@ -233,16 +239,19 @@ def main() -> None:
             }
         )
         compare_id = f"compare_{slug}_{level}"
+        compare_argv = [
+            args.python, "-m", evaluator, "compare",
+            "--pooled-predictions", str(run / "predictions" / f"eval_{level}_full.jsonl"),
+            "--task-predictions", str(predictions),
+            "--report", str(run / "reports" / f"{compare_id}.json"),
+        ]
+        if not bool(cell["powered"]):
+            compare_argv.append("--descriptive-only")
         jobs.append(
             {
                 "job_id": compare_id, "kind": "compare", "gpu": None,
                 "depends_on": [eval_id, f"eval_{level}_full"],
-                "argv": [
-                    args.python, "-m", evaluator, "compare",
-                    "--pooled-predictions", str(run / "predictions" / f"eval_{level}_full.jsonl"),
-                    "--task-predictions", str(predictions),
-                    "--report", str(run / "reports" / f"{compare_id}.json"),
-                ],
+                "argv": compare_argv,
                 "outputs": [str(run / "reports" / f"{compare_id}.json")],
             }
         )
@@ -275,11 +284,15 @@ def main() -> None:
             for relative in implementation_relatives
         },
         "powered_cells": powered,
+        "task_cells": task_cells,
         "jobs": jobs,
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"output": str(output), "jobs": len(jobs), "powered_cells": len(powered)}))
+    print(json.dumps({
+        "output": str(output), "jobs": len(jobs),
+        "powered_cells": len(powered), "task_cells": len(task_cells),
+    }))
 
 
 if __name__ == "__main__":

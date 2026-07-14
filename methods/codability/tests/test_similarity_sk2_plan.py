@@ -79,3 +79,53 @@ def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeyp
         if value == "--learning-rate"
     ]
     assert auxiliary_rates[-1] == "5e-6"
+
+
+def test_underpowered_trainable_cells_get_descriptive_task_comparisons(
+    tmp_path: Path, monkeypatch,
+) -> None:
+    inventory = tmp_path / "inventory.json"
+    manifest = tmp_path / "manifest.json"
+    inventory.write_text(
+        json.dumps(
+            {
+                "powered_cells": [
+                    {
+                        "task": "math-stackexchange", "level": "R2",
+                        "weighted_train_pairs": 1500, "test_pairs": 900,
+                        "test_same": 100, "powered": True,
+                    },
+                    {
+                        "task": "humor", "level": "R2",
+                        "weighted_train_pairs": 500, "test_pairs": 900,
+                        "test_same": 100, "powered": False,
+                    },
+                    {
+                        "task": "peer-review", "level": "R1",
+                        "weighted_train_pairs": 0, "test_pairs": 900,
+                        "test_same": 100, "powered": False,
+                    },
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    manifest.write_text("{}", encoding="utf-8")
+    (tmp_path / "sk2_model_inventory.json").write_text("{}", encoding="utf-8")
+    output = tmp_path / "jobs.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest), "--output", str(output)],
+    )
+
+    freeze_sk2_jobs.main()
+
+    plan = json.loads(output.read_text())
+    jobs = {job["job_id"]: job for job in plan["jobs"]}
+    assert len(plan["powered_cells"]) == 1
+    assert len(plan["task_cells"]) == 2
+    assert "task_math_stackexchange_R2" in jobs
+    assert "task_humor_R2" in jobs
+    assert "task_peer_review_R1" not in jobs
+    assert "--descriptive-only" not in jobs["compare_math_stackexchange_R2"]["argv"]
+    assert "--descriptive-only" in jobs["compare_humor_R2"]["argv"]

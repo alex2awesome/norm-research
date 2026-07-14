@@ -47,7 +47,10 @@ a Sonnet/GPT-5 refinement. A matched primary-only adapter supplies the
 auxiliary-data ablation. Primary fits use `2e-5`; the auxiliary curriculum uses
 `5e-6`. Levels without auxiliary targets skip that meaningless extra
 comparison. Every powered task-level cell continues on primary labels from its
-pooled adapter.
+pooled adapter. Cells with some task-local training data but insufficient
+weighted power also receive a descriptive continuation; their reports can
+diagnose heterogeneity but are never eligible for automatic promotion. Tasks
+with no training pairs remain pooled-only out-of-domain generalization tests.
 
 Gemma-4's BF16 backward pass can produce a non-finite gradient on a rare,
 deterministic accumulation window even when the loss is finite. Trainable LoRA
