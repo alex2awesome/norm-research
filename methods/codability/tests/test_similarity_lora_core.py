@@ -4,6 +4,7 @@ import pytest
 import json
 
 from methods.codability.lexicon_distill.train_gemma4_similarity_lora import (
+    collate,
     label_token_ids,
     read_rows,
 )
@@ -48,3 +49,15 @@ def test_auxiliary_scope_uses_auxiliary_distribution(tmp_path) -> None:
     rows = read_rows(path, level="R1", task=None, primary_only=False, auxiliary_only=True)
     assert rows[0]["target_probs"] == [1.0, 0.0, 0.0]
     assert rows[0]["example_weight"] == 0.25
+
+
+def test_collate_left_pads_so_last_position_is_always_prompt_token() -> None:
+    batch = collate(
+        [
+            {"input_ids": [4, 5], "target_probs": [1, 0, 0], "weight": 1},
+            {"input_ids": [6], "target_probs": [0, 1, 0], "weight": 1},
+        ],
+        pad_token_id=0,
+    )
+    assert batch["input_ids"].tolist() == [[4, 5], [0, 6]]
+    assert batch["attention_mask"].tolist() == [[1, 1], [0, 1]]

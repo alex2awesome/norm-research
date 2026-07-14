@@ -250,8 +250,11 @@ def collate(rows: Sequence[Mapping[str, Any]], pad_token_id: int) -> dict[str, A
     for row in rows:
         ids = list(row["input_ids"])
         padding = width - len(ids)
-        input_ids.append(ids + [pad_token_id] * padding)
-        masks.append([1] * len(ids) + [0] * padding)
+        # Left padding keeps the final physical position equal to the final
+        # prompt token for every row.  Gemma can then avoid materializing
+        # vocabulary logits at all earlier positions via logits_to_keep=1.
+        input_ids.append([pad_token_id] * padding + ids)
+        masks.append([0] * padding + [1] * len(ids))
     return {
         "input_ids": torch.tensor(input_ids, dtype=torch.long),
         "attention_mask": torch.tensor(masks, dtype=torch.long),
@@ -354,10 +357,11 @@ def train(
             rows = [encoded[index] for index in indices[start : start + args.batch_size]]
             batch = {key: value.to(device, non_blocking=True) for key, value in collate(rows, int(tokenizer.pad_token_id)).items()}
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-                logits = model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]).logits
-                last_positions = batch["attention_mask"].sum(dim=1) - 1
-                batch_indices = torch.arange(logits.shape[0], device=device)
-                constrained = logits[batch_indices, last_positions][:, label_tensor]
+                logits = model(
+                    input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                    logits_to_keep=1,
+                ).logits
+                constrained = logits[:, -1, :][:, label_tensor]
                 log_probs = torch.log_softmax(constrained.float(), dim=-1)
                 row_losses = -(batch["target_probs"] * log_probs).sum(dim=-1)
                 raw_loss = (row_losses * batch["weights"]).sum() / batch["weights"].sum()
@@ -466,7 +470,7 @@ def main() -> None:
         if tokenizer.eos_token_id is None:
             raise ValueError("tokenizer has neither pad nor EOS token")
         tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
+    tokenizer.padding_side = "left"
     encoded, tokenization, label_ids = encode_rows(
         tokenizer,
         rows,

@@ -130,7 +130,7 @@ def run_evaluation(args: argparse.Namespace) -> None:
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"
+    tokenizer.padding_side = "left"
     encoded, tokenization, label_ids = encode_rows(
         tokenizer, source_rows, protocols, max_length=args.max_length, augment_order=True
     )
@@ -147,10 +147,11 @@ def run_evaluation(args: argparse.Namespace) -> None:
             selected = encoded[start : start + args.batch_size]
             batch = {key: value.to(device, non_blocking=True) for key, value in collate(selected, int(tokenizer.pad_token_id)).items()}
             with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-                logits = model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]).logits
-            last = batch["attention_mask"].sum(dim=1) - 1
-            indices = torch.arange(logits.shape[0], device=device)
-            probabilities = torch.softmax(logits[indices, last][:, label_tensor].float(), dim=-1).cpu().tolist()
+                logits = model(
+                    input_ids=batch["input_ids"], attention_mask=batch["attention_mask"],
+                    logits_to_keep=1,
+                ).logits
+            probabilities = torch.softmax(logits[:, -1, :][:, label_tensor].float(), dim=-1).cpu().tolist()
             for row, probability in zip(selected, probabilities):
                 views[str(row["example_id"])].append([float(value) for value in probability])
     by_id = {str(row["example_id"]): row for row in source_rows}
