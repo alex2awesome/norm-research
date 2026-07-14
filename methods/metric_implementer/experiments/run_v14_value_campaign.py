@@ -58,6 +58,7 @@ from .v14_decoder_tuning import (
 from .v14_panel_design import (
     build_panel_design,
     canonical_sha256,
+    ensure_teaching_label_balance,
     freeze_probe_split,
     validate_panel_design,
     validate_probe_split,
@@ -110,6 +111,10 @@ FALLBACK_DECODER_MODELS = {
     "llama": "meta-llama/Llama-3.1-8B-Instruct",
     "mistral": "mistralai/Mistral-7B-Instruct-v0.3",
 }
+DEFAULT_SENTINEL_METRIC_KEYS = (
+    "humor_R3_metric0", "humor_R3_metric10", "humor_R3_metric11",
+    "humor_R3_metric12", "humor_R3_metric34", "humor_R3_metric50",
+)
 
 
 def _safe(value: str) -> str:
@@ -255,13 +260,18 @@ def _panel_balance_candidates(
         split = freeze_probe_split(
             _probe_ids(probe_texts), run_sha=str(run_sha), metric_key=metric_key,
         )
+        global_yes = int(np.sum(target_bits))
+        global_no = int(len(target_bits) - global_yes)
+        if min(global_yes, global_no) >= 3:
+            split = ensure_teaching_label_balance(split, target_bits)
         teaching = np.asarray(split["teaching"]["indices"], dtype=int)
         yes = int(np.sum(target_bits[teaching]))
         no = int(len(teaching) - yes)
         report = {
+            "global_yes": global_yes, "global_no": global_no,
             "teaching_yes": yes, "teaching_no": no,
             "minimum_per_class_required": 3,
-            "eligible": min(yes, no) >= 3,
+            "eligible": min(global_yes, global_no, yes, no) >= 3,
         }
         row["target_entropy_bits"] = _binary_entropy(target_bits)
         row["v14_panel_balance"] = report
@@ -271,6 +281,7 @@ def _panel_balance_candidates(
 
 def _select_v14_certification_metrics(
     candidates: Sequence[Mapping[str, object]], *, total: int = 35,
+    required_metric_keys: Sequence[str] = DEFAULT_SENTINEL_METRIC_KEYS,
 ) -> tuple[list[dict], dict[str, int]]:
     """Select an entropy-spread population after enforcing panel feasibility."""
     grouped: dict[str, list[dict]] = {}
@@ -278,7 +289,18 @@ def _select_v14_certification_metrics(
         grouped.setdefault(str(source["task"]), []).append(dict(source))
     if len(grouped) != 7:
         raise ValueError("v14 certification requires all seven task families")
-    quotas = {task: min(5, len(rows)) for task, rows in grouped.items()}
+    required = set(map(str, required_metric_keys))
+    by_key = {str(row["metric_key"]): row for row in candidates}
+    if not required.issubset(by_key):
+        raise ValueError("a required sentinel is not panel-feasible for certification")
+    required_counts = {
+        task: sum(str(row["metric_key"]) in required for row in rows)
+        for task, rows in grouped.items()
+    }
+    quotas = {
+        task: max(min(5, len(rows)), required_counts[task])
+        for task, rows in grouped.items()
+    }
     while sum(quotas.values()) < int(total):
         choices = [
             task for task, rows in grouped.items() if quotas[task] < len(rows)
@@ -289,6 +311,16 @@ def _select_v14_certification_metrics(
             -(len(grouped[name]) - quotas[name]), name,
         ))
         quotas[task] += 1
+    while sum(quotas.values()) > int(total):
+        choices = [
+            task for task in grouped if quotas[task] > max(1, required_counts[task])
+        ]
+        if not choices:
+            raise ValueError("required sentinels leave no valid 35-metric quota allocation")
+        task = min(choices, key=lambda name: (
+            len(grouped[name]) - quotas[name], name,
+        ))
+        quotas[task] -= 1
     if sum(quotas.values()) != int(total):
         raise RuntimeError("v14 certification quota allocation is invalid")
 
@@ -299,12 +331,16 @@ def _select_v14_certification_metrics(
             hashlib.sha256(str(row["metric_key"]).encode("utf-8")).hexdigest(),
         ))
         quota = quotas[task]
+        required_rows = [row for row in rows if str(row["metric_key"]) in required]
+        remaining = [row for row in rows if str(row["metric_key"]) not in required]
+        needed = quota - len(required_rows)
         positions = (
-            [0] if quota == 1 else
-            [int(round(rank * (len(rows) - 1) / (quota - 1))) for rank in range(quota)]
+            [] if needed == 0 else [len(remaining) // 2] if needed == 1 else
+            [int(round(rank * (len(remaining) - 1) / (needed - 1))) for rank in range(needed)]
         )
-        for rank, position in enumerate(positions):
-            row = dict(rows[position])
+        task_rows = [*required_rows, *(remaining[position] for position in positions)]
+        for rank, source in enumerate(task_rows):
+            row = dict(source)
             row["target_entropy_quintile"] = int(
                 round(rank * 4 / max(1, quota - 1)) + 1
             )
@@ -336,6 +372,7 @@ def build_designs(
             "mode": "target_entropy_quintiles_after_hard_panel_balance_filter",
             "n_eligible": len(feasible), "n_excluded": len(excluded),
             "n_selected": len(entries), "task_quotas": quotas,
+            "required_sentinel_metric_keys": list(DEFAULT_SENTINEL_METRIC_KEYS),
             "quota_reallocation": (
                 "start at min(5, feasible task population), then assign deficits to the "
                 "task with the largest remaining feasible population; stable task-name tie-break"
@@ -362,7 +399,13 @@ def build_designs(
         if len(probe_texts) != 300:
             raise ValueError(f"v14 requires the 300-probe bank for {metric_key}")
         ids = _probe_ids(probe_texts)
-        split = freeze_probe_split(ids, run_sha=run_sha, metric_key=metric_key)
+        target_bits = (
+            np.asarray(target_bootstrap["target"], dtype=float) > 0.5
+        ).astype(np.uint8)
+        split = ensure_teaching_label_balance(
+            freeze_probe_split(ids, run_sha=run_sha, metric_key=metric_key),
+            target_bits,
+        )
         codebook_keys, signatures = _codebook_signatures(codebook)
         target_index = codebook_keys.index(metric_key)
         panel = build_panel_design(
@@ -488,7 +531,9 @@ def prepare_development_population(
         for position, row in enumerate(ranked):
             row["target_entropy_quintile"] = min(4, int(5 * position / (denominator + 1)))
     selected = select_dev_metrics(
-        candidates, certified_metric_keys=certified_keys, run_sha=run_sha, n_dev=8,
+        candidates,
+        certified_metric_keys=[*certified_keys, *DEFAULT_SENTINEL_METRIC_KEYS],
+        run_sha=run_sha, n_dev=8,
     )
     for row in selected:
         for field in ("codebook_path", "assets_root", "candidate_bank_path"):
@@ -552,8 +597,14 @@ def prepare_development_population(
         "schema": "cr3-v14-development-reference-index-v1",
         "certified_metric_keys": certified_keys,
         "development_metric_keys": [str(row["metric_key"]) for row in designs],
+        "sentinel_metric_keys": list(DEFAULT_SENTINEL_METRIC_KEYS),
         "metric_level_disjoint": not bool(
             set(certified_keys).intersection(row["metric_key"] for row in designs)
+        ),
+        "sentinel_disjoint": not bool(
+            set(DEFAULT_SENTINEL_METRIC_KEYS).intersection(
+                row["metric_key"] for row in designs
+            )
         ),
         "selected_manifest": str(selected_path),
         "selected_manifest_sha256": file_sha256(selected_path),
@@ -562,8 +613,8 @@ def prepare_development_population(
             "metric_key": row["metric_key"], **row["v14_panel_balance"],
         } for row in panel_ineligible],
     }
-    if not index["metric_level_disjoint"]:
-        raise RuntimeError("development and certified metric populations overlap")
+    if not index["metric_level_disjoint"] or not index["sentinel_disjoint"]:
+        raise RuntimeError("development overlaps the certification or sentinel population")
     index["index_sha256"] = canonical_sha256(index)
     _atomic_json(dev_root / "reference_index.json", index)
     return index
@@ -1880,10 +1931,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--metrics-manifest")
     parser.add_argument("--dev-metrics-manifest")
     parser.add_argument("--sentinel-metrics-manifest")
-    parser.add_argument("--sentinel-metric-keys", nargs="+", default=[
-        "humor_R3_metric0", "humor_R3_metric10", "humor_R3_metric11",
-        "humor_R3_metric12", "humor_R3_metric34", "humor_R3_metric50",
-    ])
+    parser.add_argument(
+        "--sentinel-metric-keys", nargs="+", default=list(DEFAULT_SENTINEL_METRIC_KEYS),
+    )
     parser.add_argument("--out-root", required=True)
     parser.add_argument("--run-sha", default="v14.0")
     parser.add_argument("--metric-keys", nargs="+")

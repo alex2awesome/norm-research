@@ -6,6 +6,7 @@ reconstructor outputs or certification values.
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import math
@@ -104,6 +105,86 @@ def validate_probe_split(split: Mapping[str, object]) -> None:
     union = set().union(*groups)
     if union != set(range(int(split.get("n_probes", -1)))):
         raise ValueError("v14 probe splits do not cover the declared probes")
+
+
+def ensure_teaching_label_balance(
+    split: Mapping[str, object], target_labels: Sequence[int], *, minimum_per_class: int = 3,
+) -> dict:
+    """Deterministically swap probes across frozen splits to make teaching contrast feasible."""
+    validate_probe_split(split)
+    labels = np.asarray(target_labels, dtype=np.uint8)
+    n_probes = int(split["n_probes"])
+    if labels.shape != (n_probes,) or np.any((labels != 0) & (labels != 1)):
+        raise ValueError("target_labels must be one binary label per frozen probe")
+    minimum = int(minimum_per_class)
+    if minimum <= 0 or min(int(np.sum(labels == label)) for label in (0, 1)) < minimum:
+        raise ValueError("target population cannot satisfy the teaching label balance")
+
+    repaired = copy.deepcopy(dict(split))
+    id_by_index = {}
+    for group in ("teaching", "decoder_development", "heldout"):
+        for index, probe_id in zip(
+            repaired[group]["indices"], repaired[group]["probe_ids"]
+        ):
+            id_by_index[int(index)] = str(probe_id)
+    teaching = list(map(int, repaired["teaching"]["indices"]))
+    swaps = []
+    for label in (0, 1):
+        shortage = max(0, minimum - int(np.sum(labels[np.asarray(teaching)] == label)))
+        if not shortage:
+            continue
+        incoming = []
+        for group_priority, group in enumerate(("decoder_development", "heldout")):
+            for index in repaired[group]["indices"]:
+                if int(labels[int(index)]) == label:
+                    incoming.append((
+                        group_priority,
+                        canonical_sha256({
+                            "run_sha": repaired["run_sha"],
+                            "metric": repaired["metric_key"],
+                            "probe": int(index), "label": label,
+                            "purpose": "teaching-balance-incoming",
+                        }),
+                        group, int(index),
+                    ))
+        outgoing = sorted(
+            (index for index in teaching if int(labels[index]) != label),
+            key=lambda index: canonical_sha256({
+                "run_sha": repaired["run_sha"], "metric": repaired["metric_key"],
+                "probe": int(index), "label": label,
+                "purpose": "teaching-balance-outgoing",
+            }),
+        )
+        if len(incoming) < shortage or len(outgoing) < shortage:
+            raise ValueError("frozen split cannot be repaired to teaching label balance")
+        for (_, _, source_group, incoming_index), outgoing_index in zip(
+            sorted(incoming)[:shortage], outgoing[:shortage]
+        ):
+            teaching.remove(outgoing_index)
+            teaching.append(incoming_index)
+            source_indices = list(map(int, repaired[source_group]["indices"]))
+            source_indices.remove(incoming_index)
+            source_indices.append(outgoing_index)
+            repaired[source_group]["indices"] = sorted(source_indices)
+            swaps.append({
+                "label_added_to_teaching": int(label),
+                "incoming_index": incoming_index, "source_split": source_group,
+                "outgoing_index": outgoing_index,
+            })
+    repaired["teaching"]["indices"] = sorted(teaching)
+    for group in ("teaching", "decoder_development", "heldout"):
+        indices = list(map(int, repaired[group]["indices"]))
+        repaired[group]["probe_ids"] = [id_by_index[index] for index in indices]
+        repaired[group]["sha256"] = canonical_sha256(repaired[group]["probe_ids"])
+    repaired["teaching_balance_repair"] = {
+        "minimum_per_class": minimum, "performed": bool(swaps), "swaps": swaps,
+        "target_yes_after": int(np.sum(labels[np.asarray(teaching)] == 1)),
+        "target_no_after": int(np.sum(labels[np.asarray(teaching)] == 0)),
+    }
+    repaired.pop("split_sha256", None)
+    repaired["split_sha256"] = canonical_sha256(repaired)
+    validate_probe_split(repaired)
+    return repaired
 
 
 def code_entropy_bits(codes: np.ndarray) -> float:

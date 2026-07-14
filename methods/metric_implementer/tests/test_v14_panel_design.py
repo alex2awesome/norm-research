@@ -8,11 +8,29 @@ import pytest
 from methods.metric_implementer.experiments.v14_panel_design import (
     _eligible_subset,
     build_panel_design,
+    ensure_teaching_label_balance,
     freeze_probe_split,
     identification_diagnostic,
     validate_panel_design,
     validate_probe_split,
 )
+
+
+def test_probe_split_balance_repair_is_deterministic_and_size_preserving():
+    _, probe_ids = _fixture()
+    split = freeze_probe_split(probe_ids, run_sha="repair", metric_key="sparse")
+    labels = np.zeros(300, dtype=np.uint8)
+    teaching = split["teaching"]["indices"]
+    outside = split["decoder_development"]["indices"] + split["heldout"]["indices"]
+    labels[teaching[:2]] = 1
+    labels[outside[:5]] = 1
+    repaired = ensure_teaching_label_balance(split, labels)
+    assert repaired == ensure_teaching_label_balance(split, labels)
+    assert [len(repaired[name]["indices"]) for name in (
+        "teaching", "decoder_development", "heldout"
+    )] == [120, 30, 150]
+    assert int(np.sum(labels[repaired["teaching"]["indices"]])) >= 3
+    assert repaired["teaching_balance_repair"]["performed"] is True
 
 
 def test_eligible_subset_is_hash_stable_and_balance_feasible():
