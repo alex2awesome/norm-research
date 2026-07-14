@@ -40,6 +40,20 @@ completion markers, stopping point, and artifact paths below remain current.
   prevents an expired AFS current directory from killing a `spawn` worker. The resumed sk2 Llama
   lane was likewise launched from its `/lfs` code root as PID `1224489`.
 
+### 20:11 PDT follow-up
+
+- Shard 0 reached its fixed-executor handoff and its pre-fix process failed EngineCore startup.
+  Its cache remains intact. A corrected retry found sk3 device 0 occupied by a separate live
+  `methods.codability.experiments.score_fresh_name_arms` calibration job (parent PID `2261554`),
+  not an orphan; do not terminate or interfere with that job.
+- Shard 0 is therefore paused with no retry loop. Resume it only after device 0 is free, or on
+  another allowed device after its current Tier B shard completes:
+
+  ```bash
+  ssh sk3 'V13_SHARD_IDS=0 V13_DEVICE_OVERRIDE=0 \
+    /lfs/skampere3/0/alexspan/cr3-v13.1/scripts/run_v13_llama70_shards_sk3.sh'
+  ```
+
 This note is the durable handoff for the currently running v13.1 campaign. PIDs and row counts
 below are a point-in-time snapshot; the paths, completion markers, restrictions, and monitoring
 commands are the durable source of truth.
