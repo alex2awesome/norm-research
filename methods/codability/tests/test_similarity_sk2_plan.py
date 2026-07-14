@@ -35,3 +35,28 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     assert jobs["pooled_R1_full"]["gpu"] == 0
     assert jobs["eval_R1_base"]["gpu"] == 2
     assert jobs["eval_R2_base"]["gpu"] == 3
+
+
+def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeypatch) -> None:
+    inventory = tmp_path / "inventory.json"
+    manifest = tmp_path / "manifest.json"
+    inventory.write_text(json.dumps({"powered_cells": []}), encoding="utf-8")
+    manifest.write_text("{}", encoding="utf-8")
+    (tmp_path / "R1_train.jsonl").write_text(
+        json.dumps({"family_distributions": {"sonnet": [0, 0, 1], "opus": [0, 1, 0]}}) + "\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "jobs.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["freeze", "--inventory", str(inventory), "--dataset-manifest", str(manifest), "--output", str(output)],
+    )
+
+    freeze_sk2_jobs.main()
+
+    jobs = {job["job_id"]: job for job in json.loads(output.read_text())["jobs"]}
+    assert jobs["pooled_R1_auxiliary"]["gpu"] == 0
+    assert jobs["pooled_R1_full"]["gpu"] == 0
+    assert jobs["pooled_R1_primary"]["gpu"] == 6
+    assert jobs["pooled_R1_full"]["depends_on"] == ["pooled_R1_auxiliary"]
+    assert jobs["pooled_R1_primary"]["depends_on"] == ["preflight_R1"]

@@ -127,11 +127,16 @@ def main() -> None:
             job_id = f"pooled_{level}_{variant}"
             adapter = run / "adapters" / job_id
             report = run / "reports" / f"{job_id}.train.json"
+            # R1 has two independent 104k-row primary fits.  Once the short
+            # R3 fit releases GPU 6, run the primary-only ablation there while
+            # the auxiliary-initialized headline fit continues on GPU 0.
+            # Keeping both on GPU 0 needlessly serialized the longest jobs.
+            training_gpu = 6 if level == "R1" and variant == "primary" else gpu_for_level[level]
             jobs.append(
                 {
                     "job_id": job_id,
                     "kind": "train_pooled",
-                    "gpu": gpu_for_level[level],
+                    "gpu": training_gpu,
                     "depends_on": dependencies,
                     "argv": base + extra + ["--output", str(adapter), "--report", str(report)],
                     "outputs": [str(adapter / "adapter_model.safetensors"), str(report)],
