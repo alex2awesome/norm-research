@@ -190,6 +190,34 @@ def main() -> None:
                     "outputs": [str(predictions), str(report)],
                 }
             )
+        variant_comparisons = [("full_vs_base", "base", "full")]
+        if auxiliary_available:
+            variant_comparisons.extend(
+                [
+                    ("primary_vs_base", "base", "primary"),
+                    ("full_vs_primary", "primary", "full"),
+                ]
+            )
+        for comparison, reference, candidate in variant_comparisons:
+            job_id = f"compare_{level}_{comparison}"
+            report = run / "reports" / f"{job_id}.json"
+            jobs.append(
+                {
+                    "job_id": job_id, "kind": "compare_variant", "gpu": None,
+                    "depends_on": [f"eval_{level}_{reference}", f"eval_{level}_{candidate}"],
+                    "argv": [
+                        args.python, "-m", evaluator, "compare-variants",
+                        "--reference-predictions",
+                        str(run / "predictions" / f"eval_{level}_{reference}.jsonl"),
+                        "--candidate-predictions",
+                        str(run / "predictions" / f"eval_{level}_{candidate}.jsonl"),
+                        "--reference-label", reference,
+                        "--candidate-label", candidate,
+                        "--report", str(report),
+                    ],
+                    "outputs": [str(report)],
+                }
+            )
     task_gpus = (0, 1, 6)
     task_eval_gpus = (2, 3)
     for index, cell in enumerate(task_cells):

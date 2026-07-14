@@ -324,6 +324,72 @@ def compare_predictions(args: argparse.Namespace) -> None:
     print(json.dumps(report, sort_keys=True), flush=True)
 
 
+def compare_variants(args: argparse.Namespace) -> None:
+    reference = read_predictions(Path(args.reference_predictions))
+    candidate = read_predictions(Path(args.candidate_predictions))
+    common = sorted(set(reference) & set(candidate))
+    if len(common) < 100:
+        raise ValueError(f"paired comparison underpowered: only {len(common)} examples")
+    for example_id in common:
+        if reference[example_id]["truth"] != candidate[example_id]["truth"]:
+            raise ValueError(f"truth drift for {example_id}")
+    reference_rows = [reference[example_id] for example_id in common]
+    candidate_rows = [candidate[example_id] for example_id in common]
+    reference_metrics = metrics(reference_rows)
+    candidate_metrics = metrics(candidate_rows)
+    endpoints = ("cohen_kappa", "macro_f1", "same_f1")
+    observed = {
+        endpoint: candidate_metrics[endpoint] - reference_metrics[endpoint]
+        for endpoint in endpoints
+    }
+    rng = random.Random(args.seed)
+    bootstrap = {endpoint: [] for endpoint in endpoints}
+    for _ in range(args.bootstrap_samples):
+        sample = [rng.randrange(len(common)) for _ in common]
+        sampled_reference = metrics([reference_rows[index] for index in sample])
+        sampled_candidate = metrics([candidate_rows[index] for index in sample])
+        for endpoint in endpoints:
+            bootstrap[endpoint].append(sampled_candidate[endpoint] - sampled_reference[endpoint])
+    intervals = {
+        endpoint: [percentile(values, 0.025), percentile(values, 0.975)]
+        for endpoint, values in bootstrap.items()
+    }
+    precision_drop = reference_metrics["same_precision"] - candidate_metrics["same_precision"]
+    recall_drop = reference_metrics["same_recall"] - candidate_metrics["same_recall"]
+    supported = (
+        intervals["cohen_kappa"][0] > 0
+        and intervals["macro_f1"][0] > 0
+        and precision_drop <= 0.02
+        and recall_drop <= 0.02
+    )
+    report = {
+        "schema_version": "gemma4-similarity-paired-variant-comparison-v1",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "n": len(common),
+        "reference_label": args.reference_label,
+        "candidate_label": args.candidate_label,
+        "reference": reference_metrics,
+        "candidate": candidate_metrics,
+        "delta": {
+            **observed,
+            "same_precision": candidate_metrics["same_precision"] - reference_metrics["same_precision"],
+            "same_recall": candidate_metrics["same_recall"] - reference_metrics["same_recall"],
+        },
+        "paired_bootstrap_95ci": intervals,
+        "improvement_gate": {
+            "supported": supported,
+            "requirements": {
+                "cohen_kappa_ci_lower_above_zero": True,
+                "macro_f1_ci_lower_above_zero": True,
+                "maximum_same_precision_drop": 0.02,
+                "maximum_same_recall_drop": 0.02,
+            },
+        },
+    }
+    write_json_new(Path(args.report), report)
+    print(json.dumps(report, sort_keys=True), flush=True)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -345,6 +411,14 @@ def parse_args() -> argparse.Namespace:
     compare.add_argument("--bootstrap-samples", type=int, default=1000)
     compare.add_argument("--seed", type=int, default=94137)
     compare.add_argument("--descriptive-only", action="store_true")
+    variants = sub.add_parser("compare-variants")
+    variants.add_argument("--reference-predictions", required=True)
+    variants.add_argument("--candidate-predictions", required=True)
+    variants.add_argument("--reference-label", required=True)
+    variants.add_argument("--candidate-label", required=True)
+    variants.add_argument("--report", required=True)
+    variants.add_argument("--bootstrap-samples", type=int, default=1000)
+    variants.add_argument("--seed", type=int, default=94137)
     return parser.parse_args()
 
 
@@ -353,8 +427,10 @@ def main() -> None:
     if args.command == "evaluate":
         assert_sk2_host()
         run_evaluation(args)
-    else:
+    elif args.command == "compare":
         compare_predictions(args)
+    else:
+        compare_variants(args)
 
 
 if __name__ == "__main__":
