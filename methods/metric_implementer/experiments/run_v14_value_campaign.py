@@ -264,6 +264,50 @@ def _panel_balance_candidates(
     return eligible, excluded
 
 
+def _select_v14_certification_metrics(
+    candidates: Sequence[Mapping[str, object]], *, total: int = 35,
+) -> tuple[list[dict], dict[str, int]]:
+    """Select an entropy-spread population after enforcing panel feasibility."""
+    grouped: dict[str, list[dict]] = {}
+    for source in candidates:
+        grouped.setdefault(str(source["task"]), []).append(dict(source))
+    if len(grouped) != 7:
+        raise ValueError("v14 certification requires all seven task families")
+    quotas = {task: min(5, len(rows)) for task, rows in grouped.items()}
+    while sum(quotas.values()) < int(total):
+        choices = [
+            task for task, rows in grouped.items() if quotas[task] < len(rows)
+        ]
+        if not choices:
+            raise ValueError("fewer than 35 panel-feasible certification metrics remain")
+        task = min(choices, key=lambda name: (
+            -(len(grouped[name]) - quotas[name]), name,
+        ))
+        quotas[task] += 1
+    if sum(quotas.values()) != int(total):
+        raise RuntimeError("v14 certification quota allocation is invalid")
+
+    selected = []
+    for task in sorted(grouped):
+        rows = sorted(grouped[task], key=lambda row: (
+            float(row["target_entropy_bits"]),
+            hashlib.sha256(str(row["metric_key"]).encode("utf-8")).hexdigest(),
+        ))
+        quota = quotas[task]
+        positions = (
+            [0] if quota == 1 else
+            [int(round(rank * (len(rows) - 1) / (quota - 1))) for rank in range(quota)]
+        )
+        for rank, position in enumerate(positions):
+            row = dict(rows[position])
+            row["target_entropy_quintile"] = int(
+                round(rank * 4 / max(1, quota - 1)) + 1
+            )
+            row["v14_certification_task_quota"] = int(quota)
+            selected.append(row)
+    return selected, quotas
+
+
 def build_designs(
     *, metrics_manifest_path: str | Path, out_root: str | Path, run_sha: str,
     metric_keys: Sequence[str] | None = None,
@@ -282,11 +326,15 @@ def build_designs(
         feasible, excluded = _panel_balance_candidates(
             manifest["metrics"], base=base, run_sha=str(run_sha),
         )
-        filtered_manifest = {**manifest, "metrics": feasible}
-        entries = select_metric_entries(filtered_manifest, base)
+        entries, quotas = _select_v14_certification_metrics(feasible, total=35)
         selection_report = {
             "mode": "target_entropy_quintiles_after_hard_panel_balance_filter",
             "n_eligible": len(feasible), "n_excluded": len(excluded),
+            "n_selected": len(entries), "task_quotas": quotas,
+            "quota_reallocation": (
+                "start at min(5, feasible task population), then assign deficits to the "
+                "task with the largest remaining feasible population; stable task-name tie-break"
+            ),
             "excluded": [{
                 "metric_key": row["metric_key"], **row["v14_panel_balance"],
             } for row in excluded],
