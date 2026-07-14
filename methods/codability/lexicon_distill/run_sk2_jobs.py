@@ -63,6 +63,13 @@ def validate_frozen_inputs(plan: dict[str, Any]) -> None:
     model_inventory = Path(plan["model_inventory_remote_path"])
     if not model_inventory.is_file():
         raise RuntimeError(f"missing sk2 model inventory: {model_inventory}")
+    implementation_files = plan.get("implementation_files")
+    if not isinstance(implementation_files, dict) or not implementation_files:
+        raise RuntimeError("job plan does not bind implementation files")
+    for relative, reference in implementation_files.items():
+        path = Path(reference["remote_path"])
+        if not path.is_file() or sha256_file(path) != reference["sha256"]:
+            raise RuntimeError(f"implementation file missing or hash-drifted: {relative} ({path})")
     manifest = json.loads(Path(plan["dataset_manifest"]["remote_path"]).read_text(encoding="utf-8"))
     root = Path(plan["dataset_manifest"]["remote_path"]).parent
     required = {

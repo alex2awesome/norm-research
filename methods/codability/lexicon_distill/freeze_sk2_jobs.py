@@ -67,6 +67,14 @@ def main() -> None:
     run = repo / "outputs/lexicon/similarity_lora_v1"
     trainer = "methods.codability.lexicon_distill.train_gemma4_similarity_lora"
     evaluator = "methods.codability.lexicon_distill.evaluate_similarity_lora"
+    local_repo = Path(__file__).resolve().parents[3]
+    implementation_relatives = (
+        "methods/codability/lexicon_distill/dataset.py",
+        "methods/codability/lexicon_distill/train_gemma4_similarity_lora.py",
+        "methods/codability/lexicon_distill/evaluate_similarity_lora.py",
+        "methods/codability/lexicon_distill/freeze_sk2_jobs.py",
+        "methods/codability/lexicon_distill/run_sk2_jobs.py",
+    )
     gpu_for_level = {"R1": 0, "R2": 1, "R3": 6}
     # Keep expensive untouched evaluations off the training lanes.  R1 owns
     # evaluation GPU 2; shorter R2/R3 evaluations serialize on GPU 3.
@@ -252,6 +260,13 @@ def main() -> None:
             "sha256": sha256_file(manifest_path),
         },
         "model_inventory_remote_path": str(model_inventory),
+        "implementation_files": {
+            relative: {
+                "sha256": sha256_file(local_repo / relative),
+                "remote_path": str(repo / relative),
+            }
+            for relative in implementation_relatives
+        },
         "powered_cells": powered,
         "jobs": jobs,
     }

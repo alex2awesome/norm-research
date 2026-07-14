@@ -20,6 +20,14 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     plan = json.loads(output.read_text())
     assert plan["sk3_forbidden"] is True
     assert "skampere2" in plan["model"]
+    assert set(plan["implementation_files"]) == {
+        "methods/codability/lexicon_distill/dataset.py",
+        "methods/codability/lexicon_distill/train_gemma4_similarity_lora.py",
+        "methods/codability/lexicon_distill/evaluate_similarity_lora.py",
+        "methods/codability/lexicon_distill/freeze_sk2_jobs.py",
+        "methods/codability/lexicon_distill/run_sk2_jobs.py",
+    }
+    assert all(len(reference["sha256"]) == 64 for reference in plan["implementation_files"].values())
     assert all("skampere3" not in " ".join(job["argv"]) for job in plan["jobs"])
     assert {job["job_id"] for job in plan["jobs"]}.issuperset({"preflight_R1", "preflight_R2", "preflight_R3"})
     jobs = {job["job_id"]: job for job in plan["jobs"]}

@@ -200,6 +200,12 @@ def run_evaluation(args: argparse.Namespace) -> None:
         "created_at": datetime.now(timezone.utc).isoformat(),
         "model": args.model,
         "adapter": file_ref(Path(args.adapter) / "adapter_model.safetensors") if args.adapter else None,
+        "implementation": {
+            "evaluator": file_ref(Path(__file__)),
+            "shared_trainer": file_ref(
+                Path(__file__).with_name("train_gemma4_similarity_lora.py")
+            ),
+        },
         "dataset": file_ref(dataset),
         "protocols": file_ref(protocols_path),
         "selection": {"level": args.level, "task": args.task},

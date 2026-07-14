@@ -578,6 +578,7 @@ def main() -> None:
         "protocols": file_ref(protocols_path),
         "model": str(Path(args.model).resolve()),
         "model_inventory": file_ref(Path(args.model_inventory)) if args.model_inventory else None,
+        "implementation": file_ref(Path(__file__)),
         "runtime": runtime_metadata(),
         "selection": {
             "level": args.level, "task": args.task,
