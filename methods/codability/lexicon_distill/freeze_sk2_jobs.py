@@ -80,7 +80,7 @@ def main() -> None:
             "--model", args.model, "--level", level,
             "--model-inventory", str(model_inventory),
             "--max-length", "1024", "--epochs", "1", "--batch-size", "8",
-            "--gradient-accumulation-steps", "2", "--lora-r", "16",
+            "--gradient-accumulation-steps", "2", "--learning-rate", "2e-5", "--lora-r", "16",
             "--lora-alpha", "32", "--lora-dropout", "0.05",
         ]
         preflight_id = f"preflight_{level}"
@@ -105,7 +105,10 @@ def main() -> None:
                     "job_id": auxiliary_id, "kind": "train_pooled_auxiliary",
                     "gpu": gpu_for_level[level], "depends_on": [preflight_id],
                     "argv": base + [
-                        "--auxiliary-only", "--output", str(auxiliary_adapter),
+                        # The lower-trust curriculum gets one quarter of the
+                        # primary learning rate; all examples remain present.
+                        "--auxiliary-only", "--learning-rate", "5e-6",
+                        "--output", str(auxiliary_adapter),
                         "--report", str(auxiliary_report),
                     ],
                     "outputs": [str(auxiliary_adapter / "adapter_model.safetensors"), str(auxiliary_report)],
@@ -115,7 +118,7 @@ def main() -> None:
                 [
                     (
                         "full",
-                        ["--primary-only", "--init-adapter", str(auxiliary_adapter), "--learning-rate", "2e-5"],
+                        ["--primary-only", "--init-adapter", str(auxiliary_adapter)],
                         [auxiliary_id],
                     ),
                     ("primary", ["--primary-only"], [preflight_id]),

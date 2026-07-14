@@ -32,6 +32,8 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     accumulation_index = jobs["pooled_R1_full"]["argv"].index("--gradient-accumulation-steps")
     assert jobs["pooled_R1_full"]["argv"][batch_index + 1] == "8"
     assert jobs["pooled_R1_full"]["argv"][accumulation_index + 1] == "2"
+    learning_rate_index = jobs["pooled_R1_full"]["argv"].index("--learning-rate")
+    assert jobs["pooled_R1_full"]["argv"][learning_rate_index + 1] == "2e-5"
     assert jobs["pooled_R1_full"]["gpu"] == 0
     assert jobs["eval_R1_base"]["gpu"] == 2
     assert jobs["eval_R2_base"]["gpu"] == 3
@@ -60,3 +62,9 @@ def test_r1_primary_ablation_uses_parallel_training_lane(tmp_path: Path, monkeyp
     assert jobs["pooled_R1_primary"]["gpu"] == 6
     assert jobs["pooled_R1_full"]["depends_on"] == ["pooled_R1_auxiliary"]
     assert jobs["pooled_R1_primary"]["depends_on"] == ["preflight_R1", "pooled_R3_full"]
+    auxiliary_rates = [
+        jobs["pooled_R1_auxiliary"]["argv"][index + 1]
+        for index, value in enumerate(jobs["pooled_R1_auxiliary"]["argv"])
+        if value == "--learning-rate"
+    ]
+    assert auxiliary_rates[-1] == "5e-6"

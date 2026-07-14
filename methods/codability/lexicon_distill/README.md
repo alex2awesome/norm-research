@@ -41,12 +41,13 @@ python -m methods.codability.lexicon_distill.run_sk2_jobs \
   --plan outputs/lexicon/similarity_distill_v1/sk2_jobs.json
 ```
 
-Where auxiliary teachers exist, the headline pooled adapter first learns their
-distributions at quarter weight, then receives a lower-learning-rate
-Sonnet/GPT-5 refinement. A matched primary-only adapter supplies the
-auxiliary-data ablation. Levels without auxiliary targets skip that meaningless
-extra comparison. Every powered task-level cell continues on primary labels
-from its pooled adapter.
+Where auxiliary teachers exist, the headline pooled adapter first sees all of
+their distributions at one quarter of the primary learning rate, then receives
+a Sonnet/GPT-5 refinement. A matched primary-only adapter supplies the
+auxiliary-data ablation. Primary fits use `2e-5`; the auxiliary curriculum uses
+`5e-6`. Levels without auxiliary targets skip that meaningless extra
+comparison. Every powered task-level cell continues on primary labels from its
+pooled adapter.
 
 Evaluation reports three-way macro-F1, Cohen's kappa, SAME precision/recall/F1,
 ordinal error, Brier score, calibration, input-order consistency, protocol
