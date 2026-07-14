@@ -20,7 +20,9 @@ scripts/run_v14_campaign_sk3.sh 7 ...
 
 The wrapper rejects every other `sk3` device and takes a per-device process lock before exposing
 CUDA. It pins CUDA enumeration to PCI-bus order, forces vLLM workers to use `spawn`, and moves
-`HOME` to durable `/lfs` storage. The Python launcher independently verifies the declared
+`HOME` to durable `/lfs` storage. It also uses the pinned sk3 miniconda interpreter because a
+noninteractive sk3 shell has no bare `python` on `PATH`; `V14_PYTHON` may override that path.
+The Python launcher independently verifies the declared
 physical IDs. Do not invoke a GPU phase directly on `sk3`.
 
 The campaign has a hard **four-GPU total cap across all hosts**. Using sk3 GPUs 0, 5, 6, and 7

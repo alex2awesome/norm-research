@@ -45,6 +45,7 @@ export VLLM_WORKER_MULTIPROC_METHOD=spawn
 export HOME=/lfs/skampere3/0/alexspan
 export CUDA_VISIBLE_DEVICES="$physical_csv"
 export V14_PHYSICAL_GPUS="$physical_csv"
+V14_PYTHON=${V14_PYTHON:-/lfs/skampere3/0/alexspan/miniconda3/bin/python}
 
-exec python -m methods.metric_implementer.experiments.run_v14_value_campaign \
+exec "$V14_PYTHON" -m methods.metric_implementer.experiments.run_v14_value_campaign \
   --physical-gpus "$physical_csv" "$@"
