@@ -68,6 +68,9 @@ def main() -> None:
     trainer = "methods.codability.lexicon_distill.train_gemma4_similarity_lora"
     evaluator = "methods.codability.lexicon_distill.evaluate_similarity_lora"
     gpu_for_level = {"R1": 0, "R2": 1, "R3": 6}
+    # Keep expensive untouched evaluations off the training lanes.  R1 owns
+    # evaluation GPU 2; shorter R2/R3 evaluations serialize on GPU 3.
+    eval_gpu_for_level = {"R1": 2, "R2": 3, "R3": 3}
     jobs: list[dict[str, Any]] = []
     for level in ("R1", "R2", "R3"):
         base = [
@@ -153,12 +156,13 @@ def main() -> None:
                 argv += ["--adapter", str(run / "adapters" / f"pooled_{level}_{variant}")]
             jobs.append(
                 {
-                    "job_id": job_id, "kind": "evaluate", "gpu": gpu_for_level[level],
+                    "job_id": job_id, "kind": "evaluate", "gpu": eval_gpu_for_level[level],
                     "depends_on": dependency, "argv": argv,
                     "outputs": [str(predictions), str(report)],
                 }
             )
-    task_gpus = (0, 1, 6, 7)
+    task_gpus = (0, 1, 6)
+    task_eval_gpus = (2, 3)
     for index, cell in enumerate(powered):
         task, level = cell["task"], cell["level"]
         slug = task.replace("-", "_")
@@ -191,7 +195,8 @@ def main() -> None:
         eval_report = run / "reports" / f"{eval_id}.json"
         jobs.append(
             {
-                "job_id": eval_id, "kind": "evaluate_task", "gpu": task_gpus[index % len(task_gpus)],
+                "job_id": eval_id, "kind": "evaluate_task",
+                "gpu": task_eval_gpus[index % len(task_eval_gpus)],
                 "depends_on": [job_id],
                 "argv": [
                     args.python, "-m", evaluator, "evaluate",

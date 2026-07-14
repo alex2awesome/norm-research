@@ -32,3 +32,6 @@ def test_frozen_plan_uses_only_sk2_paths(tmp_path: Path, monkeypatch) -> None:
     accumulation_index = jobs["pooled_R1_full"]["argv"].index("--gradient-accumulation-steps")
     assert jobs["pooled_R1_full"]["argv"][batch_index + 1] == "8"
     assert jobs["pooled_R1_full"]["argv"][accumulation_index + 1] == "2"
+    assert jobs["pooled_R1_full"]["gpu"] == 0
+    assert jobs["eval_R1_base"]["gpu"] == 2
+    assert jobs["eval_R2_base"]["gpu"] == 3
