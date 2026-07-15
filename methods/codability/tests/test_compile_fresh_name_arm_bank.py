@@ -85,7 +85,9 @@ def test_frozen_concluding_batch_is_exact_hash_bound_and_sealed():
     root = Path(__file__).parents[3]
     exp = root / "methods/codability/experiments"
     data = root / "notebooks/data/two_faces_20260702"
-    manifest_path = exp / "concluding_policy_execution_manifest_v1.json"
+    # v2 supersedes v1 (2026-07-15): identical frozen design; only the analysis-closure
+    # bookkeeping fix and the v2 output directory differ.  v1's lockbox was never opened.
+    manifest_path = exp / "concluding_policy_execution_manifest_v2.json"
     manifest = json.loads(manifest_path.read_text())
 
     rebuilt = compile_concluding_confirmation_manifest(

@@ -1043,10 +1043,24 @@ def test_same_version_upper_manifests_bind_unsupervised_two_arm_experiment():
         "methods/codability/experiments/score_fresh_target_views.py",
         "methods/codability/experiments/validate_fresh_item_partitions.py",
         "methods/metric_implementer/vllm_backend.py",
+        # Drifted by the 2026-07-15 analysis-closure unification; frozen bytes archived.
+        "methods/codability/experiments/policy_data.py",
+        "methods/codability/experiments/run_policy_isomorphism.py",
     }
-    assert [row["path"] for row in _analysis_implementation()["files"]] == [
+    # This sealed manifest predates the 2026-07-15 closure fix that added the three package
+    # __init__.py files to the recorder.  Its lockbox is already opened and complete, so the
+    # relationship is documented rather than re-frozen: current recorder = frozen list + inits.
+    current_paths = [row["path"] for row in _analysis_implementation()["files"]]
+    manifest_paths = [
         row["path"] for row in execution["implementation"]["analysis"]["files"]
     ]
+    init_additions = {
+        "methods/codability/__init__.py",
+        "methods/codability/experiments/__init__.py",
+        "methods/metric_implementer/__init__.py",
+    }
+    assert [p for p in current_paths if p not in init_additions] == manifest_paths
+    assert set(current_paths) - set(manifest_paths) == init_additions
     assert execution["phases"]["lockbox"] == [selection["lockbox_partition"]]
     assert set(execution["selection_required_phases"]) == {"calibration", "lockbox"}
     jobs = {row["id"]: row for row in execution["model_jobs"]}
