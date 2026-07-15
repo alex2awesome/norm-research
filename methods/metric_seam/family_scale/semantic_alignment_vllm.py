@@ -38,7 +38,13 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0)
     args = parser.parse_args()
 
-    paths = sorted(args.requests_dir.glob("*_request.json"))
+    # macOS tar archives can contain AppleDouble ``._*`` sidecars.  They are
+    # metadata, not frozen requests, and must never enter the model batch.
+    paths = sorted(
+        path
+        for path in args.requests_dir.glob("*_request.json")
+        if not path.name.startswith("._")
+    )
     if args.limit:
         paths = paths[: args.limit]
     if not paths:
