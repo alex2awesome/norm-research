@@ -18,8 +18,8 @@ import time
 
 
 DEFAULT_MODEL = (
-    "/lfs/skampere3/0/alexspan/merged_models/"
-    "Llama-3.3-70B-FP8-with-tokenizer"
+    "/lfs/skampere3/0/shared_hf_cache/models--nvidia--Llama-3.3-70B-Instruct-FP8/"
+    "snapshots/fde04ee76a27704c88f569542ef023b57d4d0362"
 )
 
 

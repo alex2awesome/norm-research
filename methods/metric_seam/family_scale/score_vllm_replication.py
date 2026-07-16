@@ -10,6 +10,7 @@ from pathlib import Path
 import random
 import statistics
 
+from .response_normalization import normalize_alignment_raw
 from .semantic_alignment import AlignmentError, build_alignment_report
 
 
@@ -64,12 +65,16 @@ def main() -> int:
         sonnet_path = args.sonnet_dir / f"{stem}_response.json"
         try:
             request = json.loads(request_path.read_text())
+            raw_text = raw_path.read_text(encoding="utf-8")
+            normalized_text = normalize_alignment_raw(raw_text)
+            was_normalized = normalized_text != raw_text
             report = build_alignment_report(
-                request=request, raw_response=raw_path.read_text(encoding="utf-8")
+                request=request, raw_response=normalized_text
             )
             report["source_request_model"] = report["model"]
             report["model"] = manifest["model"]
             report["instrument"] = "independent_open_model_replication"
+            report["response_was_normalized"] = was_normalized
             sonnet = json.loads(sonnet_path.read_text())
             pairwise_mean = statistics.mean(
                 value["semantic_jaccard"]["decimal"] for value in report["pairwise"]
@@ -83,6 +88,7 @@ def main() -> int:
                 "domain": domain_by_name[report["metric"]["name"]],
                 "open_model_mean_pairwise_semantic_jaccard": pairwise_mean,
                 "sonnet_open_model_link_jaccard": link_j,
+                "response_was_normalized": was_normalized,
                 "output": str(output_path),
             })
         except (AlignmentError, FileNotFoundError, json.JSONDecodeError, KeyError) as exc:
@@ -109,6 +115,7 @@ def main() -> int:
         "n_expected": len(list(args.requests_dir.glob("*_request.json"))),
         "n_valid": len(rows),
         "n_invalid": len(failures),
+        "n_normalized": sum(1 for row in rows if row["response_was_normalized"]),
         "overall": {
             "sonnet_open_model_link_jaccard": median_summary(link_values, seed=77171),
             "open_model_decomposition_stability": median_summary(open_values, seed=66161),
@@ -127,6 +134,7 @@ def main() -> int:
         "status": result["status"],
         "n_valid": result["n_valid"],
         "n_invalid": result["n_invalid"],
+        "n_normalized": result["n_normalized"],
         "link_agreement": result["overall"]["sonnet_open_model_link_jaccard"],
     }))
     return 0 if not failures else 2
