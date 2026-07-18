@@ -100,6 +100,16 @@ def cmd_build(task):
     print(f"{task}: {len(aids)} criteria x {len(test_ids)} test = {n} rows -> {outp}")
 
 
+MIN_MINORITY = 5  # both instrument AND judge need >=5 items off their modal value on the
+                  # scored selection, else spearman is tie-dominated / single-item driven
+
+
+def variance_ok(vals, min_minority=MIN_MINORITY):
+    from collections import Counter
+    c = Counter(vals)
+    return len(vals) - c.most_common(1)[0][1] >= min_minority
+
+
 def cmd_eval(task, results):
     ctx = bc.load_ctx(task)
     _, gate = certified_aids(task)
@@ -112,14 +122,19 @@ def cmd_eval(task, results):
         aid = a.split(".")[1]; sc = r.get("score")
         if isinstance(sc, int):
             g_by.setdefault(aid, {})[r["datapoint_id"]] = sc
-    rows = []
+    rows = []; skipped = []
     print(f"{'aid':6s} {'base':>6s} {'G':>7s} {'ceil':>6s} | {'r_base':>7s} {'r_G':>6s} {'seamW':>6s}  n")
     for aid, col_g in sorted(g_by.items()):
         judge = ctx["judge"].get(aid, {})
         sel = [d for d in test_ids if d in judge and col_g.get(d) is not None]
         if len(sel) < 20:
-            continue
-        rho_g = spearman([col_g[d] for d in sel], [judge[d] for d in sel])
+            skipped.append((aid, f"n={len(sel)}<20")); continue
+        gv = [col_g[d] for d in sel]; jv = [judge[d] for d in sel]
+        if not variance_ok(gv) or not variance_ok(jv):
+            skipped.append((aid, "degenerate: <5 off-modal items (instrument or judge)")); continue
+        rho_g = spearman(gv, jv)
+        if rho_g != rho_g:  # nan guard — clip01(nan) would silently become 1.0
+            skipped.append((aid, "spearman nan")); continue
         base = gate[aid]["full"]["rho_baseline"]; ceil = ceiling(gate[aid]["judge_rel1"])
         r_base = clip01(base / ceil); r_g = clip01(rho_g / ceil)
         seamw = (r_g - r_base) / r_g if r_g > 0 else float("nan")
@@ -127,13 +142,16 @@ def cmd_eval(task, results):
                          r_base=round(r_base, 3), r_G=round(r_g, 3), seam_width=round(seamw, 3),
                          n_test=len(sel)))
         print(f"{aid:6s} {base:6.3f} {rho_g:7.3f} {ceil:6.3f} | {r_base:7.3f} {r_g:6.3f} {seamw:6.3f}  {len(sel)}")
+    for aid, why in skipped:
+        print(f"SKIP {aid}: {why}")
     import statistics as st
     mb = st.median(r["r_base"] for r in rows); mg = st.median(r["r_G"] for r in rows)
     F = (mg - mb) / mg if mg else float("nan")
-    summ = dict(task=task, n=len(rows), med_r_base=round(mb, 3), med_r_G=round(mg, 3),
-                seam_width_F=round(F, 3), arm="seed-G (lower bound)")
+    summ = dict(task=task, n=len(rows), n_skipped=len(skipped), med_r_base=round(mb, 3),
+                med_r_G=round(mg, 3), seam_width_F=round(F, 3), arm="seed-G (lower bound)",
+                skipped=[f"{a}:{w}" for a, w in skipped])
     print(f"\n{task}: V=med_r_base {summ['med_r_base']}  V+A=med_r_G {summ['med_r_G']}  "
-          f"-> F={summ['seam_width_F']}  (n={summ['n']})")
+          f"-> F={summ['seam_width_F']}  (n={summ['n']}, skipped {len(skipped)})")
     json.dump({"rows": rows, "domain_summary": {task: summ}},
               open(OUT / f"seed_g_{task}_final.json", "w"), indent=1)
 

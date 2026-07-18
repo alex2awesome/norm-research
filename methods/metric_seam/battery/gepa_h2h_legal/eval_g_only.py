@@ -47,6 +47,13 @@ def load_arm_g(path):
     return out
 
 
+def variance_ok(vals, min_minority=5):
+    """Both sides need >=5 items off their modal value, else spearman is tie/single-item driven."""
+    from collections import Counter
+    c = Counter(vals)
+    return len(vals) - c.most_common(1)[0][1] >= min_minority
+
+
 def main():
     results = sys.argv[1]
     ctx = bc.load_ctx(TASK)
@@ -60,7 +67,12 @@ def main():
         sel = [d for d in test_ids if d in judge and col_g.get(d) is not None]
         if len(sel) < 20:
             print(f"{aid}: only {len(sel)} scorable test items, skip"); continue
-        rho_g = spearman([col_g[d] for d in sel], [judge[d] for d in sel])
+        gv = [col_g[d] for d in sel]; jv = [judge[d] for d in sel]
+        if not variance_ok(gv) or not variance_ok(jv):
+            print(f"SKIP {aid}: degenerate (<5 off-modal items on instrument or judge side)"); continue
+        rho_g = spearman(gv, jv)
+        if rho_g != rho_g:  # nan guard — clip01(nan) silently becomes 1.0
+            print(f"SKIP {aid}: spearman nan"); continue
         base = GATE[aid]["full"]["rho_baseline"]
         ceil = ceiling(GATE[aid]["judge_rel1"])
         r_base = clip01(base / ceil)

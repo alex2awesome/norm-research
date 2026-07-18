@@ -97,13 +97,24 @@ def cmd_eval(task, results):
     y = [iy[d][1] for d in sel]
     gy = [g[d] for d in sel]
     cl = [len(iy[d][0]) for d in sel]
+    # Language AUC is reported RAW: the prompt's direction is defined (higher = favorable),
+    # so flipping it would overstate performance. The char-length confound floor IS reported
+    # orientation-free (a confound can cut either way), with the raw value + direction kept.
     auc_g, npos, nneg = auc(gy, y)
-    auc_len, _, _ = auc(cl, y)
-    auc_g = max(auc_g, 1 - auc_g); auc_len2 = max(auc_len, 1 - auc_len)  # orientation-free
-    print(f"{task}: n={len(sel)} (y=1:{npos} y=0:{nneg}) | AUC(language->y)={auc_g:.3f} | "
-          f"AUC(char-len->y)={auc_len2:.3f} | lift over length={auc_g-auc_len2:+.3f}")
+    auc_len_raw, _, _ = auc(cl, y)
+    auc_len_abs = max(auc_len_raw, 1 - auc_len_raw)
+    len_dir = "longer->favorable" if auc_len_raw >= 0.5 else "shorter->favorable"
+    from collections import Counter
+    dist = Counter(gy)
+    compressed = dist.most_common(1)[0][1] / len(gy) > 0.6 if gy else False
+    print(f"{task}: n={len(sel)} (y=1:{npos} y=0:{nneg}) | AUC(language->y)={auc_g:.3f} (raw) | "
+          f"AUC(|char-len|->y)={auc_len_abs:.3f} ({len_dir}, raw {auc_len_raw:.3f}) | "
+          f"lift={auc_g-auc_len_abs:+.3f}" + ("  [score-dist compressed >60% modal]" if compressed else ""))
     res = dict(task=task, n=len(sel), n_pos=npos, n_neg=nneg,
-               auc_language_y=round(auc_g, 4), auc_charlen_y=round(auc_len2, 4))
+               auc_language_y_raw=round(auc_g, 4), auc_charlen_y_abs=round(auc_len_abs, 4),
+               auc_charlen_y_raw=round(auc_len_raw, 4), charlen_direction=len_dir,
+               score_dist=dict(sorted((str(k), v) for k, v in dist.items())),
+               score_dist_compressed=compressed)
     json.dump(res, open(OUT / f"y_seam_{task}_final.json", "w"), indent=1)
     return res
 
