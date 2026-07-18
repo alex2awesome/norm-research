@@ -23,9 +23,10 @@ OUT = HERE / "seed_g_extend"
 OUT.mkdir(exist_ok=True)
 
 # load_ctx needs a PROGDIR entry (hyb dir; unused for seed-G but dereferenced) -- patch all.
-for t, pd in {"legal_title_vii": "programs_legal", "legal_ss_disability": "programs_legal_ss",
+for t, pd in {"legal_title_vii": "programs_legal", "legal_ss_disability": "programs_ssdis",
               "peer_review": "programs_peer", "creative_writing": "programs_cw",
-              "math": "programs_math", "humor": "programs_humor"}.items():
+              "math": "programs_math", "humor": "programs_humor",
+              "code_review": "programs_code_review"}.items():
     bc.PROGDIR.setdefault(t, pd)
 
 TASK_DOMAIN = {
@@ -35,6 +36,7 @@ TASK_DOMAIN = {
     "creative_writing": "creative-writing story or story excerpt",
     "math": "Math StackExchange question/answer post",
     "humor": "stand-up comedy / humor-craft feedback post",
+    "code_review": "GitHub pull request with its code-review discussion",
 }
 DOC_MARKER = "<<<DOCUMENT>>>"
 MAXCHARS = 6000
