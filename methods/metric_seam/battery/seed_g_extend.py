@@ -39,6 +39,7 @@ TASK_DOMAIN = {
     "humor": "stand-up comedy / humor-craft feedback post",
     "code_review": "GitHub pull request with its code-review discussion",
     "notice_and_comment": "public comment submitted to a federal rulemaking docket",
+    "press_releases": "news article about a corporate press release",
 }
 DOC_MARKER = "<<<DOCUMENT>>>"
 MAXCHARS = 6000
