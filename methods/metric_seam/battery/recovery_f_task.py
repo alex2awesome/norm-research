@@ -71,6 +71,9 @@ def main():
     ap.add_argument("task")
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--model", default="glm-5.2")
+    ap.add_argument("--distractor", default="hard", choices=["hard", "random"],
+                    help="hard = highest same-tier behavioral agreement (clones excluded); "
+                         "random = seeded uniform draw from non-clone same-tier columns")
     a = ap.parse_args()
     cfg = CFG[a.task]
 
@@ -141,8 +144,15 @@ def main():
             sims.sort(reverse=True)
             if len(sims) < 3:
                 print(f"SKIP {tier}/{aid}: <3 non-clone distractors"); continue
+            if a.distractor == "random":
+                import hashlib as _hl
+                seed = int(_hl.sha256(f"{a.task}|{tier}|{aid}".encode()).hexdigest()[:8], 16)
+                drng = np.random.default_rng(seed)
+                pick = list(drng.choice([o for _, o in sims], size=3, replace=False))
+            else:
+                pick = [o for _, o in sims[:3]]
             distractors = [dict(metric_id=o, description=desc[o], scores=panel[tier][o])
-                           for _, o in sims[:3]]
+                           for o in pick]
             try:
                 row = mcq_value_from_precomputed_behavior(
                     recon, noun=cfg["noun"], candidate_prompt_text=f"{tier}:{aid}",
@@ -172,10 +182,11 @@ def main():
     if bV is not None and bG is not None and bG > 0:
         summary["recovered_bits_seam"] = round((bG - bV) / bG, 3)
         print(f"recovered-bits seam (G-V)/G = {summary['recovered_bits_seam']}")
-    json.dump({"task": a.task, "aids": aid_list, "summary": summary,
+    suffix = "" if a.distractor == "hard" else f"_{a.distractor}"
+    json.dump({"task": a.task, "distractor": a.distractor, "aids": aid_list, "summary": summary,
                "rows": {t: rows for t, rows in results.items()}},
-              open(OUT / f"recovery_f_{a.task}.json", "w"), indent=1, default=float)
-    print(f"-> seed_g_extend/recovery_f_{a.task}.json")
+              open(OUT / f"recovery_f_{a.task}{suffix}.json", "w"), indent=1, default=float)
+    print(f"-> seed_g_extend/recovery_f_{a.task}{suffix}.json")
 
 
 if __name__ == "__main__":
