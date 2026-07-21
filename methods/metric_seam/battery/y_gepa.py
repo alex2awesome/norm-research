@@ -55,29 +55,57 @@ def render(body, text):
     return body.replace(MARK, t) + FOOT
 
 
-def glm_call(system, user, model="glm-5.2", max_tokens=4000):
-    import os
-    key = None
-    for p in KEY_PATHS:
-        fp = pathlib.Path(os.path.expanduser(p))
+def glm_call(system, user, model="glm-5.2", max_tokens=4000, attempts=10):
+    """Hardened z.ai caller: long retry stack (the endpoint is flappy — user-confirmed),
+    exponential backoff with jitter, KEY ROTATION on every attempt, Retry-After honored,
+    extra-long waits on 429. Raises only after `attempts` total failures across both keys."""
+    import os, time, random
+    keys = []
+    for kp in KEY_PATHS:
+        fp = pathlib.Path(os.path.expanduser(kp))
         if fp.exists():
-            key = fp.read_text().strip(); break
-    if not key:
+            k = fp.read_text().strip()
+            if k and k not in keys:
+                keys.append(k)
+    if not keys:
         raise FileNotFoundError("no z.ai key")
     body = json.dumps({"model": model, "max_tokens": max_tokens, "system": system,
                        "messages": [{"role": "user", "content": user}]}).encode()
-    req = urllib.request.Request(ZAI_URL, data=body, headers={
-        "x-api-key": key, "anthropic-version": "2023-06-01",
-        "content-type": "application/json"})
-    for attempt in range(3):
+    backoff = 5.0
+    last = None
+    for attempt in range(attempts):
+        key = keys[attempt % len(keys)]           # rotate keys every attempt
+        req = urllib.request.Request(ZAI_URL, data=body, headers={
+            "x-api-key": key, "anthropic-version": "2023-06-01",
+            "content-type": "application/json"})
         try:
             with urllib.request.urlopen(req, timeout=240) as r:
                 resp = json.loads(r.read())
             return "".join(b.get("text", "") for b in resp.get("content", []))
-        except Exception as e:
-            if attempt == 2:
-                raise
-            import time; time.sleep(4 * (attempt + 1))
+        except urllib.error.HTTPError as e:
+            last = e
+            retry_after = None
+            try:
+                retry_after = float(e.headers.get("Retry-After", ""))
+            except (TypeError, ValueError):
+                pass
+            if e.code == 429:
+                wait = retry_after if retry_after else max(backoff, 45.0)
+            elif e.code in (500, 502, 503, 504, 529):
+                wait = retry_after if retry_after else backoff
+            else:
+                raise                              # 4xx other than 429: no point retrying
+        except Exception as e:                      # timeouts, connection resets
+            last = e
+            wait = backoff
+        if attempt == attempts - 1:
+            raise last
+        wait *= 1.0 + random.random() * 0.3         # jitter
+        print(f"[glm_call] attempt {attempt+1}/{attempts} failed "
+              f"({type(last).__name__}{getattr(last, 'code', '')}); "
+              f"sleeping {wait:.0f}s, rotating key", flush=True)
+        time.sleep(min(wait, 150.0))
+        backoff = min(backoff * 1.7, 120.0)
 
 
 def cmd_init(task):
