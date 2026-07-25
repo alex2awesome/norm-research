@@ -2345,3 +2345,141 @@ Deepens the thesis: reflective search doesn't merely fail to beat unguided recom
 part of its budget writing training items into the prompt — memorization masquerading as instruction
 discovery. **Guardrails: "measurably" is only defensible after the Hole-B anchors validate the
 instrument; scope to ONE optimizer across five benchmarks, not a law about reflective optimizers.**
+
+## HB96 (2026-07-25) — ★ HOLE B CLOSED: the leakage judge is validated (recall 1.0, FPR 0.0)
+
+`audit_leakage_anchors.py`: 10 synthetic anchors of known grade — built FROM THE REAL SPLITS so the
+difficulty is realistic, not caricature — shuffled blind into 20 real hotpot pool units and judged by
+the identical prompt under identical conditions.
+
+| gold \ pred | none | domain | item_hint | answer |
+|---|---|---|---|---|
+| none (3) | **3** | 0 | 0 | 0 |
+| domain (2) | 1 | **1** | 0 | 0 |
+| item_hint (2) | 0 | 0 | **1** | 1 |
+| answer (3) | 0 | 0 | 0 | **3** |
+
+**Detection of "flagged" (item_hint ∪ answer): recall 5/5 = 1.00, false-positive rate 0/5 = 0.00.
+Answer-grade exact recall 3/3.** Both off-diagonal cells are benign: one `domain`→`none` (under-calls
+a real technique as generic — harmless to us) and one `item_hint`→`answer` (over-calls SEVERITY
+within the flagged class — conservative in our disfavour, the safe direction).
+
+**★ And the 20 real hotpot units were re-judged 20/20 "none" under blinding** — reproducing the
+68/68 result in a batch where the same judge simultaneously caught 5/5 planted leaks. That is what
+makes hotpot's clean pool credible rather than merely convenient, and it is what licenses the word
+"measurably" in the Finding-1 memorization claim (advisor guardrail from HB95b).
+
+## HB96b — lane re-priorities
+
+- **Phase 2 is SLOW**: 12/90 interleaved evals after ~1h (126 items × 24k tokens on a contended box)
+  → ~6h to completion. Progress polled by COUNT ONLY; no Phase-2 score inspected, per HB91.
+- **sk3 GPU7 reclaimed**: the finished 14B chain had left its server resident (173 GB, 0% util).
+  Killed by explicit PID (parent 3682546 + EngineCore child 3682752, both verified alexspan and
+  confirmed as the port-8179 owner); four other alexspan EngineCores were enumerated and **left
+  alone** since they could not be accounted for.
+- **★ Revalidation was queued behind a certificate = inverted priority** (the advisor called the
+  revalidation load-bearing and the certs rung 2). Fixed by launching the 3-bench revalidation on the
+  freed sk3 GPU7 **in parallel** rather than killing sk1's cert: `sk3_reval.sh` (pid 4086411, 8B on
+  port 8078) runs aime {official_sk1cfg, official_sk2cfg, unitrecomb} → ifbench {official,
+  unitrecomb_v6ctx32k} → hotpot {official, unitrecomb_v5sk2}, each bench in ONE invocation = one
+  session. hover stays on sk2 (only box whose `datasets` loads hover-nlp/hover).
+- First aime datapoint in: `official_sk2cfg` k3 = **.3000** (was .3667 single-pass).
+
+## HB97 (2026-07-25) — ★★★ SAME-SESSION PAIRED REVALIDATION: aime RESCUED, hotpot flagship, ifbench DOWNGRADED
+
+sk3 GPU7, each bench rescored in ONE invocation (= one session, so u_session cancels in the paired
+delta), k=3, paper-exact splits. Primary inference = paired bootstrap on the mean delta (the sign
+test under-powers because partial-credit/EM metrics tie heavily).
+
+| bench | GEPA (k3) | M_ω (k3) | Δ | sign | **bootstrap P(Δ≤0)** | verdict |
+|---|---|---|---|---|---|---|
+| **aime** vs STRONGER config | .3067 | .3978 | **+.0911** | W25-L7-T118, p=.0021 | **.0012** | **WIN** |
+| aime vs weaker config | .3000 | .3978 | +.0978 | W25-L5-T120, p=.0003 | .0004 | WIN |
+| **hotpot** | .4133 | .6333 | **+.2200** | W75-L9-T216, p=4.3e-14 | **.0000** | **WIN** |
+| ifbench | .4337 | .4535 | +.0198 | W42-L34-T218, p=.42 | **.2330** | **NOT SIGNIFICANT** |
+
+**★ HB92's comparator crisis DISSOLVES — and the resolution vindicates the same-session protocol.**
+The two aime GEPA `official` runs that disagreed wildly on single-pass test (.5333 sk1 vs .3667 sk2)
+land at **.3067 and .3000** when measured in the same session. The .5333 was an inflated single-pass
+reading, **not** a genuinely stronger configuration. So aime was never a −.107 loss; it is a **+.091
+win, significant at p=.0012, and it is now our most rigorously established cell precisely because we
+tried hard to kill it.** Retraction of the HB92 retraction — recorded in full because the wrong
+intermediate conclusion is part of the record.
+
+**★ hotpot is the flagship cell**: +.2200 at p=4.3e-14, on the ONE pool that is 0/68 flagged for
+leakage AND whose cleanliness is anchor-validated (HB96: recall 1.00, FPR 0.00, and its 20 sampled
+units re-judged 20/20 "none" under blinding). Largest effect, cleanest provenance, strongest test.
+
+**★ ifbench DOWNGRADED from win to "directionally positive, not confirmed."** The +.044 single-pass
+gap shrinks to +.0198 with P(Δ≤0)=.233 under same-session pairing. By the HB91 discipline this does
+NOT count as a win and must NOT be re-rolled.
+
+**Scoreboard after revalidation** (W = strict same-session paired wins):
+| bench | status |
+|---|---|
+| aime | **WIN** (+.091, p=.0012) |
+| hotpot | **WIN** (+.220, p<1e-13) |
+| ifbench | directionally positive, NOT confirmed (+.020, p=.233) |
+| hover | pending sk2 lane (reval + leakage ablation + purged cert) |
+| livebench | pending Phase 2/3 under the HB91 pre-registration |
+| pupa | TIE, final (−.0009, p=.52) |
+
+**W = 2 confirmed of 6 so far**, with hover and livebench outstanding. Note this is materially weaker
+than the "4 clean wins + 1 provisional + 1 tie" board of a few hours ago — every honest instrument
+upgrade has cost us cells, and the ones that survive are now defensible.
+
+## HB98 (2026-07-25) — provenance audit CLEAN; paper drafted for the settled sections
+
+**★ Advisor's one new request — candidate SELECTION PROVENANCE for the two confirmed cells — is
+CLEAN.** Read from the `proposals.jsonl` phase logs (not from memory):
+| bench | panels used during select/confirm | panel at final test | verdict |
+|---|---|---|---|
+| aime / unitrecomb | 15, 18, 27, 30 (train slices) | 150 | selection never touched test |
+| hotpot / unitrecomb_v5sk2 | 100 (select), 350 (confirm = train+val) | 300 | selection never touched test |
+So both confirmed cells were select-panel-chosen and need only a one-sentence methods note — they
+do NOT need HB93-style re-selection. (The livebench topdraw remains the one place selection touched
+test, which is exactly why it is being repaired.) Side observation worth a limitation line: aime's
+select panel is only 15-30 items, so its per-unit marginals are noisy even though provenance is clean.
+
+**Advisor's rulings this pass (HB97 → action):**
+- **W=2 carries the paper, under a reframe we had half-committed to already.** The thesis is
+  pool-not-search, and under that thesis **a tie is evidence FOR us**: if unguided recombination of
+  GEPA's own trajectory-mined units matches GEPA, GEPA's search contributed nothing beyond pool
+  discovery. Board reads: 2 cells where search is strictly dominated, 2 where it adds nothing,
+  **0 cells at any point after instrument correction where search wins**, 2 pending. Primary claim
+  = **"never worse, sometimes much better (up to +.22)"**; W is a secondary strict-win count. This
+  is exactly the HB95b sentence structure, so nothing pre-committed moves.
+- **The 2-3-airtight-cells + methodology version is the STRONGER paper.** Reviewers cannot rerun our
+  experiments; they can only audit our process — and this process now has a dated pre-registration,
+  an author-found comparator defect, a retraction-of-retraction, an anchor-validated leakage judge,
+  and an instrument upgrade that COST us cells. *"Every honest upgrade shrank our win column and we
+  kept the shrunken column"* is the most credibility-generating sentence available and no competing
+  paper can say it. Methodology → named contribution in the abstract, not buried in methods.
+- **aime collapse = methods CENTERPIECE, not a headline** (a second headline splits the message; and
+  "single-pass benchmarking is unreliable" from n=1 bench + n=1 judge is the overreach HB91b already
+  ruled out). Pair it with pupa so both metric classes are covered. On GEPA's single-pass reporting:
+  ONE factual sentence, no editorializing — let reviewers draw the inference.
+- **ifbench: main table, verbatim pre-registered label, NO widening** even though HB91 permits one.
+  Upside is one marginal win; the downside is a mandatory "we widened and it stayed n.s." sentence —
+  and spending the permitted widening would partially refund the credibility the kept downgrade buys.
+- **CONDITION on all of the above: neither pending cell may land as a confirmed loss.** If one does,
+  HB95b Branch B applies (clause DROPPED, not softened).
+
+**Drafting done this pass** (`latex/paper-2__articulation-upper-bounds/main.tex`, compiles clean):
+- **Old abstract RETRACTED IN FULL** and replaced. Removed: EVT endpoint ceiling (degenerate),
+  "certified all-prompt DPI bound" (doesn't transfer — vacuity theorem), "never loses", pupa .907,
+  hover .547 p=1e-4, aime .413, "8× absorption", and the 1.7B-32B envelope (max_tokens confound →
+  moved to Paper #4). Every removal is documented in a header comment in the .tex itself.
+- Title narrowed: "Certified Upper Bounds on Prompt Articulation" → **"Pool-Level Bounds on Prompt
+  Articulation"** (the old title asserts the object the vacuity theorem says cannot exist).
+- **Branch A abstract written; Branch B stubbed verbatim-ready** for the loss case.
+- **§Measurement protocol — FINAL**: variance-components model, the metric-class table, both
+  exhibits (pupa judge / aime EM), paired-bootstrap-primary with the tie-mass rationale, comparator
+  rule.
+- **§Leakage audit — FINAL but for the bracketed hover ablation delta**: design, anchor validation,
+  the memorization finding, the HoVer near-duplicate benchmark defect, disposition/purge policy.
+- **§Bounds**: vacuity theorem, metric-reachability cap, rank certificate with both scope conditions
+  (measured-not-true-skill; per-pool).
+- **§Results**: main table with aime/hotpot final, ifbench pre-registered label, hover/livebench
+  marked PENDING; the "how we nearly lost AIME" narrative; the provenance paragraph above.
+- Limitations section stubbed with the required content list.
