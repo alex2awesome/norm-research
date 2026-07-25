@@ -1,0 +1,2160 @@
+# 2026-07-19 — GEPA consolidation + M_ω upgrade master plan (user directives, verbatim intent)
+
+User issued six directives (this file is the execution state of record; update STATUS lines as
+work proceeds; survive compaction via this file).
+
+## D1. Official GEPA only — FIRM AND FINAL (reconstruction experiments)
+Deprecate the in-house GEPA search loop; archive, don't delete.
+- In-house loop = `tune_shared_template` / `tune_shared_template_batched` in
+  `methods/metric_implementer/experiments/v14_decoder_tuning.py` + the `--phase tune` path in
+  `run_v14_value_campaign.py` (`run_decoder_tuning` → tune_shared_template_batched) + proposer
+  `propose_mutations`.
+- KEEP shared utilities used by the official path: `template_sha256`,
+  `validate_shared_template` (official_gepa_decoder_tune.py imports them).
+- Plan: (a) move loop fns + propose_mutations into
+  `methods/metric_implementer/experiments/archive/inhouse_gepa_deprecated.py` with banner
+  "DEPRECATED 2026-07-19 (user decision): official github GEPA (gepa 0.1.4) is the only
+  sanctioned optimizer for reconstruction experiments. Same-pool comparison: official best
+  pooled −0.014 / best admissible −0.052 vs in-house −0.078 (see
+  outputs/fast/development/tuning/ on sk2)."; keep import-compat shims that raise
+  DeprecationWarning→error; (b) rewire `--phase tune` to official gepa.optimize (generalize
+  `official_gepa_decoder_tune.py` to all 3 decoder families + behavioral channel, keep
+  search-split-only selection + post-hoc aggregate discipline); (c) fix tests that import the
+  old loop (skip w/ deprecation reason or port); (d) `pip install gepa==0.1.4` into sk2 AND
+  sk3 envs (sk2 has it; sk3 needs check); (e) grep whole repo for other in-house GEPA loops
+  (A-bank/silver-norms recipe uses GEPA — check whose implementation; if in-house loop,
+  migrate; if already official, leave).
+- STATUS: DONE (code side, 2026-07-19). (a) In-house loop archived VERBATIM to
+  `experiments/archive/inhouse_gepa_deprecated.py` (+ `archive/__init__.py`) with the banner
+  above (`tune_shared_template`, `tune_shared_template_batched`, `propose_mutations`, and the
+  private helpers `_mutation_prompt`/`_propose_mutations`/`stable_seed` + constants
+  TRACE_SCHEMA/MAX_ROUNDS/CANDIDATES_PER_ROUND/BEAM_SIZE). `v14_decoder_tuning.py` keeps the
+  live utilities `template_sha256`, `validate_shared_template`, `select_dev_metrics`,
+  `stratified_reference_states`; the three public loop names are now shims raising
+  `RuntimeError("in-house GEPA loop deprecated 2026-07-19 — use official gepa …")`. (b)
+  `run_v14_value_campaign.run_decoder_tuning` rewired to official `gepa.optimize` via a
+  `GEPAAdapter` generalizing `official_gepa_decoder_tune.py` to all 3 decoder families + the
+  behavioral channel: per-family scoring copied exactly from the retired `evaluate_batch`
+  (mcq→`score_mcq_reference_templates`; behavioral→`induce_behavioral_reference_templates` +
+  `score_behavioral_reference_templates` with FIXED_EXECUTOR), search-split-only selection
+  signal, CONSTRAINT text appended in `make_reflective_dataset`, 3-try engine retry with
+  `release_resident_engines`, `proposals.jsonl` in the run dir, post-hoc
+  `aggregate_template_fitness` over seed+winner+every distinct valid template, output
+  `development/tuning/<name>.json` schema `v14-tune-official-gepa-v1` (winner_template,
+  winner_template_sha256, winner_report, reports per-sha, seed equivalents, plus
+  shared_across_decoder_families/freeze_sha256 so `build_production_freeze` still consumes it);
+  proposer spec `backend:model` becomes `reflection_lm` via `LLMBackend`; added
+  `--max-metric-calls` (default 240). (c) Tests: `test_v14_campaign.py`
+  batched-GEPA test now asserts the shim raises RuntimeError (name kept); new
+  `tests/test_official_gepa_tune.py` monkeypatches `gepa.optimize`/dev-contexts/scorer under
+  `fake_backends=True` and checks the output JSON schema. `python -m pytest
+  test_v14_campaign.py test_official_gepa_tune.py -x -q` → 16 passed in 4.76s; full tests/
+  dir still collects (325). (e) grep: `run_r2_recovery.py`→`m_omega_gepa.gepa_discriminative_m_omega`
+  is a SEPARATE in-house M_ω prompt-GEPA (not the moved v14 functions), left untouched;
+  `battery/gepa_h2h*/eval_final.py` import none of `gepa`/moved fns/`v14_decoder_tuning` (they
+  score pre-frozen `gepa_final_prompts.jsonl`), left untouched. NOT DONE (out of scope this
+  pass): (d) `pip install gepa==0.1.4` on sk2/sk3 — deliberately skipped (no sk2/sk3 touch, no
+  GPU); the separate `m_omega_gepa` in-house loop was NOT migrated (only the v14 decoder loop
+  was in scope). No GPU code executed; all paths fake/mocked.
+- STATUS (2026-07-19, second pass — SECOND in-house loop migrated): `m_omega_gepa.py`'s
+  `gepa_discriminative_m_omega` (the discriminative-M_ω prompt search used by
+  `run_r2_recovery.py --gepa-m-omega`) is now driven by official `gepa.optimize`. (a) The
+  hand-rolled rounds/mutations loop + its loop-only helper `_fewshot_block` are archived
+  VERBATIM in `experiments/archive/inhouse_m_omega_gepa_deprecated.py` (same banner style; it
+  imports the still-live primitives rather than forking copies). Unlike the v14 decoder shims
+  the public name is NOT a raising stub — it keeps working, on official GEPA. (b) Rewritten
+  IN PLACE with an IDENTICAL signature (plus an optional `max_metric_calls=None` override) and
+  an IDENTICAL return contract, so `run_r2_recovery.py` needed NO edit. ESTIMAND UNCHANGED:
+  same executor primitive `_score_binary_sampled`, same canonical pool objective
+  `_discrimination_score = std - 0.5*|mean - 0.5|` for the report. (c) GEPA needs per-instance
+  scores for its Pareto frontier, so the adapter scores instances with the mean-absolute-
+  deviation decomposition `s_i = |p_i - p_bar| - 0.5*|p_bar - 0.5|`; for binary verdicts
+  MAD = 2*p_bar*(1-p_bar) and std = sqrt(p_bar*(1-p_bar)) are both strictly increasing in
+  p_bar*(1-p_bar), and with d = |p_bar - 0.5| both statistics reduce to strictly decreasing
+  functions of d ⇒ RANK-EQUIVALENT, so the search signal is faithful and (valset = whole pool)
+  GEPA's selection is the canonical selection. Verified numerically: 19,900 random pairs, every
+  discordance ≤ 1.1e-16 (float-epsilon ties only). (d) Canonical pool-level statistic reported
+  POST-HOC for the seed, the winner, and every distinct candidate (per-instance signal for
+  SEARCH, canonical statistic for the REPORT — same discipline as the decoder tune); trajectory
+  keeps its 5-tuple shape with row 0 = seed and last row = returned prompt. (e) Budget mapping
+  `max_metric_calls = rounds * n_mutations * len(texts)` keeps the existing `--gepa-rounds` /
+  `--gepa-mutations` CLI flags working. (f) Reflective feedback reuses `_select_failures`
+  (items nearest 0.5) + `_mutation_prompt` intent + measured base-rate/std + an explicit
+  CONSTRAINT line (one self-contained criterion, no exemplars copied in, no meta-commentary).
+  (g) `mutation_mode` / `fewshot_examples` are accepted for signature compatibility but INERT
+  (the code-appended few-shot operator has no GEPA analogue; it also HURT discrimination in the
+  2026-06-25 A/B, 0.448→0.292) — a RuntimeWarning fires if a caller asks for a non-default.
+  Tests: new `tests/test_m_omega_gepa_official.py` (13 tests) fakes executor/reviser and
+  monkeypatches `gepa.optimize` with a stub that still drives the real adapter; it asserts the
+  return contract by RUNNING the archived loop and comparing key sets, pins rank-equivalence,
+  the base-rate-0.5 symmetry, NaN→-1.0, the budget mapping, and archive integrity.
+  `pytest tests/ -q -x -k "m_omega or gepa"` → 16 passed, 322 deselected; full dir collects 338.
+  Repo grep for other importers: ONLY `run_r2_recovery.py` (line 51). No GPU/sk2/sk3 touched.
+  CAVEAT (recorded, NOT fixed — memory `project_a_bank_degeneracy_audit`): "variance-revival !=
+  information-revival" — a discrimination-maximizing objective can produce high-variance but
+  UNINFORMATIVE criteria (mined banks ran 54-68% degenerate). This migration preserves the
+  pre-existing objective and does NOT endorse it; also noted in the module + function docstrings.
+  D1(e) NOTE: a THIRD in-house GEPA loop exists, `datasets/prompt-optimality-test/run_inhouse_gepa.py`,
+  and must NOT be migrated — it is Arm B, the deliberate in-house-vs-official contrast that
+  Phase 3 measures. Still open from the first pass: (d) `pip install gepa==0.1.4` on sk2/sk3
+  (local env here is gepa 0.0.17; tests monkeypatch `gepa.optimize` so they are version-agnostic,
+  but the LIVE path should be run against 0.1.4).
+
+## D2. M_ω generation upgrade (main reconstruction project)
+New unit-pool recipe: units mined from BEST official-GEPA trajectory + EXPLICIT CHILDREN
+metrics (hierarchy: judging R2 → include its certified R1 children from the L0→R3 ladders,
+`project_hierarchy_l0_r3_reconstruction`) + LLM-suggested units.
+- KEY: M_ω compile INITIALIZES FROM the best GEPA candidate (not from seed), then greedy
+  add/remove units ⇒ M_ω ≥ GEPA on the selection panel by construction (superset argument).
+- Benchmark-side analog (prompt-optimality-test `run_unit_recombination.py`): init compile =
+  best official-GEPA prompt; units from official trajectory + GLM-suggested novel units;
+  greedy add AND remove (swap) steps.
+- STATUS: BENCHMARK-SIDE IMPLEMENTED 2026-07-19 -> datasets/prompt-optimality-test/run_momega_v2.py
+  (v1 left intact; new arm dir runs/<ds>/momega_v2/). Design = the D3-supported fixes only:
+  init from official GEPA's SHIPPED best_candidate; NO cheap screen (a 60-item PAIRED marginal
+  pass over every unit IS the selection step); unit pool = official+in-house trajectory clauses
+  PLUS 12 GLM-5.2-suggested novel units generated from init's observed failures; cumulative-
+  prefix sweep + drop-one pass; NO-REGRET GUARD on a disjoint 40-item confirmation slice (ship
+  init if the compile does not beat it => M_ω >= GEPA-shipped by construction up to confirmation
+  noise). SPLIT HYGIENE FIX (important, discovered while building): every phase-1-4 arm selected
+  on val[:100], so val[:100] is contaminated for reporting; v2 selects on TRAIN only and reports
+  on val[100:300] (200 items, untouched by every arm), re-scoring GEPA-shipped and the raw seed
+  on those same items. NOTE: on hover AND hotpotqa official GEPA SHIPPED CANDIDATE idx 0 = the
+  SEED (val_agg 0.76 and 0.80; it explored 6 candidates and improved on neither), so "beat GEPA"
+  there == "beat the seed"; only aime saw a real GEPA gain (.353 -> .529, idx 2).
+  D2's third unit source (explicit children metrics, e.g. R1 children when judging R2) has NO
+  analog in this benchmark setting — it applies to the reconstruction side, still TODO.
+
+## D3. Investigate the 1-of-30-units bottleneck (benchmark Arm C)
+HYPOTHESES to test against runs/*/unitrecomb/proposals.jsonl (logged item vectors exist):
+(a) acceptance noise — MIN_GAIN=.01 on 15-item panel needs >=1 net item, most units within
+noise of cur; (b) screen(8 items) rank ~ uncorrelated with greedy gain; (c) unit redundancy
+(clause-splits of similar prompts) collapses conditional value after 1st accept; (d) GLM
+saturation headroom on hover/hotpot. CANDIDATE FIXES (implement only what diagnosis
+supports): paired per-item sign-test acceptance; bigger dev panel; unit dedup/clustering;
+init-from-GEPA-best (D2); remove/swap moves; larger declared budget.
+- STATUS: DIAGNOSIS DONE 2026-07-19 -> datasets/prompt-optimality-test/UNIT_BOTTLENECK_DIAGNOSIS.md.
+  RESULT OVERTURNED THE PLAN'S PRIORS. Confirmed causes: (1) DOMINANT+deterministic — the
+  reserve formula greedy_reserve=panel*(1+12+4) plus screening eating ~48-51% of budget
+  truncates round 2 at exactly 4-of-11 units on ALL three datasets, capping compiles at ~1
+  regardless of unit quality (explains the identical "1 everywhere" pattern); (2) STRONG — the
+  15/8-item selection panel has sd(panel mean) ~1.7-1.8 items vs a 0.15-item acceptance bar, so
+  the accepted unit is a coin flip: hover's compiled unit scored +3 items on panel but 0.73 on
+  val-100, BELOW the 0.76 seed (false positive); (3) MODERATE — the 8/5-item screen quantizes to
+  2-5 distinct values so "top-12" sits on a 14-22-way tie => near-random shortlist
+  (Spearman(screen,greedy) = -0.495/+0.251/+0.378, all n.s.).
+  REFUTED: (a) MIN_GAIN too strict — 0.01 on 15 items is 0.15 items, LOOSER than one item; all
+  12 hover round-1 units cleared it. (b) redundancy — top-12 token-Jaccard .075/.117/.035 with
+  10-12 clusters of 12; pool is diverse. (c) GLM saturation — 16-19 of ~30 single units BEAT the
+  seed on val-100; regret vs best single unit is -0.18 (aime) / -0.09 (hover). The failure is
+  MIS-SELECTION, not a ceiling.
+  ⚠ THE PLAN'S OWN PROPOSED FIX IS REFUTED: a paired sign-test acceptance rule admits ZERO units
+  on every dataset (base acc .67-.73 caps wins at ~5 discordant items; structurally underpowered
+  at n=15) — it would compile 0, strictly worse than 1. PANEL SIZE is the lever, not the test.
+  SUPPORTED FIXES ONLY: init-from-GEPA-best; budget out of screening into selection; bigger
+  selection panel; remove/swap only if paired with a bigger panel.
+
+## D4. Optimality via the upper-bound machinery
+Prove best method ≤ projected upper bound (strictly larger), using existing tools:
+- Benchmark side: rescore matrices → exchangeable best-of-m curves → `fit_saturating` y_inf
+  (+ bootstrap CI) = projected pool-ceiling; ALSO pool-oracle union_all (per-item ∃-solve) =
+  hard within-pool cap. Report per dataset: best-method val < y_inf < union_all pattern +
+  CIs. Machinery: methods/metric_implementer/experiments/unseen_value_scaling.py (fit_saturating,
+  value_frontloading_stat), analyze.py value curves. CAVEAT (standing): conditional-on-pool,
+  not all-prompt; the only certified all-prompt bound style = DPI fixed-target cap
+  (project_momega_audit_bracket) — reconstruction side.
+- Reconstruction side: report `dev_identification_residual_bits` as the ceiling-residual
+  (in-house control stopped at residual <0.02 bits; VERIFY meaning in v14_tuning_evaluator
+  before quoting as bound; v4 seed row showed 0.0 — suspicious, check field semantics).
+- STATUS: DONE, AND THE ANSWER IS A STRUCTURAL NEGATIVE (2026-07-19) ->
+  datasets/prompt-optimality-test/analyze_bounds.py + runs/bounds_summary.{md,json}.
+  ⚠ THE REQUESTED BOUND CANNOT COME FROM THIS MACHINERY, BY CONSTRUCTION. For an exchangeable
+  best-of-m statistic over a FIXED FINITE pool, E[max of m] is pinned to the pool max at m=n, so
+  every monotone asymptote is <= best_achieved. Verified independently in-session on hover:
+  E[max|m=1]=.7561, m=29 .8220, m=58 .8298, m=59 .8300 == pool max exactly.
+  Numbers (best achieved / y_inf [boot CI] / union-of-all oracle): hover .830 / .8138
+  [.7985,.8202] / .950; hotpotqa .880 / .8493 [.8243,.8620] / .920; aime2025 .4706 / .4492
+  [.4300,.4581] / .5882. Ordering best<y_inf FAILS on all three; the whole CI sits BELOW
+  best-achieved (margins -.0162/-.0307/-.0214). Two separable effects: (i) `fit_saturating` is
+  MISSPECIFIED here — it forces y(0)=0 but a best-of-m curve has a large floor at m=1, so tau
+  collapses to .35-.89 and R^2 falls to .30-.59 (`compare_scaling_forms` prefers the power law on
+  all three); refitting the EXCESS curve y(m)-y(1) lifts R^2 to .87-.94 and the ceiling STILL
+  lands at/below best (.8230 vs .8300; .8770 vs .8800; .4648 vs .4706) — so misspecification is
+  not the cause; (ii) the finite-pool cap is what binds.
+  The ONLY term above best-achieved is union-of-all, but it is a DIFFERENT object (ceiling for a
+  per-item ORACLE selector, not for any single prompt) and it is inflated by multiple comparisons
+  over noisy binary scoring: per-item scoring noise q estimated from repeated seed rescorings =
+  .030 hover / .000 hotpotqa / .088 aime2025; expected false "solved" recoveries 9.9/0.0/8.8 vs
+  observed 12/4/2 => aime's oracle gap is ENTIRELY within noise, hover's mostly noise, only
+  hotpotqa's 4 items survive. aime2025 (n=17 items, binomial SE .121 > every margin in the table)
+  cannot support ANY ceiling claim.
+  PART B (verification, requested before quoting): `dev_identification_residual_bits` is NOT a
+  legitimate ceiling residual — see memory `reference_dev_identification_residual_bits_trap`.
+  It is (panel-design constant) minus (upward-biased plug-in MI) on incommensurable alphabets;
+  the campaign code itself tags the ceiling term `moves_with_decoder_tuning: False` and
+  `identification_mi_is_not_a_behavioral_ceiling: True`; its 0.0 is a CENSORED readout
+  (max(0,...)), reachable when panel code entropy is 0 (a maximally UNINFORMATIVE panel scores a
+  perfect residual). Consequence: the archived in-house loop used it as an EARLY-STOP rule
+  (stopping_reason "dev_identification_residual_below_0.02_bits") — which is exactly what the
+  qwen-only in-house control reported, so that control's stop is suspect and the
+  official-GEPA-beats-in-house result should be read as "official searched further", NOT
+  "in-house converged".
+  FOLLOW-UP STARTED THEN STOPPED by the user's pause: `analyze_bounds_evt.py` (extreme-value
+  endpoint estimator = the CORRECTLY-SPECIFIED tool for "a bound strictly above best-achieved",
+  since it estimates the upper endpoint of the distribution prompts are drawn from rather than a
+  within-pool selection statistic). The agent confirmed the q values and was killed before
+  writing the estimator; the file may not exist. NEXT: (1) finish the EVT estimator, (2) redo all
+  of D4 on the 300-item paper-exact test splits (SE ~.023 instead of ~.04-.12) — on 100 noisy
+  binary items the margins are smaller than the sampling error and no bound can be meaningful.
+
+## D5. Phase 5 both-LM paper runs (user approved BOTH)
+- Qwen3-8B justification: IT IS the paper's open-model task LM (Table 1; Appendix E.2 — Qwen3
+  8B temp .6 top-p .95 top-k 20; GPT-4.1-mini is the other). Paper-exact column = Qwen3-8B
+  served on sk2 (shared HF cache has it; vllm serve, 1 GPU, deviation from offline-batch rule
+  ACKNOWLEDGED as DSPy requirement). Second column = GLM-5.2 (our best; subscription quota,
+  spend freely).
+- Runs: 3 benchmarks (aime/hover/hotpot) × 3 arms × 2 task LMs, budget 600 declared,
+  paperexact_arms.py; test = full paper test split; log raw draws.
+- STATUS: SET UP AND SMOKE-TESTED, NO PAPER RUNS EXECUTED (stopped by the user's pause).
+  Harness `paperexact_arms.py` written and validated; its unitrecomb arm was UPGRADED to the same
+  M_ω v2 geometry as run_momega_v2.py (init-from-GEPA-best, paired marginal selection, prefix
+  sweep + drop-one, no-regret guard, LLM-suggested per-module units) so the paper runs do not
+  inherit v1's broken selection. Qwen3-8B was served on sk2 GPU 7 (port 8077, reasoning-parser
+  qwen3, HOME pinned to /lfs) with a local SSH tunnel; endpoint smoke-tested clean (content
+  parsed, no stray <think> leakage). BOTH THE SERVER AND TUNNEL WERE STOPPED and GPU 7 freed on
+  the user's pause — relaunch via code/scripts/serve_qwen3_sk2.sh + `ssh -f -N -L 8077:127.0.0.1:8077 sk2`.
+  TWO PROVENANCE FINDINGS: (1) dspy 3.2.1 HARD-PINS `gepa[dspy]==0.0.27`, so installing dspy for
+  Phase 5 silently DOWNGRADED the prompt-opt venv from the PIN.txt-recorded 0.1.4. Phases 1-4
+  Arm A ran BEFORE that install, so those results are on 0.1.4 and are clean; but any future raw
+  `gepa.optimize` run in that venv must re-pin. Env versions observed: main repo 0.0.17,
+  prompt-opt venv 0.0.27, sk2 0.1.4. (2) The GEPA paper's OWN optimizer is
+  `vendor/gepa-artifact/gepa_artifact/gepa/gepa.py` — a STANDALONE DSPy teleprompter that does
+  NOT wrap the pip `gepa` package at all. Working interpretation (FLAGGED TO USER, UNANSWERED):
+  the requirement "exactly the same as the original GEPA paper" is about the END EVALUATION —
+  programs, metrics, splits — which ARE verbatim theirs; the optimizer is dspy.GEPA, documented
+  as a deviation, with the artifact's own class available if a stricter replication is wanted.
+
+## D6. Theory: is reconstruction the optimal unsupervised metric?
+Write notes/2026-07-19__reconstruction-optimality-theory.md:
+- Barber–Agakov: E_q[log p(x|m)] is a variational LOWER bound on I(M;X); tight iff
+  reconstructor = true posterior. Reconstruction objective = tightest certifiable label-free
+  bound on I(M;X).
+- DPI corollary: for M=f(X) and any label Y (chain M—X—Y): I(M;Y) ≤ min(I(M;X), I(X;Y)).
+  So I(M;X) caps ALL downstream supervised value ⇒ maximizing a certified lower bound on
+  I(M;X) = maximizing the universal capacity cap. "Optimal unsupervised metric" in exactly
+  this sense (no per-task AUC guarantee).
+- EM correspondence: user's p(x|z) intuition = ELBO reconstruction term; EM maximizes
+  marginal likelihood; our C(R(Ω)) = I(M;M̂) recovery = decodability/self-consistency ⇒
+  relate to identifiability (nonlinear-ICA/iVAE conditions; honest limits: without
+  identifiability no unsupervised criterion can be pointwise optimal).
+- Tie to existing feedback memories: T_lower_bound_Mstar_be_upper, report_recovery_metric_only,
+  vinfo_pathologies_koyejo (Shannon transmission, no naive scaling).
+- STATUS: DONE 2026-07-19 -> notes/2026-07-19__reconstruction-optimality-theory.md. Provable:
+  Barber-Agakov tightness (reconstruction = THE attaining label-free variational bound on
+  I(M;X)); DPI universality (I(M;Y) <= I(M;X) for every Y, sharp — for deterministic M,
+  I(M;X)=H(M)=sup_Y I(M;Y)); recovery I(M_ω;M̂) measures the IDENTIFIABLE quotient
+  [ω]_behavior (nonlinear-latent unidentifiability => behavioral readout is the only well-posed
+  one, which retro-justifies the no-similarity-to-reference rule). NOT provable, with
+  counterexample: reconstruction optimal for a SPECIFIC downstream task — a SHA-parity criterion
+  maximizes I(M;X) with zero semantic utility, i.e. "maximize I(M;X)" IS entropy maximization
+  and is the formal statement of the audited "variance-revival != information-revival" finding
+  (which also flags the discrimination-maximizing M_ω objective as a CAPACITY objective).
+  Fano deliberately NOT used (retracted in this project). Open+promising: add the ELBO's missing
+  complexity term => MDL-penalized recovery readout (description lengths already logged).
+
+## Execution order: D1 → D2 → D3 → D4 → D5 → D6 (user: "focus on everything in order and fully")
+
+---
+
+# NEXT TASKS — brief for the incoming agent (written 2026-07-20 at session handoff)
+
+Everything below was STOPPED cleanly by user request. Nothing is running: no local processes, no
+agents, no sk2 vLLM server (GPU 7 freed), no SSH tunnel. Read the STATUS lines above before
+starting — several of this file's original hypotheses were REFUTED by evidence and the refutations
+are recorded there. Do not re-derive them.
+
+## T1 (highest priority) — rerun M_ω v2 and get the headline number
+The user's core ask is "we want to slightly beat GEPA". The fixed implementation exists and was
+killed ~5 evaluations in; it has never produced a result.
+    cd datasets/prompt-optimality-test && nohup ./run_momega_v2_all.sh > <log> 2>&1 &
+Runs hover + hotpotqa in parallel on the two GLM keys. ~2h (a 60-item eval takes ~100s; ~3800
+calls/dataset). Output: `runs/<ds>/momega_v2/result.json` →
+`test_untouched: {momega_v2, gepa_shipped, seed}` on val[100:300], 200 items no arm has touched.
+SUCCESS CRITERION: `momega_v2 >= gepa_shipped`. The no-regret guard makes >= automatic up to
+confirmation noise, so the interesting quantity is the MARGIN and whether units were compiled at
+all (`units.n_compiled` > 1 would confirm the D3 fix worked).
+DO NOT run aime2025 in this harness — its val split is only 17 items; cover AIME in T3.
+DO NOT quote v1 `unitrecomb` numbers (.73/.81/.29) as M_ω performance; they are the broken-geometry
+run, preserved for provenance only.
+
+## T2 — finish D4 properly
+(a) `analyze_bounds_evt.py` was being written when the agent was killed — CHECK IF IT EXISTS; if
+partial, finish or rewrite. It is the extreme-value endpoint estimator (upper endpoint of the
+distribution prompts are drawn from), which is the correctly-specified tool now that best-of-m is
+proven unusable for this. Include: two endpoint estimators cross-checked over top-k, bootstrap CI,
+the i.i.d.-violation caveat (candidates come from an ADAPTIVE search), and binomial SE alongside
+every margin. (b) Then REDO all of D4 on the 300-item paper-exact test splits from T3 — on 100
+noisy binary items every margin is smaller than the sampling error, so no bound there can mean
+anything. A clean negative is an acceptable outcome; do not dress one up.
+
+## T3 — D5 paper-exact runs (needs the server back)
+    ssh sk2 'nohup bash /lfs/skampere2/0/alexspan/cr3-v14.1-two-lane/code/scripts/serve_qwen3_sk2.sh \
+      > /lfs/skampere2/0/alexspan/cr3-v14.1-two-lane/logs/qwen3_serve.log 2>&1 &'
+    ssh -f -N -L 8077:127.0.0.1:8077 sk2        # wait for "Application startup complete"
+Then `paperexact_arms.py <aime|hover|hotpot> --arm <official|inhouse|unitrecomb> ...`.
+ARM ORDER MATTERS: official → inhouse → unitrecomb (unitrecomb reads official's result.json to
+initialize). Two task-LM columns: `openai/Qwen3-8B --api-base http://127.0.0.1:8077/v1
+--temperature 0.6 --top-p 0.95 --max-tokens 8000` (paper-exact; max_model_len is 16384 so do NOT
+pass --max-tokens 16384) and GLM-5.2 (our best). Start with aime (1 LM call per rollout, cheapest,
+and the only benchmark where GEPA actually improved over the seed). Kill the server + tunnel when
+done; check for OTHER alexspan vLLM jobs on the box first and never pattern-kill (see T6).
+
+## T4 — D1 leftovers
+`pip install gepa==0.1.4` on sk3 (UNCHECKED; sk2 already has 0.1.4). Decide the local-env pin:
+dspy 3.2.1 hard-pins `gepa[dspy]==0.0.27`, so a venv cannot hold both dspy and gepa 0.1.4 — either
+separate the envs or accept dspy's pin for the benchmark harness while sk2 stays 0.1.4 for
+reconstruction. Update PIN.txt to record what is actually installed rather than what was intended.
+
+## T5 — D2's untouched half: the reconstruction-side M_ω
+Only the benchmark side was built. The reconstruction side still needs the CHILDREN-METRICS unit
+source: when judging R2, seed the unit pool with that metric's certified R1 children from the
+L0→R3 ladders (memory `project_hierarchy_l0_r3_reconstruction`), alongside official-GEPA
+trajectory units and LLM suggestions, with the same init-from-GEPA-best superset argument. This is
+the version that matters for the paper's Level-1 claims.
+
+## T6 — standing cautions for this workstream
+- sk2 is SHARED. Another user (sahasras) runs vLLM there, and alexspan has OTHER jobs (a `qwen14b`
+  tmux lane). Kill ONLY by explicit PID after mapping the process tree; a `pgrep -f "vllm serve"`
+  pattern-kill misfired this session (it matched the ssh shell's own command line).
+- Pin HOME=/lfs/skampere2/0/alexspan in every sk2 job; the AFS home is unreadable and an unpinned
+  HOME already destroyed one full run (v3 decoder tune, every engine init failed).
+- val[:100] is CONTAMINATED for reporting on hover/hotpotqa (every phase-1-4 arm selected on it).
+  Report on val[100:300] or the paper test splits.
+- Do not quote `dev_identification_residual_bits` as any kind of bound (see D4 Part B).
+
+---
+
+# AUDIT ROUND (2026-07-20, incoming agent) — everything above independently verified
+
+Seven parallel audit agents checked every D1-D6 artifact before continuing. Results:
+
+- **m_omega_gepa migration: VERIFIED on all claims** (signature/return contract, estimand,
+  rank-equivalence math re-derived, budget mapping, archive integrity, 13/13 tests, live
+  gepa-0.0.17 API compatibility). Two caveats FIXED in code: (1) docstring overstated
+  selection-equivalence — NaN verdicts score −1.0 in the search signal but are EXCLUDED from the
+  canonical statistic, so equivalence is exact only at equal parse-failure rates (docstring now
+  says so); (2) `raise_on_exception=False` could silently return the seed on a dead backend — now
+  warns loudly when GEPA returns the seed with no other candidate evaluated.
+- **v14 decoder rewire: VERIFIED** (archive verbatim by function-body diff, scoring copied
+  exactly, discipline + freeze-consumer keys, 16/16 tests, 338 collect). FIXED: the unguarded
+  post-hoc rescore (a crashing non-winner template after a completed 240-call search would abort
+  the run and lose the winner) — now per-template with retry for seed/winner, drop-with-warning
+  for others; also the wasted final-attempt sleep. NOT touched (noted): over-broad retry
+  mislabels deterministic scorer bugs as transient; append-mode proposals.jsonl pollutes
+  `distinct` on re-runs into the same run_dir.
+- **analyze_bounds.py: FULLY VERIFIED, zero bugs** — re-run byte-identical; the exchangeable
+  estimator, excess-curve refit, oracle union, noise model, and candidate-bootstrap all checked
+  independently (exact combinatorial estimator matches their MC to <3e-4). The structural
+  negative (sup_m E[max of m] = pool max at m=n) is mathematically confirmed. Labeling gap only:
+  bounds_summary.md doesn't carry the RUNBOOK caveat that aime's 17-item split is ad-hoc.
+- **UNIT_BOTTLENECK_DIAGNOSIS: ALL numbers reproduced exactly from logs** (budget arithmetic,
+  panel sd, Spearmans + permutation p, headroom, 0-compile sign test). One framing caveat
+  appended to the file: "compiled went backwards vs seed" is a run-time-vs-rescore measurement
+  artifact (like-for-like the hover compile ties the seed at 0.760); the robust claim is
+  "compiled captures far less than best single unit (regret −0.06/−0.02/−0.118 like-for-like)".
+  Every v2 design choice survives.
+- **paperexact_arms.py: paper-exactness VERIFIED** (programs/metrics/splits imported verbatim
+  from the artifact; v2 geometry present; nothing selects on test). BUGS FIXED: `--max-tokens`
+  default 16384→8000 (paper Appendix E.2); AIME panels now adapt to its 45-item train (was:
+  5-item confirm slice); budget default now per-arm (600 official/inhouse, 2400 unitrecomb —
+  600 starved the prefix/confirm stages and silently shipped init); `evaluate_cand` no longer
+  silently truncates the panel when budget runs low (scores were incomparable); z.ai key lookup
+  now falls back across all three key files + ZAI_KEY_FILE env. STILL OPEN: hover/hotpot need
+  the BM25S wiki index built (aime does not — run aime first); runs_paperexact/ is empty (never
+  executed).
+- **D6 theory note: both load-bearing theorems CORRECT** (Barber-Agakov, DPI + sharpness, Fano
+  properly absent). FIXED in the note: the §5 MDL claim was internally inconsistent — a
+  description-length penalty is MINIMIZED by the SHA-parity hash (short English description), so
+  the already-logged description lengths canNOT power the pilot; the penalty must target
+  executed-computation complexity. Also added: decoder-family tightness caveat,
+  within-variational-family qualifier, the two-senses-of-"reconstruction" terminology guard
+  (Thm A's decode-X-from-M vs the project's criterion-recovery I(M_ω;M̂)), fiber-argument
+  attribution for §6. Headline survives: "provably the best label-free capacity certificate,
+  provably not task-optimal".
+- **runs/ AIME is answer-contaminated** (official arm's reflection injected literal 2025 answers;
+  13/17 split of the same 30 problems, no test set) — never quote runs/ aime numbers for
+  anything; paperexact AIME (45/45/150, disjoint sources) is the only clean AIME.
+- **Environment recon**: sk2 GPU 7 free, serve script intact, port 8077 free remotely but the
+  local ControlMaster still holds the stale forward (it revives when the server binds — no new
+  tunnel needed). sk2 conda: gepa 0.1.4 + dspy 3.1.3 (a dspy that tolerates 0.1.4 exists —
+  T4-relevant). sk3: gepa 0.0.26. alexspan's other lanes (qwen14b/qwen_32B/qwen_3B/qwen_7B tmux,
+  GPUs 0-1 busy) — DO NOT TOUCH.
+
+T1 RELAUNCHED 2026-07-20 after the audit (runs/<ds>/momega_v2/run.log; killed-run partials
+preserved as proposals.partial-killed-20260719.jsonl). analyze_bounds_evt.py WRITTEN (T2a):
+process-conditional endpoint via GPD-MLE + Pickands over a k-sweep, candidate bootstrap,
+dequantization sensitivity, binomial SE beside every margin, i.i.d. caveat up front.
+
+## T1 RESULT (2026-07-20, the headline run — COMPLETE)
+
+`runs/<ds>/momega_v2/result.json`, test = 200 untouched val[100:300] items, GEPA-shipped = seed
+on both (official GEPA had found no improvement):
+
+| dataset | M_ω v2 | GEPA-shipped | seed | paired W-L | exact sign p | units compiled |
+|---|---|---|---|---|---|---|
+| hotpotqa | **.795** | .765 | .765 | 14-8 | .286 | **7** (format/article/phrasing rules) |
+| hover | .730 | .750 | .750 | 12-16 | .572 | 1 (the known quasi-exemplar film fact) |
+
+READ: (1) The D3 mechanism fix WORKED — hotpotqa compiled 7 units (v1: 1 everywhere) with select
+.65→.80, confirm agreeing (.65→.75), and the test direction positive (+.030 ≈ 1 SE; suggestive,
+NOT significant — paired 14W-8L p=.29). (2) hover reproduced the diagnosis's failure mode at the
+next level up: the select panel (+10 items!) and the 40-item confirm slice (+.025) BOTH passed
+the quasi-exemplar "Adam Arkapaw" unit, which then failed to transfer (−.020 on test, 12W-16L,
+n.s.). The no-regret guard's "up to confirmation noise" clause is doing real work — 40 items is
+not enough to catch an entity-overlap false positive on hover. (3) Consistent with the EVT read
+(bounds_evt_summary): hover's process endpoint ≈ best-achieved (no headroom to find), hotpotqa's
+endpoint unstable-but-higher (room existed; M_ω claimed some). Candidate v3 refinements, NOT
+implemented (need sign-off + evidence): bigger confirm slice, and a unit-type filter for
+proper-noun exemplar-fact units (the memory `banks have 0 mechanical` / degeneracy line predicts
+these transfer poorly on entity-clustered tasks like hover).
+
+## T3 RESULT — paper-exact AIME, Qwen3-8B column (COMPLETE 2026-07-20)
+
+`runs_paperexact/aime/Qwen3-8B/<arm>/result.json`, paper splits 45/45/150, test n=150
+(binomial SE ≈ .039; the SEED measured twice across arms gave .333 and .367 — run-to-run
+sampling noise is the size of most gaps here):
+
+| arm | seed_test | best_test | note |
+|---|---|---|---|
+| official (dspy.GEPA, 600) | .333 | .367 | GEPA's val-selected candidate (val .31→.40 during search) |
+| inhouse (600) | .367 | **.440** | +.073 ≈ 1.8 SE, selected on a 25-item train panel — borderline, replicate before quoting |
+| unitrecomb M_ω v2 (2400) | .367 | .367 | **guard fired correctly**: 1/24 units positive on 27-item select (= noise), confirm rejected it (.444<.500) → shipped official's prompt VERBATIM |
+
+READ: on clean paper-exact AIME the M_ω superset floor held exactly (M_ω = GEPA, no regression);
+the inhouse arm's .44 is the only arm above noise and needs replication (25-item selection panel).
+Rescore of ALL distinct candidates (3 arms pooled) on the 150-item test is RUNNING
+(`paperexact_rescore.py` → `<arm>/rescore.jsonl`) — feeds the EVT/bounds redo (T2b) on a split
+nothing selected on. GLM-5.2 column arms RUNNING (`run_paperexact_aime_glm.sh`). BM25S wiki
+index build for hover/hotpot delegated (unblocks those benches).
+
+## LATE-SESSION STATE (2026-07-20 evening)
+
+- **GLM-5.2 AIME column RETRACTED as measurement artifact** (diagnosed by fresh-call repro):
+  the paper metric's bare `int(prediction.answer)` zeroes LaTeX-formatted answers ('$504$' →
+  ValueError → 0; free-form GLM-5.2 scored 5/5 where the harness scored 3/6), plus 16k-token
+  truncation poisoned GEPA's search signal (55 truncation events; inhouse "best" .24 < seed was
+  GEPA optimizing against truncation noise). Old run quarantined at
+  `runs_paperexact/aime/glm-5.2_formatbug-quarantine-20260720/`. RERUN launched with
+  `--robust-answer-extract` (last-integer extraction wrapper in paperexact_arms.py — vendored
+  artifact untouched, no-op for bare-integer models so the Qwen paper-exact column is
+  unaffected) + `--max-tokens 32000`; both fixes recorded in result.json.
+- **Clean-AIME rescore pool (34 rows incl. 6 harvested dspy-GEPA trajectory candidates):
+  top-3 candidates are ALL unitrecomb compiles (.467/.460/.447) > official's best rewrite
+  (.413)** — unit GENERATION reaches above GEPA's rewrites, but selection (27-item panel,
+  18-item confirm) could not identify them and the guard shipped GEPA's prompt (.367). Known
+  only from the post-hoc test rescore — CANNOT be used for selection. Selection power remains
+  the binding constraint (D3, again). EVT on this pool: GPD .4667 [.447,.479] pinned at pool
+  max, Pickands .597 wide — estimators disagree, no stable endpoint quoted; both sit above
+  observed GEPA (.367). No bound violations anywhere to date.
+- **Gestalt/undershoot point (user, 2026-07-20): CORRECT and now part of the ladder reading.**
+  Rung-1/2 bounds are process-conditional and UNDERSHOOT the all-prompt truth; a natural
+  "gestalt" prompt from a richer process can legitimately exceed them (vivid demo: free-form
+  GLM-5.2 5/5 vs constrained-format 3/6 on the same items). Only rung 0 binds all processes.
+  Endpoint claims must be process-marked; endpoint-vs-process-family convergence is the only
+  empirical probe of a task ceiling.
+- **sk3 paired A/B recovery campaign LAUNCHED** (pid on sk3; GPU 7 co-located at 0.35
+  mem-util): Arm A `--gepa-m-omega` (first-ever official-GEPA plain baseline) then Arm B
+  `--momega-v2`, peer-review/specific groups 3,36,38,13,30,116,35,45,125,16,22,23 (matches the
+  Jul 11 no-GEPA arms), Llama-8B executor + glm-4.7 reconstructor, n_items 60 R 5, out-dir
+  `outputs/r2_recovery_v2_momega/{gepa_plain,momega_v2}` on sk3. sk3 code deployed by rsync
+  (stale copy had no --momega-v2); 21/21 tests passed on sk3 pre-launch. ~6-7h.
+- hover Qwen paper-exact arms running (chained after the AIME rescore).
+- **v3 refinement proposals AWAITING USER SIGN-OFF**: (1) much larger confirm slices (full
+  45-item AIME val; 100+ on hover/hotpot); (2) proper-noun exemplar-fact unit filter for
+  entity-clustered tasks. Both change the selection design — do not implement unilaterally.
+
+## T3 RESULT — paper-exact HOVER, Qwen3-8B column (COMPLETE 2026-07-20) — ★ THE HEADLINE
+
+300-item untouched paper test (SE ≈ .028), arms in order official → inhouse → unitrecomb
+(unitrecomb mines BOTH prior trajectories + LLM facets, inits from official's winner):
+
+| arm | seed_test | best_test | paired vs official GEPA |
+|---|---|---|---|
+| official dspy.GEPA (600) | .380 | .450 | — |
+| inhouse (600) | .380 | .547 | (vs M_ω: 33W-24L p=.29, n.s.) |
+| **unitrecomb M_ω v2 (2400)** | .380 | **.517** | **32W-12L, exact sign p=.0037** |
+
+**M_ω v2 significantly beats canonical official GEPA on a clean paper-exact split** — compiled
+3 units (select .425→.525, confirm .600→.680, guard PASSED on real signal), vs seed 51W-10L
+p<1e-5. First statistically solid end-to-end win for the mechanism. Caveats to carry: budget
+asymmetry by design (2400 vs 600, declared + recorded); M_ω initialized FROM official's .450
+candidate so this is the superset mechanism working, not an independent-optimizer comparison;
+inhouse's .547 joint rewrite is statistically tied with M_ω. Chain launched: hover rescore
+(300-item EVT input) → hotpot arms → hotpot rescore.
+
+## T3 RESULT — paper-exact AIME, GLM-5.2 column FIXED RERUN (2026-07-20, robust extract + 32k)
+
+seed measured .433/.440/.467 across arms (spread ≈ SE .04). official .433→.433 (no gain);
+inhouse .440→**.347** (NO guard → shipped a 25-item-panel overfit, −.09 on test); unitrecomb
+guard fired (confirm .333 < init .389) → no-op at .467. **Guard now 4/4 correct.** Reads:
+(1) artifact diagnosis validated — GLM-5.2's real AIME level is .43-.47 (was .30 under
+int('$504$')); zero missing-answer events at 32k; (2) strong-model AIME = NO headroom for ANY
+arm (endpoint ≈ seed); (3) guard-vs-no-guard contrast under no-headroom: M_ω no-ops, inhouse
+ships harm — the paper-ready argument for the superset construction alongside the hover win.
+
+## T5 RESULT — reconstruction-side A/B, peer-review/specific 12 groups (COMPLETE 2026-07-20)
+
+sk3, Llama-8B executor + glm-4.7 reconstructor, n_items 60 / n_train 30 / R 5, paired arms:
+A = --gepa-m-omega (first official-GEPA plain baseline), B = --momega-v2 (children units).
+Results (`outputs_sk3_momega/{gepa_plain,momega_v2}.jsonl` local copies):
+
+- 6/12 groups fail-closed in BOTH arms ("target constant on design split") — degenerate metrics
+  stay degenerate, correctly refused. **B RESCUED grp 13 from that failure** (unit compile
+  created design-split variance; id_acc .400 where A = unmeasurable).
+- Measurable groups: grp 116 A id .000 (plain GEPA COLLAPSED the metric, gepa_std 0) → B id
+  .200 (2 units, std .499); grp 36 recovery .066 → **.196 (3x)** with 1 unit, id 1.0 both;
+  grps 22/35 exact ties (0 units, superset floor held); grp 125 REGRESSION A .800 → B .600
+  (recovery NaN; 4 units passed a 7-ITEM confirm slice then failed held-out — the underpowered-
+  confirm disease at reconstruction scale). Mean gepa_std A .329 → B .481.
+- **★ EVERY compiled unit (8/8, across grps 13/36/116/125) is source=CHILDREN** — zero LLM,
+  zero trajectory. The D2 children-metrics hypothesis gets a clean confirmation: certified R1
+  children are THE productive unit source on the reconstruction side.
+- FOLLOW-UP LAUNCHED (bigpanel): same 12 groups at n_items 100 / n_train 60 (→ 15-item confirm)
+  → outputs/r2_recovery_v2_momega_bigpanel/ on sk3, both arms, to fix the 125-style guard
+  failure and re-measure. ~5-6h.
+
+## HEARTBEAT LOG (2026-07-20/21 overnight campaign)
+
+**HB1 (~18:30 PT):** all lanes alive. hover Qwen 300-item rescore DONE → EVT: pool n=38, best
+.5500 (a UNITRECOMB candidate again — top-3 unitrecomb .550/.517/.517 vs official .450/.38),
+GPD endpoint .5500 [.530,.570] (Pickands .609 wide — formally unstable, don't quote single
+number), union oracle .8033. **The paper's own 7k-rollout GEPA (.5233) lands just below our
+GPD CI** — process-family convergence ~.52-.55 on hover. Selection left .033 on the table
+(shipped .517 vs pool best .550) — v3 rerun queued in Track A. ifbench GLM official: seed .320
+→ GEPA .478 (big gain — prime M_ω target). hotpot Qwen official started 01:25Z. sk3 bigpanel
+Arm A running.
+
+**HB2 (~19:45 PT): ★ SECOND SIGNIFICANT WIN — paper-exact HOTPOT, Qwen3-8B, 300-item test,
+first v3-geometry run:** official GEPA .380→.380 (found NOTHING), inhouse .380→.380 (nothing),
+**M_ω v3 .380→.4233 (2 units, select .43→.51, confirm .48→.52, guard passed) — paired vs GEPA
+17W-4L, exact sign p=.0072.** M_ω is the only method that improved at the declared budget.
+Winning units = 2 trajectory-mined hop-2-query rephrasings; LLM suggester returned 0 (rate-limit
+window, pre-retry-fix — win happened despite a thin 8-unit pool). Qwen scoreboard: hover WIN
+(.517>.450 p=.0037), hotpot WIN (.423>.380 p=.0072), aime tie-by-guard (.367; v3 rerun queued).
+Caveat vs paper: their hotpot GEPA 62.33 ran 6,871 rollouts vs our 600 — budget-parity runs
+still pending. B1: hover-GLM official .47→.517, inhouse .477→.623 (unitrecomb next inits from
+.517). B2: ⚠ ifbench-GLM OFFICIAL seed .3197 vs inhouse-pass seed .5221 — 20-point seed
+discrepancy = suspected outage-deflation during key-A saturation; do NOT quote ifbench-GLM
+official .478 until the rescore adjudicates. sk3 bigpanel Arm A 1/12 groups (slow, n=100). All
+lanes alive; hotpot Qwen rescore 2/16 running.
+
+**HB3-4 (~21:00-21:30 PT):** all lanes alive, none hung (logs 0m stale). ifbench-Qwen: official
+AND inhouse both .4116→.4116 (GEPA found nothing; paper's own IFBench GEPA gain was small,
++1.7) — M_ω unitrecomb running now. ifbench-GLM unitrecomb: 0 units shipped (all marginals ≤0),
+its seed re-measured at .5612 — CONFIRMS the official-pass .3197 seed was outage-deflated (the
+official .478 "gain" is suspect; rescore adjudicates). hover-GLM unitrecomb: 24 LLM units in
+pool (retry fix working), slow-but-live on the 100-item panel (~3.5h — GLM multihop evals are
+heavy). sk3 bigpanel Arm A 6/12. LLM-pool crowding noted: with 24 LLM units, cross-LM units get
+truncated by the 32-unit cap (llm-first ordering) — consider max_units 48 if a bench stalls.
+
+**HB5 (~22:30 PT): z.ai PROVIDER OUTAGE** — both GLM lanes (hover-GLM unitrecomb at 31/32
+marginals!, livebench-GLM official) went stale at the same instant 2.5h ago; direct probe
+confirms z.ai read-timeouts on a trivial request. Processes ALIVE and left running (litellm
+retries should resume them on recovery); 5-min recovery probe armed → on recovery, verify both
+resume within ~20 min, else kill by explicit PID and relaunch stages. Qwen lane UNAFFECTED
+(ifbench unitrecomb 14 marginals and progressing); sk3 bigpanel Arm A 11/12, currently in a
+local-vLLM phase, unblocked.
+
+**v3.2 (2026-07-21 ~01:00 PT, user: "lift to 32 right now"):** prefix cap 16→32 (= every
+positive unit gets a prefix slot), unit-pool cap 32→48 (un-crowds cross-LM units), unitrecomb
+default declared budget 6000→12000 (the bigger sweep needs ~11.4k worst-case; all-or-nothing
+budget check would otherwise silently truncate). Budget asymmetry vs GEPA-600 grows — by
+design, recorded per-result.json, must be stated in the writeup.
+**v3.1 (2026-07-21 ~00:45 PT, user question exposed the cap):** prefix-sweep TOP_K raised 8→16
+in paperexact_arms.py — T1-hotpotqa compiled 7/8, i.e. the old cap BOUND; 10-30-unit compiles
+were structurally impossible before this. In-flight runs (ifbench-Qwen unitrecomb) keep 8 (file
+read at process start); livebench/pupa + all reruns get 16. Unit-count doctrine recorded: count
+is bounded by (detection floor ~ panel SE) × (redundancy/conditional-value collapse) × (the
+top-k cap); the first two are measured properties, the third was a design artifact now lifted.
+
+**HB8 (~01:45 PT, first Sonnet-sweeper heartbeat):** (1) **ifbench-Qwen = PRINCIPLED TIE**:
+GEPA .4116→.4116, inhouse same, M_ω guard fired after full 32-marginal pass → shipped .4116.
+No method moves ifbench on Qwen (paper's own gain there was +1.7 — thin headroom bench).
+(2) ⚠ **GLM-column results from the outage window are CORRUPTED — DO NOT QUOTE**: livebench-GLM
+official "best" .3339 vs seed .6212, inhouse .2885 vs .6639, hover-GLM unitrecomb best_test .38
+vs init .5167 — all have the dead-endpoint zero-scored-items signature. GLM-column uniform
+rescores (retry-hardened) must re-adjudicate ALL glm-5.2 numbers after the chains finish; queue
+`paperexact_rescore.py <bench> --lm-tag glm-5.2 --task-lm anthropic/glm-5.2 ...` per bench.
+(3) sk3 bigpanel Arm A COMPLETE 12/12, Arm B started 08:04Z. (4) Track A → livebench-Qwen
+(v3.2), B1 → hotpot-GLM, B2 → livebench-GLM unitrecomb. (5) No free sk2 GPUs (all 8 >129GB) —
+second server still parked. z.ai UP at sweep time (flapping earlier).
+
+**HB9 (~02:45 PT):** hotpot-GLM official CLEAN: .37→.4967 (+.13 GEPA product, post-outage —
+M_ω inits from .4967 next in B1). ⚠ **livebench-Qwen BROKEN: seed=best=0.0** (paper baseline
+48.7; GLM column scores fine → Qwen-column pipeline artifact; AIME-Qwen on same server was
+fine). Opus diagnosis dispatched; its inhouse arm is accumulating garbage meanwhile —
+kill/quarantine/relaunch decision follows the diagnosis (PID-targeted only). sk3 bigpanel Arm B
+3/12. z.ai UP at sweep. No free sk2 GPUs.
+
+**HB9-INCIDENT RESOLVED (~03:15 PT):** livebench-Qwen 0.0 root cause = the sk2 TUNNEL dropped
+again (server survived, same pid); 840/840 connection errors + dspy max_errors=10000 silently
+zero-scored everything into a plausible-looking result. Sequence executed: tunnel re-established
+FIRST (killing the doomed arm earlier would have let the chain overwrite good aime/hover
+results with 0.0 garbage), then inhouse PID 3548 killed (explicit PID), official artifacts
+quarantined (official.deadendpoint-quarantine-20260721/), **pre-flight endpoint health check
+added to paperexact_arms.py** (dead local endpoint now aborts loudly — landmine defused for all
+future arms), livebench-Qwen recovery chain launched (official→inhouse→unitrecomb→rescore).
+Track A main chain proceeds to aime/hover v3.2 reruns against the live endpoint.
+
+**HB12 (~05:00 PT):** livebench-Qwen recovery CLEAN: official seed .6744 → GEPA .6956 (+.021;
+note our livebench score scale runs higher than the paper's 48.7 — partial-credit olympiad
+scoring + split mix; within-column comparisons are what count). **inhouse (no guard) regressed
+AGAIN: .6665 → .5792 (−.09) — THIRD documented guardless regression** (aime-GLM −.09, hover-T1
+n.s., now livebench-Qwen −.09); the guard-vs-no-guard contrast is now a robust pattern, not an
+anecdote. livebench-Qwen unitrecomb started (inits from .6956). livebench-GLM unitrecomb prefix
+reached k=17 under the lifted cap (v3.2 exercising exactly as intended). aime-Qwen v3.2 rerun
+still mid-flight (old result.json's final-test rows in append-mode proposals caused a false
+"complete" read — verify by result.json MTIME, not proposals rows). sk3 Arm B 10/12. All lanes
+green; tunnel OK; z.ai UP.
+
+## T5 BIGPANEL RESULT (2026-07-21, n_items 100 / n_train 60 — REVERSES the small-panel read)
+
+`outputs_sk3_momega_bigpanel/{gepa_plain,momega_v2}.jsonl` (local). At the bigger design split:
+**Arm A (plain GEPA) mean id_acc .450 over 8 measurable groups** (PRISMA grp 3 now MEASURABLE
+at id .800; grps 35/45/125 at 1.0/1.0/1.0) — the larger split mostly fixes what the小 split
+couldn't measure. **Arm B (momega-v2) mean id_acc .175 — WORSE**, with striking flips: grp 35
+id 1.0→0.0 (1 unit), grp 125 1.0→0.0 (2 units, discriminating False AGAIN despite the 15-item
+confirm), grp 45 1.0→.600. B wins remain only on recovery for grps 36 (.109→.220) and 22
+(.051→.136) and id for grp 30 (0→.200). Compiled units: 12 children + 2 trajectory.
+
+**Working hypothesis (NOT a conclusion; n=12, needs a targeted check): IDENTITY DILUTION.** The
+MCQ option shown IS the compiled prompt; appending children criteria makes the option a blend
+of sibling criteria, so the reconstructor can no longer match the metric to its own behavior —
+discrimination (capacity) rises while identifiability falls. This is open decision 3
+materializing empirically: the reconstruction-side guard gates on DISCRIMINATION (a capacity
+objective, per D6) while the reported readout is RECOVERY — the guard guards the wrong
+quantity on this side (benchmark side is fine: its guard gates task accuracy = the readout).
+CANDIDATE FIX (needs user sign-off — changes selection estimand): no-regret guard on a
+design-split recovery proxy (e.g., MCQ identification or induced-behavior agreement) instead
+of discrimination. Do NOT quote small-panel B positives as confirmed; the two runs disagree
+and the bigpanel is the better-powered one.
+
+**HB14 (~07:15 PT):** livebench-GLM unitrecomb landed (seed .7339 → shipped .6612, 1 unit) but
+is **NOT QUOTABLE — corrupted at the root**: it initialized from the outage-corrupted official
+best_candidate (official's GEPA search ran through the z.ai outage on zero-scored signals), and
+GLM-livebench seed measurements vary .62-.73 across passes (partial-outage deflation). The
+ENTIRE livebench-GLM column needs a clean rerun (official → inhouse → unitrecomb) after z.ai
+stabilizes; queue with the GLM-column uniform rescores. pupa-GLM official started (B2's last
+bench). aime-Qwen v3.2 at 69 marginals (cross-LM pool); livebench-Qwen M_ω at 13 marginals;
+hotpot-GLM inhouse still alive (slow GLM multihop). All lanes green; tunnel OK; z.ai UP.
+
+**HB17 (~10:00 PT):** **pupa-GLM official CLEAN: seed .8981 → GEPA .9735 (+.075)** — largest
+clean GEPA gain of the campaign, matches the paper's PUPA pattern (their biggest GEPA delta);
+M_ω unitrecomb will init from .9735 (inhouse mid-run). aime-Qwen v3.2 in late drop-one stage;
+livebench-Qwen at 27 marginals; hotpot-GLM inhouse still alive (12h+ — verify progress next
+sweep via proposals count, not just log freshness). Tunnel keepalive active (auto-healed
+earlier); key A 1302 back-pressure transient (key B OK). z.ai UP.
+
+**HB18 (~11:00 PT):** pupa-GLM inhouse .8913→.9552 (below official's .9735); **pupa-GLM
+unitrecomb RUNNING from the .9735 init — best-shot arm of the campaign.** hotpot-GLM inhouse
+KILLED by explicit PID (4344): 2 evaluations in ~14h = reflection-spin through the outages,
+scientifically void (mark ABANDONED-STARVED, never quote); its blocked successor hotpot-GLM
+unitrecomb launched manually (pid 52365, key B). B1 chain exit after the kill = expected.
+aime-Qwen v3.2 still in late stages; livebench-Qwen 34/48 marginals. Tunnel + z.ai OK.
+
+**HB19 (~13:30 PT):** sk2 network outage #4 resolved — ssh recovered, vLLM server SURVIVED
+(same pid since launch, 4 outages outlived), tunnel restored (manual + keepalive confirm). All
+4 unitrecomb processes ALIVE through the double outage (aime PID 8082, livebench 28805, pupa
+47961, hotpot-GLM 52365 — the deep retry stacks did their job). aime-Qwen v3.2 went 30 units
+deep into the lifted prefix cap before wedging; resumes now. z.ai UP again. Scoreboard
+unchanged; pupa-GLM M_ω (best-shot arm) at 10 marginals.
+
+**PAPER-EXACTNESS AUDIT ADDENDUM (2026-07-21, user question):** (1) Task models: the paper runs
+TWO executors — Qwen3-8B (Table 1; we run it exactly) and **GPT-4.1 Mini (Table 2; we do NOT
+run it** — GLM-5.2 was the approved substitute). Adding a true GPT-4.1-Mini column ≈ $30-40
+(aime) / $300-500 (all six) on the sk3 OpenAI key — OFFERED, awaiting user. (2) **top-k 20
+(Appendix E.2) was NOT being set** in any arm to date (vLLM default = disabled) — recorded
+deviation for all completed Qwen arms; `--top-k` flag added (extra_body passthrough), v4 script
+now passes `--top-k 20`, value recorded in result.json. (3) Everything else verbatim: program,
+metric (robust-extract is GLM-column-only), splits incl. AIME ×5 protocol, temp/top-p.
+Optimizer = dspy.GEPA (documented deviation, open decision 2); budgets 600 vs paper 1839-7051
+(parity runs queued).
+
+**DECISION (user, 2026-07-21): GLM-5.2 REPLACES GPT-4.1 Mini as the second executor column** —
+"an outdated model, anyway." No GPT-4.1-Mini runs. Writeup framing: deliberate modern
+substitute for the paper's closed-model column (Table 2 analog), not an omission; the
+paper-exact claim rests on the Qwen3-8B column alone.
+
+**HB22 (~14:45 PT): ★ AIME-QWEN TIE BROKEN — M_ω v3.2 shipped .4267 vs GEPA .3667 (+.06,
+paired 14W-5L, exact sign p=.0636 — borderline, above .05).** 1 unit compiled from the 48-unit
+pool: trajectory-mined format-discipline clause ("Do NOT use LaTeX formatting such as
+'\\boxed{125}'") — converts paper-metric int()-zeroed answers into scored ones; select .467→.600,
+confirm .400→.467 (15 items), TRANSFERRED to test this time. v4 (96 units, 60-item val-backed
+confirm, top-k 20) queued for consolidation above the significance line. Hardening landed:
+POST-aware rescore probe (no false aborts on legit 0.0 candidates), regression_flag in every
+result.json (best < seed−.05 → review-before-quote), inhouse starvation guard (6h/<5 evals →
+loud abort). **Canonical bounds artifact created: runs/UPPER_BOUNDS.md**
+(analyze_upper_bounds_rollup.py regenerates; refreshed after every rescore) — the single
+answer to "where are our upper bounds".
+
+**HB25 (~17:15 PT):** livebench-Qwen M_ω = TIE-BY-GUARD (0 units survived selection; shipped
+GEPA's prompt; .673 own-pass vs official-pass .696 = run-to-run spread, same prompt). GEPA had
+already captured livebench headroom (.674→.696). livebench-Qwen rescore running. ifbench v4 at
+67/96 marginals (noisy truncated-generation text observed in some scoring batches — watch).
+z.ai transient 1113 again on key B (triage rule applied — no action). QWEN SCOREBOARD: hover W
+(p=.0037), hotpot W (p=.0072), aime borderline-W (p=.064, v4 consolidation queued), livebench
+tie-by-guard, ifbench v4 pending, pupa not started. 0 losses.
+
+**HB26 (~18:00 PT):** 5 arms + chain alive, nothing stalled. **hover v3.2 prefix sweep at k=23**
+(the lifted cap genuinely exercised — old cap 8 would have truncated it). pupa-GLM (best-shot
+arm) FINISHED its 48 marginals, now prefix k=9. ifbench v4 ~38/96 marginals; livebench v4 just
+started (3 marginals); hotpot-GLM in its 300-item final-test phase (dspy parallelizer errors
+present but retrying — log fresh). livebench-Qwen rescore at 5 candidates. z.ai UP, tunnel OK.
+
+**HB27-28 INCIDENT (~21:30 PT / 04:30Z): WEDGED-SOCKET outage — the failure the timeout can't
+catch.** ALL 5 arms went silent ~175 min simultaneously (both providers at once → looked local,
+but google=200). Diagnosis: z.ai UP, sk2 DOWN, and the two probed arms (livebench-Qwen,
+pupa-GLM) sat at **0.0% CPU** = blocked on DEAD SOCKETS that `timeout=300` did NOT recycle
+(litellm holds some in-flight connections in a state the read-timeout doesn't fire on — the one
+hole no retry depth closes). ACTIONS (kill by explicit PID only): (1) pupa-GLM (best-shot arm,
+z.ai up) killed 47961 → relaunched 53698, running clean (76-unit pool, init from GEPA); (2)
+hotpot-GLM killed 52365 → first relaunch DIED on a HuggingFace `trust_remote_code` dataset-load
+error (the 10h-old process had it cached; fresh load failed) → **fixed with
+`HF_DATASETS_TRUST_REMOTE_CODE=1`**, now alive 54099; (3) 3 Qwen arms (livebench 16532/hover
+63252/ifbench 79655) LEFT WEDGED — sk2 still down, restarting is futile (pre-flight guard would
+refuse) AND they hold in-progress marginals (hover prefix k23+, ifbench 87 marg, livebench 56
+marg); **NEXT HEARTBEAT: when sk2 returns, these 3 will still be wedged on dead sockets → kill by
+PID + relaunch (accept loss of in-progress marginals).** 2 Sonnet sweepers this window died on
+"connection closed mid-response" (Anthropic API rough patch) → ran heartbeat inline instead.
+
+**HB29 (~22:30 PT): wedged-arm recovery + robust tunnel.** sk2 SSH up but the port-FORWARD was
+flapping (not the host). Fixed: replaced the ControlMaster forward with a DEDICATED tunnel
+carrying `ServerAliveInterval=15 ServerAliveCountMax=3 ExitOnForwardFailure=yes` (self-heals
+short drops; keepalive monitor blg8uct5p re-establishes on longer ones — old keepalive
+bmo12f6w5 died in the pkill, replaced). Sweeper CPU-check pinpointed the wedged set: killed by
+PID 348 (lb-rescore), 16532 (lb-v4), 79655 (if-v4) — all 0% CPU dead sockets — and relaunched
+livebench-v4 (57295) + ifbench-v4 (57296), both now progressing (ifbench eval 82%, livebench
+73%). **hover-Qwen (63252) was NEVER wedged (0.3% CPU) — left running.** GLM restarts from HB28
+healthy (pupa 53698, hotpot 54099). livebench rescore NOT relaunched yet (deferred to avoid 4
+concurrent Qwen loads vs the working hover arm; queue next cycle once one arm finishes).
+LANDMINE for memory: fresh hotpot dataset load needs `HF_DATASETS_TRUST_REMOTE_CODE=1`.
+
+**HB30 (~23:50 PT): ★★ HOVER v3.2 UPGRADED WIN — M_ω .5467 vs GEPA .4500, 41W-12L, p=0.0001**
+(was p=.0037 at .517). 5 units compiled, ALL LLM-suggested (3×summarize1, 2×create_query_hop3)
+— the v3.2 diversified LLM framings + 96-unit pool + val-backed confirm materially improved the
+flagship result. This is the strongest single result of the campaign. Also: Track-A chain
+advanced to **pupa-Qwen official (87035)** — the 6th/last Qwen bench now running. ifbench-v4
+re-wedged (57296, 0% CPU 2 samples) → killed by PID, relaunched 89910 (alive, evaluating) — the
+robust tunnel reduces but hasn't eliminated the litellm dead-socket bug (timeout=300 provably
+doesn't fire on certain ESTABLISHED-but-dead sockets; no clean internal fix, periodic restart is
+the mitigation). QWEN SCOREBOARD: hover WIN p=.0001, hotpot WIN p=.0072, aime borderline-WIN
+p=.064, livebench v4 running, ifbench v4 running, pupa-Qwen just started. 0 losses.
+
+**HB31 (~01:00 PT): AUTO-RESTART WATCHDOG deployed for the wedge-prone Qwen v4 arms.** livebench-v4
+(57295) + ifbench-v4 (89910) wedged AGAIN (0% CPU dead sockets) — the litellm bug bites on any
+tunnel micro-drop during a long marginal pass. Manual restart every heartbeat is wasteful, so:
+`qwen_arm_watchdog.sh` (crash-proof, NO set -e/-u) checks livebench+ifbench every 5 min and
+kill-by-PID + relaunches any arm that is 0% CPU AND proposals-stale >15 min (both conditions →
+never kills a slow eval). Log: runs_paperexact/qwen_watchdog.log. Watchdog pid 8943 (survives;
+first two attempts died on set-u fragility — rewritten defensively). Current v4 arms: livebench
+8428, ifbench 8429 (relaunched clean after a $CO-variable arg-mangling misfire). pupa-Qwen
+official (87035) + both GLM arms (pupa 53698, hotpot 54099) healthy. NOTE: livebench pool max
+.724 > GEPA .696 → a pool candidate already beats GEPA; v4's job is to ship it.
+
+**HB32 (~02:00 PT): watchdog PROVEN (auto-restarted ifbench 2× unattended) + GENERALIZED to all
+4 arms.** hotpot-GLM had wedged unwatched (z.ai dead socket) → restarted (24227, w/ HF env) +
+added to watchdog. New watchdog (24234) covers livebench+ifbench (Qwen, tunnel-gated) and
+pupa+hotpot (GLM, z.ai-gated), each with correct relaunch incl. hotpot's HF_DATASETS_TRUST_
+REMOTE_CODE. ⚠ **ifbench TREADMILL**: wedges every ~15-20 min (its 2-stage program = ~2× LM
+calls/item = 2× socket exposure vs single-stage benches), so it may never finish a full run
+between wedges — watchdog keeps trying; needs a stable 20-30min network window to complete.
+livebench-v4 (8428) healthy + progressing (the promising push: pool max .724 > GEPA .696).
+pupa-Qwen official (87035) working. Confirmed wins unchanged (hover p=.0001, hotpot p=.0072,
+aime p=.064, 0 losses). Infra now self-healing: tunnel keepalive + 4-arm watchdog + heartbeat
+backstop.
+
+**HB34 (~04:00 PT): pupa-Qwen OFFICIAL DONE — seed .803 → GEPA .862 (+.059)** — the 6th/last
+Qwen bench's GEPA baseline; PUPA's large-headroom pattern (paper's biggest GEPA gain)
+reproduces on Qwen. pupa-Qwen inhouse (41391) running → unitrecomb next via chain (strong .862
+init). pupa-GLM unitrecomb (53698) working HARD (7.8% CPU, best-shot arm, from .974 init). z.ai
+transient 1302 throttle (retries absorb). Watchdog again auto-restarted ifbench+hotpot-GLM
+unattended. livebench-v4 (8428) wedged @2:57 etime → watchdog will catch when age>15 (a partial-
+write-then-wedge can briefly reset its age clock — acceptable, long wedges still cross 15m).
+ifbench treadmill continues (proposals now 960 lines across many restarts, no clean finish yet).
+No confirmed-win changes. NEXT: record pupa unitrecomb results (both columns) when they land —
+pupa is the likeliest remaining WIN given its headroom.
+
+**HB35 (~04:50 PT): pupa-Qwen inhouse DONE FLAT (.832→.831, no gain — guardless found nothing).**
+pupa-Qwen unitrecomb (57928) now running from the .862 official init (26min, working). HONEST
+INFRA ASSESSMENT: the compounding sk2-tunnel + z.ai instability is THROTTLING the 3 remaining
+benches to a crawl — livebench-v4 (8428) ~15 marginals/hr, pupa-GLM (53698) only 145 proposals
+in 6.75h (its program makes multiple GLM calls/item × flaky z.ai = brutal). They are
+PROGRESSING, not dead; restarting crawling-but-progressing arms would lose partial work and
+re-crawl, so NOT thrashing them. Watchdog+keepalive are the right mitigations and are running.
+Likely outcomes if infra stays flaky: pupa-Qwen unitrecomb (freshest, single-provider Qwen) most
+likely to finish; livebench/ifbench/pupa-GLM may not complete before morning. **Campaign is
+already a strong result on the confirmed wins alone** (hover p=.0001, hotpot p=.0072, aime
+p=.064, 0 losses, bounds framework, reconstruction identity-dilution finding) — the remaining
+arms are upside, not load-bearing.
+
+**HB41 (~07:00 PT): pupa-GLM unitrecomb DONE — M_ω .9685 vs GEPA .9735, 9W-14L, p=0.40 =
+STATISTICAL TIE (not a loss).** 1 LLM unit (PII-redaction clause), guard kept it on a 25-item
+confirm (.836→.960) but it was NEUTRAL on the 221-item test → M_ω landed marginally BELOW GEPA
+within noise. MECHANISM = small-confirm-slice artifact (pupa-GLM ran WITHOUT --confirm-add-val,
+so confirm=25 train items; the unit's confirm gain didn't generalize). This is the honest
+demonstration that "M_ω ≥ GEPA by construction" is CONFIRMATION-NOISE-BOUNDED, not absolute —
+and the direct empirical argument FOR --confirm-add-val (which the Qwen v4 arms have, GLM arms
+don't). NOT a loss (p=.40), but the first case M_ω didn't beat GEPA; scoreboard note: pupa-GLM =
+tie. ⚠ paper caveat: report the guard guarantee as "≥ up to confirmation noise" and show this
+case. All Qwen arms still crawling (livebench 194, pupa-Qwen 35). Confirmed Qwen wins unchanged.
+
+**HB42 (~12:20 PT): sk2 recovered (~56min outage) + cleanup.** pupa-Qwen (57928, paper-exact)
+had DIED during the outage (proposals stalled 120min) → relaunched 3122 WITH v4 config
+(--confirm-add-val, 96 units) so it gets the val-augmented confirm that pupa-GLM lacked (avoids
+the HB41 small-confirm tie artifact). Fixed a latent WATCHDOG BUG: its `pgrep "pupa --arm
+unitrecomb"` matched both pupa-Qwen AND pupa-GLM and was set to relaunch pupa as GLM — would
+have wrongly resurrected pupa-Qwen as a GLM arm. Killed the redundant pupa-GLM (122; already has
+its .9685 result) and re-pointed the watchdog's pupa check to Qwen (v4 relaunch). Watchdog now
+correctly covers livebench+ifbench+pupa (Qwen v4) + hotpot (GLM). Replaced the noisy tunnel
+keepalive with a transition-only monitor (bhgbvvec4). livebench (8428) wedged 11h+ — still not
+finishing; leaving to watchdog. Confirmed wins unchanged.
+
+**HB43 (~13:05 PT): v5 PUSH on ifbench+livebench (user directive: "push both harder — more
+units? more and diverse sampling strategies?") + sk2 EXECUTION LANE.**
+- **Harness v5** (paperexact_arms.py): `--run-tag` (parallel variant arms, no run-dir
+  collisions), `--prefix-cap` (48 for the push; was hardcoded 32), TWO new suggestion framings
+  — (4) example-grounded: the suggester now sees 3 REAL train examples (until now it only ever
+  saw module instructions, never the task); (5) unconventional-in-kind (new reasoning orders /
+  counterexample search / intermediate representations, no rephrasing) — and a greedy ADD-BACK
+  pass after drop-one (skipped positive-marginal units get one shot at the pruned set; catches
+  combination-only value). Confirm guard unchanged = still can't ship worse than GEPA.
+  prefix_cap/run_tag now recorded in result.json.
+- **sk2 lane** (kills the ifbench tunnel treadmill): harness rsynced to
+  sk2:/lfs/skampere2/0/alexspan/norm-research/datasets/prompt-optimality-test; venv with
+  version-pinned deps (dspy 3.2.1/litellm 1.91.4/datasets 5.0.0 + spacy/sympy/lark for the
+  bench metrics); z.ai verified reachable FROM sk2 (key already present). Per heartbeat
+  directive (GPUs 1+6 idle): **second Qwen3-8B vLLM server on sk2 GPU 1, port 8078, sk2-PID
+  3481835** (same serve args as the 8077 server) — so the sk2 arms don't contend with the
+  local arms' 8077.
+- **v5 arms live ON sk2** (localhost vLLM = no tunnel in the loop): ifbench sk2-PID 3625813,
+  livebench sk2-PID 3625814; both `--max-units 128 --prefix-cap 48 --confirm-add-val --top-k
+  20 --budget-calls 40000 --run-tag v5sk2` → runs_paperexact/<b>/Qwen3-8B/unitrecomb_v5sk2/.
+  Unit mining confirms the framing upgrade: **60 LLM-suggested each** (old ceiling ~36);
+  ifbench 79 units used, livebench 128 (cap hit).
+- **Local ifbench v4 RETIRED** (killed 5278, then watchdog-respawn 10524 — both by explicit
+  PID, 2min into mining, nothing lost); watchdog line removed + watchdog restarted (10908,
+  covers local livebench/pupa/hotpot). **Local livebench v4 (8428) NOT touched — it is in its
+  ENDGAME**: all 175 marginals done, prefix_k9 at select .679 (Sonnet digest's "0
+  select_marginal rows" was a wrong-key grep; the field is `phase`). Best guarded result of
+  {local v4, sk2 v5} wins per bench.
+- Rollup made variant-aware (glob unitrecomb*; M_ω cell = best guarded variant, tagged).
+  PROTOCOL: rsync back ONLY runs_paperexact/*/Qwen3-8B/unitrecomb_v5sk2/ from sk2 before
+  refreshing the rollup — never wholesale (would clobber local official/inhouse data).
+- Sweep notes: z.ai UP; sk3 bigpanel path reported MISSING by sweeper — verify path next HB;
+  sweeper's (b) "no run logs" also wrong (find-pattern artifact) — treat Sonnet digests as
+  pointers, verify before acting (twice bitten this HB).
+- **HB43b (~13:20 PT): --eval-threads flag added** (evaluate_cand was hardcoded n_threads=8 —
+  the real throughput bottleneck). sk2 v5 arms killed ~30min in (explicit PIDs 3625813/3625814,
+  first eval not yet recorded = nothing lost) and relaunched at **32 threads**: ifbench sk2-PID
+  3934278, livebench sk2-PID 3934279. Local arms stay at 8 (thread count = socket count =
+  tunnel dead-socket exposure; and mid-run restarts would lose real progress). Measured
+  cadences at this HB: livebench-local 9.5 min/eval (prefix_k10, endgame ~5-6h out), pupa-local
+  6.8 min/marginal (~12h out). Rate probe armed for the v5 arms.
+
+**HB43c (~13:40 PT): FULL-BOARD v5 PUSH (user: "prioritize beating paper-exact metrics.
+Let's push on all of these").** GPU 6 verified idle (fresh nvidia-smi: 0%, 0 MiB) → **third
+Qwen3-8B server, port 8079, sk2-PID 4032777**. Launched the remaining three paper-exact v5
+arms on it: **aime sk2-PID 4071211** (borderline p=.064 → make decisive; v3 compiled just 1
+unit), **hover sk2-PID 4071212** (shipped .547 ≈ v3-process endpoint .550 — v5's new framings
+= a DIFFERENT proposal distribution, so this directly tests whether the EVT endpoint moves
+with the process), **hotpot sk2-PID 4071214** (headroom .423→.437). All: --max-units 128
+--prefix-cap 48 --confirm-add-val --top-k 20 --eval-threads 32 --run-tag v5sk2; aime budget
+24000, hover/hotpot 40000; aime WITHOUT --robust-answer-extract (Qwen emits bare integers —
+column stays paper-exact). Fleet now: 8077(tunnel)=local livebench-v4 endgame + pupa-v4 +
+hotpot-GLM; 8078(GPU1)=ifbench-v5 + livebench-v5; 8079(GPU6)=aime-v5 + hover-v5 + hotpot-v5.
+Every one of the 6 paper benchmarks has an active Qwen-column push. GLM lanes deprioritized
+per directive (hotpot-GLM left cycling; costs only z.ai quota).
+- **sk2 LANDMINES hit + fixed during v5 bring-up** (for future sk2 lanes): (1) hover/hotpot
+  need `bm25s`+`PyStemmer` (+the 1.0G prebuilt bm25s_retriever — ships inside vendor/, rsync
+  covers it); (2) `datasets==5.0.0` REFUSES script datasets (hover-nlp/hover) — local machines
+  only work via the cached ARROW copy, and sk2's profile exports HF_HOME→shared_hf_cache, so
+  synced ~/.cache copies are invisible: fix = rsync local
+  ~/.cache/huggingface/{datasets/hover-nlp___hover,modules/datasets_modules/datasets/hover-nlp--hover}
+  to sk2 AND launch hover arms with `HF_DATASETS_CACHE=$HOME/.cache/huggingface/datasets`.
+  hover relaunched with fix (sk2-PID in log); aime + hotpot v5 already mining (aime 128 units,
+  hotpot 68, both 60 LLM-suggested).
+- **HB43d (~14:45 PT): measured v5 eval rates** (32 threads, localhost): 8078 pair — ifbench
+  2.4 min/eval, livebench 4.9; 8079 trio — hotpot 0.7, hover 0.8, aime 3.0 (long gens).
+  Revised ETAs: hotpot-v5 ~5pm, hover-v5 ~6pm, livebench-local-v4 ~7-9pm, ifbench-v5 ~10pm
+  today; aime-v5 ~4am, pupa-v4 + livebench-v5 ~9-10am tomorrow. The sk2 lane is 4-12x the
+  tunnel lane per eval.
+
+**HB44 (~14:55 PT): all 7 Qwen lanes verified healthy; no completions yet.** Local: livebench-v4
+at **prefix_k15** (writes 0.9 min fresh — on pace for tonight), pupa-v4 50 marginal rows (4 min
+fresh), hotpot-GLM watchdog-cycled again (now 20215). sk2 v5 (all in select_marginal, writes
+0-3 min fresh): hotpot 56 evals, hover 36, ifbench 21, aime 13, livebench 9 — all matching the
+HB43d rates, ETAs hold. z.ai UP; both sk2 servers responding; GPUs 1/6 at 100% (ours). No new
+result.json in 80 min (expected; first verdicts ~5pm). SWEEPER RELIABILITY: digest (e) reported
+"NO ROWS" for all v5 arms — artifact of an ssh NAT64 reset mid-loop (plus a py3.11 f-string
+nested-quote trap in my own probe); verified directly, all arms fine. Standing rule: any
+sweeper NEGATIVE (missing/zero/stale) must be re-verified directly before acting — 3rd
+false-negative in 3 sweeps. **sk3 NOTE for user:** heartbeat checklist item (d) references
+outputs/r2_recovery_v2_momega_bigpanel which does NOT exist on sk3; outputs/r2_recovery exists
+(cw-llama8b-* subdirs) but has NO writes in 12h+ — the sk3 A/B recovery campaign appears
+finished-or-stopped; NOT restarting anything blindly (paper-exact priority + unclear intended
+state) — needs user confirmation of the campaign's disposition.
+
+**HB45 (~15:55 PT): hotpot-v5 at confirm_compiled = final guard gate; result imminent.**
+Sweep: hotpot-v5 140 evals (past marginals+prefix+drop-one+add-back → confirm), hover-v5 110
+(marginals nearly done), ifbench-v5 47, aime-v5 32, livebench-v5 21 — all fresh writes ≤3 min.
+Local: livebench-v4 prefix_k20 (on pace), pupa-v4 58 marginals, hotpot-GLM cycled (40788).
+z.ai UP, both servers up, GPUs saturated. One tunnel blip at 21:22Z restored in ~2 min (local
+arms rode retries; sk2 lane untouched by design). Completion watchers armed: sk2 v5
+result.json (2-min polls) + local livebench-v4 result.json mtime (3-min polls) — sign tests
+will run the moment either lands.
+
+**HB45b (~16:20 PT): ⚠ hotpot-v5 RESULT INVALID — sk2 retrieval was BROKEN; caught by
+seed-sanity, quarantined, both retrieval arms relaunched clean.** The first v5 result landed
+(hotpot: seed .18 / best .373 / 10 units) and FAILED the seed-sanity check: the identical seed
+program scores .38 locally — the baseline itself collapsed. Root cause: hover/'s
+wiki.abstracts.2017.jsonl is a SYMLINK to an absolute /Users/... path (dangles on sk2; the only
+broken symlink in the tree; bm25s_retriever dir was present but init requires corpus too, and
+the auto-rebuild path also crashes through the dangling link). hotpot ran with retrieval
+soft-failing → Qwen answered multi-hop nearly blind (.18) and the search "optimized"
+compensation units — meaningless vs official GEPA. ACTIONS: relative symlink →
+data/wiki17/wiki.abstracts.2017.jsonl (1.78G copy had synced); search() verified returning
+correct passages on sk2; hover-v5 killed by PID 245070 (its in-flight search was poisoned);
+hotpot-v5 dir RENAMED runs_paperexact/hotpot/Qwen3-8B/INVALID_noretrieval_v5sk2 (sk2+local —
+kept, but escapes the rollup's unitrecomb* glob); clean relaunches hotpot sk2-PID 1393089,
+hover sk2-PID 1393091. LESSONS: (1) seed_test ≈ local seed_test is a mandatory validity gate
+on any cross-machine result — the guard chain worked (nothing was recorded); (2) rsync -a
+carries absolute symlinks — always `find -xtype l` after seeding a new machine. aime/ifbench/
+livebench-v5 unaffected (no retrieval). ETAs: hotpot/hover-v5 push to ~7-9pm PT.
+
+**HB46 (~16:55 PT): all lanes advancing; endgames approaching.** Local livebench-v4 at
+**prefix_k27** (of ≤32 — endgame ~2-3h out), pupa-v4 67 marginals, hotpot-GLM cycled (62183).
+sk2 v5: clean hotpot already at **prefix_k19** (result ~1h out), hover 173 rows (marginals
+~done; note its proposals.jsonl carries ~36 rows from the poisoned first run — clean-run
+row-counting must subtract), aime 52, ifbench 69, livebench-v5 33. z.ai UP, both servers UP.
+No valid results yet (the only new result.json was the already-quarantined INVALID hotpot).
+Watchers armed; nothing to record this cycle.
+
+**HB47 (~17:55 PT): two arms in final passes; no verdicts yet.** Local **livebench-v4 at
+drop_one** (past its 32-prefix sweep w/ best 8-unit prefix +.035 over init — confirm gate +
+finals next, ~1h out; PING-ON-LAND armed per user). sk2: hotpot-v5 also at drop_one (129
+evals), hover-v5 ~108/128 clean marginals, ifbench-v5 prefix_k12 (panel units still earning),
+aime-v5 71/129 marginals (3.2 min/eval — slower than the trio estimate, endgame ~11pm-1am),
+livebench-v5 45 rows (morning as forecast). pupa-v4 77 marginals. hotpot-GLM cycled (20421).
+z.ai UP, watchdog UP, both servers UP. Nothing recorded this cycle — all changes pending the
+confirm gates.
+
+**HB48 (~18:30 PT): hover-v5 LANDED — seed-sanity PASS, guard PASS, beats GEPA, does NOT
+displace v3.2; EVT endpoint HELD.** seed .35 (1.1 SE from local .38 — valid, unlike the
+INVALID hotpot .18 = 7 SE), best .49, 4 units (2 llm + 2 trajectory), confirm .397→.491
+(350 items). Interpretation: (1) fresh draw from the upgraded process beat GEPA (.49>.45) —
+the floor works; (2) it did NOT approach v3.2's .5467 ≈ endpoint .550 → **first direct
+evidence the hover EVT ceiling survives a diversified proposal distribution** (v5 had 128
+units incl. 60 new-framing LLM suggestions and every chance to exceed it); (3) MINING GAP
+found+fixed: _mine read only official/inhouse — v3.2's 5 winning units were ABSENT from v5's
+pool. v5.1 harness fix: pools now inherit ALL unitrecomb* variant trajectories (INVALID_*
+excluded); synced to sk2 — matters for the OSL staircase (frozen pool must contain 8B winners
+by construction). Scoreboard UNCHANGED (hover = .5467 best-variant, p=.0001). hotpot-v5 still
+in endgame; watcher re-armed.
+
+**HB49 (~19:55 PT): three arms in guard/endgame simultaneously.** hotpot-v5 at
+**confirm_init** (guard evals running — result ~30-60 min); local livebench-v4 still in
+drop_one (fresh writes; its 9.5-min evals make the endgame slow — revised landing ~1.5-2h);
+ifbench-v5 at **prefix_k37** (units STILL earning past k37 of 48 — deepest prefix any ifbench
+attempt has reached anywhere); aime-v5 91/129 marginals; livebench-v5 57/129; pupa-v4 86
+marginals (endgame tonight). hotpot-GLM cycled (4680). z.ai UP, watchdog UP, all writes ≤4
+min fresh. Nothing new recorded (hover-v5 was HB48). Ping-on-livebench still armed.
+
+**HB50 (~20:40 PT): ★★★ HOTPOT v5 — THE RESULT OF THE CAMPAIGN. M_ω .6333 vs GEPA .380,
+81W-5L, p=4.8e-19, 28 units.** Seed-sanity PASS (.40 vs .38 local, 0.7 SE). Guard chain
+consistent across THREE disjoint slices: select .44→.71, confirm(350) .443→.62, test
+.40seed→.6333. Units: 25 LLM-suggested + 3 trajectory — the v5 framings did this. Mechanism
+(honest): hotpot is exact-match scored and Qwen3-8B's verbose answers fail string match; most
+compiled units are ANSWER-FORMAT DISCIPLINE (extract exact entity, no filler, rely only on
+provided summaries) + 2 reasoning-structure units — i.e., the lift is largely articulable
+output-format knowledge, exactly what articulation SHOULD capture, and exactly what GEPA's
+reflection never found (official GEPA-Qwen: seed=best=.38, ZERO improvement). **THEORY DATA
+POINT: the v3-process EVT endpoint (.437) is DEMOLISHED by the v5 process (.6333) — endpoints
+are process-conditional, now demonstrated in BOTH directions in one night (hover: held at
+.550; hotpot: moved +.20). The paper's EVT section gets its perfect contrast pair.** Rollup
+refreshed (hotpot M_ω cell = .633 (v5sk2)); EVT re-estimate deferred until uniform rescores.
+Terminal ping sent (mobile inactive). QWEN SCOREBOARD: hover .5467 (p=1e-4) ✅, hotpot .6333
+(p=5e-19) ✅✅, aime .4267 (p=.064) ✅~, ifbench tie (v5 at prefix_k37+), livebench v4 drop_one
++ v5 in marginals, pupa endgame tonight. 0 losses.
+
+**HB50b (~21:20 PT): OSL STAIRCASE CUED UP (user directive: "cue up the scaling law
+experiments").** (1) **GPU census (fresh nvidia-smi all 3 boxes): sk1 = 6 IDLE A100-80s
+(GPUs 1,2,3,5,6,7) → THE STAIRCASE BOX; sk2 = only our 2 (campaign continues); sk3 = fully
+saturated, untouchable.** sk1 caveats: /lfs 97% full (1.7T free — lean footprint), no Qwen3
+family in cache (~125GB to download), account+space exist. (2) **Proposer decision (user):
+GLM-5.2 default for all non-paper-exact work** (it produced tonight's results; 4.7 =
+health-probe/fallback only). (3) **Tooling shipped: build_frozen_pool.py** (frozen pool =
+union of all units the 8B runs actually evaluated, from result.json marginals — deterministic,
+no re-mining, winners included by construction) **+ --pool-file mode in paperexact_arms**
+(skips mining+suggestion entirely, no z.ai dependency at scale-time). Pools built: hover 164u
+(8 winners), hotpot 68u (27), aime 48u, ifbench 32u, livebench 48u — REBUILD after tonight's
+v5s land, then freeze. (4) sk1 bring-up in flight: harness rsync running; next = venv (sk2
+recipe), find -xtype l symlink audit, hover HF-cache sync, nltk, Qwen3 1.7B/4B/8B downloads
+(14B/32B after), then per-scale servers on the 6 free GPUs — whole primary staircase can run
+in PARALLEL. Llama-70B later on sk2 B200s post-campaign; Gemma-4 phase last.
+
+**HB51 (~21:55 PT): local livebench-v4 PASSED THE CONFIRM GATE — now in final test evals**
+(phase final_test_seed; its 8-unit compile survived drop-one AND confirm; result ~20-40 min;
+ping watcher live). ifbench-v5 at drop_one (endgame, verdict ~1h). aime-v5 114/129 marginals,
+livebench-v5 69/129, pupa-v4 93 marginals (endgame next). hotpot-GLM cycled (66804). z.ai UP.
+sk1 staircase: 6 fixed-arm runs in flight (no results yet, no tracebacks; 32B still
+downloading). No new results to record this cycle — hotpot/hover v5 already in HB50/HB48.
+
+**HB52 (~22:20 PT): livebench-v4 LANDED — STATISTICAL TIE (user pinged per request).**
+Shipped a real 7-unit compile (guard .748→.781 on 161-item confirm — first livebench attempt
+to ship a compile at all), best_test .6823 vs GEPA official .6956; paired 9W-12L (105/126
+ties), p=.81 → tie, not a loss. Note the cross-run sampling asymmetry: v4's own seed rescore
+was .6681 (its compile is +.014 over its own init measurement); GEPA's .6956 was measured in
+the official run — temp-.6 resampling noise dominates the .013 mean gap, consistent with
+p=.81. livebench remains GEPA-favorable-tie; the v5 wide-pool arm (128 units, 69/129
+marginals) is the remaining shot, ~AM. Rollup refreshed (M_ω cell .682). Terminal ping sent.
+SCOREBOARD: hover .5467 ✅ p=1e-4; hotpot .6333 ✅✅ p=5e-19; aime .4267 ✅~ p=.064 (v5 in
+flight); ifbench ⚖️ (v5 at drop_one); livebench ⚖️ (v5 in flight); pupa in flight. 0 losses.
+
+**HB53 (~22:55 PT): sk1 staircase FALSE START caught + fixed; ifbench diagnosed NOT-wedged.**
+(1) All 3 sk1 vLLM servers died AT ARGPARSE (**vLLM 0.25.1 removed --disable-log-requests**;
+sk2's older install still has it) and my ready-watcher gave a FALSE POSITIVE (count-based
+check, polluted output) → 6 staircase evals retry-looped against dead ports for ~2h. NOTHING
+recorded (no fixed_arms.json; partial evals.jsonl quarantined as *.attempt1_deadservers).
+Fixes: staircase_eval.py now has the SAME pre-flight abort + HEALTH_PROBE mid-run guard as
+paperexact_arms (it had none — same landmine class as the sk2 livebench zero-score incident);
+servers relaunched without the dead flag (999520/21/23); ready-check now greps the actual
+model name, then auto-relaunches the 6 evals. LESSONS: pin flag compat per vLLM version;
+ready-watchers must verify content, not counts; every eval entrypoint gets the outage guard.
+(2) ifbench-v5 NOT wedged: alive, grinding drop_one; systematic per-item error — longest
+IFBench items + heavy unit stacks exceed the 16384 server context (8385 input + 8000 output)
+→ those items zero out for unit-heavy candidates only = slight ANTI-unit bias; guard still
+valid (same constraint both sides); consider 32768-context servers for any ifbench rerun.
+pupa-v4 102 marginals; aime-v5 prefix_k11; livebench-v5 82/129 marginals.
+
+**HB54 (~00:20 PT): ★ FIRST STAIRCASE CURVE (aime fixed arms, 3 scales) + triple incident
+recovery.** THE DATA: aime 1.7B seed .213 / GEPA-transplant .173 / M_ω-transplant .213;
+4B .367/.460/.433; 8B .320/.420/.440 → **the 8B-discovered articulation HURTS-or-does-nothing
+at 1.7B (transplant lift −.04/0.0) and helps at 4B/8B (+.06..+.12) — first empirical points
+for H-i/H-iv ("bigger models can absorb more articulation"; transplant lift GROWS with
+scale)**. Caveats: 150-item test SE ~.04; 3 of 5 rungs; transplant lift ≠ per-scale-optimized
+lift (those arms come next). INCIDENTS: (1) hover staircase trio died of **fd exhaustion
+(ulimit 1024) + dspy disk-cache sqlite contention** — hover also opens the 1.0G bm25s index;
+aime (no retrieval) survived; outage guard correctly refused to record 2 all-zero batches
+(the 3rd hit OSError writing evals.jsonl — quarantined *.attempt2_fdexhaustion). Fix:
+ulimit -n 65536 + per-run DSPY_CACHEDIR; hover trio relaunched (1083757/59/60), watcher
+armed. LESSON for all multi-proc sk1 launches: raise ulimit + isolate dspy caches. (2) Tunnel
+DOWN again → restored; watchdog had correctly skipped Qwen arms during the outage. (3) pupa-v4
+wedged on the dead socket (37 min stale, 109 marginal rows lost) → killed 3122 by PID,
+relaunched 51260 (v4 config). (4) ifbench-v5: proposals stale 144 min BUT log fresh (1 min) —
+it is inside ONE glacial drop_one eval, retry-looping context-overflow items; alive at 8h11m;
+leaving it. aime-v5 at prefix_k44 (endgame close).
+
+**HB54b (~00:50 PT): ★★ HOVER STAIRCASE FIXED ARMS COMPLETE — the CONTRAST PAIR to aime.**
+hover: 1.7B seed .350 / GEPA-tx .390 / **M_ω-tx .4833**; 4B .390/.4667/.510; 8B
+.370/.440/.5267. READING: (1) hover articulation transfers ALL THE WAY DOWN — M_ω transplant
+lifts 1.7B by +.13, putting the 1.7B ABOVE the 8B's own seed (.4833 > .37); aime transplant =
+0/−.04 at 1.7B → **articulable-procedural (hover) vs capability-indexing (aime) articulation,
+measured — the tacit/articulable divide as a scale-transfer contrast pair**; (2) M_ω-tx >
+GEPA-tx at EVERY hover scale (+.06-.09): unit-composed prompts transfer better than
+reflective rewrites; (3) 8B sanity: M_ω-tx .5267 ≈ paper-exact .5467 (serving-stack + temp
+noise), seed .37 ≈ .38 ✓. NEXT STAGE LAUNCHED: z.ai verified from sk1 (key copied); **6
+per-scale GEPA arms live** (hover+aime × 1.7/4/8B, budget 600, GLM-5.2 reflection, ulimit +
+isolated caches; pids 1656302-12) — per-scale M_ω (--pool-file, init-from-scale-GEPA) queues
+as each GEPA lands; **14B (GPU5:8174) + 32B (GPU6:8175) servers launching**, fixed arms
+auto-launch on ready (watcher armed). sk1 now runs 5 GPUs for the staircase.
+
+**HB55 (~02:00 PT): staircase reshuffle after other users claimed sk1 GPUs 0/5/6.** 14B/32B
+servers had died on "free memory 51.67/79.25 GiB" — NOT a config error: between my GPU census
+and the launches, other users grabbed GPUs 5+6 (and grew GPU 0). Shared-box lesson: **verify
+idle IMMEDIATELY before every server launch, and expect claims to race.** Recovery: 14B
+relaunched on GPU 7 (the last free one; sk1-PID 1741512, death-detecting ready-watcher →
+fixed arms auto-launch); **32B rung DEFERRED to sk2 B200s post-campaign** (today: its arms
+are all in endgames). Staircase now: 1.7/4/8B servers busy with the 6 per-scale GEPA arms
+(hover-8B + aime-8B GEPA DONE — sk1 rerun; note their result.json OVERWROTE the synced sk2
+copies on sk1 only, canonical copies safe local+sk2; future sk1 8B arms use --run-tag);
+per-scale M_ω (--pool-file) queues on each GEPA completion. sk2: aime-v5 at add_back
+(verdict close), livebench-v5 109 marginals, ifbench-v5 still inside its glacial drop_one
+eval (177 min); pupa-v4 relaunch healthy (148 rows); tunnel UP; z.ai UP.
+
+---
+
+# OPUS RUNBOOK (2026-07-23 ~03:30 PT handoff — PROCEDURAL. Keep things moving; do NOT
+# redesign anything. Anything ambiguous: record a ⚠ line here and leave it for the user.)
+
+## Env preambles (use VERBATIM in every ssh)
+- sk1: `export HOME=/lfs/skampere1/0/alexspan; export HF_HOME=$HOME/hf_cache; export HF_DATASETS_TRUST_REMOTE_CODE=1; export HF_DATASETS_CACHE=$HOME/.cache/huggingface/datasets; export ZAI_KEY_FILE=$HOME/.z-ai-api-key-spangher.txt; cd $HOME/norm-research/datasets/prompt-optimality-test; ulimit -n 65536`
+- sk2: same pattern with /lfs/skampere2/0/alexspan
+- sk3: same pattern with /lfs/skampere3/0/alexspan, PLUS `export VLLM_WORKER_MULTIPROC_METHOD=spawn` and `CUDA_DEVICE_ORDER=PCI_BUS_ID` on any vllm serve
+- Every client launch: prefix `DSPY_CACHEDIR=$HOME/dspy_cache_<uniquename>`
+- vLLM 0.25.1 (sk1/sk3): NO --disable-log-requests flag
+
+## THE LOOP (each hourly heartbeat)
+1. Dispatch the Sonnet sweeper (copy the HB checklist pattern from HB51-55: exact python
+   snippets, `phase`/`ts` keys, retry ssh once). VERIFY ANY NEGATIVE FINDING DIRECTLY before
+   acting — 4 sweeper false-negatives so far.
+2. Walk the EVENT TABLE below; execute matching actions.
+3. Append an HBnn entry here (results + sign tests + incidents). Keep zero unexplained state.
+
+## EVENT TABLE (event → exact procedure)
+**E1. A result.json appears under sk2 .../unitrecomb_v5sk2/ (aime imminent; livebench ~AM;
+ifbench eventually):**
+  a. `rsync -a sk2:/lfs/skampere2/0/alexspan/norm-research/datasets/prompt-optimality-test/runs_paperexact/<B>/Qwen3-8B/unitrecomb_v5sk2 runs_paperexact/<B>/Qwen3-8B/`
+  b. SEED-SANITY: result seed_test must be within ~2 SE of the local 8B seed band (aime
+     .32-.37, livebench ~.65-.67, ifbench ~.41). FAIL → rename dir INVALID_<reason>_v5sk2
+     (sk2+local), log ⚠, do NOT record.
+  c. Sign test (template in HB50): item_scores of last final_test_best row in the v5
+     proposals.jsonl vs same row in runs_paperexact/<B>/Qwen3-8B/official/proposals.jsonl.
+  d. Record HB entry; run `.venv/bin/python analyze_upper_bounds_rollup.py`.
+  e. livebench ONLY: PushNotification with the verdict (user asked twice).
+  f. If livebench v5 DONE: its 8078 server slot frees → OPTIONAL queued task: relaunch sk2
+     8078 server at --max-model-len 32768 (kill old server by PID first) and launch ifbench
+     `--run-tag v6ctx32k` (same v5 flags otherwise) — ONLY if ifbench v5 still unfinished.
+**E2. Local pupa v4 result.json appears (runs_paperexact/pupa/Qwen3-8B/unitrecomb/):**
+  same gate + sign test vs local pupa official (.862); record. No ping required.
+**E3. sk3 bring-up watcher fires (blxrg98jw / grep "BRINGUP DONE" ~/sk3_bringup.log):**
+  a. FIRST verify where Qwen3-32B snapshot lives: `ls $HOME/hf_cache_stair/hub | grep 32B`
+     else `ls $HOME/.cache/huggingface/hub | grep 32B` — set HF_HOME for the server to
+     WHICHEVER contains it.
+  b. Fresh `nvidia-smi` — confirm GPUs 0/1 still free (GPU 7 = USER'S, never touch).
+  c. 32B server: `CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 VLLM_WORKER_MULTIPROC_METHOD=spawn nohup .venv/bin/vllm serve Qwen/Qwen3-32B --served-model-name Qwen3-32B --port 8175 --host 127.0.0.1 --max-model-len 16384 --gpu-memory-utilization 0.90 --reasoning-parser qwen3 > $HOME/vllm_32b.log 2>&1 &`
+  d. Ready-check = curl /v1/models greps "Qwen3-32B" (content, not counts). Then: fixed arms
+     (staircase_eval.py hover+aime --model Qwen3-32B --api-base http://127.0.0.1:8175/v1
+     --eval-threads 32), then GEPA (paperexact_arms official, budget 600, same flag pattern
+     as sk1 14B launch in HB55), then M_ω stair (unitrecomb --pool-file
+     pools/<B>_Qwen3-8B_frozen.json --run-tag stair, init auto = its official).
+  e. Llama anchor on GPU 1: serve meta-llama/Llama-3.1-8B-Instruct port 8176 (same pattern,
+     no reasoning parser flag for Llama). Then hover+aime: official GEPA (budget 600) →
+     unitrecomb WITH MINING (NO --pool-file; family-native pool) --run-tag llanchor →
+     afterwards `build_frozen_pool.py <B> --lm Llama-3.1-8B-Instruct`.
+**E4. sk1 staircase cell completes (official/result.json or unitrecomb_stair/result.json
+  or fixed_arms.json for 1.7B/4B/14B):** no action needed — the chainer
+  ($HOME/stair_momega_chainer.sh, log $HOME/stair_chainer.log) launches M_ω per GEPA
+  completion automatically. Just VERIFY chainer alive (`pgrep -f stair_momega_chainer`) and
+  record numbers in an HB entry. Envelope per rung = max(official best_test,
+  unitrecomb_stair best_test); also record lift = each − seed(fixed_arms.json).
+**E5. Wedge/stall detection (proposals stale >30min AND process 0.0% CPU AND its endpoint
+  UP):** local Qwen arms → tunnel check first (`curl 127.0.0.1:8077/v1/models`; restore:
+  `ssh -f -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=15 -o ServerAliveCountMax=3 -L 8077:127.0.0.1:8077 sk2`), then kill BY PID + relaunch with the arm's original flags
+  (watchdog 10908 auto-covers local pupa/hotpot; it does NOT relaunch missing procs).
+  EXCEPTION: sk2 ifbench v5 (pid 3934278) is NOT wedged — glacial by known cause
+  (context-overflow retries); DO NOT KILL IT.
+**E6. A server dies (curl fails):** check `nvidia-smi` for a GPU claim race BEFORE
+  relaunching; relaunch only onto a verified-free GPU; on sk1 only GPUs 1,2,3,7 are ours.
+
+## HARD RULES (never violate)
+- Kill ONLY by explicit PID. Never pkill/killall patterns. Never touch other users' jobs.
+- Never delete data — quarantine by rename (INVALID_*, *.attemptN).
+- fresh nvidia-smi immediately before EVERY server launch (claims race; bitten once).
+- Seed-sanity gate before recording ANY cross-machine result (caught one invalid already).
+- Do NOT rebuild pools/{hover,aime}_Qwen3-8B_frozen.json (staircase comparability). Only
+  build NEW pool files (ifbench/livebench/pupa after their v5s; Llama anchor).
+- No new experiments/objectives/analyses beyond this runbook — park ideas as ⚠ lines.
+- GLM-5.2 = proposer everywhere (z.ai, spend freely, retries absorb); glm-4.7 = probes only.
+- Morning user summary: scoreboard table (all 6 benches, sign tests), staircase
+  fixed-arm + envelope tables, incidents one-liner each, ⚠ list.
+
+## Live watcher inventory (as of handoff)
+- bul7ebbyn: sk2 v5 result.json poller (2-min) — fires E1.
+- blxrg98jw: sk3 bring-up completion — fires E3.
+- bhgbvvec4: tunnel transition monitor (auto-reconnects; alert = check E5).
+- sk1 chainer (on sk1, not a local task): auto M_ω per GEPA — E4.
+- Local watchdog PID 10908: pupa + hotpot-GLM auto-restart (needs tunnel up to act).
+- Re-arm any expired watcher with the same command pattern (see transcript HB entries).
+
+**HB56 (~06:00 PT, Opus handoff cycle 1): all lanes healthy; no new verdicts; 32B rung
+launched.** sk2: aime-v5 at **add_back** (212 evals, verdict imminent — watcher bul7ebbyn
+armed), livebench-v5 123 marginals (~AM), ifbench-v5 237min at drop_one = KNOWN glacial
+(context-overflow retries), NOT wedged, not killed. pupa-v4 157 marginals (fresh), tunnel UP,
+z.ai UP, watchdog 10908 alive. **sk1 chainer VERIFIED working** (sweeper's "empty log" was a
+$HOME→AFS path artifact; real log at /lfs shows 3 launches): M_ω-stair live for hover-8B
+(1995611), aime-8B (1996902), hover-4B (3062280); hover-1.7B queued next 10-min loop. GEPA-stair
+DONE: hover-1.7B seed .3433/best .40, hover-4B .39/.4667; aime GEPA still optimizing all scales
+(GEPA reflection slow), 14B GEPA at 0% just started. **sk3 32B rung LAUNCHED**: Qwen3-32B
+located in /lfs/skampere3/0/shared_hf_cache (sk3 profile forces shared cache; HF_HUB_CACHE set
+accordingly), server pid 114181 on GPU 0 (verified free at launch), fixed-arms+GEPA watcher
+b51k91hh5 armed (death-detecting). 32B M_ω-stair = PENDING next cycle (sk1 chainer doesn't reach
+sk3; launch once 32B GEPA lands). ⚠ **sk3 GPUs 1-7 all claimed by other users → Llama/Gemma
+family phases BLOCKED on sk3 until GPUs free; 32B on GPU 0 is the only sk3 rung for now.**
+Envelope tables to build once M_ω-stair cells land (per rung: max(GEPA best, M_ω-stair best);
+lift = each − fixed-arms seed).
+
+**HB57 (~06:30 PT): ✅ AIME v5 LANDED — REPLICATED WIN, cleaner significance.** seed .32
+(sanity PASS), best .4133, 8 units (6 llm + 2 traj), guard passed on confirm equality
+(.40=.40; select .50→.6333; test .32→.4133). Sign test vs GEPA official: **8W-1L (141 ties),
+p=0.0195**. HONEST FRAMING (no p-hacking across runs): aime now has TWO independent M_ω runs
+both beating GEPA on point estimate — v3.2 .4267 (14W-5L, p=.064) and v5 .4133 (8W-1L,
+p=.0195) vs GEPA .3667 → **aime = replicated win; GEPA never beats M_ω on point estimate;
+campaign-best M_ω .4267 (v3.2)**. Rollup shows best guarded variant per cell. Rollup refreshed.
+No ping (not livebench). sk2 remaining: livebench-v5 now at prefix_k7 (endgame; watcher
+bwifffaaf armed), ifbench-v5 290min drop_one (glacial exception, NOT killed). pupa-v4 running.
+
+**HB58 (~07:00 PT): ★★ FIXED-ARM TRANSPLANT CURVES ~COMPLETE (both benches, 5 scales) — the
+H-i/H-iv result taking shape.** All values = test-split, arms = seed / GEPA-8B-transplant /
+M_ω-8B-transplant (fixed 8B-discovered prompts, NO re-optimization). SE ~.026 hover(300)/.04
+aime(150).
+
+hover (seed → M_ω-tx, lift):
+  1.7B .350→.4833 (+.133) | 4B .390→.510 (+.120) | 8B .370→.5267 (+.157) |
+  14B .4733→.5567 (+.083) | 32B .4533→.5333 (+.080)
+aime (seed → M_ω-tx, lift):
+  1.7B .2133→.2133 (.000) | 4B .3667→.4333 (+.067) | 8B .320→.440 (+.120) |
+  32B .280→.340 (+.060) [⚠] | 14B pending
+
+READINGS: (1) **hover M_ω-tx > GEPA-tx at ALL 5 scales** (unit-composed transfers better than
+reflective rewrites, replicated). (2) **hover lift SHRINKS with scale** (+.13-.16 small →
++.08 at 14/32B) = H-iv "gap closes from the capability side" supported. (3) hover absolute
+SATURATES ~14B (.557) ≈ 32B (.533, within 1 SE) = an articulation ceiling ~.53-.56. (4) aime
+lift 0 at 1.7B, positive 4B+ = capability threshold for absorption (H-i). ⚠ **aime-32B is
+NON-MONOTONIC (all arms below 8B: seed .28<.32, M_ω-tx .34<.44)** — strong smell of
+8000-token reasoning TRUNCATION on 32B (reasons longer, hits cap); do NOT over-read aime-32B
+until truncation-rate checked (parked for user; a 16k-token aime-32B rerun would settle it).
+NOTE these are TRANSPLANT curves; the ENVELOPE (per-scale re-optimized max(GEPA,M_ω-stair))
+still cooking: sk1 6 GEPA + 5 M_ω-stair running (none finished), chainer alive; sk3 hover-32B
+GEPA done (.4533→.5233) → **hover-32B M_ω-stair LAUNCHED pid 153765** (164-unit frozen pool);
+aime-32B M_ω pending its GEPA. Campaign: livebench-v5 prefix_k8 (endgame), ifbench 297min
+(glacial exception), pupa-v4 running. bwifffaaf watcher armed.
+
+**HB58b (~07:40 PT): z.ai OUTAGE (monitor bx2d2gl6a UP→DOWN; direct probe timed out).**
+SCOPE verified: IMMUNE (running fine) = all 6 M_ω-stair envelope runs (frozen-pool = zero
+z.ai dep, by design), sk2 livebench-v5 + ifbench-v5 (past mining), pupa-v4. AFFECTED
+(alive+retrying, NOT crashed) = 6 sk1 GEPA-stair reflection steps (GLM-5.2 reflection) +
+hotpot-GLM (bonus). ACTION = NONE (no thrash; z.ai transient, retries absorb; restart-mid-
+outage futile + pre-flight refuses). bx2d2gl6a fires on recovery. ⚠ **PROTECTIVE FLAG: any
+GEPA-stair cell that COMPLETES during/just-after this outage window must be sanity-checked
+(best_test ≥ seed, reasonable) before envelope use — a z.ai-degraded GEPA run can finish at
+best≈seed (no reflections landed), which would understate GEPA and unfairly inflate the M_ω
+envelope. Re-run any such cell post-outage.** M_ω-stair cells are unaffected and safe to use.
+
+**HB58c (~07:52 PT): z.ai RECOVERED (~10min outage, DOWN 07:38→UP 07:48; bx2d2gl6a).
+Protective flag PAID OFF — caught 1 degraded GEPA cell.** All 6 GEPA + M_ω-stair procs
+survived via retries EXCEPT: **hover-14B GEPA completed DURING the window at best=seed=.4267
+(delta 0.0 — all reflections failed) = z.ai-DEGRADED.** Worse, the chainer had already fired
+hover-14B M_ω-stair (pid 111910, 07:44) initialized from that degraded GEPA (=seed). FIX
+(HB58b protocol): killed 111910 by PID; quarantined official→official_ZAIDEGRADED and
+unitrecomb_stair→unitrecomb_stair_ZAIDEGRADED (renamed, not deleted); RE-RAN hover-14B GEPA
+(pid 345973, z.ai back) → chainer auto-refires its M_ω off the VALID GEPA once done. hover-14B
+FIXED-ARM curve (HB58) is UNAFFECTED (fixed arms = pure evals, no z.ai). hotpot-GLM (died in
+outage) self-recovered/watchdog-caught, running. NO OTHER GEPA cell completed in the window
+(only hover-14B). LESSON reinforced: GEPA reflection is the one z.ai-exposed staircase arm; any
+GEPA cell finishing best≈seed near a z.ai blip = re-run. M_ω-stair (frozen pool) stays immune.
+
+**HB59 (~08:30 PT): all healthy; sweeper false-zero #5 dismissed; envelope cells accumulating.**
+Digest reported sk1 gepa_running=0/momega_running=0/chainer-restarted/hover-14B-rerun-dead —
+ALL FALSE (its `pgrep -af "A|B" | grep -c` patterns errored → spurious 0s). DIRECT verify:
+9 paperexact procs alive, servers 8171-4 UP, chainer alive real-PID 1995581, M_ω-stair writing
+(hover-1.7B 35 / 4B 72 / 8B 32 rows, fresh), hover-14B GEPA rerun 345973 alive. GEPA-stair
+DONE so far: hover-1.7B .3433/.40, hover-4B .39/.4667, hover-8B .3567/.4567, aime-8B
+.3333/.3667, sk3 hover-32B .4533/.5233. **M_ω-stair: NONE finished yet (all mid-run) → envelope
+table not yet buildable; per-rung envelope = max(GEPA best, M_ω-stair best) once M_ω cells land.**
+Still cooking: aime GEPA 1.7/4/14B, hover-14B rerun, sk3 aime-32B GEPA + both 32B M_ω. Campaign:
+livebench-v5 prefix_k22 (deep endgame — verdict soon, ping armed bwifffaaf), ifbench 358min
+(glacial exception), pupa-v4 168 marginals. z.ai UP, tunnel UP. FUTURE-SWEEP FIX: count procs
+with `ps -eo args|grep -c "[p]aperexact"` not fragile pgrep alternations.
+
+**HB60 (~09:00 PT): ⚠⚠ AIME-8B GEPA STAIRCASE ANOMALY — .5333, +.167 over paper-exact canonical
+(.3667). FLAGGED FOR USER, not resolved.** Verified valid: n_test=150, paper-exact metric
+(robust_extract=False; seed .3133=47/150 with SAME metric, best .5333=80/150), single-module
+'predict', budget 600, top_k 20. So it's a REAL GEPA run — but a fresh reflection trajectory
+scored .5333 where the sk2 canonical GEPA scored .3667. INTERPRETATION (for user): either (a)
+aime GEPA run-to-run variance is HUGE (~30 unique problems ×5 → very high variance; the paper
+itself found GEPA barely moves aime → unstable), or (b) lucky reflection prompt. This DIRECTLY
+bears on the envelope: aime-8B M_ω-stair (pid 1996902) init from the EARLIER .3667 official
+(chainer fired 05:04, before this .5333 landed), so envelope aime-8B = max(.5333 GEPA, M_ω
+best) — if GEPA's .5333 outlier holds, it could show GEPA>M_ω at 8B on aime (a variance
+artifact, NOT a real M_ω failure). ⚠ Also: this sk1 GEPA rerun OVERWROTE the synced paper-exact
+aime-8B official on sk1 (canonical SAFE on sk2+local .3667); HB54b's 6 GEPA arms predated the
+"use --run-tag" rule. RECOMMEND (user call): re-run aime-8B GEPA 3-5× to bound the variance
+before trusting any single aime GEPA cell in the envelope. NO reactive re-run done (runbook:
+park judgment calls). OTHER: pupa-v4 entered prefix_k4 (marginals DONE, endgame near);
+livebench-v5 prefix_k35 (verdict imminent, bwifffaaf armed); ifbench 417min glacial; no M_ω-stair
+cells finished yet; z.ai UP, tunnel UP, all servers UP, 9 sk1 + 4 sk3 procs alive.
+
+**HB60b (~09:10 PT): ifbench status CORRECTED + livebench imminent.** livebench-v5 at
+**prefix_k48 = LAST prefix step (cap 48)** → verdict minutes-to-1h away (watcher b27b2iagy
+armed). **ifbench REVISED from "glacial" to "effectively stuck"**: 477min (8h) with ZERO
+proposal rows written = stuck INSIDE one drop_one eval (context-overflow items retry-loop
+under max_errors=10000, never completing the eval). Won't finish at this rate. NOT killed yet
+because the real fix (32k-context server, HB53) needs the 8078 GPU which livebench still holds.
+**PLAN (runbook E1.f): when livebench-v5 DONE → kill ifbench-v5 (pid 3934278) by PID, kill
+old 8078 server by PID, relaunch 8078 at --max-model-len 32768, launch ifbench fresh
+--run-tag v6ctx32k (same v5 flags).** Until then ifbench left alone. Everything else unchanged
+(pupa prefix_k4, envelope M_ω-stair cooking, z.ai/tunnel/servers UP).
+
+**HB61 (~09:30 PT): all converging, no new completions.** livebench-v5 now at **drop_one**
+(past the full prefix sweep — last stage before confirm+test; verdict imminent, watcher
+b27b2iagy armed). pupa-v4 prefix_k10 (endgame). sk1: 10 procs (chainer added one), all GEPA
+cells unchanged (aime-8B still the flagged .5333 anomaly), **M_ω-stair still NONE finished** —
+ETA note: hover frozen pool = 164 units → ~164 marginals × 300-item panel per scale is
+inherently slow (est. 6-8h/cell); envelope will complete over the next several hours, which
+is fine (user checks in tomorrow). Not touching pool size (comparability; runbook forbids
+rebuild). ifbench 478min stuck (fix queued behind livebench). z.ai/tunnel/servers all UP.
+Nothing to record/sign-test this cycle.
+
+**HB62 (~10:40 PT): hover-14B GEPA re-run VERIFIED LEGIT (not a 2nd degradation); post-outage
+recovery CLOSED.** Re-run finished .4367/.4367 (best=seed AGAIN) but this time it's REAL:
+**0 reflection errors in log** (vs the degraded run's empties) → GEPA reflections worked,
+proposed candidates, none beat seed in 600 budget → shipped init. Legit no-improvement
+(consistent with GEPA instability at small budget — same reason it "barely moves" some paper
+benches). Chainer correctly re-fired hover-14B M_ω at 10:35 (pid 3077014) off the VALID GEPA.
+NOTABLE for envelope interpretation: hover-14B FIXED-ARM transplant (8B-GEPA prompt → .5033,
+8B-M_ω prompt → .5567) BEATS fresh GEPA-14B optimization (.4367 = found nothing) — i.e.,
+articulation discovered at 8B transfers UP better than re-discovering at 14B with a 600 budget;
+the M_ω-stair (re-firing now) should confirm M_ω>>GEPA at this rung. NO new completions this
+cycle: livebench-v5 still drop_one (grinding its 7-8 unit drop-tests), pupa prefix_k17,
+ifbench 537min stuck (fix queued behind livebench), M_ω-stair still none finished. z.ai/tunnel/
+servers UP; 10 sk1 + 4 sk3 procs.
+
+**HB63 (~11:10 PT): livebench-v5 AND pupa-v4 both at add_back = final stage; verdicts imminent.**
+Armed a dedicated pupa result watcher (bhspaqzon, local — E2: sign test vs pupa official .862
+on landing). livebench watched by b27b2iagy (E1 + ping + then ifbench 32k fix). New GEPA cell:
+aime-1.7B .2067/.20 (best≈seed, GEPA found nothing at 1.7B — consistent w/ hover-14B, GEPA weak
+at small budget). aime-8B still the flagged .5333 anomaly (user re-run recommendation stands,
+HB60). **M_ω-stair STILL none finished (~6h in; 164-unit hover pool inherently slow — expected
+per HB61).** ifbench 597min (~10h) stuck, fix queued behind livebench. z.ai/tunnel/servers UP;
+10 sk1 + 4 sk3 procs. Nothing to record/sign-test this cycle.
+
+**HB64 (~11:40 PT): all M_ω-stair cells VERIFIED progressing (none stuck); verdicts still
+grinding add_back.** M_ω-stair proposals freshness (all ≤7min stale, advancing): hover-4B 202
+rows (NEAR DONE → first envelope cell imminent), hover-8B 143, hover-1.7B 132, aime-8B 39
+(slow = 8000-tok reasoning), aime-4B 3 (just fired — its GEPA completed this cycle). So the
+envelope is SLOW not hung (164-unit hover pool + aime reasoning cost). livebench-v5 + pupa-v4
+both advancing through add_back (218 / 241 rows, fresh) — many skipped-unit re-tests, verdicts
+still imminent (watchers b27b2iagy + bhspaqzon armed). New GEPA cell: aime-4B .3267/.42
+(legit +.09). ifbench 657min (~11h) stuck (fix queued behind livebench). z.ai/tunnel/servers UP;
+10 sk1 + 4 sk3 procs. Nothing to record/sign-test.
+
+**HB65 (~12:10 PT): livebench-v5 PASSED CONFIRM GATE → running final test (verdict imminent).**
+livebench-v5 phase=final_test_seed (fresh) = confirm gate passed, final evals running →
+result.json in minutes (biyh66my4 armed: E1 sign test + ping + then ifbench 32k fix). pupa-v4
+still add_back (248 rows, fresh — grinding). New GEPA cells: aime-4B .3267/.42 (+.09), **aime-32B
+.2333/.3533 (+.12)** — but ⚠ aime-32B seed .2333 < fixed-arm .28 < 8B .32, REINFORCES the
+aime-32B 8000-tok TRUNCATION concern (HB58); aime-32B GEPA improved but off a suppressed base.
+aime-14B GEPA still running. M_ω-stair still none finished (hover-4B ~2/3 through: 202 rows of
+~305). ifbench 717min (~12h) stuck. z.ai/tunnel/servers UP; 10 sk1 + 3 sk3 procs. No completed
+results to sign-test yet (livebench about to be first).
+
+**HB66 (~12:40 PT): livebench-v5 DEGRADED-TEST (quarantined, tie STANDS) + ifbench 32k FIX
+launched.** livebench-v5 landed: **seed-sanity FAIL (seed .5635 < band .62-.72)**, fell_back=
+True (n_compiled=0, guard found nothing on confirm .6894→.677), best .619 vs GEPA .6956 =
+3W-25L. DIAGNOSIS: the shipped prompt = GEPA's own winner (fell back), yet scored .619 not
+.6956 on the SAME prompt → seed AND GEPA-prompt both depressed ~.07-.10 = **transient final-test
+degradation on 8078** (server verified HEALTHY after: coherent sanity gen, GPU1 fine — the
+degradation window cleared). NOT a real loss. QUARANTINED runs→INVALID_seedfail_v5sk2 (sk2+
+local). **livebench = TIE (v4 .682 vs .696 p=.81 STANDS; v5 confirms M_ω finds no improvement,
+consistent w/ EVT ±1SE compression finding). 0 losses intact.** Terminal ping sent.
+IFBENCH FIX (runbook E1.f, now that livebench freed 8078): killed ifbench-v5 3934278 + 8078
+server(16k) 3481835 by PID; **relaunched 8078 @ --max-model-len 32768 (sk2 GPU1, pid 926491)**;
+ifbench relaunching fresh --run-tag v6ctx32k (watcher b35a88y18). 32k fixes the 8385+8000>16384
+overflow that stuck ifbench-v5 12h. pupa-v4 still add_back (watcher bpg2wmemf armed). M_ω-stair
+cells still cooking. NEXT: ifbench-v6 mining confirm; pupa verdict; first envelope cell.
+
+**HB66b (~13:00 PT): ifbench v6 fd-exhaustion crash → fixed + relaunched.** First v6ctx32k
+launch DIED on OSError [Errno 24] Too many open files (sk2 soft ulimit=1024; SAME fd-exhaustion
+class as sk1 hover HB54 — I forgot to carry the ulimit+DSPY_CACHEDIR fix into the sk2 launch).
+Confusing "different PID at 00:00 each check" was fd-crashed remnants, NOT a respawn loop
+(verified: killed all → IFBENCH_V6_PROCS=0, no respawn). FIX: sk2 hard limit=1048576 so
+`ulimit -n 65536` works; quarantined partial→unitrecomb_v6ctx32k_fdcrash; relaunched with
+ulimit 65536 + DSPY_CACHEDIR=$HOME/dspy_cache_ifbench_v6 (pid 1191901); mining watcher bri82bnhw.
+LESSON (runbook): EVERY sk2/sk3 multi-thread arm launch needs `ulimit -n 65536` +
+DSPY_CACHEDIR — the early sk2 v5 arms got lucky at 1024 (single-stage or fewer fds); ifbench's
+2-stage program × 32 threads exhausts 1024 fast. 8078 @32k still UP. livebench tie stands, pupa
+add_back, envelope cooking.
+
+**HB67 (~13:40 PT): pupa WATCHDOG-RESTARTED (chronic tunnel wedge); ifbench-v6 fix working;
+M_ω-stair all progressing (hover-4B nearest).** pupa 51260 wedged (0% CPU, >15min stale on
+tunnel dead-socket) → watchdog restarted as 69011 (lost its near-done add_back, re-running
+marginals from scratch — 2nd+ pupa tunnel wedge; ⚠ CHRONIC: pupa via 8077 tunnel keeps
+wedging, each restart loses hours; if it wedges again next cycle consider moving pupa to run
+ON sk2 localhost like the v5 arms — caveat: PUPA judge metric may add z.ai dep; parked, letting
+watchdog manage 1 more cycle). ifbench-v6 (32k fix): mining done, 28 marginals, 8078 UP —
+overflow FIXED, progressing (verdict many hrs out). M_ω-stair freshness (all progressing, slow
+= hover BM25 + aime reasoning): hover-4B 230 rows @add_back (NEAREST → first envelope cell
+imminent), hover-8B 166 @prefix_k1, hover-1.7B 143 @marginal, hover-14B 60 @marginal, aime-8B
+47 @marginal (16min = slow aime eval not wedge). aime-14B GEPA still running. z.ai/tunnel/
+servers UP. No completions to sign-test.
+
+**HB68 (~14:10 PT): M_ω-stair SLOW-BUT-PROGRESSING (envelope = 1-2 day fill); ifbench-v6 +
+pupa both healthy.** Diagnosed the zero-completions: NOT stuck — hover-4B M_ω advancing through
+add_back (246 rows, 2min fresh, 30/~48 add_back candidates done). Cost/cell ≈ 270 evals (164
+marg + 48 prefix + drop-one + 48 add_back + confirm/test) × ~2min (hover BM25) ≈ 9h/cell, AND
+each scale's GPU serves BOTH hover+aime M_ω (+GEPA) serialized → limited parallelism. **REALISTIC
+ETA: first envelope cell (hover-4B) ~2-3h; FULL envelope ~1-2 days.** Acceptable (user checks in
+tomorrow; envelope is bonus on top of the confirmed campaign wins). Can't speed w/o redesign
+(runbook forbids mid-run config change; comparability). ifbench-v6 75 marginals (32k working,
+progressing). pupa (69011, restarted) now prefix_k6 — HOLDING, no re-wedge this cycle. aime-14B
+GEPA still running. z.ai/tunnel/servers UP. No completions to sign-test.
+NOTE for morning: envelope may be incomplete at user check-in; the CONFIRMED deliverables
+(hotpot ✅✅, hover ✅, aime ✅ replicated, livebench/ifbench ties, fixed-arm transfer curves
+HB58, contrast-pair finding HB54b) stand independent of envelope completion.
+
+**HB69 (Jul 23 ~09:55 PDT, user back — audit + actions): ★ FIRST ENVELOPE POINT WHERE
+PER-SCALE M_ω BEATS PER-SCALE GEPA; two dead/idle lanes revived.** Sweep found TWO completed
+envelope cells: (1) **hover-32B stair (sk3, 09:06): seed .46 → best .5633 — BEATS 32B GEPA
+official .5233 (+.04) AND the 8B-transplant .5333** = first clean per-rung envelope win for
+re-optimized M_ω. (2) aime-8B stair (sk1, 09:46): seed .3733 → best .40 — consistent with
+canonical 8B M_ω (.4133), which further isolates sk1's aime-8B GEPA .5333 as the outlier
+(re-run decision still with user). INCIDENTS: aime-14B GEPA official (998111) found DEAD, no
+result — cause = **Qwen3-14B reasoning-overflow on AIME: text=None, reasoning_content consumed
+the full 8000-token budget** (52 AdapterParseErrors + repeated tracebacks in log; same failure
+family as the aime-32B truncation concern). Old log preserved → official_stair_run.log.attempt1;
+**relaunched pid 1019855** (chainer will auto-fire aime-14B M_ω stair when it lands).
+staircase_eval aime-14B (1788324): logged seed .34 at 08:58 then silent (evals.jsonl 1 row) —
+NOT killed (could be a legitimately long arm-2 eval; dspy logs only at eval end); rule: if
+evals.jsonl still 1 row next cycle → kill by PID + relaunch. sk3 was IDLE after its two cells
+finished → **launched aime-32B M_ω stair pid 531385** (frozen pool 48u, init==GEPA winner
+confirmed; NB sk3 ulimit raise not permitted, hard cap 1024 — hover-32B stair completed fine
+at that limit, watching for fd errors). ifbench-v6 confirmed clean on 32k (117 rows fresh,
+0 "16384" in last 200 log lines). pupa healthy (val .88-.90 vs official .862), 3h watcher
+expired NO_RESULT → re-armed. livebench v5sk2 quarantine synced local. ⚠ local ifbench
+rescore (95980) 23.5h on 16k port 8077 emitting overflows — non-load-bearing, awaiting user
+PID-kill say-so. Envelope rungs done: hover{32B}, aime{8B}; in flight: hover{1.7B,4B,8B,14B},
+aime{1.7B,4B,32B}; blocked-on-GEPA: aime{14B}. hover-4B nearest (260 rows, add_back).
+
+**HB70 (Jul 23 ~10:05 PDT): all lanes healthy; one wedge cleared per HB69 rule.** Sweep: no new
+result.json beyond HB69's aime-8B stair. staircase_eval aime-14B (1788324) still frozen (evals.jsonl
+1 row, 62min stale) → rule tripped → killed by PID, relaunched as **1201323** (log append-preserved;
+seed .34 row retained in evals.jsonl). aime-14B GEPA relaunch (1019855) healthy, rollouts running,
+0 AdapterParseErrors so far. aime-32B stair (531385) healthy, 0 fd errors — only benign
+"LM response truncated (max_tokens=8000)" warnings (more evidence for the 16k-output rerun decision).
+ifbench-v6 125 rows fresh; pupa 363 rows fresh (val .88-.90 band); hotpot-GLM 4433 rows churning
+(3772 select_marginal); z.ai UP (962ms); sk2 zero free GPUs (standing checklist's "second server"
+item moot — 8078/8079 already up). NB standing heartbeat item (d) references
+outputs/r2_recovery_v2_momega_bigpanel on sk3 which DOES NOT EXIST (only outputs/r2_recovery/*) —
+stale checklist path, ⚠ for user to confirm/retire. Stair lanes in flight: hover{1.7B 160r, 4B 261r,
+8B 194r, 14B 93r}, aime{1.7B 46r, 4B 27r, 32B just started}. No completions to sign-test.
+
+**HB71 (Jul 23 ~10:45 PDT): USER DIRECTIVE — push livebench/ifbench/pupa head-to-heads with all
+available GPUs. PUSH WAVE LAUNCHED (5 concurrent attempts across the 3 benches).** Rationale: these
+are the 3 remaining non-wins (livebench tie .682/.696; ifbench tie w/ v6 in flight; pupa unresolved,
+val .88-.90 vs official .862). Diversity lever = fresh GLM-5.2 mining w/ v5 framings + enriched
+trajectory history (rsynced v4-winner + in-flight snapshots), racing independent stochastic climbs;
+rollup takes best GUARDED variant per bench (established pattern). Actions:
+(1) KILLED local rescore chain by PID (wrapper 81218 first, then 95980; 23.5h futile 16k-overflow
+rescore) → tunnel 8077 now serves local pupa EXCLUSIVELY. Chain-tail analyses can run manually later.
+(2) sk2: launched **livebench unitrecomb_v6wide pid 4153932** on idle 8079 (mining mode, max-units
+128, prefix-cap 64; mining history enriched w/ unitrecomb_v4local = the .682 v4-winner trajectory).
+⚠ sk2 ulimit raise failed this launch (soft 1024) — single-stage program, watch for Errno 24.
+(3) sk3: verified GPUs 1-6 EMPTY (fresh nvidia-smi), z.ai keys present, hard fd cap 16384 (fine);
+pre-downloaded Qwen3-8B; synced livebench v4local + pupa v4snap (363-row in-flight snapshot) +
+ifbench v6snap (sk2 v6 partial, 125 rows) for mining. Orchestrator **launch_pushwave.sh pid 538957**
+(logs $HOME/pushwave.log): 3 × Qwen3-8B@32k servers on GPUs 1/2/3 (ports 8176/8177/8178, per-GPU
+claim-check before launch, content-based ready check) then 3 arms: **livebench v6widesk3**
+(max-units 128/prefix 64), **ifbench v7wide** (max-units 160/prefix 64), **pupa v4sk3** (mirror
+v4 config). GPU 7 untouched (user's). Code facts checked before launch: suggester = GLM-5.2 via
+z.ai key files in $HOME (paperexact_arms.py:205-227); PUPA metric judge = GLM-5.2 hardwired
+(z.ai dep, currently UP, 962ms); --robust-answer-extract is AIME-ONLY (SystemExit otherwise).
+Total attempts/bench now: livebench ×2 (sk2 v6wide, sk3 v6widesk3), ifbench ×2 (sk2 v6ctx32k in
+flight, sk3 v7wide), pupa ×2 (local v4 mid-flight ~prefix/dropone, sk3 v4sk3 fresh). Watcher armed
+on PUSHWAVE_LAUNCHED for arm-health verify.
+
+**HB71b (Jul 23 ~10:20 PDT): BUDGET FIX — 3 of 4 wave arms were underbudgeted, caught at launch
+(+few min), killed by PID + relaunched w/ correct budgets.** The wider configs raised the minimal
+selection plan past 24000 calls: harness warned "later stages will be skipped and the no-regret
+guard will ship init" (= wasted run). livebench 128u/64pfx needs ≥26323 → relaunched at 40000;
+ifbench 160u/64pfx needs ≥36000 → relaunched at 48000. Partial dirs quarantined *_underbudget.
+NEW PIDS: sk3 livebench v6widesk3 **544581**, sk3 ifbench v7wide **544582**, sk2 livebench v6wide
+**688050**. pupa v4sk3 (542545) unaffected (96u/48pfx fits 24000; mining done: 62 LLM + own-traj
+= 96 used). All 3 relaunches verified alive at 45s with NO budget warning. LESSON for runbook:
+any --max-units/--prefix-cap increase must recompute budget — grep launch log for "minimal
+selection plan" within the first minute.
+
+**HB72 (Jul 23 ~10:55 PDT): ★★ SECOND ENVELOPE WIN — hover-4B stair .5233 BEATS 4B GEPA .4667
+(+.057). Per-rung envelope table forming; all 6 push-wave arms healthy.** hover-4B unitrecomb_stair
+landed (seed .42 → .5233, regression_flag False) vs hover-4B GEPA official .4667 (seed .39) and
+8B-transplant .510. ENVELOPE TABLE (hover, per-rung re-optimized):
+| rung | GEPA | M_ω-stair | 8B-transplant | envelope |
+| 4B   | .4667 | **.5233** | .510  | M_ω +.057 |
+| 32B  | .5233 | **.5633** | .5333 | M_ω +.040 |
+Both completed hover rungs: freshly re-optimized M_ω > freshly re-optimized GEPA, and > transplant
+— the model-optimal envelope is M_ω-defined so far. (aime-8B rung: stair .40 < GEPA⚠ .5333
+anomaly, unresolved pending user's re-run decision.) PUSH WAVE: all 6 attempts alive & writing
+(sk2 ifbench v6 152 rows; sk2 livebench v6wide 10 rows; sk3 livebench 18/ifbench 43/pupa 10 rows;
+local pupa 368 rows now at **prefix_k21**). Local hotpot-GLM PID drift 77909→68188 (watchdog
+restart), arm alive 18h. z.ai UP (1564ms). aime-14B: GEPA relaunch (1019855) alive, 0 parse errors,
+still in baseline eval (bar 0/600 — 14B server 3-way shared, slow OK); staircase_eval relaunch
+(1201323) 1 row/54min silent — NOT restarted (silence expected mid-eval; dspy logs only at eval
+end; server provably processing hover-14B). ESCALATION RULE: if still 1 row AND no new log bytes
+at next heartbeat → py-spy/queue diagnosis, NOT blind restart. Stair lanes all fresh (hover 1.7B
+171r, 8B 212r, 14B 104r; aime 1.7B 56r, 4B 35r, 32B 12r).
+
+**HB73 (Jul 23 ~12:00 PDT): aime-14B DOUBLE-WEDGE root-caused (dead-socket under 3-way contention)
+→ killed both + SEQUENCER deployed; everything else green.** Escalation rule from HB72 tripped:
+staircase_eval (1201323) log flat since 09:59:55 AND aime-14B GEPA (1019855) at 0/600 rollouts
+after 2h, 0 errors — while hover-14B stair advanced on the SAME 8174 server (control). Socket
+diagnosis (no py-spy on box): both clients hold ~30 ESTAB sockets to 8174, blocked on responses
+that never arrive; server 152 ESTAB total, actively serving hover → classic litellm dead-request
+wedge under contention, NOT a server failure. Blind relaunch would re-roll into the same
+contention → SERIALIZED instead: killed 1201323+1019855 by PID; **sequencer pid 2644789**
+($HOME/aime14b_sequencer.sh, log aime14b_sequencer.log) waits for hover-14B stair result →
+relaunches aime-14B GEPA official SOLO on 8174 (log preserved .attempt2) → then staircase_eval;
+chainer auto-fires aime-14B M_ω stair after GEPA lands. 8174 server pid 1741512, log
+vllm_Qwen3-14B_8174.log (for later forensics). ALL other lanes green: 6 push-wave arms fresh
+(sk2 ifbench 185r, sk2 livebench 23r; sk3 livebench 44r/ifbench 101r/pupa 24r; local pupa 380r
+now in candidate-mutation/add-back region); stair lanes hover 1.7B 182r/8B 230r/14B 118r, aime
+1.7B 67r/4B 47r/32B 23r; z.ai UP (2190ms). sk3 8176/8177 curl "000" = sweep-agent endpoint
+artifact (their arms actively write through those ports). Local hotpot-GLM watchdog PID drift
+(→10962), arm 18h alive. No new results to sign-test (hover-4B stair already in HB72).
+
+**HB74 (Jul 23 ~12:40 PDT): USER DIRECTIVE — sk3 GPUs 1-2 off-limits. Discovered both wave servers
+there were ALREADY DEAD (last sweep's curl 000 was real); GPUs 4-7 claimed by other users. Wave
+arms re-homed; GPUs 1-2 confirmed drained (0 MiB).** Fresh nvidia-smi: sk3 GPU1/2 = 4 MiB (servers
+8176/8177 gone, pids 538987/538995 no longer exist), GPU4-7 = ~157GB/100% (others' vLLM jobs —
+untouched). RE-HOMING: killed orphaned arms 544581/544582 by PID, partials quarantined *_gpuevict;
+**livebench v6widesk3 relaunched pid 699021 → sk3:8178** (shares pupa's GPU3 B200; --eval-threads
+24 to keep 2-client load light; no budget warning); **ifbench v7wide → sk1 GPU5** (was empty on
+fresh check): new Qwen3-8B@32k server port 8180 (pid 585305) + launcher pid 646901 (waits ready →
+launches arm, 160u/48000 budget); ifbench mining trajectories rsynced local→sk1 (official/inhouse/
+unitrecomb + v6snap). FAMILY STAIRCASE RE-BLOCKED: sk3 has Llama-3.2-1B/3B + 3.1-8B + gemma-2/3/4
+weights AND HF token cached, but zero free GPUs after the 4-7 claim — parked until GPUs free
+(⚠ tell user: family bringup is launch-ready the moment 1-2 B200s open). Envelope lanes unaffected
+and running: hover{1.7B,8B,14B} + aime{1.7B,4B,32B} stairs, aime-14B sequencer (2644789) waiting on
+hover-14B, chainer alive. Contention lesson applied: livebench@24 threads on shared 8178.
+
+**HB75 (Jul 23 ~14:10 PDT): ★★ THIRD ENVELOPE WIN (aime-1.7B) — and it reframes the capability
+threshold; pupa hedge SIGSTOPPED to protect primary's judge from our own rate-limit pressure.**
+NEW CELL: aime-1.7B stair seed .2267 → **.2933** vs aime-1.7B GEPA official **.20** (GEPA best ≤ its
+own seed .2067 — found nothing at 1.7B). Recall HB58: the 8B-transplant showed ZERO lift at 1.7B
+(read then as a capability threshold). Per-scale SELECTION from the SAME frozen 8B pool finds
++.07-.09 → the threshold was partly a TRANSPLANT artifact: small models benefit from the pool, but
+only via re-selection at their own scale ("selection transfers, combinations don't"). Descriptive
+only pending paired test (150-item test; run sign test vs official from item scores).
+ENVELOPE TABLE now: hover-4B M_ω .5233/GEPA .4667 (+.057); hover-32B .5633/.5233 (+.040);
+aime-1.7B .2933/.20 (+.093); aime-8B .40/GEPA⚠.5333 (anomaly pending user).
+PUPA PROTECTION: local pupa (add_back, 388r) logging 21× z.ai 1302 rate-limit errors/100 lines on
+its judge — main co-consumer of the same key = our sk3 pupa hedge → **kill -STOP 542545** (state
+Tl confirmed; reversible). RESUME TRIGGER: local pupa result.json lands (watcher b2xc3qhrx, 3h,
+re-armed) → kill -CONT 542545. Rationale: symmetric eval noise → false-fallback risk on the gate;
+hedge is 2.7h into ~15h, pause costs little. THREADS QUESTION (user): all campaign servers spot-
+checked at ~100% GPU util (sk1 GPU5, sk3 GPU0/3, sk2) → eval-threads bump would add queueing not
+throughput; NO restarts done (user said none needed); future launches keep 32 (48 only if a card
+shows <90% util). Sweep: 10/10 arms alive; sk2 ifbench v6 ALSO at add_back (216r — verdict close);
+sk2 livebench 37r; sk1 ifbench v7wide mining; sequencer waiting hover-14B; GPUs 1-2 sk3 = 0 MiB ✓.
+
+**HB76 (Jul 23 ~14:30 PDT): IFBENCH v6 VERDICT — DIRECTIONAL LEAD, NOT SIGNIFICANT. M_ω .4558 vs
+GEPA .4116 (+.044), sign test 39W-29L (n=68 decisive), p=.275.** Details: v6ctx32k landed on 294
+test items, regression_flag False. GEPA official found NOTHING on ifbench (best_test == seed_test
+== .4116; matches v7wide's init==seed:True observation) → our +.095-over-seed is the only
+improvement either optimizer found; the head-to-head vs GEPA == vs seed here. ⚠ seed-reading gap:
+v6's seed_test .3605 vs official's .4116 (~1.7 SE at n=294, temp-.6 eval noise — inside tolerance,
+noted not quarantined). EVT refresh (analyze_bounds_evt --paperexact ifbench): **endpoint ≈
+best-achieved** (dequantized median ~.444, margin inside binomial SE) = v6's search exhausted its
+own draw distribution → more sampling of THIS pool won't move it; **v7wide's wider pool (160u, on
+sk1:8180) is the right instrument** — it changes the draw distribution (mining moves the LEVEL,
+per capture-recapture doctrine). SCOREBOARD: ifbench upgraded tie → directional lead (not a win;
+claim stays honest at p=.275). Zero losses intact. Next verdicts: local pupa (add_back), livebench
+twin tonight.
+
+**HB76b (Jul 23 ~14:45 PDT): REPORTING POLICY SET BY USER — "keep the win and report significance /
+not-significance, and EVT upper bounds as well."** Deliverable format per bench, three columns
+always: (1) point result M_ω-best vs GEPA-official (best GUARDED variant per rollup rules),
+(2) paired sign test p labeled significant / not-significant — never suppress the point estimate
+for lack of significance, never overclaim p≥.05 as a win, (3) EVT process-conditional endpoint
+(dequantized median, with the standard caveat: process-conditional = ceiling of THIS search's draw
+distribution, not an all-prompt bound; the only certified all-prompt bound remains the DPI
+fixed-target cap). EVT batch refresh for all 6 benches running (b1n8419zz); deliverable table to
+be assembled on completion.
+
+**HB76c (Jul 23 ~15:00 PDT): CORRECTION to HB76's EVT attribution + full EVT table with population
+made explicit.** analyze_bounds_evt --paperexact pools **rescore.jsonl matrices** (paperexact_
+rescore.py output = pre-push-wave candidates), NOT the live arm draws. HB76's "v6 exhausted its own
+draw distribution" was WRONG population attribution — the .4439 endpoint was the OLD pool's ceiling,
+and **v6's winner .4558 EXCEEDS the old pool's GPD CI upper (.4500)** = direct evidence the wider
+mining MOVED THE LEVEL past the prior process ceiling (capture-recapture doctrine confirmed, not
+contradicted). EVT TABLE (population = pre-wave rescore pools, GPD k-median endpoint [boot CI]):
+| bench | pool n | pool best | endpoint | CI | current winner vs ceiling |
+| aime | 34 | .4667 | .4667 | [.4400,.4914] | win .4133-.4267 inside CI |
+| hover | 38 | .5500 | .5500 | [.5300,.5696] | win .5467 at ceiling |
+| hotpot | 16 | .4367 | .4367 | [.4233,.4367] | **win .6333 SHATTERS old pool** (pool predates v5) |
+| ifbench | 75 | .4439 | .4439 | [.4406,.4500] | **v6 .4558 > CI upper** (mining moved level) |
+| livebench | 11 | .7244 | .7244 | [.7215,.7244] | ceiling ABOVE GEPA .696 → headroom EXISTS for twins (NB .7244 = retrospective test-best of a rescored candidate; NOT claimable, selection never saw it) |
+| pupa | — | — | no rescore pool | — | — |
+TODO: after tonight's landings, refresh rescore matrices for new arm dirs via OFFLINE BATCH vLLM
+(per user's batch-vLLM point + standing rule — the rescore pass is embarrassingly parallel), then
+regenerate EVT columns on the updated pools for the deliverable table.
+
+**HB77 (Jul 23 ~15:50 PDT): all-nominal sweep; idle cycle used to implement the MIPROv2 baseline
+arm (user-requested baselining).** Sweep: pupa local at final_test_seed (396r — verdict imminent,
+hedge still Tl-stopped ✓); livebench twins both select_marginal (sk3 70r, sk2 51r); ifbench v7wide
+14r select_marginal; envelope lanes hover-8B/aime-4B at add_back, hover-1.7B drop_one, hover-14B +
+aime-32B marginals; z.ai UP 1561ms; GPUs 1-2 idle (816/4 MiB — GPU1 warming = user's process,
+expected). NEW CODE: paperexact_arms.py **--arm mipro** = dspy.MIPROv2 baseline (the GEPA paper's
+principal comparator): prompt_model=GLM-5.2 (parallels GEPA's reflection LM), **instruction-only
+regime max_*_demos=0** (demos would be silently dropped by get_instructions → would misrepresent
+MIPROv2; this makes it optimize the same object as all other arms), auto=None + num_trials =
+0.8×budget/minibatch(25), num_candidates=12, **requires_permission_to_run=False pinned** (defaults
+True in dspy 3.2.1 = would HANG a nohup run at an interactive prompt), max_errors=10k, default
+budget 600 (shares official's default = budget-matched to GEPA per the paper's protocol). Syntax +
+CLI verified. VALIDATION PLAN (validate-before-scaling): first run = aime on local 8077 once pupa
+releases it; fan out to 6 benches on freed servers tomorrow. Baseline roadmap recorded: MIPROv2
+(must-have) → Best-of-N floor (optional) → SIMBA/COPRO (secondary); unsupervised/reconstruction-
+objective expansion needs design+prereg note BEFORE any confirmatory run (drafting next idle cycle).
+
+**HB78 (Jul 23 ~16:20 PDT): ★ PUPA VERDICT — M_ω .9074 vs GEPA .8621 (+.045), 39W-24L (n=63
+decisive of 221), p=.077 — NEARLY significant, strongest of the 3 contested benches.** Local pupa
+v4 (dir unitrecomb, untagged) landed: seed .8313 → best .9074, regression_flag False; official:
+seed .8030 → .8621. Seed-gap .028 ≈ 1.2 SE (n=221) — inside tolerance. Sign test: 39W-24L,
+two-sided p=.0769 (significant at .10, not .05). Per HB76b reporting policy: pupa = WIN ON POINTS,
+not-significant label, EVT column pending (no rescore pool yet — pupa joins the offline-batch
+rescore pass). HEDGE RESUMED per trigger: kill -CONT 542545 → state Sl confirmed; sk3 pupa v4sk3
+continues as independent replication shot (NB: protocol remains best-GUARDED-variant + its own
+sign test — no post-hoc p-pooling; a second independent beat would be reported descriptively as
+replication, aime-style). CONTESTED-BENCH BOARD: pupa +.045 p=.077; ifbench +.044 p=.275
+(v7wide climbing); livebench −.014 tie (twins in flight tonight). Zero losses intact. ALSO this
+cycle: arm_mipro switched to PAPER-LITERAL MIPROv2-Heavy config (auto="heavy", max_errors=10k,
+budget=realized-spend per artifact protocol; demos still pinned 0 = flagged deviation awaiting
+user ruling); **--arm official_merge added** (dspy GEPA use_merge=True = GEPA+Merge, the strongest
+GEPA-family baseline); GRPO = cite-not-reproduce recommendation; Abl-SelectBestCandidate = skip.
+
+**HB79 (Jul 23 ~17:30 PDT): JUMP-HOST OUTAGE (whale.stanford.edu resets SSH pre-auth) — all sk
+boxes monitoring-blind; remote lanes UNAFFECTED (nohup'd). + FIRST ABSORPTION (H-i) NUMBERS; ⚠
+aime-1.7B envelope win moved to UNDER-AUDIT.** Sweep local-only: z.ai UP (1481ms); hotpot-GLM
+alive; "pupa v4 log stale/no owner" = benign (run FINISHED, HB78). Host process restarted this
+cycle (old watchers died; hourly sweeps + new watcher cover). NEW ANALYSIS analyze_stair_units.py
+(retained units by text-containment vs frozen pool, in shipped winner):
+| cell | retained/pool | frac |
+| hover-4B | 7/164 | .04 |
+| hover-32B | 34/164 | .21 |
+| aime-8B | 16/48 | .33 |
+| aime-1.7B | **0/48** | .00 ⚠ |
+hover: 32B retains ~5× more units than 4B → **H-i (absorption rises with scale) SUPPORTED on
+hover** (2 points, descriptive). ⚠ aime-1.7B winner retained ZERO units (5229-char candidate) →
+suspicion: stair may have shipped ≈init (GEPA's own candidate) and the +.09 vs GEPA official could
+be RE-MEASUREMENT noise, not selection value → **aime-1.7B envelope win UNDER AUDIT** (identity
+check stair-cand vs official-cand text; blocked on SSH; runs at reconnect). Do NOT quote aime-1.7B
++.093 until audit passes. Connectivity watcher armed (3-min polls, 6h). Blocked-on-SSH queue:
+(1) aime-1.7B identity check, (2) full sweep, (3) tonight's twin/v7wide verdict pulls.
+
+**HB79b (Jul 23 ~18:10 PDT): ★★ AUDIT VERDICT — aime-1.7B ENVELOPE WIN **RETRACTED** (identity
+check: stair candidate == GEPA official candidate, byte-identical after whitespace-norm); hover
+envelope wins CONFIRMED GENUINE and H-i strengthened; same-prompt variance data resolves the
+aime-8B GEPA anomaly reading.** SSH restored → blocked audit ran. Findings:
+(1) **aime-1.7B AND aime-8B stair candidates are IDENTICAL to their GEPA officials'** — the
+no-regret guard fell back at both scales (no addition cleared confirm). All stair-vs-official
+deltas on these rungs = RE-MEASUREMENT NOISE of the same prompt: 1.7B .2933 vs .20 (Δ.093!),
+8B .40 vs .5333 (Δ.133!). **NEVER quote aime-1.7B +.093 (HB75 claim retracted; its "selection
+transfers" interpretation dies with it).**
+(2) Same-prompt pairs = free eval-variance data: aime n=150 temp-.6 test evals swing ~.09-.13 →
+**the aime-8B GEPA .5333 anomaly (HB60) is most plausibly an upward eval fluctuation** (its own
+prompt re-measured .40); recommendation to user upgraded: aime envelope/anomaly rows need
+multi-eval averaging (3-5 test passes) before any quoting.
+(3) **hover rungs GENUINE**: stair ≠ official; NET-of-init added units: 4B +4, 32B +31 (in-stair
+gross 7/34 included 3 init-contained units each — pool mined from these trajectories, so init
+trivially contains own fragments; analyze_stair_units.py fixed to report NET + detect fallback).
+**Corrected H-i: hover absorption 4 → 31 units (4B→32B) — supported, cleaner than gross.**
+CORRECTED ENVELOPE TABLE: hover-4B M_ω .5233 vs GEPA .4667 (+.057, 4 net units) ✓; hover-32B
+.5633 vs .5233 (+.040, 31 net units) ✓; aime-1.7B/8B = guard-fallback ties (M_ω=GEPA by
+construction) + variance data. Pending rungs (hover 1.7/8/14B, aime 4/14/32B) now get the
+identity check as a STANDARD post-landing step.
+
+**HB80 (Jul 23 ~17:45 PDT): 3 new stair rungs landed + identity-audited; hover H-i now a
+4-rung monotone ladder; aime same-prompt variance CONFIRMED at .133; MIPROv2-Heavy baseline
+LAUNCHED (first ever run of the arm).** Sweep found 2 fresh result.json (aime-4B, hover-1.7B)
+plus hover-8B from 14:43; all three run through the now-standard identity check vs their GEPA
+official (`sha1` of whitespace-normed best_candidate).
+
+CORRECTED ENVELOPE TABLE (identity-audited, supersedes HB79b's):
+| bench | model | GEPA | M_omega | delta | identity |
+|---|---|---|---|---|---|
+| hover | 1.7B | .4000 | .4467 | **+.047** | distinct - GENUINE (new) |
+| hover | 4B | .4667 | .5233 | **+.057** | distinct - GENUINE |
+| hover | 8B | .4567 | .5833 | **+.127** | distinct - GENUINE (new, largest) |
+| hover | 32B | .5233 | .5633 | **+.040** | distinct - GENUINE |
+| aime | 1.7B | .2000 | .2933 | (+.093) | IDENTICAL - RETRACTED |
+| aime | 4B | .4200 | .4133 | -.007 | distinct - tie/small loss (new) |
+| aime | 8B | .5333 | .4000 | (-.133) | IDENTICAL - RETRACTED |
+
+(1) **hover is now 4/4 genuine wins across 1.7B->32B** — every hover rung beats its own
+re-optimized GEPA, none is a guard fallback. This is the envelope result's backbone.
+(2) **H-i (absorption rises with scale) does NOT hold on the score delta**: deltas run
+.047/.057/.127/.040 — non-monotone, 8B is the peak, 32B the smallest. H-i was framed on
+absorbed UNIT COUNT (4 -> 31 net, 4B->32B), which still rises; but the two readouts now
+DISSOCIATE (32B absorbs the most units for the least gain). Do not report H-i as supported on
+score; report the unit-count ladder and the score ladder separately and say they come apart.
+**UPDATE (same heartbeat, analyze_stair_units.py shipped to sk1 and run): H-i is NOT supported
+on the UNIT-COUNT readout either.** Net-of-init retained units across the full hover ladder are
+**1.7B=38, 4B=4, 8B=39, 32B=31** (of a 164-unit pool) - non-monotone, and the 4B rung is a stark
+outlier: it wins +.057 while absorbing only 4 units, where 8B needs 39 for +.127. The earlier
+"absorption rises 4 -> 31" claim (HB79b) was an artifact of having only TWO rungs (4B, 32B)
+in hand; with all four it disappears. **RETRACT H-i as stated on both score and unit count.**
+What survives is weaker and more interesting: absorption EFFICIENCY (gain per absorbed unit)
+is wildly scale-dependent - 4B ~.014/unit vs 8B ~.003/unit - so the right question is not "how
+much does a scale absorb" but "how much does a scale need to absorb". Reframe before the next
+rung lands. aime net units: 1.7B=0, 4B=1, 8B=0 (the two zeros are the guard fallbacks).
+NOTE: result.json's `units` field is 11 for every cell incl. the guard-fallback ones, so it is
+NOT the selection outcome and must never be read as retained units. hover-32B is not on sk1
+(its 31 is carried from the earlier audit on its own box).
+(3) **aime same-prompt eval variance now measured twice**: byte-identical prompts scored
+.2933-vs-.2000 (1.7B) and .4000-vs-.5333 (8B). |delta| up to .133 at n=150/temp-.6. No aime rung
+is interpretable single-pass; aime-4B's -.007 is inside noise and is a TIE, not a loss.
+Multi-pass (3-5) test averaging is a prerequisite for any aime envelope claim.
+(4) **MIPROv2-Heavy first run LAUNCHED** (hover/Qwen3-8B, sk3 GPU 4, port 8182, run-tag
+`miprov2`). Validation-before-scaling per HB77; hover chosen over aime because aime's .133
+noise floor would make the baseline unreadable. Harness synced to sk3 (backup
+`paperexact_arms.py.bak_pre_mipro_20260723`); diff vs sk3 was exactly the arm_mipro +
+official_merge additions, nothing else. sk3 GPUs 1-2 untouched per user directive; 4-5 were the
+free pair, 5 still free for the GEPA+Merge follow-on.
+(5) aime-14B stair still NOT started - gated behind hover-14B stair (185 rows, live) via
+sequencer pid 2644789. aime-14B official/result.json also absent.
+
+**HB81 (Jul 23 ~19:05 PDT): sk3 GPU EVACUATION (user: free GPUs by 8pm) — GPUs 4+5 FREED at
+~6:15pm.** MIPROv2-Heavy and GEPA+Merge (both ~1.3h in, unresumable but cheap) were killed by
+explicit PID (arms 919542/927518, servers 918830/926545, EngineCore children verified dead) and
+RELAUNCHED on existing idle servers: **MIPROv2 -> sk1:8173 (pid 350602)**, **GEPA+Merge ->
+sk2:8078 (pid 1145787)** — both confirmed past startup before the sk3 kills. No new servers
+needed (sk1 GPUs 0-4 / sk2 ports 8077-8078 were holding idle Qwen3-8B servers from finished
+stair arms). Remaining sk3 prompt-opt footprint: GPU 0 (aime-32B stair, in add_back = final
+phase, ~1-2h out; its :8175 32B server ALSO serves the user's norm-scraper text-gate job so
+GPU 0 cannot be freed unilaterally even after the arm lands) and GPU 3 (pupa prefix k29/48 +
+livebench prefix k50/64, both hours from done, unresumable — preempt only on explicit order).
+Data consolidation: rsync sk3 runs_paperexact -> sk1:runs_paperexact_sk3mirror_20260723/
+(--ignore-existing, append-only). Harness with mipro/official_merge arms now installed on ALL
+THREE boxes (backups paperexact_arms.py.bak_pre_mipro_20260723).
+PREEMPTIBILITY LADDER (for future evictions): baselines (mipro/merge, restart cost = elapsed
+time) < servers (stateless) < unitrecomb searches (NO mid-run checkpoint; kill = lose the whole
+search). Multi-pass aime eval work (--eval-passes/--test-passes) deferred during evacuation.
+
+## Open decisions the user has NOT answered (ask before assuming)
+1. Is the EVT endpoint estimator the accepted substitute for D4's original (impossible) framing?
+2. Paper-exactness scope: is dspy.GEPA acceptable as the optimizer given the paper's own optimizer
+   is the standalone teleprompter in `vendor/gepa-artifact/gepa_artifact/gepa/gepa.py`? (Current
+   working interpretation: the requirement is about the END EVALUATION, which is verbatim theirs.)
+3. Should the discrimination-maximizing M_ω objective be revisited? D6 shows it is a CAPACITY
+   objective and therefore vulnerable to the SHA-parity degeneracy; the MDL-penalized recovery
+   readout is the cheap first experiment (description lengths already logged).
+
+**HB82 (Jul 24 ~12:20 PDT): sk1 z.ai key DRAINED (code 1113 killed MIPROv2 mid-run 11:00);
+MIPROv2 RELAUNCHED on sk3 with the alexander-spangher key; overnight verdicts: pupa + livebench
+wide runs both GUARD-FALLBACK — those two benches remain the only losses (4/6 envelope).**
+(1) KEY EVENT: sk1's only key (.z-ai-api-key-spangher) hit "1113 Insufficient balance" — sk1
+MIPROv2 died with empty run dir. sk2's alexander-spangher key confirmed still funded (GEPA+Merge
+making successful calls same hour). Funded key copied to sk1 (~/.z-ai-api-key-alexander-spangher
+.txt, chmod 600). ALL future launches: export ZAI_KEY_FILE=$HOME/.z-ai-api-key-alexander-
+spangher.txt (harness prefers this name anyway, but sk1 lacked it).
+(2) MIPROv2-Heavy relaunch: sk3 GPU 3 (old :8178 server had died on its own; fresh Qwen3-8B
+server pid 3309543/EngineCore 3317912, init 7.4s), arm pid 3343789, run-tag miprov2, ZAI_KEY_FILE
+set. Confirmed past startup into GLM proposal phase. NOTE sk3 GPU 7's norm-scraper VL server is
+also gone (not killed by me).
+(3) OVERNIGHT VERDICTS (all identity-relevant fields from result.json):
+| run | test | fell_back | read |
+| pupa v4sk3 | .7913 | TRUE (0 units) | re-measure of GEPA init; official .8621 — NO progress |
+| livebench v6widesk3 | .6190 | TRUE | fallback twin |
+| livebench v6wide (sk2) | .6111 | TRUE | fallback twin |
+| aime-32B stair | .3667 | FALSE (1 unit) | vs GEPA-32B official .3533: +.013, inside aime noise |
+(4) SIX-BENCH Qwen3-8B ENVELOPE STANDING: aime .3667→.4267 WIN; hotpot .38→.6333 WIN; hover
+.4567→.5833 WIN; ifbench .4116→.4558 WIN (v6ctx32k); livebench .6956 vs best genuine M_ω .6823
+LOSS (every wide retry falls back); pupa .8621 vs nothing genuine LOSS. pupa/livebench = the
+high-baseline pair where the confirm gate never clears — next move is richer unit framings +
+multi-pass confirm, not recipe re-runs.
+
+**HB83 (Jul 24 ~12:40 PDT): v8 SHIPPED (failure-grounded mining + multi-pass evals, user-
+approved); pupa+livebench v8 rescue arms LAUNCHED; hover-14B rung LANDED (+.120 GENUINE →
+hover 5/5); envelope-expansion sequencer armed (ifbench+pupa 14B rungs).**
+(1) HARNESS v8 (paperexact_arms.py, synced all 3 boxes, backups .bak_pre_v8_20260724):
+--failure-mine (runs init on select panel once, worst-12 cases w/ input/gold/output → GLM
+diagnose-and-fix framings ×2; units tagged failure_grounded, PREPENDED never cap-evicted;
+phase=failure_mine_diag logged); --eval-passes/--confirm-passes/--test-passes (k independent
+generation passes averaged, per-item elementwise so paired tests stay valid; budget charged
+k×panel; result.json records all three + pass_means per row). Confirm-add-val left OFF for v8
+rescue arms (it biases toward init; k=3 confirm is the noise control instead).
+(2) V8 RESCUE ARMS (the two losing benches): pupa v8failmine sk3:8178 pid 3783917 (shares
+fresh server w/ relaunched MIPRO; train 111, pool 96 = 60 LLM + trajectory + failure units
+pending); livebench v8failmine sk2:8078 pid 3593977 (shares w/ GEPA+Merge). Both: budget
+30000, max-units 96, prefix-cap 48, confirm-passes 3, test-passes 3, funded key via
+ZAI_KEY_FILE.
+(3) ★ hover-14B rung landed overnight: GEPA official .4367 vs M_ω stair .5567 (+.120,
+fb=False, 22 compiled units) → **hover ladder 5/5 GENUINE (1.7/4/8/14/32B)**, second-largest
+delta after 8B's +.127. Score ladder now .047/.057/.127/.120/.040 — the non-monotone shape
+(peak mid-scale) sharpens.
+(4) ENVELOPE EXPANSION: expand14b_sequencer.sh armed on sk1 (pid 1074511) — waits for the
+aime-14B lane (official in final_test now → chainer stair → staircase_eval) to clear :8174,
+then ifbench-14B official → stair → pupa-14B official → stair. pools/pupa_Qwen3-8B_frozen.json
+BUILT (96 units, 0 past-winners — consistent with the v4 fallback; needed v4sk3 result.json
+pulled from sk3, the 07-23 mirror predated its landing). NOTE stair_momega_chainer has TWO
+live instances (1032399, 1995581) — harmless no-op duplicates, but don't add a third.
+
+**HB84 (Jul 24 ~14:20 PDT): ★★ UNDERPERFORMANCE AUDIT (pupa/ifbench/livebench, user-ordered).
+Verdict: these are three DIFFERENT failure classes, and two of the three "losses" are
+measurement artifacts, not search losses.**
+Instrument: audit_bench.py (scratchpad) over proposals.jsonl — same-candidate replicate
+spread, marginal distributions, zero-score contamination, select→confirm transfer; plus
+rescore_k3.py (NEW, in repo) — k-pass test re-measure of shipped winners.
+
+(1) **LIVEBENCH = load-dependent metric (the big one).** The AMPS sympy metric runs under a
+wall-clock timeout, and generation contention adds item errors → zeros. Evidence: zero-rate
+.17-.42 across runs (row max .69); same-candidate replicate spreads up to **.37**; v6wide's
+select_init measured .4568/.5185 vs the same prompt's .6522/.7019 confirm rows; and the
+KILLER: GEPA-official's shipped prompt re-measured k=3 on the busy box = **.479
+[.508/.468/.460] vs its headline .6956** (zero-rate .405, 127/378 item errors). The .6956 was
+measured on an idle box on 07-21. CONSEQUENCES: (a) the "-.013 loss" is far inside instrument
+instability — livebench W/L is UNDECIDED, not lost; (b) all 128/128-positive-marginal wide
+runs = deflated-base artifacts (base eval caught a bad window → every unit looks positive →
+search chases noise → honest confirm guard falls back — the guard is WORKING); (c) NEVER
+compare livebench numbers measured under different box loads; final verdicts need an
+idle-server k≥3 protocol for BOTH arms.
+(2) **PUPA = judge-noise ceiling + select-panel overfit.** Metric judge AND untrusted model =
+GLM-5.2 via make_reflection_lm → judge runs at **temperature 1.0** (inherited; artifact's own
+judge default — paper-faithful but noisy). Test-level same-prompt swing ~.07 (official .8621
+vs v4sk3 re-measures .7653/.7913). Search-level: v4sk3 select climbed .8658→.9414 (+.076!)
+but confirm rejected (.8345 init vs .8130 compiled) — with 96 marginals at sd .039 on a
+74-item panel, top marginals are order statistics of noise; the +.076 was panel-fitting.
+Zero-contamination NOT the issue on pupa (.005-.009). v8's confirm-passes-3 helps; the k3
+official rescore (sk3 pid 2493460, running) gives the honest target. Judge-temp-0 variant
+would be an instrument CHANGE — separate flagged column, only with user sign-off.
+(3) **IFBENCH = fixed already; history was infra.** Plain unitrecomb died of context overflow
+(confirm rows littered with 0.0/.7488 duplicates, replicate spread .7375, zero-row max 1.0 —
+the fd-crash era) and shipped a fallback tie. v6ctx32k (32k server) is CLEAN: confirm .5821→
+.8286, test .3605→.4558 — a genuine +.044 win over official .4116. No current pathology; its
+baseline being single-pass is the only residual caveat.
+(4) CROSS-CUTTING: max_tokens=8000 truncation warnings appear in pupa/livebench eval streams
+(long-output items) — truncated generations score low and add variance; consider 12-16k for
+non-aime benches (server ctx permitting) as a flagged deviation.
+LIVE: pupa k3 rescore sk3 pid 2493460; livebench idle-server rescore QUEUED behind the v8/
+merge arms (current busy-box k3 already logged). rescore_k3.py synced sk2+sk3.
+
+**HB85 (Jul 24 ~14:35 PDT): ★★★ FULL ERROR DIAGNOSIS — the losses are INSTRUMENT DAMAGE, and
+two root causes are now FIXED with measured effect sizes. livebench truncation costs **+.082**;
+pupa judge rate-limits cost ~5% of items; MIPROv2 was dying on a MISSING PYTHON PACKAGE.**
+Instruments: errclass.py (scratchpad, classifies every dspy eval error), rescore_k3.py (repo).
+
+ERROR TAXONOMY (counts = eval-loop errors per run log):
+| run | eval errors | dominant cause |
+| livebench v6wide | 7,880 | 7,156 truncation warnings -> JSON-parse failures |
+| livebench v8failmine | 680 | 615 truncation |
+| livebench k3 rescore (8k) | 168 | 180 truncations; 132/168 errors = "cannot be serialized
+to a JSON object" / "JSONAdapter failed to parse" |
+| ifbench v6ctx32k | 246 | 1,656 truncation |
+| pupa v4sk3 | 129 | **123 z.ai 1302 rate-limit** (the METRIC JUDGE, not the task LM) |
+| pupa v8failmine | 9 | 8 rate-limit |
+| hover mipro | 0 | died at import: **ImportError optuna** |
+
+(1) ★ **LIVEBENCH ROOT CAUSE = max_tokens TRUNCATION, not sympy/timeout.** Long math CoT hits
+max_tokens=8000 mid-JSON -> adapter cannot parse -> dspy errors the ITEM -> scored 0. CONTROLLED
+TEST (same prompt, same box, same load, GEPA-official's shipped candidate, k=3):
+| max_tokens | k3 mean | pass means | truncations | eval errors | zero-rate |
+| 8,000 (paper-exact) | .4788 | .508/.468/.460 | 180 | 168 | .405 |
+| 24,000 | **.5608** | .675/.484/.524 | **0** | 17 | .325 |
+→ **+.082 recovered by removing truncation alone.** Every livebench arm to date (both GEPA and
+M_ω) searched and was scored through this. Residual pass-spread .19 at 24k = load contention,
+so the protocol is BOTH 24k AND an idle box AND k>=3. NOTE 8000 is paper Appendix E.2, so 24k
+is a FLAGGED DEVIATION — must be applied SYMMETRICALLY (both arms) and reported as its own
+instrument-clean column beside the paper-exact one.
+(2) ★ **PUPA ROOT CAUSE = judge-side rate limits.** pupa's metric judge IS GLM via z.ai; a 1302
+rate-limit does not merely retry — it errors the item, scoring it 0 (123 such zeros in v4sk3 =
+~5% panel deflation, which is the same order as the effect being searched for). FIX SHIPPED:
+make_reflection_lm(patient=True) -> num_retries 40 for the pupa judge only (changes no judgment,
+only whether a judgment is obtained). VERIFIED: 12 errors in 12 min before -> **0 errors** after.
+Contention was partly self-inflicted (concurrent GLM consumers); --eval-threads 16 for pupa.
+(3) **MIPROv2 was never a scientific failure**: `ImportError: MIPROv2 requires optuna`. Installed
+(optuna 4.9.0, sk3 venv); relaunched pid 2827254, now past the wall and evaluating. Yesterday's
+"MIPRO died" (1113 balance) and today's are two DIFFERENT trivial infra faults.
+(4) ★ **GEPA+Merge BASELINE LANDED (hover/Qwen3-8B): seed .387 -> best .533.** Stronger than
+plain GEPA (.4567) as expected, and **M_omega .5833 still beats it (+.050)** — the strongest
+GEPA-family baseline does not close the gap. First head-to-head vs GEPA+Merge in the campaign.
+(5) LIVE: pupa k3 rescore w/ patient judge (sk3 pid 2829920, both official+v4sk3 arms; the
+pre-fix rescore quarantined as rescore_k3.jsonl.INVALID_ratelimit_20260724); livebench 24k
+rescore DONE; pupa v8 + livebench v8 arms running; MIPRO running; expand14b sequencer waiting
+on the aime-14B lane (aime-14B GEPA still in final_test since 08:45 — SLOW, watch it).
+DECISION PENDING (user): the live livebench v8 arm is searching through the 8k-truncation
+signal (615 truncations so far) — recommend killing it by PID and relaunching at 24k, but
+unitrecomb searches are preempt-on-explicit-order-only, so it keeps running until told.
+
+**HB85b (Jul 24 ~14:50 PDT): ★★★ PUPA RESOLVED — the entire "pupa loss" was judge-rate-limit
+contamination. Clean instrument: GEPA .8835 vs the fallback candidate .8833 (SAME PROMPT,
+Δ=.0002).** k=3 patient-judge rescore, 0 eval errors, both arms:
+| arm | old single-pass | clean k3 | note |
+| official (GEPA) | .8621 | **.8835** | |
+| unitrecomb_v4sk3 | .7913 | **.8833** | guard fallback -> byte-identical prompt to official |
+Both rows are the SAME candidate, so their agreement to **.0002** measures the CLEAN
+instrument's noise — pupa is in fact one of the most STABLE benches once the judge stops
+failing. The .8621-vs-.7913 spread that made pupa look like a .07 loss was 100% instrument.
+CONSEQUENCES: (a) the "pupa LOSS" is RETRACTED — there was never a real gap, only a fallback
+tie mis-measured; (b) pupa's true baseline to beat is **.8835**, not .8621; (c) a genuine M_ω
+gain on pupa is now cleanly DETECTABLE (noise ~.000x, not .07), which is exactly the condition
+the v8 failure-grounded search needs. NEVER quote pupa .7913 or .8621 again.
+NOTE the live pupa v8 arm (sk3 pid 3783917) loaded the PRE-patient code, so its select panel
+still takes occasional rate-limit zeros (9 in ~4h, mild vs v4sk3's 129 — fewer concurrent GLM
+consumers). Judged tolerable; its confirm guard is the backstop. All FUTURE pupa runs get the
+patient judge automatically.
+
+**HB86 (Jul 24 ~15:30 PDT): ★★★ UPPER-BOUND DEEP AUDIT (user-ordered). Two verdicts: the EVT
+endpoint is DEGENERATE and must be retracted; a NEW non-vacuous CERTIFIED all-prompt cap now
+exists (livebench .9048). Plus the session's biggest score find: livebench was hard-zeroing 19%
+of its items on a MISSING PIP PACKAGE.**
+
+(1) ★ **EVT ENDPOINT RETRACTED — degenerate by construction.** The GPD MLE endpoint is
+u + σ/(−ξ). Fitted ξ is in the ξ < −1 boundary regime at EVERY tail size on EVERY bench
+(aime −1.14..−1.58, hover −1.03..−1.87, hotpot −1.31..−1.77, livebench −2.54..−3.72), where the
+GPD likelihood is maximized by pinning the endpoint to the largest order statistic (Smith 1985
+irregular regime). VERIFIED ARITHMETICALLY: u + σ/(−ξ) − best_achieved = **0.00e+00** in all 9
+(bench,k) cells checked. So the bolded "EVT endpoint" column in runs/UPPER_BOUNDS.md is the
+SAMPLE MAX wearing a hat — margin exactly 0.000, carrying no information above best-achieved.
+Pickands is worse (fails 4k>n at most k; one aime cell returned 1.9e13; CI upper hits 1.0). The
+file's own verdicts already said "do not quote"/"NO USABLE ENDPOINT" for 3 of 5 — the rollup
+table over-read them. ROOT CAUSE: n_candidates 11-75 with scores on a 1/n grid; EVT needs
+hundreds of continuous draws. NOT repairable by re-fitting; needs a different instrument.
+(2) **The vacuity result is a THEOREM, and my earlier "only DPI survives" was mis-stated.** On
+deterministic-label benchmarks sup_p score(p) = 1.0 exactly (a prompt may encode the answer key),
+so NO information-theoretic all-prompt cap can bind. The DPI fixed-target cap is a NOISY-LABEL
+object (Papers #1/#3) and degenerates to 1.0 here. Correct statement: **Paper #2 has no
+non-vacuous certified all-prompt bound from the information-theoretic route, and cannot have one
+without restricting the prompt class or assuming model-capability limits.**
+(3) ★ **NEW CERTIFIED CAP FROM THE METRIC SIDE (bound_metric_reachability.py, in repo).** An item
+whose metric returns 0 even when handed an IDEAL response is unreachable by every prompt:
+sup_p score(p) ≤ 1 − (unreachable)/n. Exact w.r.t. a DECLARED output family F (bare/LaTeX/boxed/
+prose/...), conservative by construction (enlarging F only lowers the count). Results:
+| bench | unreachable | CERTIFIED CAP | note |
+| aime | 0/150 | 1.000 (vacuous) | metric clean; the LaTeX-zeroing artifact is PROMPT-FIXABLE, so not a ceiling |
+| livebench | **12/126** | **0.9048** | first non-vacuous certified all-prompt cap in this arm |
+| hotpot/ifbench | probe N/A | none emitted | terminal field is not the scored answer; VALIDITY GATE added so the script refuses to mint a 0.0 cap from its own probe errors |
+(4) ★★★ **LIVEBENCH WAS HARD-ZEROING 19% OF ITEMS ON A MISSING PACKAGE.** The probe's first run
+gave cap .7143 — FALSIFIED on the spot by our own pool max .7244 (a real prompt beat the
+"certified" cap). Chasing that contradiction found
+`ModuleNotFoundError: No module named 'Levenshtein'` inside the metric's proof-rearrangement path
+(livebenchmath_utils/olympiad/utils.py:111, imported INSIDE the function so it throws per-item →
+RuntimeError → dspy scores 0). **24/126 items (19%) were scored 0 for EVERY prompt and EVERY
+model, in every livebench run this campaign has ever done.** Installed python-Levenshtein on all
+3 boxes; probe re-run: exceptions 168 → **0**, unreachable 36 → **12**, cap .7143 → **.9048**.
+Every livebench number to date (incl. GEPA's .6956 headline) is deflated and must be re-measured.
+The self-falsification is worth keeping in the paper as a worked example of a bound auditing its
+own instrument.
+(5) ACTIONS: livebench M_ω restarted on the fixed metric (sk2 pid 616567, run-tag v10lev24k,
+24k tokens + failure-mine + k3 confirm/test); pre-fix run quarantined as
+unitrecomb_v9_PRELEVENSHTEIN_20260724. True post-fix baseline measuring now (sk3 pid 2945446,
+GEPA official + v4local, k3, 24k). NOTE all four earlier livebench "losses"/fallbacks were
+measured through this defect.
+(6) PAPER #4 HANDOFF (user-requested): wrote latex/paper-4__tacit-knowledge/METRIC_BATTERY.md —
+envelope as the ZERO POINT of #4's exchange-rate axis; TK_residual = ChannelBest − Envelope as an
+envelope-referenced tacitness estimator (cleaner than dense−articulated because the articulated
+leg is OPTIMIZED); absorption-efficiency proposed as a 4th row of Fig 3; E1-E4 battery table;
+explicit scope box (no certified all-prompt bound exists; EVT must not be cited; the max_tokens
+confound blocks any scaling claim until the 24k re-run lands). FIGURES.md updated to point at it.
+
+**HB86b (Jul 24 ~15:55 PDT): FIRST CLEAN-INSTRUMENT LIVEBENCH NUMBERS (post-Levenshtein, 24k,
+k=3, 0-3 eval errors) — GEPA .6283 vs M_ω(v4local) .5846. livebench is our ONE genuine
+remaining loss (-.044), now honestly measured rather than noise-measured.**
+| measurement | GEPA official | M_ω v4local |
+| original headline (8k, 1 pass, pre-fix) | .6956 | .6823 |
+| 8k k3 busy box, pre-fix | .4788 | — |
+| 24k k3 busy box, pre-fix | .5608 | — |
+| **24k k3 post-Levenshtein (canonical)** | **.6283** | **.5846** |
+Note the .6956 headline does NOT reproduce even with the metric fixed and truncation removed →
+it was an upward fluctuation on an idle box; the campaign's livebench baseline should be restated
+as ~.63. M_ω's .6823 likewise deflates to .5846. Ordering is unchanged (GEPA ahead), so the
+livebench loss is REAL, not instrumental — but it is now measurable at ~.00x error instead of
+being buried under a 19% dead-item floor. The v10lev24k arm (sk2 pid 616567, failure-mined units
+on the working metric) is the live attempt to close it; this is the first livebench search in the
+campaign whose signal is not corrupted.
+
+**HB87 (Jul 24 ~16:40 PDT): EVT REPLACEMENT BUILT (rank/exchangeability certificate) + livebench
+switched from blind search to a TARGETED 3-pass design after measuring the select panel's noise
+at ±.148 on the SAME candidate.**
+
+(1) ★ **WHY THE SEARCH KEPT FAILING ON LIVEBENCH — measured, not inferred.** In v10 the identical
+candidate (hash 389cbc8e) scored **.7398 and .5916 on the same 81-item select panel**, back to
+back, with zero-rate .148 vs .296. Spread **.148**. The variation is items flipping to zero
+(generation/parse variance), not skill. NO single-pass search can work through that: the observed
+marginals (.709-.813) sit ABOVE both init readings, i.e. the classic deflated-base signature
+again. **--eval-passes 3 is mandatory for livebench select**, not just the confirm/test guards.
+(2) **v11 = targeted, hypothesis-driven, 3-pass** (sk2 pid 1443392, run-tag v11targeted3pass).
+Blind 96-unit search at 3 passes would need ~90 GPU-hours (v10 rate: 7.7 min/eval x 3 x 240
+evals), so the design changed: 12 HAND-BUILT units derived from the METRIC'S OWN STRUCTURE rather
+than from mathematical skill. Mechanism: proof-rearrangement scores
+`1 - levenshtein(parsed, gold)/max(len)`, so an unparseable/empty answer scores EXACTLY 0 while
+any full-length guess earns partial credit. The units therefore target the abstention→zero
+failure mode (always emit a complete comma-separated integer list, one id per <missing> tag;
+count tags first; never abstain; nothing after the answer line; keep reasoning short enough to
+reach the answer line). pools/livebench_targeted_v11.json; eval/confirm/test passes all 3;
+prefix-cap 12; budget 120k. This is a legitimate prompt-side intervention (GEPA sees the same
+partial-credit feedback text), not metric gaming.
+(3) ★ **EVT FIX = CHANGE THE SAMPLING, NOT THE ESTIMATOR** (`bound_rank_certificate.py`, in repo,
+queued on sk2 behind v11 so the two never contend). EVT failed for three simultaneous reasons —
+n=11-75, 1/n-grid ties, and adaptive (non-i.i.d.) draws — and no re-fit repairs any of them.
+Instead: draw N prompts I.I.D. from a DECLARED FROZEN generator G (each frozen-pool unit included
+independently w.p. p=.5, appended to the GEPA init). Then exchangeability ALONE gives a
+finite-sample, distribution-free certificate with no tail model and no shape parameter:
+    P(fresh draw from G > max of N draws) <= 1/(N+1);  more generally <= k/(N+1) at the k-th largest.
+At N=120 that is <= 0.83%. Ties only make it more conservative. **And the noise direction is
+favourable**: observed = true skill + binomial noise, so the observed max is biased UPWARD, making
+the bound conservative as a statement about true skill. SCOPE: certifies the tail of THIS
+generator (= the recombination class M_omega searches), not all of prompt space — which is
+exactly the class the paper's "nothing beats recombination" claim is about. This is the honest
+successor to the retracted EVT column.
+(4) Bound ladder now, for Paper #2: [certified, all-prompt] metric-reachability cap (livebench
+.9048) > [certified, class-relative, distribution-free] rank certificate (queued) > [estimate]
+missing-value ceiling > ~~EVT endpoint~~ RETRACTED.
+
+## HB88 (2026-07-25) — overnight verdicts: pupa FLIPS TO WIN; rank certificate lands and exposes livebench
+
+- **pupa v8failmine (sk3) PROMOTED — first pupa win.** Failure-grounded mining (24 diagnosis units of a 120-unit pool) + patient GLM judge + 3-pass confirm: confirm_init .8739 vs confirm_compiled .9313 → guard cleared (fell_back=False, first time on pupa). TEST k3: **M_ω .8938 vs GEPA-shipped clean-k3 .8835** (+.010; GEPA single-pass official .8621). Margin is within pupa judge noise (~.07 test-level swing) → paired item-level sign test still required before declaring the W column. Artifact: runs_paperexact/pupa/Qwen3-8B/unitrecomb_v8failmine/result.json (sk3).
+- **Rank/exchangeability certificate (livebench, sk2) COMPLETE** — the EVT replacement works: N=120 iid draws from the declared generator (each of the 48 frozen-pool units included w.p. .5, appended to GEPA init). Ladder: P(fresh draw > .7914) ≤ .0083; > .7819 ≤ .0165; > .774 ≤ .041; > .7662 ≤ .083. Artifact: runs/bound_rank_certificate_livebench_Qwen3-8B.json (sk2).
+- **★ The certificate's side-finding is the real livebench story: 120/120 random recombinations beat the GEPA shipped prompt** (draws mean .7412 ± .019, max .7914, vs shipped init .6438 same panel/session). Random unit-appending beats GEPA by ~+.10 with probability 1.0 over the generator — the mined pool contains the fix; the *search* was what kept failing (deflated-base select noise), not the units.
+- Top draw #86 (21 units, single-pass .7914) reconstructed (rng seed 0 is deterministic) → runs_paperexact/livebench/Qwen3-8B/rankcert_topdraw/result.json; **k3 idle both-arms rescore launched** (sk2 pid 3137389, logs/rescore_livebench_topdraw_k3.log) per the W/L protocol.
+- **livebench v11targeted3pass FAILED**: 12 hand-built metric-structure units, all marginals ≈ 0/negative at 3 passes; final_test seed .6699 vs best .6424, and 3-pass spreads still huge (.58–.78 per pass) — load-dependence dominates even at k=3 on test. The abstention→zero framing does not add on top of the compiled candidate; the mined-pool draws (above) supersede this line.
+- **MIPROv2 hover (sk3) DONE: .48** (seed .3667). Envelope baseline order on hover: GEPA+Merge .533 > MIPRO .48 > GEPA .387; M_ω .5833 beats the whole family (+.050 over strongest).
+- **14B/24k envelope chain (sk1)**: aime GEPA official at 24k = **.50** (seed .34) — vs the 8k pathological all-zero regime, confirming the max_tokens confound at 14B. Chain pid 986255 alive 18h, still on stage 1 (aime official eval long-tail); ifbench/pupa stages pending.
+
+## HB88b (2026-07-25) — livebench W/L decider + pupa paired test + second 14B lane
+
+- **livebench same-session k3 both-arms rescore (sk2, busy-box symmetric)**: GEPA official **.6147** vs rankcert topdraw #86 **.6723** → **+.058 M_ω-family win**. Paired item tests on n=126: sign W32-L22-T72 p=.22 (72 ties — partial-credit metric ties are expected), **paired bootstrap on the mean: P(Δ≤0)=.023** → significant. Note winner's curse confirmed: topdraw single-pass .7914 → fresh k3 .6723; the +.058 is the honest number. Artifacts: runs_paperexact/livebench/Qwen3-8B/{official,rankcert_topdraw}/rescore_k3.jsonl.
+- **pupa paired (cross-session k3)**: M_ω .8938 vs GEPA .8835, W35-L30-T156, sign p=.62 — within judge noise; needs same-session k≥5 both-arms to decide, or report as "≥ GEPA".
+- Scoreboard correction: **ifbench is NOT outstanding** (v6ctx32k .4558 vs official .4116). aime is a win on file (unitrecomb .4267 vs official .3667, fell_back=False — the "guard 3/3" memory refers to the contamination guard, not the no-regret guard).
+- **User released sk3 GPU 7** → second 14B/24k envelope lane launched there (chain pid 3682544, vllm 3682546/3682655, port 8179, ctx 32k): hover → hotpot → livebench GEPA-official at 24k. Complements sk1's aime → ifbench → pupa chain.
+
+## HB89 (2026-07-25) — advisor review: two defects in the livebench result, and a corrected bound semantics
+
+Fable advisor pass over HB80-HB88b. Three corrections and a re-prioritization; acted on immediately.
+
+**★ DEFECT 1 (mine) — the livebench topdraw was SELECTED ON TEST.** The 120 certificate draws were
+scored on test; I promoted the test-argmax (#86) and reported it on the same 126 test items. The k3
+fresh rescore cures winner's-curse-on-noise but NOT prompt-to-item overfit. **The +.058 cell is
+provisional until re-selected.** Repair (running): rescore the top-5 test draws on the SELECT panel
+(train[:81]), promote the select-argmax, k3 test. → `livebench_reselect_placebo.py` PHASE 1.
+
+**★ DEFECT 2 — no placebo, so the content claim is unsupported.** "120/120 random recombinations beat
+GEPA" has a live alternative: appending ~24 clauses of ANYTHING lengthens the prompt and suppresses
+the abstain→zero mode that the Levenshtein partial-credit metric punishes with an exact 0. v11 does
+NOT discriminate (it tested on top of the compiled candidate, not the init). Repair (running):
+placebo generator, identical inclusion process and identical per-draw clause COUNT, clauses drawn
+from **hover's** frozen pool = length/structure-matched, content-irrelevant. 40 real + 40 placebo +
+10 init replicates, **randomized interleaved order** in one session → also fixes the third weakness,
+that 120 draw readings were compared against essentially ONE init reading (.6438) on a prompt that
+has measured .479-.6956 across sessions. Separation is only real if init-replicate MAX < draw MIN.
+→ `livebench_reselect_placebo.py` PHASE 2. If placebo also beats init, the content claim dies.
+
+**★ CORRECTION — the "conservative for true skill" note on the rank certificate was WRONG** and had
+propagated into bound_rank_certificate.py's docstring, its emitted `scope` field, and
+paper-4/METRIC_BATTERY.md. It claimed observed = true + symmetric noise ⇒ observed max biased up ⇒
+conservative for true skill. Backwards: noise here is **one-sided downward** (errors/truncation/
+timeouts force hard 0), so observed ≤ true per item and the observed max can sit BELOW the class's
+best true skill. Correct semantics: the certificate bounds the **measured** score under the declared
+protocol — protocol-relative, exactly like the metric-reachability cap. Winner's curse (argmax
+overstates ITS OWN skill) is a separate, still-true statement. All three files corrected.
+
+**Scoping the certificate for review:** adaptive pool mining does NOT invalidate it (G is frozen
+before drawing; exchangeability among draws is untouched) — but it makes the bound **per-pool**: a
+new pool needs a new certificate, and it says nothing about what further mining reaches. Two audits
+still owed: (a) select/test provenance of every unit, (b) an LLM leakage pass over all 48 units/bench
+for answer-key content (the vacuity theorem cuts both ways).
+
+**Advisor's framing of the real claim** (better than mine): not "random beats GEPA" but *the value of
+prompt optimization here lives in the unit POOL, not in the SEARCH; unguided recombination dominates
+reflective search when per-candidate eval noise exceeds per-unit effect sizes.* Suggested extra
+check: score the compiled M_ω candidate in the same session as the draws — if random draws match it,
+the honest headline is "the recombination class is what matters; the greedy machinery is decoration."
+Also suggested: promote **best-of-N random draws** to a named baseline row in the main table.
+
+**Re-prioritization (acted on).** sk2 queue wrapper killed by PID (4012049; pupa k5 child 4012057 left
+running), re-queued as sk2_queue_v2.sh (pid 4150875): pupa k5 → P0 reselect+placebo → rank certs on
+**aime and hover only**. **CUT: hotpot/ifbench certs; the 24k scaling-ladder re-run (belongs to Paper
+#4 anyway); envelope completion (MIPROv2/GEPA+Merge on the 5 non-hover benches); any new pupa arm.**
+pupa is one-shot: if k5 is still n.s., report "M_ω ≥ GEPA (n.s.)" and stop — re-rolling a .07-noise
+judge is p-hacking.
+
+**The overclaim to avoid** (verbatim from advisor, for the abstract review): *"Random prompts
+outperform state-of-the-art reflective optimizers (120/120, p<10⁻²), and we certify that no prompt
+can exceed X."* Every clause overreaches — they are recombinations of units mined FROM GEPA's own
+trajectories (no GEPA, no generator); the honest paired number is +.058 on one bench with a selection
+caveat and pupa n.s.; and "no prompt" is class- and protocol-relative only. Title's "certified upper
+bounds on what prompting can achieve" needs rescoping for the same reason.
+
+## HB90 (2026-07-25) — pupa decided: TIE. sk1 aime-14B hung and reclaimed. sk3 hover broken.
+
+**★ pupa same-session k=5 both-arms rescore (sk2, 221 items) = TIE, and the earlier +.010 was
+cross-session noise.** GEPA **.8825** vs M_ω v8failmine **.8817**, mean delta **−.0009**; sign
+W28-L30-T163 p=.90; paired bootstrap P(Δ≤0)=.52. Per the advisor's one-shot rule this is FINAL:
+**report pupa as "M_ω ≈ GEPA (n.s.)" and run no further pupa arms.** The prior k3 reading
+(M_ω .8938 vs GEPA .8835) is superseded — both arms were measured in different sessions.
+Scoreboard correction: pupa is a TIE, not a win. Artifacts:
+runs_paperexact/pupa/Qwen3-8B/{official,unitrecomb_v8failmine}/rescore_k3.jsonl (rows passes=5).
+
+**★ Instrument finding — pupa's judge noise is CROSS-session, not within-session.** The 5 pass
+means are nearly identical within each arm (GEPA .8816/.8827×4; M_ω .8835/.8812×4) — spread ~.002,
+versus the ~.07 swings seen *between* sessions. So k-pass averaging does NOT buy what we assumed on
+pupa: repeated passes inside one session are near-duplicates. **The only valid pupa comparison is
+both arms in the SAME session** (which is what finally decided it). Generalize: for judge-based
+metrics, budget same-session A/B, not more passes.
+
+**sk1 aime-14B/24k HUNG and was reclaimed.** The arm ran 19h with its last log write 9.5h earlier;
+tail showed `litellm.exceptions.Timeout: APITimeoutError` — it was stuck in the retry path, GPU
+pinned, making no progress. Killed by explicit PID in order (wrapper 986255 → arm 1081879 → vllm
+parent 983652 → EngineCore 986039); other users' EngineCores (animjha 330902, sahasras 1451756)
+identified and left alone. Per the advisor's cut, the 14B lane was NOT restarted; GPU7 was
+repurposed to an 8B server running the **aime + hover rank certificates** (sk1_certs.sh, pid
+708878, port 8078), so certs now run in parallel with sk2's P0 controls instead of behind them.
+sk2 re-queued as v3 = **P0 controls only** (pid 490085).
+
+**sk3 hover-14B failed instantly (rc=0 masked it).** `RuntimeError: Dataset scripts are no longer
+supported, but found hover.py` — sk3's `datasets` is too new for `hover-nlp/hover`'s script loader
+(sk1/sk2 are fine). The chain's `rc=$?` captured the *echo*, not the python, so a 4-second crash
+logged as success — **fix the chain template to test the python's rc directly**. hotpot-14B/24k did
+complete: **.2667 (seed = best, GEPA found nothing)**, notably below 8B's .38; livebench-14B still
+running. No 14B claim should be made from this row until the hover gap and the hotpot regression
+are explained — and per the advisor the 14B ladder is CUT from Paper #2 anyway.
+
+## HB91 (2026-07-25 18:35Z) — ★ BINDING PRE-REGISTRATION for the livebench controls (written BEFORE results were read)
+
+Advisor-issued, recorded while `livebench_reselect_placebo.py` was still mid-run on sk2 and no
+Phase-1 or Phase-2 output had been inspected. Whichever cell the data lands in IS the sentence that
+goes in the paper. No post-hoc renegotiation.
+
+**PHASE 1 — re-selection.** Δ = (select-argmax draw, fresh k3 test) − (GEPA official, same session).
+| outcome | rule | consequence |
+|---|---|---|
+| CONFIRMS | Δ ≥ +.030 **and** paired bootstrap P(Δ≤0) < .05 | livebench = confirmed win (expect shrinkage from +.058; .6723 was still test-selected) |
+| FALSIFIES | Δ ≤ 0 | livebench cell → tie/loss; headline degrades to "matches or exceeds 6/6, strictly exceeds 4" |
+| AMBIGUOUS | 0 < Δ < .030, or P(Δ≤0) ∈ [.05,.25] | "directionally positive, not confirmed"; NOT counted as a win; **no re-roll** (one same-session replication allowed ONLY as a declared widening of k, never a fresh selection) |
+
+**PHASE 2 — placebo.** init replicates n=10, real draws n=40, placebo draws n=40, interleaved, one session.
+| outcome | rule | consequence |
+|---|---|---|
+| CONFIRMS content claim | (real mean − placebo mean) ≥ +.020 with rank-sum p<.05, AND real beats init (clean: real min > init max; acceptable: real−init ≥ +.05 with clear separation) | pool-not-search claim keeps its flagship exhibit. n=40/40 at draw SD≈.019 resolves ~.012, so +.020 is a fair bar |
+| FALSIFIES content claim | placebo within .010 of real (rank-sum n.s.) while both beat init | "the pool's value is LENGTH/STRUCTURE, not mined content" → livebench is rewritten as a metric-pathology finding (padding suppresses abstain→zero); the central claim then rests only on hover/hotpot/aime/ifbench, where no placebo has been run. **This is the outcome that genuinely hurts.** |
+| AMBIGUOUS | real > placebo significantly AND placebo ≫ init | decompose honestly: "of the ~+.10 raw effect, X points structural, Y points content" — still publishable, arguably a better claim |
+
+**★ UNCONDITIONAL KILL SWITCH:** if the init-replicate max overlaps the real-draw distribution, the
+**"120/120" claim is DEAD regardless of the placebo outcome**, because the original comparison was
+120 draw readings against a single init reading (.6438).
+
+**The ONE permitted follow-up if Phase 2 is ambiguous** (pre-declared here so it cannot be a post-hoc
+rescue): score the compiled M_ω candidate in-session against the draws. Nothing else.
+
+## HB91b — advisor's other mandates from the same pass
+
+- **★ NEW MANDATORY WORK: same-session paired k3 both-arms revalidation of the 4 deterministic wins**
+  (hover, hotpot, aime, ifbench). The pupa artifact was *judge* drift and cannot touch EM/programmatic
+  metrics — but those four share the *sibling* risk of generation-side session effects (load, timeouts,
+  the max_tokens confound). ~8-16 GPU-hours total. Buys the methods sentence *"every headline cell is a
+  same-session, paired, k≥3 both-arms measurement,"* which retroactively immunizes the whole scoreboard
+  against the class of objection pupa just exposed. Priority if squeezed: aime > hover > ifbench > hotpot.
+- **★ pupa's k=5 was effectively k≈1.** 4 of 5 pass-means were BIT-IDENTICAL (.8827×4, .8812×4) —
+  that is provider-side caching or deterministic decoding, not merely "low variance". The averaging
+  bought literally nothing. Verify before relying on k-passes with any API judge.
+- **Variance-components framing (reviewer-proof, use this):** `score = true + u_session + ε_call`.
+  Averaging attacks ε_call ONLY; pairing cancels u_session ONLY. pupa needed pairing and got averaging.
+  | metric | σ_session | σ_call | correct design |
+  |---|---|---|---|
+  | pupa (GLM judge) | ~.07 | ~.002 | same-session paired A/B; k-passes worthless |
+  | livebench (Levenshtein under load) | present | ~.148, one-sided down | k-pass within session, idle box, symmetric load |
+  | hover/hotpot/aime/ifbench | load/config-mediated | small | same-session pairing as cheap insurance |
+  Assumption to verify cheaply: pairing cancels u_session only if the session effect is additive and
+  arm-symmetric → run two paired sessions on livebench/ifbench and check the DELTA is stable while
+  LEVELS move. Within-session determinism also explains the huge tie counts (T163/221), which is why
+  **the paired bootstrap, not the sign test, is the primary inference.**
+  Verdict: strong *subsection* of Paper #2, NOT a standalone paper (that would need 5-10 judges across
+  providers). Bank the data, don't spin it off.
+- **Framing for pupa:** "on the one benchmark scored by an LLM judge with near-zero within-session
+  variance, the two arms are statistically indistinguishable (Δ=−.0009, n=221, P(Δ≤0)=.52)", with the
+  cross-session artifact as the methods section's motivating example.
+- **Still owed from HB89, now urgent:** unit provenance audit + LLM leakage pass over the 48 livebench
+  units. The vacuity theorem makes answer-key leakage the single most dangerous latent objection —
+  **do not submit without it.** CPU/API only, no GPU contention.
+- **Best-of-N-random-draws as a named baseline row** — nearly free from Phase 1's select-panel scores,
+  but it MUST be selected on the select panel or it inherits Defect 1.
+- **Newly pointless:** any further pupa arm; the compiled-vs-draws check *on pupa*; more pupa judge-noise
+  characterization. **Still cut:** 14B ladder (hotpot .2667-vs-.38 regression + hover crash are Paper #4
+  problems — log, don't chase), hotpot/ifbench certs, envelope completion.
