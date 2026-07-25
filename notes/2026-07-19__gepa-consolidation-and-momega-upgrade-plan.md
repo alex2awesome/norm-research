@@ -2483,3 +2483,41 @@ select panel is only 15-30 items, so its per-unit marginals are noisy even thoug
 - **§Results**: main table with aime/hotpot final, ifbench pre-registered label, hover/livebench
   marked PENDING; the "how we nearly lost AIME" narrative; the provenance paragraph above.
 - Limitations section stubbed with the required content list.
+
+## HB99 (2026-07-25) — ★★ THREAD AUDIT (user-requested): two instrument defects found, one conclusion reopened
+
+**Defect 1 — the k-pass mechanism was CACHE-DEFEATED across the whole campaign.** Inspecting
+pass_means of every revalidation cell: aime sk2cfg [.30,.30,.30], ifbench official
+[.4337,.4337,.4337], hotpot BOTH arms [identical ×3], pupa [4 of 5 identical]. dspy's client-side
+response cache returned the SAME completions on repeated passes → effective k ≈ 1-2 everywhere we
+claimed k≥3. **What survives: everything load-bearing.** The paired deltas (aime +.091, hotpot
++.220, pupa tie, ifbench n.s.) are same-session paired measurements and pairing is untouched by
+cache-collapsed passes — the variance-components analysis says pairing, not averaging, was the
+binding remedy anyway. What does NOT survive: the "k≥3" description. Fixed: `rescore_k3.py` now
+passes `cache=False` (all 3 boxes + repo); the paper's protocol section now reports the cache
+pathology as a third instrument exhibit instead of claiming k≥3; the pupa "provider-side caching"
+attribution corrected to client-side.
+
+**Defect 2 — the aime rank-certificate lane was unviable and got killed.** Init eval alone took
+2.5h (150 items × 24k tokens); 80 draws ⇒ ~150-200h. Killed by PID (wrapper 772463 → python
+772473; also reval-waiter 845143, which was doubly broken — rescore_k3.py was never shipped to
+sk1, and its hover stage cannot load there). sk1's 8B server kept up and repurposed.
+
+**★ REOPENED — the aime "session noise" resolution is now in doubt.** Before dying, the aime
+certificate measured the GEPA shipped init at **.5267** on sk1 (150 test items, 24k) — a second
+independent sk1 reading near the original .5333, against sk3's paired-session .3067/.3000. Two
+sk1 sessions ≈.53 vs one sk3 session ≈.31 looks like a **MACHINE/config effect, not generic
+session noise** — HB97's "the .5333 was an inflated single-pass reading" was itself premature.
+The paired delta on sk3 (+.091) remains internally valid, but if the deflation mechanism (e.g.
+truncation under different server settings) is arm-ASYMMETRIC, the win could be an artifact.
+**Discriminator launched** (sk1 pid 445184, logs/aime_crossbox_sk1.log): same-session paired k3
+of official + unitrecomb ON THE HIGH-READING BOX, cache disabled. If M_ω also wins there → aime
+stands (with "machine" replacing "session" in the paper's narrative). If GEPA wins there → aime
+returns to CONTESTED and leaves W. The paper's AIME narrative paragraph is bracketed HOLD.
+
+**Rest of the audit: decisions that were checked and STAND** — pre-registration committed before
+data (verified in git); Phase 2 still uninspected (polled by count only, 21/90); provenance of
+both confirmed candidates select-panel-clean (HB98); the hover purge/ablation queue; killing the
+hung 14B lane (9.5h without a log write); leaving 4 unaccounted-for EngineCores alone; ifbench
+no-widening. Comparator-rule tex paragraph softened to admit the family was only complete on
+hover (envelope completion is cut, so the paper must not imply a 3-optimizer max everywhere).
