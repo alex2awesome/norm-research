@@ -2928,3 +2928,20 @@ no-outside-knowledge). Different metrics reward different rule types: EM rewards
 genuinely, zero-on-parse rewards them pathologically, multi-hop retrieval rewards thick ones.
 This is "prompt-code isomorphism shows thin/thick rule differences" (the abstract's closing
 claim) with data already behind it.
+
+## HB112 (2026-07-26) — aime CLOSED with partial 24k evidence; sk1 back after ~1-day outage
+
+sk1 returned. Both aime lanes died during the box outage (likely reboot): session 1 completed
+**two clean 24k passes of GEPA-official, both reading .5800 exactly** (87/150, cache OFF — real
+replicates, 3.5h apart) before dying mid-run; the M_ω arm never ran; session 2 never started (its
+cancellation per HB110 is moot). The 8B server on sk1 is down and STAYS down (nothing needs it).
+
+**Disposition (HB110 rules applied):** aime measurement remains CLOSED. The two .58 passes are
+recorded as MECHANISM evidence only, not a cell: they confirm the serving-config account —
+same candidate reads .30-.35 at 8k (many truncations) and .53-.58 at 24k (none), and at 24k the
+readings are pass-stable to 4 decimals with the cache off. aime ships as "directionally
+positive; delta not stable across serving configurations; excluded from W," with the 8k/24k
+level split quoted as the truncation exhibit. No paired 24k comparison exists and none will be
+run.
+
+hotpot foreign-content grid: 72/90 — verdict expected within the hour.
