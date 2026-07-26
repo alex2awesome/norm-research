@@ -2552,3 +2552,15 @@ User challenged the "machine effect" wording and directed a code check. Verified
   instrument-clean column. The pre-declared rule extends: aime counts in W only if M_ω wins the
   PAIRED comparison in BOTH columns; if it wins only at 8k, the honest sentence is "M_ω's prompt
   is more robust to the paper's own output-budget truncation," reported as such.
+
+## HB101 (2026-07-25) — RESULTS_LEDGER established (user directive: stop the churn)
+
+`datasets/prompt-optimality-test/RESULTS_LEDGER.md` is now the single source of truth: a number is
+quotable ONLY if it appears there with a provenance block (artifact path, box, session, serving
+config, effective k, pairing status). The five churn factors are enumerated as a checklist (F1
+cross-session, F2 serving config, F3 dspy cache, F4 test-selection, F5 run-dir overwrite), each
+with its mitigation status. `rescore_k3.py` now writes a `session_fingerprint` row (host, vLLM
+version, max_model_len, full CLI config) at the top of every rescore block on all three boxes —
+after the aime incident, no measurement is separable from the server that produced it. HB entries
+remain the journal; the ledger is the state. Update the ledger in the same commit as any
+measurement that changes it.
