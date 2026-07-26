@@ -2564,3 +2564,32 @@ version, max_model_len, full CLI config) at the top of every rescore block on al
 after the aime incident, no measurement is separable from the server that produced it. HB entries
 remain the journal; the ledger is the state. Update the ledger in the same commit as any
 measurement that changes it.
+
+## HB102 (2026-07-26) — ★★★ HOVER CONFIRMED WIN (ablation-clean); aime 8k delta FAILS replication
+
+**HOVER — the same-session 4-arm table (sk2, one session, cache off, n=300):**
+| comparison | means | Δ | paired bootstrap |
+|---|---|---|---|
+| M_ω vs GEPA+Merge (strongest clean comparator) | .5144 → .5689 | **+.0544** | **P=.0004** |
+| M_ω-ABLATED vs GEPA+Merge | .5144 → .5656 | **+.0511** | **P=.0009** |
+| M_ω full vs M_ω ablated (the flagged clause's worth) | .5656 → .5689 | +.0033 | P=.41 — **causal NULL** |
+| M_ω vs plain GEPA | .4522 → .5689 | +.1167 | P=.0000 |
+
+**hover is a WIN and the leakage objection is empirically dead**: removing the one test-hit clause
+from our best candidate costs .003 (P=.41, null), and the ablated candidate still beats the clean
+GEPA+Merge by +.051 at P=.0009. Lock the ABLATED candidate as the cell of record if maximal
+cleanliness is preferred; either version wins. Artifacts:
+runs_paperexact/hover/Qwen3-8B/{official,official_merge_gepamerge,unitrecomb_stair,unitrecomb_stair_ablated}/rescore_k3.jsonl (sk2).
+
+**AIME — the 8k paired delta does NOT replicate across servers.** sk1 same-session paired (cache
+off, fingerprinted, n=150): GEPA .3533 vs M_ω .3578, **Δ=+.0044, W16-L18-T116, P=.40** — versus
+sk3's +.091 (P=.0012) for the SAME two candidates at the same nominal config. Two internally-valid
+paired sessions disagree on the DELTA, so the session effect on aime is NOT arm-symmetric — the
+additive-u_session assumption fails here (the advisor's predicted failure mode, now observed).
+**aime drops from W**: label = "delta not stable across serving environments; not confirmed." The
+24k column (running, sk1 pid 436036) is now informational, not decisive — a same-config replication
+failure at 8k cannot be overridden by a different-config win.
+
+**Scoreboard: hotpot W (+.220), hover W (+.051 clean), aime NOT CONFIRMED, ifbench NOT CONFIRMED,
+pupa TIE, livebench PENDING (P0 resumed and running — orchestrator working as designed after the
+fd crash).** "Reflective search never beats recombination" still holds in every settled cell.

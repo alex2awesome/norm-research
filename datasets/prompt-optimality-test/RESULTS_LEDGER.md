@@ -47,10 +47,14 @@ is explicitly provisional.**
 - Pool: 0/68 leakage-flagged; judge anchor-validated recall 1.00 / FPR 0.00 (HB96).
 - Threats: none known. Answers are short → truncation (F2) not plausible. STABLE.
 
-### aime — CONTESTED (was WIN; dual-column resolution in flight)
-**LOCKED so far: the paired 8k delta (+.091, P=.0012) as the paper-exact-config result.** The
-*interpretation* (win vs truncation-robustness) is what awaits the 24k column — the delta itself
-is measured and stable.
+### aime — NOT CONFIRMED (delta fails cross-server replication, 2026-07-26)
+**LOCKED: the honest label — "delta not stable across serving environments."** Two internally-valid
+same-session paired measurements of the SAME candidates at the same nominal 8k config: sk3 Δ=+.091
+(P=.0012) vs sk1 Δ=+.0044 (P=.40, W16-L18-T116). The session effect on aime is not arm-symmetric,
+so no single paired session can carry the cell. aime does NOT count in W. The 24k column (running)
+is informational only — a same-config replication failure cannot be overridden by a
+different-config win. aime still supports the "never worse" clause (no measurement shows GEPA
+beating M_ω).
 - Paper-exact-config paired reading: **GEPA .3067/.3000 (two configs, same session) vs M_ω .3978,
   Δ=+.091, bootstrap P=.0012, n=150** — sk3 GPU7 session 2026-07-25 21:29–21:33Z, 8k, effective k≈1.
   Artifacts: `runs_paperexact/aime/Qwen3-8B/{official_sk1cfg,official_sk2cfg,unitrecomb}/rescore_k3.jsonl` (sk3).
@@ -79,8 +83,13 @@ is measured and stable.
   Artifacts: `runs_paperexact/pupa/Qwen3-8B/{official,unitrecomb_v8failmine}/rescore_k3.jsonl` (sk2, passes=5 rows).
 - Superseded: "M_ω .8938 vs GEPA .8835 win" was cross-session (F1). One-shot rule: no further arms.
 
-### hover — PENDING; same-session run IN FLIGHT (jumped ahead of P0 after its crash)
-**LOCKED: nothing yet.** The deciding run (official + GEPA+Merge + unitrecomb_stair + ablated, one
+### hover — WIN (confirmed 2026-07-26, ablation-clean)
+**LOCKED: M_ω-ablated .5656 vs GEPA+Merge .5144 (+.051, P=.0009); full M_ω .5689 (+.054, P=.0004);
+the flagged clause's causal contribution is NULL (+.0033, P=.41).** One session, 4 arms, cache off,
+n=300, sk2 2026-07-26 ~01:00-02:30Z. The ablated candidate is the cell of record (beats the CLEAN
+strongest comparator with the flagged clause removed — the leakage objection is empirically dead).
+Artifacts: runs_paperexact/hover/Qwen3-8B/{official,official_merge_gepamerge,unitrecomb_stair,unitrecomb_stair_ablated}/rescore_k3.jsonl (sk2).
+SUPERSEDED prior state: The deciding run (official + GEPA+Merge + unitrecomb_stair + ablated, one
 session, fingerprinted, cache off) started 2026-07-26 ~01:00Z on sk2 (pid 2182963); mid-run
 readings in the .56-.58 range are visible but UNATTRIBUTED (arm order unknown mid-flight) — quote
 nothing until the paired table lands.
