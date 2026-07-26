@@ -2830,3 +2830,27 @@ grid with a shuffled-text arm added. If CONFIRM: no hotpot follow-up at all.
 - Critical path: hotpot grid → hover stability pair → livebench third arm + zero-rate
   decomposition → aime 24k (sk1 still unreachable) → writing with both abstract branches
   verbatim-ready before the hotpot result is read.
+
+## HB108 (2026-07-26) — purged hover certificate lands; hotpot grid and hover stability pair both mid-flight
+
+**★ Purged hover rank certificate (leakage-purged 160-unit pool, N=80, one sk2 session):**
+- Ladder: **P(fresh draw > .5800) ≤ .0123**; P(> .5767) ≤ .037; P(> .5667) ≤ .123.
+- Draws: mean **.5425 ± .019**, max **.5800**; GEPA shipped init on the same panel/session: **.4867**;
+  **80/80 draws beat the init**.
+- Two readings worth flagging for the paper (both mechanism-agnostic per HB107b):
+  (a) the certificate brackets our greedy candidate — M_ω-ablated .5656 sits INSIDE the draw
+  ladder (above the mean, below the max), i.e. greedy selection on hover lands around the
+  ~85th-90th percentile of random recombination, echoing the pool-not-search thesis at the
+  certificate level; (b) hover now has the SAME qualitative pattern livebench had
+  (draws ≫ init, 100% beating) — whether hover's version is content or structure is exactly
+  what the running foreign-content controls decide (hotpot grid now; hover would need its own
+  if hotpot falsifies — hotpot CONFIRM covers the thesis per HB103#1).
+- CAVEAT before quoting alongside HB102: the cert session's init reading (.4867) differs from
+  the reval session's (.4522) — cross-session levels move (F1/F2); only within-session
+  comparisons are quotable. The cert is self-contained (init + draws in one session).
+
+**Lanes:** hotpot foreign-content grid 17/90 (~3.5h total, counts only, per HB107). Hover
+stability pair started right behind the finished orchestrator (24k, truncation warnings visible
+= expected at hover's long CoT? — watch: hover reasoning at 24k still truncating is itself
+notable). sk1 STILL unreachable (banner-exchange timeout; sk1-specific — sk2/sk3 fine); both
+aime 24k sessions remain unread.
