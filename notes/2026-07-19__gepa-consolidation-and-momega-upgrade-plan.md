@@ -2521,3 +2521,34 @@ both confirmed candidates select-panel-clean (HB98); the hover purge/ablation qu
 hung 14B lane (9.5h without a log write); leaving 4 unaccounted-for EngineCores alone; ifbench
 no-widening. Comparator-rule tex paragraph softened to admit the family was only complete on
 hover (envelope completion is cut, so the paper must not imply a 3-optimizer max everywhere).
+
+## HB100 (2026-07-25) — ★★ the aime .53-vs-.35 mystery SOLVED: serving config, not machine, not session
+
+User challenged the "machine effect" wording and directed a code check. Verified:
+- `paperexact_arms.py` and `rescore_k3.py` md5-IDENTICAL on sk1/sk2/sk3.
+- The aime GEPA candidate is byte-identical everywhere (cand md5 e018f7779184 in all 3 result.jsons).
+- **The .5333 was not the 07-20 official run at all.** That run's own log ends `50/150 = .333 (seed)`,
+  `55/150 = .367 (best)` — matching sk2's result.json. sk1's result.json was **overwritten on 07-23**
+  by a stair-campaign re-run whose final test read 80/150 = .5333.
+- **Mechanism, two stacked serving-config effects** (from the logs, not conjecture):
+  (1) TRUNCATION: cert session at 24k → **0 truncation warnings** → .5267; today's crossbox at 8k →
+  578 warnings → .3533. (2) REASONING-PARSER: the .5333 run's final-test log shows responses with
+  `'text': None` + full output in `reasoning_content` — whether the vLLM server splits reasoning
+  into a separate field (and whether the answer survives into `text`) depends on server
+  version/flags, and a `text: None` response scores 0 after parse failure.
+- So the correct model is NOT "machine effect" and NOT free-floating "session noise":
+  **u_session for aime ≈ serving-configuration (max_tokens × reasoning-parser × vLLM version)**.
+  Same code + same candidate + same box + same nominal CLI flags still spans .35-.53 across days
+  because the SERVER behind the port changed. Consequence for the paper's variance-components
+  table: the "session effect" row for deterministic metrics is config/serving-mediated — the tex
+  already says this ("config/load-mediated"), now with a demonstrated mechanism.
+- **Consequence for the aime cell**: the sk3 paired win (+.091 at 8k) is internally valid but is a
+  *paper-exact-config* result in a regime where truncation destroys ~40% of GEPA's answers — and
+  possibly asymmetrically (a prompt that elicits shorter reasoning survives 8k better; format
+  robustness is partly REAL prompt value, partly instrument artifact). **Dual-column resolution
+  queued**: after the 8k crossbox paired run finishes on sk1 (pid 445184), the identical paired
+  run at 24k launches automatically (pid 436036, logs/aime_24k_sk1.log) — same box, same server,
+  same code, same candidates, only max_tokens moves. 8k = paper-exact column; 24k =
+  instrument-clean column. The pre-declared rule extends: aime counts in W only if M_ω wins the
+  PAIRED comparison in BOTH columns; if it wins only at 8k, the honest sentence is "M_ω's prompt
+  is more robust to the paper's own output-budget truncation," reported as such.
