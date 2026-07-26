@@ -20,6 +20,8 @@ the user flagged result churn. Rules of the ledger:
 | F4 test-panel selection | candidate chosen by its test score (livebench draw #86) | selection logs / phase provenance | select on train panels only; verified for all canonical candidates |
 | F5 run-dir overwriting | 07-23 rerun silently replaced sk1 `aime/official/result.json` (.3667 → .5333) | result.json mtime vs run log content | NEVER reuse a run dir; always `--run-tag`; this ledger pins which file is canonical |
 
+| F6 fd exhaustion | long multi-eval processes leak http fds -> `OSError 24` mid-run (killed P0 at 31/90, 2026-07-26; same class as the old ifbench fd-crash era) | rc!=0 or "Too many open files" in log | RLIMIT_NOFILE bump + checkpoint/resume in livebench_reselect_placebo.py; orchestrator auto-retries (SHIPPED 2026-07-26) |
+
 Also relevant, found and fixed earlier: missing `python-Levenshtein` hard-zeroed 19% of livebench
 for every run before 2026-07-24; pupa judge rate-limits scored items 0 before the patient retry stack.
 
@@ -31,7 +33,12 @@ All canonical cells: same-session paired, paper-exact test splits, Qwen3-8B, pri
 paired bootstrap on mean item delta. "Effective k≈1" = passes were cache-collapsed (F3); validity
 rests on pairing, which F3 does not touch.
 
+**LOCK-IN STATUS (user directive 2026-07-26): each bench below carries a LOCKED line = the
+highest-confidence (and where defensible, highest-M_ω) result we build on. Anything not LOCKED
+is explicitly provisional.**
+
 ### hotpot — WIN (the flagship cell)
+**LOCKED: M_ω .6333 vs GEPA .4133 (+.220, P=.0000).** Nothing pending can move this cell.
 - **GEPA .4133 vs M_ω .6333, Δ=+.2200, sign W75-L9-T216 p=4.3e-14, bootstrap P(Δ≤0)=.0000, n=300**
 - Provenance: sk3 GPU7, 2026-07-25 21:42–21:47Z, fresh Qwen3-8B server port 8078 (ctx 32768),
   max_tokens 8000, effective k≈1 (pre-fingerprint).
@@ -41,6 +48,9 @@ rests on pairing, which F3 does not touch.
 - Threats: none known. Answers are short → truncation (F2) not plausible. STABLE.
 
 ### aime — CONTESTED (was WIN; dual-column resolution in flight)
+**LOCKED so far: the paired 8k delta (+.091, P=.0012) as the paper-exact-config result.** The
+*interpretation* (win vs truncation-robustness) is what awaits the 24k column — the delta itself
+is measured and stable.
 - Paper-exact-config paired reading: **GEPA .3067/.3000 (two configs, same session) vs M_ω .3978,
   Δ=+.091, bootstrap P=.0012, n=150** — sk3 GPU7 session 2026-07-25 21:29–21:33Z, 8k, effective k≈1.
   Artifacts: `runs_paperexact/aime/Qwen3-8B/{official_sk1cfg,official_sk2cfg,unitrecomb}/rescore_k3.jsonl` (sk3).
@@ -56,18 +66,24 @@ rests on pairing, which F3 does not touch.
   24k paired auto-queued behind it (pid 436036, `logs/aime_24k_sk1.log`).
 
 ### ifbench — DIRECTIONALLY POSITIVE, NOT CONFIRMED (final; no re-roll)
+**LOCKED: +.0198 (P=.233), reported with the pre-registered label. Closed cell.**
 - **GEPA .4337 vs M_ω .4535, Δ=+.0198, bootstrap P=.233, n=294** — same sk3 session 21:33–21:42Z, 8k.
   Artifacts: `runs_paperexact/ifbench/Qwen3-8B/{official,unitrecomb_v6ctx32k}/rescore_k3.jsonl` (sk3).
 - Superseded reading: +.044 single-pass (F1). Pre-registered label applies verbatim; the permitted
   k-widening is deliberately NOT spent (advisor ruling, HB98).
 
 ### pupa — TIE (final)
+**LOCKED: tie (Δ=−.0009, P=.52). Closed cell.**
 - **GEPA .8825 vs M_ω .8817, Δ=−.0009, sign W28-L30-T163 p=.90, bootstrap P=.52, n=221** —
   sk2, 2026-07-25, k=5 requested / effective k≈1 (F3), same-session.
   Artifacts: `runs_paperexact/pupa/Qwen3-8B/{official,unitrecomb_v8failmine}/rescore_k3.jsonl` (sk2, passes=5 rows).
 - Superseded: "M_ω .8938 vs GEPA .8835 win" was cross-session (F1). One-shot rule: no further arms.
 
-### hover — PENDING (sk2 lane, queued behind livebench P0)
+### hover — PENDING; same-session run IN FLIGHT (jumped ahead of P0 after its crash)
+**LOCKED: nothing yet.** The deciding run (official + GEPA+Merge + unitrecomb_stair + ablated, one
+session, fingerprinted, cache off) started 2026-07-26 ~01:00Z on sk2 (pid 2182963); mid-run
+readings in the .56-.58 range are visible but UNATTRIBUTED (arm order unknown mid-flight) — quote
+nothing until the paired table lands.
 - NOT YET CANONICAL. Best available readings (single-pass, cross-session — quote nothing from these):
   M_ω stair .5833 (sk1, 07-24) > GEPA+Merge .5333 > MIPRO .48 > GEPA .45/.4567.
 - Complications to be settled by the queued same-session run (`sk2_hover.sh` pid 39174):
@@ -76,6 +92,12 @@ rests on pairing, which F3 does not touch.
   (b) purged-pool certificate (164→160) runs after. hover loads ONLY on sk2 (datasets version).
 
 ### livebench — PENDING (P0 controls under the HB91 pre-registration)
+**LOCKED so far: (a) the rank certificate P(fresh > .7914) ≤ .0083 (protocol-relative, per-pool);
+(b) the reachability cap .9048; (c) draw #88 as the candidate of record (select-promoted, .7869
+on the held-out select panel).** Phase 2/3 crashed at 31/90 on fd exhaustion (F6) with rc
+misleadingly 0; resumed with checkpoint/resume + RLIMIT bump via the sk2 orchestrator (runs after
+the hover session finishes; purged hover cert runs after that). The 31 completed control evals
+are preserved and the session boundary is disclosed (randomized order makes it orthogonal to arm).
 - NOT YET CANONICAL. Void readings (never quote): GEPA .6956 (Levenshtein-broken era + idle box);
   all pre-2026-07-24 numbers; topdraw +.058 (draw #86 was test-selected, F4).
 - Pre-registered decision (committed to git BEFORE data, commit 45e5137): Phase 3 Δ of draw #88

@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import resource
 import time
 from pathlib import Path
 
@@ -42,6 +43,16 @@ import dspy
 import numpy as np
 
 import paperexact_arms as px
+
+# fd hardening + resume support added 2026-07-25 after the first run died at eval 31/90 with
+# OSError 24 (Too many open files) — litellm/http connections leak over long multi-eval runs.
+# The script checkpoints results after every eval and all randomization is seed-deterministic,
+# so a rerun skips completed work exactly.
+try:
+    _soft, _hard = resource.getrlimit(resource.RLIMIT_NOFILE)
+    resource.setrlimit(resource.RLIMIT_NOFILE, (min(65536, _hard), _hard))
+except Exception:
+    pass
 
 HERE = Path(__file__).parent
 
@@ -112,6 +123,7 @@ def main():
 
     print(f"[{a.bench}] pool={len(units)} placebo_pool={len(placebo_units)} "
           f"select={len(select_panel)} test={len(test)}", flush=True)
+    prev = json.loads(out_path.read_text()) if out_path.exists() else {}
     result = {"bench": a.bench, "lm_tag": a.lm_tag,
               "max_tokens": a.max_tokens, "include_p": a.include_p}
 
@@ -119,22 +131,26 @@ def main():
     cert = json.loads((bench_dir / "rank_certificate" / "running.json").read_text())
     cert_scores = [s if s is not None else -1 for s in cert["scores"]]
     masks = replay_masks(len(units), len(cert_scores), a.include_p, a.cert_seed)
-    top_idx = list(np.argsort(cert_scores)[::-1][:a.top_k_reselect])
-    print(f"PHASE 1 re-selection: top-{a.top_k_reselect} test draws = "
-          f"{[(int(i), round(cert_scores[i], 4)) for i in top_idx]}", flush=True)
-
-    reselect = []
-    for i in top_idx:
-        clauses = [u[1] for u, m in zip(units, masks[i]) if m]
-        s = px.evaluate_cand(program, build(clauses), select_panel, metric, log_path,
-                             f"reselect_draw_{i}")
-        reselect.append({"draw": int(i), "n_units": len(clauses),
-                         "test_score_at_selection": cert_scores[i], "select_score": s})
-        print(f"  draw {i}: select={s:.4f} (test-at-selection {cert_scores[i]:.4f})", flush=True)
-    best = max(reselect, key=lambda r: r["select_score"] if r["select_score"] is not None else -1)
-    result["phase1_reselect"] = {"candidates": reselect, "promoted_draw": best["draw"],
-                                 "note": "promoted by SELECT panel; test never used for selection"}
-    print(f"  -> promoted draw #{best['draw']} on select ({best['select_score']:.4f})", flush=True)
+    if prev.get("phase1_reselect"):
+        result["phase1_reselect"] = prev["phase1_reselect"]
+        best = {"draw": prev["phase1_reselect"]["promoted_draw"]}
+        print(f"PHASE 1 resumed from checkpoint: promoted draw #{best['draw']}", flush=True)
+    else:
+        top_idx = list(np.argsort(cert_scores)[::-1][:a.top_k_reselect])
+        print(f"PHASE 1 re-selection: top-{a.top_k_reselect} test draws = "
+              f"{[(int(i), round(cert_scores[i], 4)) for i in top_idx]}", flush=True)
+        reselect = []
+        for i in top_idx:
+            clauses = [u[1] for u, m in zip(units, masks[i]) if m]
+            s = px.evaluate_cand(program, build(clauses), select_panel, metric, log_path,
+                                 f"reselect_draw_{i}")
+            reselect.append({"draw": int(i), "n_units": len(clauses),
+                             "test_score_at_selection": cert_scores[i], "select_score": s})
+            print(f"  draw {i}: select={s:.4f} (test-at-selection {cert_scores[i]:.4f})", flush=True)
+        best = max(reselect, key=lambda r: r["select_score"] if r["select_score"] is not None else -1)
+        result["phase1_reselect"] = {"candidates": reselect, "promoted_draw": best["draw"],
+                                     "note": "promoted by SELECT panel; test never used for selection"}
+        print(f"  -> promoted draw #{best['draw']} on select ({best['select_score']:.4f})", flush=True)
     out_path.write_text(json.dumps(result, indent=1))
 
     # ---------------- PHASE 2: interleaved real / placebo / init ----------------
@@ -151,10 +167,17 @@ def main():
     for j in range(a.n_init_replicates):
         jobs.append(("init", j, []))
     order = rng.permutation(len(jobs))          # session drift now orthogonal to arm
-    print(f"PHASE 2: {len(jobs)} interleaved evals in randomized order", flush=True)
+    done = {r["order_pos"]: r for r in prev.get("phase2_controls", [])}
+    print(f"PHASE 2: {len(jobs)} interleaved evals in randomized order "
+          f"({len(done)} resumed from checkpoint)", flush=True)
+    # RESUME NOTE: completed positions keep their original-session scores; the remainder runs in
+    # a new session. Because arm assignment is randomized w.r.t. position, a session boundary is
+    # orthogonal to arm — disclose it, but it does not bias the real-vs-placebo-vs-init contrast.
 
-    recs = []
+    recs = [done[p] for p in sorted(done)]
     for pos, ji in enumerate(order):
+        if pos in done:
+            continue
         arm, j, clauses = jobs[int(ji)]
         s = px.evaluate_cand(program, build(clauses), test, metric, log_path,
                              f"ctrl_{arm}_{j}")
