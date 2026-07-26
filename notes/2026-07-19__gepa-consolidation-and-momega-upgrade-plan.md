@@ -2627,3 +2627,21 @@ reviewer can name is worse than a run one. Queued after the purged hover certifi
 - Hover's mechanism-absence defense: report the hover session's truncation-warning count (expected
   ~0; hover outputs are short labels) — "the demonstrated instability channel requires truncation
   exposure; hover has none."
+
+## HB103b (2026-07-26) — ★ AIME STABILIZATION PLAN (user directive: "just get it stabilized"; committed BEFORE the 24k result is read — process confirmed still running, output not inspected)
+
+The 8k regime is unstable BECAUSE the instrument dominates there: ~40% of GEPA's answers truncate,
+and truncation exposure varies with serving config and interacts with each prompt's reasoning
+length. The fix is not more 8k replications — it is measuring where the mechanism is absent.
+
+**Pre-registered rule for aime's canonical cell:**
+1. The canonical aime number = the **24k paired both-arms** measurement (in flight, sk1 pid 436036),
+   **replicated once** in a second fresh-server session at 24k.
+2. If the two 24k paired deltas agree in sign and the pooled paired bootstrap gives P<.05 → aime is
+   **stabilized at the 24k value** (win, tie, or loss — whatever it is), reported as the
+   instrument-clean column, with the 8k instability reported as the third protocol exhibit.
+3. If the two 24k sessions ALSO disagree on the delta → aime is reported as measurement-unstable,
+   full stop, and no aime performance claim of any kind appears in the paper.
+4. The 8k numbers are never again quoted as performance; they are exhibit material only.
+This supersedes the now-moot HB100 conjunction rule (dead via the 8k replication failure) with a
+single convergent path instead of an open-ended one.
