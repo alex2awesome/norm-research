@@ -3026,3 +3026,17 @@ Analysis 3 (aime per-item truncation decomposition): NOT executable from existin
 (truncation warnings are not item-attributed in the logs) — dropped, per HB110 no new runs.
 Analysis 6 (thin/thick judge classification of all pools): optional, GLM-only; queued behind
 writing.
+
+## HB115 (2026-07-26) — full quiescence; re-mining root cause = z.ai balance exhausted
+
+- **Re-mining v2 (and hover's earlier 0×3) root-caused: z.ai error 1113 "Insufficient balance"**
+  — the sk2 key (alexander-spangher) is drained, as the sk1 key was days ago. Every GLM
+  suggestion call failed through the patient retry stack → 0-unit replicates on all benches.
+  Not a code failure; the cache=False change was correct. Capture-recapture is out-of-scope for
+  submission (HB114), so no impact — but any future mining or the optional thin/thick judge
+  pass (analysis 6) needs a z.ai top-up or the alternate key. Empty replicate files left in
+  pools/remine/ labeled by their summary (S=0) — self-documenting, nothing quotable.
+- **sk3 GPU0's idle grid server killed by PID** (775490 + EngineCore); all sk3 GPUs now clear of
+  our processes. sk1/sk2 verified quiet. **The campaign is fully quiescent: zero running jobs,
+  zero open experimental questions.** Remaining work is writing (advisor pass 7 roadmap) +
+  optional post-submission items (shuffled arm, re-mining after top-up).
