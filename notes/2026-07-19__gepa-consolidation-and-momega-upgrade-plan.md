@@ -2693,3 +2693,42 @@ need no exchangeability, declared-generator tails are certifiable exactly, (iii)
 paragraph that PLAYS DOWN GEPA-derivation with measured numbers: LLM suggestion supplies roughly
 half of all units (hover 192/340, hotpot 120/144, ifbench 144/320), trajectories the rest, so
 optimizer-trajectory mining is one sampling technique among several, not a precondition.
+
+## HB105 (2026-07-26) — certifiability groundwork: UCB machinery computed, rarity-value answered, re-mining launched (and the cache strikes a THIRD time)
+
+**Why pools were frozen (user asked):** deliberate at the time — freezing made the SEARCH
+reproducible across staircase rungs and removed the flaky z.ai mining dependency from GPU runs
+(freeze-before-eval discipline). Right for search comparability; silently fatal for
+capture-recapture, because a consumed pool is the same capture repeated, not a recapture. It is
+NOT the source of the score pathologies (those were serving-config/session effects); it is the
+reason certifiability could not be computed on hover/hotpot/aime.
+
+**UCB machinery — derived and computed on ifbench (the one bench with genuine re-mining):**
+- Chao1 point estimate N̂ = S + f1²/(2f2) = 541; classical variance + Chao (1987) log-normal CI:
+  **95% CI [422, 729] → unseen-count UCB ≈ 509** (vs 220 observed).
+- Good-Turing missing probability mass: P(next mined unit is novel) = f1/n = **.475**, one-sided
+  95% UCB (McAllester–Schapire-style concentration, +√(2ln(1/δ)/n)) = **.612**. Distribution-free;
+  needs exchangeable unit-draws, which declared re-mining replicates provide.
+- ε̂_UCB assembly (design): UCB(unseen count) × upper quantile of singleton marginal values, or
+  extrapolate the concave value curve to the CI-upper endpoint (the Fig-1 combined plot).
+
+**★ Rarity-vs-value regression (user directive) — rare units are worth MORE, not less.**
+ifbench (only bench with frequency variation): slope −.058 per capture, **r = −.55**; mean
+marginal by capture count: singletons **+.028**, doubletons **+.032**, tripletons **−.114**.
+Direction = "rarely proposed because NOVEL", not "because weak". Consequence: pricing unseen
+units at the singleton mean is NOT automatically conservative for an upper bound — another
+reason the UCB must use an upper quantile. **Confound to disclose:** capture count correlates
+with WHICH run measured the delta (tripletons include the earliest, worst-session run's
+readings); re-mined pools + fresh marginal measurement will de-confound.
+
+**★★ THE CACHE STRIKES A THIRD TIME (F3c).** First K=3 re-mining run completed in 45 seconds
+with all three replicates BYTE-IDENTICAL per bench (md5-verified) — dspy's response cache served
+replicates 1-2 (and possibly 0) from disk. A replicate that can be served from cache is not a
+capture. Quarantined as pools/remine_CACHED_IDENTICAL_20260726/. Relaunched with an explicit
+cache=False reflection LM (sk2 pid 1366186); v2 is taking real API time (>10 min/replicate),
+which is what genuine mining looks like. F3 has now defeated: k-pass averaging, mining
+replicates — and pupa's k5. Rule: **any stochastic replicate anywhere in this stack must
+construct its LM with cache=False and prove non-identity (hash check) before use.**
+
+**Paper:** Fig 1 v4 per user iteration (s_i inside circles; vertical p^i→m^i stack with
+improving colorings; pool + unseen-mass chip; single combined Good-Turing/Chao-CI/value plot).
