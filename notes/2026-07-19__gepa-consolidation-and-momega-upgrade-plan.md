@@ -2732,3 +2732,43 @@ construct its LM with cache=False and prove non-identity (hash check) before use
 
 **Paper:** Fig 1 v4 per user iteration (s_i inside circles; vertical p^i→m^i stack with
 improving colorings; pool + unseen-mass chip; single combined Good-Turing/Chao-CI/value plot).
+
+## HB106 (2026-07-26) — ★★★ LIVEBENCH P0 VERDICT (HB91 applied mechanically): the comparison WINS, the content claim is FALSIFIED, the 120/120 claim is DEAD
+
+All three phases complete (one session; fd-crash resumed per HB-F6; results read only after completion).
+
+**Phase 1/3 — re-selection CONFIRMS the comparison.** Select-promoted draw #88 (chosen on the
+held-out select panel, never by test) vs GEPA official, same session, k3:
+**GEPA .5548 vs draw88 .6470, Δ=+.0923, W35-L13-T78, paired bootstrap P(Δ≤0)=.0001** (n=126).
+Meets the pre-registered CONFIRM cell (Δ≥.030 ∧ P<.05).
+
+**Phase 2 — the placebo FALSIFIES the content claim.** 40 real draws (livebench's own mined
+units) vs 40 placebo draws (hover's clauses — length/count-matched, content-irrelevant) vs 10
+init replicates, randomized interleaved:
+| arm | n | mean | sd | min | max |
+|---|---|---|---|---|---|
+| real (own units) | 40 | .7055 | **.100** | .362 | .777 |
+| placebo (foreign clauses) | 40 | **.7342** | .031 | .621 | .773 |
+| GEPA init replicates | 10 | .6213 | .033 | .578 | .706 |
+**Placebo ≥ real** (−.029, rank-sum z=−1.04, p=.30 n.s.) and both ≫ init. This is the
+pre-registered FALSIFIES cell, a fortiori: content-free foreign clauses reproduce (numerically
+exceed) the entire gain. Note also real-sd (.100) ≫ placebo-sd (.031) with real-min .36 —
+livebench's own mined content can HURT badly; padding is uniformly helpful.
+
+**Kill switch FIRES:** init-replicate max (.7055) sits AT the real-draw mean → the "120/120
+random recombinations beat GEPA" claim is DEAD, per the unconditional pre-registered rule.
+
+**Pre-registered sentence (verbatim consequence):** the livebench story is rewritten as a
+METRIC-PATHOLOGY finding — under zero-on-parse/abstention scoring, prompt bulk of ANY content
+suppresses the abstain→zero mode and lifts scores ~+.09-.11; the mechanism is structural, not
+mined content. **livebench does NOT count in W.** Headline branch (c) applies for its clause:
+we own the pathology as a finding.
+
+**★ CONTINGENCY HB103#1 FIRES (pre-registered): the identical placebo grid runs on HOTPOT**, and
+the paper's content claim rests on that result. If hotpot's +.220 survives its placebo, the
+pool-content thesis stands on the flagship cell; if hotpot's gain is also reproduced by foreign
+clauses, the thesis itself must be rewritten. Launching on sk3 GPU7.
+
+Also: hover K=3 re-mining returned 0 units ×3 (mining failure to investigate — GLM refusal or
+parse; ifbench/aime/hotpot replicates TBD-check); purged hover cert running on sk2; sk1
+unreachable again at poll time (aime 24k sessions unread).
