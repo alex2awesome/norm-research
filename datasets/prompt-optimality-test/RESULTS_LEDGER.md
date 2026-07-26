@@ -100,7 +100,15 @@ nothing until the paired table lands.
   official, GEPA+Merge, unitrecomb_stair, AND unitrecomb_stair_ablated (clause removed) in ONE session;
   (b) purged-pool certificate (164→160) runs after. hover loads ONLY on sk2 (datasets version).
 
-### livebench — PENDING (P0 controls under the HB91 pre-registration)
+### livebench — COMPARISON-CONFIRMED / CONTENT-FALSIFIED (HB106, final; excluded from W)
+**LOCKED: draw #88 beats GEPA +.0923 (P=.0001, same-session k3, select-panel-provenanced) — but
+the foreign-content control reproduces the entire gain (placebo .7342 ≥ real .7055 n.s.; init
+.6213), the 120/120 claim is DEAD (kill switch: init max = real mean), and livebench is a
+metric-pathology exhibit, not a content win.** Mechanism sentence gated on the per-item
+zero-rate decomposition (HB107b); third arm (shuffled text) mandated before submission.
+Artifacts: runs/reselect_placebo_livebench_Qwen3-8B.json (sk2), HB106.
+
+### livebench — superseded pre-registration state (kept for the record)
 **LOCKED so far: (a) the rank certificate P(fresh > .7914) ≤ .0083 (protocol-relative, per-pool);
 (b) the reachability cap .9048; (c) draw #88 as the candidate of record (select-promoted, .7869
 on the held-out select panel).** Phase 2/3 crashed at 31/90 on fd exhaustion (F6) with rc

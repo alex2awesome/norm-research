@@ -2772,3 +2772,61 @@ clauses, the thesis itself must be rewritten. Launching on sk3 GPU7.
 Also: hover K=3 re-mining returned 0 units ×3 (mining failure to investigate — GLM refusal or
 parse; ifbench/aime/hotpot replicates TBD-check); purged hover cert running on sk2; sk1
 unreachable again at poll time (aime 24k sessions unread).
+
+## HB107 (2026-07-26) — ★ BINDING PRE-REGISTRATION: hotpot placebo interpretation grid (advisor pass 6; committed while the grid runs, results UNREAD)
+
+Definitions: R = real-draw mean (hotpot's own 68-unit pool, p=.5, n=40); P = foreign-content-draw
+mean (livebench clauses, count-matched, n=40); I = init-replicate mean (n=10). Content share
+**θ = (R−P)/(R−I)**. Primary inference: rank-sum real-vs-placebo. Power: even at worst-case sd
+.100, SE of mean difference ≈ .017 at 40/40, so the +.050 bar is ~3 SE.
+
+| cell | rule | consequence |
+|---|---|---|
+| VOID/SELECTION | R−I < +.05 | grid cannot adjudicate; the +.220 cell SURVIVES (it is a selected-candidate paired comparison, not a draw mean); content claim retreats to "the pool contains the value; selection extracts it" (marginals-only support); NO re-roll |
+| **CONFIRMS** | R−I ≥ +.05 ∧ R−P ≥ +.050 with p<.05 ∧ θ ≥ .5 | pool-content thesis stands on the flagship; abstract keeps pool-not-search with "audited by placebo control"; livebench owned as the pathology exhibit |
+| AMBIGUOUS | R−P ≥ +.020 with p<.05 ∧ θ < .5 | honest split "X structural, Y content"; thesis softened: content adds measurably but structure is the larger term |
+| **FALSIFIES** | P within .020 of R (or p ≥ .05) while P−I ≥ +.05 | content thesis dead on both probed benches; ALL M_ω-vs-GEPA comparisons survive as comparisons; the paper becomes the methodology/pathology paper + the striking negative "GEPA's search fails to beat arbitrary foreign text"; pool-content clause DROPPED not softened; title's articulation framing reviewed |
+
+**Advisor's declared expectation (recorded so no escape hatch can be invented later):** CONFIRM
+with θ ≥ .7 — EM over short answers has no abstain→zero bulk channel; +.220 is 2× the largest
+structural artifact seen anywhere; hotpot's pool is 0/68 flagged. If foreign clauses reproduce
+>half the hotpot gain, something instrument-shaped is likely — **but the cell verdict binds
+regardless**; the per-item decomposition may EXPLAIN a FALSIFIES outcome, never overturn it.
+
+**One permitted follow-up** (only if AMBIGUOUS or FALSIFIES): one session re-running the full
+grid with a shuffled-text arm added. If CONFIRM: no hotpot follow-up at all.
+
+## HB107b — advisor pass 6, other rulings (all adopted)
+
+- **Livebench mechanism sentence is GATED.** Phase 2 proves content-SOURCE-INDEPENDENCE only.
+  "Prompt bulk suppresses abstention" may not print until the CPU per-item decomposition shows
+  the +.11 concentrates on 0→nonzero conversions. Rivals: H1 bulk per se / H2 coherent
+  instruction transfer (hover clauses = good generic advice) / H3 format-length interaction.
+- **Placebo RENAMED "foreign-content control"** everywhere — hover clauses are coherent generic
+  instructions, not inert text; the falsification inference survives the rename, but HB106's
+  "prompt bulk of ANY content" overclaims and is corrected to source-independence.
+- **Third arm MANDATED before submission (not a footnote):** word-shuffled versions of the SAME
+  hover clauses (token/vocab-matched, syntax destroyed — NOT lorem ipsum), one fresh session of
+  shuffled+foreign+init (~20/20/10; the real arm is NOT re-run — real-vs-foreign is settled and
+  must not be re-litigated). Pre-registered readout: |shuffled−foreign| ≤ .02 → bulk per se;
+  shuffled within .02 of init → coherent-instruction transfer; intermediate → both channels.
+  Cache off; hash-check the shuffles (F3c).
+- **"Mined content adds risk, not value"** — livebench real-draw sd .100 vs placebo .031, real
+  min .362 BELOW init min .578: own-mined draws are zero-mean with a severe harmful tail while
+  foreign padding is a uniform level shift. Stronger and truer than "content is inert".
+- **Purged hover certificate: KEEP** (ablation cleaned the candidate; the certificate is a
+  pool-level object; headline promises leakage-audited certificates).
+- **Livebench rank certificate: KEEP, RE-SCOPED** into the pathology section as the worked
+  example of protocol-relativity: P(fresh>.7914)≤.0083 remains exactly true over a class whose
+  gains are structural — the vacuity theorem made concrete. Add: certificates are
+  mechanism-agnostic.
+- **Newly pointless:** further livebench real-vs-foreign arms; the compiled-candidate livebench
+  follow-up (its cell didn't occur); the flagged-unit conditional-draw readout on livebench;
+  best-of-N-draws as pool-value evidence on livebench (descriptive row only); anything downstream
+  of "120/120".
+- Hover re-mining 0×3: investigate cheaply (raw GLM responses — refusal or parse regression);
+  NOT critical path; fallback = certifiability on ifbench alone with frozen-pool benches labeled
+  degenerate-by-design (HB104).
+- Critical path: hotpot grid → hover stability pair → livebench third arm + zero-rate
+  decomposition → aime 24k (sk1 still unreachable) → writing with both abstract branches
+  verbatim-ready before the hotpot result is read.
