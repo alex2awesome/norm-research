@@ -2871,3 +2871,17 @@ Artifacts: runs_paperexact/hover/Qwen3-8B/{official_merge_gepamerge,unitrecomb_s
 
 W = 2, both now airtight: hotpot +.220 (P<1e-13; placebo grid mid-run) and hover +.036..+.051
 (P=.0086/.0009, delta-stable). hotpot foreign-content grid at 26/90 (~4h to the thesis verdict).
+
+## HB110 (2026-07-26) — user directive: stability program CLOSED
+
+Per user challenge ("how many times have you run aime?" — answer: 8, of which the last 2-3 were
+polishing a footnote): **the stability program is DONE.** Rules now in force:
+1. aime: session 1 (24k) may finish; **session 2 is CANCELLED** (kill waiter pid 3193668 when sk1
+   becomes reachable). aime ships as *"directionally positive; delta not stable across serving
+   configurations; excluded from W."* No further aime measurement of ANY kind.
+2. No new re-measurement anywhere. Running tails only: hotpot placebo grid (the thesis gate) and
+   aime 24k s1. Hover passed its one stability pair (HB109) — done.
+3. The stability work's actual products stand: pupa/ifbench artifact detection, the truncation/
+   serving-config mechanism, hover's fortification. The waste was runs 8-9 on a cell the advisor
+   had already ruled out of W. Lesson recorded: "stabilized" = classified-and-closed, not
+   measured-until-convergence.
