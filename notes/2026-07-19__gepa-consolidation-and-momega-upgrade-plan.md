@@ -2645,3 +2645,51 @@ length. The fix is not more 8k replications — it is measuring where the mechan
 4. The 8k numbers are never again quoted as performance; they are exhibit material only.
 This supersedes the now-moot HB100 conjunction rule (dead via the 8k replication failure) with a
 single convergent path instead of an open-ended one.
+
+## HB104 (2026-07-26) — ★ CAN THE POOL ACTUALLY CERTIFY? Computed. Two blocking issues, both fixable.
+
+Ran capture-recapture over every mining run that recorded a unit list (CPU only, no GPU):
+
+| bench | mining runs | distinct units S | f1 (singletons) | f2 (doubletons) | Chao1 N̂ | implied unseen |
+|---|---|---|---|---|---|---|
+| hover | 3 | 161 | **0** | 149 | 161.0 | **0** (degenerate) |
+| hotpot | 3 | 68 | **0** | 60 | 68.0 | **0** (degenerate) |
+| aime | 2 | 48 | **0** | 48 | 48.0 | **0** (degenerate) |
+| ifbench | 3 | 220 | 152 | 36 | **540.9** | **~321** |
+
+**★ ISSUE 1 — most of our "independent" mining runs are not recaptures at all.** hover/hotpot/aime
+show f1=0 because those runs CONSUMED A FROZEN POOL (`--pool-file`) rather than re-mining: the same
+units appear in every run by construction, so every unit is a doubleton/tripleton and Chao1
+collapses to S. That is the identical pathology that killed EVT — the estimator is fine, the
+sampling is not independent. **ifbench is the one bench where mining genuinely re-ran** (32 / 128 /
+160 units from three different mining passes), and there capture-recapture DOES produce a number:
+N̂≈541 against 220 observed, i.e. ~60% of the unit space unsurfaced. Caveat: f1≫f2 (152 vs 36)
+makes that estimate unstable and heavily heterogeneity-inflated.
+→ **FIX (cheap, no GPU beyond mining): freeze the miner and re-run it K≥3 times with independent
+seeds per bench**, then capture-recapture is valid for THAT declared miner. This is the same
+"specify the sampling, don't strengthen the estimator" move that produced the rank certificate.
+
+**★ ISSUE 2 — the bound's conservativeness runs the WRONG WAY, and this must not reach the paper
+unfixed.** Chao1 is a *lower* bound on richness. Fewer estimated unseen units ⇒ smaller ε̂ ⇒
+**B̂ = achieved + ε̂ is too LOW ⇒ the "ceiling" can be exceeded by a real prompt.** For an upper
+bound we need an UPPER confidence limit on missing mass (upper end of the Chao1 CI, or a
+Chao–Lee coverage-corrected estimator) AND an upper quantile — not the mean — of the unseen
+units' value distribution. Pricing note: unseen units are by construction the rarely-proposed
+ones; whether they are worth less (rarely proposed because weak) or more (rarely proposed because
+novel) is an EMPIRICAL question we can answer from data in hand — regress per-unit marginal delta
+on capture frequency. If value declines with rarity, pricing unseen units at the singleton rate is
+defensible and mildly conservative.
+
+**Consequence for the abstract's "upper bound" language:** as currently computed it is an
+*estimate*, not a bound, in the direction that matters. Either (a) switch to upper confidence
+limits and call it a bound, or (b) call it an estimated ceiling and reserve "bound"/"certificate"
+for the two objects that genuinely are one (metric-reachability cap; rank certificate). Decision
+owed before the abstract is finalized.
+
+**Paper edit made this pass:** new `\section{Background: what makes an exploration process
+measurable}` containing (i) the GEPA-vs-ε-certifiability contrast (user's framing, verbatim in
+substance), (ii) "what survives non-i.i.d. sampling" — declare-the-sampler, one-sided statements
+need no exchangeability, declared-generator tails are certifiable exactly, (iii) a provenance
+paragraph that PLAYS DOWN GEPA-derivation with measured numbers: LLM suggestion supplies roughly
+half of all units (hover 192/340, hotpot 120/144, ifbench 144/320), trajectories the rest, so
+optimizer-trajectory mining is one sampling technique among several, not a precondition.
