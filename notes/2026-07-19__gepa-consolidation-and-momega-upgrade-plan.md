@@ -2885,3 +2885,46 @@ polishing a footnote): **the stability program is DONE.** Rules now in force:
    serving-config mechanism, hover's fortification. The waste was runs 8-9 on a cell the advisor
    had already ruled out of W. Lesson recorded: "stabilized" = classified-and-closed, not
    measured-until-convergence.
+
+## HB111 (2026-07-26) — ★★★ EXPANSION PASS (user directive): why the wins win
+
+**HOTPOT (+.220): the winning candidate decomposed.** 31/68 pool units chosen; chosen mean
+marginal **+.0445** vs unchosen **−.0114** — the greedy gate genuinely discriminates. The
+composition has a clean two-tier structure:
+- **Top tier (marginals +.09..+.16, the top 6 units): ANSWER-FORMAT DISCIPLINE** — "extract only
+  the exact entity", "just the person's name", "strict exact-string match, stripping articles",
+  "no conversational filler". EM scoring rewards exact answers; the single most valuable
+  articulable content on hotpot is output-shape control.
+- **Mid tier (+.02..+.09): MULTI-HOP STRATEGY** — entity-dependency DAG, bridge-query
+  formulation ("query that seeks the missing second hop"), evidence discipline ("rely
+  exclusively on the provided summaries"), fact-checker persona.
+- **Provenance: 25/31 chosen units are LLM-SUGGESTED, only 6 from GEPA trajectories** — on the
+  flagship bench, the pool's value is mostly NOT GEPA's discoveries. Strengthens the
+  provenance-independence claim (HB104) with outcome-level evidence.
+
+**HOVER: what selection adds over the pool.** 61/164 chosen (mean marginal +.0216 vs −.0098).
+Top units are **retrieval STRATEGY, not format**: synonym/alias/acronym query expansion,
+extract-2-3-unresolved-keywords, confirmed-vs-missing delineation, pivot broad→specific.
+Source mix balanced (27 llm / 32 trajectory / 2 xlm) — hover's trajectories DID matter, unlike
+hotpot. Within the cert session: init .4867 → random-draw mean .5425 (**pool effect ≈ +.056**)
+→ greedy candidate ≈ 84-90th percentile of draws (**selection effect ≈ +.02**; cross-session
+caveat on the candidate's level). Rough split: **~70% pool, ~30% selection.**
+
+**LIVEBENCH: the mechanism gate (HB107b) RESOLVES — and the abstention story does NOT survive.**
+Zero-rates: init .282 → placebo .177 → real .201. But the gain decomposition: items with init≈0
+(16/126) carry only **22%** of the +.106 lift; **78% comes from partial-credit items** — the
+foreign clauses mostly improve Levenshtein similarity on items that already scored, not
+0→nonzero conversion. Per the gate: **"prompt bulk suppresses abstention" may NOT print as the
+mechanism.** The printable sentence: the lift is content-source-independent, reduces the
+zero-rate .28→.18 (≈22% of the gain), and mostly improves partial-credit similarity (≈78%) —
+consistent with the format/length-interaction channel (H3). The shuffled-text arm remains the
+H1-vs-H2 discriminator.
+
+**★ Emerging taxonomy worth a paper table (bridges the Daston thin/thick framing):** chosen
+units classify cleanly into (a) FORMAT/output-shape rules (thin, mechanical — dominate hotpot's
+top tier, are livebench's entire pathological lift), (b) STRATEGY rules (thick, judgment-laden —
+dominate hover: query reformulation, pivoting), (c) EVIDENCE-DISCIPLINE rules (grounding,
+no-outside-knowledge). Different metrics reward different rule types: EM rewards thin rules
+genuinely, zero-on-parse rewards them pathologically, multi-hop retrieval rewards thick ones.
+This is "prompt-code isomorphism shows thin/thick rule differences" (the abstract's closing
+claim) with data already behind it.
