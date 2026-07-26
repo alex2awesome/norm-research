@@ -2593,3 +2593,37 @@ failure at 8k cannot be overridden by a different-config win.
 **Scoreboard: hotpot W (+.220), hover W (+.051 clean), aime NOT CONFIRMED, ifbench NOT CONFIRMED,
 pupa TIE, livebench PENDING (P0 resumed and running — orchestrator working as designed after the
 fd crash).** "Reflective search never beats recombination" still holds in every settled cell.
+
+## HB103 (2026-07-26) — ★ TWO PRE-REGISTRATIONS (committed BEFORE livebench P0 is read; advisor pass 5)
+
+**(1) Hotpot-placebo contingency.** IF livebench Phase 2 lands in the FALSIFIES cell of HB91
+(placebo within .010 of real while both beat init), THEN we run the IDENTICAL placebo grid on
+hotpot (40 real draws from a hotpot-mined pool vs 40 length-matched foreign-content placebo draws
+vs 10 init replicates, randomized interleaved, one session), and the paper's content claim rests
+on THAT result. Declared now so it is a control, not a post-hoc rescue. Cost zero unless the (c)
+branch occurs.
+
+**(2) Hover second-session stability pair.** The aime exhibit demonstrates cross-session delta
+instability of .087 — larger than hover's locked +.051 margin — so hover must earn the sentence
+aime failed to earn. Rule, declared before launch: rerun the 2-arm pair (unitrecomb_stair_ablated
+vs official_merge_gepamerge) on sk2 in a FRESH server session with one config knob moved
+(max_tokens 8000 → 24000, per the one-knob rule). **If the second-session paired delta remains
+positive with P<.05 → hover is CONFIRMED-STABLE. If not → hover takes the aime label ("delta not
+stable across serving environments") and leaves W.** We accept the risk knowingly: an unrun test a
+reviewer can name is worse than a run one. Queued after the purged hover certificate on sk2.
+
+**Also adopted from advisor pass 5:**
+- aime is reported as a **significant session×arm INTERACTION** (Δ of deltas .087, per-session SEs
+  ~.027-.03 → z≈2.1-2.3, p<.05): the arm-symmetric session model is REJECTED, not merely
+  unconfirmed. To be computed exactly from the two rescore jsonls.
+- aime 24k column: even if it shows an M_ω win, it earns AT MOST a footnote — the HB100 conjunction
+  (win at both 8k and 24k) is already dead via the 8k replication failure. No drift back toward W.
+- The protocol-exhibit triad is now graded: pupa (averaging insufficient) → cache (k-passes
+  fictitious) → aime (PAIRING ITSELF insufficient when the metric interacts with response length).
+  aime decomposition (per-arm truncation counts, sk3 vs sk1; does the +.091 concentrate on items
+  where GEPA truncated and M_ω did not?) upgrades it from correlational to mechanistic — CPU-only.
+- Abstract wording: replace "matches or exceeds on every benchmark tested" with **"never
+  significantly worse in any settled comparison"** — same content, immune to the aime objection.
+- Hover's mechanism-absence defense: report the hover session's truncation-warning count (expected
+  ~0; hover outputs are short labels) — "the demonstrated instability channel requires truncation
+  exposure; hover has none."
