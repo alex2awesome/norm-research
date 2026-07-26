@@ -11,11 +11,35 @@ Usage: rescore_k3.py <bench> --lm-tag Qwen3-8B --task-lm openai/Qwen3-8B \
 Appends runs_paperexact/<bench>/<lm-tag>/<run>/rescore_k3.jsonl (phase=rescore_k3).
 """
 import argparse
+import datetime
 import json
+import socket
 
 import dspy
+import requests
 
 import paperexact_arms as px
+
+
+def server_fingerprint(api_base: str) -> dict:
+    """Record WHICH server produced this measurement. Added 2026-07-25 after the aime
+    .53-vs-.35 incident: same code + same candidate + same box + same CLI flags still spanned
+    .18 because the vLLM process behind the port had changed (version / reasoning-parser /
+    context settings). A number without a server fingerprint is not reproducible."""
+    fp = {"api_base": api_base, "host": socket.gethostname(),
+          "utc": datetime.datetime.utcnow().isoformat() + "Z"}
+    root = api_base.rsplit("/v1", 1)[0]
+    try:
+        fp["vllm_version"] = requests.get(root + "/version", timeout=5).json().get("version")
+    except Exception:
+        fp["vllm_version"] = None
+    try:
+        m = requests.get(api_base + "/models", timeout=5).json()["data"][0]
+        fp["served_model"] = m.get("id")
+        fp["max_model_len"] = m.get("max_model_len")
+    except Exception:
+        pass
+    return fp
 
 
 def main():
@@ -41,6 +65,12 @@ def main():
     dspy.configure(lm=lm)
     px.EVAL_THREADS = a.eval_threads
 
+    fp = server_fingerprint(a.api_base)
+    fp["cli"] = {"max_tokens": a.max_tokens, "temperature": a.temperature, "top_p": a.top_p,
+                 "top_k": a.top_k, "passes": a.passes, "cache": False,
+                 "eval_threads": a.eval_threads}
+    print("SERVER FINGERPRINT:", json.dumps(fp), flush=True)
+
     bench, program, metric, _ = px.load_bench(a.bench)
     test = list(bench.test_set)
     print(f"[{a.bench}] test={len(test)} passes={a.passes}", flush=True)
@@ -48,6 +78,9 @@ def main():
         rd = px.HERE / "runs_paperexact" / a.bench / a.lm_tag / run
         res = json.loads((rd / "result.json").read_text())
         cand = res["best_candidate"]
+        # fingerprint row FIRST, so every rescore block in the jsonl is self-describing
+        with open(rd / "rescore_k3.jsonl", "a") as fh:
+            fh.write(json.dumps({"phase": "session_fingerprint", **fp}) + "\n")
         s = px.evaluate_cand(program, cand, test, metric, rd / "rescore_k3.jsonl",
                              "rescore_k3", passes=a.passes)
         print(f"{run}: original best_test={res.get('best_test')}  "
