@@ -2854,3 +2854,20 @@ stability pair started right behind the finished orchestrator (24k, truncation w
 = expected at hover's long CoT? — watch: hover reasoning at 24k still truncating is itself
 notable). sk1 STILL unreachable (banner-exchange timeout; sk1-specific — sk2/sk3 fine); both
 aime 24k sessions remain unread.
+
+## HB109 (2026-07-26) — ★★★ HOVER CONFIRMED-STABLE (HB103#2 rule applied): the delta survives a fresh session AND a config change
+
+Second-session stability pair (fresh server process, vLLM 0.16.0, one knob moved 8k→24k per the
+one-knob rule, fingerprinted, cache off): **GEPA+Merge .5267 vs M_ω-ablated .5622, Δ=+.0356,
+W51-L34-T215, paired bootstrap P=.0086, n=300.**
+
+Per the pre-declared HB103 rule (positive with P<.05) → **hover is CONFIRMED-STABLE.** The two
+paired sessions give deltas **+.051 (8k, session 1)** and **+.036 (24k, session 2)** — same sign,
+same magnitude range, across a serving-config change of the exact kind that flipped aime's delta
+from +.091 to +.004. Hover is now the campaign's most fortified cell: same-session paired ✓,
+leakage-ablated ✓, strongest-clean-comparator ✓, cross-session/config delta-stable ✓.
+Artifacts: runs_paperexact/hover/Qwen3-8B/{official_merge_gepamerge,unitrecomb_stair_ablated}/rescore_k3.jsonl
+(final rows = stability session, fingerprint 2026-07-26T17:46Z).
+
+W = 2, both now airtight: hotpot +.220 (P<1e-13; placebo grid mid-run) and hover +.036..+.051
+(P=.0086/.0009, delta-stable). hotpot foreign-content grid at 26/90 (~4h to the thesis verdict).

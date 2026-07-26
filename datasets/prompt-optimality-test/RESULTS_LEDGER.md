@@ -83,7 +83,12 @@ beating M_ω).
   Artifacts: `runs_paperexact/pupa/Qwen3-8B/{official,unitrecomb_v8failmine}/rescore_k3.jsonl` (sk2, passes=5 rows).
 - Superseded: "M_ω .8938 vs GEPA .8835 win" was cross-session (F1). One-shot rule: no further arms.
 
-### hover — WIN (confirmed 2026-07-26, ablation-clean)
+### hover — WIN, CONFIRMED-STABLE (2026-07-26; passed the cross-session test aime failed)
+**LOCKED addendum: second-session stability pair (fresh server, 24k, vLLM 0.16.0): Merge .5267 vs
+M_ω-ablated .5622, Δ=+.0356, P=.0086 — deltas +.051 (s1, 8k) and +.036 (s2, 24k) agree across a
+serving-config change. Most fortified cell on the board.**
+
+### hover — original win record (2026-07-26, ablation-clean)
 **LOCKED: M_ω-ablated .5656 vs GEPA+Merge .5144 (+.051, P=.0009); full M_ω .5689 (+.054, P=.0004);
 the flagged clause's causal contribution is NULL (+.0033, P=.41).** One session, 4 arms, cache off,
 n=300, sk2 2026-07-26 ~01:00-02:30Z. The ablated candidate is the cell of record (beats the CLEAN
