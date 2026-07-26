@@ -37,7 +37,13 @@ rests on pairing, which F3 does not touch.
 highest-confidence (and where defensible, highest-M_ω) result we build on. Anything not LOCKED
 is explicitly provisional.**
 
-### hotpot — WIN (the flagship cell)
+### hotpot — WIN, CONTENT-AUDITED (2026-07-26: the placebo grid CONFIRMS, θ=1.45)
+**LOCKED addendum: foreign-content control (HB113): real draws .5936 vs foreign-clause draws
+.3326 vs init .4133 — own-pool content carries the entire gain (θ=1.45, z=7.28, p≈3e-13), real
+min .500 > init, and foreign bulk actively HURTS (−.08, tail to .000). The pool-content thesis
+stands on the flagship cell; same foreign clauses that lift livebench +.11 sink hotpot −.08.**
+
+### hotpot — original win record (the flagship cell)
 **LOCKED: M_ω .6333 vs GEPA .4133 (+.220, P=.0000).** Nothing pending can move this cell.
 - **GEPA .4133 vs M_ω .6333, Δ=+.2200, sign W75-L9-T216 p=4.3e-14, bootstrap P(Δ≤0)=.0000, n=300**
 - Provenance: sk3 GPU7, 2026-07-25 21:42–21:47Z, fresh Qwen3-8B server port 8078 (ctx 32768),
