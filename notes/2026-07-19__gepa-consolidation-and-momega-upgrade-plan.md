@@ -2982,3 +2982,47 @@ control on the flagship cell"; livebench stays owned as the pathology exhibit; N
 follow-up runs (CONFIRM ⇒ none permitted). W = 2 (hotpot content-audited + hover
 confirmed-stable), livebench = comparison-win/content-falsified, pupa tie, ifbench directional,
 aime closed.
+
+## HB114 (2026-07-26) — advisor pass 7 adopted + the expansion analyses land
+
+**Rulings adopted:** shuffled-text livebench arm RELEASED (optional, gates nothing; the pathology
+section keeps the hedge verbatim — "we did not discriminate bulk-per-se from coherent-instruction
+transfer"). Bound-vs-ceiling: option (b) — "bound"/"certificate" reserved for the
+metric-reachability cap and rank certificates; capture-recapture = "estimated ceiling",
+appendix-only, ifbench-only. Writing roadmap (9 sections), promote/appendix table, and the 3
+carrying figures (scoreboard table with verdict-label column; the two-bench three-arm
+content-audit symmetry figure; hover pool-anatomy figure) accepted as drafted targets.
+DONE declarations: aime, livebench, hover, hotpot ALL closed — hotpot explicitly "no follow-up
+permitted" (CONFIRM cell rule). K=3 re-mining v2 + hover 0-unit mining failure: out-of-scope for
+submission (capture-recapture ships as caveated appendix).
+
+**★ Analysis 5 — hover truncation exposure (defensive check): 12 warnings (8k session) and 9
+(24k session)** across ~thousands of generations (<0.5%): exposure is negligible AND nonzero in
+both, so the printable defense is the STRONG form: *the hover delta survived a change in
+truncation regime (8k→24k, +.051→+.036)* — not the fragile "no exposure" claim. HB103's drafted
+defense line updated accordingly.
+
+**★★ Analysis 1 — hotpot foreign-draw autopsy: the smoking gun is one clause.**
+`Put your final answer in LaTeX inside a $\boxed{}$` appears in **100% of catastrophic draws
+(≤.10) vs 42% of benign draws (≥.45)** — a livebench thin rule that wraps hotpot's extracted
+entity in LaTeX, guaranteeing an exact-match zero. The two-channel story is confirmed in data:
+format-collision clauses drive the .000 tail; livebench's math-content clauses ride along.
+Conversely the most benign-compatible foreign clause is the 'Answer:' list-format rule (95% of
+benign draws) — a format rule the EM parser happens to survive. Cliff-vs-slope, made literal.
+
+**★ Analysis 2 — the composition story is estimator-robust.** Independent draw-level regression
+(40 real draws, with-vs-without per unit) reproduces HB111's greedy-marginal top tier:
+bridge-query discipline (+.040), person-name/format rules (+.035), constraint re-read (+.032),
+module-role discipline (+.025). Bottom of the list: "output an empty summary if passages are
+irrelevant" = **−.077** — the abstention-style rule is the worst unit in the pool (echoes the
+no-expect-empty doctrine). One-line paper claim: "confirmed by an independent draw-level
+regression."
+
+**★ Analysis 4 — the aime interaction test, exact:** session A (sk3) Δ=+.0911 (se .0296) vs
+session B (sk1) Δ=+.0044 (se .0184) → **arm×session interaction z=2.49, p=.013** — the
+arm-symmetric session model is REJECTED, not merely unconfirmed. This is the number §4 quotes.
+
+Analysis 3 (aime per-item truncation decomposition): NOT executable from existing artifacts
+(truncation warnings are not item-attributed in the logs) — dropped, per HB110 no new runs.
+Analysis 6 (thin/thick judge classification of all pools): optional, GLM-only; queued behind
+writing.

@@ -37,7 +37,7 @@ rests on pairing, which F3 does not touch.
 highest-confidence (and where defensible, highest-M_ω) result we build on. Anything not LOCKED
 is explicitly provisional.**
 
-### hotpot — WIN, CONTENT-AUDITED (2026-07-26: the placebo grid CONFIRMS, θ=1.45)
+### hotpot — WIN, CONTENT-AUDITED, CLOSED (CONFIRM cell ⇒ no follow-up permitted; init replicates were cache-degenerate, effective n=1 — disclosed, verdict unaffected)
 **LOCKED addendum: foreign-content control (HB113): real draws .5936 vs foreign-clause draws
 .3326 vs init .4133 — own-pool content carries the entire gain (θ=1.45, z=7.28, p≈3e-13), real
 min .500 > init, and foreign bulk actively HURTS (−.08, tail to .000). The pool-content thesis
@@ -70,10 +70,9 @@ beating M_ω).
 - Historical readings, all explained (HB100): .5333 = 07-23 stair rerun (overwrote sk1 result.json, F5);
   .3667 = 07-20 run; .5267 = 24k; .3533/.3067/.3000 = 8k. Candidate byte-identical throughout
   (md5 e018f7779184); code byte-identical across boxes.
-- **Decision rule (pre-declared, HB100): aime counts in W only if M_ω wins the PAIRED comparison at
-  BOTH 8k and 24k.** In flight on sk1 (one box, one server, fingerprinted, cache off):
-  8k paired = pid 445184 (`logs/aime_crossbox_sk1.log`; GEPA arm read .3533, M_ω arm running);
-  24k paired auto-queued behind it (pid 436036, `logs/aime_24k_sk1.log`).
+- **CLOSED (HB110/HB112).** All measurement lanes dead (sk1 reboot); the two 24k GEPA passes
+  (.5800 ×2, pass-stable, cache off) are truncation-mechanism evidence only. Arm×session
+  interaction z=2.49, p=.013 (HB114) — the arm-symmetric session model is REJECTED.
 
 ### ifbench — DIRECTIONALLY POSITIVE, NOT CONFIRMED (final; no re-roll)
 **LOCKED: +.0198 (P=.233), reported with the pre-registered label. Closed cell.**
@@ -122,10 +121,7 @@ Artifacts: runs/reselect_placebo_livebench_Qwen3-8B.json (sk2), HB106.
 ### livebench — superseded pre-registration state (kept for the record)
 **LOCKED so far: (a) the rank certificate P(fresh > .7914) ≤ .0083 (protocol-relative, per-pool);
 (b) the reachability cap .9048; (c) draw #88 as the candidate of record (select-promoted, .7869
-on the held-out select panel).** Phase 2/3 crashed at 31/90 on fd exhaustion (F6) with rc
-misleadingly 0; resumed with checkpoint/resume + RLIMIT bump via the sk2 orchestrator (runs after
-the hover session finishes; purged hover cert runs after that). The 31 completed control evals
-are preserved and the session boundary is disclosed (randomized order makes it orthogonal to arm).
+on the held-out select panel).** TERMINAL STATE: P0 complete (HB106), all livebench lanes closed.
 - NOT YET CANONICAL. Void readings (never quote): GEPA .6956 (Levenshtein-broken era + idle box);
   all pre-2026-07-24 numbers; topdraw +.058 (draw #86 was test-selected, F4).
 - Pre-registered decision (committed to git BEFORE data, commit 45e5137): Phase 3 Δ of draw #88
