@@ -2945,3 +2945,40 @@ level split quoted as the truncation exhibit. No paired 24k comparison exists an
 run.
 
 hotpot foreign-content grid: 72/90 — verdict expected within the hour.
+
+## HB113 (2026-07-26) — ★★★ HOTPOT PLACEBO GRID: **CONFIRMS THE CONTENT CLAIM** (HB107 applied mechanically)
+
+One randomized session, sk3 GPU0, 90/90 evals, fingerprinted:
+| arm | n | mean | sd | min | max |
+|---|---|---|---|---|---|
+| real (hotpot's own 68-unit pool, p=.5) | 40 | **.5936** | .049 | .500 | .663 |
+| foreign-content control (livebench clauses, count-matched) | 40 | **.3326** | .203 | **.000** | .527 |
+| GEPA init replicates | 10 | .4133 | .000 | — | — |
+
+**Grid cells:** R−I = **+.180** (≥ .05 ✓); R−P = **+.261**, rank-sum z = **7.28**, p ≈ 2e-13
+(≥ .050 with p<.05 ✓); **θ = (R−P)/(R−I) = 1.45** (≥ .5 ✓, and > 1 because the placebo lands
+BELOW the init). Separation: real min (.500) > init max (.4133) ✓. **Cell: CONFIRMS.** The
+advisor's declared expectation (CONFIRM, θ ≥ .7) is met and exceeded.
+
+**The result is stronger than confirmation — foreign bulk actively HURTS hotpot**: placebo mean
+sits .08 BELOW the bare init, with a catastrophic tail (min .000 — some foreign draws destroy
+the multi-hop pipeline entirely). Combined with HB106, this yields the paper's sharpest
+symmetry: **the same foreign clauses that lift livebench by +.11 sink hotpot by −.08.** Prompt
+bulk is metric-dependent — it exploits zero-on-parse partial-credit scorers and damages
+exact-match multi-hop pipelines — while OWN-POOL CONTENT is what survives across metrics
+(+.180 draw-level on hotpot; 100% of real draws ≥ .50).
+
+**Disclosure (F3 yet again, contained):** the 10 init replicates read identically (sd = 0.000) —
+the grid's task LM did not disable the dspy cache, and the init arm re-used one completion set.
+Effective init n = 1. This does NOT touch the verdict: (a) the init LEVEL .4133 exactly matches
+the independent same-session HB97 measurement; (b) real and placebo draws are all distinct
+prompts (no cache collisions possible); (c) the decisive contrast is real-vs-placebo (n=40/40,
+z=7.28), which does not involve the init arm. Noted for the methods appendix; grid script
+patched expectation: add cache=False for any future grid.
+
+**Consequences (pre-committed):** the pool-content thesis STANDS on the flagship cell; the
+HB95b/Branch-A abstract keeps the pool-not-search claim with "audited by a foreign-content
+control on the flagship cell"; livebench stays owned as the pathology exhibit; NO hotpot
+follow-up runs (CONFIRM ⇒ none permitted). W = 2 (hotpot content-audited + hover
+confirmed-stable), livebench = comparison-win/content-falsified, pupa tie, ifbench directional,
+aime closed.
