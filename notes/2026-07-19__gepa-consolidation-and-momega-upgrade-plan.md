@@ -3885,3 +3885,49 @@ and its reference.
 | 4 | single-pass init | **DEAD** (HB125, replicated here) |
 | 2 | selection regret | **OPEN** — my noise-scale rebuttal was retracted (HB132b); needs the hindsight rescore of GEPA's explored candidates, which this run dir does NOT retain (only best_candidate is saved), so it requires a fresh GEPA run with candidate logging |
 | 1 | superset construction | **OPEN, and untestable on hotpot** — init ≡ seed there (HB132), so `native` ≡ `seed_units`. **Only HB128 on hover can answer it.** |
+
+## HB137 (2026-07-27) — ★★★ "Degenerate" means CONSTANT-LABEL, not "saturated". I mis-described it.
+
+User asked why 137/272 metrics are degenerate. I had written "already saturated by mined prompts".
+**That was wrong.** Diagnosed properly (`cr3-v12/degeneracy_diagnosis.json`, script
+`/tmp/degen_why.py`; base rate and entropy of each binarized target):
+
+| group | n | base rate (median) | label entropy | majority-class baseline | ~constant (H<0.1 bits) |
+|---|---|---|---|---|---|
+| **degenerate** (best agreement ≥ .999) | 140 | **1.000** | **0.000 bits** | **1.0000** | **136/140** |
+| non-degenerate | 132 | .943 | .314 bits | .9433 | 10/132 |
+
+**The degenerate metrics fire on essentially EVERY item.** Their labels are constant, so a
+constant predictor ("always yes") scores ~100% agreement. Nothing was reconstructed because there
+was nothing to reconstruct. This is a **defect of those metrics as instruments**, not evidence
+that mined prompts saturated them. Correct wording: *"half the bank is label-degenerate — no
+variance to predict — and must be excluded before any reconstruction readout."*
+
+**★ The bigger problem this exposes: the AGREEMENT scale is compressed for the whole bank.**
+Median majority-class baseline over all 272 metrics = **.9933**. Even among the non-degenerate
+132 it is **.9433**. So the raw numbers I reported — achieved .975/.980, ceiling .995 — live
+entirely inside the top ~5% of the scale, where a constant predictor already sits. **Raw agreement
+(and any ceiling stated on it) is not an interpretable readout here and must not be reported bare.**
+
+**★ Baseline-corrected, the reconstruction result SURVIVES and is respectable.** Normalized skill
+`(A − majority)/(1 − majority)`, on the 132 non-degenerate metrics:
+
+| statistic | value |
+|---|---|
+| **median normalized skill** | **0.597** |
+| metrics with skill > 0.5 | 86/132 |
+| metrics with skill < 0.2 | 4/132 |
+| metrics failing to beat a constant predictor | **1/132** |
+
+So the best mined prompt closes ~60% of the gap a constant predictor leaves, on almost every
+metric with real label variance. That is a genuine finding; the raw .975 was not.
+
+**Actions:**
+1. Every unsupervised-side agreement number in the paper gets reported as normalized skill (or
+   with the majority baseline printed alongside). Never bare agreement.
+2. The 140 label-degenerate metrics are **excluded**, and the exclusion is reported as a property
+   of the metric bank, not hidden in a denominator.
+3. HB-series entries that used raw agreement on this bank (ceiling backtest coverage, "median
+   achieved .980 / ceiling .995") are **superseded by this normalization** — the coverage/rank
+   certificate conclusions still hold, since the rank certificate is scale-free and was computed
+   per-metric, but the descriptive agreement medians must be restated.
