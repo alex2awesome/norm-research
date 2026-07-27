@@ -4482,3 +4482,28 @@ executors, 1.24B–72.7B, 5 families) + memory `project_osl_executor_scaling`.
   sigs-column ↔ item-text mapping must be recovered from the bank builder
   (`methods/metric_seam/reconstruction_v2.py` / cells DB) before any rung runs. Items exist in
   frozen_probes only for humor; other 7 tasks need the join.
+
+## HB153 (2026-07-28) — July-7 metrics-scaling data: GLM-FREE and reusable; convergent audit thin
+
+**(1) Reuse verdict (user: can we reuse/audit the old results, even discarding GLM?).**
+- **The core grid never touched GLM: 0 of 1,387 curves contain a GLM executor.** All 14 executors
+  are local (llama 1b/3b/8b/70b, qwen2.5 3–72b, gemma2 9/27b, mistral 7/24b, phi4). GLM appears
+  only in the separate adjudication/step-down layer (hermes_adjudication, mbarglm rungs). So the
+  curves are fully reusable AND fully replicable/extendable today.
+- Curve files store per-metric z[], y[], se[], execs[], fitted verdict, and limit L with CI —
+  everything needed for refits (family-holdout, drop-any-executor) without recompute.
+- **Convergent-validity audit run** (new median-split achieved-MI vs July-7 fitted limit L,
+  matched by metric name): the two lineages sampled mostly DIFFERENT metrics — only ~54/272 bank
+  metrics appear in the curves at all; usable overlap n=17 (cw) and n=17 (humor), rho +.22 / +.06,
+  Fisher-z pooled +.14. **Uninformative at this n, not discordant.** Matching is also truncated
+  (npz names cut at 54 chars — prefix match changed nothing).
+- **Consequence for OSL-M:** the design gains a free companion — for sampled metrics present in
+  the July-7 grid, plot the old local-executor curve beside the new median-split curve; OSL-M
+  becomes the convergent audit the thin name-overlap could not deliver.
+
+**(2) Fig fixes shipped** (user list): Fig 6 — five supervised benches LHS, extrapolation/trend
+lines REMOVED, named+boxed RHS annotations; Fig 7 — the p_unseen RISE was an ordering artifact
+(sequence grouped by framing ⇒ f1/n non-exchangeable); permutation-averaged over 150 orders,
+curves now monotone, caption explains; Fig 4 v5 — pool Ω central with 11 real abbreviated units,
+prose prompt with shaded attachment spans, single admission gate, audit battery, Fig-1-idiom
+flip dots.
