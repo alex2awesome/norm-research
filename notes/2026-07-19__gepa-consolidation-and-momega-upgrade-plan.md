@@ -3977,3 +3977,60 @@ informative here because the first has no variance to predict at tau=.02. This m
 plainly in the paper — it is a definitional choice, not a neutral preprocessing step. Whoever set
 tau=.02 may have had a rationale for an absolute threshold; if one exists it should be recovered
 before the median split is made canonical.
+
+## HB139 (2026-07-27) — ★★★ HB124 4-ARM COMPLETE. Content confirmed; HB132 independently corroborated.
+
+`runs/hb124_controls_hotpot_Qwen3-0.6B.json`. hotpot / Qwen3-0.6B, all four arms in ONE session,
+cache off, count-matched draws, n=40 each. init (k=5) = .25134 — and on hotpot that init **is the
+seed**, byte-identical (HB132).
+
+| arm | construction | mean | above init |
+|---|---|---|---|
+| **native** | true pool clauses | **.2971** | **37/40** |
+| **seed_units** | same clauses appended to the SEED (searched winner removed) | **.2925** | 33/40 |
+| shuffled | same clauses, tokens scrambled (length/format/vocabulary held fixed) | .1965 | 4/40 |
+| foreign | hover's pool, count-matched | .1803 | 1/40 |
+
+| contrast | Δ | 95% CI | P(Δ≤0) | |
+|---|---|---|---|---|
+| native vs **shuffled** | **+.1006** | [+.0855,+.1155] | .0000 | sig |
+| native vs **foreign** | **+.1167** | [+.1011,+.1321] | .0000 | sig |
+| native vs **seed_units** | **+.0046** | [−.0101,+.0194] | .2740 | **n.s.** |
+
+**(1) The content result is now controlled three ways and holds.** Scrambling the tokens of the
+very same clauses — preserving count, bullet format and vocabulary exactly — costs .10 and drops
+performance BELOW init (4/40 above). Foreign clauses cost .12. The gain is semantic, full stop.
+
+**(2) The seed_units null is a CONFIRMATION of HB132, not a test of the superset confound.**
+HB132 established by byte-comparison that GEPA shipped the unmodified seed on hotpot; therefore
+`native` (units → init) and `seed_units` (units → seed) are *the same arm*, and Δ=+.005 n.s. is
+exactly what that predicts. **Two independent methods — a hash comparison of the prompt text and a
+behavioural A/B over 80 scored draws — agree.** That is a genuine internal-consistency win, and it
+is NOT evidence that the pool replaces search. **Only hover can test that** (its init carries real
+searched content, .38→.45), and HB128's foreign arm is still running.
+
+**Practical upshot, stated carefully.** On hotpot at 0.6B, appending a random half of an
+LLM-proposed clause pool **to the bare seed** scores .2925 vs the seed's .25134 — with no
+optimizer in the causal path at any point. Combined with HB131's matched-8B cell (+.186), the
+pool-without-search route is real on this bench. What remains unlicensed is the general claim that
+recombination substitutes for search, because hotpot's search never moved.
+
+## HB140 (2026-07-27) — Table 1: first REAL MIPROv2 cell, and GEPA+Merge fails on ifbench
+
+Post-optuna-fix (HB134), verified 0 ImportErrors after the fix vs 2 before; MIPROv2 ran a genuine
+34-trial optimization on ifbench.
+
+| bench | arm | seed_test | best_test | Δ |
+|---|---|---|---|---|
+| hotpot | GEPA+Merge | .4033 | .4167 | +.0134 |
+| aime | GEPA+Merge | .3000 | .3867 | **+.0867** |
+| **ifbench** | **GEPA+Merge** | .4099 | **.4065** | **−.0034** |
+| **ifbench** | **MIPROv2** | .3963 | **.3946** | **−.0017** |
+
+**On ifbench BOTH strong baselines end up below their own seed.** With HB132 (GEPA official also
+shipped the seed on ifbench) that makes **four independent optimizers — GEPA, GEPA+Merge, MIPROv2,
+and our M_ω (+.020, n.s.) — none of which beats the ifbench seed.** ifbench is not a bench where we
+underperform; it is a bench where prompt optimization does not work at all. That is worth stating
+as a finding rather than an empty row.
+Caveat: these are single-pass `best_test` values and by HB121 are selection statistics; the
+Δ signs above are suggestive only until a same-session k≥5 rescore. Do not print them as W/L.
