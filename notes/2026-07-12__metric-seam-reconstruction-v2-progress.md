@@ -1,9 +1,10 @@
 # Metric-seam reconstruction v2 — technical progress and claim envelope (2026-07-12)
 
 This note records the additive v2 work performed after the independent verification review.
-Historical programs, contracts, and reported outputs remain frozen. The new lane stays on the
-unsupervised reconstruction objective: the old LLM judgement is a frozen reference for
-isomorphism, never a newly supervised external target.
+Historical empirical outputs remain recoverable in the prior freeze/commit; additive corrections
+do not rewrite them. The new lane stays on the unsupervised reconstruction objective: the old LLM
+judgement is a frozen reference for reconstruction agreement, never a newly supervised external
+target. Isomorphism additionally requires construct, input, program, and reference fidelity.
 
 ## 1. Operational thesis
 
@@ -24,14 +25,19 @@ representation, compiler, and budget. It never licenses a claim of tacitness.
 The policy is **isomorphism-first, not isomorphism-only**. Isomorphic substitution is the
 cleanest result. Code that adds valid evidence unavailable to the prompt may instead earn an
 evidence-surface extension. A stronger verifier-dominant constructive extension requires a
-replayable certificate on the exact cases where code and the frozen LLM reference disagree.
-Uncertified disagreement remains reference divergence.
+replayable certificate on the exact cases where code and the frozen LLM reference disagree,
+plus explicit passes for input, executed-program, and reference-instrument fidelity. The typed
+record now rejects a constructive-extension flag unless reference reconstruction actually
+fails under those controls. Uncertified or representation-confounded disagreement remains
+reference divergence.
 
 ## 2. Instrument changes
 
 - `methods/metric_seam/reconstruction_v2.py` now provides typed prompt/code/isomorphism axes,
   orthogonal historical provenance and current pipeline-selection status, joint outcomes, and
-  executable claim permissions. `may_claim_tacitness` is always false.
+  executable claim permissions. Reference reconstruction is now a separate canonical readout;
+  isomorphism requires construct, input, executed-program, and reference-instrument fidelity
+  passes, with missing checks defaulting to unavailable. `may_claim_tacitness` is always false.
 - `battery/blind_reconstruction_v2.py` and `battery/evaluate_blind_v2.py` implement a clean
   compiler/evaluator split. Development sees the contract, unlabeled TRAIN `ctext`, opaque
   aliases, and allowed capabilities; it never sees reference values, residuals, held-out IDs,
@@ -164,8 +170,9 @@ unchanged.
   relation/corpus mismatch, not evidence that the criterion is tacit.
 - Patents a34: on the same oracle-conditioned prior-art evidence surface, the evidence-aware
   hybrid reaches rho 0.745 versus 0.084 with the evidence op nulled (marginal +0.661). This is
-  strong selected-pipeline utility and isomorphic reconstruction conditional on privileged
-  evidence; it is not autonomous prior-art retrieval or pure-code verification.
+  strong selected-pipeline utility and reconstruction agreement conditional on privileged
+  evidence; it is not a full isomorphism certificate, autonomous prior-art retrieval, or
+  pure-code verification.
 - The seven-case technical catalog currently permits five selected-utility claims, two
   canonical code-verifiability claims, zero historical automatic-selection claims, zero
   canonical verifier-dominant disagreement extensions, and zero tacitness claims.
@@ -177,8 +184,9 @@ See `outputs/metric_seam_pilot/technical_replay_v2/REPORT.md`.
 These two runs preserve the experiment's three-axis vocabulary. **Articulability** means a
 prompt/LLM program implementing the articulated relation; **verifiability** means a code program
 executing a scoped relation check; **isomorphism** is the separate comparison of either program
-with the frozen LLM judgement. A code program can therefore be more isomorphic to that reference
-than a prompt program without thereby proving that code is correct on their disagreements.
+with the frozen LLM judgement under additional fidelity checks. A code program can therefore
+have stronger reconstruction agreement with that reference than a prompt program without
+thereby establishing isomorphism or proving that code is correct on their disagreements.
 
 #### Blind Math a216: automatic proposal, construct-fidelity preemption
 
@@ -207,7 +215,7 @@ supported by the artifact ordering and run contents, not represented as a hostil
 sandbox proof. Canonical record:
 `outputs/metric_seam_pilot/reconstruction_v2/blind_math_a216_001/reconstruction_record.json`.
 
-#### Code-review a104: active census, provenance-corrected V3
+#### Code-review a104: active census, channel-corrected V4
 
 This is the **active coding lane**, not the old `f2p_mock/` prototype summarized in Section 3.2.
 The inputs are canonicalized unified PR diffs; although their raw files live under
@@ -215,17 +223,17 @@ The inputs are canonicalized unified PR diffs; although their raw files live und
 test-execution telemetry, or per-PR test outcomes was used. No repository checkout or submitted
 PR test execution occurred.
 
-Three poles were compared on the same 97-item common held-out support:
+Three executable-code poles were compared on the same 97-item common held-out support:
 
-- The frozen prompt-compiled baseline, selected from three prompt programs on TRAIN only,
-  reached rho = 0.5089.
+- The frozen prompt-generated shallow-code baseline, selected from three Claude-generated
+  Python regex/tanh scorers on TRAIN only, reached rho = 0.5089.
 - The pre-existing deep static/AST checker reached rho = 0.6498 (delta = +0.1409,
   `P(gate)=0.5615`, `P(beats)=0.9455`) and passes the current reconstruction gate.
 - The new relation h0 reached rho = 0.6064 (delta = +0.0975, `P(gate)=0.3235`,
   `P(beats)=0.8495`). It is a positive but sub-gate retrospective seed and must not be tuned on
   this held-out readout.
 
-V3 corrects the h0 provenance to `manual_mock_retrospective_seed` with label-unreferenced
+V3 corrected the h0 provenance to `manual_mock_retrospective_seed` with label-unreferenced
 execution. Its evaluator projects `{datapoint_id, ctext}` before scoring and delays loading the
 articulated LLM judgement, but the program was manually authored after label-bearing files
 existed; it was not mechanically label-inaccessible and is not a blind-discovery result. The
@@ -233,60 +241,175 @@ deep checker also predates this h0 process. An independent sanitized-input rerun
 split, all six scorer/profile outputs with zero mismatches, all correlations, and both 2,000-draw
 paired bootstraps; its targeted audit passed 11/11 checks.
 
-This is a useful broadening result: on one active technical criterion, deeper code reconstructs
-the frozen articulated judgement better than the prompt-compiled pole. It is still a
-reconstruction result, not proof that code is substantively correct when the two disagree. The
-static evidence covers source/test presence and balance, AST name correspondence, and assertion
-structure; it does not certify behavioral intent, oracle validity, or test success. A
+V4 corrects the remaining channel taxonomy without changing a number or V3 provenance field.
+All three historical “prompt-compiled” baselines are executable Python programs: prompt
+generation is their authoring provenance, not their runtime channel. The licensed result is
+therefore **within-code-channel program-depth reconstruction**: deeper static/AST code has higher
+agreement with the frozen LLM judgement than TRAIN-selected prompt-generated shallow code. It is
+not a direct prompt-articulability versus code-verifiability comparison, not “code over prompt,”
+and not an isomorphism certificate from rho alone. It also does not prove code substantively
+correct where the programs disagree. The static evidence covers source/test presence and
+balance, AST name correspondence, and assertion structure; it does not certify behavioral
+intent, oracle validity, or test success. A
 repo-composition sensitivity is supportive but explicitly exploratory: on 92 rows from
 repositories with at least two held-out items, within-repository centered-midrank Spearman was
-0.299 for the prompt program, 0.581 for the deep checker, and 0.467 for the retrospective h0.
+0.299 for the shallow program, 0.581 for the deep checker, and 0.467 for the retrospective h0.
 It is neither a new gate nor a tuning result.
 
 No model inference or GPU was used in either continuation run. The a104 comparison nevertheless
 uses a pre-existing model-produced judgement as the frozen reconstruction reference and
-pre-existing model-produced prompt programs; “no inference in this run” does not mean that no
-model artifact was used. Canonical V3 report:
-`outputs/metric_seam_pilot/tasks/code_review/A104_CPU_SEALED_REPORT_V3.md`. Independent receipt:
+pre-existing model-produced code programs; “no inference in this run” does not mean that no
+model artifact was used. Canonical V4 report:
+`outputs/metric_seam_pilot/tasks/code_review/A104_CPU_SEALED_REPORT_V4.md`. Independent V3 receipt:
 `outputs/metric_seam_pilot/tasks/code_review/A104_CPU_V3_INDEPENDENT_AUDIT_V1.md`.
 
-### 3.6 Full-paper science: bounded same-input prompt smoke
+### 3.6 Full-paper science: strict prompt smoke and relation-corrected code invariance
 
 The prompt counterpart now has a bounded execution receipt, but not a criterion-level result.
-The request builder projects every source row to exactly `paper_id + abstract + body`, never
-loads `y`, SHA-binds all 2,400 rendered requests, and compares the prompt and code channels as
-peers rather than treating either as ground truth. Versions 1--5 are preserved as failed or
-instrument-development attempts. Version 6 made only five serial remote API calls and launched
-neither a local model nor a GPU.
+The request builder deserializes each source row and immediately projects it to exactly
+`paper_id + abstract + body`; it never indexes, emits, or uses the label value. It SHA-binds all
+2,400 rendered requests and compares prompt and code as peers rather than treating either as an
+external correctness target. Versions 1--5 are preserved as failed or instrument-development
+attempts. Version
+6 records five successful logical request results. Because the runner may retry and did not bank
+attempt counts, this does not establish exactly five physical HTTP calls. It launched neither a
+local model nor a GPU.
 
-The canonical additive replay applies the prompt's actual verbatim-span contract. It folds only
+The earlier literal-guard V4 replay correctly enforced verbatim text but incorrectly allowed two
+qualitative, zero-quantity, null-comparison objects to count as strong certificates. That violated
+the frozen instruction that only exact numeric/comparative relations are strong. The canonical
+strict-relation V7 replay now enforces grounding, typed relation semantics, and a non-estimating
+support guard. It folds only
 whitespace runs needed for PDF line wrapping; case, punctuation, hyphenation, and Unicode must
 otherwise match the bound source literally. On the same five raw responses:
 
-- 2/5 passed request binding, schema checks, and the verbatim whitespace-canonical grounding
-  guard; 3/5 were rejected.
-- The rejects were one certificate evidence span absent from BODY, one certificate claim span
-  absent from ABSTRACT, and one weaker evidence-link span that was not a verbatim BODY span.
-- On the two accepted papers, prompt/code status agreement and strong-certificate-presence
-  agreement were each 1/2. There were 0 matched strong witnesses from 2 prompt versus 0 code
-  witnesses; neither accepted paper had a weaker link in either channel.
+- 1/5 passed; it was an abstention with no strong certificate or weaker evidence link. Four were
+  rejected: two for ungrounded evidence spans, one for a qualitative/non-relational strong
+  certificate, and one for quantity bookkeeping without a quantity payload.
+- Prompt strong certificates are therefore **0**, not 2. The sole shared abstention yields only a
+  bookkeeping agreement cell. The evaluator marks the support `non_estimating` because `n=1` and
+  no shared paper has a strong certificate; the resulting 1/1 fractions must not be promoted.
 - Reasoning was requested off, but provider telemetry reported 12,426 reasoning tokens for one
   of five responses. Hidden reasoning text was not retained, so the run is described as
   reasoning-off-requested rather than uniformly reasoning-free.
 
-This smoke establishes that the same-input comparison is executable and that its binding guard
-has teeth. It does not estimate full-corpus articulability or prompt/code isomorphism. More
-importantly, it identifies copied-text serialization as an avoidable nuisance variable: semantic
-relation selection can be sound while a model changes punctuation or dehyphenates a PDF span.
-Before a full run, the next additive prompt transport should expose pre-segmented source IDs and
-ask the model for addresses plus relation decisions; deterministic code should hydrate the exact
-claim/evidence spans. That preserves the evidence surface while moving source identity checking
-to code and leaving semantic selection prompt-side.
+This smoke establishes validator selectivity, not full-corpus articulability or prompt/code
+isomorphism. The source-addressed instrument segments the 2,400 records into 19,219 abstract and
+152,750 body sentence addresses. Only 1,957 records contain a body; the other 443 form a
+missing-input/abstention stratum and must not be described as full-paper semantic support. V8 fixes
+the earlier schema/runner/resume gates, renders addresses rather than copied spans, hydrates exact
+source text in code, and records physical attempts. The full prompt arm is prepared but remains
+unexecuted because no API credential is available; preparation made no API call and used no GPU.
+Its future outputs will be prompt-asserted relations, not code-verifier certificates.
+
+The exact-address code arm separately runs the manually seeded claim selector, per-paper BM25
+retrieval, relation parser, and one-to-one graph matcher over the same A/B source spans. Its first
+v2.2/v8 result reproduced 136/136 outputs across representations, but a relation audit found
+concrete false positives: 28% robustness matched 28% resource savings, 1000 nodes matched 1000
+rounds, one nearby percentage satisfied two obligations, H.264 was treated as a quantity, and an
+interrogative comparison counted as asserted support. The 136/136 result is therefore retained
+only as **old-parser output invariance**, not as 136 validated verifier witnesses.
+
+The additive v2.3/v9 correction requires one-to-one value obligations, exact units, local
+entity/metric agreement, articulated numeric direction, stronger/weaker role and baseline
+agreement, assertive comparisons, and filtering of codec/version, function-parameter, math-
+constant, norm, and date identifiers. It emits **100 parser-accepted relation-local witnesses**
+across **95 papers**: 68 numeric and 32 comparative. Continuous and addressed arms agree on all
+100 after whitespace normalization and on all 95 supported-paper sets. Strict-text identity is
+only 8/100 because addressed spans retain line breaks that the continuous segmenter replaces with
+spaces. Paper status agrees on 2,396/2,400 rows; the four differences are weak
+`evidence_link -> insufficient` transitions. Weak links are correspondingly representation-
+sensitive (434 continuous, 430 addressed; normalized intersection 429).
+
+This is a positive input-representation result for the frozen executable sub-relations, not full
+semantic isomorphism, whole-paper scientific support, or external scientific truth. The program
+is still a manually selected retrospective mock of a discovered decomposition, not an automatic
+discovery result.
 
 Canonical receipt:
-`outputs/metric_seam_pilot/science_articulability_v6_openrouter_reasoning_off_prepared/evaluation_literal_guard_v4.json`.
+`outputs/metric_seam_pilot/science_articulability_v6_openrouter_reasoning_off_prepared/evaluation_strict_relation_guard_v7.json`.
 Report:
-`outputs/metric_seam_pilot/science_articulability_v6_openrouter_reasoning_off_prepared/REPORT_LITERAL_GUARD_V4.md`.
+`outputs/metric_seam_pilot/science_articulability_v6_openrouter_reasoning_off_prepared/REPORT_STRICT_RELATION_GUARD_V7.md`.
+Prepared V8 manifest:
+`outputs/metric_seam_pilot/science_articulability_v8_hardened_prepared/manifest.json`.
+Corrected continuous report:
+`outputs/metric_seam_pilot/science_claims_v2_relation_strict_v23/REPORT.md`.
+Corrected exact-address report:
+`outputs/metric_seam_pilot/science_verifiability_v9_relation_strict_addressed/REPORT.md`.
+
+### 3.7 Code-review a407: blind structural program, coverage wall, and matched seam design
+
+The blind candidate is substantially deeper than regex: CodeScope v3 uses Tree-sitter parsers,
+language-aware lexical scopes, declaration/use resolution, morpheme decomposition, and explicit
+collision/shadowing graphs for Python, Go, Java, JavaScript, and TypeScript. The candidate was
+authored from the articulated contract and sanitized unlabeled TRAIN input before opening the
+a407 reference. It leaves `semantic_context_fit` null and exposes only a frozen structural partial
+aggregate.
+
+The sealed evaluator caught and excluded a prohibited target substitution: `items.json.judgement`
+is PR merge outcome, not a407. The historical reconstruction reference is the pre-existing
+two-pass a407 prompt instrument, using the active coding-lane convention `(pass1 + pass2) / 20`
+on the numeric intersection. On the 99 exact-input held-out rows, 74 have both declaration
+coverage and a two-pass reference. The structural aggregate reaches Spearman **0.1746**, Pearson
+**0.1220**, MAE **0.1769**, and signed code-minus-reference mean **-0.0989**. Individual subscore
+Spearman values range from 0.0357 to 0.2030; no leave-one-family-out result exceeds 0.2134.
+
+Coverage, not algorithmic depth alone, is the dominant limitation. Of 75 declaration rows in the
+100-row heldout bundle, 59 have parser errors/missing nodes, 46 are truncated, and only six are
+strict-complete. The exact-input sensitivity is rho 0.8407 on those six versus 0.1111 on 68 partial
+rows; the six-row number is explicitly exploratory and does not establish a completeness effect.
+The 25 no-declaration rows are noncoverage—their neutral 0.5 never enters reconstruction—and 19
+of them still contain 383 visible use events, exposing a declaration-only observation gap.
+Heldout coverage is also language-skewed (61 Go, 12 Python, 2 Java, no JS/TS), so cross-language
+measurement invariance is unavailable.
+
+The audit now separates finite positive witnesses from absence claims. A locally valid detected
+placeholder/collision event may be a relation-local code witness under partial input. “No event
+detected” is not verified absence unless the parse and the relation observation universe are
+complete; neither structural event establishes contextual inappropriateness or harmfulness. The
+additive v4 policy encodes these states without rewriting v3.
+
+The original raw/hybrid prompts were not executed: they omitted model-visible relation
+definitions and changed both the evidence surface and output task. A pre-reference matched v2
+addendum renders the same construct and six definitions, uses the same response schema and ctext,
+and varies only whether CodeScope facts are null or present. It is still **full-graph
+augmentation**, not substitution: hybrid messages are 5.0x larger at the median and include that
+token/attention cost. The pre-result v4 design therefore calls for compact one-relation facts with
+null, relation-matched, and equally deep relation-mismatched/token-length-matched controls, plus a
+separate offline substitution lattice. Current v3 scalars are ineligible for substitution until
+relation-specific construct adversaries pass.
+
+The outcome is `DESCRIPTIVE_RECONSTRUCTION_ONLY`: whole-construct fidelity and reference-
+instrument fidelity are unavailable, program fidelity fails, and full isomorphism is not
+established. No new model/API/GPU operation was used. Canonical report:
+`outputs/metric_seam_pilot/reconstruction_v2/a407_sealed_historical_eval_001/REPORT.md`.
+
+### 3.8 Math a12: exact symbolic-step witnesses without a whole-proof claim
+
+The next technical seed targets a narrow sub-relation of a12, “Precision and rigor in statements
+and proofs”: an explicitly presented rational-algebra equality step should preserve the same
+expression on its declared domain. It reuses the existing manually selected math-span extractor,
+then parses bounded answer-side equalities with SymPy's Lark LaTeX parser, exactly reduces the
+difference, and reports denominator-nonzero obligations. This is parsed symbolic execution, not a
+regex or keyword score.
+
+On 150 sanitized opaque TRAIN rows, 42 contain at least one executable rational pair and 108
+abstain. The operation emits 24 exact identity certificates on 10 rows, 91 exact nonidentity
+witnesses on 36 rows, one unresolved pair, and 327 parse-noncoverage pairs. It emits zero
+document-level rigor defects. Nonidentity becomes a universal-identity counterexample only if a
+separately frozen prompt-side scope judgment establishes that the equation was asserted
+universally rather than used as a definition, special solution, assumption, or conditional step.
+Ten construct-derived adversarial/metamorphic tests pass; whole-criterion fidelity and a parent
+scalar remain unavailable.
+
+This is honestly labeled
+`selected_retrospective_seed_with_aggregate_train_summary_exposure`, not pristine blind
+authorship: seed selection opened a legacy h0 docstring containing one aggregate TRAIN
+correlation and qualitative rationale. No per-item outcome, heldout/reference value, residual, or
+evaluation output was opened, and no value influenced the symbolic relation, threshold, or
+weights. The reproducible preparation records SymPy/Lark and writes only aggregate coverage. No
+model/API/GPU operation occurred. Canonical report:
+`outputs/metric_seam_pilot/reconstruction_v2/math_a12_symbolic_step_retrospective_prepare_001/REPORT.md`.
 
 ## 4. What claims are broader now
 
@@ -296,8 +419,8 @@ that the old single-axis reconstruction report hid:
 1. **Selected machinery can be useful without being historically agentic.** Provenance and
    experimental pipeline role are orthogonal.
 2. **Deep code can add a new evidence surface even without matching an LLM ranking.** Stored
-   certificates from prior repository execution and current full-paper cross-section checking
-   are examples; the current legacy-code replay itself performs classification, not execution.
+   certificates from prior repository execution and corrected full-paper relation checking are
+   examples; the current legacy-code replay itself performs classification, not execution.
 3. **Verifiability survives unavailable isomorphism.** A valid code certificate remains a
    verifiability result when no channel-matched frozen LLM reference exists; it is reported as
    `verifiable_only`, not erased as unresolved.
@@ -307,6 +430,13 @@ that the old single-axis reconstruction report hid:
    than either proven L-only or successfully moved to code.
 5. **Failure localizes the search boundary.** Zero SymPy coverage and low blind-a144 rho locate
    capability/representation/program-class limits; neither supports tacitness.
+6. **Executable relations can be representation-robust without being semantically complete.**
+   The corrected science relation set is identical across continuous and addressed inputs after
+   whitespace normalization, while weak lexical links move and whole-paper truth remains outside
+   the claim.
+7. **Positive detection and verified absence have different evidence burdens.** A finite event
+   can witness a code-native sub-relation under partial input; non-detection becomes an absence
+   certificate only under a complete parse and observation universe.
 
 ## 5. Audit remediation and relation-local follow-up
 
@@ -336,18 +466,20 @@ that the old single-axis reconstruction report hid:
 
 ## 6. Next confirmatory moves
 
-1. Replace copied-text science responses with source-addressed claim/evidence selections that
-   code hydrates from the exact same abstract+body representation. Re-run a bounded transport
-   gate first; launch the full prompt counterpart only if binding and grounding are stable.
-   Compare prompt/code/hybrid relations without substituting accept/reject labels.
-2. Start a new blind hybrid compiler run on an untouched technical criterion and split only
-   after prompt-result provenance is exactly bound at preparation time. Do not reuse the now
-   opened a144 held-out split for confirmation.
-3. For patents, separate examiner/oracle candidate injection from autonomous retrieval and
+1. If an API credential becomes available, run a bounded V8 source-addressed prompt transport
+   smoke before any full corpus call. Compare prompt assertions with the corrected v9 code
+   witnesses as peer channels; never substitute paper acceptance labels.
+2. Implement the compact, one-relation a407 null/matched/mismatched augmentation design and the
+   separately gated substitution lattice. Use a new confirmatory criterion for any program
+   changes motivated after the a407 reference was opened.
+3. Re-author the a12 symbolic relation in a fresh context if pristine blindness is required, or
+   select another untouched math criterion. In either case, pass the construct adversary before
+   heldout access and do not reuse the opened a144/a407 splits for confirmation.
+4. For patents, separate examiner/oracle candidate injection from autonomous retrieval and
    certify claim-element links on a non-oracle candidate set.
-4. Repair the duplicated transplant row in a new immutable consolidation artifact, then compare
+5. Repair the duplicated transplant row in a new immutable consolidation artifact, then compare
    relation-matched execution against an equally deep mismatched operation and a null operation.
-5. Accumulate several blind technical criteria before running one immutable,
+6. Accumulate several blind technical criteria before running one immutable,
    multiplicity-controlled certification batch. The rejected a144 candidate is ineligible for
    that batch. Keep construct-adversary acceptance separate from reference-reconstruction
    inference.

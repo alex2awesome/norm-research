@@ -1,0 +1,30 @@
+# What is ACTUALLY INSTALLED (recorded 2026-07-20; the original 2026-07-18 pin below is history)
+#
+# .venv (this dir):   gepa 0.0.27  + dspy 3.2.1  + litellm 1.91.4   Python 3.12.3
+#   HOW: installing dspy 3.2.1 for Phase 5 (2026-07-19) hard-pinned gepa[dspy]==0.0.27,
+#   silently DOWNGRADING the venv from the 0.1.4 recorded below. Phases 1-4 Arm A ran BEFORE
+#   that install, so those results are on 0.1.4 and clean; any run in .venv since 2026-07-19
+#   is on 0.0.27. dspy.GEPA wraps the installed gepa, so the paperexact official arm runs on
+#   0.0.27 by construction (documented deviation; the paper's own optimizer is the standalone
+#   teleprompter in vendor/gepa-artifact, not the pip package at any version).
+# main repo python:   gepa 0.0.17 (methods/metric_implementer tests monkeypatch gepa.optimize,
+#   so they are version-agnostic; the m_omega_gepa live path was API-verified against 0.0.17)
+# sk2 miniconda base: gepa 0.1.4  + dspy 3.1.3  (NOTE: dspy 3.1.3 pins gepa[dspy]==0.0.26, so
+#   this combo carries an UNSATISFIED pin that pip warns about and runtime ignores; fine because
+#   reconstruction code calls gepa directly, never through dspy. No dspy version coexists
+#   cleanly with gepa 0.1.4.)
+# sk3 miniconda:      gepa 0.1.4 (upgraded 2026-07-20 from 0.0.26; same unsatisfied dspy-3.1.3
+#   pin as sk2, same reason it does not matter)
+# vendor/gepa clone:  sha 665cbc368313b7223f2b0638d2ef47da7a130dad (= 0.1.4); NOT on sys.path,
+#   NOT imported by anything — reference copy only.
+#
+# RESOLUTION (T4): envs stay SEPARATE. .venv = benchmark harness (dspy-driven, accepts dspy's
+# 0.0.27 pin, documented); sk2 conda = reconstruction (gepa 0.1.4). Do not try to hold dspy
+# 3.2.1 and gepa 0.1.4 in one env — dspy hard-pins. If a raw gepa.optimize run at 0.1.4 is ever
+# needed locally, use a separate venv, never .venv.
+
+# --- original pin (2026-07-18, superseded by the downgrade note above) ---
+gepa pip version: 0.1.4
+gepa repo sha:    665cbc368313b7223f2b0638d2ef47da7a130dad
+pinned on:        2026-07-18T17:05:24Z
+python:           Python 3.12.3

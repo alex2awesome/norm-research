@@ -186,3 +186,127 @@ For these: Stanford library proxy + Thorium Reader (for `.lcpl`) are the remaini
 - A **`variance_report.py`** that computes the battery of metrics (1b) and outputs a per-task table + plots.
 
 These four scripts, plus the existing extraction infrastructure, give us the full pipeline.
+
+
+## References (auto-verified BibTeX, 2026-06-15)
+
+> Extracted from this document and web-verified + independently audited by an automated fact-check pass (search → fetch → resolvable id; attributed claim checked against the located paper). 12 entries. Real located works; not hand-checked. See "needs manual review" for 0 contradicted-claim and 0 unlocatable/rejected items.
+
+```bibtex
+@misc{ali_restatements,
+  author       = {{American Law Institute}},
+  title        = {Restatement of the Law (series)},
+  howpublished = {\url{https://www.ali.org/publications/}},
+  year         = {1923},
+  note         = {Series published 1923--present by the American Law Institute (ALI), founded 1923}
+}
+
+@book{apstylebook2024,
+  author    = {{The Associated Press}},
+  title     = {The Associated Press Stylebook 2024-2026},
+  publisher = {Basic Books},
+  year      = {2024},
+  isbn      = {9781541605114}
+}
+
+@book{bernays1928propaganda,
+  title={Propaganda},
+  author={Bernays, Edward L.},
+  year={1928},
+  publisher={Horace Liveright},
+  note={Reprint: Ig Publishing, 2004, isbn 9780970312594, intro by Mark Crispin Miller}
+}
+
+@book{bluebook2025,
+  author    = {{Columbia Law Review} and {Harvard Law Review} and {University of Pennsylvania Law Review} and {Yale Law Journal}},
+  title     = {The Bluebook: A Uniform System of Citation},
+  edition   = {22nd},
+  publisher = {Harvard Law Review Association},
+  year      = {2025},
+  url       = {https://www.legalbluebook.com/}
+}
+
+@book{faber1990landis,
+  author    = {Faber, Robert C. and Landis, John L.},
+  title     = {Landis on Mechanics of Patent Claim Drafting},
+  publisher = {Practising Law Institute},
+  year      = {1990},
+  isbn      = {9780872240070}
+}
+
+@article{galtung1965structure,
+  title={The Structure of Foreign News: The Presentation of the Congo, Cuba and Cyprus Crises in Four Norwegian Newspapers},
+  author={Galtung, Johan and Ruge, Mari Holmboe},
+  journal={Journal of Peace Research},
+  volume={2},
+  number={1},
+  pages={64--91},
+  year={1965},
+  doi={10.1177/002234336500200104}
+}
+
+@book{garner1999winningbrief,
+  author    = {Garner, Bryan A.},
+  title     = {The Winning Brief: 100 Tips for Persuasive Briefing in Trial and Appellate Courts},
+  publisher = {Oxford University Press},
+  year      = {1999},
+  isbn      = {9780195128086}
+}
+
+@book{mancosu2008philosophy,
+  editor    = {Mancosu, Paolo},
+  title     = {The Philosophy of Mathematical Practice},
+  publisher = {Oxford University Press},
+  year      = {2008},
+  isbn      = {9780199296453}
+}
+
+@book{mckee1997story,
+  title={Story: Substance, Structure, Style, and the Principles of Screenwriting},
+  author={McKee, Robert},
+  year={1997},
+  publisher={ReganBooks},
+  isbn={9780060391683}
+}
+
+@manual{mpep2024,
+  author       = {{United States Patent and Trademark Office}},
+  title        = {Manual of Patent Examining Procedure (MPEP)},
+  edition      = {Ninth Edition, Revision 01.2024},
+  organization = {U.S. Patent and Trademark Office},
+  year         = {2024},
+  url          = {https://www.uspto.gov/web/offices/pac/mpep/index.html}
+}
+
+@book{polanyi1966tacit,
+  title={The Tacit Dimension},
+  author={Polanyi, Michael},
+  year={1966},
+  publisher={Doubleday/Anchor}
+}
+
+@book{daston2007objectivity,
+  title={Objectivity},
+  author={Daston, Lorraine and Galison, Peter},
+  year={2007},
+  publisher={Zone Books},
+  address={New York},
+  isbn={9781890951788}
+}
+
+@book{sigal1973reporters,
+  title={Reporters and Officials: The Organization and Politics of Newsmaking},
+  author={Sigal, Leon V.},
+  year={1973},
+  publisher={D. C. Heath},
+  isbn={9780669850352}
+}
+
+```
+
+### Citations needing manual review
+
+**Partial claim-match (3)** — spot-check exact numbers/wording:
+
+- `apstylebook2024`; `bluebook2025`; `galtung1965structure`
+

@@ -3182,3 +3182,54 @@ That is a real alternative explanation and the honest framing is "no unit is ind
 load-bearing," not "the units do nothing." A leave-many-out or Shapley-style design would
 separate these; the E3 sub-clause arms (running) partially address it.
 Artifact: runs/ablation_battery_hover.json (sk2). hotpot battery at arm 7/16, running.
+
+## HB120b (2026-07-27) — ★ CORRECTION to HB120: the causal battery is UNDERPOWERED, not a null
+
+Advisor pass 8 demanded the noise floor before any reading. Computed from the battery's own
+per-pass means (11 arms x 3 passes, cache off):
+
+| quantity | value |
+|---|---|
+| median within-arm pass SD | **.0110** |
+| median SE of an arm mean (3 passes) | .0064 |
+| 95% noise band on a single arm | ±.0125 |
+| **95% noise band on a DIFFERENCE of two arms** | **±.0176** |
+
+**Every observed causal delta (−.0133 to +.0078) lies INSIDE the ±.0176 two-arm noise band.**
+The battery therefore cannot distinguish per-unit effects of this size from zero. HB120's reading
+is RETRACTED as stated:
+- "median causal Δ = .000, units are not individually causal" → **not supported**; the correct
+  statement is *no per-unit effect larger than ≈.018 is detectable at this n*.
+- "**4 of 10 units improve the prompt when removed**" → this is the NULL EXPECTATION (~5 of 10
+  under zero true effects), not a finding. Must not print as striking.
+- "**corr(greedy marginal, causal Δ) = +0.013 ⇒ marginals don't transfer**" → **unsupportable**.
+  At n=10 the 95% CI is ≈[−.62,+.64]. Worse, the ten arms are the TOP-10 units *selected on high
+  select-panel marginal*, so x is range-restricted: correlating within the selected decile
+  attenuates toward zero even if marginals are perfectly informative overall (the
+  GRE-among-admits problem). **The design cannot answer the question it appears to answer.**
+
+**Three hypotheses remain observationally identical** and the current data separates none:
+H-redundant (units substitutable; set matters, members don't) / H-inert (top-10 contribute
+nothing jointly either) / H-noise (true ±.02 effects invisible at this n).
+
+**Decisive follow-up, pre-registered here before launch — hover drop-m dose-response, 12 arms,
+one session, ~4-6 GPU-h (same cost as the battery already paid for):** full; **drop-all-10**;
+drop-random-{3,5,7} x2 each; **add-one-LOW-marginal x3** (fixes the range restriction).
+Rules: **REDUNDANCY CONFIRMED** iff drop-10 Δ ≤ −.030 with paired-bootstrap P(Δ≥0)<.05 while
+median single-drop |Δ| < .010 → printable: "no single unit is load-bearing; the assembled set is."
+**JOINT NULL** iff drop-10 Δ within ±.015 of the additive prediction (−.007) and its CI excludes
+−.030 → printable: "top-ranked units contribute neither individually nor jointly." Marginal
+transfer recomputed over the full marginal range (singles + add-one-low); claim non-transfer ONLY
+if the CI excludes +.30. No Shapley (hundreds of evals for what 12 arms give).
+
+**Prediction on file (advisor's, adopted):** hotpot's singles will be REAL where hover's are not,
+because hotpot's top-tier units are format rules with marginals +.09..+.16 (an order of magnitude
+above hover's +.02) and format rules are structurally non-redundant. If so the split runs along
+the HB111 thin/thick axis: **thin rules are individually causal; thick rules are causal only in
+sets** — which is a Daston-framed result (C7) with data underneath, and the best available outcome.
+
+**Definitional consequence (adopt regardless):** define units by CONSTRUCTION, not by measured
+per-unit causality — "short, self-contained natural-language clauses drawn from a declared mining
+distribution, individuated so the space is finite and its tail estimable" — and report the causal
+battery as a finding. Drop "minimal" (unlicensable once whole-unit effects are undetectable); use
+"atomic (single-clause)", a syntactic property defensible by inspection.

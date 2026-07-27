@@ -104,10 +104,21 @@ def main():
                 # bench, f1=0, 45s total) — the same F3 pathology that made k-passes fictitious.
                 # A replicate that can be served from cache is not a capture.
                 import dspy
-                refl = dspy.LM(f"anthropic/{a.reflection_model}",
-                               api_base="https://api.z.ai/api/anthropic",
-                               api_key=px._zai_key(), temperature=1.0, max_tokens=16000,
-                               num_retries=40, timeout=300, cache=False)
+                if a.reflection_model.startswith("local:"):
+                    # local:<served-name>@<api-base> — the GLM route died 2026-07-25, so the
+                    # declared sampler is now a locally served model. cache=False still
+                    # mandatory (see above); temperature=1.0 preserves the sampling channel
+                    # that makes replicates independent captures.
+                    _spec = a.reflection_model[len("local:"):]
+                    _name, _base = _spec.split("@", 1)
+                    refl = dspy.LM(f"openai/{_name}", api_base=_base, api_key="EMPTY",
+                                   temperature=1.0, max_tokens=16000,
+                                   num_retries=20, timeout=300, cache=False)
+                else:
+                    refl = dspy.LM(f"anthropic/{a.reflection_model}",
+                                   api_base="https://api.z.ai/api/anthropic",
+                                   api_key=px._zai_key(), temperature=1.0, max_tokens=16000,
+                                   num_retries=40, timeout=300, cache=False)
                 units = px._suggest_units_paper(bench.__class__.__name__, init_cand, refl,
                                                 n=a.n, train_examples=train_examples)
                 rep_path.write_text(json.dumps({

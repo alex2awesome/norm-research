@@ -1,0 +1,499 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\newcommand{\Iv}{\mathrm{I}}
+\newcommand{\TVD}{\mathrm{TVD}}
+\newcommand{\Mhat}{\widehat{M}}
+\newcommand{\Bset}{\mathcal{B}_E}
+\newcommand{\Cspace}{\mathcal{C}}
+\newcommand{\Om}{\Omega}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\te}{\mathrm{te}}
+\newcommand{\Mw}{m_\omega}
+\newcommand{\Mstar}{M_i^\star}
+\newcommand{\cinf}{c_\infty}
+
+\title{\textbf{Certifying the optimality of an unsupervised-metric prompt}\\[2pt]
+\large What can be proved about $p^\star$ with no ground truth}
+\author{(working draft)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We certify optimality of a prompt defining a single latent evaluation metric $M_i$, with no labels and no
+stronger-model anchor. The objective is a label-free \emph{recovery} $R_i$: the TVD mutual information
+between the metric's held-out verdicts and a reconstruction obtained by articulating it as a rubric and
+re-executing it on the same held-out items. The certificate is a \emph{two-sided bracket}. The lower side is
+free and tight: $R_i\le T_i=\Iv(M_i;X)$ by data processing, and this transmission ceiling is globally
+attained by the metric's own posterior readout, so recovery's optimum over \emph{all} prompts is exactly
+$T_i$---but $T_i$ is the ceiling on the \emph{operationalized} metric $\Mw$, hence only the \textbf{floor} on
+the ideal meaning-defined metric $\Mstar$. The upper side---bounding $\Mstar$ from above---is the harder job
+and is necessarily unsupervised (there is \textbf{no} aggregate label $Y$): we give the $\Bset$ census (a
+Heaps/Good--Turing go/no-go on whether the reachable criterion space can be covered), an $R$-weighted
+cross-source consensus extrapolation $H(\cinf)$, and a prompt-free spectral decoder-capacity ceiling
+$\mathrm{OPT}'$. Every quantity is \emph{per-metric}, and every $\Bset$ claim is \emph{process-relative} to a
+specific non-IID set of criterion generators. Along the way: a universal cap, a within-class submodular
+certificate with an exact conditional theorem, a finite-set treatment of presentation form, and a discovery
+scaling law---each with its assumptions and looseness stated.
+\end{abstract}
+
+\section{Setup and objective}
+
+\textbf{Unit of analysis: one metric (read this first).} Everything below scopes to a \emph{single} latent
+evaluation metric $M_i$---one per R2 cluster (e.g.\ ``novelty of contribution'' in peer review). A task has
+$j$ such metrics $M_1,\dots,M_j$; the observed outcome $Y=f(M_1,\dots,M_j)$ (e.g.\ accept/reject) is their
+\emph{aggregate} and is \textbf{not} the target---the loop below is anchor- and label-free (\textbf{no $Y$}).
+$M_i$ is itself unlabeled; we recover it from its \emph{own} (item, verdict) pattern. Every symbol
+($R,T,\Om,\Bset,\alpha,\gamma,A$) is per-metric ($R_i,T_i,\alpha_i,\dots$); repeat the analysis for each
+metric. This is load-bearing and recurs as a bug: at the \emph{task} level (pooling every metric's criteria)
+the criterion universe is always vast, so the Heaps exponent $\alpha\approx0.9$ \emph{everywhere}
+(non-discriminating). The structure---thin vs.\ thick, coverable vs.\ inexhaustible---lives only per-metric
+($\alpha_i<0.5$ for a simple metric, $\alpha_i\to1$ for a complex one).
+
+\textbf{Items, behavior.} Items $X_1,\dots,X_N$; index $I\sim\mathrm{Unif}[N]$. A prompt $p$ makes
+executor $E$ a stochastic map item$\to$verdict; binary behavior $s_p=(s_1,\dots,s_N)$,
+$s_i=\Pr(V{=}1\mid X_i,p)$; $K$-ary $s_p\in(\Delta_K)^N$. Behavior space $\Cspace=(\Delta_K)^N$ is convex,
+compact. The achievable set $\Bset=\{s_p:p\in\Sigma^\star\}$ (for this metric) is countable, non-convex,
+known only through a sampling oracle.
+
+\textbf{Recovery (the objective).} Split items into train $X_\tr$ and held-out $X_\te$. Run $p$ on $X_\tr$
+to get $M_\tr=m(X_\tr)$; a reconstructor reads $(X_\tr,M_\tr)$ and emits a rubric $\hat s$; run both on the
+\emph{same} held-out items for $M_\te=m(X_\te)$ and $\Mhat_\te=\mathrm{exec}(\hat s,X_\te)$. Then
+\[
+R_i(p)=\Iv_{\TVD}(M_\te;\Mhat_\te),\qquad \Iv_f(A;B)=D_f\!\big(P_{AB}\,\|\,P_A\otimes P_B\big).
+\]
+$R$ is label- and anchor-free; it is high only if $p$ runs a generalizable rule, not memorized train
+features.
+
+\textbf{Transmission.} $T(p)=\Iv_f(I;V)$ under one behavior $s_p$. Distinguish in-sample consistency
+$T_\tr$ from the held-out $T_\te=\Iv_f(\Mhat_\te;X_\te)$; only the latter bounds $R$ (Prop.~\ref{prop:dpi}).
+$T$ is not the objective---it is the convex quantity that caps $R$.
+
+\textbf{Operationalized vs.\ ideal metric.} Write $\Mw$ for the metric as actually operationalized by the
+executor on its criteria (what the verdicts realize), and $\Mstar$ for the \emph{ideal}, meaning-defined
+metric the cluster reaches for. These differ: $\Mw$ is reachable and measured, whereas $\Mstar$ is a
+\emph{meaning} object---unreachable by maximizing recovery, since maximizing $R$ finds decodability, never
+meaning. There is no label for $\Mstar$, and---again---no $Y$.
+
+\textbf{Reduction.} $p$ matters only through $s_p$, so $\mathrm{OPT}:=\sup_p R(p)=\sup_{s\in\Bset}F(s)$.
+
+\textbf{The two-sided bracket (the whole paper).}
+\[
+\underbrace{\widehat R_i(\hat p)}_{\text{free lower bound}}
+\ \le\ \mathrm{OPT}_i\ =\ T_i(\Mw)
+\ \le\ \underbrace{\Iv(\Mstar;X)}_{\text{the ideal}}
+\ \le\ \underbrace{U_{\Bset}}_{\text{$\Bset$ census}}.
+\]
+The lower half (through $T_i(\Mw)$) is the recovery certificate of \S\ref{sec:recceiling}--\S\ref{sec:gap};
+the crucial orientation is that $T_i(\Mw)$ is the \emph{floor} on the ideal $\Mstar$, never its ceiling. The
+upper half---bounding $\Mstar$ from above via $\Bset$---is \S\ref{sec:upperbound}, and is unsupervised end to
+end.
+
+\begin{definition}[Certificate]
+For a found $\hat p$, an $\varepsilon$-global certificate is a verified $U\ge\mathrm{OPT}$ with
+$U-\widehat R(\hat p)\le\varepsilon$. The lower bound is free; the work is producing $U$.
+\end{definition}
+
+\section{Two structural facts}
+
+\begin{proposition}[Convexity of $T$]\label{prop:conv}
+$T(s)=\Iv_f(I;V)$ is convex in $s$, so $\max_{s\in\Cspace}T$ is attained at a deterministic per-item
+labeling.
+\end{proposition}
+\begin{proof}
+$P_{I,V}(i,v)=\tfrac1N p_i(v)$ and $P_I\otimes P_V$ are affine in $s$; $(P,Q)\mapsto D_f(P\|Q)$ is jointly
+convex; convex $\circ$ affine is convex. A convex function on a compact convex set attains its maximum at
+an extreme point of $\Cspace$ (Bauer)---a vertex, i.e.\ a deterministic labeling.
+\end{proof}
+
+\begin{proposition}[Data processing: $R\le T_\te$]\label{prop:dpi}
+On the held-out split, $R=\Iv_f(M_\te;\Mhat_\te)\le \Iv_f(M_\te;X_\te)=T_\te(m)$.
+\end{proposition}
+\begin{proof}
+$\hat s$ is learned on the disjoint train split, so $\Mhat_\te$ is produced from $X_\te$ by a channel
+independent of $M_\te$ given $X_\te$. The f-divergence DPI ($D_f(KP\|KQ)\le D_f(P\|Q)$) applied to that
+channel gives $\Iv_f(M;\Mhat)\le\Iv_f(M;X)$. The inequality lives within one distribution: it does
+\emph{not} hold against the train consistency $T_\tr$.
+\end{proof}
+
+\noindent\emph{Asymmetry.} $T$ is convex; $R$ (a nonlinear learned map of $s$) is not known convex. Hence
+we cap $R$ by $T$ globally and optimize $R$ only locally / within-class.
+
+\section{The recovery ceiling is global---and it is the floor on the ideal}\label{sec:recceiling}
+Prop.~\ref{prop:dpi} bounds $R$ by $T_\te$ for the found prompt; more is true \emph{globally}. Since
+$M\perp\Mhat\mid X$ (the reconstructor, trained on a disjoint split, never sees $X_\te$), $M\to X\to\Mhat$ is
+a Markov chain for \emph{every} prompt the reconstructor could emit, so the f-DPI gives
+\[
+\mathrm{OPT}_{\mathrm{rec}}=\sup_{p\in\Sigma^\star}R(p)=T(\Mw)=\Iv_f(\Mw;X),
+\]
+attained when the reconstruction outputs the \emph{soft posterior}
+$\Mhat=\eta(X):=\Pr(M_\omega{=}1\mid X)=\mathbb E[\Mw\mid X]$, the Bayes-sufficient statistic
+($\Iv(\Mw;\eta(X))=\Iv(\Mw;X)$). Two consequences:
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+\item \textbf{Both-readouts (continuous $\Pr(\mathrm{YES})$) is \emph{necessary} for tightness, not a
+nicety.} A \emph{sampled} binary reconstruction is a conditionally-independent copy and gives $R<T$ strictly
+whenever the readout is stochastic given $X$ ($H(M_\omega\mid X)>0$). Only the soft posterior makes $T$
+attainable in principle, so that $\mathrm{headroom}=T-R$ measures real articulability rather than an artifact
+of hard-rounding.
+\item \textbf{This is Rung 1 at the executor's real transmission,} not the vacuous
+$\mathrm{cap}_f=\tfrac12$: no prompt anywhere in $\Sigma^\star$ recovers more than $T(\Mw)$, so ``$\hat p$ is
+$\varepsilon$-optimal for the metric'' is exactly $\mathrm{headroom}=T(\Mw)-\widehat R(\hat p)\le\varepsilon$.
+Recovery \emph{dissolves} the class boundary: its effective class is $\Sigma^\star$ itself (free-gen can
+produce any prompt), so it never pays a within-/out-of-class tax.
+\end{itemize}
+\textbf{Orientation---do not over-read $T$.} $T(\Mw)$ is the ceiling on recovering the \emph{operationalized}
+$\Mw$, which equals the \textbf{floor} on the ideal $\Mstar$: a richer criterion pool reaches more of
+$\Mstar$, so $T(\Mw)\le\Iv(\Mstar;X)$. The ideal's \emph{upper} bound is a different object
+(\S\ref{sec:upperbound}), approached unsupervised, with no $Y$. The three nested ceilings, then, are
+$R\le T(\Mw)\le\mathrm{cap}_f$ on the operationalized side, and $T(\Mw)\le\Iv(\Mstar;X)$ crossing to the
+ideal.
+
+\textbf{The gap is a sufficiency deficit; for recovery there is no $\Bset$ search.} The chain rule sharpens the
+headroom to $T-R(\varphi)=\Iv(\Mw;X)-\Iv(\Mw;\varphi(X))=\Iv(\Mw;X\mid\varphi(X))\ge0$, zero iff the readout
+$\varphi(X)$ is sufficient for $\Mw$. So the recovery value-surface on $\Bset$ is not a black box with hidden
+peaks: it has \emph{one} known global maximum ($\eta(X)$) and falls off as a Bregman-type deficit. Hence for
+\emph{known-target} recovery there is no census of $\Bset$---estimate $\eta$ with the strongest model and
+both-readouts, measure the deficit, certify via $T$; the only residual search is over reconstructor prompts (a
+saturation test on achieved $R$). The $\Bset$ census of \S\ref{sec:upperbound} is for the \emph{other}
+regime---the ideal / unknown-target, where no single $\eta$ exists and value is coverage, not a deficit from a
+known peak.
+
+\section{The universal cap (Rung 1)}\label{sec:cap}
+
+\begin{theorem}[Cap]
+For every $p$, $R(p)\le T(p)\le\mathrm{cap}_f:=\sup_{s\in\Cspace}\Iv_f(I;V)$, with
+\[
+\mathrm{cap}_{\TVD}=1-\tfrac1{\min(N,K)}\ \ (\text{binary: }\tfrac12),\qquad
+\mathrm{cap}_{\mathrm{Shannon}}=\log\min(N,K).
+\]
+\end{theorem}
+\begin{proof}
+For a deterministic labeling $V=g(I)$ the item index collapses and
+$\Iv_{\TVD}(I;V)=1-\sum_v\Pr(V{=}v)^2$ (Gini impurity), maximized by a uniform histogram over $\min(N,K)$
+values. Prop.~\ref{prop:conv} places the maximizer there; $R\le T$ extends the bound to recovery.
+\end{proof}
+
+\noindent\emph{Comments.} (i) $K$, not $N$, sets the ceiling: a $K$-symbol verdict narrows the item by a
+fixed \emph{fraction}; $N$ is sample size, entering only via $\min(N,K)$. A binary readout caps every $R$
+at $\tfrac12$. (ii) Use the cap as a \emph{sanity check} ($\widehat R\le\mathrm{cap}_f$; detect readout
+compression), \emph{not} a proximity KPI: $\mathrm{cap}_f-\widehat R$ is valid but vacuous, as usually
+$\mathrm{OPT}\ll\mathrm{cap}_f$.
+
+\section{The certificate ladder}\label{sec:ladder}
+\begin{description}[leftmargin=1.3em,itemsep=1pt]
+\item[Rung 1.] $U_1=\mathrm{cap}_f$: global over $\Sigma^\star$, assumption-free, loose. (For \emph{recovery}
+it upgrades to the tight $T(\Mw)$ of \S\ref{sec:recceiling}.)
+\item[Rung 2.] Restrict to $S\subseteq\Om$ for a discovered criterion set $\Om$; $f(S)=R(C(S))$ is a set
+function, certified by submodular selection (\S\ref{sec:submod}). Tight, relative to $\Om$.
+\item[Rung 3.] Best-in-set over a finite materialized prompt list, with bootstrap CIs.
+\item[Rung 4.] Local: edit-stationarity / saturation at $\hat p$.
+\end{description}
+Only Rung 1 speaks to $\Sigma^\star$; Rungs 2--4 buy tightness by downscoping (validity vs.\ tightness).
+
+\section{Constructing $\Om$}\label{sec:omega}
+Each criterion $e\in\Om$ is individuated \emph{behaviorally} by its per-item signal $X_e\in\{0,1\}^N$:
+$e\equiv e'$ iff $X_e=X_{e'}$, regardless of wording. Glue text carries no $X_e$ and is not in $\Om$;
+``green and round'' is one unit if $E$ emits a single verdict for it.
+
+\paragraph{Discovery-to-Selection.}
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+\item \textbf{Mine diffs.} Harvest the criteria each accepted optimizer mutation \emph{added} across the
+whole lineage $\to$ pool $R_{\mathrm{pool}}$.
+\item \textbf{Orthogonalize.} Add $e$ to $\Om$ iff $\Iv(X_e;X_\Om)$ is low (new partition), else discard
+(paraphrase). TVD-MI has no chain rule, so this high-dimensional CMI is a \emph{Shannon} proxy: the
+cross-entropy reduction of a surrogate classifier predicting $X_e$ from $X_\Om$. Survivors are
+near-orthogonal $\Rightarrow$ the CI-given-$M$ premise of \S\ref{sec:submod} approximately holds.
+\item \textbf{Canonicalize.} A fixed-template compiler $C(S)$ (section order Format, Semantics, Negative)
+makes $f(S)=R(C(S))$ a genuine set function, killing path-dependence.
+\item \textbf{Select.} Brute-force for $|\Om|\le15$ (exact, bypasses $\gamma$); else \S\ref{sec:submod}.
+Shannon builds $\Om$; TVD certifies on it.
+\end{enumerate}
+
+\begin{remark}[The prompt is prose; $\Om$ is its decomposition]\label{rem:prose}
+The optimized prompt $\hat p$ is \emph{natural-language prose} (the object $E$ reads and scores with);
+$\Om$ is a \emph{separate} decomposition of $\hat p$ into atomic criteria, performed by a strong model
+after optimization---it is not the prompt itself, and structured JSON is never forced into the executed
+prompt. Writing $M$ for $E$'s verdict on $\hat p$ and $M_\Om$ for $E$'s verdict on the all-criteria
+compilation $C(\Om)$, the certificate measures two distinct pairwise quantities:
+\[
+\Iv(M;M_\Om)\quad\text{(decomposition gap)},\qquad
+\Iv(M_\Om;M_S)\quad\text{(selection gap)},
+\]
+each read against its own reliability ceiling $T$ (two passes of the same prompt, \S2). The direct
+$\Iv(M;M_S)$ would conflate a lossy decomposition with a bad subset; the two-step chain separates them.
+These are reconstructibility measures, not correctness (\S4.3).
+\end{remark}
+
+\section{Submodularity: a conditional theorem and a greedy guarantee}\label{sec:submod}
+Model criterion $i$ as $X_i$; ideal recovery $\check\Iv(S)=\Iv(M;X_S)$.
+
+\begin{lemma}[Monotonicity]
+$\check\Iv(S\cup\{i\})-\check\Iv(S)=\Iv(M;X_i\mid X_S)\ge0$.
+\end{lemma}
+
+\begin{theorem}[Submodularity signature]
+\[
+\Iv(M;X_i\mid X_j)-\Iv(M;X_i)=\Iv(X_i;X_j\mid M)-\Iv(X_i;X_j).
+\]
+Redundancy ($\Iv(X_i;X_j\mid M)<\Iv(X_i;X_j)$) shrinks the marginal gain (submodular); synergy (XOR-like)
+grows it (super-modular). Conditional independence given $M$ $\Rightarrow$ $\check\Iv$ is monotone
+submodular.
+\end{theorem}
+\begin{proof}
+Both differences equal the symmetric interaction information
+$\Iv(X_i;X_j;M):=\Iv(X_i;X_j\mid M)-\Iv(X_i;X_j)$, which is invariant under permuting its three arguments;
+conditioning on $X_j$ instead of $M$ writes the same quantity as $\Iv(M;X_i\mid X_j)-\Iv(M;X_i)$. Equating
+the two expressions gives the identity.
+\end{proof}
+
+\begin{corollary}[Greedy guarantee]
+With submodularity ratio $\gamma$ and curvature $\alpha$,
+$f(S_{\mathrm{greedy}})\ge\tfrac1\alpha\big(1-e^{-\alpha\gamma}\big)\,\mathrm{OPT}_\Om$ (Bian et al.;
+Das--Kempe $1-e^{-\gamma}$); $\gamma=1$ gives $1-1/e$.
+\end{corollary}
+
+\noindent\emph{Comments.} $\gamma$ is \emph{measured} on $\Om$ as discovered (mining with an
+``independent criteria'' instruction would pre-bias $\gamma\to1$). For $|\Om|\le15$ brute force is exact
+and bypasses $\gamma$. We drop the spectral $\gamma\ge\lambda_{\min}$ bound: it presumes a
+linear-regression value function, false for an attention-mixing $E$. The realized
+$R(S)=\Iv(M;\Mhat_S)\le\check\Iv(S)$ passes through an executor that compresses $X_S$ into a single
+verdict, which can make $R$ \emph{non-monotone}---then use non-monotone double-greedy (BFNS: $\tfrac13$
+deterministic, $\tfrac12$ randomized).
+
+\begin{remark}[Validity: side-channels, not submodularity]\label{rem:validity}
+Submodularity (\S\ref{sec:submod}) is the \emph{combinatorial} axis (diminishing returns). Validity is
+orthogonal: is $\Iv$ causal/semantic, or a \emph{side-channel} (length, formatting, a surface marker the
+executor latches onto)? $\Iv_{\TVD}$ is correlation, not causal, so a criterion riding a confound inflates
+$R$ spuriously. We block this \emph{by construction, not by adjustment}: $\Iv$ is a v-information through
+the constrained class $V=\{\text{criterion}\to E\}$, so a causally-semantic criterion class excludes
+side-channels with no causal model of the data (Xu et al.\ 2020)---ignorability as a property of the
+channel class, not the confounder graph. PRUNE-help (removing $e$ raises $R(C(\Om))$) is the leakage alarm.
+Cleaning channels removes the spurious non-monotonicity of \S\ref{sec:submod}, so near-submodularity
+\emph{emerges} from validity rather than being assumed---we never prove $\gamma$ standalone.
+\end{remark}
+
+\section{The form axis}\label{sec:form}
+Form $\varphi$ (few-shot count, persona, format, order) carries no $X_e$; it modulates executor fidelity.
+Certify the product
+\[
+\max_{\varphi\in\Phi}\Big[\max_{S\subseteq\Om}R(S,\varphi)\Big],
+\]
+inner submodular-certified, outer best-in-set over a materialized $\Phi$ (Rung 3), no separability
+assumed. The canonical compiler fixes one order so $f$ is a set function; its abstraction error equals the
+executor's \emph{order-sensitivity}, checked by a permutation test: with $\sigma^2_{\mathrm{subset}}$ the
+variance of $R$ across subsets and $\sigma^2_{\mathrm{perm}}$ across orderings of one subset, the
+abstraction holds iff $\sigma^2_{\mathrm{subset}}\gg\sigma^2_{\mathrm{perm}}$ (order is a residual of size
+$\sqrt{\sigma^2_{\mathrm{perm}}}$). Folding order in would blow $2^{|\Om|}$ subsets up to
+$\sum_k k!\binom{|\Om|}{k}$ sequences.
+
+\section{Discovery scaling law: $\Om\to\infty$}\label{sec:scaling}
+$\mathrm{OPT}_\Om$ is monotone non-decreasing in $\Om$ and bounded by $\mathrm{cap}_f$, hence converges
+$\mathrm{OPT}_{\Om_t}\to\mathrm{OPT}_\infty$. A rate follows from universe curvature (high-impact criteria
+found early) and a Heaps/Zipf discovery curve; subsampled submodular maximization
+($\sim(n/k)\log(1/\varepsilon)$ random elements retain $1-1/e-\varepsilon$ of $\mathrm{OPT}$) converts
+discovery count into an approximation guarantee.
+
+\emph{Magic-word defense (missing \emph{impact}, not mass).} Two prongs: (i) a submodular tail-bound,
+\[
+\max_{e\notin\Om}\Delta(e\mid\Om)\le\min_i[\text{greedy gain}]_i\qquad(\gamma\approx1\text{ in the tail}),
+\]
+where the leave-one-out minimum is a tighter diagnostic, not a guaranteed bound; and (ii) adversarial
+saturation, $\Iv(X_{\mathrm{probe}};M\mid X_\Om)\approx0$ for rare/OOD probes (no submodularity needed).
+Halt mining when both fire. (Good--Turing missing-\emph{mass} cannot bound impact and is dropped here; it
+returns in \S\ref{sec:upperbound} as a \emph{coverage} certificate on the ideal, a different use.)
+
+\section{The verifiable corner: $E=$ compiler}\label{sec:vcorner}
+If $M$ is code-generated a perfectly fitting rule exists ($R=1$ reachable); if $E$ is a compiler the
+within-item entropy is $0$ ($T\equiv1$). Then $R\le T=1$ is vacuous and $A=1-R$ is \emph{pure
+learnability}. This gives calibration gates: a planted code metric must recover $R\to\mathrm{cap}$, and
+planted submodular vs.\ synergistic constructions must recover $\gamma$. Restricting the executor class
+decomposes the same $R$:
+\[
+\underbrace{R(\text{code, compiler})}_{\text{Verifiable}}\ \le\
+\underbrace{R(\text{rubric, LLM})}_{+\,\text{Articulable}}\ \le\
+\underbrace{R(\text{dense model})}_{+\,\text{Taste}\,=\,C}.
+\]
+
+\section{The articulation gap $A=T-R$}\label{sec:gap}
+$A(m)=T_\te(m)-R(m)\ge0$ (same held-out split, Prop.~\ref{prop:dpi}). It measures the metric, not the
+prompt, and bundles three things a scalar cannot separate: tacit content, non-generalizing (overfit)
+spread, and executor-limited content. So $A$ upper-bounds the tacit residual; the executor axis and the
+held-out split separate the parts, and the overfit part is a generalization gap
+$O(\sqrt{d/N_\te})$ in the reconstruction family's complexity $d$.
+
+\section{Upper-bounding the ideal $\Mstar$---the $\Bset$ census}\label{sec:upperbound}
+The lower half brackets the \emph{operationalized} $\Mw$. Bounding the \emph{ideal} $\Mstar$ from above
+requires saying something about $\Bset$ \emph{beyond} the current pool $\Om$, and it must be
+unsupervised---\textbf{there is no $Y$}.
+\[
+\underbrace{R(\Om)}_{\text{floor: a richer pool does at least this well}}
+\ \le\ \text{measurability of }\Mstar\ \le\
+\underbrace{?}_{\text{from }\Bset,\ \text{beyond }\Om}.
+\]
+
+\textbf{Assumption-free $\Rightarrow$ only the loose cap.} With no structure the sup over reachable
+behaviors is the information cap (\S\ref{sec:cap}); when the reachable space is inexhaustible
+($\alpha_i\approx1$) the raw-$\Bset$ route \emph{degenerates} to exactly that cap
+($\Iv(\text{all-of-}\Bset;X)\to H(X)$). Sampling $\Bset$ harder cannot tighten it---the raw-$\Bset$-extent
+route is a dead end for a tight ceiling.
+
+\paragraph{ALPHA-PROBE: the run-first go/no-go (per metric).} Estimate the Heaps exponent $\alpha_i$ of
+$M_i$'s reachable criterion space, with Good--Turing/Chao1 coverage and an assumption-free
+Berend--Kontorovich lower bound on covered mass,
+$C_{\mathrm{lo}}=1-\big(f_1/N+\sqrt{\log(1/\delta)/N}\big)$ ($N\!\approx\!1200$ for a $0.95$ certificate).
+Then $\alpha_i\ll1\Rightarrow\Bset$ (for this metric) is low-dimensional: cover it, get a tight $U_i$;
+$\alpha_i\approx1\Rightarrow$ inexhaustible: enumeration cannot tighten, so the upper bound falls back to
+the direct DPI ceiling $T_i$ (still valid, just not tightened by coverage). Run this \emph{once per metric};
+the task-level $\alpha\approx0.9$ is the wrong level.
+
+\emph{Support-completeness is not certifiable.} No independence among the discovery lists can certify that
+their union support equals $\Bset$: a criterion in no family's support has zero capture probability under every
+list (the DPI-guarded zero-mass tail), so the gap is a \emph{shared-support ceiling}, not a correlation---more
+diverse lists narrow it but never close it. Three assumptions \emph{could} close it, each trading the
+untestable support claim for another: \textbf{(a) positivity} (every articulable criterion has proposal
+probability $\ge p_{\min}>0$) makes coverage-of-support $=$ coverage-of-$\Bset$; \textbf{(b) Lipschitz-impact}
+(value $L$-smooth in a criterion embedding) does not recover unseen species but \emph{bounds their
+impact}---turning ``unseen support'' into ``bounded residual impact,'' the target we actually care about;
+\textbf{(c) complexity} (finite VC / Heaps $\alpha<1$), which we distrust (non-Lipschitz extrapolation). The
+only lever that raises the LM-support ceiling itself is a \emph{non-LM} (human/expert) elicitation list; if it
+too surfaces nothing new, that is the strongest available---still non-certifying---evidence of exhaustion.
+
+\paragraph{Counting vs.\ value: the VALUE-CENSUS.} ALPHA-PROBE puts the \emph{counting} measure on $M_i$'s
+criteria (how fast new ones appear); it is silent on \emph{value}. A NO-GO ($\alpha_i\approx1$) says $M_i$ has
+inexhaustibly many \emph{expressible} criteria, not that adding them keeps recovering $M_i$. Swap in the
+\emph{value} measure---each criterion's contribution to recovering $M_i$ (its \S\ref{sec:recceiling} recovery,
+never the aggregate $Y$)---and re-run the same machinery: the value exponent $\alpha_{V,i}$ can be small even
+when $\alpha_i\approx1$. The gap $\alpha_i\gg\alpha_{V,i}$ is the per-metric signal ``many expressible criteria,
+few actually pin down $M_i$'': $T_i$ is reachable but not by enumeration---a few criteria recover most of $M_i$,
+and no finite rubric recovers all ($\alpha_i\approx1\Rightarrow$ no short faithful rubric).
+
+\paragraph{The recapture machinery (three jobs; a generator is not a certifier).} The census is a
+multiple-recapture design: strong LMs, data slices, and $\Om$-discovery algorithms are independent
+\emph{lists}, each capturing a subset of $\Bset$; the cell captured by none is the missing impact. Keep three
+jobs distinct---bound missing \emph{mass} (Good--Turing $f_1/n$, needs a \emph{stationary} proposal), convert
+mass to \emph{impact} (value-Lipschitz / EVT), extend \emph{support} past one proposal (multi-list
+overlap)---with two cautions: the top ($k$-way) interaction is \emph{non-identifiable} (Fienberg: a $2^k$
+contingency table with one missing cell), so source \emph{diversity} pushes the irreducible ``$=0$'' assumption
+to higher order rather than removing it; and every realistic correlation is \emph{positive} (shared
+pretraining), inflating overlap into \emph{false saturation}, so report the max-dependence-corrected lower
+bound, not the optimistic point estimate. This forces \emph{two separate streams}: a frozen breadth stream
+(multi-family, novelty-tilted, iid---the only valid input to the mass estimator) and an adaptive depth stream
+(GEPA, value-tilted, magic-word hunter). \textbf{GEPA is a generator, not a certifier:} $R\le T(\Mw)$
+immunizes the \emph{optimality} claim against any exploration bias (a biased prompt with $R<T$ is simply
+\emph{detected}, never a false optimum), but GEPA's adaptive single-family draws break Good--Turing, so it is
+disqualified from the breadth/mass estimator. Net: a ladder of conditional global claims, each buying tightness
+with one more assumption---DPI alone gives $\mathrm{OPT}\le T$; ${}+{}$ stationarity gives
+$\varepsilon$-optimality relative to the proposal support; ${}+{}$ smoothness gives an impact bound
+$\mathrm{OPT}_{\mathrm{supp}}\le\mathrm{OPT}_\Om+\hat\Delta$; ${}+{}$ $k$ independent sources extends the
+support and shrinks $\hat\Delta$ geometrically, off the zero-mass tail where only DPI guards.
+
+\paragraph{Consensus stabilization $\cinf$ (the constructive unsupervised route).} The only ground truth
+without labels is self-consistency among reachable criteria. Draw criteria coherent with the cluster from
+$\Bset$ (beyond $\Om$), weight each by its \emph{reconstructability} $R(s)$ (its \S1 recovery---this keeps
+the \emph{generalizable} agreement and strips shared-but-non-generalizable artifacts; the value target is
+$R$, not the verdict), and track a \emph{cross-source} consensus as the pool grows:
+\[
+c_k=\text{top $R$-weighted factor of proposer-family $k$'s columns},\qquad
+\cinf=\text{agreement \emph{across} families }\{c_k\},
+\]
+so per-family biases cancel (the independence that matters here is \emph{source}-independence, not the
+coverage-iid of the Good--Turing certificate---a different requirement, do not conflate). Split-half
+alignment $|\cos(c_A,c_B)|\to1$ pins the ideal; a plateau $<1$ means no stable ideal (incoherent cluster).
+The reported ceiling is $H(\cinf)$, a Good--Toulmin-style extrapolation of the stabilization curve:
+assumption-bounded (smoothness/saturation), a \emph{point estimate}, not a certificate. Its one irreducible
+caveat is \textbf{not} the $Y$ problem (there is no $Y$): $\cinf$ is $\Mstar$ \emph{up to shared proposer
+bias}, and the only unsupervised lever that widens past it is genuine proposer-support diversity (different
+model families). Note $\cinf$ is distinct from $\alpha$: the criterion \emph{count} $\alpha_i\approx1$ by
+proposer creativity even while the consensus converges---so measure the \emph{stabilization rate}, not
+$\alpha$.
+
+\paragraph{The prompt-free spectral ceiling $\mathrm{OPT}'$.} Work \emph{backwards} from recovery: $R(m)$
+is defined for \emph{any} labeling $m$, so
+\[
+\mathrm{OPT}':=\max_{m\in\{0,1\}^N}R(m)\ \ge\ R^\star=\max_{s\in\Bset}R(s),
+\qquad R^\star\le\mathrm{OPT}'\le\mathrm{cap}_f,
+\]
+a prompt-free upper bound between $R^\star$ and the cap. High-$R$ labelings live in the decoder's learnable
+subspace, so it is computed \emph{spectrally}---PCA / kernel-PCA on a frozen embedding $\varphi(X)$,
+threshold the top-$k$ directions, evaluate $R$---in $O(N d^2)$, never $2^N$. It is the decoder's
+\emph{capacity} (the easiest-to-decode function of $X$, typically a trivial surface feature such as length
+or topic), hence \emph{metric-agnostic} and conservative: it over-bounds every metric at once, and is
+\emph{not} $\Iv(X;\Mstar)$. It is useful (strictly above $R^\star$) only with a decoder \emph{stronger} than
+the prompt class (a trained probe on full embeddings); with a same-class decoder $\mathrm{OPT}'\approx
+R^\star$. Distinct from $\cinf$: same spectral machinery, but $\mathrm{OPT}'$ is raw learnability
+(metric-agnostic ceiling) while $\cinf$ is the criteria's agreement (an estimate of the ideal); read
+$\mathrm{headroom}'=\mathrm{OPT}'-\widehat R$ as a floor on how much room \emph{could} exist, never as the
+operative certificate (that remains $T(\Mw)-R$).
+
+\paragraph{Process-relative scope.} We never sample $\Bset$ iid: every generator (LLM free-gen, GEPA,
+curated children) is a non-IID biased process. So read every $\Bset$ claim---coverage, $H(\cinf)$, ``the
+ceiling on the ideal''---as scoped to \emph{what the specific generator set reaches}, never $\Bset$ in the
+absolute. This is the right scope, not a defect: the generators are \emph{diverse}, so cross-process
+agreement cancels their idiosyncratic biases while their \emph{common} bias is a named, non-removable floor;
+and the scope is replicable and resource-invariant (it bounds what anyone using the same generators achieves
+at \emph{any} compute). Our methods certify a property of exploration by a specific, diverse, non-IID set of
+criterion-generating processes---not a property of $\Bset$ itself. State the process-set; report the claim
+relative to it.
+
+\section{Related work}\label{sec:related}
+\textbf{MI prompt selection (Sorensen et al.\ 2022).} Selecting a prompt to maximize
+$\Iv(\text{input};\text{output})$ is exactly maximizing our transmission $T(p)=\Iv(\text{verdict};X)$; that
+line validates $T$ as the right label-free signal. Our addition is to turn selection into a two-sided
+\emph{certificate}---$T$ is not merely a score to climb but the attained recovery ceiling
+(\S\ref{sec:recceiling}), bracketed above by the $\Bset$ census (\S\ref{sec:upperbound}).
+
+\textbf{Exhaustive-search prompt optimality (Wenliang et al.\ 2026).} Their optimum---the best conditioning
+sequence for a near-Bayes-optimal predictor---is found by exhaustive search: exact but exponential, and
+established empirically rather than proved. Our $\Bset$ census is the cheaper, scalable counterpart: a
+process-relative point estimate (polynomial, not a certificate) in place of an exact exponential search.
+Their Bayesian framing also \emph{names} our posterior readout $\eta(X)=\mathbb E[\Mw\mid X]$ as the
+Bayes-optimal object that attains $T$---a lineage note (Solomonoff/Hutter), not a change to the optimum, and
+one that touches only the lower ($T$) side, never the $\Bset$ upper bound.
+
+\textbf{Others.} Picca (2025) frames the executor as a semiotic channel---a capacity view consonant with our
+cap (\S\ref{sec:cap}); the $L^2$M MI power-law is a scaling result adjacent to our discovery-scaling law
+(\S\ref{sec:scaling}), and Robertson--Koyejo quantify step-by-step information. None of these gives the
+label-free, two-sided ($R$/$\Bset$) bracket.
+
+\section{Limitations}
+\begin{enumerate}[leftmargin=1.5em,itemsep=1pt]
+\item \textbf{Pure $R$.} Every bound certifies $R=\Iv_{\TVD}(M_\te;\Mhat_\te)$, not a scalarized
+production objective (transfer needs component-wise convexity, the blend's $\gamma$, and budget caps as a
+knapsack).
+\item \textbf{Single executor.} The optimum is $E$-specific; cross-executor aggregation (average / min /
+consensus target) changes the certificate---indeed the $\cinf$ construction (\S\ref{sec:upperbound}) is
+exactly a principled cross-\emph{source} aggregation on the ideal side.
+\item \textbf{No $Y$, and $R\ne$ correctness.} The certificate is for recovery of $M_i$, not for any
+aggregate outcome $Y=f(M_1,\dots,M_j)$: there is \emph{no} $Y$ in the loop, and the ideal $\Mstar$ is a
+meaning object, not a label. \emph{If} one had $Y$, the wall $\Iv(Y;\Mhat)\le\min\!\big(R,\Iv(M_i;Y)\big)$
+would still hold---but that is out of scope; the ideal is approached unsupervised (\S\ref{sec:upperbound}),
+never via a label.
+\item \textbf{Coverage.} Rung 2 is within $\Om$; closing to the global optimum on the operationalized side
+is free from $T(\Mw)$ (\S\ref{sec:recceiling}), and on the \emph{ideal} side is the census of
+\S\ref{sec:upperbound}, certified only under measured tail / smoothness conditions.
+\item \textbf{Process-relative $\Bset$.} We never sample $\Bset$ iid; all coverage / $H(\cinf)$ / ``ceiling
+on the ideal'' claims are scoped to a specific non-IID set of generators \{LLM, GEPA, children\} and are
+floored by their shared bias (\S\ref{sec:upperbound}). Replicable and resource-invariant, but not absolute.
+\item \textbf{Estimation.} f-MIs are finite-sample (bootstrap CIs); high-order joint MIs are demanding.
+\item \textbf{Validity is the load-bearing risk, not submodularity.} $\Iv_{\TVD}$ is correlation, not
+causal; a side-channel (length/format) can inflate $R$. We block channels by construction (v-information
+predictor-class + adversarial saturation + counterfactual validity, Rem.~\ref{rem:validity}), not by causal
+adjustment. Submodularity (\S\ref{sec:submod}) is an optional top layer (the large-$\Om$ approximation +
+tail-bound); the core---cap, DPI, the recovery ceiling $T(\Mw)$, exact $|\Om|\le15$ certificate, $A$---is
+submodularity-free, so the theory degrades gracefully (measured optimum + valid ceiling, no certified
+approximation ratio) if $\gamma$ cannot be established.
+\end{enumerate}
+
+\end{document}

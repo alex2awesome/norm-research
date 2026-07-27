@@ -78,3 +78,79 @@ The full calibration-then-lockbox run launched on sk3 physical GPU 5 at
 change the code used by the simultaneous breadth job.  The authoritative invocation record and
 log are `concluding_policy_confirmation_v1/launch_record.env` and
 `concluding_policy_confirmation_v1/logs/full_run.log` under the data directory above.
+
+**v1 outcome (2026-07-14):** calibration completed and certified exactly one arm
+(`N_press-releases_35` / `source_definition`), but the lockbox never opened: the release gate
+failed on a closure-bookkeeping drift (the manifest declared 15 analysis-implementation files, the
+report's runtime self-record listed 12; the 3-file diff is the inert package `__init__.py`s, zero
+hash mismatches on real code).  No sealed item was ever read under v1.
+
+## v2 re-execution and SEALED RESULT (2026-07-15)
+
+The closure lists were unified into one canonical `ANALYSIS_IMPLEMENTATION_PATHS` tuple in
+`policy_data.py` (commit `451d841`), the execution manifest recompiled as
+`concluding_policy_execution_manifest_v2.json` (SHA-256
+`a879ccd8bbd6fb68832b649cfe5a012a420a3bc05fc9456d75f3e17814328c4c`; structural diff vs v1 is
+exactly the four edited-file hashes plus the v2 output directory), the selection artifact reused
+byte-identical, and the full calibration-then-lockbox run re-executed from snapshot
+`concluding_policy_a879ccd8` (GPU 5, PID `3567311`, launched `2026-07-15T12:06:26-07:00`,
+completed 12:45, no errors).  Both phases scored fresh; nothing was reused from v1.  The batch has
+no adaptive step between phases (all arms pre-frozen in the selection artifact), so v1's observed
+calibration outcomes could not influence the sealed test.
+
+Sealed 400-item `tacit_breadth_validation` results, simultaneous six-member 99.1667% CIs
+(worst-form adverse rho / form-quotient rho), 10,000-draw paired bootstrap, functional floor .70:
+
+| Construct | Arm | Adverse rho [CI] | Quotient rho [CI] | Native 70B−8B gap | Sealed verdict |
+|---|---|---|---|---|---|
+| `N_press-releases_35` | `source_definition` | **.782 [.717, .829]** | **.796 [.737, .843]** | .573 [.486, .663] | **CERTIFIED functional-ordinal joint substitution** |
+| `N_press-releases_35` | `source_full_rubric` | .611 [.518, .690] | .685 [.604, .754] | — | fails floor |
+| `N_humor_23` | `source_definition` | .648 [.556, .728] | .681 [.592, .756] | .490 [.407, .575] | fails floor (articulation gain certified) |
+| `N_humor_23` | `source_full_rubric` | .630 [.535, .712] | .682 [.593, .756] | — | fails floor (articulation gain certified) |
+| `N_humor_11` | `source_definition` | .676 [.584, .743] | .710 [.628, .775] | .390 [.322, .463] | fails floor |
+| `N_humor_11` | `source_full_rubric` | .554 [.449, .645] | .624 [.527, .707] | — | fails floor |
+
+The gi35 definition arm passes every certified gate of the joint claim on sealed data:
+articulation gain over the 8B name-only baseline, control superiority
+(`small_sparse_adverse_rank_below_functional_floor`), fixed-target floor, direct-endpoint floor,
+and a simultaneous-certified native scale gap — the same claim grade as H49 (`functional_ordinal`;
+near-identity correctly not claimed).  Calibration-to-sealed shrinkage is small
+(adverse .801 → .782), i.e., the effect replicates on never-before-read items.  This is the
+second sealed certified construct, in a different domain (press-releases) and different construct
+family (checkable-claims specificity) than H49 (humor).  Report construct-by-construct; "1 of 3"
+is a selection-biased existence count, never a prevalence.
+
+Artifacts: `notebooks/data/two_faces_20260702/concluding_policy_confirmation_v2/`
+(`lockbox_report.json`, `calibration_report.json`, `calibration_release.json`,
+`launch_record.env`, `logs/full_run.log`).  Release chain verified: the release binds the exact
+calibration-report SHA (`8a883e20…`) and manifest SHA (`a879ccd8…`), and the lockbox report's
+partition authorization records the same manifest and selection SHAs.
+
+## Cross-version capacity ladder — EXPLORATORY ONLY (2026-07-15)
+
+Llama-3.2-1B and Llama-3.2-3B executors were run against the same frozen Llama-3.1-70B name-only
+target, same frozen arms, same open 400-item `tacit_breadth_search` partition (never the sealed
+partition).  Llama-3.1 has no 1B/3B checkpoint, so these rungs cross model versions and are
+**exploratory observations, never confirmatory**: cross-version name-only baselines are not
+monotone in size (the 3.2-3B name baseline tracks the 70B target *better* than 3.1-8B's on gi35,
+native gap .401 vs .547, but *worse* on both humor cells), so no same-family scaling claim may be
+built on them.  Manifests: `concluding_policy_capacity_{3b,1b}_exploratory_manifest_v1.json`
+(status `frozen-before-cross-version-exploratory-capacity-calibration-outcomes`); reports under
+`notebooks/data/two_faces_20260702/concluding_policy_capacity_{3b,1b}_exploratory_v1/`.
+
+Definition arm, worst-form adverse rho vs the frozen target (point [95% simultaneous CI]):
+
+| Construct | 1B (3.2) | 3B (3.2) | 8B (3.1, same partition) |
+|---|---|---|---|
+| gi35 press-releases | .268 [.139, .385] | .721 [.648, .776] | .801 [.745, .844] |
+| H23 humor | −.041 [−.174, .085] | .533 [.422, .631] | .671 [.580, .747] |
+| gi11 humor | .074 [−.057, .203] | .548 [.443, .635] | .693 [.611, .760] |
+
+Observed pattern: a hard executability floor between 1B and 3B — at 1B every articulation arm is
+inert (humor at zero; rubric arm equally dead), while at 3B gi35's definition already functions
+near its 8B level (−.08) and the humor constructs recover only about half their 8B fidelity
+(−.14/−.15).  The capacity needed to *execute* an explicit articulation of a larger model's
+policy is construct-dependent: gi35's threshold sits between 1B and 3B; the humor constructs'
+sits at or above 8B.  Native 70B-minus-executor name-only gaps at 1B are extreme (gi35 .756,
+gi11 .857, H23 1.072 — the 1B name baseline is negatively correlated with the target on H23).
+Ladder ordering is monotone within every construct.

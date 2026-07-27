@@ -1881,3 +1881,403 @@ coding (on GPU-pass). Held-out discipline unchanged: NOTHING is a result until i
   records now emit independent articulable/verifiable outcomes and never infer a parent without
   a frozen aggregation. Legacy Code replay prose corrected: old prototype/frozen prior-execution
   telemetry, not active coding census or 800 live runs.
+- 2026-07-12 [wake 14:39] 2 agents in flight under the concurrent-threads protocol, both
+  healthy: ssdis S3 (a0 — piloting a graded bridge field, v2 pilot iteration at 14:35) +
+  humor H3 (a90 — candidate build 14:36). Baseline manifest in force (603 files); other
+  thread implementing audit fixes in v2 lane (disjoint write-sets). Queue 28. No GPU, OSL
+  untouched. Holding.
+- 2026-07-12 **SSDIS S3 (a0 logical-bridge, mid): PASS 4/4 → queue #29 (+33.1%, dominance
+  108f/3b/0w = 36:1, MAE −48.8%).** Census firsts: (1) GENUINE NEGATIVE on the graded-field
+  lever — two GLM pilots run and REJECTED (v1 mode-collapsed, v2 non-monotonic), root-caused,
+  field cache never touched: the pilot gate has teeth in both directions; (2) class-7
+  sub-species named: STARVED-BUT-CORRECTLY-SIGNED L fields (why a0 is mid not floor);
+  (3) sharpest code-blindness instance: _CITE_MARKER fires 0/250 (dead constant); (4)
+  anchor-split does NOT replicate the all-in-TEST pattern (5/8 train — honest
+  non-replication of erratum #4); (5) self-caught a wrong-signed marker in its OWN candidate
+  pre-ship (rho −.30). Instrument hashes verified START+END, zero drift; detected the other
+  thread editing the runbook mid-session and correctly stayed out of it (main loop logging
+  this line instead). Shipped lever = reweight correctly-signed fields + 2 corpus-validated
+  corroboration terms.
+- 2026-07-12 **HUMOR H3 (a90 storytelling, floor): PASS 4/4 → queue #30 (+37.8%, MAE
+  −29.2%). FLOORS 6/6 ARTIFACTS — 6th mechanism named: STRUCTURAL-PROXY INVERSION**
+  (elaborateness heuristics reward multi-beat stock-joke structure over tight personal
+  narrative; independently re-confirms ws65 rambling_reward via a different method).
+  COUNTER-DATUM: L-channel HELPS here (code-only .055 vs full .252 — opposite sign from
+  4/5 prior floors; story_frame alone .390 beats h0's own blend). New field
+  narrative_shaping_grade honestly disclosed as UNDERPERFORMING the existing field alone
+  but genuinely complementary (blend .464). INSTRUMENT-TENSION datum: contract_check's
+  frac_at_mode gate forced a code-only cap that costs rho (~.46→.35) — the discrimination
+  gate itself shapes shipped candidates on L-heavy constructs. ws65 PANEL-CONTROL mislabel
+  for this file flagged (pre-existing). Instrument hashes clean START+END. Queue 30.
+- 2026-07-12 [wake 15:39] 0 were in flight after S3+H3 landed (both logged: queue 29+30,
+  floors 6/6 artifacts w/ 6th mechanism, first genuine pilot-negative) → advanced: launched
+  peer P2 (a130 title/abstract structure — CODE-heavy contract) + legal L2 (a44 protected
+  activity — the mention-vs-use doctrinal test on the 1-of-8-genuine 'opposed' trap). Both
+  under concurrent-threads protocol (hash checks, disjoint write-sets, no runbook writes by
+  cells). Queue 30. No GPU, OSL untouched. Holding.
+- 2026-07-12 **USER: PAUSE — no new agent launches after current cells finish.** In flight:
+  peer P2 (a130) + legal L2 (a44) — these run to completion and get logged; then HOLD (log
+  results + wake status lines only, no new launches until the user says resume). Other
+  thread continues its v2-lane implementation independently.
+- 2026-07-12 **LEGAL L2 (a44 protected activity): PASS 4/4 → queue #31 (+16.13%, MAE
+  −17.4%, dominance 11f/2b/137w).** The doctrinal mention-vs-use test delivered: found a
+  corpus-scale instance of the trap — bare \bfiled\b scores any mention of the INSTANT
+  lawsuit's own filing as prior protected activity (10/11 judge-zero items near ceiling);
+  fixed with an uncorroborated-suit gate. Code-only floor byte-identical (opposite shape
+  from a26/L1 — the lever here is real-data, not probe-floor). LIBRARY TAXONOMY SHARPENED:
+  attributions() mismatch precisely characterized as WHO-SAID-A-PROPOSITION vs
+  WHO-DID-AN-ACT (ccomp/xcomp-required vs transitive act-attribution; zero discriminative
+  signal on the contract's own minimal pair). ⚠ NEEDS USER SIGN-OFF: 15/150 ADA/ADEA-only
+  items have judge mean .857, CONTRADICTING the contract's a0-precedent classification
+  (d00291 judge=1.0 while classed as mention-only trap) — the judge appears to treat
+  non-Title-VII protected activity as qualifying; candidate takes no position; affects a0
+  + a44 contract semantics. 'Opposed' trap itself remains open (upstream extraction).
+  PAUSE IN FORCE: no new launches; P2 (a130) last in flight.
+- 2026-07-12 **PEER P2 (a130 title/abstract structure): PASS → queue #32 (sign flip
+  −.068 → +.192, MAE −13.2%, dominance favorable both views).** Most extreme starved-field
+  case of the census: BOTH LLM fields 100% NONE 250/250 — a corpus-REPRESENTABILITY limit
+  (abstracts never contain printed title lines), not a pipeline bug; 35% of h0's budget was
+  dead constants (and h0 still 'passed' its contract — gate-vs-reality datum). Lever:
+  drop dead fields + self-naming detector (+.266 standalone, 71/71 spot-checked) +
+  structured-header regex. Round-1 INVERSION self-caught+fixed. Graded-field lever
+  evaluated and correctly NOT pursued (code-only sufficed). Anchor-split 9/13 TEST —
+  erratum #4 replicates (3rd instance). Queue dedup-verified against the concurrent a44
+  append. **PAUSE NOW FULLY IN FORCE: 0 agents in flight; wakes = status/log only until
+  user resumes.**
+- 2026-07-12 **RECONSTRUCTION-V2 CONTINUATION — BLIND MATH a216 PREEMPTED.** Fresh
+  ctext-only compiler proposal passed 30/34 adversarial pairs and 7/10 range anchors but
+  failed the frozen per-category floor (semantic target 0/1; subequation grouping 1/3).
+  Canonical outcome `proxy_mismatch`; construct fidelity preempted evaluation before the
+  held-out LLM reference was opened. Independent CPU replay and finalizer are byte-exact.
+  Positive claim is automatic decomposition/program proposal only—not code verifiability,
+  isomorphism, or tacitness.
+- 2026-07-12 **ACTIVE CODE a104 V3 VERIFIED.** On common heldout n=97, TRAIN-selected
+  prompt-compiled baseline rho=.5089; pre-existing deep static/AST checker rho=.6498
+  (delta +.1409, Pgate=.5615, Pbeats=.9455; current gate PASS); new relation h0 rho=.6064
+  (delta +.0975, Pgate=.3235; sub-gate, no tuning). This is the active coding lane, not
+  legacy f2p. H0 provenance corrected to manual/mock retrospective seed with
+  label-unreferenced—not label-inaccessible—execution. Independent sanitized rerun: zero
+  mismatches; repo-grouped companion supports ordering but is exploratory. Code-over-prompt
+  reconstruction does not by itself adjudicate their disagreements. CPU only; no model/GPU,
+  repository checkout, or test execution in this run.
+- 2026-07-12 **SCIENCE SAME-INPUT PROMPT SMOKE — LITERAL-GUARD V4.** Five serial calls
+  only; no full 2,400-paper batch and no GPU. Exact `paper_id+abstract+body` inputs, no `y`.
+  Verbatim whitespace-canonical guard accepts 2/5 and rejects 3/5 (BODY evidence absent,
+  ABSTRACT claim absent, non-verbatim weak-link evidence). Accepted-only status and
+  certificate-presence agreement are each 1/2; strong witness overlap 0/2 prompt/0 code.
+  This is an instrument/transport result, not criterion-level articulability/isomorphism.
+  Next transport should return source addresses hydrated by code so copy serialization does
+  not confound prompt-side semantic selection. Reasoning was requested off, but one response
+  reported 12,426 reasoning tokens; hidden reasoning text was not retained.
+- 2026-07-13 **CODE-REVIEW RELATION-LOCAL RECONSTRUCTION — HARNESS BUG, RUN
+  RECOVERED, CEILING ARM ADDED.** The reported "0 valid / 4,500 contract errors"
+  was a **deserialization defect in the runner, not a GLM-5.2 contract failure**:
+  `run_hierarchy_prompt_jobs.py` parsed `raw_response` with a bare `json.loads`,
+  unwrapping no Markdown fence and rejecting literal tabs inside evidence strings
+  (a *non-random* drop, selecting against tab-indented languages). GLM-5.2 honored
+  the response schema on ~99% of rows. Replaying the fixed parse over the retained
+  raw text recovers **4,442/4,500 valid (98.71%); true contract errors 58 (1.29%)**,
+  with **no new model calls**. The test suite had *enshrined* the bug (a case
+  asserting that a fenced valid response is a `contract_error`); it is flipped.
+  The 12:52 transport smoke had already returned 2/2 contract errors and was
+  "excluded from analysis" — a 100% smoke failure is a stop signal, not a row to
+  exclude.
+  **Corrected result (not a null):** rho is **defined and low**. Median raw
+  Spearman **0.146**, 95% clustered-bootstrap CI **[−0.280, +0.623]**; 3/18
+  mappings confirmatory, 5 exploratory, 8 without support. Median two-pass
+  reliability **0.897** — so the prompt side is self-consistent and the low rho is
+  genuine divergence, not noise. Three cells are **negative** (a43 −.300,
+  a401 −.201, a15 −.200), and a43 "intention-revealing naming" (R3, −.300) opposes
+  a70 "intention-revealing naming" (R1, +.327) — the *program*, not the construct,
+  drives the sign, as withheld polarity predicts. The wrong-relation control
+  contrast is **undefined (no support)** — a designed control that currently yields
+  nothing; diagnose before any specificity claim.
+  **Ceiling result → instrument limit; lower arms stopped.** v3 shipped with
+  `full_executable_contract_ceiling: omitted`, i.e. no upper anchor. The additive
+  `full_executable_contract` arm disclosed the complete program source,
+  digest-bound to the executed artifact. Its frozen 4,500-request run completed
+  with **4,426 valid responses (98.36%) and 74 contract errors (1.64%)**, all in
+  one attempt, with no missing, duplicate, unexpected, or hash-mismatched request.
+  All 18 mappings now have confirmatory support (common n=34–102), but median raw
+  Spearman is only **.149**, 95% vector-cluster/shared-item bootstrap CI
+  **[−.076, +.478]**. Median reliability ceiling is **.905** and median
+  ceiling-normalized rho is **.137**. The pre-declared **rho < .40** branch
+  therefore applies: GLM-5.2 cannot reliably simulate the program even given
+  full source, so this is an **executor/item-panel instrument limit**, not a
+  tacitness result. The recovered implementation-summary rho=.146 cannot be
+  interpreted as disclosure loss. No lower disclosure arm was launched.
+  Execution was local CPU plus the hosted z.ai API; no `sk3` GPU workload was
+  launched, and `sk3` GPUs 1–4 remain excluded from continuation work.
+
+  **2026-07-13 correction — the instrument-limit inference above is retracted.**
+  The frozen executions and response-accounting numbers remain valid, but the
+  `rho < .40` branch did not support its interpretation. The full-source arm
+  asks the model to perform exact program execution—including enumeration and
+  nonlinear arithmetic—over long diffs, so it measures arithmetic simulation
+  rather than a clean articulation-transport ceiling. More importantly, 10/18
+  code vectors are dominated by ties: their top and bottom terciles coincide,
+  and `a1_simplicity_yagni` returns exactly 1.0 on 102/125 held-out items.
+  Median rho=.149 is therefore not a codability estimate, and the recovered
+  implementation-summary rho=.146 is not interpretable as disclosure loss.
+  The corrected CPU readout reports target resolution and top-versus-bottom
+  tercile AUC only for cells with actual spread. Forward work replaces scalar
+  scorers with independently authored boolean, witness-bearing verifiers and a
+  TRAIN discrimination gate. Failure to certify is bounded non-verification
+  for the frozen corpus, verifier class, and budget—not evidence of tacitness.
+  The completed CPU replay finds separated target terciles in **8/18** mappings.
+  Their median top-versus-bottom AUC is **.573**, descriptive item-bootstrap
+  95% CI **[.502, .678]**. The three named cells reproduce (a0=.720,
+  a37=.711, R3 a92=.710), but the earlier median .547 and zero-inversions
+  shorthand do not: 2/8 AUCs are below .5. Artifact:
+  `results/code_review_target_resolution_v1/readout.json`.
+  The same CPU-only TRAIN diagnostic over already-existing technical targets
+  finds adequate resolution in **14/16 Math vectors**, **6/15 Patent relation
+  vectors**, and **1/2 full-article Science views**. Failures are retained as
+  corpus/target-resolution results; they are not tacitness claims. Artifact:
+  `results/technical_target_discrimination_v1/readout.json`. No prompt batch
+  was launched for these domains.
+
+  **Free applicability diagnostic.** Mapping-weighted code outcomes are 51.9%
+  scored, 20.0% `not_applicable`, and 28.1% applicable-but-abstained (48.1%
+  total unscored). On strict-valid prompt rows, full contract is 57.2% scored and
+  42.8% `not_applicable`, versus implementation summary 16.9% scored, 82.9%
+  `not_applicable`, and 0.2% `applicable_abstain`. The ceiling's total unscored
+  rate is much closer to code, so the summary channel clearly withholds support-
+  relevant information; however, the ceiling never reproduces the code's
+  abstain state, and its score-order correlation remains below the instrument
+  threshold. The previously cited 84.1% shorthand is not reproduced by the
+  frozen primary denominators: implementation-summary `not_applicable` is 82.9%
+  over valid rows (81.8% over expected rows), while total unscored is 83.1%
+  (82.0% over expected). This support diagnostic does not rescue a tacitness
+  claim.
+
+  **Specificity control.** Under full contract, the median correct-minus-wrong
+  rho is **.148**, CI **[−.180, +.546]**, with 13/18 defined contrasts; the
+  interval crosses zero, so specificity is not established. Under the
+  implementation summary it remains undefined: median correct/wrong prompt
+  overlap is zero, 13/18 mappings have no five-way common support, 16/18 have
+  n<10, and the two with n≥10 contain a constant prompt vector. This is a
+  support-and-variance failure, not specificity evidence.
+
+  Exact executor command:
+
+  ```bash
+  python -m methods.metric_seam.run_hierarchy_prompt_jobs \
+    --jobs outputs/metric_seam_pilot/hierarchy_r123/code_review_reconstruction_ceiling_jobs_v1.jsonl.gz \
+    --channel full_executable_contract \
+    --backend zai_anthropic \
+    --model glm-5.2 \
+    --temperature 0.2 \
+    --max-tokens 1024 \
+    --concurrency 3 \
+    --expected-jobs 4500 \
+    --output outputs/metric_seam_pilot/hierarchy_r123/results/code_review_glm52_ceiling_v1/responses.jsonl
+  ```
+
+  Exact analyzer command:
+
+  ```bash
+  python -m methods.metric_seam.analyze_code_review_reconstruction \
+    --prompt-manifest outputs/metric_seam_pilot/hierarchy_r123/code_review_reconstruction_prompt_manifest_v3.json \
+    --prompt-jobs outputs/metric_seam_pilot/hierarchy_r123/code_review_reconstruction_ceiling_jobs_v1.jsonl.gz \
+    --responses outputs/metric_seam_pilot/hierarchy_r123/results/code_review_glm52_ceiling_v1/responses.jsonl \
+    --code-execution outputs/metric_seam_pilot/hierarchy_r123/code_review_heldout_execution_v1.json \
+    --bootstrap-draws 10000 \
+    --bootstrap-seed 20260713 \
+    --output outputs/metric_seam_pilot/hierarchy_r123/results/code_review_glm52_ceiling_v1/readout.json
+  ```
+
+  Claim limits: conditional relation-local reconstruction only; no whole-metric
+  codability, tacitness, specificity, external-correctness, or R-level-trend
+  claim. Full-source prompting is model simulation, not literal code execution.
+  Code/prompt disagreement does not establish code underperformance.
+  Artifacts: `results/code_review_glm52_impl_summary_v2_recovered/` (recovered
+  readout), `results/code_review_glm52_ceiling_v1/` (ceiling arm),
+  `code_review_reconstruction_ceiling_jobs_v1.jsonl.gz`.
+
+- 2026-07-13 **VERIFIER-NATIVE SHORT PATH — CODE REVIEW STOPS; MATH a12
+  ADVANCES.** The corrected natural-only TRAIN gate was implemented with the
+  shared three-state contract `(not_applicable, satisfied, violated)` and
+  mandatory file-qualified witnesses. Synthetic plants cannot rescue natural
+  prevalence, completeness, or modal concentration.
+
+  **Code review:** four frozen CUF relation candidates were executed over the
+  merged-PR TRAIN corpus using independently authored structured/tree-sitter
+  verifiers. **0/4 pass natural corpus measurability.** a0 has only 2/25
+  violated applicable occasions; a18 and a38 have zero natural violations;
+  a92 applies on only 11/122 completed items and has zero violations. Yet the
+  same implementations detect **152/160 planted violations with zero
+  inversions**, and both co-run positive controls achieve 40/40 planted
+  separation. This is evidence that the verifiers are operative and that the
+  post-review corpus lacks the target violations. It is a bounded
+  `corpus_unmeasurable` result—not evidence of tacitness or unqualified
+  non-codability. Per the frozen STOP rule, no code-review V_llm or held-out
+  certificate run was launched. Canonical corrected artifact:
+  `outputs/metric_seam_pilot/hierarchy_r123/results/code_review_ast_train_v2/readout.json`.
+
+  **Math a12:** the existing manually constructed SymPy equality-step pipeline
+  was preserved and adapted, rather than rediscovered, as a mock pipeline seed.
+  The measurement unit is one structurally extracted adjacent equality pair,
+  not the whole rigor metric. The operational relation is exact
+  rational-expression identity/nonidentity on the algebraic domain inferred by
+  the bounded parser; the code does **not** recover a domain declared by the
+  document. On 150 compiler-TRAIN documents it yields **443
+  natural pairs: 328 not-applicable, 24 exact identities (satisfied), and 91
+  exact nonidentities (violated)**. Thus P(applies)=115/443 and
+  P(violated|applies)=91/115; all **24/24** available rhs+1 probes flip from
+  satisfied to violated with zero inversions. The frozen TRAIN discrimination
+  gate passes. Exact nonidentity remains a pair-relation result, not a document
+  error without separately established universal claim scope. Artifact:
+  `outputs/metric_seam_pilot/hierarchy_r123/results/math_a12_symbolic_train_v1/readout.json`.
+
+  A separately authored/executed Sonnet contract receives all 443 structural
+  pairs and never receives SymPy verdicts. Both arms deliberately share the
+  code-proposed equality-pair extractor, so the estimand is conditional
+  applicability/polarity agreement on proposed pairs—not independent relation
+  discovery. Its first 10-call smoke initially parsed
+  6/10 because four responses prefixed explanatory prose before one valid JSON
+  fence. Production stopped exactly as required. A parser-only v2 replay
+  recovers the same retained raw responses to 10/10 with no prompt change and
+  no additional call. This is explicitly recorded as **post-smoke parser
+  calibration**: the original smoke was 6 valid + 4 contract errors, while the
+  v2 CPU replay is 10 valid; parser version was historically outside each
+  request digest, so bundle-file hashes and a separate calibration receipt bind
+  the revision. The initially compiled two-pass sensitivity bundle was
+  then stopped after 69 envelopes: a second stochastic pass is not part of the
+  two-implementation certificate and would double runtime. A deterministic
+  all-pairs/pass-1 bundle reuses 34 byte-identical completed requests and runs
+  the remaining calls at concurrency four, one response ledger row committed
+  per completion. The change selects neither pairs nor outcomes—all 443 pairs
+  remain in the estimand. No local or server GPU is used. This is still TRAIN
+  work and uses Sonnet 4.5 specifically. Witness coincidence is bound by the
+  supplied span, and no real witness-ablation rerun has occurred; neither is
+  treated as empirical certification. No Math held-out certificate has been
+  claimed.
+
+- 2026-07-14 **PROPOSAL-FIRST CONSTRUCT-VALIDITY REPAIR — BOUNDED FIRST
+  RELEASE COMPLETE.** The forward workflow is now `PROPOSE → BASE-RATE PROBE
+  → AUTHOR/IMPORT → CONSTRUCT CHALLENGE → PER-NODE GATE → SELECT → FREEZE →
+  TRANSCRIBE → EVALUATE`. Agreement cannot rescue a unit that fails construct
+  validity.
+
+  **Math a12 is reclassified as the falsifying case.** Twelve contextual
+  controls were executed against the old symbolic adapter. It scored **0/12**
+  correctly: all eight rigorous definitions, hypotheses, constraints, initial
+  conditions, and equations-to-solve were called violations because their
+  sides were nonidentical; all four genuine rigor defects without an equality
+  were not-applicable. The prior 91/91 conditional polarity agreement is
+  retained as agreement between two context-free identity implementations
+  under a shared construct misconstrual—not validity, certification, or
+  whole-metric isomorphism. The narrower rational-expression identity
+  capability remains valid and is not destroyed.
+
+  **Fresh prospective Patent antecedent unit.** A proposal-only, detector-blind
+  Sonnet 4.5 probe used a fixed hash sample of 32 compiler-TRAIN patent
+  documents with full context. Its first transport smoke was **2/5 valid**:
+  two responses cited nonexistent line coordinates and one applicable response
+  omitted witnesses. Production stopped. A disclosed v2 transport showed
+  exact one-based line numbers without changing the proposal, sample, items,
+  model, or construct; its smoke passed 5/5 and production completed **32/32
+  valid**, yielding **0 not-applicable / 14 satisfied / 18 violated**. This
+  licenses code authorship/import only; it is not a verifiability result.
+
+  The preexisting manual depth-3 claim graph was then imported as the draft.
+  Its binary relation over all 150 natural TRAIN documents is **1
+  not-applicable / 1 satisfied / 148 violated**: P(violated|applies)=148/149,
+  above the frozen 0.90 maximum. It also classifies only 6/8 fixed construct
+  controls as expected before blind control adjudication, missing explicit CPU
+  alias and plural-reference cases. The natural code gate already preempts
+  selection, so the planned 150-item prompt transcription and held-out pass
+  were not launched. This is a prospective bounded code-degeneracy result.
+
+  **Code review remains corpus-unmeasurable:** 0/4 natural gates pass while
+  152/160 plants are detected. The audit-reported a34 dead subtree has no exact
+  local node artifact in this workspace and is therefore recorded as a
+  provenance gap rather than independently reproduced. Canonical consolidated
+  artifact: `outputs/metric_seam_pilot/verifier_pipeline_v2/construct_validity_repair_summary_v1/`.
+
+- 2026-07-14 **VALIDITY-BOUNDS CORRECTION — A12 HEADLINE RETRACTED; A34
+  EXACT ATTRIBUTION COMPLETE.** The old Math a12 κ values are retained only as
+  a context-free control. Two independent defects preclude the former reading:
+  (1) Sonnet received `(lhs,rhs,span)` but never the document, so κ=.445 on
+  applicability is a context-withholding artifact; and (2) the shared unit
+  misconstrued definitions, hypotheses, constraints, and equations-to-solve as
+  rigor occasions, so κ=1.0 is two symbolic-identity implementations agreeing
+  on symbolic identity—not adjudication transport, validity, or isomorphism.
+  Canonical G2 controls now include both true violations and construct-satisfied
+  proxy traps. The frozen symbolic verifier detects 2/2 true errors but fires
+  on **4/4 proxy traps**, therefore G2 FAIL. Its bounded algebra capability is
+  retained for contextually asserted identity steps.
+
+  Patent a34 now has an exact, TRAIN-only structural readout over all **2,048
+  coalitions** of its 11 ablatable nodes. Shapley efficiency holds with residual
+  `-3.33e-16` (required ≤1e-9). Absolute Shapley mass is **0.801 evidence**
+  versus **0.118 computation** and **0 individuation**; `prior_art_lookup`
+  alone has φ=.572. The preregistered practical per-node rule
+  `|φ|<.01 AND applies<.10` retrospectively marks five nodes DELETE. The
+  declared-DAG certificate enumerates 648 separating cuts and 8
+  inclusion-minimal cuts. Every minimal cut passes the empirical DPI check;
+  the minimum-information cut is `{norm, prior_art_lookup,
+  closest_art_field, distinguishing_field}` at 2.338 plug-in bits versus 1.507
+  bits at the program output. This bounds the frozen artifact on its empirical
+  TRAIN distribution, never codability in general.
+
+  The old code-review `full_executable_contract` arm is reclassified as an
+  **execution** result, not articulation transport. With complete source
+  disclosed, GLM-5.2 reconstructs frozen program rankings at median raw
+  ρ=.149, 95% clustered bootstrap CI [−.076,.478], and median
+  ceiling-normalized ρ=.137. The CI crosses zero and no positive threshold
+  claim is licensed. The bounded conclusion is that source disclosure did not
+  make this model execute these programs rank-faithfully; this is not evidence
+  of tacitness or external correctness.
+
+  Canonical artifacts:
+  `outputs/metric_seam_pilot/hierarchy_r123/results/math_a12_g2_validity_v1/`,
+  `outputs/metric_seam_pilot/battery/effort_ladder/ws4/patents_pa__a34/readouts.json`,
+  and
+  `outputs/metric_seam_pilot/hierarchy_r123/results/code_review_glm52_ceiling_v1/readout.json`.
+
+  **A12 full-context arm (preregistered prediction confirmed).** All 443 frozen
+  pair/document requests were executed once with Sonnet 4.5; 430 satisfy the
+  strict role/witness contract and 13 failures are retained without retry. The
+  prompt classifies 203 asserted identity steps, 122 definitions, 44
+  hypotheses, 20 equations-to-solve, and 41 other occasions. Of 111 pairs the
+  symbolic arm calls applicable on common support, **64 (57.7%)** are
+  reclassified as non-asserted occasions (21 definition, 15 equation-to-solve,
+  11 hypothesis, 17 other). Applicability κ is **−.052**, versus .445 in the
+  now-retracted context-free control. This fall was the frozen prediction and
+  measures occasion individuation, not model failure. On the residual 47
+  jointly asserted steps, polarity κ is only **.082**: 23 both-satisfied, 2
+  both-violated, and 22 symbolic-violation/context-satisfied. Thus even after
+  role filtering, context-dependent substitution defeats bare pair identity.
+  Role labels remain unsupervised prompt reconstruction, not external truth.
+  Canonical artifact:
+  `outputs/metric_seam_pilot/hierarchy_r123/results/math_a12_context_train_v1/`.
+
+  **Pipeline inversion replay and node-width estimate.** The frozen [.10,.90]
+  pre-authoring occurrence rule would have killed all six known dead units
+  before authorship: a34 closest-art 2/250, a34 distinguishing 1/250, and the
+  four code-review target violations at 2/122, 0/122, 0/122, 0/122. This is a
+  retrospective counterfactual; the rule is prospective for new work. Three
+  blind a34 authoring fleets (K=3 frozen before outputs) each proposed nine
+  nodes. One unsupervised semantic reconciliation yields 13 observed node
+  types; bias-corrected incidence Chao2 estimates 13.8 total and **94.2%**
+  coverage. This is a small-K authoring-width estimate only; it neither
+  validates constructs nor bounds general codability. Artifacts:
+  `outputs/metric_seam_pilot/hierarchy_r123/results/pipeline_inversion_replay_v1/`
+  and
+  `outputs/metric_seam_pilot/hierarchy_r123/results/patents_a34_capture_recapture_k3_v1/`.
+
+  **A34 matched-information result.** Arm B gave Sonnet the application and the
+  exact `PriorArtOps` JSON received by frozen program C; both reconstruct the
+  same frozen two-pass Gemma evidence-aware target. Execution completed 100
+  requests with 98 contract-valid scores and two retained empty-response
+  failures, no retries. On common support, B reaches **ρ=.661** and C reaches
+  **ρ=.740**; `C−B=.079`, paired bootstrap 95% CI **[.013,.151]** (5,000
+  draws). With target attenuation ceiling .883 and deterministic code
+  reliability pinned to 1.0, normalized ρ is .748 for B and .838 for C. This
+  licenses the preregistered **algorithmic execution advantage** reading for
+  this frozen, mocked/precomputed patent pipeline. It does not establish
+  external correctness. Document-only A is descriptive and
+  information-confounded (ρ=.278 on its 75-item support). Artifact:
+  `outputs/metric_seam_pilot/hierarchy_r123/results/patents_a34_matched_info_v1/`.

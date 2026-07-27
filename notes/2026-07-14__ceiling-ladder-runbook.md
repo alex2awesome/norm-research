@@ -95,5 +95,53 @@ ssh sk3 'pid=$(cat /lfs/skampere3/0/alexspan/cr3-v14.1-roadmap/run.pid); \
   tr "\000" "\n" </proc/"$pid"/environ | rg "^CUDA_VISIBLE_DEVICES="; \
   find /lfs/skampere3/0/alexspan/cr3-v14.1-roadmap/outputs/constructor \
     -name constructor.json 2>/dev/null | wc -l; \
-  tail -n 40 /lfs/skampere3/0/alexspan/cr3-v14.1-roadmap/run.log'
+tail -n 40 /lfs/skampere3/0/alexspan/cr3-v14.1-roadmap/run.log'
 ```
+
+# FAST/CERT scoring lanes
+
+The two lanes always use separate output roots. FAST is screening-only and emits
+`results.parquet`, `screening_summary.parquet`, and `fast_permutation_nulls.npz`;
+it never emits certificates. CERT is a fresh measurement population and remains
+the only input accepted by the release audit.
+
+CPU freeze for a wide FAST population:
+
+```bash
+python -m methods.metric_implementer.experiments.run_v14_value_campaign --phase design \
+  --scoring-lane fast --metrics-manifest "$METRICS" \
+  --probe-extension-root "$EXTENSIONS" --out-root "$FAST_ROOT" \
+  --run-sha "$RELEASE_SHA"
+python -m methods.metric_implementer.experiments.run_v14_value_campaign --phase seed-freeze \
+  --out-root "$FAST_ROOT" --template-freeze "$FAST_ROOT/template_freeze.json"
+```
+
+Run the three constructor-family stages, the fixed executor stage, then CPU
+aggregation using the existing phase entry points. FAST aggregation uses 200
+selection-preserving permutations, K=6, four menu permutations, and only states
+realized by the frozen candidate bank (plus required shuffled-control states).
+
+Freeze promotion from the one-row-per-metric screening summary:
+
+```bash
+python -m methods.metric_implementer.experiments.run_v14_value_campaign \
+  --phase promote --out-root "$PROMOTION_ROOT" --run-sha "$RELEASE_SHA" \
+  --fast-results "$FAST_ROOT/screening_summary.parquet" \
+  --promotion-manifest "$PROMOTION_ROOT/promotion_manifest.json" \
+  --top-k-per-task 3 --figure-metric-keys "${FIGURE_METRICS[@]}"
+```
+
+The CERT design must be created beneath a different root. It consumes only the
+promoted metric identities; no FAST score, cache, state table, or reference is
+copied:
+
+```bash
+python -m methods.metric_implementer.experiments.run_v14_value_campaign \
+  --phase design --scoring-lane cert --metrics-manifest "$METRICS" \
+  --probe-extension-root "$EXTENSIONS" --out-root "$CERT_ROOT" \
+  --promotion-manifest "$PROMOTION_ROOT/promotion_manifest.json" \
+  --run-sha "$RELEASE_SHA"
+```
+
+CERT then follows the independent-reference, hidden/planted-anchor,
+preregistration, 10K-permutation, exact-cap-where-enumerable workflow below.

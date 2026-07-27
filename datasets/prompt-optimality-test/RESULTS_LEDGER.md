@@ -158,3 +158,82 @@ on the held-out select panel).** TERMINAL STATE: P0 complete (HB106), all livebe
 4. Truncation-sensitive benches (aime, livebench): dual-column, 8k paper-exact + 24k
    instrument-clean, same server.
 5. Decision rules are written down BEFORE the data is read (HB91, HB100) and applied mechanically.
+
+## CEILING BACKTEST (2026-07-27) — the hold-out validation HB104 demanded
+
+**Provenance:** `runs/ceiling_backtest.json` (272 metrics), from sk3
+`cr3-v12/inputs/r3_*/llama8b_glm/*_sigs.npz`; script `/tmp/backtest.py` (pid 2665751).
+Protocol: build the ceiling on a random 80% of mined prompts, ask whether the held-out 20%
+max exceeds it. Seed 0, single split.
+
+### Finding 0 (unanticipated, and it reframes the rest): HALF THE BANK HAS NO HEADROOM
+**137 of 272 metrics (50.4%) have max training agreement ≥ .999.** The mined prompt pool already
+reconstructs them essentially perfectly, so their "ceiling" is trivially 1.0 and coverage is
+automatic. **Any coverage number quoted over the full 272 is inflated by these.** All ceiling
+statistics below are on the **135 non-degenerate metrics only**. Quotable as a result in its own
+right: *half the unsupervised metric bank is already saturated by mined prompts.*
+
+### Finding 1: the Good-Turing one-draw ceiling holds — but at a LOOSER n than we would quote
+| | non-degenerate (n=135) |
+|---|---|
+| coverage | **.970** (4 violations) |
+| worst overshoot | **.0030** |
+| median slack | .0193 |
+| genuinely binding (slack < .02) | 68/135 (50%) |
+
+**Caveat that blocks the headline:** U₀ here is computed at 0.8n, and Good-Turing is strongly
+n-dependent — median U₀_UCB is **.723 at 0.8n vs .454 at full n**. The backtest therefore
+validates a ceiling substantially LOOSER than the full-n one. **The full-n Good-Turing ceiling
+remains UNVALIDATED**; report it as an estimate, never as certified, and matched-n validation is
+still owed.
+
+### Finding 2 ★ the RANK/EXCHANGEABILITY certificate validates, and validates CONSERVATIVELY
+Distribution-free, exact in n, no Good-Turing dependence. Under exchangeability with N train /
+m held out, P(held-out max > train max) = m/(N+m) = .200 at an 80/20 split.
+
+| | |
+|---|---|
+| **observed exceedance** | **20/135 = .148** |
+| predicted under exchangeability | .200 |
+| median excess when exceeded | .0067 (max .0533) |
+
+Observed < predicted ⇒ the bound is **conservative** on this data. **This is the instrument to
+lead with** — it survives the n-dependence that undermines the Good-Turing form, and it is the
+already-adopted replacement for the retracted EVT/GPD endpoint. Wording: *"a fresh mined prompt
+exceeds the best of N by at most k/(N+1) probability; empirically .148 against a .200 prediction."*
+
+**Consequence for the paper:** lead the unsupervised ceiling with the rank certificate; carry the
+Good-Turing one-draw form as a secondary estimate with its n-dependence stated; report the 50%
+degeneracy as a finding rather than hiding it in a denominator.
+
+## OSL SUPERVISED LANE — validity checks (2026-07-27, in flight)
+**Setup:** `logs/lane_osl_20260727.log`, sk2 GPU5 port 8110. Ladder **Qwen3-0.6B/1.7B/4B/8B**
+(the only sizes in the shared HF cache; 14B/32B are NOT cached, so the earlier 1.7/4/8/14 plan
+was unrunnable without a multi-hour download). Benches hotpot + hover.
+- **F2 truncation check: PASSES.** 15 truncation warnings across 14 completed 300-item evals =
+  **0.4% of items** at max_tokens=24000. Too small to bend a scaling slope; the earlier worry
+  that small models would truncate more and manufacture a fake slope is not realized. Re-check
+  per model before quoting — this rate is the 0.6B end, where rambling is most likely.
+- Server-side fingerprint recorded per run in `runs/osl_<bench>_<model>.json`.
+
+## LANE INFRASTRUCTURE FIXES (2026-07-27) — three real bugs, all silent
+1. **vLLM is not in the battery `.venv`** — it lives in `miniconda3/bin/vllm` and is served from
+   local snapshots under `/lfs/skampere2/0/shared_hf_cache/hub`. Launching from `.venv` fails
+   with ModuleNotFoundError *into a log file*, so the wrapper looked alive while serving nothing.
+2. **Vendored hotpot metric broke on a dspy relocation**: `from dspy.dsp.utils import EM, F1` →
+   moved to `dspy.evaluate.metrics`. Fired only in GEPA's *feedback* metric, so plain evals
+   (the ablation battery) were unaffected and it looked bench-specific. Every hotpot example
+   errored to 0 while GEPA happily burned its 600-call budget. Patched with a try/except
+   re-export (SAME functions — metric semantics unchanged). Poisoned run dir ARCHIVED, not
+   deleted: `runs_paperexact/hotpot/Qwen3-8B/official_merge_t1fill.POISONED_emf1_importerror_20260727`.
+3. **`refl(prompt)[0]` returns a dict, not a string**, when the served model has a reasoning
+   parser (`--reasoning-parser qwen3`): dspy wraps text + reasoning_content. `raw.index("[")`
+   then threw `'dict' object has no attribute 'index'`, was swallowed by `except`, and **every
+   mined replicate came back empty** — which then looked like "0 units (cached)" forever because
+   16 zero-unit stubs from the dead-GLM era were treated as a valid cache. Added `_as_text()`
+   (prefers the answer field, NEVER the reasoning trace — parsing the trace would mine units out
+   of the model's scratchpad). Stubs archived to `pools/remine_EMPTY_glm_era_20260727/`.
+   After the fix: 60 units/replicate on hotpot, ifbench, hover.
+
+**Standing lesson:** all three failed *silently into logs* while the wrapper process stayed
+alive. "Process is running" is not evidence of progress; check for produced ARTIFACTS.

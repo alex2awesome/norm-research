@@ -1,0 +1,228 @@
+{
+  "bench": "hover",
+  "arm": "unitrecomb",
+  "task_lm": "anthropic/glm-5.2",
+  "budget_calls": 6000,
+  "n_test": 300,
+  "max_tokens": 32000,
+  "robust_answer_extract": false,
+  "seed_test": 0.4767,
+  "best_test": 0.38,
+  "best_candidate": {
+    "create_query_hop2.predict": "Given the fields `claim`, `summary_1`, produce the fields `query`.",
+    "create_query_hop3.predict": "Given the fields `claim`, `summary_1`, `summary_2`, produce the fields `query`.\n- Given the fields `claim`, `summary_1`, `summary_2`, produce the fields `query`.",
+    "summarize1.predict": "Given the fields `claim`, `passages`, produce the fields `reasoning`, `summary`.\n\n# Task Description\nYou are a fact-checking assistant tasked with verifying claims using only the provided text `passages` and your own generalizable strategy. Your goal is to determine if the `passages` contain sufficient information to verify the `claim` and to identify any missing links or documents.\n\n# Generalizable Strategy & Instructions\n1. **Deconstruct the Claim:** Break down the claim into its core entities and relationships. Example: \"Belgian composer of X wrote songs for Y\".\n2. **Cross-Reference Passages:** Scan the provided `passages` for evidence supporting these entities and relationships. \n3. **Identify Missing Evidence:** It is common in this task for the passages to contain partial evidence but miss crucial linking documents (e.g., the exact article for the book \"The Company\" or the person \"Rosi Golan\"). Even if you can logically deduce the missing link, you must explicitly state that the provided passages lack this specific evidence.\n4. **Provide Output:** Output your step-by-step `reasoning` followed by a concise `summary` of whether the claim can be verified with the *provided* passages.\n\n# Domain Specific Knowledge & Factual Information\nTo assist your reasoning, here is domain-specific factual information relevant to the entities mentioned in the claims:\n- **Example 1 Entities:** \"Army Peak\" is named after \"Jefferson C. Davis\" (who died in 1879). The \"1900 establishment\" refers to \"Fort Davis, Alaska\".\n- **Example 2 Entities:** The \"Belgian composer\" of \"Bee (song)\" refers to \"Rosi Golan\". The \"brand of Artsana\" refers to \"Chicco\".\n- **Example 3 Entities:** The literary style is \"roman \u00e0 clef\" (French for \"novel with a key\"). The novel Washington: Behind Closed Doors is based on is the \"Company (Ehrlichman novel)\".",
+    "summarize2.predict": "Given the fields `claim`, `context`, `passages`, produce the fields `summary`."
+  },
+  "units": {
+    "n_llm_suggested": 24,
+    "n_pool_used": 32,
+    "select_init": 0.47,
+    "marginals": [
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Given the fields `claim`, `summary_1`, `summary_2`, produce the fields `query`.",
+        "delta": 0.17000000000000004,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Begin your `summary` with a clear boolean or status statement (e.g., 'VERIFIED', 'REFUTED', or 'MISSING EVIDENCE') based strictly on the combination of the new `passages` and the provided `context`.",
+        "delta": 0.12,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Do not discard or ignore the previously established facts in the `context`; synthesize the `context` with the newly extracted `passages` to resolve the overarching `claim`.",
+        "delta": 0.12,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "If the newly provided `passages` contradict the previously provided `context`, explicitly state the contradiction in your summary and default to the information that directly addresses the original claim's main subject.",
+        "delta": 0.12,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Your goal is to determine if the `passages` contain sufficient information to verify the `claim` and to identify any missing links or documents.",
+        "delta": 0.12,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Given the fields `claim`, `summary_1`, produce the fields `query`.",
+        "delta": 0.08000000000000007,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Limit your `summary` output to only the final deductive conclusion and the explicit evidence sources, omitting any open-ended musings or internal monologue about the text.",
+        "delta": 0.06000000000000005,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Avoid repeating information that has already been successfully verified in the previous summaries; focus the query exclusively on the single missing factual link required to evaluate the claim.",
+        "delta": 0.040000000000000036,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "You are a fact-checking assistant tasked with verifying claims using only the provided text `passages` and your own generalizable strategy.",
+        "delta": 0.040000000000000036,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Construct the query to bridge the gap between `summary_1` and `summary_2` by explicitly asking for the specific relationship or event that links the two summaries together.",
+        "delta": 0.030000000000000027,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Given the fields `claim`, `passages`, produce the fields `reasoning`, `summary`.",
+        "delta": 0.020000000000000018,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Extract the most critical unresolved keyword from `summary_2` and make it the central focus of your search `query`.",
+        "delta": 0.0,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Ensure the query focuses exclusively on the final unverified entity or relationship needed to definitively prove or disprove the claim, avoiding redundant information from previous summaries.",
+        "delta": -0.009999999999999953,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "If the current `passages` still lack the necessary evidence after considering the `context`, explicitly name the final missing piece of information required to reach a conclusion.",
+        "delta": -0.019999999999999962,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Formulate the query as a direct natural language question designed to retrieve the specific missing link identified in `summary_1`.",
+        "delta": -0.02999999999999997,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Start the query with targeted search terms (e.g., \"[Entity A] occupation\" or \"[Entity B] parent company\") instead of generating a natural language question that search engines will fail to parse.",
+        "delta": -0.02999999999999997,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Given the fields `claim`, `context`, `passages`, produce the fields `summary`.",
+        "delta": -0.02999999999999997,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "Use the provided `context` strictly as prior knowledge to bridge any logical gaps or entity links that are missing in the current `passages`.",
+        "delta": -0.03999999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Ensure your final `summary` strictly reports what can be proven with the provided text, noting exactly which entity or relationship is still required to fully verify or refute the claim.",
+        "delta": -0.06,
+        "source": "llm"
+      },
+      {
+        "module": "summarize2.predict",
+        "unit": "When assessing the current `passages`, briefly explain how the newly retrieved information combines with the `context` to either fully verify or refute the `claim`.",
+        "delta": -0.06999999999999995,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Given the fields `claim`, `passages`, produce the fields `summary`.",
+        "delta": -0.07999999999999996,
+        "source": "trajectory"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "When identifying missing evidence, explicitly output the exact name of the missing entity or document needed to connect the provided passages to the claim.",
+        "delta": -0.08999999999999997,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Exclude the names of entities already confirmed in `summary_1` from the query, focusing solely on resolving the unverified aspects of the `claim`.",
+        "delta": -0.10999999999999999,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "# Generalizable Strategy & Instructions",
+        "delta": -0.10999999999999999,
+        "source": "trajectory"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Base your query strictly on the unresolved entity from the `claim` that is missing from `summary_1`, rather than copying the entire claim into a single broad question.",
+        "delta": -0.15999999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "create_query_hop2.predict",
+        "unit": "Formulate the query as if you are directly asking a search engine to retrieve the bridging Wikipedia article between two concepts, using highly specific nouns.",
+        "delta": -0.16999999999999998,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "If the provided `passages` contain contradictory information regarding the claim, explicitly state this conflict in your summary.",
+        "delta": -0.18,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "In your `reasoning`, directly quote the specific sentence from the `passages` that supports a claim sub-step, or explicitly write 'NO EVIDENCE FOUND IN PASSAGES' if absent.",
+        "delta": -0.20999999999999996,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Break down the `claim` into its core entities and temporal constraints before scanning the `passages`, ensuring you explicitly note any mismatched dates.",
+        "delta": -0.24999999999999997,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Under no circumstances should you use your internal pre-trained knowledge to fill in missing evidence; you must explicitly state that the link is missing if the provided `passages` do not contain the exact entities.",
+        "delta": -0.27999999999999997,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "When deconstructing the `claim`, clearly list out the independent sub-claims (e.g., Entity A's attribute, Entity B's relationship to A) so you can methodically check each one against the `passages`.",
+        "delta": -0.32999999999999996,
+        "source": "llm"
+      },
+      {
+        "module": "summarize1.predict",
+        "unit": "Do not use outside knowledge to fill in missing evidence; only state whether the text within the provided `passages` logically bridges the claims.",
+        "delta": -0.33999999999999997,
+        "source": "llm"
+      }
+    ],
+    "select_compiled": 0.65,
+    "confirm_init": 0.14,
+    "confirm_compiled": 0.3,
+    "compiled_units": [
+      {
+        "module": "create_query_hop3.predict",
+        "unit": "Given the fields `claim`, `summary_1`, `summary_2`, produce the fields `query`.",
+        "source": "trajectory"
+      }
+    ],
+    "n_compiled": 1,
+    "fell_back_to_init": false
+  }
+}

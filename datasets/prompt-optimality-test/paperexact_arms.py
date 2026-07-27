@@ -244,6 +244,15 @@ def make_reflection_lm(model: str, patient: bool = False, cache: bool = True):
     # claude-* models route to the real Anthropic API (ANTHROPIC_KEY_FILE env, else
     # ~/.anthropic-usc-key.txt; user directive: "we'll be using Sonnet"). `cache` kw added:
     # stochastic replicates (mining, k-passes) MUST pass cache=False — F3c rule.
+    if model.startswith("local:"):
+        # v9.2 (2026-07-27): STRONG LOCAL reflection/proposal LM served by our own vLLM, for
+        # GEPA+Merge and MIPROv2 now that every API route is dead. Format:
+        #   local:<served-name>@<api-base>   e.g. local:Qwen3-32B@http://127.0.0.1:8191/v1
+        spec = model[len("local:"):]
+        name, base = spec.split("@", 1)
+        return dspy.LM(f"openai/{name}", api_base=base, api_key="EMPTY",
+                       temperature=1.0, max_tokens=8000, cache=cache,
+                       num_retries=40 if patient else 10, timeout=600)
     if model.startswith("claude"):
         import os
         kf = os.environ.get("ANTHROPIC_KEY_FILE") or str(Path.home() / ".anthropic-usc-key.txt")
@@ -345,6 +354,26 @@ def arm_inhouse(program, bench, metric, metric_fb, log_path, budget_calls, refle
     return cur
 
 
+def _as_text(raw):
+    """Normalize an LM completion to a string.
+
+    A served model with a reasoning parser (e.g. vLLM --reasoning-parser qwen3) makes dspy
+    return dicts carrying {"text"/"content", "reasoning_content"} rather than bare strings, so
+    the downstream raw.index("[") blew up with 'dict' object has no attribute 'index' and every
+    mined replicate came back empty. Prefer the ANSWER field and never the reasoning trace —
+    parsing the trace would silently mine units out of the model's scratchpad.
+    """
+    if isinstance(raw, str):
+        return raw
+    if isinstance(raw, dict):
+        for k in ("text", "content", "answer", "output_text"):
+            v = raw.get(k)
+            if isinstance(v, str) and v.strip():
+                return v
+        return ""
+    return str(raw or "")
+
+
 def _suggest_units_paper(bench_name, init_cand, refl, n=12, train_examples=None):
     """D2 third unit source: novel per-module clauses proposed by a strong LLM.
 
@@ -384,7 +413,7 @@ def _suggest_units_paper(bench_name, init_cand, refl, n=12, train_examples=None)
             'with ONLY a JSON array of objects {"module": <one of the module names above>, '
             '"clause": <one or two self-contained sentences>}.')
         try:
-            raw = refl(prompt)[0]
+            raw = _as_text(refl(prompt)[0])
             arr = json.loads(raw[raw.index("["): raw.rindex("]") + 1])
             for d in arr:
                 mod, c = str(d.get("module")), str(d.get("clause", "")).strip()
@@ -458,7 +487,7 @@ def _suggest_units_failures(bench_name, init_cand, refl, program, panel, metric,
             'of objects {"module": <one of the module names above>, "clause": <one or two '
             "self-contained sentences>}.")
         try:
-            raw = refl(prompt)[0]
+            raw = _as_text(refl(prompt)[0])
             arr = json.loads(raw[raw.index("["): raw.rindex("]") + 1])
             for d in arr:
                 mod, c = str(d.get("module")), str(d.get("clause", "")).strip()
