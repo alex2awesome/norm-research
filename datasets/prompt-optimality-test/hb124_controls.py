@@ -42,6 +42,7 @@ def main():
     ap.add_argument("--max-tokens", type=int, default=24000)
     ap.add_argument("--eval-threads", type=int, default=32)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--tag", default="", help="suffix for the output file (new session = new file)")
     ap.add_argument("--base", choices=["init", "seed"], default="init",
                     help="what every draw is appended TO. seed = the benchmark seed prompt "
                          "with the searched winner REMOVED (required for a zero-search "
@@ -49,7 +50,7 @@ def main():
                          "superset of the searched prompt, which licenses nothing).")
     ap.add_argument("--arms", nargs="+",
                     default=["native", "foreign"],
-                    choices=["native", "foreign", "shuffled", "seed_units"],
+                    choices=["native", "foreign", "shuffled", "seed_units", "foreign_shuffled", "shuffled_entity"],
                     help="shuffled = native clauses with tokens scrambled (kills the "
                          "any-text artifact: same length/format/vocabulary, no semantics). "
                          "seed_units = units appended to the SEED prompt, with GEPA's "
@@ -87,10 +88,20 @@ def main():
         _rs.shuffle(w)
         return " ".join(w)
     shuffled = [(m, _shuf(c)) for m, c in native]
+    # entity-preserving scramble: capitalized multi-word spans stay atomic, everything else shuffles.
+    # Separates "vocabulary priming" from "entity-name priming" (HB147: word-level scrambling
+    # shatters entity names, likely UNDER-estimating the vocabulary share on fact-verification).
+    import re as _re
+    def _shuf_ent(c):
+        toks = _re.findall(r"[A-Z][a-z]+(?: [A-Z][a-z]+)+|\S+", c)
+        _rs.shuffle(toks)
+        return " ".join(toks)
+    shuffled_entity = [(m, _shuf_ent(c)) for m, c in native]
+    foreign_shuffled = [(m, _shuf(c)) for m, c in foreign]
     print(f"pools: native={len(native)} foreign({a.foreign_bench})={len(foreign)} "
           f"shuffled={len(shuffled)}", flush=True)
 
-    out = HERE / "runs" / f"hb124_controls_{a.bench}_{a.lm_tag}_{a.base}.json"
+    out = HERE / "runs" / f"hb124_controls_{a.bench}_{a.lm_tag}_{a.base}{a.tag}.json"
     out.parent.mkdir(exist_ok=True)
     prev = json.loads(out.read_text()) if out.exists() else {}
     res = {"bench": a.bench, "lm_tag": a.lm_tag, "foreign_bench": a.foreign_bench,
@@ -116,15 +127,22 @@ def main():
     counts = [int(rng.binomial(len(native), a.include_p)) for _ in range(a.n_draws)]
     BASE = dict(seed_cand) if a.base == "seed" else init_cand
     ARMS = {"native": (native, BASE), "foreign": (foreign, BASE),
-            "shuffled": (shuffled, BASE),
+            "shuffled": (shuffled, BASE), "shuffled_entity": (shuffled_entity, BASE),
+            "foreign_shuffled": (foreign_shuffled, BASE),
             # seed_units always drops the searched winner regardless of --base
             "seed_units": (native, dict(seed_cand))}
+    # PAIRED subsets (HB147 fix): one index draw per i, reused by every same-pool arm; foreign
+    # arms get their own count-matched draw. Removes pool-composition variance from contrasts.
+    _rp = np.random.default_rng(a.seed + 17)
+    IDX_NAT = [ _rp.choice(len(native),  size=min(c, len(native)),  replace=False).tolist() for c in counts ]
+    IDX_FRN = [ _rp.choice(len(foreign), size=min(c, len(foreign)), replace=False).tolist() for c in counts ]
+    PAIRED_IDX = {"native": IDX_NAT, "shuffled": IDX_NAT, "shuffled_entity": IDX_NAT,
+                  "seed_units": IDX_NAT, "foreign": IDX_FRN, "foreign_shuffled": IDX_FRN}
     for arm in a.arms:
         pool, base_cand = ARMS[arm]
         rows = res.get(arm, [])
         for i in range(len(rows), a.n_draws):
-            k = min(counts[i], len(pool))
-            idx = rng.choice(len(pool), size=k, replace=False).tolist()
+            idx = PAIRED_IDX[arm][i]
             cand = dict(base_cand)
             for j in idx:
                 m, c = pool[j]

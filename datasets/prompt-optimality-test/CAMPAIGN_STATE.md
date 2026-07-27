@@ -1,5 +1,5 @@
 # CAMPAIGN STATE — prompt-optimality / Paper #2
-**Single source of truth. Updated 2026-07-27 23:05Z. Rewrite this file rather than adding another notes file.**
+**Single source of truth. Updated 2026-07-28 00:05Z. Rewrite this file rather than adding another notes file.**
 
 Written because the campaign had drifted across three boxes and several parallel plans. A census
 (2026-07-27) showed the sprawl was mostly imaginary — see "Where things actually run".
@@ -25,6 +25,8 @@ codegen — it cost hours for zero results. Do not use it without a specific rea
 | `lane_t1_v3.sh` — Table 1 | 678689 | RUNNING, on livebench/mipro |
 | `lane2.sh osl` — OSL ladder | 1311630 | RUNNING, on Qwen3-4B (final rung) |
 | `mipro_refill.sh` | 398357 | WAITING for the T1 lane (re-runs the 2 cells burned by the optuna bug) |
+| `table_omnibus.sh` (HB150 L1) | 2592654 | WAITING for T1+refill, then per-bench ALL-candidate k=5 rescore → retires every † in Table 1 |
+| `controls_v2.sh` (HB150 L2) | 2592656 | RUNNING gpu2: hover 5-arm PAIRED (adds foreign_shuffled + shuffled_entity), then hotpot-shuffled-8B |
 | `hover_ceiling.sh` (HB128) | — | **COMPLETE** |
 | `hb124_full.sh` (4-arm) | — | **COMPLETE** |
 | `paperexact_arms.py ifbench --arm unitrecomb --run-tag solwide` | 50630 | **NOT LAUNCHED BY THIS LINEAGE.** budget 60000. Leave alone; do not quote its output without provenance. |
@@ -76,12 +78,11 @@ coverage); rank certificate P(fresh beats best) ≤ 1/(N+1) ≈ .0016.
 
 ## 5. Open, ranked
 
-1. **Table 1 is unquotable** — every cell is single-pass `best_test`, a selection statistic. Needs
-   same-session k≥5 rescore. *This is the blocker on the paper's main table.*
-2. **scrambled-foreign arm** — separates vocabulary priming from a generic high-perplexity-text
-   effect. Prereg on file: prediction ≈ seed within ±.015.
-3. **hotpot-shuffled-at-8B** — the hover/hotpot shuffled sign flip is confounded with executor
-   scale (0.6B vs 8B). One cell.
+1. **Table 1 comparability — IN FLIGHT** (`table_omnibus.sh`): per-bench all-candidate k=5
+   same-session rescore; when it lands, replace every † cell and drop the daggers.
+2. **scrambled-foreign + shuffled_entity — IN FLIGHT** (`controls_v2.sh`, paired subsets;
+   preregs frozen in HB150).
+3. **hotpot-shuffled-at-8B — IN FLIGHT** (same chain, second stage).
 4. ~~pool↔test entity-overlap audit~~ — **DONE (HB149): leakage REFUTED** (native 3% bigram
    overlap vs foreign 0%, word-overlap .31 vs .27 — cannot produce +.097).
 5. **selection-regret** — GEPA's explored candidates were never retained, so closing this needs a

@@ -4395,3 +4395,25 @@ appendix figure: missing-mass curves for all five supervised benches from the re
 pools at TWO species granularities (fine J≥.5 vs coarse J≥.25 — the within-panel contrast IS the
 granularity-not-task finding; deterministic clustering, declared conservative). PDF now 7 pages.
 Memory index + project memory updated (the .517/.450 headline is now flagged SUPERSEDED there).
+
+## HB150 (2026-07-27) — PREREG + LAUNCH: table-comparability omnibus & controls v2 (frozen before launch)
+
+**Lane 1 — TABLE OMNIBUS (fixes "these numbers are not comparable").** For each bench, ALL table
+candidates rescored in ONE invocation, k=5, cache off, one server fingerprint: official,
+GEPA+Merge, MIPROv2 (where the cell exists), and the M_ω run. Waits for the T1/mipro-refill lanes
+to drain so the mipro cells exist. Every Table-1 row will then be single-session; all † daggers
+retire. Hover is re-panelled ONLY because adding MIPROv2 to the row is an instrument change (new
+candidate set requires a new session); the HB127 prereg verdict (WIN +.100) is untouched and stays
+the verdict of record.
+**Lane 2 — CONTROLS v2 (tasks #9/#10), design fixes from HB147:** all arms drawn from PAIRED unit
+subsets (same indices per draw across same-pool arms; count-matched for foreign); five arms on
+hover→seed: native, foreign, shuffled, **foreign_shuffled**, **shuffled_entity** (word-scramble
+that keeps capitalized multi-word entity spans atomic); then **hotpot shuffled at 8B**.
+**Frozen predictions:**
+1. foreign_shuffled ≈ seed within ±.015 (already frozen in HB147). If materially above seed, the
+   vocabulary component is partly a generic scrambled-text artifact and HB146 must be restated.
+2. shuffled_entity ≥ shuffled (entity-preserving scramble recovers MORE than plain scramble),
+   because word-level scrambling shatters entity names; gap = the entity share of vocabulary priming.
+3. hotpot-shuffled-at-8B lands ABOVE init (executor-scale explanation of the sign flip). If it
+   stays BELOW init at 8B, the flip is bench-kind, not scale, and HB146's cross-bench framing changes.
+One shot each; whatever returns is the verdict.
