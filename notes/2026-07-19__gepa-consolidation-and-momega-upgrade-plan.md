@@ -3140,3 +3140,45 @@ skipped (no gpt-5-mini bank).
 style (log-x, per-curve γ, dashed power-law extrapolation to the p=.1 target, regime legend,
 named arrow annotations); new Fig 4 = missing VALUE (supervised LiveBench ladder measured;
 unsupervised panel pending its value artifacts).
+
+## HB120 (2026-07-27) — ★★★ HOVER PER-UNIT CAUSAL BATTERY: units are NOT individually causal
+
+First per-unit causal measurement in the campaign (E2). One session, cache OFF, 3 real passes,
+n=300, full candidate vs candidate-minus-one-unit for the top-10 greedy-chosen units.
+
+Full candidate **.5678**. Causal deltas (full − ablated):
+| arm | ablated score | causal Δ | unit (abbrev) |
+|---|---|---|---|
+| minus_6 | .5600 | **+.0078** | extract all relevant entities/relationships |
+| minus_9 | .5600 | +.0078 | delineate confirmed vs missing |
+| minus_5 | .5611 | +.0066 | compare gaps in summary_1 vs summary_2 |
+| minus_0 | .5622 | +.0056 | synonyms/aliases/acronyms for entities |
+| minus_4 | .5678 | .0000 | expand query with aliases |
+| minus_3 | .5678 | −.0000 | extract 2-3 unresolved keywords |
+| minus_2 | .5700 | −.0022 | generate multiple diverse queries |
+| minus_1 | .5767 | −.0089 | focus query on unverified facts |
+| minus_8 | .5778 | −.0100 | state contradictions with new passages |
+| minus_7 | .5811 | **−.0133** | identify which components remain unresolved |
+
+**Median causal Δ = .0000; range −.013 to +.008. Four of ten units make the prompt BETTER when
+removed.** And the headline: **corr(greedy select-panel marginal, causal test delta) = +0.013** —
+the select-panel marginals that drove unit selection have essentially ZERO relationship to each
+unit's causal contribution on test.
+
+**What this does and does not touch.**
+- It does NOT touch the hover win (+.051/+.036, replicated across sessions and configs) or the
+  hotpot win (+.220, content-audited). Those are candidate-vs-candidate comparisons.
+- It DOES falsify a per-unit reading of the abstract's definition ("units = minimal perturbations
+  that induce CAUSAL behavioral changes"). Individually, on this bench, they do not.
+- It is CONSISTENT with — arguably the sharpest evidence yet for — the pool-not-search thesis:
+  value lives in the assembled pool, not in identifiable individual units; the greedy search's
+  per-unit signal is noise, which is exactly why unguided recombination matches or beats it.
+- It also explains the earlier livebench mixture finding (20 positive/6 toxic units) and the
+  hover leakage-ablation null (+.003, P=.41) — same phenomenon, now measured systematically.
+
+**Caveat before over-reading:** single-unit ablation measures MARGINAL contribution in the
+presence of all others; substitutable/redundant units will each show ~0 while the SET matters.
+That is a real alternative explanation and the honest framing is "no unit is individually
+load-bearing," not "the units do nothing." A leave-many-out or Shapley-style design would
+separate these; the E3 sub-clause arms (running) partially address it.
+Artifact: runs/ablation_battery_hover.json (sk2). hotpot battery at arm 7/16, running.
