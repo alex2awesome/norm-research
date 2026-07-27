@@ -3931,3 +3931,49 @@ metric with real label variance. That is a genuine finding; the raw .975 was not
    achieved .980 / ceiling .995") are **superseded by this normalization** — the coverage/rank
    certificate conclusions still hold, since the rank certificate is scale-free and was computed
    per-metric, but the descriptive agreement medians must be restated.
+
+## HB138 (2026-07-27) — ★★★ ROOT CAUSE: degeneracy is a GLOBAL-THRESHOLD artifact. Fixed; 0/272 remain.
+
+**Why it happened.** Every metric was binarized at a single global **tau = 0.020**. But the raw
+M_i are not near-constant at all — they carry full variance:
+
+| group (old readout) | distinct M_i values | M_i std | M_i min (median) | frac ≥ tau |
+|---|---|---|---|---|
+| "degenerate" 140 | **300 of 300 items** | .148 | **.039** | **1.0000** |
+| "non-degenerate" 132 | 300 of 300 | .205 | .001 | .9433 |
+
+**The minimum M_i of the degenerate metrics (.039) is already ABOVE tau=.020**, so every item
+labels positive and the target's variance is annihilated. **0 of 272 metrics have only one
+distinct M_i value** — none was ever truly constant. My HB137 reading ("constant-label metrics, an
+instrument defect") was wrong in the same way the "saturated" reading was: the metrics are fine,
+**the readout was broken**.
+
+**Fix: per-metric MEDIAN split** (signatures binarized on the same per-metric threshold, so the
+comparison stays apples-to-apples). `cr3-v12/rebinarized_median.json`:
+
+| statistic | tau = 0.02 (old) | **median split (new)** |
+|---|---|---|
+| degenerate metrics (agreement ≥ .999) | **140/272** | **0/272** |
+| majority-class baseline (median) | .9933 | **.5000** |
+| best agreement (median) | 1.0000 | **.8250** |
+| **normalized skill (median)** | — | **0.650** |
+| metrics beating the majority baseline | — | **272/272** |
+| skill > 0.5 / skill < 0.2 | — | **240/272 / 0/272** |
+
+**Consequences — all favourable, and no exclusions are needed:**
+1. **Nothing gets dropped.** The planned "exclude the degenerate 137" is moot; all 272 metrics are
+   usable once binarized sensibly. Figure 3 RHS should be regenerated on the median-split readout
+   over the FULL bank, not on a filtered subset.
+2. The result is **stronger and finally interpretable**: median agreement .825 against a .500
+   baseline (skill .650), instead of .975 against a .993 baseline where a constant predictor
+   already sat.
+3. Every prior unsupervised agreement/ceiling number computed at tau=.02 is **superseded**. The
+   rank certificate is unaffected in form (scale-free, per metric) but must be recomputed on the
+   new binarization before being quoted.
+
+**Honest caveat on the fix.** A median split changes the target's meaning from *"does the metric
+fire"* to *"is the metric above its own median"*. Both are defensible; the second is far more
+informative here because the first has no variance to predict at tau=.02. This must be stated
+plainly in the paper — it is a definitional choice, not a neutral preprocessing step. Whoever set
+tau=.02 may have had a rationale for an absolute threshold; if one exists it should be recovered
+before the median split is made canonical.
