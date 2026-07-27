@@ -1,0 +1,367 @@
+{
+  "bench": "hotpot",
+  "replicate": 2,
+  "sampler": "gpt-5.6-sol_5framings",
+  "units": [
+    {
+      "module": "summarize1.predict",
+      "unit": "Extract only facts that connect the question's named entities to a likely bridge entity, preserving exact names, dates, titles, and relation directions.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Identify which retrieved passage directly addresses the question and which passage supplies a clue for the missing second-hop fact; exclude unrelated lexical matches.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "State the strongest supported intermediate conclusion and cite the passage wording that establishes it, without guessing the final answer.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Form a concise BM25-friendly query containing the exact bridge entity from summary_1 plus the unresolved relation or attribute requested by the question.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Remove broad question wording and pronouns from the second-hop query; retain distinctive proper nouns and one key relation term.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "When several bridge candidates appear, query the candidate supported by an explicit relation in summary_1 rather than the most familiar name.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Combine context with the new passages by explicitly stating the two-hop chain: question entity to bridge entity, then bridge entity to answer.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Prefer a passage that explicitly expresses the required relation over one that merely mentions both entities, and preserve the answer's canonical surface form.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Resolve conflicting passages using relation specificity and consistency with summary_1; report only evidence relevant to the requested answer type.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Return the shortest exact answer span supported by the two summaries, using the canonical name and no explanation, article, or trailing punctuation.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Match the grammatical answer type demanded by the question, such as a person, place, date, work, or yes/no response.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Do not substitute the bridge entity for the requested endpoint; answer the final relation asked in the original question.",
+      "source": "llm_sol",
+      "framing": 1
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "First label the question's target slot and known entity, then extract a sentence that supplies a bridge filling the relation between them.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "For every candidate bridge, record the exact supporting phrase; discard candidates supported only by topic overlap, shared nationality, or co-occurrence.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Watch for reversed relations such as named-after versus namesake-of, parent versus child, or author versus subject, and state the direction explicitly.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Build the second query as '<exact bridge name> <missing property>' and add a disambiguating location, profession, or date only when summary_1 supports it.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "If the first retrieval already reveals a probable answer, still query the bridge and requested relation so the answer receives independent second-hop support.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Avoid copying the entire natural-language question into the query; use exact entity strings and retrieval terms likely to occur verbatim in an encyclopedia passage.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Write a compact evidence ledger with Bridge fact and Answer fact, each tied to an explicit passage statement; omit any candidate lacking both links.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Check entity identity before merging evidence: identical surnames, titles, or place names do not establish that two passages discuss the same entity.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "When dates or superlatives matter, retain the exact qualifier and reject evidence about a nearby year, a later officeholder, or a different ranking.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Before emitting, classify the expected answer type and select a span of that type; never return a full sentence when a name or date is requested.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Use the entity's complete conventional name from the evidence, but omit honorifics, appositives, and descriptive material not needed for identity.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "For comparison questions, verify which entity satisfies the comparison and answer with that entity alone; do not output the compared value unless requested.",
+      "source": "llm_sol",
+      "framing": 2
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Re-read the question after drafting the summary and verify that the extracted bridge resolves a necessary missing link rather than an incidental detail.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Before finalizing summary_1, re-derive the relation direction from the passage wording and confirm that subject and object have not been swapped.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Audit every retained proper noun against the retrieved text, correcting spelling, parenthetical disambiguators, and similarly named entities.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Before submitting the query, point to the exact summary_1 phrase that licenses its bridge entity; if none exists, rebuild the query from supported facts.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Check that the query seeks the still-unknown endpoint rather than redundantly retrieving the fact already established in the first hop.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Mentally test whether the query could retrieve a namesake or homonym; add one evidence-backed discriminator when that ambiguity is plausible.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Reconstruct the complete two-edge chain from the original question through summary_1 to the new passages, and reject an answer if either edge lacks textual support.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Perform a contradiction check across all relevant passages; if a candidate conflicts with a more explicit statement, explain the conflict and retain the better-supported fact.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Re-read every constraint in the question, including dates, locations, negation, and comparison direction, and confirm the proposed evidence satisfies each one.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Privately substitute the candidate into the original question and verify the resulting statement is supported by both summaries before returning it.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Run a final exact-match audit: output only the answer span, with canonical spelling, no explanation, no quotation marks, and no terminal punctuation.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Compare the candidate with the question's requested entity type and relation endpoint; if it is merely the bridge, re-derive the final hop.",
+      "source": "llm_sol",
+      "framing": 3
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Translate the question into a two-slot relation graph with known node, unknown node, and edge labels; summarize only facts that can fill or connect those slots.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Generate one plausible but wrong bridge from surface word overlap, then use the passages to state why it fails before selecting the supported bridge.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Restate the information goal in your own words as 'I know X and must discover Y through Z,' then extract X-to-Z evidence.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Create three query sketches emphasizing entity, relation, and disambiguator respectively, then emit the one whose terms are most likely to appear together verbatim.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Represent the unresolved hop as a missing encyclopedia sentence and query the rarest content words that sentence would probably contain.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Use a counterfactual query test: if replacing the bridge with another same-type entity leaves the query equally plausible, add a bridge-specific anchor.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Construct a tiny table of candidate answer, supporting edge, opposing evidence, and type match; choose only after every surviving candidate has been compared.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Reason backward from each candidate answer to the bridge, then forward from the question to the bridge; keep candidates whose two paths meet at the same entity.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Assign each link a support label of explicit, implied, or absent, and summarize an answer only when both hops are labeled explicit.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Imagine an adversary arguing for the closest alternative answer; return the candidate only if one specific evidence fact defeats that alternative.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Apply a deletion test to the answer phrase: remove words one at a time and keep the shortest form that still uniquely names the evidenced entity.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Separate identity selection from string rendering: first decide the entity, then independently copy its exact canonical span from the summaries.",
+      "source": "llm_sol",
+      "framing": 4
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "For a 'named after' question, extract the honoree's full name and the thing bearing that name as separate entities, preserving which one names the other.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Treat biographical clues such as 'first to ascend' plus a year and landmark as identifiers; require one passage to connect all supplied clues to the same person.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "summarize1.predict",
+      "unit": "Preserve rare proper-name tokens exactly, because names like Philemon Beecher Van Trump are stronger retrieval anchors than generic terms such as climber or glacier.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Once the person is identified, query the full personal name together with the target category word, for example 'Philemon Beecher Van Trump glacier'.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "If the question supplies a landmark with a likely spelling variant, include the correctly identified landmark only when needed to disambiguate the namesake.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "create_query_hop2.predict",
+      "unit": "Convert the first-hop biography into a second-hop namesake query rather than searching the ascent event again; the unresolved target is the named feature.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Require the second-hop passage to state that the target feature was named for the identified person; shared surname alone is insufficient.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Join the biography and namesake facts explicitly: the person matching the ascent clue is the same person for whom the candidate glacier was named.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "summarize2.predict",
+      "unit": "Distinguish a named geographic feature from its nearby mountain, route, or settlement, and retain the feature-type word required by the question.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Answer a 'Which Glacier' question with the glacier's proper name including the word 'Glacier', not with the honoree's name or the mountain.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Copy the complete supported feature name exactly, such as 'Van Trump Glacier', and output no lead-in like 'The glacier is'.",
+      "source": "llm_sol",
+      "framing": 5
+    },
+    {
+      "module": "final_answer.predict",
+      "unit": "Check that the final span answers the question's head noun and not the identifying relative clause; here the requested object is a glacier, not a climber.",
+      "source": "llm_sol",
+      "framing": 5
+    }
+  ]
+}

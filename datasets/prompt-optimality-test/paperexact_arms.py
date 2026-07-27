@@ -685,6 +685,7 @@ def main():
                     choices=["official", "official_merge", "inhouse", "unitrecomb", "mipro"])
     ap.add_argument("--task-lm", required=True,
                     help="litellm model id, e.g. openai/Qwen/Qwen3-8B or anthropic/glm-4.7")
+    ap.add_argument("--lm-cache-off", action="store_true")
     ap.add_argument("--api-base", default=None)
     ap.add_argument("--api-key-file", default=None)
     ap.add_argument("--temperature", type=float, default=0.6)
@@ -758,7 +759,8 @@ def main():
     key = Path(a.api_key_file).read_text().strip() if a.api_key_file else "EMPTY"
     # deep retries + per-attempt timeout: see make_reflection_lm comment (z.ai hang post-mortem)
     lm_kwargs = dict(api_base=a.api_base, api_key=key, temperature=a.temperature,
-                     top_p=a.top_p, max_tokens=a.max_tokens, num_retries=10, timeout=300)
+                     top_p=a.top_p, max_tokens=a.max_tokens, num_retries=10, timeout=300,
+                     cache=not a.lm_cache_off)   # v9.1: --lm-cache-off makes k-passes real (F3)
     if a.top_k is not None:
         lm_kwargs["extra_body"] = {"top_k": a.top_k}
     lm = dspy.LM(a.task_lm, **lm_kwargs)

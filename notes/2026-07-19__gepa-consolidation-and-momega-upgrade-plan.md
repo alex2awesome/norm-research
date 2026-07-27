@@ -3065,3 +3065,45 @@ Candidates (memory): GLM-5.2-NVFP4 local (4×B200 — impractical), **Llama-70B 
 B200)**, **Gemma-4-31B (certified ≥ Sonnet as judge in this project)**, Qwen3-32B. Proposed:
 Llama-70B = miner/proposer; Gemma-4-31B = judge/classifier. Chain them on sk2 GPU3 after the
 E-work queue unless the user picks otherwise.
+
+## HB117 (2026-07-27) — WHY THE PLACEBOS FAILED: livebench's pool is a MIXTURE, not inert
+
+Draw-level regression on the 40 P0 real draws (score vs unit inclusion, n≈20 draws per side):
+- **20 of 48 units have positive marginals** (top: cyclotomic-polynomial content +.066, roots-of-
+  unity heading +.048, state-the-domain +.042, strict-output-format +.042, geometry-sketch +.042);
+  their marginals SUM to **+.576**.
+- **6 units are actively toxic** (worst −.063: "write out the total number of combinatorial
+  cases", "translate word problems first", "provide clear step-by-step reasoning" −.058).
+- Random p=.5 draws mix ~10 good + ~3 toxic + 11 neutral → the mixture averages DOWN to the
+  foreign-content level. **The placebo did not show content is worthless; it showed the POOL is
+  diluted.** That is a different (and more interesting) finding, and it is testable.
+
+Same logic likely explains ifbench's non-significance: 32 units is a thin pool, and its search
+fell back repeatedly. The fix there is a BIGGER, better-sampled pool, not a re-roll of the old one.
+
+## HB118 (2026-07-27) — ★ PRE-REGISTERED WIN ATTEMPTS (committed BEFORE any of it runs)
+
+Both attempts are single-shot. No re-rolls; whatever the rule says is what the paper says.
+
+**IFBENCH — merged-pool search.** New pool = 32 frozen + 180 sol-mined units (3 independent
+gpt-5.6-sol replicates, hash-verified distinct) = **212 units**, `pools/ifbench_Qwen3-8B_merged_sol.json`.
+Run `unitrecomb --run-tag solwide --lm-cache-off` (harness v9.1 adds `--lm-cache-off`, so search
+k-passes are finally real samples), then ONE final session at **k=5** scoring
+{official, unitrecomb_v6ctx32k, unitrecomb_solwide} together.
+*Rule:* ifbench counts as a WIN iff best-M_ω minus official has paired-bootstrap **P(Δ≤0) < .05**
+in that session. This is the ONE permitted widened-k replication reserved in HB91 — spending it
+now, declared, on a genuinely NEW candidate rather than a re-roll of the old one. If it fails,
+ifbench keeps its "directionally positive, not confirmed" label FOREVER.
+
+**LIVEBENCH — content rescue (`livebench_content_rescue.py`).** Stage 1: score all 48 units'
+marginals on the SELECT panel (train[:81], k=2, cache off) — selection re-derived cleanly, never
+from test. Deterministic rule: **keep the top-12**. Stage 2: one test session, cache off, arms =
+8 init replicates + 8 selected-candidate evals + 15 count-matched foreign-content draws.
+*Rule:* **CONTENT RESTORED iff selected-mean > placebo-mean with rank-sum p < .05.** Otherwise
+livebench's content claim stays dead and no further attempt is made.
+Note this tests a sharper claim than the original: not "the pool's content is valuable" but
+"SELECTED content beats bulk" — which is exactly the pool-not-search thesis with selection
+doing the work the P0 random draws deliberately withheld.
+
+Chain armed on sk2 GPU3 (pid 1099047) behind the E-work queue: ifbench search → ifbench k5
+session → livebench rescue.
