@@ -3107,3 +3107,36 @@ doing the work the P0 random draws deliberately withheld.
 
 Chain armed on sk2 GPU3 (pid 1099047) behind the E-work queue: ifbench search → ifbench k5
 session → livebench rescue.
+
+## HB119 (2026-07-27) — ★★ SEMANTIC SPECIES FIXES CAPTURE-RECAPTURE; real p(unseen) curves extracted
+
+**★ The estimator works once species are SEMANTIC.** Codex/sol clustered all sol-mined clauses +
+frozen-pool clauses into semantic equivalence classes; over the 3 independent replicates:
+| bench | clusters | replicate-species S | f1 | f2 | f3 | Chao1 N̂ | 95% CI | cross-sampler overlap |
+|---|---|---|---|---|---|---|---|---|
+| hotpot | 109 | 73 | 22 | 19 | 32 | **86** | [78, 108] | 18 clusters |
+| ifbench | 85 | 72 | 21 | 17 | 34 | **85** | [77, 109] | 15 clusters |
+Verbatim matching gave f2=0 (degenerate); semantic matching gives well-conditioned spectra and
+real CIs. **This is the fix HB104 predicted** ("specify the sampling, don't strengthen the
+estimator" — here: specify the SPECIES). Cross-sampler overlap (18/15 clusters shared with the
+GLM-era frozen pool) also shows two different miners rediscover the same units — evidence the
+unit space is a property of the task, not of the miner.
+
+**★ Fable extraction: 30 REAL Good-Turing curves** (10 metric banks × 3 species granularities),
+`runs/p_unseen_curves.json`. Regimes: 10 saturating, 17 plateauing, 3 climbing. The finding the
+fork surfaced is sharper than the category question I asked:
+**the regime is a property of the GRANULARITY at which a norm is individuated, not of the task.**
+Every task saturates at concept-head level (p_end .024-.069, ~8k species) and none saturates at
+phrase level (.81-.93, ~65k species) from the identical corpus. Patents splits hardest
+(.024 vs .845); humor is most open everywhere (.069/.735/.931 — taste resists shared vocabulary);
+grant-funding closes fastest (5,315 heads — institutionally standardized criteria). Only
+peer-review::fine actually climbs. Mirrors the campaign's R2/R3-saturate vs L0/R1-open-tail
+result from the metric-lexicon line. Caveats recorded: ordering is file-mtime (no usable
+collection-query logs); point estimates only (notebook had Clopper-Pearson bands); 5 tasks
+skipped (no gpt-5-mini bank).
+
+**Paper:** Table 1 now stars-not-P and no verdict column; Fig 3 = missing MASS
+(supervised | unsupervised) plotted from real data by `gen_fig_curves.py` in the notebook's
+style (log-x, per-curve γ, dashed power-law extrapolation to the p=.1 target, regime legend,
+named arrow annotations); new Fig 4 = missing VALUE (supervised LiveBench ladder measured;
+unsupervised panel pending its value artifacts).
