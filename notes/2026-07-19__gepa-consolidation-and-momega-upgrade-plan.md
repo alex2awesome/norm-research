@@ -4034,3 +4034,134 @@ underperform; it is a bench where prompt optimization does not work at all. That
 as a finding rather than an empty row.
 Caveat: these are single-pass `best_test` values and by HB121 are selection statistics; the
 Δ signs above are suggestive only until a same-session k≥5 rescore. Do not print them as W/L.
+
+## HB141 (2026-07-27) — DPI bank RECOMPUTED under median-split targets; Figure 4 RHS rebuilt
+
+Advisor's blocking item: the DPI fixed-target cap is the campaign's only certified all-prompt
+bound, and it inherited the tau=0.02 defect. Recomputed (`runs/dpi_bank_median.json`, script
+`/tmp/dpi_median.py`, n=272):
+
+| quantity | value |
+|---|---|
+| H(target) | **1.0000 bits for every metric** (median split, by construction) |
+| achieved MI | median **.348** bits, IQR [.259,.431], max .570 |
+| normalized skill | median **.650**, IQR [.560,.720] |
+| fraction of capacity recovered | median **.348** |
+
+**Per-task ordering is now interpretable** rather than threshold-driven:
+
+| task | achieved MI (median bits) |
+|---|---|
+| humor | .446 |
+| creative-writing | .425 |
+| math | .312 |
+| code-review | .276 |
+| press-releases | .268 |
+| peer-review | .251 |
+| news | .245 |
+| legal | .205 |
+
+**Figure 4 RHS rebuilt** (`gen_fig_value_rhs.py` → `figs/gen_value_unsupervised.tex`): capacity is
+now a single 1-bit line and the panel shows the sorted achieved-MI curve with the recovered
+fraction shaded. **Per-metric ceiling SPREAD is abandoned deliberately, not lost** — under any
+per-metric binarization H(M_b) is a function of the threshold choice (exactly 1 bit under a median
+split), so ceiling spread can never be a statement about the metrics. The caption states the
+definitional change explicitly: the target becomes "is this metric above its own median" rather
+than "does this metric fire".
+
+**Retraction:** every previously quoted number from the old bank (achieved .259 / ceiling .626
+bits, the .365→.081 gap-tightening, the ceiling-backtest coverage figures) is computed on the
+broken binarization and is **superseded**. The rank/exchangeability certificate is unaffected in
+form (scale-free, per metric) but must be recomputed on median-split targets before being quoted.
+PDF rebuilt, 6 pages, 0 errors.
+
+## HB142 (2026-07-27) — ★★ Per-metric MISSING-VALUE ceiling (36x tighter), and the LHS curve TURNS OVER
+
+**(1) RHS rebuilt with a real per-metric bound.** User's objection to H(M_b)=1 bit was correct: it
+is identical for every metric and therefore carries no per-metric information. Two candidate
+LHS-style estimators were tried:
+
+| estimator | median gap above achieved | verdict |
+|---|---|---|
+| entropy H(M_b) | .1750 | uninformative — identical for all metrics |
+| Good-Turing on exact signature patterns | .1482 | **near-vacuous**: U0=.92 (600 distinct patterns from 640 prompts) — every prompt is its own species, the HB119 granularity trap again |
+| **upper order statistics of the achieved-score tail** | **.0167** | **36x tighter than entropy (11x conservative); used** |
+
+Species must be the SCORE, not the pattern: missing *value* does not care which pattern is new,
+only how much better a fresh draw could score. Per metric, over its N≈640 mined prompts, bound the
+one-draw gain by the largest observed top-tail spacing. Distribution-free, conservative, and
+**272/272 ceilings are strictly below 1.0**. Companion probability statement: a fresh prompt beats
+the best of N with probability ≤ 1/(N+1) ≈ .0016. Artifacts `runs/missing_value_bound.json`,
+`gen_fig_value_rhs.py`.
+
+**(2) ★ The supervised value curve is NON-MONOTONE — and that is why the projection reads high.**
+User asked why the projected median sits above the observed k>20. Answer: `unitrecomb_v5sk2` has
+prefix points k=1..40 (k>40 does **not** exist — 40 is the maximum mined). The observed scores
+past k=20 are:
+
+`k=21..32 → .68 .67 .67 .67 .67 .66 .69 .68 .64 .64 .61 .63`
+
+They **peak near k≈27 and then decline to ~.61**. The forward projection is fitted on k≤20, where
+the curve is still rising, so it extrapolates a saturating plateau and cannot anticipate a
+turnover. The projection is therefore **systematically optimistic by construction**, not
+mis-plotted.
+
+This independently corroborates HB135's `corr(#units, score) = −.263` at 8B: **past a subset
+optimum, more units actively hurt.** The two measurements are different designs (prefix order vs
+random subsets) agreeing on an inverted-U in prompt length.
+**Consequence:** the missing-value projection must be reported as an upper bound *under a
+saturating assumption that the data violates*, or refitted with a turnover term. Do not present
+the extrapolated plateau as an expectation.
+
+## HB143 (2026-07-27) — ★★★★ HOVER ZERO-SEARCH CEILING TEST PASSES ALL PREREGISTERED GATES
+
+The HB128 prereg, frozen before launch, executed exactly as written. **Every arm appended to the
+bare SEED — no searched prompt anywhere in any arm** — so unlike hotpot (where init ≡ seed made
+the test vacuous, HB132) this genuinely tests whether the pool substitutes for search.
+One session, one server, k=5 seed anchor, n=300 hover test. `runs/hb124_controls_hover_Qwen3-8B_seed.json`.
+
+| arm | construction | mean | above seed |
+|---|---|---|---|
+| seed baseline (k=5) | — | **.4580** | — |
+| **native (R)** | random p=.5 pool units → SEED | **.5535** | **20/20** |
+| foreign (F) | hotpot's pool, count-matched → SEED | **.4568** | 9/20 |
+| shuffled (partial 14/20) | native clauses, tokens scrambled → SEED | .4976 | 14/14 |
+
+**Gates (frozen in HB128 before any number existed):**
+
+| gate | criterion | result | |
+|---|---|---|---|
+| 1 | mean(R) ≥ .53 | **.5535** | **PASS** |
+| 2 | M_ω ≤ 90th pct of R | 65th pct | PASS *(cross-session, weak — see caveat)* |
+| 3 | mean(R) − mean(F) > 0, CI excludes 0 | **+.0967 [+.0848,+.1090]** | **PASS** |
+| kill | mean(F) ≥ .53 → task-easy | .4568 | not triggered |
+| kill | mean(R) ≤ .50 → assembly matters | .5535 | not triggered |
+
+**VERDICT: POOL-CEILING SUPPORTED.**
+
+**★ What this licenses, stated precisely.** Random halves of an LLM-proposed clause pool, appended
+to the *unmodified seed* with **no search of any kind**, reach **.5535** — against HB127's
+same-bench anchors of GEPA **.4640**, inhouse **.5587**, M_ω **.5640**. Zero-search draws land in
+the same band as both searched methods and ~.09 above GEPA's optimized output. **This is the
+superset confound (HB124 objection #1) finally answered, and answered on the only bench that
+could answer it.**
+
+**★ And the content specificity holds here too.** Count-matched foreign units land at **.4568**,
+statistically indistinguishable from the bare seed (.4580) — appending text of the same volume
+does nothing. The +.0955 gain is carried entirely by task-native content, replicating HB129/HB139
+on a second benchmark and a 13x larger executor.
+
+**Caveats, recorded before anyone quotes this:**
+1. **Gate 2 is cross-session** — M_ω's .5640 comes from HB127, a different session; only gates 1
+   and 3 are within-session. The clean version needs M_ω and inhouse rescored inside THIS session.
+   Gates 1 and 3 carry the verdict; gate 2 is corroborative only.
+2. **shuffled is incomplete (14/20)** and sits at .4976 — *above* the seed, unlike hotpot where
+   scrambled text fell below init. If that holds at n=20, hover's units retain some value even
+   scrambled, which would mean the hotpot and hover content effects are not identical in kind.
+   Do not report the shuffled arm until it finishes.
+3. n=20 draws per arm here vs 40 on hotpot; the R−F CI is nonetheless tight (±.012).
+
+**Scoreboard consequence.** Combined with HB127 (M_ω ties pool-free `inhouse` on hover) the
+coherent reading is now: **the value is in the articulated content, and both search loops and
+random recombination are interchangeable ways of getting it into the prompt** — with GEPA's
+selection the only procedure that reliably fails to.
