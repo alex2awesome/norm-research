@@ -4165,3 +4165,47 @@ on a second benchmark and a 13x larger executor.
 coherent reading is now: **the value is in the articulated content, and both search loops and
 random recombination are interchangeable ways of getting it into the prompt** — with GEPA's
 selection the only procedure that reliably fails to.
+
+## HB144 (2026-07-27) — Three adversarial checks on HB143. One lands, one is refuted, one is a trap.
+
+**(1) ✗ "ZERO-SEARCH" IS AN OVERCLAIM — objection CONFIRMED, retract the phrasing.**
+Audited the pool proposer (`_suggest_units_paper`, paperexact_arms.py:377-404). It is handed
+**real training examples**: the prompt literally reads *"Here are REAL examples from this task's
+training set:"* (v5 changelog: "+example-grounded framing — the suggester finally SEES the task").
+So the pool is conditioned on train-set data. **"No search of any kind" is false and must not be
+written.** The defensible claim is narrower and still strong:
+> *One proposal round, conditioned on the task and its training examples, with **no selection and
+> no iteration**, matches what the full optimizer ships.*
+That relocates the finding from "search is unnecessary" to **"selection and iteration add nothing
+beyond the proposal distribution"** — which is what the data actually shows, and is the claim to
+build the paper on.
+
+**(2) ✓ FORMAT/LABEL LEAKAGE — objection REFUTED.** The hypothesis was that hover's units smuggle
+the output schema (SUPPORTED/NOT_SUPPORTED, verdict wording), so appending them fixes parse
+failures rather than transmitting strategy. Measured over hover's 164 units:
+
+| pattern | units | share |
+|---|---|---|
+| SUPPORTED/NOT_SUPPORTED token | 5 | **3%** |
+| verdict/label/classify wording | 4 | 2% |
+| any schema/format instruction | 12 | 7% |
+
+And the single top match is a **false positive** — "explicitly supported by both the context and
+the retrieved passages" is prose, not a label. At 3% prevalence a p=.5 draw carries ~2 such units;
+that cannot produce +.0955. **Schema leakage is not the mechanism.** (The shuffled-arm sign flip
+still needs the hotpot-shuffled-at-8B cell to separate benchmark from executor scale — HB139's
+hotpot shuffled was measured at 0.6B, hover's at 8B, so "differ in kind" is not yet licensed.)
+
+**(3) ⚠ BEST-OF-N — the counter is real but the statistic is booby-trapped.**
+Max of the 20 hover draws = **.5933**, above M_ω's .5640, with **7/20** draws exceeding it.
+Taken at face value this says trivial best-of-N selection beats the sophisticated search — which
+would *strengthen* the anti-search reading. **But each draw is a SINGLE-PASS measurement, so a max
+over 20 of them is precisely the winner's-curse statistic HB121 was written to forbid**, and it is
+the same error that turned pupa's +.032 into a dead tie. **Do not quote .5933.** The disciplined
+version: report the full draw distribution (mean .5535, median .5534, IQR, max flagged as
+selection-inflated), and if best-of-N is to be claimed, select on a dev split and rescore the
+winner k≥5 on held-out items in a fresh session.
+
+**Immediate consequence for the write-up:** the HB143 headline sentence changes from
+"zero-search recombination reaches the searched band" to **"an unselected, un-iterated proposal
+round reaches the searched band."** Numbers unchanged; scope corrected before it propagates.
