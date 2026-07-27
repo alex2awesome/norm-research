@@ -4329,3 +4329,41 @@ artifact and HB146 must be restated.
 pool clauses and the 300 hover TEST items. The proposer saw training examples (HB144); if train
 and test share entities, the scramble-surviving gain is partly content leakage rather than
 "vocabulary". Label leakage was refuted at 3%; *content* overlap has not been measured.
+
+## HB148 (2026-07-27) — ★★★ I WAS WRONG THAT PANEL C IS CIRCULAR. Selection is CONDITIONAL, not a threshold.
+
+User asked why some small-delta units are kept while some big-delta units are discarded. Traced it
+to source (`build_frozen_pool.py:33-46`) and the answer overturns my own repeated claim:
+
+- **`delta_8b`** = the unit's **STANDALONE** screening marginal (from `marginals`).
+- **`won_8b`** = membership in **`compiled_units`**, i.e. the final **greedy assembly**, which
+  accepts a unit on its **CONDITIONAL** gain given everything already accepted.
+
+**These are two different statistics.** `won_8b` is NOT a threshold on `delta_8b`, and the
+distributions overlap heavily:
+
+| | n | delta range | overlap |
+|---|---|---|---|
+| KEPT | 27 | [+.010, +.160] | **19/27 kept units sit BELOW the highest discarded unit** |
+| DISCARDED | 41 | [−.230, +.070] | **12/41 discarded units sit ABOVE the lowest kept unit** |
+
+**Retraction.** In HB136, HB139 and the figure caption I labelled the screening panel "CIRCULAR —
+`kept` was defined by thresholding this very statistic." **That is false.** It was a reasonable
+guess that I never checked against the code, and it is wrong.
+
+**What the panel actually shows, and it is a finding rather than an artifact:** greedy selection is
+**redundancy-aware**. A unit with a large standalone gain is rejected when an already-accepted unit
+covers the same ground; a unit with a small standalone gain is accepted when it adds something new
+conditional on the rest. The imperfect correlation between the two axes IS the result — it is
+direct evidence that *what a unit is worth depends on what else is in the prompt*, which is the
+paper's compositional claim in miniature.
+
+**This also rehabilitates an earlier "null".** HB120b reported corr(greedy marginal, causal Δ) =
++.013 and I called the design unable to answer the question. Part of that near-zero correlation is
+now explained: standalone marginals and conditional acceptance are genuinely different quantities,
+so a low correlation is expected, not merely a power failure.
+
+**Actions:** (1) strike "circular" from the figure caption and from HB136/HB139; (2) the redrawn
+panel must show the overlap explicitly, since that is the point; (3) the honest framing for the
+screening axis is *"standalone gain"* vs the selection axis *"survived conditional greedy
+assembly"*.
