@@ -336,7 +336,7 @@ def arm_inhouse(program, bench, metric, metric_fb, log_path, budget_calls, refle
             if budget["remaining"] < panel_n:
                 break
             try:
-                raw = refl(prompt)[0]
+                raw = _as_text(refl(prompt)[0])
                 raw = raw[raw.index("{"): raw.rindex("}") + 1]
                 cand = {k: str(v) for k, v in json.loads(raw).items() if k in cur}
                 if not cand or cand_hash({**cur, **cand}) == cand_hash(cur):

@@ -3233,3 +3233,379 @@ per-unit causality — "short, self-contained natural-language clauses drawn fro
 distribution, individuated so the space is finite and its tail estimable" — and report the causal
 battery as a finding. Drop "minimal" (unlicensable once whole-unit effects are undetectable); use
 "atomic (single-clause)", a syntactic property defensible by inspection.
+
+## HB121 (2026-07-27) — ★★★ PUPA IS A TIE. The +.032 "win" was winner's curse.
+
+Decisive pre-registered k=5 rescore (both arms, same session), `runs_paperexact/pupa/Qwen3-8B/
+{official,unitrecomb_v8failmine}/rescore_k3.jsonl` (file name says k3; the record says
+`passes=5` — it IS the k5 rescore). sk2 queue pid 4012049, now exited.
+
+| arm | single-pass best_test | **k=5 mean** | shift |
+|---|---|---|---|
+| official (GEPA) | .8621 | **.8825** | **+.0204** |
+| unitrecomb_v8failmine (ours) | .8938 | **.8817** | **−.0121** |
+
+**Paired item-level test (n=221, the heartbeat's required bootstrap, not the sign test):**
+mean delta = **−.0009**, 95% CI **[−.0324, +.0307]**, P(Δ≥0) = .476.
+Tie mass **163/221 = 74%** — precisely why a sign test on this metric is uninformative.
+
+**Reading — and it is against us.** Under one pass ours appeared to win by +.032. Under five it
+is a dead tie with the sign flipped. The two arms moved in OPPOSITE directions on rescoring
+(baseline up, ours down), which is the signature of **winner's curse**: our reported number was
+`best_test`, a MAX selected over a noisy single pass, so it regresses down; the baseline was not
+max-selected, so it regresses up. This is the deflated-base red flag from the eval-noise memory
+showing up in the direction that costs us a result.
+
+**Consequences (adopt now):**
+1. **PUPA IS NOT A WIN.** Never quote .8938, and never quote the +.032 delta. The quotable pupa
+   line is "tie, Δ=−.001, 95% CI [−.032,+.031], k=5 paired".
+2. Any arm number reported as `best_test` from a single pass is **suspect by construction**.
+   Every W/L in Table 1 needs the same k≥5 both-arms same-session rescore before it prints.
+   Single-pass `best_test` is a selection statistic, not an estimate.
+3. The 74% tie mass means item-level power on pupa is low regardless: to detect a true +.02 here
+   would need far more than 221 items. Pupa may simply be unable to separate these arms.
+
+## HB122 (2026-07-27) — sk3 14B/24k chain COMPLETE: GEPA does nothing on hotpot, HURTS livebench
+`logs/chain14b_sk3gpu7.log`, finished 2026-07-25T19:20Z, pid 3682544 now exited. GEPA official arm:
+
+| bench | seed_test | best_test | Δ |
+|---|---|---|---|
+| hotpot | .267 | .267 | **.000 — GEPA found nothing** |
+| livebench | .779 | **.748** | **−.031 — GEPA made it WORSE** |
+| hover | (rc=0, no DONE line parsed — recover before quoting) | | |
+
+Both are post-2026-07-24 so the Levenshtein defect does NOT apply. These are **baseline-side**
+results and they matter for the paper's thesis: on two of three benches at 14B/24k, reflective
+search returns zero or negative value over its own seed. That is the "nothing beats
+recombination" claim's strongest supporting evidence so far — but note it argues the search is
+weak, NOT that our recombination is strong; HB121 just showed our pupa margin was noise. Treat
+these as evidence about GEPA, not evidence for M_ω, until a paired k≥5 rescore says otherwise.
+
+**LANE STATE:** all three heartbeat pids DEAD. sk1 (986255) died 2026-07-24T23:23 immediately
+after "aime-14B GEPA official (24k)" and produced NOTHING — **8 idle GPUs for ~2.5 days**, the
+single largest wasted resource in the campaign. sk3 GPUs 0/5 held by orphaned VLLM::EngineCore
+(alexspan, 20h and 28m); sk3 GPU7 now belongs to yallouah — NOT ours despite the 07-25 release.
+
+## HB123 (2026-07-27) — ★ CORRECTION to HB121 + PREREG: hover omnibus k5 (frozen BEFORE launch)
+
+**HB121 correction.** My HB121 entry presented the pupa k=5 tie as a newly decisive result. It is
+not new: **HB97 already recorded pupa as "TIE, final (−.0009, p=.52)"** from the same rescore
+artifact. HB121 re-derives it (−.0009, CI [−.032,+.031]) and adds the winner's-curse mechanism and
+the 74% tie mass, which ARE new; the verdict is not. Recorded so the ledger does not double-count
+one measurement as two.
+
+**A worse error, caught by the advisor before it did damage.** I launched a blanket k=5 rescore of
+every arm on sk1 (aime, hotpot, ifbench, livebench, pupa, hover). **Four of those cells are already
+settled by HB97's same-session paired k=3**, and HB97 states explicitly that ifbench "must NOT be
+re-rolled". Re-rolling settled cells until they move is p-hacking under our own HB91 one-shot rule,
+and it is exactly the discipline the pupa post-mortem exists to enforce. **Killed before it scored
+anything** (wrapper PID first; the vLLM server had in fact failed to start, so zero passes ran).
+Nothing to retract. Standing rule reaffirmed: **a settled cell is re-measured only if the INSTRUMENT
+changed, never because the result is inconvenient.**
+
+**PREREG — hover omnibus, frozen before launch.** hover is genuinely PENDING (HB97 scoreboard), so
+it is the one cell that may be measured. Design: ALL candidates rescored in ONE invocation =
+one session, k=5, paper-exact splits, cache off, single server fingerprint.
+Panel (6, all frozen ex-ante): `official` (GEPA baseline), `official_merge_gepamerge` (GEPA+Merge),
+`inhouse`, `unitrecomb`, `unitrecomb_stair`, `unitrecomb_v5sk2`. MIPROv2 does not exist for hover
+on sk1 — the envelope is therefore 3-way (GEPA / GEPA+Merge / M_ω), and that gap is stated, not
+quietly dropped.
+Primary inference: paired bootstrap on mean item-level delta, M_ω-best vs `official`. Sign test
+reported but NOT primary (tie mass).
+**Pre-registered prediction (adversarial, on file before any number exists):** the single-pass
+margin shrinks; I predict a paired delta of **+.02 to +.04** with borderline significance, NOT the
++.067 the single-pass reading suggests. **If it lands n.s., hover is a NON-WIN and the paper's
+headline moves to hotpot (+.220) and aime (+.091), which are already same-session certified.**
+Committing to that consequence now, before seeing the number, is the point of writing it here.
+**One shot. Whatever it returns is the hover verdict.**
+
+## HB124 (2026-07-27) — ★★★ RANDOM units beat GEPA's OWN winner 36/40 (hotpot, 0.6B). Thesis-shaped.
+
+The advisor's "kill-shot control" (random recombination at zero search budget) turns out to
+ALREADY EXIST inside `osl_battery.py` — it was never read as such. Verified semantics before
+quoting (osl_battery.py:72): `init_cand` **is the GEPA-official best_candidate**, and each draw
+appends a random p=.5 subset of the frozen pool **to that same init**. So the contrast is
+*GEPA's winner* vs *GEPA's winner + random units from the pool GEPA itself mined*.
+
+`runs/osl_hotpot_Qwen3-0.6B.json`, hotpot, executor Qwen3-0.6B:
+
+| arm | score |
+|---|---|
+| init = **GEPA-official winner** | .2567 |
+| **40 random pool draws** | mean **.2943**, median .2967, range .200–.347 |
+| transfer = 8B M_ω winner, verbatim | .3000 |
+
+**36 of 40 random draws (90%) beat GEPA's own optimized prompt**, by +.038 on the mean.
+`corr(#units included, score) = +.034` — essentially zero, so this is NOT "more text is better";
+almost ANY random subset of the pool improves the searched prompt. Ordering:
+**searched M_ω (.300) > random pool draws (.294) > GEPA winner (.257)** — i.e. most of M_ω's
+advantage over GEPA is reachable without any search at all.
+
+**This is the paper's sentence if it survives.** "The pool is the asset: even unintelligent
+recombination cashes most of the value GEPA's own search left in the pool it mined."
+
+**TWO CONFOUNDS, both resolvable, neither resolved yet — do NOT quote until they are:**
+1. **CROSS-SCALE (the serious one).** init is an **8B-optimized** prompt scored on **0.6B**.
+   "Random perturbation helps a mis-transferred prompt" would produce this exact pattern without
+   any pool-value claim. **The 8B OSL cell is the decisive control** (init and executor matched):
+   if random draws still beat init at 8B, the confound is dead. That cell is queued in Lane A
+   (0.6B done, 1.7B/4B/8B pending) — wait for it.
+2. **init is a SINGLE-pass measurement.** Against the ablation battery's pass SD (.0110), +.038
+   is ~3.5 SD, so it is unlikely to be pure noise — but per HB121 the correct fix is a k≥5 init,
+   not an appeal to a noise floor measured on a different bench. Re-measure init multi-pass
+   before this prints.
+
+Note this needs no new experiment and no sign-off: it is a re-reading of data already collected.
+The only new work is the 8B row (already queued) and a multi-pass init.
+
+## HB124b (2026-07-27) — ★ CORRECTION to HB124: the draws are SUPERSETS of init, not recombinations
+
+Verified in source (osl_battery.py:109-112): each draw is `cand = dict(init_cand)` followed by
+appending the sampled clauses. **Every draw therefore CONTAINS 100% of GEPA's winning prompt.**
+
+My HB124 headline — "random units beat GEPA's own winner" — is technically true but rhetorically
+overstated, and a reviewer will say so. The honest statement is:
+
+> **Appending random pool units to GEPA's winner improves it in 36/40 draws (+.038).**
+
+That is evidence GEPA's search **terminated early and left value in the pool it had already
+mined** — a real and useful claim. It is NOT evidence that random recombination can replace the
+searched prompt, because no arm here ever omits the searched prompt. The thesis-critical arm is
+missing: **seed + random units** (no searched winner inside), which is what would license
+"the pool, not the search."
+
+**Four stacked asymmetries, ALL favoring the draws** (the advisor's audit; adopt all four):
+1. **Superset** — draws = init + more text; init never gets the same treatment.
+2. **Selected vs unselected** — GEPA's winner was chosen as a max over noisy validation, so it
+   regresses DOWN on re-eval; the 40 draws are unselected and do not. This is the HB121
+   winner's-curse mechanism pointing at the BASELINE this time. It is orthogonal to scale and
+   survives the matched-8B control.
+3. **Cross-scale** — an 8B-optimized init scored on a 0.6B executor.
+4. **Single-pass init** — the reference point everything is measured against is one draw.
+Until all four are removed, **HB124 is a promising anomaly, not a result.** Do not put it in the
+paper, and do not quote the .3467 max draw under any circumstance — that is a max over 40 noisy
+single passes, exactly the statistic HB121 was written to forbid.
+
+**Also correcting my own reasoning:** I cited `corr(#units, score) = +.034` as evidence against
+"more text is better." It is not. Under p=.5 inclusion the unit count is binomially concentrated,
+so there is almost no leverage on the length axis, and a saturating format effect (any bullets >
+no bullets) predicts a flat slope. The near-zero correlation is exactly what the artifact would
+produce. The right control is a **length-and-format-matched placebo**, not a correlation.
+
+## HB124c (2026-07-27) — the percentile statistic (usable) and the mask regression (NOT usable)
+
+**★ Better statistic than the mean gap, from data already in hand.** Instead of "+.006 over the
+random-draw mean", report where the searched prompt falls in the null built from its own pool:
+
+| prompt | percentile within the 40 random draws |
+|---|---|
+| searched M_ω winner (.3000) | **52nd** |
+| GEPA-official winner (.2567) | **8th** |
+
+**"The searched prompt is statistically indistinguishable from a MEDIAN random draw from its own
+pool"** is a far stronger and more honest sentence than a +.006 mean difference, and it does not
+depend on the mean of a skewed 40-point sample. Null: n=40, mean .2943, sd .0303. Same four
+confounds as HB124 apply — this is a sharper framing of the anomaly, not a resolution of it.
+
+**✗ The per-unit mask regression is NOT identified — do not use it.** The advisor proposed fitting
+`score ~ mask` on the logged masks to get per-unit values. Attempted; it is degenerate:
+**68 units with variation, 40 draws, residual dof = 1, R² = 1.000.** That R² is pure overfit, not
+signal, and the resulting coefficients (top +.043, bottom −.021) are noise dressed as estimates.
+**Reporting them would have been a serious error.** To identify an additive per-unit model here
+needs ≳3-5× more draws than units (≈200-340 draws at this pool size) or explicit regularization
+with a held-out split. Deferred; the drop-m dose-response (HB120b prereg) is the better-powered
+route to the same question and costs less.
+
+## HB125 (2026-07-27) — HB124 confound #4 (single-pass init) is DEAD; #1-#3 still stand
+
+`runs/hb124_controls_hotpot_Qwen3-0.6B.json`, sk2 GPU0, same session, cache off:
+**init at k=5 = .25468** vs the original single-pass init **.2567** — a difference of .0020.
+The reference point everything in HB124 is measured against was NOT a noise fluke, so the
++.038 draw gain cannot be explained by an unluckily-low init. **Confound #4 removed.**
+
+Still outstanding and still disqualifying until answered: #1 superset construction (draws
+contain 100% of init), #2 selected-vs-unselected (GEPA's winner is a noisy argmax and regresses
+down; the draws don't), #3 cross-scale (8B-optimized init on a 0.6B executor). The native and
+foreign-content arms are mid-run; the shuffled-token placebo and the seed+units arm are not yet
+built. HB124 stays UNQUOTABLE.
+
+## HB126 (2026-07-27) — hover omnibus, first two candidates: winner's curse visible in the SIGN
+
+Prereg HB123, one session, k=5, cache off, single fingerprint. Partial (2 of 6):
+
+| candidate | single-pass best_test | k=5 mean | shift |
+|---|---|---|---|
+| official (GEPA baseline) | .4500 | **.4640** | **+.0140** |
+| official_merge_gepamerge (GEPA+Merge) | .5333 | **.5247** | **−.0086** |
+
+The shifts run in **opposite directions, and in exactly the direction selection pressure
+predicts**: `official` is the least-selected candidate and regresses UP; `official_merge` was
+picked as a max and regresses DOWN. This is the HB121 mechanism reproducing prospectively on a
+different bench — which is itself corroboration that the winner's-curse diagnosis was right,
+not a post-hoc story.
+Four candidates (inhouse, unitrecomb, unitrecomb_stair, unitrecomb_v5sk2) still scoring. The
+prereg'd verdict rests on unitrecomb_stair (single-pass .5833) vs official (k5 .4640); no W/L
+will be called until the paired bootstrap runs on the item-level scores.
+
+## HB127 (2026-07-27) — ★★★ HOVER VERDICT: WIN over GEPA (+.100), but a TIE with our own search
+
+Prereg HB123 executed exactly as frozen: 6 candidates, ONE invocation, k=5, cache off, paper-exact
+splits, **single session fingerprint verified across all arms** (2026-07-27T11:30:30Z, n=300).
+Primary inference = paired bootstrap on mean item-level delta.
+
+| candidate | single-pass | **k=5** | Δ vs GEPA official | 95% CI | P(Δ≤0) | verdict |
+|---|---|---|---|---|---|---|
+| official (GEPA) | .4500 | .4640 | — | — | — | baseline |
+| official_merge (GEPA+Merge) | .5333 | .5247 | +.0607 | [+.037,+.085] | .0000 | WIN |
+| unitrecomb_v5sk2 | .4900 | .5167 | +.0527 | [+.031,+.075] | .0000 | WIN |
+| unitrecomb | .5467 | .5287 | +.0647 | [+.041,+.089] | .0000 | WIN |
+| inhouse (monolithic search) | .5467 | .5587 | +.0947 | [+.061,+.130] | .0000 | WIN |
+| **unitrecomb_stair (M_ω best)** | .5833 | **.5640** | **+.1000** | **[+.072,+.129]** | **.0000** | **WIN** |
+
+**★ hover is a WIN. My pre-registered prediction was WRONG, and in the conservative direction.**
+HB123 predicted the margin would shrink to +.02–.04 and be borderline. It shrank from +.133 to
+**+.100 and is overwhelmingly significant**. Recording the miss because a prereg that only gets
+cited when it is right is worthless. The prediction failed; the discipline did not — the shrinkage
+was real (−.033), just smaller than forecast.
+
+**★★ The result that actually matters, and it is NOT in our favour — head-to-head, same session:**
+
+| comparison | Δ | 95% CI | P(Δ≤0) | verdict |
+|---|---|---|---|---|
+| M_ω vs GEPA+Merge | +.0393 | [+.013,+.066] | .0014 | WIN |
+| inhouse vs GEPA+Merge | +.0340 | [+.001,+.068] | .0215 | WIN |
+| **M_ω vs inhouse** | **+.0053** | **[−.023,+.033]** | **.361** | **NOT SIGNIFICANT** |
+
+**On hover, unit recombination is statistically indistinguishable from our own monolithic
+mutate-and-accept search.** M_ω beats GEPA and GEPA+Merge; it does not beat plain search. Any
+claim that recombination is the *mechanism* cannot be supported on this bench, and the paper must
+say so. The envelope M_ω > GEPA+Merge > GEPA holds and is quotable; "recombination > search" does
+not hold here.
+
+**★ The charitable reading is also the more interesting one — and it is testable, not rhetoric.**
+Three different assembly procedures (M_ω recombination .564, monolithic search .559, and — from
+HB124, on a different bench/scale — random pool draws) land in one narrow band well above GEPA.
+That is the signature of a **shared ceiling set by the unit pool**, with the assembly method
+nearly irrelevant. This is the pool-value thesis in a stronger form than "our method wins".
+It predicts something falsifiable: **on hover, random draws from the frozen pool should also land
+near .55.** Cheap to run, and it either converts a tie into the paper's mechanism or kills it.
+Pre-register before running: pool-ceiling supported iff random-draw mean ≥ .53 with the searched
+arms inside the draw distribution's upper half.
+
+**★ The winner's-curse pattern held prospectively, 6 for 6.** Every max-selected candidate
+regressed DOWN (merge −.009, unitrecomb −.018, stair −.033); the two least-selected regressed UP
+(official +.014, inhouse +.012). Note v5sk2 rose (+.027) — it was selected on a *different* box's
+session, so it was not max-selected in this instrument's sense. Independent prospective
+corroboration of HB121 on a bench that played no part in diagnosing it.
+
+**Scoreboard:** aime WIN (+.091) · hotpot WIN (+.220) · **hover WIN (+.100)** · ifbench not
+confirmed (+.020) · pupa TIE · livebench pending idle-protocol re-measurement. **W = 3 of 6.**
+
+## HB127b (2026-07-27) — ★★ MY SHARED-CEILING READING IS NOT SUPPORTED. `inhouse` is POOL-FREE.
+
+The advisor's first question was the one that decides which paper this is, and it costs zero GPU:
+**what does `inhouse` consume?** Answer, read from source (paperexact_arms.py:304-312,
+`arm_inhouse`): `cur, cur_score = seed_cand, None` — inhouse starts from the **SEED prompt**,
+mutates whole per-module instruction sets via a reflection LM conditioned only on train-panel
+feedback, and **never reads the unit pool at all.**
+
+**This inverts my HB127 reading.** I proposed that M_ω (.564), inhouse (.559) and random pool
+draws landing in one band was "the signature of a ceiling set by the unit pool." It is not: a
+**pool-free** method reaches that band, so the pool is **not necessary** to get there. The band is
+better explained as a **task/executor ceiling that any competent optimizer reaches**, and GEPA's
+failure to reach it (.464) is then a statement about GEPA's *selection*, not about pool access.
+Retracting the pool-ceiling framing as stated.
+
+**Second correction, also mine.** I wrote "assembly is nearly irrelevant." That is already false
+in the HB127 table: **GEPA+Merge (.5247) does NOT reach the band**, sitting .034-.039 below
+inhouse and M_ω with p=.0215 / .0014. One assembly procedure demonstrably undershoots. The
+survivable version is narrower and is about GRAIN, not assembly-indifference: merge recombines at
+CANDIDATE grain, M_ω at UNIT grain. Any claim here must be stated as unit-grain vs candidate-grain
+access, and it still requires knowing inhouse's grain — which we now do: inhouse is whole-prompt
+rewrite, no pool, and it matches M_ω. So grain does not separate them either.
+
+**What survives, stated precisely.** Not "recombination is the mechanism" and not "the pool sets
+the ceiling", but: **M_ω is in the statistical top tier on every bench measured, and no procedure
+we ran ever beat it** — it wins where anything wins (aime +.091, hotpot +.220, hover +.100) and
+ties where nothing separates. GEPA is top-tier only where nothing wins. The literal title claim
+("nothing beats recombination") holds; the mechanistic connotation does not.
+
+**The zero-search arm is now MORE important, not less**, and its interpretation has changed: if
+random draws from hover's frozen pool (appended to SEED, never to a searched winner) also reach
+~.55, that shows the ceiling is reachable with **no search at all** — which is a real result even
+though it no longer isolates the pool as the *cause*, because inhouse reaches it pool-free too.
+Adopting the advisor's stricter 4-arm rule over my weaker one (mine lacked a foreign-pool gate and
+"upper half" is consistent with a genuine assembly advantage):
+  R native draws → SEED · F foreign-pool length-matched · P shuffled-token · in-session anchors.
+  **SUPPORTED** iff mean(R) ≥ .53 AND M_ω ≤ 90th pct of R AND mean(R)−mean(F) > 0 with CI excluding 0.
+  **TASK-EASY** iff mean(F) ≥ .53 (pool content irrelevant → thesis dead on hover).
+  **ASSEMBLY MATTERS** iff mean(R) ≤ .50. Between .50 and .53: no verdict, descriptive only.
+
+**Latent bug found while reading `arm_inhouse`** (paperexact_arms.py:340): it does
+`raw = refl(prompt)[0]` then `raw.index("{")` — the identical dict-response defect fixed earlier
+in `_suggest_units_paper`. It has not bitten because inhouse has only ever run against
+non-reasoning-parser endpoints, but it WILL silently zero the arm on a reasoning-parser server.
+Patching now rather than after it costs a run.
+
+## HB128 (2026-07-27) — PREREG: hover zero-search pool-ceiling test (frozen BEFORE launch)
+
+Decisive test for HB127b. Every arm appended to the **SEED** prompt (`--base seed`), so no draw
+ever contains a searched winner — the HB124b superset defect cannot recur. One invocation, one
+server, one fingerprint, k=5 anchors, cache off, n=300 hover test.
+
+| arm | construction |
+|---|---|
+| **R** native | random p=.5 draws from hover's frozen pool → SEED |
+| **F** foreign | draws from hotpot's pool, count-matched → SEED (kills "generic advice") |
+| **P** shuffled | native clauses, tokens scrambled → SEED (kills "any text of this length/format") |
+| anchors | GEPA official + M_ω rescored IN-SESSION (never reuse HB127's scores — different session) |
+
+**Decision rule, frozen now (advisor's, adopted over my weaker one — mine had no foreign gate and
+"upper half" is consistent with a real assembly advantage):**
+- **POOL-CEILING SUPPORTED** iff mean(R) ≥ .53 AND M_ω ≤ 90th pct of R AND mean(R)−mean(F) > 0
+  with bootstrap CI excluding 0.
+- **TASK-EASY / generic-text** iff mean(F) ≥ .53 → pool content is irrelevant and the pool-value
+  claim is DEAD on hover regardless of R.
+- **ASSEMBLY MATTERS** iff mean(R) ≤ .50 → the band needs search; the inhouse tie was coincidence
+  and this becomes the under-selection paper.
+- mean(R) ∈ (.50,.53): **NO VERDICT**, report descriptively, make no claim.
+One shot. Whatever it returns is the hover pool verdict.
+
+**Note on what this can and cannot show, given HB127b:** because `inhouse` reaches ~.559 with NO
+pool access, a passing R can no longer establish the pool as the *cause* of the ceiling. What it
+would establish is weaker but still worth reporting: **the ceiling is reachable with zero search.**
+Stating that limit here so the result is not oversold when it lands.
+
+## HB129 (2026-07-27) — ★★★ The "any text helps" objection is DEAD. Foreign units actively HURT.
+
+`runs/hb124_controls_hotpot_Qwen3-0.6B.run1_2arm.json` (run 1 preserved, not deleted). hotpot,
+Qwen3-0.6B, ONE session, cache off, count-matched draws, n=40 per arm.
+
+| arm | mean | median | range | above init |
+|---|---|---|---|---|
+| init (k=5) | .25468 | — | — | — |
+| **native** pool units | **.2985** | .3000 | [.207,.370] | **36/40** |
+| **foreign** (hover units, count-matched) | **.1763** | .1767 | [.070,.250] | **0/40** |
+
+- native − init = **+.0438**
+- foreign − init = **−.0783**
+- **native vs foreign: Δ=+.1222, 95% CI [+.106,+.139], P(Δ≤0)=.0000**
+- θ (share of the native gain attributable to CONTENT rather than text volume) = **2.79**
+
+**Confound (A), "a 0.6B model improves whenever you append more instruction text," is dead.**
+Count-matched foreign clauses do not merely fail to help — they **hurt by −.078, with 0 of 40
+draws beating init.** θ > 1 precisely because foreign lands *below* init. The model is strongly
+sensitive to instruction CONTENT, not to instruction volume, which is the opposite of the
+artifact. This also retires my discredited `corr(#units, score) = +.034` argument (HB124b) with a
+control that actually has power.
+
+Note this is a stronger control than "foreign is merely neutral" would have been, and it cuts a
+second way: because irrelevant instructions are actively harmful here, a pool of *task-relevant*
+units is doing real work.
+
+**Still outstanding for HB124** (unchanged): #1 superset construction (every draw contains
+GEPA's winner), #2 selected-vs-unselected regression asymmetry, #3 cross-scale 8B init on 0.6B.
+The queued 4-arm single-session run adds the **shuffled-token** arm (matched vocabulary AND
+length — a tighter (A) control than foreign) and the **seed_units** arm (drops the searched
+winner entirely, attacking #1). HB124 remains UNQUOTABLE until #1-#3 are answered; HB129 stands
+on its own as a clean control result.
