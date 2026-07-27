@@ -3040,3 +3040,28 @@ writing.
   our processes. sk1/sk2 verified quiet. **The campaign is fully quiescent: zero running jobs,
   zero open experimental questions.** Remaining work is writing (advisor pass 7 roadmap) +
   optional post-submission items (shuffled arm, re-mining after top-up).
+
+## HB116 (2026-07-27) — E-plan GREEN-LIT and launched; no-API constraint; sk1 disk full
+
+**User rulings:** all E-experiments green-lit. NO API LMs at all (z.ai dead; Anthropic key also
+dead — the copies I briefly placed on boxes are removed). "Sonnet" meant Max-plan subagents from
+the session; then superseded by: **use a strong LOCAL model on the server** for reflection/
+mining/judging. C4a: spirit-not-letter is fine → E1-full's calibrated line ("median ±.03 at 4-8
+steps ahead, fit on ≥8-10 points") is the supported rendering.
+
+**Harness v9:** make_reflection_lm gained claude-routing (now inert — no key) and a `cache` kw
+(F3 rule); shipped byte-identical to all boxes (md5 9c2a3da3...).
+
+**Infrastructure:** ★ sk1 /lfs is **100% FULL (0 bytes free)** — writes fail; sk1 unusable for
+new work until space frees (not ours to clean; user should ping admins/check docker). sk3 has no
+clean GPU (all free-looking GPUs carry other users' resident memory). → everything consolidated
+into ONE serial queue on sk2 GPU3 (pid 3575442, logs/ework_queue.log):
+**hover ablation battery (E2/E3) → hotpot ablation battery → OSL rungs 8B → 1.7B → 4B → 14B
+(E5-P1, hotpot, 24k, cache-off)**. Scripts: ablation_battery.py, osl_battery.py (repo + boxes).
+
+**Deferred pending a free GPU + strong-local-model choice:** E4 re-mining, E6 classification,
+E9 MIPRO (needs in-process proposal LM → now UNBLOCKED by the strong-local pivot), E7 code-writer.
+Candidates (memory): GLM-5.2-NVFP4 local (4×B200 — impractical), **Llama-70B BF16 (fits one
+B200)**, **Gemma-4-31B (certified ≥ Sonnet as judge in this project)**, Qwen3-32B. Proposed:
+Llama-70B = miner/proposer; Gemma-4-31B = judge/classifier. Chain them on sk2 GPU3 after the
+E-work queue unless the user picks otherwise.
