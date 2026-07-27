@@ -4440,3 +4440,45 @@ tests here are score-mediated (behavioural flips = unsupervised-side screen); re
 company-dependent (19/27 overlap), so a different mixture keeps a different set; per-unit
 multi-mixture identification needs ~200+ draws (40 was unidentified) — open instrument.
 Falsy-zero bug caught in my own pool query (`delta or 9` drops Δ=0.0 units).
+
+## HB152 (2026-07-28) — Metrics-side scaling: AUDIT of the July-7 work + design of the parallel battery (OSL-M)
+
+**(A) Audit of existing metrics scaling-law work (user: "how systematic/current is it?").**
+Source: `notebooks/data/2026-07-07-osl-multi/` (8 task curve files, 1,387 metrics × up to 14
+executors, 1.24B–72.7B, 5 families) + memory `project_osl_executor_scaling`.
+- **Systematic: YES, more than expected.** Frozen 14-executor crowd; capability index z from a
+  frozen anchor battery (logit-AUC); planted-truth ladders monotone in both families; placebo
+  corrections; per-metric fitted verdicts (RISING/REACHES/BOUNDED/NOISY); inverted-U closed
+  across 4 families; z×a forecast machinery with falsifiable N* predictions.
+- **Independent of the tau=.02 defect** — different pipeline (probe-battery recovery, not the
+  llama8b_glm signature bank), so HB138 does NOT contaminate it.
+- **But NOT current for Paper 2, for four reasons:** (1) its y (probe-battery recovery /
+  identification) is not the paper's median-split reconstruction skill — the two are not
+  interchangeable readouts; (2) several rungs are GLM-adjudicated and the GLM API is permanently
+  dead → those rows are unextendable/unreplicable; (3) its own caveat ledger marks cross-task
+  probe-support comparability BROKEN and some planted-truth rows needing recompute; (4) exchange
+  rates were found FAMILY-RELATIVE, so pooled-family claims are barred.
+- **The actual gap:** nothing in that lineage measures the Paper-2 quantities across scale —
+  {seed, best-mined prompt, random pool draws, ceiling} per metric per executor rung. The
+  supervised ladder has exactly this grid; the metrics side has none.
+
+**(B) DESIGN — OSL-M, the parallel battery (prereg-ready; NOT launched, needs sign-off + GPUs).**
+- **Executors:** Qwen3 {0.6B, 1.7B, 4B, 8B} — same rungs as the supervised ladder, one family
+  (standing rule), all cached on sk2.
+- **Metric sample:** 32 metrics = 8 tasks × 4, one per achieved-skill quartile (median-split
+  bank), stable-hash selection.
+- **Arms per metric × rung (mirrors the supervised arms):** seed/generic prompt (k=3) · the
+  metric's best mined prompt (k=3) · 10 random draws from its own 640-prompt pool (k=1) ·
+  count-matched foreign-prompt control on a 8-metric subsample.
+- **Items:** fixed 120-item stable-hash subset of the 300; **readout = normalized skill
+  2·agreement−1 on the frozen per-metric median split** (capacity fixed at 1 bit, threshold-free
+  across metrics). One server per rung; all arms of a rung in ONE session.
+- **Preregistered questions:** Q1 best-mined skill vs scale (rises? saturates?); Q2 the
+  best-minus-random-draw gap vs scale — prediction from HB131: the gap does NOT grow (pool ≥
+  selection at every scale); Q3 draws-minus-seed gain vs scale — prediction: grows, the
+  unsupervised analogue of +.038→+.090→+.186; Q4 foreign control stays at seed at every rung.
+- **Cost:** ≈32×12×120 ≈ 46k judgments/rung, ~184k total ≈ 1 GPU-day serial on sk2.
+- **STEP-0 dependency (the one blocker):** the npz stores prompts but not item ids; the
+  sigs-column ↔ item-text mapping must be recovered from the bank builder
+  (`methods/metric_seam/reconstruction_v2.py` / cells DB) before any rung runs. Items exist in
+  frozen_probes only for humor; other 7 tasks need the join.

@@ -307,6 +307,19 @@ robustness for every C cell.
 - **One VAT protocol (H7):** declare the grouping unit per domain (court/app/venue/repo/docket),
   threshold-free AUC, noise-ceiling-normalized gap, fidelity-optimized A as primary + baseline-A
   as the "overstates articulability" reference column.
+- **DENSE STANDARD (user decision 2026-07-27): the dense column = ONE recipe everywhere.**
+  Llama-3.1-8B + LoRA (r16/α32, lr 5e-5, batch 16, max_len 1024, 2 epochs,
+  gradient-checkpointing), single full-data run (frac=1.0, NO scaling ladder), grouped
+  80/10/10 split on the task's V/A grouping unit, selection on test / report CLEAN EVAL AUC
+  (math-closure convention). **No TF-IDF, no frozen-embedding arms in the dense column** —
+  those move to a labeled "lexical floor" appendix row if kept at all. Audit that forced this
+  (2026-07-27): peer .690 was TF-IDF `D_lex_big`; N&C .588 was TF-IDF; claim-matching
+  "dense-at-chance" was untrained bge-m3 (already retracted as ceiling evidence); only
+  math legs + legal T were already Llama-8B LoRA. Driver:
+  `methods/dense/run_dense_standard.sh`; bundles built by
+  `datasets/notice-and-comment/v4/build_dense_standard_csvs.py` (peer rungs reuse the
+  vat_3y stable title-grouped splits; N&C uses a docket-pure greedy 80/10/10 map shared
+  across the 3 y's — NOTE agree eval/test pos .64-.66 vs train .50, docket-clustered label).
 - **Fidelity-optimized A everywhere (H6):** replicate the N&C GEPA fidelity↑/AUC↓ test on peer
   and ≥1 more bank. Sonnet-via-CLI proposer (unmetered) as in N&C; do not switch to GLM without
   re-asking.
