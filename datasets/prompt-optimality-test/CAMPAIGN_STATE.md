@@ -1,5 +1,5 @@
 # CAMPAIGN STATE — prompt-optimality / Paper #2
-**Single source of truth. Updated 2026-07-27 21:40Z. Rewrite this file rather than adding another notes file.**
+**Single source of truth. Updated 2026-07-27 23:05Z. Rewrite this file rather than adding another notes file.**
 
 Written because the campaign had drifted across three boxes and several parallel plans. A census
 (2026-07-27) showed the sprawl was mostly imaginary — see "Where things actually run".
@@ -32,6 +32,8 @@ codegen — it cost hours for zero results. Do not use it without a specific rea
 ## 3. Result scoreboard — what is quotable TODAY
 
 Same-session paired, k≥3, bootstrap on mean item-level delta. **Nothing single-pass is quotable.**
+
+**Paper sync status: Table 1, Fig 3 captions, appendix figure updated in main.tex as of 23:05Z (submodule commit 5f2c921). PDF = 7 pages.**
 
 | bench | M_ω vs GEPA | status |
 |---|---|---|
@@ -80,11 +82,14 @@ coverage); rank certificate P(fresh beats best) ≤ 1/(N+1) ≈ .0016.
    effect. Prereg on file: prediction ≈ seed within ±.015.
 3. **hotpot-shuffled-at-8B** — the hover/hotpot shuffled sign flip is confounded with executor
    scale (0.6B vs 8B). One cell.
-4. **pool↔test entity-overlap audit** (CPU-free) — owed before quoting the vocabulary share.
+4. ~~pool↔test entity-overlap audit~~ — **DONE (HB149): leakage REFUTED** (native 3% bigram
+   overlap vs foreign 0%, word-overlap .31 vs .27 — cannot produce +.097).
 5. **selection-regret** — GEPA's explored candidates were never retained, so closing this needs a
    fresh GEPA run with candidate logging.
-6. Appendix missing-mass plots for the other supervised benches — pools exist for all five, but the
-   semantic-clustering step has no script in the repo.
+6. ~~Appendix missing-mass plots~~ — **DONE**: `gen_fig_appendix_mass.py`, all five benches at two
+   declared species granularities; in the PDF as fig:appendix-mass. (An LLM-clustered semantic
+   version would need a Sonnet+ judge per standing rules — the deterministic version is the
+   conservative stand-in.)
 
 ## 6. Standing methodology rules earned the hard way
 

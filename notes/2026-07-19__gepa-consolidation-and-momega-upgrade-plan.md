@@ -4367,3 +4367,31 @@ so a low correlation is expected, not merely a power failure.
 panel must show the overlap explicitly, since that is the point; (3) the honest framing for the
 screening axis is *"standalone gain"* vs the selection axis *"survived conditional greedy
 assembly"*.
+
+## HB149 (2026-07-27) — Content-leakage audit: REFUTED. Plus the debt-clearing pass into the paper.
+
+**(1) Pool→test content overlap (task #11, CPU-free, prereg'd as owed before quoting the
+vocabulary share).** Decisive design: if leakage explained the native−foreign gap, the NATIVE pool
+would overlap the hover TEST text far more than the FOREIGN pool. Measured (`overlap_audit.py`,
+hover test claims, n=300):
+
+| pool | units w/ a test-matching content BIGRAM | mean single-word overlap | proper-entity spans |
+|---|---|---|---|
+| native (hover) | 5/164 (**3%**) | .31 | 26 |
+| foreign (hotpot) | 0/68 (0%) | .27 | 1 |
+
+Single-word overlap is nearly identical (.31 vs .27) — that is shared generic vocabulary, present
+in both pools, so it cannot produce the +.097 native−foreign gap. Bigram-level (content) matches
+are 3%, the same rate as the label-leakage check (HB144). **Train→test content leakage does not
+explain the vocabulary-priming component.** The +.0396 scramble-surviving gain is task-domain
+vocabulary, not copied test content.
+
+**(2) Paper updated (the debt the user flagged).** Same-session certified numbers moved from notes
+into `main.tex` (submodule commit 5f2c921): Table 1 HoVer row = HB127 omnibus (+.100***), all
+single-pass cells filled but †-marked as selection statistics excluded from W/L, AIME's stale
+exclusion footnote replaced (HB97 rescued it), seed-shipping + ifbench-inert footnotes added;
+Fig 3 LHS caption states the k≈27 turnover (projection = optimistic envelope, per HB142); NEW
+appendix figure: missing-mass curves for all five supervised benches from the re-mined replicate
+pools at TWO species granularities (fine J≥.5 vs coarse J≥.25 — the within-panel contrast IS the
+granularity-not-task finding; deterministic clustering, declared conservative). PDF now 7 pages.
+Memory index + project memory updated (the .517/.450 headline is now flagged SUPERSEDED there).
