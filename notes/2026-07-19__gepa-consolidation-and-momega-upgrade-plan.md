@@ -3609,3 +3609,163 @@ The queued 4-arm single-session run adds the **shuffled-token** arm (matched voc
 length — a tighter (A) control than foreign) and the **seed_units** arm (drops the searched
 winner entirely, attacking #1). HB124 remains UNQUOTABLE until #1-#3 are answered; HB129 stands
 on its own as a clean control result.
+
+## HB130 (2026-07-27) — ★★ hotpot ablation: 10/10 negative, but the SHARED CONTROL error eats it
+
+All 10 removal arms complete (`runs_paperexact/hotpot/Qwen3-8B/ablation_battery/`, 3 passes each).
+`full` = .6589 (pass sd .0102). Deltas (removal − full):
+
+`−.0089 −.0156 −.0156 −.0111 −.0156 −.0022 −.0111 −.0078 −.0189 −.0100`
+
+**Every single removal hurts — 10 of 10.** Naive sign test P = .00195. Mean delta −.01168.
+This is the direction HB120b's pre-registered thin/thick prediction called for (hotpot's units are
+format rules with marginals an order of magnitude above hover's), and it is the opposite of
+hover's uninformative battery.
+
+**But it does not survive correct error propagation, and the reason is structural.**
+All ten deltas are measured against ONE `full` value. That reference has SE = .0102/√3 = **.0059**,
+and — critically — **that error does not average down across arms; it is common to all of them.**
+A `full` measured just 1 SE high makes every removal look negative.
+
+| analysis | mean delta | 95% CI | verdict |
+|---|---|---|---|
+| ignoring `full`'s error (**WRONG**) | −.01168 | [−.0147, −.0087] | "decisive" |
+| **propagating the shared reference** | −.01168 | **[−.0240, +.0006]** | **INCLUDES 0** |
+
+Per-arm: the 95% band on a single difference is ±.0179, and **9 of 10 deltas fall inside it** — no
+individual unit is separately resolvable, same as hover. The sign test is *also* compromised: it
+assumes independent draws, and these ten share a reference, so 10/10 is much likelier under the
+null than 2×(1/2)^10 suggests.
+
+**Verdict: SUGGESTIVE, NOT ESTABLISHED.** Do not quote "every unit is load-bearing" or the .00195.
+Had I not propagated the shared error I would have reported a confident false positive — the naive
+CI excludes zero comfortably.
+
+**★ STANDING RULE (adopt campaign-wide).** In any ablation/battery design with one shared control,
+**the control arm must get several times more passes than each treatment arm**, because its error
+enters every comparison and never averages out. Equal passes everywhere spends the budget in the
+wrong place. Rule of thumb here: with 10 treatments, `full` wants ≈√10 ≈ 3× the passes of a single
+treatment arm, and more if the effect is near the noise floor.
+
+**Cheap decisive fix, queued:** re-measure `full` alone at k=15 in one session. That shrinks
+SE_full from .0059 to .0026 and the aggregate CI to roughly [−.0175, −.0058] **if the point
+estimate holds** — turning a graze into a result, or killing it honestly. One arm, ~15 evals.
+
+**Correction to the HB130 fix, caught before launch.** My first plan was to re-measure `full`
+alone at k=15 via `rescore_k3.py hotpot --runs unitrecomb_v5sk2 --passes 15` (verified it hits the
+same candidate on the same split — ablation_battery.py:87 uses `bench.test_set`, as does
+rescore_k3). **That would have been wrong.** The new `full` would sit in a DIFFERENT session from
+the 10 removal arms, so every delta would reacquire the cross-session `u_session` term that the
+whole same-session protocol exists to cancel — trading a known shared-reference error for a larger
+unknown one. Precisely the HB121 mistake in a new costume.
+
+**Correct design (queued, not yet launched):** ONE session containing `full` at **k=15** plus the
+three most negative removal arms (`minus_8` −.0189, `minus_1`/`minus_2`/`minus_4` −.0156) at k=5
+each. ≈30 evals, one server, one fingerprint. This gives a well-measured shared control and
+within-session deltas simultaneously. Needs a small arm-selection flag on `ablation_battery.py`
+(no `--only-full`/`--arms` exists today), so it is a code change plus a run, not a run alone —
+deliberately NOT launched half-right tonight.
+
+## HB131 (2026-07-27) — ★★★ MATCHED-SCALE 8B CELL: HB124 survives, effect is 5x LARGER, 40/40
+
+`runs/osl_hotpot_Qwen3-8B.json`. The decisive control for HB124 confound #3: init is the
+GEPA-official **8B** winner and the executor is now also **8B**, so no cross-scale mismatch exists.
+
+| executor | init (GEPA winner) | random draws (mean) | gain | draws > init |
+|---|---|---|---|---|
+| 0.6B | .2567 | .2943 | +.0376 | 36/40 |
+| 1.7B | .3567 | .4465 | +.0898 | 39/40 |
+| **8B (MATCHED)** | **.4000** | **.5856** | **+.1856** | **40/40** |
+
+At matched scale: draws mean .5856, 95% CI [.5693,.6013]; gain **+.1856 [+.169,+.201]**;
+**even the WORST of 40 draws (.4833) beats GEPA's winner (.4000)** by +.083.
+Percentiles within the draw null: searched M_ω (.6367) = **80th**; GEPA's winner = **0th**
+(below all 40 draws).
+
+**★ The gain GROWS monotonically with executor capability (+.038 → +.090 → +.186).** A
+cross-scale-mismatch artifact predicts the opposite — it must SHRINK as the executor approaches
+the scale the prompt was optimized for. **Confound #3 is not merely absent; the data run against
+it.** Read positively: the more capable the executor, the more value GEPA's search left unclaimed
+in its own mined pool.
+
+**Status of every objection raised against HB124:**
+| # | objection | status |
+|---|---|---|
+| A | "any appended text helps a small model" | **DEAD** (HB129: count-matched foreign units HURT −.078, 0/40 above init) |
+| 3 | cross-scale (8B prompt on 0.6B executor) | **DEAD** (this entry; effect larger at matched scale) |
+| 4 | single-pass init | **DEAD** (HB125: k=5 init .25468 vs single-pass .2567) |
+| 2 | selected-vs-unselected regression | **effectively dead at this magnitude.** Winner's curse is bounded by the selection noise scale — measured here at SD ≈ .010-.018 (HB120b/HB130) — so it can move a point estimate by ~.02-.03 at most. Against HB97's better-measured same-session GEPA official (.4133) the gap is still **+.172**, an order of magnitude beyond what regression can produce. |
+| 1 | **superset construction** | **STILL STANDING.** Every draw contains 100% of GEPA's winner, so this licenses "adding pool units to the searched prompt helps", NOT "the pool replaces search". The `seed_units` arm (running in the 4-arm hotpot run and in HB128 on hover) is the direct test. |
+
+**Quotable NOW, with the superset framing stated honestly:**
+> On hotpot at matched 8B scale, appending a random half of the units GEPA itself mined to GEPA's
+> own selected prompt improves it by **+.186 [+.169,+.201]**, in **40 of 40 draws**, with the worst
+> draw still +.083 ahead — and the searched M_ω prompt sits at only the **80th percentile** of that
+> random-draw distribution.
+
+**Do NOT yet claim** the pool replaces search; that needs `seed_units`. **Do NOT quote** the max
+draw (.653) — max-over-40-single-passes is the HB121 statistic.
+
+## HB132 (2026-07-27) — ★★★ WHAT WE BEAT: on hotpot and ifbench, GEPA SHIPPED THE SEED
+
+The advisor pulled a fact out of this note's own D2 section (lines 122-124) and it reorganizes the
+scoreboard. **Verified empirically for the exact run dirs HB97/HB131 use**, two independent ways:
+
+(a) byte-comparison of `official/result.json` best_candidate against the benchmark seed
+(`seedcheck.py`, normalized whitespace, per module):
+> **hotpot: seed hash 36e634d55388 == init hash 36e634d55388 — IDENTICAL across all 4 modules.**
+> aime: DIFFERS (seed 63 chars → init 1402 chars) — a real GEPA gain.
+
+(b) seed_test vs best_test in every official run dir:
+
+| bench | seed_test | best_test | did GEPA improve? |
+|---|---|---|---|
+| **hotpot** | .3800 | .3800 | **NO — shipped the seed** |
+| **ifbench** | .4116 | .4116 | **NO — shipped the seed** |
+| hover | .3800 | .4500 | yes |
+| aime | .3333 | .3667 | yes |
+| livebench | .6744 | .6956 | yes |
+| pupa | .8030 | .8621 | yes |
+
+**Three consequences, all of which change how results must be WORDED (no number changes):**
+
+1. **hotpot's flagship margins are over the SEED, not over a searched prompt.** HB97's +.220 and
+   HB131's +.186 both use an `init` that is the bare seed, because GEPA explored its budget and
+   shipped nothing. The honest sentence is *"recombining the units GEPA mined beats what GEPA
+   shipped — and on hotpot what GEPA shipped was the unmodified seed."* A reviewer will otherwise
+   write the one-liner for us: *"you beat GEPA on the task where GEPA didn't run."*
+2. **Confound #1 (superset) is VACUOUS on hotpot.** Draws are "init + units", but init ≡ seed, so
+   `native` and `seed_units` are the SAME ARM there. **The seed_units arm now running on
+   hotpot/0.6B cannot test the superset confound — it never could.** Only **hover** tests it, since
+   hover's init carries real searched content (.38→.45). This raises HB128's importance sharply
+   and means I must not read hotpot's seed_units ≈ native as the confound passing.
+3. **The two meaningful wins are hover (+.100) and aime (+.091)** — the benches where GEPA
+   actually improved and we still beat it. hotpot's +.220 is the largest number and the weakest
+   *comparison*. ifbench's "not confirmed +.020" is now interpretable rather than embarrassing:
+   GEPA shipped the seed there too, so ifbench is a bench where **nothing** works, ours included.
+
+## HB132b — my confound-#2 rebuttal was UNSOUND (wrong σ). Retracted.
+
+In HB131 I argued selection regression "is bounded by the measured noise scale SD .010-.018, so it
+can move a point estimate ~.02-.03, and cannot produce +.17." **The arithmetic is right and the σ
+is wrong.** That SD is the pass-to-pass SD of careful k-pass, n=300 re-evaluations. GEPA's
+*selection* happens on 15-item minibatch panels, and this campaign's own UNIT_BOTTLENECK_DIAGNOSIS
+(D3, notes ~line 141) measured **sd(panel mean) ≈ 1.7-1.8 items on 15 ≈ .11-.12 in accuracy** —
+6-10× the σ I used — and recorded panel acceptance as "a coin flip" with a confirmed false
+positive. With σ_sel ≈ .11 over 6 candidates, σ√(2 ln k) ≈ .19, the **same order as the +.17 gap**.
+My rebuttal is withdrawn.
+
+Also, the live form of the objection is not regression at all: init was freshly re-measured
+(HB125/HB131), so it carries no curse. The real objection is **selection REGRET** — GEPA may have
+*generated* draw-band candidates and rejected them on a coin-flip panel. Nothing I have addresses
+that.
+
+**Decisive, cheap, queued: hindsight-rescore all 6 explored hotpot GEPA candidates + seed at k≥5,
+n=300, ONE session.** Both outcomes publishable:
+- none reaches the draw band (~.586) → upgrade to *"GEPA's proposal generator never produced a
+  band-level prompt; recombination of its own mined units does"* — the strong thesis, and confound
+  #2 dies properly.
+- some candidate reaches ~.586 → the story becomes *"search generates but cannot select under
+  panel noise"* — a different, still-real paper. Better found by us than by a referee.
+Frame the eventual claim as a two-part failure decomposition — **generation vs selection** — not a
+monolithic "search loses".
