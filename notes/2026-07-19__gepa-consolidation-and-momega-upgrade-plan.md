@@ -3769,3 +3769,84 @@ n=300, ONE session.** Both outcomes publishable:
   panel noise"* — a different, still-real paper. Better found by us than by a referee.
 Frame the eventual claim as a two-part failure decomposition — **generation vs selection** — not a
 monolithic "search loses".
+
+## HB133 (2026-07-27) — ★★★ THE POOL IS 88% LLM-PROPOSED, NOT "UNITS GEPA MINED". Reframe again.
+
+Read the frozen pool's own provenance record (`pools/hotpot_Qwen3-8B_frozen.json`):
+
+| source | from_run | n | share |
+|---|---|---|---|
+| **llm** (5-framing reflection-LM suggestion) | unitrecomb_v5sk2 | **60** | **88%** |
+| trajectory (harvested from optimizer runs) | unitrecomb | 8 | 12% |
+
+**I have repeatedly written "the units GEPA itself mined" (HB124, HB131). That is wrong and I am
+retracting the phrasing.** Only 8 of 68 units come from optimizer trajectories at all, and those
+came from OUR `unitrecomb` run, not from GEPA official. The pool is overwhelmingly **de novo
+clauses proposed by a reflection LM shown the program's module instructions** — a declared mining
+distribution that never required running GEPA.
+
+**What the corrected claim actually is — and it is not weaker, it is different and cleaner:**
+> On hotpot at matched 8B scale, appending a random half of a pool of LLM-proposed instruction
+> clauses to the prompt GEPA shipped improves it by +.186 [+.169,+.201] in 40/40 draws — and what
+> GEPA shipped was the unmodified seed (HB132).
+
+Chained with HB132 the honest hotpot story is: **GEPA explored its budget, shipped nothing, and a
+random half of an LLM-proposed clause pool beats its output by +.186.** No claim about GEPA's
+mining is licensed, because GEPA's mining contributed 12% of the pool at most, and 0% via its
+official run.
+
+**Consequences:**
+1. Every "GEPA's own pool" / "the pool it mined" phrasing in notes and drafts must be replaced
+   with "a declared mining distribution (5-framing LLM suggestion + trajectory harvest)".
+2. It **strengthens** the practical claim (no optimizer run is needed to build the pool) while
+   **weakening** the rhetorical one (this is no longer "search discards its own discoveries").
+3. It makes the `seed_units` arm even more central: with init ≡ seed on hotpot (HB132), the whole
+   hotpot result reduces to *LLM-proposed clauses + seed*, with no optimizer anywhere in the
+   causal path.
+4. The trajectory-vs-llm split is itself a testable question the pool records support:
+   **do the 8 trajectory units carry more value than the 60 LLM units?** Answerable by regressing
+   draw scores on the trajectory-unit count in existing OSL data — no new GPU.
+
+## HB134 (2026-07-27) — MIPROv2 has been failing SILENTLY on every bench (rc=0)
+
+`ImportError: MIPROv2 requires optional dependency 'optuna'` in
+`dspy/teleprompt/mipro_optimizer_v2.py`, on hotpot AND aime. **The wrapper recorded `rc=0` both
+times** and the run dirs (`*/mipro_t1fill/`) are EMPTY. So Table 1's entire MIPROv2 column is
+vacuous, and would have silently stayed that way.
+
+Third instance today of the same pathology (after the vLLM-in-wrong-venv and the vendored EM/F1
+relocation): **a failure that writes to a log, returns success, and leaves an empty artifact.**
+Reinforces the standing rule — verify PRODUCED ARTIFACTS, never process liveness or exit codes.
+Fix: install optuna into the run venv, then re-run the mipro cells only.
+
+## HB135 (2026-07-27) — trajectory vs LLM units, and a NEGATIVE volume correlation at 8B
+
+Free analysis on existing OSL draws (no GPU). Pool = 68 units, indices 0-7 trajectory-sourced,
+8-67 LLM-proposed (HB133).
+
+| executor | corr(# trajectory units, score) | perm p | corr(# TOTAL units, score) |
+|---|---|---|---|
+| 8B | **+.239** | .134 | **−.263** |
+| 1.7B | +.141 | .386 | −.010 |
+| 0.6B | +.040 | .808 | +.034 |
+
+**(1) Trajectory units trend more valuable, and more so at larger scale — but nothing is
+significant.** With only 8 of 68 units trajectory-sourced, per-draw counts span 1-7; the design
+has little power. **A null here does NOT show trajectory units are worthless; it shows this design
+cannot tell.** Hypothesis-generating only, and recorded as such. Testing it properly needs a pool
+with a balanced source split, not more draws on this one.
+
+**(2) The genuinely interesting number is the volume correlation at 8B: −.263.** At the matched
+scale where the effect is largest (+.186), including MORE units is mildly WORSE. So the gain is
+**not** driven by prompt volume — it arrives despite volume, implying a subset optimum well below
+the p=.5 draw size (~34 units). This independently corroborates HB129's foreign-content result
+from the opposite direction: content selection matters, bulk does not.
+
+It also retires the last remnant of my discredited HB124 argument. I originally cited
+corr(#units, score) = +.034 at 0.6B as evidence against a text-volume artifact; that was the wrong
+statistic on the wrong rung with no power (HB124b). The right rung gives **−.263**, which is
+actual evidence in the same direction — arrived at properly this time.
+
+**Practical implication worth testing later:** if fewer units is better at 8B, a draw at p≈.25
+should beat p=.5. One cheap sweep (p ∈ {.15,.25,.5,.75}, 20 draws each, one session) would locate
+the optimum and is a stronger paper figure than a single p=.5 point.
