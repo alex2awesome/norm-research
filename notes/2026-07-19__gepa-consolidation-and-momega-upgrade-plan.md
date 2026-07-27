@@ -4417,3 +4417,26 @@ that keeps capitalized multi-word entity spans atomic); then **hotpot shuffled a
 3. hotpot-shuffled-at-8B lands ABOVE init (executor-scale explanation of the sign flip). If it
    stays BELOW init at 8B, the flip is bench-kind, not scale, and HB146's cross-bench framing changes.
 One shot each; whatever returns is the verdict.
+
+## HB151 (2026-07-28) — Fig-3 methodology audits (user-ordered) + three launches
+
+**(1) RHS ceiling audit — split-half calibration check.** Suspected flaw: the ×2 multiplier was
+chosen on the same repeated splits used to report coverage. Ran calibrate-on-half /
+validate-on-other-half, 10 replicates (`audit_calib_split.py`, sk3):
+- procedure risk CONFIRMED: chosen-on-half often selects ×1.5, which under-covers held out
+  (mean .947, min .927) — had we tuned harder we'd have shipped an invalid bound;
+- the FIXED ×2 rule validates at **.960 held-out coverage** → the reported number stands, now on
+  genuinely held-out metrics. Caption updated.
+**(2) LHS band was 2.8× too narrow.** The widening slope (.02/step) was ad hoc. Calibrated so the
+band covers every held-out k=21..40 point: **s=.056**. Redrawn; the honest band is wide.
+**(3) k cannot reach 100** — the hotpot pool has 68 units. Launched `prefix_lane` (sk2, pid
+3140131): full k=1..68 prefix curve, ONE session, declared order = standalone-delta rank.
+**(4) RHS annotations:** legal outcome-prediction (achieved .777, calibrated ceiling 1.0 — the
+left-end high-headroom exemplar) and creative-writing #20 (.873 → .993) on the right.
+**(5) Fig 4 v4** per user sketch: full seed prompt; atomic kept unit (+.15); discarded exemplar
+chosen to be REJECTED FOR CHANGING NOTHING (Δ=.00, restates its module — behaviour row identical);
+Panel B = admission pipeline into Ω with the explicit gate Δ(Ω⊕u|Ω)≥ε. Caption now states:
+tests here are score-mediated (behavioural flips = unsupervised-side screen); retention is
+company-dependent (19/27 overlap), so a different mixture keeps a different set; per-unit
+multi-mixture identification needs ~200+ draws (40 was unidentified) — open instrument.
+Falsy-zero bug caught in my own pool query (`delta or 9` drops Δ=0.0 units).
