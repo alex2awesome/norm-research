@@ -3850,3 +3850,38 @@ actual evidence in the same direction — arrived at properly this time.
 **Practical implication worth testing later:** if fewer units is better at 8B, a draw at p≈.25
 should beat p=.5. One cheap sweep (p ∈ {.15,.25,.5,.75}, 20 draws each, one session) would locate
 the optimum and is a stronger paper figure than a single p=.5 point.
+
+## HB136 (2026-07-27) — ★★★ SHUFFLED-TOKEN control: the effect is SEMANTIC, decisively
+
+4-arm single-session run (hotpot / Qwen3-0.6B), `runs/hb124_controls_hotpot_Qwen3-0.6B.json`.
+init (k=5) = .25134.
+
+| arm | construction | mean | above init |
+|---|---|---|---|
+| **native** | true pool clauses | **.2971** | **37/40** |
+| **shuffled** | SAME clauses, tokens scrambled — identical length, bullet format, and vocabulary; only word order (hence meaning) destroyed | **.1965** | **4/40** |
+| foreign | hover's pool, count-matched | .1803 | 1/20 |
+
+- **native vs shuffled: Δ=+.1006, 95% CI [+.0855,+.1155], P(Δ≤0)=.0000**
+- native vs foreign: Δ=+.1167, 95% CI [+.096,+.137], P(Δ≤0)=.0000
+- θ (content share of the native gain, vs shuffled) = **2.20**
+
+**This is the tightest available control and it settles objection (A).** The shuffled arm holds
+token count, clause count, bullet formatting, and the exact vocabulary fixed — the ONLY thing
+removed is word order, i.e. meaning. Performance falls from .2971 to .1965, **below init**, with
+only 4/40 draws beating init. So the gain is not from text volume, not from list formatting, and
+not from topical vocabulary: it is **semantic**. Scrambled native text is about as harmful as
+foreign text (.1965 vs .1803), which is exactly what a content-driven account predicts.
+
+**Cross-session replication is also clean** (an unplanned bonus): native .2985 (run 1) vs .2971
+(4-arm run), init .25468 vs .25134 — two independent sessions agreeing to ~.003 on both the arm
+and its reference.
+
+**Objection ledger for HB124 after this entry:**
+| # | objection | status |
+|---|---|---|
+| A | any appended text / format / vocabulary | **DEAD** — shuffled control, Δ=+.101 P<1e-4 |
+| 3 | cross-scale | **DEAD** (HB131: effect 5× larger at matched scale) |
+| 4 | single-pass init | **DEAD** (HB125, replicated here) |
+| 2 | selection regret | **OPEN** — my noise-scale rebuttal was retracted (HB132b); needs the hindsight rescore of GEPA's explored candidates, which this run dir does NOT retain (only best_candidate is saved), so it requires a fresh GEPA run with candidate logging |
+| 1 | superset construction | **OPEN, and untestable on hotpot** — init ≡ seed there (HB132), so `native` ≡ `seed_units`. **Only HB128 on hover can answer it.** |
