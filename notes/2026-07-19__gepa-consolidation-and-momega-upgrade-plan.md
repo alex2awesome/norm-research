@@ -4244,3 +4244,46 @@ which is itself diagnostic: the tail is granularity-limited, so widening beats l
 half as impressive as the uncalibrated number and now actually validated out-of-sample. Caveat C
 (inflated anchor) remains and should be stated in the caption — it biases the measured gap
 downward, so the true gap is likely a little wider still.
+
+## HB146 (2026-07-27) — ★★★ HB128 COMPLETE: the gain DECOMPOSES 42% lexical / 58% compositional
+
+All three arms finished, n=20 each, one session, every arm appended to the bare SEED.
+
+| arm | mean | above seed | vs seed |
+|---|---|---|---|
+| seed (k=5) | .4580 | — | — |
+| **native** | **.5535** | **20/20** | **+.0955** |
+| shuffled (same clauses, tokens scrambled) | .4977 | 19/20 | +.0396 |
+| foreign (hotpot pool, count-matched) | .4568 | 9/20 | −.0012 |
+
+| contrast | Δ | 95% CI | P(Δ≤0) |
+|---|---|---|---|
+| native vs foreign | +.0967 | [+.0848,+.1090] | .0000 |
+| native vs shuffled | **+.0558** | [+.0442,+.0678] | .0000 |
+| shuffled vs seed | **+.0396** | [+.0318,+.0470] | .0000 |
+
+**★ The native gain splits cleanly into two components:**
+
+| component | size | share |
+|---|---|---|
+| **lexical** — survives token scrambling (right words, any order) | **+.0396** | **42%** |
+| **compositional** — destroyed by scrambling (word order / syntax carries it) | **+.0558** | **58%** |
+| generic text of matched volume (foreign) | −.0012 | **0%** |
+
+This resolves the HB143 caveat and is a **better** mechanism story than all-or-nothing. Appending
+*any* fluent, count-matched text does nothing (foreign ≈ seed). Appending the *right vocabulary in
+scrambled order* buys 42% of the gain. Intact, composed clauses buy the remaining 58%. So the
+units are neither magic strings nor mere keyword bags — both channels are real and measurable.
+
+**On the hotpot/hover shuffled sign flip (HB144 objection).** Hover shuffled sits ABOVE seed
+(+.0396); hotpot shuffled sat BELOW init (−.0548). **This is still confounded with executor
+scale** — hotpot's shuffled arm was measured at 0.6B, hover's at 8B. A small model is plausibly
+derailed by scrambled text while an 8B model mines it for keywords. **Do not write "the benchmarks
+differ in kind"** until the hotpot-shuffled-at-8B cell exists; HB131's matched-8B setup makes that
+one cheap cell.
+
+**Quotable now:** *"On hover, appending a random half of an LLM-proposed clause pool to the bare
+seed — with no selection and no iteration — raises exact-match from .458 to .554, and the gain
+decomposes into 42% lexical and 58% compositional; count-matched foreign clauses contribute
+nothing."* Per HB144, do NOT describe this as "zero search" (the pool proposer saw training
+examples) and do NOT quote the max draw (.5933, a single-pass max).
