@@ -120,3 +120,25 @@ Total GPU: ~3.5-4 days for items 2-4+6; boxes are currently idle.
 - Collins' four propositions in the intro currently listed as "(4) something else" — the actual
   fourth criterion in Collins (2010) is **explanation (scientific description)**; the four are
   elaboration / transformation / mechanization / explanation. No experiment, just the citation.
+
+## E1-full RESULTS (run same day, CPU, existing artifacts)
+
+Calibration over hotpot/aime/livebench greedy trajectories (ifbench logged no prefix rows), all
+fit-window sizes j ≥ 5, two functional forms:
+
+| horizon ahead | satexp median \|err\| | power-law median \|err\| | n |
+|---|---|---|---|
+| 1–3 steps | .026 | .027 | 240 |
+| 4–8 steps | .035 | **.033** | 370 |
+| 9+ steps | .056 | **.044** | 758 |
+
+The intro's literal sentence (fit at step 5, predict step 8): power-law median .026 **but max
+error .297** (satexp .543) — small fit windows have heavy-tailed failures, and on aime the
+fitted asymptote sat BELOW the realized max (anti-conservative).
+
+**Supportable rewording** (decision for the user; intro untouched per directive): the value
+curve predicts 4–8 steps ahead with median error ≈.03 when fitted on ≥8–10 prefix points
+(power-law form), degrading to ≈.05 at 9+ steps; fits on ≤5 points are unreliable
+(heavy-tailed, occasionally anti-conservative). "Reliably predict from step 5" should become
+"predict with calibrated ±.03 median error at medium horizons" — supported today, no new runs
+needed. A conformal band on top of this table is one afternoon of CPU work if wanted.
