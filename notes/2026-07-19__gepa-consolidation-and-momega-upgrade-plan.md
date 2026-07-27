@@ -4209,3 +4209,38 @@ winner k≥5 on held-out items in a fresh session.
 **Immediate consequence for the write-up:** the HB143 headline sentence changes from
 "zero-search recombination reaches the searched band" to **"an unselected, un-iterated proposal
 round reaches the searched band."** Numbers unchanged; scope corrected before it propagates.
+
+## HB145 (2026-07-27) — ★★★ DEEP AUDIT of the Fig-3-RHS ceiling: it FAILED hold-out. Now calibrated.
+
+User asked for assurance the RHS numbers are bulletproof. **They were not.** Five failure modes
+tested; two bite.
+
+| check | result | verdict |
+|---|---|---|
+| **A. hold-out backtest** (build bound on 80% of prompts, test held-out 20% max) | **coverage .9338**, 18/272 violations, worst overshoot **−.053** | **FAILS the .95 target** |
+| **B. discreteness** | granularity 1/300 = .00333; median tail spacing = **.00333 = exactly 1 item**; **33% of tail gaps are ties**; only 7 distinct values in the top 10 | **bound sits ON the granularity floor** |
+| C. winner's curse on the anchor | `achieved` is a max over ~640 single-pass prompt scores → inflated; **not correctable from stored files** (no repeat passes per prompt) | open, biases the gap DOWN |
+| D. exchangeability | median early-vs-late drift −.0046; \|drift\|>.02 in 29/272 | mild, acceptable |
+| E. horizon | bound covers ONE draw only | stated, not yet generalized |
+
+**The .0167 gap I reported was not a valid 95% bound.** It was an in-sample point estimate that
+under-covers out of sample. Retracted.
+
+**Calibration.** Swept tail depth K ∈ {10,20,40} × widening multiplier ∈ {1,1.5,2,3,4} over 5
+repeated 80/20 splits per metric (272 metrics, ~640 prompts each):
+
+| K | mult | coverage | median gap |
+|---|---|---|---|
+| 10 | 1.0 | .9213 | .0167 ← what I reported |
+| 10 | 1.5 | .9441 | .0250 |
+| **10** | **2.0** | **.9610** | **.0333** ← smallest configuration reaching ≥.95 |
+| 10 | 3.0 | .9801 | .0500 |
+
+**CALIBRATED BOUND: K=10, multiplier 2.0 → coverage .961, median gap .0333, median ceiling .8633.**
+K is irrelevant beyond 10 (identical results at 20 and 40) — the multiplier does all the work,
+which is itself diagnostic: the tail is granularity-limited, so widening beats looking deeper.
+
+**Honest standing:** still **5x tighter than the entropy bound** (.175 gap) and per-metric, but
+half as impressive as the uncalibrated number and now actually validated out-of-sample. Caveat C
+(inflated anchor) remains and should be stated in the caption — it biases the measured gap
+downward, so the true gap is likely a little wider still.
