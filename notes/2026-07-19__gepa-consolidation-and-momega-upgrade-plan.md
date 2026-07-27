@@ -4287,3 +4287,45 @@ seed — with no selection and no iteration — raises exact-match from .458 to 
 decomposes into 42% lexical and 58% compositional; count-matched foreign clauses contribute
 nothing."* Per HB144, do NOT describe this as "zero search" (the pool proposer saw training
 examples) and do NOT quote the max draw (.5933, a single-pass max).
+
+## HB147 (2026-07-27) — ★ RELABEL HB146. "Compositional" is wrong; two design facts verified in code.
+
+**(1) The label "compositional" is refuted by my own foreign arm.** Foreign clauses have perfectly
+intact syntax and word order and contribute **0** (−.0012). So the +.0558 increment cannot be
+"word order carries it." It is *domain vocabulary × intact arrangement* — i.e. **propositional
+content**, an interaction, not a syntax main effect. Corrected naming, to be used everywhere:
+
+| component | Δ | correct label | wrong label (retracted) |
+|---|---|---|---|
+| survives word-scrambling | +.0396 | **vocabulary priming** | "lexical" (fine, but say vocabulary) |
+| above that, needs intact clauses | +.0558 | **propositional content** | ~~"compositional / word order"~~ |
+| count-matched fluent foreign text | −.0012 | **generic well-formed text** | — |
+
+Also note the decomposition is **path-dependent**: I walked seed→shuffled→native and named the
+increments as if they were independent main effects. A reviewer can walk seed→foreign→native and
+observe "intact syntax alone = 0." Report the three Δs with CIs; **do not quote 42%/58% as precise
+shares** — they are a ratio of two noisy differences.
+
+**(2) Two design facts, checked in `hb124_controls.py` rather than assumed:**
+- **Scrambling is WORD-level** (`c.split()` → shuffle → join), not token-level. Individual words
+  survive intact, so "vocabulary preserved" is true at word granularity — **but multi-word entity
+  names are shattered**, and hover is fact-verification where entities are the lexicon. The
+  vocabulary share is therefore likely **under**-estimated and the propositional share inflated.
+  An entity-preserving scramble arm would bound this.
+- **The arms are NOT paired.** `rng.choice` is drawn sequentially per arm, so native/shuffled/
+  foreign each use *different* unit subsets. Pool-composition variance therefore sits inside the
+  native−shuffled CI, making it wider than a paired design would give — conservative for the
+  contrast, but it should be stated, and the follow-up should reuse identical subsets per arm.
+
+**(3) Missing control that would change the numbers: SCRAMBLED-FOREIGN.** Word-soup is
+high-perplexity text; part of the +.0396 could be a generic scrambled-text effect (distraction,
+more cautious decoding) rather than vocabulary. Intact-foreign ≈ seed does **not** control this,
+because fluent off-topic text is ignorable in a way word-soup is not. If scrambled-foreign > seed,
+the vocabulary share shrinks. **PREREGISTERED PREDICTION before that arm runs: scrambled-foreign
+≈ seed (within ±.015).** If it lands materially above seed, the vocabulary component is partly an
+artifact and HB146 must be restated.
+
+**(4) One CPU-free audit owed before 42% is quoted anywhere:** n-gram / entity overlap between the
+pool clauses and the 300 hover TEST items. The proposer saw training examples (HB144); if train
+and test share entities, the scramble-surviving gain is partly content leakage rather than
+"vocabulary". Label leakage was refuted at 3%; *content* overlap has not been measured.
