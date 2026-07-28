@@ -1,4 +1,13 @@
 # CAMPAIGN STATE — prompt-optimality / Paper #2
+
+## ⏰ EOD-2026-07-29 READINESS CHECKLIST (hourly monitor 0e6cd647 drives this)
+- [ ] Table 1 fully comparable (omnibus, same-session k=5, daggers dropped; pupa merge/mipro stay empty per HB154)
+- [ ] Five-arm decomposition verdict vs HB150 preregs (+ advisor)
+- [ ] hotpot-shuffled-8B verdict (sign-flip de-confound)
+- [ ] Fig 5 ladder complete (hover/8B) + recompiled
+- [ ] Fig 3 LHS same-session actuals to k=68 + recompiled
+- [ ] Rank certificate recomputed on median-split targets (CPU, sk3)
+- [ ] Final PDF + one-page results summary the user can report from
 **Single source of truth. Updated 2026-07-28 00:05Z. Rewrite this file rather than adding another notes file.**
 
 Written because the campaign had drifted across three boxes and several parallel plans. A census
