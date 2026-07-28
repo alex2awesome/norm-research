@@ -3,14 +3,14 @@
 ## 1. Headline result (Table 1, canonical same-session protocol)
 
 **"Under a pre-registered same-session protocol, the ε-certified recombination pool matches or
-exceeds GEPA on all six benchmarks and significantly exceeds it on three (HoVer +.100, IFBench
+exceeds GEPA on all six benchmarks and significantly exceeds it on three (HoVer +.086, IFBench
 +.040, and HotpotQA +.235 over GEPA's shipped prompt, which there equals the seed) — and the same
 protocol retracted two of our own earlier apparent wins as measurement artifacts."**
 
 | benchmark (n) | GEPA | GEPA+Merge | MIPROv2 | M_ω | Δ vs GEPA |
 |---|---|---|---|---|---|
 | HotpotQA (300) | .411 | .400 | .439 | **.646** | +.235*** |
-| HoVer (300) | .464 | .525 | (omnibus tonight) | **.564** | +.100*** |
+| HoVer (300) | .471 | .517 | not measured | **.557** | +.086*** |
 | LiveBench (126) | .699 | .688 | .677 | .705 | +.006 n.s. |
 | IFBench (294) | .403 | .411 | .383 | **.443** | +.040** |
 | AIME (150) | .385 | .373 | .323 | .392 | +.007 n.s. |

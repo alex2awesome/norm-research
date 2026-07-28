@@ -4891,3 +4891,24 @@ confirmation +.021 (p=.078). All positive, mutually compatible (CIs overlap); on
 session separates. Footnote ^f rewritten to show all three (submodule 1e9ce61). The star stays on
 the canonical row per the direction-blind rule; the caveat travels with it. GPU 6 server
 self-killed on completion — GPU 6 free again for labmates.
+
+## HB171 (2026-07-28 ~22:0xZ) — OMNIBUS COMPLETE; Table 1 fully canonical; hover row = +.086***
+
+table_omnibus finished cleanly 20:33:04Z (hover rc=0, server self-shutdown, GPU 0 freed). Hover
+canonical uniform session (fp 2026-07-28T19:09:50Z, n=300, k=5, 20k paired bootstrap):
+| candidate | mean |
+|---|---|
+| GEPA official | .4707 |
+| GEPA+Merge (gepamerge) | .5167 |
+| M_ω (unitrecomb_stair) | .5567 |
+
+M_ω vs GEPA **+.0860 [.0627,.1100] p<5e-5**; vs Merge +.0400 [.0133,.0667] p=.0015. MIPROv2 has
+NO hover candidate (never produced one) → cell = not measured, footnoted. Earlier session's +.100***
+(with pool-free .559 ≈ M_ω .564) moved to the earlier-session note in ^c. HEADLINE SENTENCE
+UPDATES: "HoVer +.100" → "HoVer +.086" everywhere forward-facing (advisor sentence amended;
+HB169's version is the ledger record of what was adopted then).
+
+**FINAL TABLE 1 (all rows canonical uniform sessions):** hotpot +.235*** / hover +.086*** /
+livebench +.006 n.s. / ifbench +.040** / aime +.007 n.s. / pupa −.001. W = 3/6, never-worse
+everywhere (min Δ = −.001). Submodule be7c607. [table1-comparable] TICKED. Remaining EOD items:
+final PDF sweep + summary note sections 3-7 + kw3 harvest.

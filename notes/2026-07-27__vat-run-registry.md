@@ -113,6 +113,18 @@ training now.
 ## (launched) ROUND-2 DENSE CHAIN LAUNCHED (2026-07-28): cap_finalist → cap_crowd → cw_full
 (WritingPrompts clean grouped, full data) — after eval pass drains. Watcher armed.
 
+## BALANCING-APPENDIX AUDIT CORRECTIONS (2026-07-28, appendix_balancing.tex wired in)
+- caption contests: "81-83" = rows PER contest (IDs 615-842, 227 contests) — not contest ids.
+- mathlib: y=(n_review_threads==0) is the RETIRED friction label, NOT accept/reject —
+  never describe the verdict cell with it.
+- P2F clean = 6,557 artifact-corroborated (6,895 was handoff narrative; figures corrected);
+  F2P = 996 corroborated (1,174 from uncommitted rescore harness).
+- FICTION-CROWD PROTOCOL MISMATCH (user decision needed): 5,000-dp V/A cell sampled from
+  litbench-to-train (upvotes>100, 31% pos, no prompt grouping) vs dense T trains on
+  writingprompts_modeling_clean (score>=10, 50/50, prompt-grouped) — different thresholds
+  AND populations; community-chart CW row is currently a mixed-protocol composite.
+- CF competition: .627 pre-enrichment vs .686 post — registry cites .627, decide before quoting.
+
 ## In-flight jobs right now (sk3)
 - Dense-standard chain GPU1: nc_responded → peer curation → peer verdict (watcher armed).
 - Caption A-bank scorer GPU2: 5 shards, 364 rubrics × 18,838 captions (watcher armed).
