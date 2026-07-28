@@ -4507,3 +4507,26 @@ lines REMOVED, named+boxed RHS annotations; Fig 7 — the p_unseen RISE was an o
 curves now monotone, caption explains; Fig 4 v5 — pool Ω central with 11 real abbreviated units,
 prose prompt with shaded attachment spans, single admission gate, audit battery, Fig-1-idiom
 flip dots.
+
+## HB154 (2026-07-28) — WASTE CAUGHT AND STOPPED: pupa Table-1 cells are unrunnable (GLM-wired judge)
+
+User asked for a cycles audit. Found one real burner: the T1 lane's `pupa/official_merge` cell had
+been running **2.2 hours with 840 dead-GLM error lines, zero scored evals, and an EMPTY run dir.**
+Root cause: `load_bench("pupa")` wires the metric's quality/leakage judge to GLM via
+`make_reflection_lm("glm-5.2")` (patient mode = 40 retries per call), and the GLM API is
+permanently dead (2026-07-25). **Every pupa metric call spins through 40 retries and fails; the
+cell can never succeed.** pupa/mipro queued behind it would have burned identically.
+
+Actions: killed the T1 wrapper (678689) FIRST, then the pupa child (789770). The lane's remaining
+work was only the two pupa cells, so nothing else was lost; the refill (hotpot+aime MIPROv2 — no
+GLM anywhere) unblocks within its 5-min poll, then the table omnibus (which never included pupa).
+
+**Standing rule added: before queueing ANY pupa work, check the bench-level judge wiring.** The
+pupa metric judge is part of the instrument; rewiring it to a local model would be an instrument
+change (and an 8B judge violates judges-Sonnet-or-better), so pupa's GEPA+Merge/MIPROv2 cells stay
+EMPTY with a stated reason unless the user decides otherwise. Pupa's headline status (TIE, final)
+is unaffected.
+
+Health of everything else, verified by artifacts/rates not liveness: controls_v2 5.5–7.1 min/draw,
+gpu2 100%, foreign arm scoring at seed level as the prereg predicts; OSL hover/4B 27/40 draws,
+artifact fresh; prefix/omnibus/refill idle-by-design (zero cycles).

@@ -22,7 +22,7 @@ codegen — it cost hours for zero results. Do not use it without a specific rea
 
 | lane | pid | state |
 |---|---|---|
-| `lane_t1_v3.sh` — Table 1 | 678689 | RUNNING, on livebench/mipro |
+| ~~lane_t1_v3.sh~~ | — | DRAINED 2026-07-28: 8 of 10 cells done; the 2 pupa cells are UNRUNNABLE (GLM-wired metric judge, HB154) and were killed after burning 2.2h |
 | `lane2.sh osl` — OSL ladder | 1311630 | RUNNING, on Qwen3-4B (final rung) |
 | `mipro_refill.sh` | 398357 | WAITING for the T1 lane (re-runs the 2 cells burned by the optuna bug) |
 | `table_omnibus.sh` (HB150 L1) | 2592654 | WAITING for T1+refill, then per-bench ALL-candidate k=5 rescore → retires every † in Table 1 |
