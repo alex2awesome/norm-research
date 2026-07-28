@@ -4655,3 +4655,15 @@ declared order = standalone-delta rank).** `runs/prefix_extend_hotpot.json`:
   the "selection adds little beyond rank-and-take-enough" reading.
 Fig 3 LHS overlays the curve (green) with the projection band; captions updated. Checklist:
 [fig5 ladder] ✓ [fig3 k68] ✓ (with [5-arm verdict] ✓ = 3/7).
+
+## HB160 (2026-07-28) — Rank certificate REVALIDATED on median-split targets; omnibus measuring
+
+**(1) Rank/exchangeability certificate backtest on the corrected binarization** (the old backtest
+ran on tau=.02; checklist item): 272 metrics × 5 splits = 1,360 observations,
+**observed P(held-out max beats train max) = .1949 vs .200 predicted — conservative, quotable.**
+The paper's Fig-3 caption claim (rank certificate, 1/(N+1)) now rests on the same binarization as
+every other number from the bank. Checklist [rank-certificate] ✓ (4/7).
+
+**(2) Refill COMPLETE** (aime MIPROv2 artifact verified, best-program score 37.78 on its select
+metric) and **the table omnibus is MEASURING** — handoff was fully automatic this time; hotpot
+bench 1/5 in progress at k=5. ETA for all five benches ≈ 8-10h ⇒ comparable Table 1 tonight.
