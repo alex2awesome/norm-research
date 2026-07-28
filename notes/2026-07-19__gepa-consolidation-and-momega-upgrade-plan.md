@@ -4881,3 +4881,13 @@ Advisor (Fable), key rulings, all adopted:
 MUST-FIX ledger: (a) hover row lands before freeze; (b) ifbench insurance reported whatever it says
 (HB167 binding); (c) stale-language sweep of PAPER — done, clean (only intentional footnotes);
 (d) abstract/intro clean — verified.
+
+## HB170 (2026-07-28 ~21:3xZ) — IFBench insurance pair REPORTED (pre-commitment HB167 honored)
+
+Insurance session (GPU 6, port 8186, single fingerprint 19:07:43Z, n=294, k=5, paired bootstrap
+20k): GEPA .4262, M_ω .4476, **Δ+.0214 [−.0082,+.0510], p=.078** — directionally positive, not
+individually significant. Three ifbench sessions now on record: +.020 n.s. / canonical +.040** /
+confirmation +.021 (p=.078). All positive, mutually compatible (CIs overlap); only the canonical
+session separates. Footnote ^f rewritten to show all three (submodule 1e9ce61). The star stays on
+the canonical row per the direction-blind rule; the caveat travels with it. GPU 6 server
+self-killed on completion — GPU 6 free again for labmates.
