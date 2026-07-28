@@ -4776,3 +4776,26 @@ per-unit bulleted term lists, NO header ("- term, term, …" per unit), paired s
 session with seed + native anchors. **Rule: recovers to within .015 of shuffled (+.047-ish) →
 FORMAT/segmentation explanation (H2); stays within .015 of flat-keywords (+.011) → ORDER/bigram
 explanation (H1); between → both channels, report interval.**
+
+## HB165 (2026-07-28 ~17:3xZ) — Table 1 partially rebuilt from the 3 completed omnibus benches; IFBENCH UPGRADES TO A WIN
+
+User asked for tables updated NOW with everything available. Fresh paired bootstraps (20k resamples,
+newest single-fingerprint block per file, all four candidates same session, k=5):
+
+| bench | GEPA | +Merge | MIPROv2 | M_ω | Δ vs GEPA | 95% CI | p(≤0) |
+|---|---|---|---|---|---|---|---|
+| hotpot | .4107 | .4000 | .4387 | **.6460** | +.2353 | [.192,.281] | <5e-5 |
+| aime | .3853 | .3733 | .3227 | .3920 | +.0067 | [−.020,.033] | .303 |
+| ifbench | .4031 | .4106 | .3834 | **.4432** | +.0401 | [.012,.069] | **.0029** |
+
+Head-to-heads (same session): hotpot M_ω vs Merge +.246***, vs MIPROv2 +.207***; ifbench vs Merge
++.033*, vs MIPROv2 +.060***; aime vs MIPROv2 +.069*** (but no GEPA separation → print policy holds).
+
+**Scoreboard change: ifbench moves from "not confirmed (+.020, p=.233)" to a significant win
+(+.040, p=.0029) in the uniform session.** Both sessions reported; footnote in Table 1 flags the
+session-sensitivity explicitly. Session-to-session GEPA-arm variance is now documented on BOTH aime
+(.307–.385) and ifbench — same instrument lesson as prompt-optimality-eval-noise.
+
+Table 1 now 6 columns; hover row = HB127 session (MIPROv2 cell lands with tonight's omnibus);
+livebench merge/mipro cells likewise; pupa envelope permanently N/A (HB154). Submodule commit above.
+Remaining for [table1-comparable]: livebench (in measurement now) + hover omnibus rows.
