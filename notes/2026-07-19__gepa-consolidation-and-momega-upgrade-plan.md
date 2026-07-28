@@ -4530,3 +4530,21 @@ is unaffected.
 Health of everything else, verified by artifacts/rates not liveness: controls_v2 5.5–7.1 min/draw,
 gpu2 100%, foreign arm scoring at seed level as the prereg predicts; OSL hover/4B 27/40 draws,
 artifact fresh; prefix/omnibus/refill idle-by-design (zero cycles).
+
+## HB155 (2026-07-28) — DUPLICATE T1 LANE found and killed; single-pass t1fill cells are double-provenance
+
+The mipro-refill stayed blocked 40 min after the T1 kill. Cause: a SECOND `lane_t1_v3.sh`
+instance (pid 1721025) — the supposedly-failed first launch from 2026-07-27 ~10:00Z had in fact
+survived — was still matching the refill's wait pattern, with its own pupa child burning
+dead-GLM retries. Killed (wrapper first, then child).
+
+**Integrity note:** two identical T1 lanes ran the same bench x arm sequence ~20 min apart against
+the SAME run dirs and log (explains the doubled "[T1] hotpot / official_merge" lines and the slow
+mipro pace — two 600-call optimizations sharing one server). Every `*_t1fill` result.json may
+therefore hold whichever duplicate finished last. **Consequence: none for the paper** — those
+cells are already †-marked single-pass indicative-only, and the table omnibus re-measures every
+candidate same-session, which is the only instrument the final table will quote. But the † cells
+now carry double provenance and must never be upgraded to quotable retroactively.
+
+Root-cause lesson (added to the artifact rule): a wrapper that appears not to have started may
+have started invisibly — always `pgrep` for ALL instances after any launch, not just the newest pid.
