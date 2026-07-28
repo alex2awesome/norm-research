@@ -3,7 +3,7 @@
 ## ⏰ EOD-2026-07-29 READINESS CHECKLIST (hourly monitor 0e6cd647 drives this)
 - [ ] Table 1 fully comparable (omnibus, same-session k=5, daggers dropped; pupa merge/mipro stay empty per HB154)
 - [x] Five-arm decomposition verdict (HB157: vocab ≥51% assumption-free; PROP bounded [0,.046]; advisor caps adopted HB158)
-- [ ] hotpot-shuffled-8B verdict (sign-flip de-confound)
+- [x] hotpot-shuffled-8B verdict (HB161: sign flip = SCALE confirmed; vocab-carries-all is hover-local — composition real on hotpot)
 - [x] Fig 5 ladder complete (8/8 cells; BOTH benches 40/40 at 8B — HB159)
 - [x] Fig 3 LHS same-session k=1..68 overlay (inverted-U measured: peak k=46 — HB159)
 - [x] Rank certificate revalidated on median-split targets (.1949 vs .200 — conservative, HB160)

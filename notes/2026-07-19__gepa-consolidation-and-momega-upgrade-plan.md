@@ -4667,3 +4667,32 @@ every other number from the bank. Checklist [rank-certificate] ✓ (4/7).
 **(2) Refill COMPLETE** (aime MIPROv2 artifact verified, best-program score 37.78 on its select
 metric) and **the table omnibus is MEASURING** — handoff was fully automatic this time; hotpot
 bench 1/5 in progress at k=5. ETA for all five benches ≈ 8-10h ⇒ comparable Table 1 tonight.
+
+## HB161 (2026-07-28) — ★★★ hotpot-shuffled-8B: sign-flip = SCALE (confirmed); vocabulary-carries-all = HOVER-LOCAL (prediction missed)
+
+One session, paired subsets, n=20/arm. init(k=5)=.3987 (≡ seed on hotpot; HB131 anchor .4000 ✓).
+`runs/hb124_controls_hotpot_Qwen3-8B_init_shuf8b.json`.
+
+| arm | mean | vs init | above init |
+|---|---|---|---|
+| native | .6027 | **+.2040** | 20/20 |
+| shuffled | .4560 | **+.0573** | 18/20 |
+paired native−shuffled: **Δ=+.1467 [+.1243,+.1680]**
+
+**(1) HB150 prereg #3 CONFIRMED.** At 8B, scrambled native units land ABOVE init (+.057, 18/20) —
+the 0.6B below-init result was **executor fragility, not bench-kind**. The sign flip is a SCALE
+effect. (Also: native +.204 here replicates HB131's +.186 across sessions.)
+
+**(2) HB158 point prediction MISSED LOW** (predicted +.140 [.130,.151], observed +.057). The
+vocabulary-carries-everything account does NOT transfer to hotpot: scrambling destroys .147 of a
+.204 gain there vs only .046 of .093 on hover. Under the additive model with the hover penalty,
+hotpot decomposes to VOCAB ≈ .10, **PROP ≈ .10 — composition is REAL on hotpot (~half the gain)**;
+alternatively the scramble penalty is bench-dependent. Either way: **the PROP≈0 result is
+hover-local.** The honest layered mechanism claim for the paper:
+- vocabulary share is large on BOTH benches (assumption-free floors: ≥51% hover, ≥28% hotpot);
+- the compositional share is BENCH-DEPENDENT — ≈0 on hover (claim-verification), substantial on
+  hotpot (multi-hop QA with format-critical answers);
+- prereg discipline made both the confirmation and the miss legible.
+Keyword arm (queued) now matters MORE: it separates vocabulary-delivery from scramble damage on
+hover; a hotpot keyword arm becomes the obvious follow-up but is NOT required for tomorrow.
+Checklist [shuf8b verdict] ✓ (5/7).

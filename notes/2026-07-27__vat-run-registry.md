@@ -80,6 +80,21 @@ p = provisional (ungrouped/unverified split); mature standard = Llama-3.1-8B LoR
 | N&C agree | .639 | .551 | +.09 |
 Old venue-confounded peer ~.77 superseded by honest grouped .751.
 
+## HUMOR CAPTION MULTI-Y COMPLETE (2026-07-28, V1 CLOSED) — hole-(b) contrast #3
+`datasets/humor/caption_multiy/cap_multiy_results.json`; anchors pos/mid/scram
+.667/.378/.121 all shards; NA .21; gkf ≈ sgkf (estimator-robust, unlike N&C).
+| y | n | V | A | V+A | A−V |
+|---|---|---|---|---|---|
+| finalist-B (hardneg headline) | 5,218 | .625 | .630 | .651 | +.005 |
+| finalist-B (full pool, inflated secondary) | 18,838 | .632 | .716 | .728 | +.083 |
+| crowd-C (median split, ≥100 votes) | 10,893 | .527 | .648 | .649 | **+.120** |
+Reading (descriptive): crowd humor = V-at-chance but substantially ARTICULABLE (+.12);
+editor-pick-vs-crowd-loved = near-null seam. Mature bank .648 on crowd captions validates
+V5's floor-harness hypothesis (jokes .564† was instrument floor). Charts updated.
+
+## ROUND-2 DENSE CHAIN LAUNCHED (2026-07-28): cap_finalist → cap_crowd → cw_full
+(WritingPrompts clean grouped, full data) — after eval pass drains. Watcher armed.
+
 ## In-flight jobs right now (sk3)
 - Dense-standard chain GPU1: nc_responded → peer curation → peer verdict (watcher armed).
 - Caption A-bank scorer GPU2: 5 shards, 364 rubrics × 18,838 captions (watcher armed).
