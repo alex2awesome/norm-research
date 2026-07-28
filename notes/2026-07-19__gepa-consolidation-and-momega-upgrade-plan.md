@@ -4719,3 +4719,35 @@ k=46 sweep value (.643) is an oracle read of the same eval and must NEVER headli
 on-record: hotpot pool 0/68 flagged + anchor-validated (HB96); framing: the row demonstrates the
 information-access bound, not equal-input optimizer superiority; per-item paired tests to
 accompany the table rebuild.
+
+## HB163 (2026-07-28) — ★★★ KEYWORD ARM VERDICT: vocabulary alone is INERT; composition is REAL. HB157's additive story retracted.
+
+One session, paired subsets, n=20/arm. seed(k=5)=.4647 (session drift vs .4527/.4580 noted;
+paired contrasts unaffected). `runs/hb124_controls_hover_Qwen3-8B_seed_kwv1.json`.
+
+| arm | vs seed | above seed |
+|---|---|---|
+| native (intact clauses) | **+.0937** | 20/20 |
+| **keywords (same terms, clean list format)** | **+.0107** | 15/20 |
+paired keywords−native: **Δ=−.0830 [−.0982,−.0687]** → frozen rule: **COMPOSITION-REAL.**
+
+**The decisive fact: delivering the units' entire content vocabulary in a legitimate format
+("relevant terms: …") reproduces almost NONE of the gain.** So HB157's additive identification —
+VOCAB≈.091, PROP≈0 — is **RETRACTED as a mechanism claim** (its arm data stand; the equal-penalty
+assumption failed exactly as the advisor warned). The full assumption-free ladder on hover:
+
+  intact clauses +.094 > scrambled clauses +.047 > **keyword list +.011 ≈ intact foreign +.003** > scrambled foreign −.043
+
+**Revised mechanism reading (hover, 8B):** the pool's value requires CLAUSE-FORM articulation.
+The same terms as a list are inert; word-scrambling preserves roughly half the gain (instruction-
+shaped in-domain text retains some effect even disordered — surviving collocations and/or
+imperative surface form); intact composed clauses carry it fully. This is also consistent with
+hotpot's PROP≈.10 (HB161) — composition now looks real on BOTH benches, restoring cross-bench
+coherence that the vocabulary-only story had broken. The queued hotpot keyword arm is the
+confirming replication.
+**Note a genuine tension to state, not hide:** the metric-lexicon result (naming a term +.505,
+paraphrase −.004) points the opposite direction in a different regime (metric identification vs
+task execution). Term-naming identifies; clause-form instructs. Flag as a regime difference.
+**Successive-revision ledger, for the record:** 42/58 (HB146) → vocabulary-carries-all (HB157) →
+composition-real (HB163) — each overturned by the NEXT preregistered control; the final state is
+the only one backed by an instrument that needed no modeling assumption.
