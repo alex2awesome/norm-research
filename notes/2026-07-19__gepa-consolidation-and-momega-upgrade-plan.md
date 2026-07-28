@@ -4567,3 +4567,41 @@ armed from a remote file.
 **Rules reinforced:** (a) every wait-loop pgrep pattern must be self-match-proof (bracket-grep or
 file-run); (b) after ANY launch, enumerate ALL matching instances, not the newest pid; (c) a
 watcher's cmdline must not contain any string another lane waits on.
+
+## HB157 (2026-07-28) — ★★★ FIVE-ARM BATTERY COMPLETE: both preregs FAIL, and the failures REWRITE HB146
+
+One session, PAIRED unit subsets (same draw indices across same-pool arms), n=20/arm, k=5 seed.
+`runs/hb124_controls_hover_Qwen3-8B_seed_pairedv2.json`. Seed .4527 (prev session .4580, drift −.005 ✓).
+
+| arm | mean | vs seed | above seed |
+|---|---|---|---|
+| native | .5460 | **+.0933** | 20/20 |
+| shuffled (native tokens, scrambled) | .4998 | +.0472 | 20/20 |
+| shuffled_entity (entities kept atomic) | .4920 | +.0393 | 20/20 |
+| foreign (intact) | .4552 | +.0025 | 13/20 |
+| **foreign_shuffled** | **.4093** | **−.0434** | **0/20** |
+
+**PREREG 1 FAIL** (foreign_shuffled ≈ seed ±.015): it lands **−.043, 0/20 above seed** — scrambled
+text carries a real GENERIC PENALTY, not ≈0. **PREREG 2 FAIL** (shuffled_entity ≥ shuffled):
+Δ=−.008 [−.018,+.002] — entity preservation does NOT help; the vocabulary effect is not
+entity-carried.
+
+**★★★ The revised additive decomposition (4-cell identification, paired):**
+Let score = seed + VOCAB·(native tokens) + PROP·(intact composition) − PEN·(scrambled surface).
+- PEN from foreign vs foreign_shuffled (paired): **.0459 [.0347,.0557]**
+- VOCAB = shuffled − seed + PEN ≈ .0472 + .0434 ≈ **+.091**
+- PROP = native − seed − VOCAB ≈ .0933 − .091 ≈ **+.003 — statistically indistinguishable from 0**
+
+**HB146's "42% lexical / 58% propositional" is RETRACTED as an artifact of the missing
+scramble-penalty control.** With the penalty identified, the native gain is carried (essentially
+entirely) by DOMAIN-TOKEN / VOCABULARY PRIMING (~+.09); intact composition adds nothing detectable
+beyond it; and the old "propositional" share was the scramble penalty in disguise. The advisor
+flagged exactly this hole ("shuffled is a weak control; gibberish plausibly actively confuses");
+the prediction I froze went the other way, and the data overruled me — which is what preregs are for.
+Caveats, stated: additive model; assumes the scramble penalty is pool-independent (supported:
+native-pool penalty ≈ foreign-pool penalty within CI); single bench (hover) at 8B; hotpot-shuffled
+at 8B (stage 2, running now) tests transfer of the penalty account to the bench where scrambling
+looked catastrophic at 0.6B.
+**Paper impact:** no printed claim changes (HB147 already barred the 42/58 percentages from the
+paper); the mechanism sentence, when written, is now *"the pool's value is carried by
+task-vocabulary priming rather than intact clause composition, on hover at 8B"*.
