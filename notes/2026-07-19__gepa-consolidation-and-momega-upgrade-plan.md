@@ -4636,3 +4636,22 @@ Decision rule, frozen: **VOCAB-CONFIRMED** iff keywords − native ∈ [−.015,
 the decomposition footnote-izes and the keyword cell becomes the headline mechanism.
 **COMPOSITION-REAL** iff native − keywords ≥ .03 with CI excluding 0 — the equal-penalty
 assumption was the artifact and the mechanism section reports the bounded claim only.
+
+## HB159 (2026-07-28) — ★★★ TWO HARVESTS: OSL ladder COMPLETE (2nd bench 40/40) + the inverted-U measured in one session
+
+**(1) OSL supervised ladder COMPLETE (8/8 cells, 24k tokens, truncation-confound closed).**
+Final cell hover/8B: init .4767, random-draw mean **.5466, 40/40 above init (+.070)**, transfer
+.5667. **Both benchmarks now show every one of 40 random pool draws beating the GEPA-shipped
+prompt at matched 8B scale** (hotpot +.186, hover +.070), with the gain growing monotonically
+with scale on both. Fig 5 regenerated: 4 rungs × 2 benches, real data throughout.
+
+**(2) Same-session full-pool prefix curve COMPLETE (k=1..68, one server, one fingerprint,
+declared order = standalone-delta rank).** `runs/prefix_extend_hotpot.json`:
+- **peak k=46 at .643** — within noise of the searched compile (.633/.6367);
+- declines to **.593 at k=68** (last-10 mean .576);
+- the earlier cross-session wobble (HB142's plateau-vs-decline ambiguity) is resolved: the
+  **inverted-U is real and now measured with a single instrument**. Taking enough top-ranked
+  units MATCHES search; exceeding the optimum HURTS. This is also the cleanest support yet for
+  the "selection adds little beyond rank-and-take-enough" reading.
+Fig 3 LHS overlays the curve (green) with the projection band; captions updated. Checklist:
+[fig5 ladder] ✓ [fig3 k68] ✓ (with [5-arm verdict] ✓ = 3/7).
