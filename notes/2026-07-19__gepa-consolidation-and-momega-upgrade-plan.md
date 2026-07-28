@@ -4696,3 +4696,26 @@ hover-local.** The honest layered mechanism claim for the paper:
 Keyword arm (queued) now matters MORE: it separates vocabulary-delivery from scramble damage on
 hover; a hotpot keyword arm becomes the obvious follow-up but is NOT required for tomorrow.
 Checklist [shuf8b verdict] ✓ (5/7).
+
+## HB162 (2026-07-28) — Advisor caps on HB161 + PREREG: hotpot keyword arm (frozen before launch)
+
+**(1) The two-way ambiguity, stated for the record.** hotpot PROP≈.101 is a RESIDUAL under the
+untested assumption that hover's scramble penalty (.046) transfers across benchmarks — and we have
+positive evidence penalties vary (0.6B hotpot's penalty exceeded the entire vocab gain). A true
+hotpot penalty of ~.147 reproduces the data with PROP=0. Assumption-free statement only:
+vocabulary ≥28% on hotpot; the remaining ≤72% is UNALLOCATED between composition and penalty.
+The advisor's print-ready mechanism paragraph (6 sentences, floors + flagged model numbers +
+falsified frozen prediction) is adopted verbatim for the paper's mechanism section.
+
+**(2) PREREG — hotpot KEYWORD arm (the discriminator), frozen now:** one session, init k=5 +
+native ×20 + keywords ×20, paired subsets, tag _kw8b. Under PROP≈.10: keywords−init ≈ +.10;
+under vocabulary-carries-all: ≈ +.20. **Rule: keywords−init ≥ .15 → VOCABULARY-DOMINANT on hotpot
+too (penalty was bench-dependent); ≤ .12 → COMPOSITION CONFIRMED at roughly half the gain;
+(.12,.15) → report the interval, no verdict.** One shot.
+
+**(3) Omnibus-row guards (adopted before the table rebuild):** the selection-free hotpot M_ω
+number is the SHIPPED compile rescored (.646 = frozen ex-ante candidate at k=5 — legitimate); the
+k=46 sweep value (.643) is an oracle read of the same eval and must NEVER headline; leakage
+on-record: hotpot pool 0/68 flagged + anchor-validated (HB96); framing: the row demonstrates the
+information-access bound, not equal-input optimizer superiority; per-item paired tests to
+accompany the table rebuild.
