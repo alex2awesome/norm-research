@@ -69,7 +69,19 @@ p = provisional (ungrouped/unverified split); mature standard = Llama-3.1-8B LoR
 - Claim-matching (EXCLUDED from grid per user — examiner-citation task, closed).
 - Peer curation/revealed + N&C 3-y contrasts: y-preference figures (Fig 3 + ypref_contrast).
 
-## DENSE CHAIN COMPLETE (2026-07-28 00:27; all test-split interim, eval pass running)
+## DENSE CHAIN — CLEAN-EVAL FINAL (2026-07-28; canonical per the standard)
+| run | T eval (CANONICAL) | T test | vs V+A | band |
+|---|---|---|---|---|
+| peer verdict | .753 | .751 | .690 | +.06 |
+| peer curation | .593 | .588 | .567 | +.03 |
+| peer revealed | .871 | .896 (optimistic, n_eval 223) | .761 | +.11 |
+| N&C responded | .808 | .825 | .635 | +.17 |
+| N&C outcome | .622 | .623 | .594 | +.03 |
+| N&C agree | .566 | .639 — DIVERGES, agree-y instability again (n_eval 505, docket-skewed) | .551 | +.02–.09 wide |
+eval≈test everywhere except agree (report agree with BOTH numbers, never one).
+sk3: methods/dense/eval_pass_results.json. Superseded interim table below.
+
+## (superseded interim) DENSE CHAIN COMPLETE (2026-07-28 00:27; all test-split interim, eval pass running)
 | run | T (test) | vs V+A | band |
 |---|---|---|---|
 | peer verdict (title-grouped) | .751 | .690 | +.06 |
@@ -92,7 +104,13 @@ Reading (descriptive): crowd humor = V-at-chance but substantially ARTICULABLE (
 editor-pick-vs-crowd-loved = near-null seam. Mature bank .648 on crowd captions validates
 V5's floor-harness hypothesis (jokes .564† was instrument floor). Charts updated.
 
-## ROUND-2 DENSE CHAIN LAUNCHED (2026-07-28): cap_finalist → cap_crowd → cw_full
+## ROUND-2 DENSE: captions DONE (2026-07-28) — BANK > DENSE on BOTH caption y's
+finalist-B T .595 (test, contest-grouped) vs V+A .651 (Δ−.06); crowd-C T .547 vs V+A .649
+(Δ−.10). Second bank>dense exemplar after competition code — dense NOT a universal upper
+bound (short texts; Gemma-31B-judged 364-criteria bank out-extracts LoRA Llama-8B).
+Single seed, test-split; eval-scoring pass optional. cw_full (96K WritingPrompts grouped)
+training now.
+## (launched) ROUND-2 DENSE CHAIN LAUNCHED (2026-07-28): cap_finalist → cap_crowd → cw_full
 (WritingPrompts clean grouped, full data) — after eval pass drains. Watcher armed.
 
 ## In-flight jobs right now (sk3)

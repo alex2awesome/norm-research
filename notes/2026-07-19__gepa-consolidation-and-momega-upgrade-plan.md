@@ -4857,3 +4857,27 @@ gain; vocabulary ~27%.
 
 In flight: omnibus hover row (passes running, 47.0%/46.7%); ifbench insurance pair (GPU6, official
 5 blocks flushed 19:07Z); kw3 bulleted-keywords.
+
+## HB169 (2026-07-28 ~21:0xZ) — Advisor verdict on livebench demotion; headline + bound phrasing ADOPTED
+
+Advisor (Fable), key rulings, all adopted:
+1. **Headline = never-worse-plus-three-wins, not "3 of 6"** (all six canonical Δ ≥ −.001). Verbatim
+   sentence adopted for paper/summary: "Under a pre-registered same-session protocol, the
+   ε-certified recombination pool matches or exceeds GEPA on all six benchmarks and significantly
+   exceeds it on three (HoVer +.100, IFBench +.040, and HotpotQA +.235 over GEPA's shipped prompt,
+   which there equals the seed) — and the same protocol retracted two of our own earlier apparent
+   wins as measurement artifacts." NEVER write "the null results are explained by instrument noise"
+   (the instrument story explains why earlier sessions differed from the ties, not why ties don't count).
+2. **Demotion strengthens the paper**: rule cut against us 2×, for us 1× — the distribution an
+   honest rule produces. Eval-noise thread upgraded to secondary CONTRIBUTION (one discussion
+   sentence: 2/6 benchmark effects in the standard setup were instrument artifacts).
+3. **Kill %-split mechanism language** — keyword arm UNDERestimates vocabulary (operator loss 30%),
+   so "composition carries 73%/88%" = upper bounds dressed as point estimates. Adopted phrasing:
+   "Keyword-only variants recover at most ~27% (HotpotQA) and ~12% (HoVer) of the native unit gain;
+   the remainder requires intact clause structure. Because keyword extraction drops logical
+   operators from ~30% of units, this bounds rather than point-estimates the split."
+4. Summary-note order fixed (Table1+protocol → two-artifact narrative → mechanism → scaling →
+   unsupervised bank → reversal ledger → limitations).
+MUST-FIX ledger: (a) hover row lands before freeze; (b) ifbench insurance reported whatever it says
+(HB167 binding); (c) stale-language sweep of PAPER — done, clean (only intentional footnotes);
+(d) abstract/intro clean — verified.
