@@ -4751,3 +4751,28 @@ task execution). Term-naming identifies; clause-form instructs. Flag as a regime
 **Successive-revision ledger, for the record:** 42/58 (HB146) → vocabulary-carries-all (HB157) →
 composition-real (HB163) — each overturned by the NEXT preregistered control; the final state is
 the only one backed by an instrument that needed no modeling assumption.
+
+## HB164 (2026-07-28) — Keyword-verdict caps, additivity quantified, final discriminator queued
+
+**(1) Scrambling granularity, stated for the record:** the shuffled arms scramble WORD-level
+WITHIN each unit, units kept as separate appended bullets. So "shuffled" is bulleted word-salad;
+the keyword arm differs from it in format (one flat headed list), dedup, and dropped short tokens
+— not only in order.
+**(2) Extraction-loss audit (H4): PARTIALLY LIVE.** 30% of units (49/164) contain logical
+operators (not/only/all/at least/must…) that the term-extractor drops. The keyword deficit
+(−.083) is therefore an upper bound on the pure form effect; content loss contributes. It cannot,
+however, explain +.011 vs +.094 — the qualitative COMPOSITION-REAL verdict stands; quantitative
+shares are softened in the write-up.
+**(3) Additivity, quantified (the advisor's hidden strength):** content effect .0908 / .0906
+(measured at both form levels), form effect .0462 / .0459 (measured at both content levels);
+predicted keywords ≈ +.047, observed +.011 → **keyword residual .036 below additive prediction**
+— the printable quantity.
+**(4) Mechanism paragraph v2 (advisor) ADOPTED** with an added clause for the operator-loss
+caveat. **aime print policy ADOPTED verbatim**: omnibus row +.007 n.s.; range +.007..+.091 across
+sessions with GEPA-arm variance comparable to the margin; "no separation claim on AIME"; never
+resurrect +.091. Headline unchanged (performance first; mechanism second beat).
+**(5) PREREG — bulleted-keywords discriminator (H1 order vs H2 format), queued behind hotpot-kw:**
+per-unit bulleted term lists, NO header ("- term, term, …" per unit), paired subsets, n=20, one
+session with seed + native anchors. **Rule: recovers to within .015 of shuffled (+.047-ish) →
+FORMAT/segmentation explanation (H2); stays within .015 of flat-keywords (+.011) → ORDER/bigram
+explanation (H1); between → both channels, report interval.**

@@ -50,7 +50,7 @@ def main():
                          "superset of the searched prompt, which licenses nothing).")
     ap.add_argument("--arms", nargs="+",
                     default=["native", "foreign"],
-                    choices=["native", "foreign", "shuffled", "seed_units", "foreign_shuffled", "shuffled_entity", "keywords"],
+                    choices=["native", "foreign", "shuffled", "seed_units", "foreign_shuffled", "shuffled_entity", "keywords", "keywords_bulleted"],
                     help="shuffled = native clauses with tokens scrambled (kills the "
                          "any-text artifact: same length/format/vocabulary, no semantics). "
                          "seed_units = units appended to the SEED prompt, with GEPA's "
@@ -109,6 +109,8 @@ def main():
                 seen.add(lw); out.append(lw)
         return "relevant terms: " + ", ".join(out)
     keywords = [(m, _kw(c)) for m, c in native]
+    # bulleted per-unit term lists, NO header -- discriminates format(H2) vs order(H1)
+    keywords_bulleted = [(m, ', '.join(_kw(c).replace('relevant terms: ', '').split(', '))) for m, c in native]
     print(f"pools: native={len(native)} foreign({a.foreign_bench})={len(foreign)} "
           f"shuffled={len(shuffled)}", flush=True)
 
@@ -139,7 +141,7 @@ def main():
     BASE = dict(seed_cand) if a.base == "seed" else init_cand
     ARMS = {"native": (native, BASE), "foreign": (foreign, BASE),
             "shuffled": (shuffled, BASE), "shuffled_entity": (shuffled_entity, BASE),
-            "foreign_shuffled": (foreign_shuffled, BASE), "keywords": (keywords, BASE),
+            "foreign_shuffled": (foreign_shuffled, BASE), "keywords": (keywords, BASE), "keywords_bulleted": (keywords_bulleted, BASE),
             # seed_units always drops the searched winner regardless of --base
             "seed_units": (native, dict(seed_cand))}
     # PAIRED subsets (HB147 fix): one index draw per i, reused by every same-pool arm; foreign
@@ -148,7 +150,7 @@ def main():
     IDX_NAT = [ _rp.choice(len(native),  size=min(c, len(native)),  replace=False).tolist() for c in counts ]
     IDX_FRN = [ _rp.choice(len(foreign), size=min(c, len(foreign)), replace=False).tolist() for c in counts ]
     PAIRED_IDX = {"native": IDX_NAT, "shuffled": IDX_NAT, "shuffled_entity": IDX_NAT,
-                  "seed_units": IDX_NAT, "keywords": IDX_NAT, "foreign": IDX_FRN, "foreign_shuffled": IDX_FRN}
+                  "seed_units": IDX_NAT, "keywords": IDX_NAT, "keywords_bulleted": IDX_NAT, "foreign": IDX_FRN, "foreign_shuffled": IDX_FRN}
     for arm in a.arms:
         pool, base_cand = ARMS[arm]
         rows = res.get(arm, [])
