@@ -4548,3 +4548,22 @@ now carry double provenance and must never be upgraded to quotable retroactively
 
 Root-cause lesson (added to the artifact rule): a wrapper that appears not to have started may
 have started invisibly — always `pgrep` for ALL instances after any launch, not just the newest pid.
+
+## HB156 (2026-07-28) — THE QUEUE DEADLOCK WAS MY OWN WATCHERS. Fixed; everything verified moving.
+
+Root cause of the refill never starting, found with a bracket-grep census run from a shipped file
+(the only way to see truth — inline ssh pgrep self-matches):
+1. **My two background watcher loops carried the string `lane_t1_v3.sh` in their command lines**,
+   so the refill's `pgrep -f "lane_t1_v3.sh"` wait saw THEM and blocked forever. The monitoring
+   caused the deadlock it was monitoring. (The sk3 memory literally records this trap —
+   "launch guards via `ssh 'bash -s' < file`, never inline" — and I violated it.)
+2. A THIRD pupa burner (`pupa --arm mipro`, pid 3600272) launched by the stale duplicate T1
+   wrapper was still spinning on dead-GLM retries.
+3. A DUPLICATE refill wrapper (678692) — same double-launch episode as the duplicate T1 lane.
+Killed all four by explicit pid (3600272, 678692, 669631, 3622751). Verified end state: exactly
+ONE refill (398360), ONE omnibus (2592654), ONE prefix (1273334, relaunched — the previous
+wrapper had died silently), ZERO pupa processes, ZERO lane_t1 matches. New clean-cmdline watcher
+armed from a remote file.
+**Rules reinforced:** (a) every wait-loop pgrep pattern must be self-match-proof (bracket-grep or
+file-run); (b) after ANY launch, enumerate ALL matching instances, not the newest pid; (c) a
+watcher's cmdline must not contain any string another lane waits on.

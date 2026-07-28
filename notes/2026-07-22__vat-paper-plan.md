@@ -52,7 +52,7 @@ by an LLM judge, dense/C = dense-model or crowd ceiling. Ordering column is the 
 | domain / run | y | V | A | A−V | dense / ceiling | regime |
 |---|---|---|---|---|---|---|
 | peer review (ICLR) | accept/reject | .611 | .676 | **+.071** | ~.77 | V<A<dense |
-| legal · title_vii | outcome | .576 | .637 | **+.061** | T⁺ .77 | V<A<T |
+| legal · title_vii | outcome | .576 | .637 | **+.061** | T .654 / T⁺ .614 (corrected 2026-07-27; "T⁺ .77" was erisa's, misattributed) | V<A<T |
 | legal · erisa_ltd | outcome | .548 | **.758** | **+.209** | T .644 / T⁺ .767 | V<T<A |
 | patents · prior-art | claim "fell" | .601 | .623 | +.022 | text .654 | V<A thin |
 | notice & comment | majority MADE | .595 | .592 | ~0 | .588 (≈char_len .595) | **flat/null** |
@@ -463,6 +463,23 @@ N&C adds the contrast case: expert y's that largely AGREE (φ .40) and share met
 (ρ .76) vs academia's committees-vs-crowd divergence (φ .16, ρ .47). New robustness item:
 pre-register the CV-design choice (GroupKFold vs StratifiedGroupKFold) for docket-clustered
 domains before the consolidated paper table.
+
+### 2026-07-27 — dense-standard chain: first harvest (INTERIM, test-split)
+
+Chain (`methods/dense/run_dense_standard.sh`, sk3 GPU1) completed 3/6 by evening:
+
+| run | n train | best test AUC | vs V+A (frozen) |
+|---|---|---|---|
+| peer revealed (citation pct, title-grouped) | 1,909 | **.896** | VA .761 → band +.14 |
+| N&C agree (docket-grouped) | 4,037 | **.639** | VA .551 → band +.09 |
+| N&C outcome (docket-grouped) | 5,667 | **.623** | VA .594 → band +.03 |
+
+CAVEATS: test = selection split (mildly optimistic); the trainer never scores the eval
+split — a post-chain eval-scoring pass is REQUIRED before these are quotable as the
+standard's clean numbers. Early reads (descriptive): N&C "flat/null" was TF-IDF-conditional
+(real Llama band +.03); Llama recovers the agree signal (.639) that frozen-design A lost
+(.524) — consistent with docket-structured-but-learnable; revealed-citation is hugely
+dense-predictable (.896), topic-floor robustness even more necessary before interpreting.
 
 ## Open decisions for the user
 - **Priority / parallelism:** do (a) and (b) in parallel or (b) first (it's cheaper and the
