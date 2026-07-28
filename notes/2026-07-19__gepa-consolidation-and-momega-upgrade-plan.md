@@ -4605,3 +4605,34 @@ looked catastrophic at 0.6B.
 **Paper impact:** no printed claim changes (HB147 already barred the 42/58 percentages from the
 paper); the mechanism sentence, when written, is now *"the pool's value is carried by
 task-vocabulary priming rather than intact clause composition, on hover at 8B"*.
+
+## HB158 (2026-07-28) — PREREGS FROZEN MID-FLIGHT: hotpot-shuffled-8B point prediction + keyword arm
+
+**(1) Advisor caps on HB157 (adopted).** The 4-cell identification rests on PENALTY HOMOGENEITY
+(scramble penalty equal across pools) — scrambled in-domain text is plausibly partially
+recoverable, so PROP=0 is model-dependent. **Safe-to-print, assumption-free bounds:**
+- foreign intact ≈ 0: fluent composition without domain vocabulary is worthless;
+- shuffled retains **+.047 = ≥51% of the native gain with word order destroyed** (hard lexical
+  lower bound, no penalty modeling);
+- entity preservation adds nothing;
+- composition effect **bounded in [~0, .046]**; equal to ~0 only under the additive equal-penalty
+  model. Print "no detectable composition effect (|PROP| ≲ .02)", never "zero".
+- Lead with PAIRED contrasts; seed-relative deltas are descriptive (single seed estimate,
+  load-dependent metric). Scope: hover, 8B, one session.
+- Convergence to cite: metric-lexicon P12 (naming +.505 vs paraphrase −.004) — an independent
+  instrument giving the same "the payload is which concepts get NAMED" signature.
+
+**(2) PREREG — hotpot-shuffled-8B point prediction, frozen BEFORE the running arm lands.**
+Under vocabulary-carries-all with a transferable scramble penalty:
+predicted shuffled-vs-init ≈ (hotpot 8B native draw gain) − PEN = +.186 − .046 = **+.140**,
+interval **[+.130, +.151]** from PEN's CI. If it lands near init (≈ +0), composition matters on
+hotpot and the hover account is bench-local. Genuine out-of-sample test; number on record now.
+
+**(3) PREREG — KEYWORD-LIST arm (the advisor's decisive penalty-free check), queued tonight.**
+Deliver each native unit's content terms as a plain comma-separated list (legitimate format, no
+scramble penalty), paired subsets, hover→seed, ONE new session containing {seed k=5, native ×20,
+keywords ×20} so all contrasts are within-session.
+Decision rule, frozen: **VOCAB-CONFIRMED** iff keywords − native ∈ [−.015, +.015] (paired CI) —
+the decomposition footnote-izes and the keyword cell becomes the headline mechanism.
+**COMPOSITION-REAL** iff native − keywords ≥ .03 with CI excluding 0 — the equal-penalty
+assumption was the artifact and the mechanism section reports the bounded claim only.
