@@ -4799,3 +4799,23 @@ session-sensitivity explicitly. Session-to-session GEPA-arm variance is now docu
 Table 1 now 6 columns; hover row = HB127 session (MIPROv2 cell lands with tonight's omnibus);
 livebench merge/mipro cells likewise; pupa envelope permanently N/A (HB154). Submodule commit above.
 Remaining for [table1-comparable]: livebench (in measurement now) + hover omnibus rows.
+
+## HB166 (2026-07-28 ~17:4xZ) — Advisor verdict on the HB165 table; must-fixes applied (submodule 6f26825)
+
+Advisor (Fable) on the ifbench upgrade and Table-1 framing:
+1. **ifbench +.040** headline is DEFENSIBLE without a third session** — the omnibus was designated
+   the canonical instrument BEFORE its results existed; headlining it follows a pre-committed rule.
+   Optional insurance: a cheap k=5 GEPA/M_ω ifbench re-pair if GPUs idle after hover, pre-committed
+   to report regardless of outcome. Do not block the deadline on it.
+2. **Symmetry is real but must be VISIBLE**: uniform session suppressed a favorable +.091 on aime
+   and replaced an unfavorable n.s. on ifbench — direction-blind. Caption now states the rule with
+   the AIME/IFBench parenthetical (applied).
+3. Hostile-reviewer order: hotpot ^s (never quote +.235 bare; hover +.100 is the prose flagship) >
+   "·" cells (must be filled or "not measured" in the final PDF — no "running" language) >
+   livebench bolded-as-win vs its own pathology footnote (fixed: ^a moved onto Δ, unbolded,
+   excluded from prose W-counts) > missing per-bench n (added: 300/300/294/221/150/126) >
+   uncorrected multiplicity (primary-contrast sentence added) > PUPA phrasing (reworded).
+
+APPLIED in submodule 6f26825: canonical-session rule + n + multiplicity sentence in caption;
+livebench ^a on Δ, unbolded; PUPA rephrase. STILL OPEN for final PDF: resolve "·" cells (omnibus
+livebench in progress, then hover); prose sweep so hover leads and livebench is out of W-tallies.
