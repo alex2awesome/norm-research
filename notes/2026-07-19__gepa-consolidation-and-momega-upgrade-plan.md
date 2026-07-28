@@ -4819,3 +4819,14 @@ Advisor (Fable) on the ifbench upgrade and Table-1 framing:
 APPLIED in submodule 6f26825: canonical-session rule + n + multiplicity sentence in caption;
 livebench ^a on Δ, unbolded; PUPA rephrase. STILL OPEN for final PDF: resolve "·" cells (omnibus
 livebench in progress, then hover); prose sweep so hover leads and livebench is out of W-tallies.
+
+## HB167 (2026-07-28 ~20:1xZ) — PRE-COMMIT: ifbench insurance re-pair launched on freed GPU 6
+
+GPUs 1/6 freed (orphan servers from drained lanes, killed by explicit PID; GPU 1 left to labmates).
+Per advisor rec #2 (HB166), launched on GPU 6: fresh uniform session, GEPA official vs
+unitrecomb_v6ctx32k, ifbench, k=5, dedicated server port 8186 (pid 1513563, engine-init verified),
+rescore child 1542860 → runs_paperexact/ifbench/.../rescore_k3.jsonl (newest fingerprint block).
+**Pre-commitment, frozen before any result exists: this session is REPORTED WHATEVER IT SAYS, as a
+footnoted confirmation alongside the canonical omnibus row (+.040 [.012,.069]). It does not replace
+the canonical estimate; it cannot be dropped if unfavorable.** Server self-kills on completion.
+kw2 (hotpot keywords 8B) and kw3 (hover bulleted keywords) confirmed already in flight on port 8196.
