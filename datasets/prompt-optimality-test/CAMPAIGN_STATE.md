@@ -1,7 +1,7 @@
 # CAMPAIGN STATE — prompt-optimality / Paper #2
 
 ## ⏰ EOD-2026-07-29 READINESS CHECKLIST (hourly monitor 0e6cd647 drives this)
-- [~] Table 1: 3/5 benches uniform-session complete (hotpot/aime/ifbench, HB165); livebench in measurement, hover omnibus queued; daggers DROPPED, 6-col table committed
+- [~] Table 1: 4/5 benches uniform-session complete (livebench DEMOTED to n.s., HB168) (hotpot/aime/ifbench, HB165); livebench in measurement, hover omnibus queued; daggers DROPPED, 6-col table committed
 - [x] Five-arm decomposition verdict (HB157: vocab ≥51% assumption-free; PROP bounded [0,.046]; advisor caps adopted HB158)
 - [x] hotpot-shuffled-8B verdict (HB161: sign flip = SCALE confirmed; vocab-carries-all is hover-local — composition real on hotpot)
 - [x] Fig 5 ladder complete (8/8 cells; BOTH benches 40/40 at 8B — HB159)
@@ -49,13 +49,13 @@ Same-session paired, k≥3, bootstrap on mean item-level delta. **Nothing single
 | bench | M_ω vs GEPA | status |
 |---|---|---|
 | hotpot | **+.235** [+.192,+.281] uniform session (also beats Merge +.246***, MIPROv2 +.207***) | WIN — GEPA shipped the SEED here |
+| livebench | +.006 [−.015,+.028] p=.297 uniform session (GEPA .699 / M_ω .705) | NO SEPARATION — old +.092*** was a LOAD ARTIFACT (HB168); never re-quote |
 | hover | **+.100** [+.072,+.129] | WIN — the only bench where GEPA genuinely improved (.38→.45) |
 | aime | +.007 [−.020,+.033] uniform session | NO SEPARATION (print policy HB162: range +.007..+.091 across sessions, never headline +.091) |
 | ifbench | **+.040** [+.012,+.069] p=.0029 uniform session | WIN (session-sensitive: earlier session +.020 n.s.; both reported, HB165) |
 | pupa | −.001 [−.032,+.031] | TIE, final |
-| livebench | — | pending idle-protocol re-measurement |
 
-**W = 4 of 6 (hotpot, hover, livebench, ifbench); aime no-separation; pupa tie.**
+**W = 3 of 6 (hotpot, hover, ifbench); aime + livebench no-separation (uniform sessions); pupa tie.**
 
 ### The mechanism result (hover, all arms appended to the bare SEED)
 | arm | mean | vs seed |

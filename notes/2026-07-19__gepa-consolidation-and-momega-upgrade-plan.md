@@ -4830,3 +4830,30 @@ rescore child 1542860 → runs_paperexact/ifbench/.../rescore_k3.jsonl (newest f
 footnoted confirmation alongside the canonical omnibus row (+.040 [.012,.069]). It does not replace
 the canonical estimate; it cannot be dropped if unfavorable.** Server self-kills on completion.
 kw2 (hotpot keywords 8B) and kw3 (hover bulleted keywords) confirmed already in flight on port 8196.
+
+## HB168 (2026-07-28 ~20:4xZ) — LIVEBENCH DEMOTED TO NO-SEPARATION (uniform session); kw2 = COMPOSITION-CONFIRMED on hotpot
+
+**Livebench omnibus row (canonical uniform session, fingerprint 16:41:49Z, n=126, k=5, 20k paired bootstrap):**
+| candidate | mean |
+|---|---|
+| GEPA official | .6989 |
+| GEPA+Merge | .6877 |
+| MIPROv2 | .6767 |
+| M_ω | .7048 |
+
+M_ω vs GEPA +.0059 [−.0151,+.0280] p=.297 — **NO SEPARATION**. vs Merge +.0172 (p=.080), vs MIPROv2
++.0281 (p=.030, secondary/uncorrected). The old +.092*** (GEPA .555) is a LOAD ARTIFACT: idle GEPA
+scores .699 ≈ the .6956 idle-load measurement (prompt-optimality-eval-noise memory); the earlier
+GEPA arm was measured busy/deflated. Direction-blind rule applied: canonical row replaced in Table 1
+(submodule a7faece), old margin footnoted, caption parenthetical now lists AIME AND LiveBench as
+earlier-sessions-favored-us. **W-tally: 3 of 6 quotable wins — hotpot +.235*** (seed caveat), hover
++.100***, ifbench +.040**; aime/livebench no-separation; pupa tie.**
+
+**kw2 (hotpot keyword arm, 8B, fingerprint 15:54Z, 20 draws, init base):** init .4047; native units
+.6053 (+.201, 20/20 above init); keywords .4597 (+.055, 18/20). Frozen rule (HB158/HB164: ≥.15
+vocab-dominant / ≤.12 composition-confirmed): +.055 ≤ .12 → **COMPOSITION-CONFIRMED on hotpot**,
+replicating hover (native +.094 vs keywords +.011). Composition carries ~73% of the hotpot unit
+gain; vocabulary ~27%.
+
+In flight: omnibus hover row (passes running, 47.0%/46.7%); ifbench insurance pair (GPU6, official
+5 blocks flushed 19:07Z); kw3 bulleted-keywords.
