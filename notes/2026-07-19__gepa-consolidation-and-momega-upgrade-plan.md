@@ -5319,3 +5319,26 @@ Caveat: the GEPA@2400 hover arm is cross-session vs the canonical rescore; a sam
 (the GEPA@2400−GEPA@600 gap of +.013 is inside session wobble, so no session effect can
 manufacture the +.073).
 Still pending: ifbench GEPA@2400 (gpu5), hotpot GEPA@16,700 (gpu2).
+
+## HB191 (2026-07-29) — HOVER BUDGET ROW **CERTIFIED** (same session): +.083 survives 4x matching
+
+3-candidate same-session rescore on hover (one server, one fingerprint, k=5, rc=0, artifacts
+verified; logs/rescore_hovercert.log "RESCORE hovercert COMPLETE"):
+| candidate | k5 |
+|---|---|
+| M_ω (unitrecomb_stair, ~10.1k calls) | .5667 |
+| GEPA @2,400 | .4833 |
+| GEPA @600 | .4700 |
+Paired bootstraps (20k, item-level, ALL SAME SESSION — printable):
+- **M_ω vs GEPA@2400: +.0833 [.0547,.1120], p<1e-4** ← the certified budget-matched hover row
+- M_ω vs GEPA@600: +.0967 [.0700,.1233], p<1e-4 (canonical Table-1 row reproduces: .470/.567)
+- GEPA@2400 vs GEPA@600: +.0133 [−.0100,+.0367], **p=.13 n.s.**
+
+Supersedes HB190's cross-session estimate (+.0727) — certified value is **+.0833**, slightly
+LARGER. Hover's win is not a budget artifact under 4x matching.
+**The cross-benchmark contrast is now certified on both sides:** 4x budget buys GEPA +.1233
+[.0860,.1613] on hotpot but +.0133 [−.010,+.037] n.s. on hover. Budget sensitivity is a property
+of the BENCHMARK, not of the comparison. Any blanket statement ("wins are budget artifacts" /
+"wins survive") is false; per-benchmark budget curves are mandatory.
+Still open: hover at M_ω's true 10.1k spend (only 4x tested, true ratio 15x); ifbench@2400 (gpu5);
+hotpot@16.7k (gpu2).
