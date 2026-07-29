@@ -5031,3 +5031,17 @@ CI .105 — tightest fits). So "most articulated TODAY" = REACHES (highest reali
 "most articulable in principle" = rising ONLY as extrapolation (don't quote .95 as a ceiling).
 Trust ladder inverts excitement ladder: bounded > reaches ≫ rising ceilings. Plot:
 outputs/analyses/figs_20260728/osl_regimes_trust.png (scatter + CI whiskers + domain stacks).
+
+## HB177 (2026-07-28) — OSL regimes on one axis: EXTERNALITY; full-panel shared taxonomy; regime×domain in paper
+
+Shared task-agnostic 9-type taxonomy over ALL 1,270 metrics (Codex, regime-BLINDED input;
+pass-2 κ in flight). Coarse axis "where truth conditions live": in-text / interface /
+beyond-text. RISING 73/16/12 idx .39; REACHES 70/17/12 idx .42; **BOUNDED 54/14/32 idx .78** —
+rising≈reaches on this axis (they differ by domain/device, not externality); bounded differs IN
+KIND, driven by IDENTITY_PERSONA 17% (vs ~2.5%), COMM_TRANSFORM .8→4.7→9.2 monotone, RECEPTION
+5.3→7.5→10.8 monotone; EVIDENCE and AUD_FIT fall toward bounded. **Domain-controlled: within
+humor/news/peer separately, bounded 31-34% beyond-text vs 4-18%** — not a composition artifact.
+Regime×domain: bounded only in humor 41 (15%) / news 13 (10%) / peer 9 (11%) / CW 2 (1%);
+math, PR, n&c, patents ZERO. → fig:osl-types + three appendix paragraphs (trust audit /
+task-agnostic types / regimes-across-tasks) in app:osl-regimes; submodule committed. Artifact
+outputs/analyses/osl_metric_types_20260728.json.
