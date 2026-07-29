@@ -5056,3 +5056,15 @@ bounded = IDENTITY_PERSONA 14% + RECEPTION 11% + stance (unchanged signature). �
 body, §5) grouped bars; coarse-axis stacked bars remain appendix-only per user. 12-type κ pass
 not yet run (single-pass; flagged in HB, 9-type κ quoted in caption as the certified grain).
 Artifacts merged into outputs/analyses/osl_metric_types_20260728.json (pass1+pass2+12type).
+
+## HB179 (2026-07-28) — appendix granularity ladder + domain plot; seam-unit categorization launched
+
+Fig 5 (12-type) kept per user; appendix adds fig:osl-granularity (8- and 6-category NESTED
+merges of the certified 12-type labels — deterministic, no relabeling; both preserve the
+compact-vs-extended inversion and the bounded social/reception loading) + fig:osl-domains
+(per-domain 100% stacked regime composition; bounded share humor 15/peer 11/news 10/CW 1/rest 0;
+rising 65-86% everywhere). 14 pages. SEAM-UNIT categorization: 629 blinded sub-rules built
+(contracts_v3 592 probes w/ CODE-vs-L channel + legal u1-u7 v2 outcomes + humor 30 units w/
+code_rt/hyb_rt), Codex 12-type descriptive pass IN FLIGHT; payoff = category × mechanization
+cross-tab. Key artifact map in agent report (Tier1-5; y_gepa unit manifests, codif_merged 143
+programs, seam tables 10 domains, fleet_boundness).
