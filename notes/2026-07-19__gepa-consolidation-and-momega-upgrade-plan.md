@@ -5357,3 +5357,33 @@ runs/prefix_5pass_hotpot.json, 40/40 k-values × 5 independent passes = 200 eval
   different day), NOT signal. The two series therefore MUST NOT share a Fig-3 panel.
 Comparison figure (no document edit): outputs/analyses/figs_20260728/prefix_5pass_vs_1pass.png
 ifbench 5-pass half now running on the same lane.
+
+## HB193 (2026-07-29, PREREG — frozen BEFORE truematch/ifbench results exist) — decision rules
+
+Both arms are mid final-test; no best_test number has been observed. Freezing now, per advisor
+("write the contingency before the arm lands; do not look and then decide"):
+
+**Hotpot truematch (GEPA@16,700):**
+- Decision statistic: same-session 3-candidate rescore (M_ω v5sk2 + GEPA@16700-best +
+  GEPA@600-best), one server fingerprint, k=5, 20k paired item bootstrap of M_ω − GEPA@16700.
+  The raw best_test from the arm's own session is NOT the decision number.
+- Outcome mapping (advisor's A/B/C, adopted verbatim):
+  A: CI wholly >0 → "at matched 16,700-call budget M_ω still leads; advantage not a spend
+     artifact" (hotpot row keeps a scoped star).
+  B: CI covers 0 → tie; hotpot advantage is a budget effect; contribution reframes to the
+     certificate + budget-sensitivity finding.
+  C: CI wholly <0 → GEPA ahead at matched budget; report the inversion first, certificate-first
+     reframe mandatory.
+- Whatever lands is reported, including C. Single-seed caveat travels with the number in all
+  three branches. No partial-result peeking before the rescore completes.
+
+**IFBench (GEPA@2,400):** decision statistic = same-session 3-candidate rescore (M_ω v6ctx32k +
+GEPA@2400-best + GEPA@600-best), k=5, paired bootstrap. Same A/B/C mapping for the +.040 star.
+Prior expectation recorded for honesty: GEPA accepted only 1 candidate in 699 iterations, so
+GEPA@2400 ≈ seed is likely and the star likely survives trivially; recording this BEFORE the
+number so it cannot be presented as a post-hoc vindication.
+
+**Refinement to HB192 (self-audit):** "inverted-U was noise" is measured only for k≤40 (the
+5-pass range). Beyond k=40 the only data are single-pass (the old k=41..68 decline), so the
+correct claim is: within k≤40 the rise is monotone and the apparent k≈27 peak was noise; the
+k>40 region and the "peak k=46" claim are UNMEASURED at 5 passes — neither confirmed nor refuted.
