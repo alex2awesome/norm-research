@@ -4949,3 +4949,19 @@ sits inside it (big-can/small-can't). Residual hypotheses not separable without 
 metric surface (EM/containment never rewards TASTE, so mining never proposes it) vs (c) mining
 distribution (units mined from 8B failures = compliance failures). Both predict the 0-TASTE cell;
 neither predicts the hover 4B craft>mech inversion — only the window hypothesis does.
+
+## HB173 (2026-07-28) — kw3 bulleted-keywords discriminator: H2 FORMAT/SEGMENTATION verdict
+
+Artifact runs/hb124_controls_hover_Qwen3-8B_seed_kw3.json (n=20 draws, one session, seed+native
+anchors; init_k .4540, native anchor .5468 = +.093, consistent with prior sessions' +.094).
+Bulleted per-unit keyword lists (no header, order still scrambled-set): mean .5030 → **gain
++.0490, 20k bootstrap CI [+.0402,+.0580]**; paired-draw native−bulleted +.0438 [+.0280,+.0597].
+
+Frozen rule (HB164 §5): within .015 of shuffled (+.047) → H2; within .015 of flat-keywords
+(+.011) → H1. Distances: **.002 from shuffled** vs .038 from flat-keywords → **unambiguous H2**:
+the flat keyword list's −.036 sub-additive residual is recovered ENTIRELY by per-unit
+segmentation (bulleting); restoring word order/bigrams contributes ≈ nothing beyond it. Combined
+with HB164(3): content .091 + form .046 add; the remaining "format" channel is unit boundaries,
+not token order. Format-vs-order now RESOLVED; vocabulary-vs-composition already settled (HB163).
+Caveat carried: extraction drops operators from 30% of units, so keyword arms bound (not point-
+estimate) the pure-form effect.
