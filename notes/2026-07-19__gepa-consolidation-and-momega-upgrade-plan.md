@@ -5196,3 +5196,35 @@ matched number; matched is 16,700. If the budget curve keeps climbing, +.104 shr
 duplicate truematch launch (pid 2208456) that ran 35 min INTO THE SAME RUN DIR as the original
 (542374). Killed by explicit PID (wrappers 2201904/2201905 first, then python); original survived,
 shared server untouched. **truematch run-dir integrity must be audited before its result is used.**
+
+## HB187 (2026-07-29) — ⚠ M_ω AT MATCHED BUDGET *LOSES* TO GEPA. Headline comparison inverts.
+
+Ran M_ω (unitrecomb) on hotpot at **2,400 calls** — the same budget GEPA got — same task LM, same
+local reflection LM, k=5 final tests. Artifact verified
+(runs_paperexact/hotpot/Qwen3-8B/unitrecomb_momega2400/result.json, "ARTIFACT ok", rc=0).
+
+| arm | budget | k5 test |
+|---|---|---|
+| M_ω (published, v5sk2) | **16,700** | .6380 |
+| GEPA @2,400 | 2,400 | **.5340** |
+| **M_ω @2,400** | 2,400 | **.4140** |
+| GEPA @600 (canonical) | 600 | .4107 |
+
+**M_ω@2400 − GEPA@2400 = −.1200 [−.1573,−.0840]** (30 items better / 83 worse / 187 tied).
+CROSS-SESSION (M_ω@2400 scored in its own session; GEPA@2400 from the certified session) — but
+the gap is far outside observed session wobble (~.01–.09), so the direction is not a session
+artifact. **Same-session rescore REQUIRED before this is certified.**
+
+**What this means.** M_ω barely moves off its seed at 2,400 calls (.4107→.4140, +.003). Its
+published .638 is a *16,700-call* result. So the published +.235 over GEPA is a 28×-compute
+comparison, and at equal compute on this benchmark **GEPA is ahead by ~.12**. The advisor's
+outcome "C" has landed for the 2,400 operating point. M_ω is not budget-efficient; the honest
+frame is that it produces a strong prompt at high spend, not that it beats GEPA per call.
+
+**Immediate consequences for the write-up:** the sentence "matches or exceeds GEPA on all six"
+cannot stand unqualified at any matched budget; the hotpot +.235 must be labeled a 600-call
+operating point AND disclosed as 28× compute; the whole comparison table needs a budget column
+with ACTUAL spend (11–42× across benches, HB186).
+
+**Still pending:** GEPA@16,700 (true match, gpu2) — decides whether M_ω's .638 survives at ITS
+own budget. GEPA@2400 on hover + ifbench (gpu3/gpu5) — decide the other two stars.
