@@ -5,11 +5,35 @@
 - [x] Five-arm decomposition verdict (HB157: vocab ≥51% assumption-free; PROP bounded [0,.046]; advisor caps adopted HB158)
 - [x] hotpot-shuffled-8B verdict (HB161: sign flip = SCALE confirmed; vocab-carries-all is hover-local — composition real on hotpot)
 - [x] Fig 5 ladder complete (8/8 cells; BOTH benches 40/40 at 8B — HB159)
-- [x] Fig 3 LHS same-session k=1..68 overlay (inverted-U measured: peak k=46 — HB159)
+- [~] Fig 3 LHS: single-pass k=1..68 overlay done (HB159) BUT **SUPERSEDED for hotpot by the 5-pass
+      sweep (HB192): noise halved (.0182→.0088), curve MONOTONE-RISING +.081 to k=40, peak at k=40.
+      The inverted-U / "peak k=46" was NOISE — do not print it. Figure not yet rebuilt (user: no
+      document edits); comparison at outputs/analyses/figs_20260728/prefix_5pass_vs_1pass.png**
 - [x] Rank certificate revalidated on median-split targets (.1949 vs .200 — conservative, HB160)
 - [x] kw3 bulleted-keywords discriminator harvested (HB173): H2 FORMAT/SEGMENTATION — gain +.049 [.040,.058], .002 from shuffled ref; format-vs-order RESOLVED
 - [x] Results summary note COMPLETE (notes/2026-07-28__results-summary-paper2.md §1-9: headline, retraction narrative, exec summary, mechanism incl. kw3, scaling+OSL regimes, seam+change-type boundary, prediction backtest, budgets, reversal ledger + limitations)
 - [ ] Final PDF sweep (15pp compiles clean; pending: 5-pass Fig 3 swap decision, OSL 12-type κ)
+
+### 🔴 BUDGET AUDIT (opened 2026-07-29, HB185-HB191) — supersedes parts of the row above
+- [x] Budget accounting CORRECTED: paper's "2,400 calls" was a CLI default. ACTUAL M_ω spend vs
+      GEPA's 600: hotpot 16,700 (28x) / ifbench 23,300 (39x) / hover 10,110 (15x) / aime 6,870 /
+      livebench 18,708 / pupa 29,526. Token-weighting WIDENS this (M_ω prompt 4,622 chars vs
+      GEPA 934-1,505) — HB186, HB189.
+- [x] Reflection-swap control PASSED (GEPA@600 rescores to .4107 = canonical) — HB185/HB186
+- [x] Test-leakage check CLEARED (select/confirm from train_set, scores from test_set) — HB189
+- [x] hotpot budget row CERTIFIED same-session: M_ω .638 / GEPA@2400 .534 / GEPA@600 .411;
+      M_ω vs GEPA@600 +.2273***, vs GEPA@2400 +.1040*** — HB186
+- [x] M_ω@2400 arm: TRUNCATED (0 units admitted, fell back to init) → M_ω has a ~10^4-call
+      minimum viable budget; "M_ω loses at matched budget" WITHDRAWN — HB187/HB188
+- [x] **hover budget row CERTIFIED: M_ω +.0833 [.0547,.1120] over GEPA@2400** — win SURVIVES
+      4x matching; GEPA gains only +.0133 n.s. on hover vs +.1233*** on hotpot → budget
+      sensitivity is BENCHMARK-DEPENDENT — HB190/HB191
+- [ ] hotpot GEPA@16,700 (TRUE match, gpu2) — decides whether +.235/.104 survives at M_ω's own spend
+- [ ] ifbench GEPA@2,400 (gpu5) — decides the most fragile star (+.040)
+- [ ] NOT DONE, disclose as unmatched: aime, livebench, pupa budget arms
+- [ ] Paper edits pending user sign-off: kill every "2,400"; add budget column w/ ACTUAL spend;
+      scope "matches or exceeds on all six" to the 600-call operating point; per-benchmark budget
+      curves (benchmarks disagree); advisor recommends retitle + certificate-first reframe
 **Single source of truth. Updated 2026-07-28 00:05Z. Rewrite this file rather than adding another notes file.**
 
 Written because the campaign had drifted across three boxes and several parallel plans. A census
