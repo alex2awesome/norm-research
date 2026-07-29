@@ -5021,3 +5021,13 @@ performer identity/persona, community-specific transformation (parody fidelity, 
 cross-artifact bundles. Tag-join gradient TASTE 23→29→50% (n=59, directional only).
 Seam-width barplot (10-task F spectrum, two-group claim) at
 outputs/analyses/figs_20260728/seam_width_spectrum.png.
+
+## HB176 (2026-07-28) — OSL regime trust audit + realized-vs-fitted plot
+
+Per-regime: realized recovery @top-3 z vs fitted L: RISING .683 vs L .946 (gap +.201, median CI
+width .560, 99% have L_hi≥1.1 → ceiling UNIDENTIFIED, censoring not type); REACHES .747 vs .761
+(gap +.023 — articulation COMPLETE at current scale, CI .330); BOUNDED .523 vs .527 (gap +.003,
+CI .105 — tightest fits). So "most articulated TODAY" = REACHES (highest realized + finished);
+"most articulable in principle" = rising ONLY as extrapolation (don't quote .95 as a ceiling).
+Trust ladder inverts excitement ladder: bounded > reaches ≫ rising ceilings. Plot:
+outputs/analyses/figs_20260728/osl_regimes_trust.png (scatter + CI whiskers + domain stacks).
