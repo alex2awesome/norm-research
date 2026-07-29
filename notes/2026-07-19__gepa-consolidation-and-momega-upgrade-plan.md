@@ -5398,3 +5398,28 @@ frozen HB193 the DECISION number is the same-session 3-candidate rescore, now RU
 (tag truecert: unitrecomb_v5sk2 + official_truematch16700 + official_budgetmatch600, k=5).
 No interpretation until it lands; outcome maps to A/B/C as frozen. Single-seed caveat applies to
 .580 exactly as to every other budget point.
+
+## HB195 (2026-07-29) — ★ OUTCOME A CERTIFIED: HOTPOT WIN SURVIVES FULL 16,700-CALL BUDGET MATCHING
+
+Same-session 3-candidate rescore (tag truecert, one server fingerprint, k=5, rc=0):
+| candidate | k5 |
+|---|---|
+| M_ω (unitrecomb_v5sk2) | .6433 |
+| GEPA @16,700 (fully matched) | .5740 |
+| GEPA @600 | .4120 |
+Paired bootstraps (20k, item-level, all same session):
+- **M_ω vs GEPA@16,700: +.0693 [+.0360,+.1033], p<1e-5** → frozen HB193 rule fires **branch A**:
+  the advantage is NOT a spend artifact. Scoped star survives at matched budget.
+- M_ω vs GEPA@600: +.2313 [+.1873,+.2760] (canonical row reproduces again)
+- GEPA@16,700 vs GEPA@600: +.1620 [+.1247,+.2000]
+GEPA hotpot budget curve (certified, this session): .412 → (.534 @2,400, HB186 session) → .574.
+Concave; even 28x calls leaves GEPA .069 short of M_ω. The honest headline sentence:
+"M_ω leads GEPA by +.231 at GEPA's default 600-call budget and by +.069 [.036,.103] at full
+16,700-call budget parity (single seed per arm; item-level CI)."
+Session-consistency note: M_ω rescored .6433 here vs .6380 in the earlier truecert-era session
+and .6333 shipped — ±.005-.01 wobble, within protocol tolerance; always quote per-session blocks.
+
+**IFBENCH RAW (bm2400, artifact verified):** GEPA@2,400 seed .414 → best **.399** — its ONE
+accepted candidate val-improved but TEST-REGRESSED below seed. GEPA is non-monotone in budget on
+ifbench (advisor's warning realized). HB193 prior ("GEPA@2400 ≈ seed, star survives trivially")
+was directionally right; certification rescore (tag ifcert) launched gpu1 per prereg.
