@@ -5120,3 +5120,17 @@ argument-adequacy 82/28, pragmatics 81/21, semantic-cat 78/19, holistic 1/0.
 and it separates FORM+FACT+CODIFIED-NORM from MEANING. Normativity is NOT what resists code
 (62%, and legal fleet compiles 6/7 units on retry); reading meaning is. Both dropped rows
 restored per user with glosses. Artifact carries all 3 passes + consensus.
+
+## HB184 (2026-07-28) — Fig 5 bounded signature is CODEBOOK-ROBUST (stronger than a repeat-κ)
+
+OSL 12-type κ pass still queued, so tested the stronger property instead: does the regime
+signature survive a DIFFERENT codebook? Mapped the 12-type labels and BOTH independent 9-type
+labelings onto their shared 5-way grain (n=1,270). Cross-codebook κ .588-.622 (within-codebook
+9-type .763) — codebook choice adds noise. But the bounded signature is identical: **community
++identity = 23.1% of bounded under all three labelings, and 13 of those 15 metrics are the SAME
+metrics** (union 17) — personal comic voice, lived experience as engine, parody voice fidelity,
+satire target/stance, emotional honesty. Rising 3.4-7.8%, reaches 6.9-8.1% under the same three.
+Added to the Fig 5 caption. This is better evidence than a within-codebook repeat: the claim is
+invariant to how the taxonomy is cut, not merely reproducible under one cut.
+NOTE: main.tex working tree also carried the user's in-progress title/abstract rewrite; committed
+together and flagged in the commit message (not my text).
