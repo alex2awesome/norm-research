@@ -4995,3 +4995,29 @@ tests proposed: gepa_nc concept-incidence vs r0 fidelity (CPU); small-executor G
 Artifacts: outputs/analyses/evolution_change_type_labels_20260728.json (+ transitions JSONL),
 extractor methods/codability/extract_evolution_diffs.py. Appendix stays PARKED pending user
 sign-off + chosen extra controls.
+
+## HB175 (2026-07-28) — M_ω extension + change-type figure INTO PAPER; H2-on-nc refuted; OSL regimes characterized
+
+**M_ω additions (all 360 pool units, Codex, same codebook; id-collision fixed by relabeling
+hotpot+hover 0-67 under fresh ids):** PROCEDURE 47% / SCORING_MECHANICS 18% / BOUNDARY 11% /
+REWORDING ~9% / EXAMPLE ~6% / concept-family ~3%. Same side of the concept/measurement divide as
+GEPA, subtype-shifted: units are executor checking-steps, not judge score-anchors. → Appendix D
+"What each process writes into the prompt" + Figure 9 (grouped barplot, plain-language category
+names per user) now IN the paper (submodule committed); parked MECH/CRAFT/TASTE appendix remains
+parked (separate, supervised-side claim).
+
+**H2 test on gepa_nc: REFUTED there.** 105 sampled rubrics spanning r0 fidelity .02-.74: zero
+concept-family edits even in the lowest quartile; low-r0 mix shifts WITHIN measurement (hygiene
+19%/boundary 14% vs high-r0 6%). Evolution's basin is measurement-first regardless of fidelity;
+concept content appears only for constructs the proposer itself treats as unfamiliar (registry
+esoterics). H3 strengthened; H1/H2 survive only in that narrow proposer-familiarity form.
+
+**OSL regimes characterized** (Codex names-based, 884/321/65; artifact
+outputs/analyses/osl_regime_characterization_20260728.md; hedged paragraph added to
+app:osl-regimes): rising = inspectable craft ops (median L .95); reaches = compact formal
+devices — joke mechanics, prose economy, endings (L .76; humor+CW dominate); bounded (L .53,
+41/65 humor) = truth conditions partly OUTSIDE the artifact — audience/platform outcomes,
+performer identity/persona, community-specific transformation (parody fidelity, satire stance),
+cross-artifact bundles. Tag-join gradient TASTE 23→29→50% (n=59, directional only).
+Seam-width barplot (10-task F spectrum, two-group claim) at
+outputs/analyses/figs_20260728/seam_width_spectrum.png.
