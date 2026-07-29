@@ -5162,3 +5162,37 @@ better / 35 worse / 169 tied). Quadrupling GEPA's budget buys +.127 on hotpot.
 this one). Per our own canonical-session rule it is NOT yet a certified number. Required next:
 rescore M_ω's shipped candidate + both GEPA candidates in ONE new session, k=5 → certified
 matched-budget row. Queued.
+
+## HB186 (2026-07-29) — CERTIFIED same-session budget row + BUDGET-ACCOUNTING CORRECTION
+
+**(A) Budget accounting was WRONG in the appendix.** "unitrecomb at 2,400 calls" came from a CLI
+DEFAULT, not from the runs. Declared caps are 6,000-40,000; ACTUAL search spend computed from
+proposals.jsonl (excluding final-test evals):
+| bench | GEPA spent | M_ω spent | ratio |
+|---|---|---|---|
+| hotpot | 600 | **16,700** | 28x |
+| ifbench | 600 | **23,300** | 39x |
+| hover | 657 | **10,110** | 15x |
+Every "2,400" statement in the paper is false and must be replaced by these numbers.
+
+**(B) CERTIFIED same-session rescore (Slot 1, advisor-mandated).** One server, one fingerprint,
+k=5, all three candidates rescored together (rc=0, artifacts verified):
+| candidate | k5 mean |
+|---|---|
+| M_ω (unitrecomb_v5sk2) | .6380 |
+| GEPA @2400 | .5340 |
+| GEPA @600 | .4107 |
+Paired item-level bootstraps (20k):
+- **M_ω vs GEPA@600: +.2273 [.1827,.2720] p<1e-5** (reproduces the published +.235 — the Table-1
+  number is SOUND at its stated operating point)
+- **M_ω vs GEPA@2400: +.1040 [.0733,.1367] p<1e-5** — the win SURVIVES 4x budget matching
+- GEPA@2400 vs GEPA@600: +.1233 [.0860,.1613] p<1e-5
+GEPA@600 rescored .4107 = canonical Table-1 .4107 EXACTLY → session + reflection-swap both clean.
+
+**(C) Still open:** 16,700-call (true-match) GEPA running on gpu2. .5340 at 2,400 is NOT the
+matched number; matched is 16,700. If the budget curve keeps climbing, +.104 shrinks further.
+
+**INCIDENT:** a timed-out ssh held its connection until the rescore finished, then fired a queued
+duplicate truematch launch (pid 2208456) that ran 35 min INTO THE SAME RUN DIR as the original
+(542374). Killed by explicit PID (wrappers 2201904/2201905 first, then python); original survived,
+shared server untouched. **truematch run-dir integrity must be audited before its result is used.**
