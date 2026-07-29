@@ -4965,3 +4965,33 @@ with HB164(3): content .091 + form .046 add; the remaining "format" channel is u
 not token order. Format-vs-order now RESOLVED; vocabulary-vs-composition already settled (HB163).
 Caveat carried: extraction drops operators from 30% of units, so keyword arms bound (not point-
 estimate) the pure-form effect.
+
+## HB174 (2026-07-28) — (A) decompression vs (B) prompt-evolution, unsupervised only: change-type CERTIFIED double-pass
+
+User directive: localize the tacit-vs-reconstruction difference to WHAT CHANGES per evolution
+step, unsupervised metrics only; paper appendix parked meanwhile. Design: 487 evolution steps in
+one shared format (200 A-ladder name→def→expl transitions across 10 domains; 53 GEPA-h2h rounds;
+150 gepa_nc rubric rounds; 84 metric_implementer version steps) + 7 blinded anchors; 8-way
+change-type codebook (union of the expansion-chain schedule + evolution-native categories);
+TWO independent Codex (gpt-5.6-sol) passes.
+
+**Reliability: 8-way κ=.678 (raw .741; anchors 6/7 both passes). Family-level
+(concept-content vs measurement-content vs other): agreement .965, κ=.932; ALL frequent
+disagreements are within-measurement (scoring↔boundary 65, procedure↔scoring 14).**
+
+**Result (replicates in both passes):** A-ladder = 100% concept-family (name→def 100%
+CONCEPT_SEMANTICS, def→expl 99% MECHANISM); B GEPA lanes = 99-100% measurement-family
+(scoring-mechanics 75-77% primary, boundary dominant secondary 130/287, input-hygiene ~12%);
+B registry = 79% measurement + 6% concept. The 6% concept exceptions are exactly the esoteric
+constructs (story-vs-narrative-discourse, distinctive_voice ×3 CLARIFY, distilled peer-review
+phase) — evolution writes concept content only where the judge is shaky (H2 capability-window).
+
+Hypotheses ledger (relayed to user): H1 residual-error slot ≡ H2 capability window (main),
+H3 scoring-conventions-are-extra-conceptual (additive), H4 A-side-generated-by-instruction
+(framing correction owed: A rows ≈ manipulation check; the finding is B's zero concept cells),
+H5 genre-shortcut (κ pass done; style-normalized retest = remaining control). Discriminating
+tests proposed: gepa_nc concept-incidence vs r0 fidelity (CPU); small-executor GEPA (1 GPU).
+
+Artifacts: outputs/analyses/evolution_change_type_labels_20260728.json (+ transitions JSONL),
+extractor methods/codability/extract_evolution_diffs.py. Appendix stays PARKED pending user
+sign-off + chosen extra controls.
