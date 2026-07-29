@@ -5106,3 +5106,17 @@ states the 12-category version was withdrawn for unreliability; normative-applic
 omitted per user with its numbers disclosed in the caption + artifact. The qualitative cliff
 (fact/form ≫ meaning) is robust to both labelings — that claim stands. Artifact updated with
 pass2 + both κ.
+
+## HB183 (2026-07-28) — seam table UPGRADED to 3-pass consensus; cliff is a DISCONTINUITY
+
+User restored the granular 12-row table (the 6-group condensation lost the signal). Rather than
+publish single-pass numbers at κ=.51, ran a THIRD independent blind pass and took per-unit
+majority vote. Agreement: **52% unanimous / 42% majority / 6% all-differ (94% ≥2/3)**; pairwise
+κ .585/.609/.646; **each pass vs consensus κ .777-.807** — consensus labels are the defensible
+object. Consensus table (n, %compiled): attribution 16/94, lexical 5/80, numeric 25/76,
+counts 14/71, syntax 57/67, format 65/66, **normative 92/62 ‖ CLIFF ‖ cross-consistency 83/30**,
+argument-adequacy 82/28, pragmatics 81/21, semantic-cat 78/19, holistic 1/0.
+**NOTHING COMPILES BETWEEN 30% AND 62%** — the cliff is a genuine discontinuity, not a gradient,
+and it separates FORM+FACT+CODIFIED-NORM from MEANING. Normativity is NOT what resists code
+(62%, and legal fleet compiles 6/7 units on retry); reading meaning is. Both dropped rows
+restored per user with glosses. Artifact carries all 3 passes + consensus.
