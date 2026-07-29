@@ -5265,3 +5265,30 @@ against a baseline given 16.7k. That is the pending gpu2 arm, and it remains the
 **Still-open checks from the advisor list:** token-level (not call-level) re-accounting of the
 11–42× ratios; verify M_ω's admission split is disjoint from the 300 test items; seeds on the
 headline pair; same-session idle rescore before printing any delta.
+
+## HB189 (2026-07-29) — token accounting does NOT rescue the ratio; HB188(2) refined
+
+**(A) Token/length accounting (advisor's hoped-for mitigation): DEAD, and it cuts the other way.**
+Shipped-prompt lengths on hotpot: GEPA@600 1,505 chars / GEPA@2400 934 / **M_ω(16.7k) 4,622**
+(694 words) / M_ω@2400 306 (= its unchanged init). A "metric call" is one ITEM EVALUATION through
+the same program (2-hop retrieval + 4 LM modules) for both arms, so the unit is symmetric — but
+M_ω evaluates with a prompt that grows to 3–5× GEPA's length as units accumulate. **Token-weighting
+therefore WIDENS the 28×, it does not shrink it to the hoped-for 3–5×.** Reflection/proposal calls
+are counted separately in both arms and are small (GEPA 7 reflection calls; M_ω 60 unit
+proposals), so excluding them is symmetric and fair.
+Side observation: GEPA@2400 ships a SHORTER prompt (934) than GEPA@600 (1,505) yet scores much
+higher (.534 vs .411) — GEPA's gain is not a length effect.
+
+**(B) Refines HB188(2): M_ω does NOT get a head start from GEPA's optimization.**
+M_ω initializes from the UNTAGGED `official` run dir, whose hotpot candidate is the SEED
+(best_test .38, 306 chars — GEPA shipped the seed there, HB132). Verified module-by-module: all
+4 modules of unitrecomb_v5sk2's shipped prompt begin with the official/seed text and extend it.
+So on hotpot M_ω starts from an unoptimized 306-char seed and grows it to 4,622 chars — it is NOT
+standing on GEPA's 600 calls of optimization. HB188's "M_ω builds on GEPA's output" is therefore
+too strong FOR HOTPOT (true only in the trivial sense that GEPA's output = the seed there).
+The additive framing in HB188 should be restated as: from the SEED (.38–.40), M_ω reaches .638
+for 16,700 calls; GEPA reaches .534 for 2,400 and .411 for 600 from the same seed.
+
+**(C) Leakage check CLEARED (advisor trap #8):** unitrecomb's select/confirm panels are carved
+from `bench.train_set` (100/50 of 150); reported scores use `bench.test_set` (300, line 856).
+Disjoint by construction — .638 is not test-contaminated.
