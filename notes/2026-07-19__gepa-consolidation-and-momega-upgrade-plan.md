@@ -5068,3 +5068,16 @@ rising 65-86% everywhere). 14 pages. SEAM-UNIT categorization: 629 blinded sub-r
 code_rt/hyb_rt), Codex 12-type descriptive pass IN FLIGHT; payoff = category × mechanization
 cross-tab. Key artifact map in agent report (Tier1-5; y_gepa unit manifests, codif_merged 143
 programs, seam tables 10 domains, fleet_boundness).
+
+## HB180 (2026-07-28) — WHAT GETS MECHANIZED at the metric seam: 12-type check taxonomy × channel
+
+629 seam sub-rules (contracts_v3 probes n=592 w/ CODE-vs-L + legal u1-u7 + humor units), channel
+BLINDED during Codex labeling (single-pass; κ pass not yet run). Mechanization rate by check type:
+attribution/sourcing 85% > numeric-fact 81% > lexical-marker 80% > format/layout 73% >
+syntax/style 63% > count/length 62% > **normative-application 55%** (legal standards compile
+better than expected — matches legal v2 6/7 units incl. fidelities .37-.57) > CLIFF >
+cross-consistency 32% > semantic-category 29% > argument-adequacy 26% > discourse-pragmatics 23%
+> holistic 0%. Coarse formal>relational>judgment gradient holds within 6/7 tasks (exception:
+press_releases relational 87% — attribution-heavy). The seam is a CHECK-TYPE frontier, not a
+domain property: domains differ in F because their banks MIX these types differently.
+Artifact outputs/analyses/seam_unit_types_20260728.json.
