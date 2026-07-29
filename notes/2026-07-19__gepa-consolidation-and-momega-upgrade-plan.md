@@ -5292,3 +5292,30 @@ for 16,700 calls; GEPA reaches .534 for 2,400 and .411 for 600 from the same see
 **(C) Leakage check CLEARED (advisor trap #8):** unitrecomb's select/confirm panels are carved
 from `bench.train_set` (100/50 of 150); reported scores use `bench.test_set` (300, line 856).
 Disjoint by construction — .638 is not test-contaminated.
+
+## HB190 (2026-07-29) — HOVER SURVIVES BUDGET MATCHING (unlike hotpot). Benchmark-dependent budget sensitivity.
+
+GEPA@2400 on hover completed (artifact verified: seed .37534 → best .4840, budget 2400).
+
+| arm | hover k5 |
+|---|---|
+| M_ω (canonical, ~10.1k calls) | .5567 |
+| GEPA @2,400 | .4840 |
+| GEPA @600 (canonical) | .4707 |
+
+Paired bootstraps (20k): **M_ω vs GEPA@600 +.0860 [.0627,.1093] p<1e-4 (SAME session)**;
+**M_ω vs GEPA@2400 +.0727 [.0467,.1000] p<1e-4 (cross-session)**;
+GEPA@2400 vs GEPA@600 **+.0133 [−.0087,+.0360] p=.12 — NOT significant.**
+
+**Key contrast with hotpot.** Quadrupling GEPA's budget bought **+.123 on hotpot but only +.013
+(n.s.) on hover.** So GEPA's budget-sensitivity is strongly benchmark-dependent, and the hover
+win is NOT a budget artifact: +.086 → +.073 under 4× matching, still highly significant.
+This kills the naive "all our wins are budget effects" extrapolation from hotpot. It also means
+the honest paper cannot say either "the wins are budget artifacts" OR "the wins survive" —
+it must report per-benchmark budget curves, because the benchmarks disagree.
+
+Caveat: the GEPA@2400 hover arm is cross-session vs the canonical rescore; a same-session
+3-candidate rescore (as done for hotpot) is required before printing +.0727. Direction is safe
+(the GEPA@2400−GEPA@600 gap of +.013 is inside session wobble, so no session effect can
+manufacture the +.073).
+Still pending: ifbench GEPA@2400 (gpu5), hotpot GEPA@16,700 (gpu2).
