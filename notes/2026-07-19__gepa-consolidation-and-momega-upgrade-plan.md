@@ -5045,3 +5045,14 @@ Regime×domain: bounded only in humor 41 (15%) / news 13 (10%) / peer 9 (11%) / 
 math, PR, n&c, patents ZERO. → fig:osl-types + three appendix paragraphs (trust audit /
 task-agnostic types / regimes-across-tasks) in app:osl-regimes; submodule committed. Artifact
 outputs/analyses/osl_metric_types_20260728.json.
+
+## HB178 (2026-07-28) — 12-type main-body figure; 9-type κ certified; 12-cat separates rising/reaches
+
+9-type κ=.752 (raw .817), coarse axis κ=.732; pass-2 independently replicates externality
+gradient (idx .38/.37/.71). Caption updated. NEW 12-type codebook (regime-blinded, all 1,270):
+**rising/reaches now SEPARATE — the compactness inversion**: rising = EXTENDED_STRUCTURE 28% >
+COMPACT_DEVICE 17% (+verification 10%, rigor 9%); reaches = COMPACT_DEVICE 34% > EXTENDED 19%;
+bounded = IDENTITY_PERSONA 14% + RECEPTION 11% + stance (unchanged signature). → Fig 5 (main
+body, §5) grouped bars; coarse-axis stacked bars remain appendix-only per user. 12-type κ pass
+not yet run (single-pass; flagged in HB, 9-type κ quoted in caption as the certified grain).
+Artifacts merged into outputs/analyses/osl_metric_types_20260728.json (pass1+pass2+12type).
