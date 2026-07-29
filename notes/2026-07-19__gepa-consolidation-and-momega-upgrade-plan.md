@@ -5134,3 +5134,31 @@ Added to the Fig 5 caption. This is better evidence than a within-codebook repea
 invariant to how the taxonomy is cut, not merely reproducible under one cut.
 NOTE: main.tex working tree also carried the user's in-progress title/abstract rewrite; committed
 together and flagged in the commit message (not my text).
+
+## HB185 (2026-07-29) — BUDGET-MATCHED GEPA: hotpot margin SHRINKS from +.235 to ~+.109
+
+Ran official GEPA at 600 AND 2400 metric calls in ONE session (same server, same local Qwen3-8B
+reflection LM, k=5 final tests, GPU1 port 8192) — only the budget varies. Artifacts
+runs_paperexact/hotpot/Qwen3-8B/official_budgetmatch{600,2400}/result.json, rc=0 + artifacts
+verified.
+
+| arm | seed_test | best_test |
+|---|---|---|
+| GEPA @600 (our declared budget) | .402 | **.4100** |
+| GEPA @2400 (M_ω's budget) | .401 | **.5373** |
+
+**Paired bootstrap (20k, item-level, same session): +.1273 [+.0893,+.1667], p<1e-5** (96 items
+better / 35 worse / 169 tied). Quadrupling GEPA's budget buys +.127 on hotpot.
+
+**Two consequences, both must propagate:**
+1. **CONTROL PASSED:** GEPA@600 here = .4100 vs canonical Table-1 GEPA .4107 — the local-Qwen
+   reflection substitution (forced by the dead z.ai endpoint) does NOT change GEPA's outcome.
+   The budget comparison is therefore clean, not confounded by the reflection swap.
+2. **THE HEADLINE MOVES:** M_ω ran at 2400. Against a budget-matched GEPA the hotpot gap is
+   ~+.109, NOT +.235. The +.235 is a 600-call-GEPA comparison and must never be quoted as a
+   matched-budget result. Also note GEPA@600 no longer "ships the seed" under local reflection
+   (it accepted a proposal, .402→.410), so that footnote is reflection-LM-specific.
+**CAVEAT — the +.109 is CROSS-SESSION** (M_ω .6460 came from the omnibus session, GEPA@2400 from
+this one). Per our own canonical-session rule it is NOT yet a certified number. Required next:
+rescore M_ω's shipped candidate + both GEPA candidates in ONE new session, k=5 → certified
+matched-budget row. Queued.
