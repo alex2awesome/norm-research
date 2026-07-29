@@ -5092,3 +5092,17 @@ COUNT_LENGTH rows omitted per user (unclear measurement) — caption points to t
 both are reported; single-pass labels, κ pass still owed. Fig 7 tacit-iso compacted (PW 4.85→
 4.30, tightened verticals). Fig 8 code-iso v3 = ONE gray panel, LLM node ABOVE the two field
 cards. 15 pages, clean compile.
+
+## HB182 (2026-07-28) — seam κ audit: 12-type UNRELIABLE (.509), table rebuilt at 6-group grain (.662)
+
+Second independent Codex pass on the 629 seam sub-rules. **12-type κ=.509 (raw .568)** — too weak
+to publish per-category percentages, and pass-2 moves them materially (format 73→54%, numeric
+81→67%, argument-adequacy 26→38%; category n's swing 64→95, 70→105). Dominant confusion
+DISCOURSE_PRAGMATICS↔SEMANTIC_CATEGORY (41). Cliff grain (form/norm/meaning) κ=.630.
+**Adopted: 6-group grain, κ=.662, values stable across passes** (recorded facts 82/78%, surface
+form 68/60%, normative 55/60%, internal consistency 32/31%, meaning reading 25/23%, adequacy
+26/31%). Table 3 now reports GROUPS with n-ranges and %-ranges across both labelings; caption
+states the 12-category version was withdrawn for unreliability; normative-application row stays
+omitted per user with its numbers disclosed in the caption + artifact. The qualitative cliff
+(fact/form ≫ meaning) is robust to both labelings — that claim stands. Artifact updated with
+pass2 + both κ.
