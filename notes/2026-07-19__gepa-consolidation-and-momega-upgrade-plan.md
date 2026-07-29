@@ -5387,3 +5387,14 @@ number so it cannot be presented as a post-hoc vindication.
 5-pass range). Beyond k=40 the only data are single-pass (the old k=41..68 decline), so the
 correct claim is: within k≤40 the rise is monotone and the apparent k≈27 peak was noise; the
 k>40 region and the "peak k=46" claim are UNMEASURED at 5 passes — neither confirmed nor refuted.
+
+## HB194 (2026-07-29) — TRUEMATCH RAW LANDED: GEPA@16,700 = .580 (own session). Rescore launched per HB193.
+
+Artifact verified (rc=0 + "ARTIFACT ok"): seed .408 → best **.58002**, budget 16,700, k=5, n=300.
+GEPA's budget curve on hotpot: 600→.4107, 2,400→.5340, 16,700→.580 (raw) — strongly CONCAVE,
+not the log-linear .707 worst case; the marginal call is worth ~6x less in the 2.4k→16.7k decade
+than in the 600→2.4k one. Raw gap vs M_ω's published .638 is ~+.058 in M_ω's favor, but per
+frozen HB193 the DECISION number is the same-session 3-candidate rescore, now RUNNING on gpu2
+(tag truecert: unitrecomb_v5sk2 + official_truematch16700 + official_budgetmatch600, k=5).
+No interpretation until it lands; outcome maps to A/B/C as frozen. Single-seed caveat applies to
+.580 exactly as to every other budget point.
