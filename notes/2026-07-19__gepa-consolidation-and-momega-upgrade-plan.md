@@ -5342,3 +5342,18 @@ of the BENCHMARK, not of the comparison. Any blanket statement ("wins are budget
 "wins survive") is false; per-benchmark budget curves are mandatory.
 Still open: hover at M_ω's true 10.1k spend (only 4x tested, true ratio 15x); ifbench@2400 (gpu5);
 hotpot@16.7k (gpu2).
+
+## HB192 (2026-07-29) — 5-PASS PREFIX CURVE COMPLETE (hotpot k=1..40): noise halved, curve is MONOTONE-RISING
+
+runs/prefix_5pass_hotpot.json, 40/40 k-values × 5 independent passes = 200 evals, one session.
+- **Roughness (mean |Δ| between adjacent k) .0088 vs .0182 single-pass — halved**, confirming
+  ~half the visible wobble in the current Fig 3 panel is measurement noise, not structure.
+- Mean SE of each 5-pass point = .0059 (±2SE band ≈ ±.012).
+- Curve **rises monotonically +.0813** (k=1 .552 → k=40 .633), **peak at k=40** — i.e. still
+  climbing at the end of the pool. The single-pass series' apparent inverted-U (peak k≈27 then
+  decline) does NOT survive averaging; it was noise. **HB142's inverted-U claim and the "peak
+  k=46" line in the paper/notes should be treated as SUPERSEDED for hotpot.**
+- Single-pass sits ~+.039 above the 5-pass series uniformly = session offset (different server,
+  different day), NOT signal. The two series therefore MUST NOT share a Fig-3 panel.
+Comparison figure (no document edit): outputs/analyses/figs_20260728/prefix_5pass_vs_1pass.png
+ifbench 5-pass half now running on the same lane.
