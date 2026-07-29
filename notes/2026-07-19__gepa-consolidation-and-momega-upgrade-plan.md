@@ -5228,3 +5228,40 @@ with ACTUAL spend (11–42× across benches, HB186).
 
 **Still pending:** GEPA@16,700 (true match, gpu2) — decides whether M_ω's .638 survives at ITS
 own budget. GEPA@2400 on hover + ifbench (gpu3/gpu5) — decide the other two stars.
+
+## HB188 (2026-07-29) — CORRECTION to HB187: M_ω@2400 TRUNCATED, it did not "lose". Plus: M_ω starts FROM GEPA.
+
+Advisor flagged two lethal unknowns; both now resolved from the artifacts, and the first one
+**walks back my own HB187 framing**.
+
+**(1) Was the Table-1 GEPA baseline an unoptimized seed? NO — refuted.**
+GEPA@600: seed_test **.402** → best_test **.4107**. GEPA does move off its seed (+.009). The
+canonical baseline is a real, if barely-optimized, GEPA run. The near-identity between GEPA@600's
+best (.4107) and M_ω@2400's *seed* (.41066) has a different cause — see (2).
+
+**(2) M_ω IS INITIALIZED FROM GEPA'S SHIPPED PROMPT** (the D2 init-from-GEPA-best design). So
+M_ω's "seed_test" ≈ GEPA's best. Consequences that must be stated in the paper: M_ω's true cost
+is its own calls **plus** GEPA's 600, and "M_ω vs GEPA" is not a head-to-head between independent
+optimizers — it is **GEPA-then-M_ω vs GEPA**. The honest framing is additive, and it is arguably
+better for us: starting from GEPA's .4107, M_ω adds +.227 for 16,700 calls, while GEPA adds +.123
+for 1,800 more calls. Per-call in this range GEPA is ~5× more efficient (6.8e-5 vs 1.4e-5 per
+call); the pending GEPA@16,700 decides the endpoint.
+
+**(3) M_ω@2400 did NOT terminate certified — it TRUNCATED mid-screening.** From its result.json:
+`n_compiled = 0`, `fell_back_to_init = True`, marginals measured **23 of 48** pool units,
+`confirm_init`/`confirm_compiled` = None. It never reached the admission or confirm phases and
+**returned its initialization unchanged**. Its .414 is therefore the init prompt (= GEPA's
+600-call output) plus scoring noise, NOT an M_ω result.
+
+**⚠ HB187's headline sentence is WITHDRAWN.** "M_ω at matched budget LOSES to GEPA by −.120" is
+wrong as a quality claim. The correct reading: **M_ω cannot run at 2,400 calls at all.** Its
+minimum viable budget on hotpot is ~10^4 calls; below that it emits its input. So the −.120 is
+not M_ω-vs-GEPA quality — it is GEPA@2400 vs GEPA@600-output, i.e. the +.123 budget effect of
+HB185/HB186 restated. The defensible statement is: **GEPA is anytime; M_ω is a step function with
+a ~16.7k-call minimum.**
+The mirror-trap still binds, per advisor: a method with a 16.7k minimum must still be judged
+against a baseline given 16.7k. That is the pending gpu2 arm, and it remains the decisive test.
+
+**Still-open checks from the advisor list:** token-level (not call-level) re-accounting of the
+11–42× ratios; verify M_ω's admission split is disjoint from the 300 test items; seeds on the
+headline pair; same-session idle rescore before printing any delta.
