@@ -4912,3 +4912,40 @@ HB169's version is the ledger record of what was adopted then).
 livebench +.006 n.s. / ifbench +.040** / aime +.007 n.s. / pupa −.001. W = 3/6, never-worse
 everywhere (min Δ = −.001). Submodule be7c607. [table1-comparable] TICKED. Remaining EOD items:
 final PDF sweep + summary note sections 3-7 + kw3 harvest.
+
+## HB172 (2026-07-28) — unit-type deep dive: what recombination adds vs what decompression rescues
+
+User question: are the units that rescue small executors in the tacit-isomorphism experiment the
+same TYPE as the units that carry gain in reconstruction? Method: Codex (gpt-5.6-sol) labeled all
+360 frozen-pool Ω units on the tacit line's 3-level checkability codebook (MECHANICAL /
+STRUCTURAL_CRAFT / TASTE, wording verbatim from notes/2026-07-03__what-gets-decompressed.md),
+blinded with 6 planted anchors → 6/6 correct incl. both TASTE anchors. Labels + provenance:
+datasets/prompt-optimality-test/runs/omega_unit_labels_checkability.json.
+
+**Composition (selection surfaces are near-disjoint):** Ω pools = 292 CRAFT / 68 MECH / **0
+TASTE** (anchors prove the tagger would have used TASTE). The humor/CW decompression banks are
+the mirror image: 0 MECH / ~74% CRAFT / ~26% TASTE. So the two experiments sample opposite ends
+of the checkability axis before any value question arises.
+
+**Value by type is executor-relative, not type-intrinsic (hover ladder, identical 162 units):**
+
+| scale | MECH mean Δ (pos%) | CRAFT mean Δ (pos%) |
+|---|---|---|
+| Qwen3-4B  | +.029 (81%) | **+.042 (89%)** |
+| Qwen3-8B  | −.010 (35%) | −.020 (21%) |
+| Qwen3-32B | −.011 (15%) | −.008 (26%) |
+
+Paired 4B→32B drop: CRAFT +.050, MECH +.040. At 4B, craft units are the bigger winners; by 32B
+almost nothing helps. aime shows the floor: at 1.7B units HURT (12–18% pos), at 8B they help
+(75% pos) — below capacity, articulated units of any type are noise (matches OSL falling-limb /
+task-relative threshold).
+
+**Reading:** the earlier "reconstruction gains live in thin/format units" (hotpot 8B: MECH +.070,
+CRAFT +.007) is an 8B-on-QA snapshot, not a law. Unit marginal Δ traces the same moving window
+the tacit experiment measures directly: a unit pays exactly when the executor is above the floor
+but below tacit mastery of that content. Reconstruction at 8B on verifiable QA sits past the
+craft window (8B already holds the craft; only compliance slack remains); tacit-iso deliberately
+sits inside it (big-can/small-can't). Residual hypotheses not separable without new runs: (b)
+metric surface (EM/containment never rewards TASTE, so mining never proposes it) vs (c) mining
+distribution (units mined from 8B failures = compliance failures). Both predict the 0-TASTE cell;
+neither predicts the hover 4B craft>mech inversion — only the window hypothesis does.
