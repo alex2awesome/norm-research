@@ -5423,3 +5423,31 @@ and .6333 shipped — ±.005-.01 wobble, within protocol tolerance; always quote
 accepted candidate val-improved but TEST-REGRESSED below seed. GEPA is non-monotone in budget on
 ifbench (advisor's warning realized). HB193 prior ("GEPA@2400 ≈ seed, star survives trivially")
 was directionally right; certification rescore (tag ifcert) launched gpu1 per prereg.
+
+## HB196 (2026-07-29) — FINAL ADVISOR RULINGS (post-branch-A); hover full-parity arm launched
+
+Advisor (Fable, 4th pass) on the complete certified picture — rulings recorded for the write-up:
+1. **Statement of record** drafted (abstract sentence + budget-column table printing ACTUAL calls
+   per arm, not ratios). Hotpot headline = **+.069 at 16.7k/16.7k parity**, +.231-at-600 demoted
+   to the budget-curve figure. Number drift fixed everywhere: certified +.2313/+.0833 replace the
+   mixed-session +.235/+.086 (own protocol forbids mixing scoring sessions).
+2. **Unified story** allowed with 3 edits: "equal CALL budget" not "equal compute" (tokens still
+   unmatched, cut against us — disclose); "diminishing returns that never close the gap" not
+   "saturates" (GEPA +.04 in the last 7x); the ties clause is mandatory (GEPA reaches parity at
+   1/11–1/42 the spend on three of six — omitting it = cherry-picking).
+3. **Rebuttal run list ranked:** (1) ifcert (running, gates its row); (2) GEPA@10k hover — LAUNCHED
+   (gpu3, tag truematch10110, budget 10,110 = M_ω's actual hover spend); (3) +2 GEPA seeds @16.7k
+   hotpot (defuses single-seed attack cheaply — asymmetric, GEPA seeds only); (4) token-parity
+   GEPA extension hotpot; (5) one prereg'd iso-compute probe on AIME; (6) M_ω-lite CUT (new-method
+   work, not rebuttal).
+4. **Retitle + certificate-first reframe STANDS** under branch A ("upgrades the exhibit, not the
+   genre"; 3 wins / 3 expensive ties reads as findings inside the certification frame; branch A
+   itself is a product of the frozen-prereg machinery). Parity win may lead the abstract inside
+   that frame.
+5. **Integrity fix list (all prose, pre-submission):** false "2,400" appendix first (contradicts
+   the step-function story); mixed-session numbers out; +.235-as-headline out; spend column +
+   ties concession in; inverted-U remnants swept (and no monotonicity claim beyond k=40);
+   disclose single-seed, token direction, 4.6k-char deployment cost; appendix lines for
+   seed-init and the cleared leakage check.
+All prose edits remain FROZEN pending user sign-off (standing instruction); list mirrors
+CAMPAIGN_STATE budget-audit section.
