@@ -5081,3 +5081,14 @@ cross-consistency 32% > semantic-category 29% > argument-adequacy 26% > discours
 press_releases relational 87% — attribution-heavy). The seam is a CHECK-TYPE frontier, not a
 domain property: domains differ in F because their banks MIX these types differently.
 Artifact outputs/analyses/seam_unit_types_20260728.json.
+
+## HB181 (2026-07-28) — figure reorganization per user: 6-cat main / 12+8 appendix; seam Table 3; Fig 7/8 rework
+
+Fig 5 (main) = 6-category regime signatures at .62\textwidth, COMPACT_DEVICE renamed "local
+patterns (punchline, endings)"; appendix granularity fig = 12 (top) + 8 (bottom), nested-merge
+note inverted accordingly. change-types fig at .72 width. Seam mechanization gradient now MAIN
+BODY Table 3 (sec:code-iso) with composition-effect paragraph; NORMATIVE_APPLICATION and
+COUNT_LENGTH rows omitted per user (unclear measurement) — caption points to the artifact where
+both are reported; single-pass labels, κ pass still owed. Fig 7 tacit-iso compacted (PW 4.85→
+4.30, tightened verticals). Fig 8 code-iso v3 = ONE gray panel, LLM node ABOVE the two field
+cards. 15 pages, clean compile.
