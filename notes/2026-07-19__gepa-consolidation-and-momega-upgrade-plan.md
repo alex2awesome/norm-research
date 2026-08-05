@@ -5451,3 +5451,58 @@ Advisor (Fable, 4th pass) on the complete certified picture — rulings recorded
    seed-init and the cleared leakage check.
 All prose edits remain FROZEN pending user sign-off (standing instruction); list mirrors
 CAMPAIGN_STATE budget-audit section.
+
+## HB197 (2026-08-05) — IFBench BRANCH A CERTIFIED; hover@10,110 raw landed; ops gap 07-30→08-05
+
+**Ops note:** laptop Kerberos ticket died 2026-07-30 (whale jump rejected all auth); ssh restored
+2026-08-05. All three sk2 lanes ran unattended to completion (rescore blocks timestamped
+2026-07-30). No parallel session harvested them; this entry is the harvest.
+
+**1. IFBench certification (frozen HB193 rule, applied verbatim).** Same-session 3-candidate
+rescore (one server fingerprint, k=5 passes, newest rescore_k3.jsonl blocks, n=294; paired
+bootstrap 20k on mean item delta):
+
+| candidate | rescored mean |
+|---|---|
+| M_ω `unitrecomb_v6ctx32k` | .4538 |
+| GEPA@2,400 shipped (`official_bm2400`) | .4177 |
+| GEPA@600 shipped (`official`) | .4062 |
+
+- **M_ω − GEPA@2,400: +.0361 [+.0078, +.0650] p≈.011 → CI>0 → BRANCH A. The IFBench star
+  survives budget matching at 2,400 calls.** HB193's recorded prior ("GEPA@2400 ≈ seed likely;
+  star survives") confirmed.
+- M_ω − GEPA@600: +.0476 [+.0201, +.0759] p=.0002 (replaces the mixed-session +.040 as the
+  certified same-session number for this contrast).
+- **GEPA@2,400 shipped the SEED**: its rescored candidate is byte-identical to GEPA@600's (same
+  hash 7ecc85bd), verified against `result.json` best_candidate text. The val-accepted candidate
+  (best_test .3994 < seed .4136) was NOT selected — GEPA's final selection returned the seed. So
+  on ifbench, 4× budget bought GEPA nothing shippable (consistent with HB195's non-monotonicity).
+- **Free instrument-noise readout**: the two GEPA arms rescored the *same prompt* in the same
+  session: Δ +.0116 [−.0092, +.0323] n.s. — same-prompt block-to-block wobble ≈ .012 on ifbench,
+  in line with the eval-noise ledger.
+
+**2. HoVer full-parity arm (GEPA@10,110 = M_ω's actual hover spend) — raw result.**
+`official_truematch10110`: seed .3687 → best .5033 (5 test passes, arm's own session). For scale:
+canonical certified M_ω .5667, certified GEPA@2,400 .4833 — so at full parity GEPA improves
+(~.48→.50 raw) but the raw gap to M_ω is still ≈ +.06. RAW ONLY — decision comes from the
+same-session rescore below; never quote .5033 against .5667 directly (cross-session).
+
+**3. PREREG (frozen before the hover certification rescore exists — the rescore has NOT run;
+all GPUs occupied by another user).** Decision statistic for hover full parity: same-session
+4-candidate rescore `hvcert10110` (`unitrecomb_stair` + `official_truematch10110` +
+`official_bm2400` + `official`), k=5, newest blocks, paired bootstrap 20k. Primary contrast:
+M_ω(stair) − GEPA@10,110. Same A/B/C mapping as HB193 (A: CI>0 win survives full parity; B: CI
+covers 0 → budget effect, certificate-first reframe; C: CI<0 → report inversion first). Prior
+recorded now: raw gap +.06 with hover same-prompt wobble ~.01 → branch A likely. Secondary
+(descriptive): GEPA budget curve 600→2,400→10,110 in one session.
+
+**4. IFBench 5-pass prefix sweep COMPLETE** (2026-07-30, 20 k-values × 5 passes): k=1 .4371,
+peak k=16 .4684, k=20 .4534 — flat-to-mildly-rising, span ~.03, no inverted-U. Consistent with
+ifbench's smaller unit margin. Descriptive only (single session).
+
+**5. Ops.** All 8 sk2 GPUs occupied by another user's jobs (verified nvidia-smi + ps: l1ly's
+concentration-study workers) — rescore launch deferred rather than stacked (rescore_gen.sh's
+>2GB busy-guard kept; avoids OOM risk to their jobs and load-noise). Watcher armed on sk2
+(pid 3175419, pidfile ~/hvcert_watch.pid, 48h cap): launches `rescore_gen.sh <gpu> 8202 hover
+hvcert10110 …` on first free GPU. Laptop-side completion monitor re-armed (polls 15 min for
+"RESCORE hvcert10110 COMPLETE"). Document freeze still in force — no paper edits.
