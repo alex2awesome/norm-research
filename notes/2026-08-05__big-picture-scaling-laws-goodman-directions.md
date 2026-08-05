@@ -164,3 +164,22 @@ What this does NOT change: the experiment battery. 1a–1d probe the internal st
 "better string" remedy (WHICH KIND of string: definitions vs exemplars vs anchors vs
 segmentation); 2a–2c probe the "better listener" remedy. 1e calibrates the string channel.
 All interpretation text for these experiments should be written in remedy language.
+
+### Battery launch ledger (2026-08-05 evening, user green-lit Directions 1+2 in full)
+
+- **1a LAUNCHED**: `prefix_modes_1a.py` + `modes1a_lane_sk3.sh` — hotpot, ONE session
+  (sk3 GPU6, port 8214, Qwen3-8B by HF id): seed + unit-prefix (k=1..20,24,28,32,36,40; frozen
+  pool delta_8b desc, md5 27966bce verified identical sk1/sk2/sk3) + exemplar-prefix
+  (k=1..12,14,16,20; train-set Q→A pairs in fixed train order appended to final_answer.predict),
+  5 passes each, added-chars recorded per point for token-matched analysis. Same-session by
+  design (HB192: cross-session curves never share a panel). ~61.5k scored items ≈ 1 day.
+  Results: runs/prefix_modes1a_hotpot.json on sk3. Monitor armed ("MODES1A COMPLETE").
+  Launch notes: sk1 GPU4 attempt aborted safely by busy-guard (eshaanb sglang took GPUs 4-7);
+  sk1 now full (our 0-3 + theirs 4-7). sk3 paperexact_arms.py synced from sk2 canonical.
+- **Queue** (start as capacity/wakes allow): 2c per-metric remedy-failure verdict table (pure
+  CPU, next), 1d archival content-count law (CPU), 1c exemplar arms added to z×a freezes (sk3),
+  1b example-blind GEPA (one GPU), 2b de-censor rung (~235 metrics, one strong executor),
+  1e calibration frontier (planted machinery), 2d LoRA in-weights probe (LAST, needs training).
+- Still in flight from the robustness batch: hvcert10110 rescore (sk1 GPU0 server / sk2
+  client), hotpot seeds s1/s2 (sk1 GPU1/2), ifbench→aime chain (sk1 GPU3), hover 5-pass
+  prefix (sk2, queued behind l1ly).
