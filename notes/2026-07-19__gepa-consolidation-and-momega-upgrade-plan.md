@@ -5544,3 +5544,45 @@ Cross-box session live: vLLM Qwen3-8B server on sk1 GPU0 port 8203 (sk1 vllm dro
 all four candidates = protocol intact. Monitors re-armed. Consolidation pull DONE:
 outputs/consolidated_boxes_20260805/{sk1,sk2,sk3} — 180 result.json + 46 rescore_k3.jsonl +
 run/lane logs (~1.1GB; caches and vllm logs excluded).
+
+## HB199 (2026-08-05) — user green-lights robustness arms (background); token-parity RESOLVED BY MEASUREMENT; AIME iso-compute PREREG
+
+**User directive:** the declined robustness arms are un-declined — "you can run these, especially
+since we do have boxes open, but run them in the background." Focus moves to scaling-law work.
+
+**1. Token-parity extension (hotpot) — CLOSED WITHOUT A RUN.** Measured from artifacts:
+- M_ω search (`unitrecomb_v5sk2` proposals.jsonl, non-final phases): 17,300 calls,
+  call-weighted mean candidate 2,674 chars ⇒ ≈46.3M candidate-chars.
+- GEPA@16,700 (`official_truematch16700` gepa_state.bin): 53 candidates, mean 4,155 chars
+  (303–8,902), 16,821 total evals, 53 full 300-item val evals ⇒ ≈70M candidate-chars
+  (val-eval-weighted; minibatch remainder ~900 calls at similar mean).
+- **At equal calls GEPA's realized candidate-prompt mass EXCEEDS M_ω's (~1.5×)** — call parity
+  is already token-generous to GEPA on the search side at this budget. A "token-parity
+  extension" would SHRINK GEPA's budget, not grow it. The HB189 "token accounting widens the
+  ratio" claim was about the @600 comparison and DEPLOYMENT prompt length; both still true.
+  One-sentence disclosure replaces the arm. (Item-side tokens shared equally by construction —
+  same items, same programs.)
+
+**2. AIME iso-compute probe — PREREG (frozen NOW, before the arm runs).** Arm: GEPA `official`
+@6,870 calls (= M_ω's actual AIME spend per budget audit), gepa-seed 0, tag `isocompute6870`,
+box sk1 (idle; sk2 full). Decision statistic: same-session 3-candidate rescore
+(M_ω `unitrecomb_v5sk2` + GEPA@6,870-shipped + GEPA@600-shipped `official`), k=5 passes,
+newest same-fingerprint blocks, paired bootstrap 20k on mean item delta, n=150. Primary
+contrast M_ω − GEPA@6,870. Mapping: CI>0 → M_ω leads even at parity (upgrade from tie);
+CI covers 0 → **tie confirmed at parity** (expected; strengthens the ties clause); CI<0 →
+GEPA leads at parity, report inversion first. Prior recorded: certified AIME row is a tie
+(+.007 n.s.); expectation = CI covers 0.
+
+**3. Seed replications — LAUNCHING (sk1, background).** `--gepa-seed` added to
+paperexact_arms.py (threads to dspy.GEPA(seed=...); default 0 = every prior run; syntax-checked;
+synced sk2→sk1 with rescore_k3.py; optuna installed in sk1 venv). Lanes (arm_lane_sk1.sh:
+sk1 paths, .venv vllm, no --disable-log-requests, $7=seed):
+- GPU1 port 8211: hotpot official @16,700 seed 1, tag `truematch16700_s1`
+- GPU2 port 8212: hotpot official @16,700 seed 2, tag `truematch16700_s2`
+- GPU3 port 8213 chain: ifbench official @2,400 seed 1 (`bm2400_s1`, advisor's fold-in) →
+  aime official @6,870 seed 0 (`isocompute6870`, prereg above)
+Seed-replication readout (descriptive, no new prereg needed): per-seed shipped-candidate test
+scores under the arm's own 5-pass final test, quoted as a range next to the single-seed
+disclosure; certification rescore only if a seed lands within the certified CI of a decision.
+Box note: arms run on sk1 (sk2 occupied); seed variance thus includes box variance — disclosed.
+GPU0 = hvcert server (in use); GPU7 taken by another user 21:30Z; GPUs 5-6 left free.
