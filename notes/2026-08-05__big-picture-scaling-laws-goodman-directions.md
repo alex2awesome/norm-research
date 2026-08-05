@@ -140,3 +140,27 @@ clear (hvcert rescore + 2 hotpot seeds + ifbench/aime chain still on GPUs 0–3)
 metric-recovery frame via zxa-style freeze arms (exemplars-in-rubric = zero runner changes;
 exemplar labels from frontier-consensus verdicts, reconstruction-only rule preserved); sk3 box
 per metric_implementer rule, GPUs 3/6/7 only.
+
+### FRAMING DECISION (user, 2026-08-05) — SUPERSEDES the RTK/STK/CTK mapping above
+
+Paper #2 does NOT probe types of tacit knowledge — that claim is retracted from the framing.
+The user's ruling, verbatim in substance: the paper probes the BLOCKERS TO EXPLICIT knowledge —
+Collins' criteria/remedies (better string / coded string / better listener) — and that framing
+is preserved. The RTK/somatic/collective mapping is NOT bought and must not structure the paper.
+
+What this changes:
+- The H-triple (reader/window/message) is DEMOTED from "Collins' types made measurable" to
+  LOCAL FAILURE EXPLANATIONS: candidate mechanisms invoked when a specific remedy
+  underperforms (why more string stops paying → window/reader; why scaling doesn't close a
+  gap → message-as-explanation). They are hypotheses about mechanism, never a taxonomy of the
+  tacit, and never certified as "this metric's knowledge is collective/somatic/etc."
+- The diagnosis matrix (remedies × failure explanations) survives, read column-first: each
+  instrument administers one remedy; H-labels annotate failures descriptively.
+- This is also the defensible claim ordering: certifying a TYPE of tacitness requires ruling
+  out every rival explanation (incl. H-writer/search incompleteness + artifact modes) — hard;
+  "this remedy fails here, best-supported local explanation is X" is what the data supports.
+
+What this does NOT change: the experiment battery. 1a–1d probe the internal structure of the
+"better string" remedy (WHICH KIND of string: definitions vs exemplars vs anchors vs
+segmentation); 2a–2c probe the "better listener" remedy. 1e calibrates the string channel.
+All interpretation text for these experiments should be written in remedy language.
