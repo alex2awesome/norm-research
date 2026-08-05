@@ -5506,3 +5506,41 @@ concentration-study workers) — rescore launch deferred rather than stacked (re
 (pid 3175419, pidfile ~/hvcert_watch.pid, 48h cap): launches `rescore_gen.sh <gpu> 8202 hover
 hvcert10110 …` on first free GPU. Laptop-side completion monitor re-armed (polls 15 min for
 "RESCORE hvcert10110 COMPLETE"). Document freeze still in force — no paper edits.
+
+## HB198 (2026-08-05) — advisor certifies branch A; clerical audits PASS + 3 free replications; hvcert10110 crash/fix
+
+**Advisor rulings on HB197 (Fable, standing order):** (a) IFBench branch A CORRECTLY TRIGGERED —
+frozen rule applied verbatim, no peeking (lanes completed unattended), and the contrast fired
+against the HIGHER of the two GEPA blocks (conservative). (b) Statement of record drafted
+(advisor verbatim, queued under freeze): "...M_ω scores .454 against .418 for GEPA's shipped
+prompt at an equal 2,400-call budget (+.036 [+.008,+.065], p=.011) and .406 at its default
+600-call budget (+.048 [+.020,+.076], p=.0002). At both budgets GEPA's final selection returned
+the unmodified seed... Budget matching extends to 2,400 calls only; M_ω's actual spend was
+23,300 calls, and no GEPA arm was run at that spend. One GEPA seed and one rescore block per
+arm." Certified +.048 REPLACES mixed-session +.040 everywhere. NEVER quote: old +.040; bm2400's
+own-session .414/.399 as anything but raw; .4177-vs-.4062 as "GEPA improved" (same prompt =
+wobble); "full parity" for ifbench; any GEPA "saturates" phrasing. (c) Rebuttal ranking
+unchanged; +2 GEPA seeds @16.7k hotpot RISES within slot (GEPA shipped seed on 2 of 3 win
+benches → "single-seed degenerate GEPA" is now the sharpest attack); optional cheap ifbench
+seed replicate @2,400 flagged — NEEDS USER SIGN-OFF. (d) hvcert10110 prereg: no objection;
+registry note: freeze postdates the raw peek but statistic is verbatim HB193 inheritance
+(disclosed); hover wobble figure cited from ledger, not in-session.
+
+**Clerical audits (advisor-ordered) — BOTH PASS:**
+1. Pass count: every rescore block records `passes: 5` with 5 per-pass means ("k3" is the
+   script filename only).
+2. Block census: ifcert = ONE complete same-fingerprint 3-candidate set (port 8200 session,
+   utc 2026-07-29T23:31Z, max_tokens 24000). Older 07-28 blocks are three SEPARATE complete
+   same-session pairs (M_ω + official, ports 8078/8180/8186, max_tokens 8000) → free
+   replication: M_ω − GEPA@600 same-session delta = +.0456 / +.0401 / +.0214 / +.0476 (ifcert)
+   — positive in four independent sessions. Single-session caveat now attaches ONLY to the
+   @2,400 contrast.
+
+**Ops:** hvcert10110 attempt 1 crashed at data load — datasets 5.0 refuses script datasets when
+HF Hub resolution falls back to cache (transient sk2 NAT64 reset; Hub 200 on retest; NOT a
+version regression — 5.0.0 installed 07-22, hovercert 07-29 worked via the parquet path).
+Cross-box session live: vLLM Qwen3-8B server on sk1 GPU0 port 8203 (sk1 vllm dropped
+`--disable-log-requests` → removed), client on sk2 (relaunched ~21:20Z); one fingerprint for
+all four candidates = protocol intact. Monitors re-armed. Consolidation pull DONE:
+outputs/consolidated_boxes_20260805/{sk1,sk2,sk3} — 180 result.json + 46 rescore_k3.jsonl +
+run/lane logs (~1.1GB; caches and vllm logs excluded).
