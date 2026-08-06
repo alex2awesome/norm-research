@@ -353,3 +353,16 @@ show-vs-tell hunt.
 ALSO (user base-rate demand): labeled-domain replications = (a) 1a gold Q→A exemplars
 (running); (b) planted arms re-selected by CODE TRUTH (launching now — kills the crowd-label
 confound on the headline stated≫shown claim); (c) silver-labeled humor/CW exemplars queued.
+
+## CODE-TRUTH PLANTED HARVEST (2026-08-06 ~18:55Z): the crowd-label confound is DEAD for the
+## planted claim
+
+Provably-correct exemplars (selected by computed rule truth) transmit NO better than
+crowd-labeled ones — big tier, vs code truth: name .573 / definition .842 / crowd-ex .601 /
+**code-truth-ex .595** / ct-placebo .558. Same picture vs the frontier reference
+(.607 vs .598). Identical result pattern in the small tier (~.51 everything except
+definition .68-.71). ⇒ The stated≫shown gap on rules is a property of the CHANNEL, not of
+label quality — even perfect examples of "contains a digit" barely beat the bare name at
+70B-class, while the stated rule scores .84-.89 against actual truth. The unlabeled-examples
+concern does NOT touch the planted headline. (It remains live for CONTESTED metrics — exactly
+what the flip-functional lanes are measuring now.)
