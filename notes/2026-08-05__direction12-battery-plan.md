@@ -266,3 +266,18 @@ alexander-spangher still dead. **Thinking mode works on the subscription endpoin
 thinking-BUDGET dial (third dose-response instrument, zero marginal cost). Plan: 100-call
 trace-length smoke on real metric prompts first, then the humor focused slate think/no-think
 (~21M tok ≈ 25% of one week). Weekly use-it-or-lose-it batching.
+
+## ALL-DOMAINS HARVEST (2026-08-06 ~06:20Z; 36/36 panels; big-tier balanced agreement)
+
+**PLANTED replication (user-required): the stated≫shown result holds in ALL FIVE domains.**
+exemplars-alone vs definition: humor .606/.889 · CW .550/.818 · peer .619/.774 · math
+.577/.707 · news .500/.761. Examples of a code-checkable rule never transmit better than ~name
+level; the stated rule adds +.15–.28 everywhere. Placebos ≤ true arms throughout.
+Notable secondary: def+exemplars ≥ definition in 4/5 domains (CW .911 vs .818 — examples ADD
+on top of statements there); authored-exemplar content-specificity (auth−auth_mm) replicates:
+CW +.057 reaches / +.072 planted, math +.130 planted, peer +.136 planted.
+**NEWS = instrument-suspect, not a finding**: all exemplar arms ≈ .50 (chance) while name .71
+and dossier .89 work — the 500-char truncation of ~2,000-char homepage probes likely destroys
+exemplar recognizability, and the news reference has only 2 frontier voters. Flag, don't quote.
+Peer REACHES definition .515 < name .719 is n=1-base × 4 execs — noisy, park.
+Artifacts: sk3 outputs/osl_multi/zxaex_read_{task}.json.
