@@ -404,3 +404,21 @@ accepted flip must not degrade B) / holdout H (touched ONCE, at the end). Plus a
 TRUE ref must sit ≈ name — if null shows gains, the harness leaks). Long-text exemplars
 truncated 500ch. Selection executors BOTH at content-emergence scale: llama70b (GPU7, live)
 + qwen25-72b (GPU5, waits behind triage). Outputs flip_functional_v2_<exec>.json.
+
+## DISCUSSION SEED (2026-08-06, from user question "is the example itself explicit knowledge?")
+
+Queued prose direction (freeze respected): an example is an explicit ARTIFACT whose
+knowledge-content is conditionally tacit — transmission-by-example = string transfer +
+receiver-side induction; the tacit component is RELOCATED from sender to receiver, not
+eliminated. Channels differ in division of epistemic labor: definitions carry intension
+(sender did the abstraction), examples carry extension (receiver must induce). Empirical
+mapping: emergence curve = receiver induction capacity switching on (dead string → live
+evidence); k-flatness = bottleneck is induction capacity, never evidence quantity; code-truth
+control = limit is the induction step, not label quality; functional selection = even CHOOSING
+good teaching examples is tacit (discoverable only by transmission — Polanyi at the meta-level).
+Inversion hypothesis: LLMs are the limiting case of Collins's interactional expert (encultured
+at training time through text) → intensional channel lands on a prepared prior, in-context
+induction emerges late; predicts the human/LLM show-vs-tell inversion weakens with scale
+(matches Table-2 trend). Construct consequence: better-string remedy splits into intension-
+carrying vs extension-carrying strings; the example-channel bound is irreducibly JOINT
+(string × listener) — the case where executor-indexing of articulation bounds is essential.
