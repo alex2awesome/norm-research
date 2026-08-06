@@ -422,3 +422,21 @@ induction emerges late; predicts the human/LLM show-vs-tell inversion weakens wi
 (matches Table-2 trend). Construct consequence: better-string remedy splits into intension-
 carrying vs extension-carrying strings; the example-channel bound is irreducibly JOINT
 (string × listener) — the case where executor-indexing of articulation bounds is essential.
+
+### Discussion-seed REFINEMENT (user objection 2026-08-06: "a bare name also imposes tacit
+### comprehension")
+
+Correct — replace "demonstration relocates the tacit component" with the DIVISION-OF-LABOR
+formulation: every channel is a contract over receiver contribution, differing in KIND:
+name = pointer (~0 content; receiver supplies the whole concept from prior POSSESSION);
+examples = extension samples (receiver supplies the INDUCTIVE leap); definition = compressed
+intension (receiver supplies GROUNDING + application); dossier = scaffolded grounding.
+"Relocation" is only correct RELATIVE TO the definition channel (abstraction step moves
+across the wire); relative to the name, examples move work toward the sender.
+Empirical teeth: the three receiver contributions DISSOCIATE — possession is family-relative
+(dialects) and window-shaped; grounding gains exist at every scale; induction gains are
+scale-emergent (~0 below 14B) and uncorrelated with grounding gains across metrics. One lump
+of "tacit comprehension" would not produce three independent curves. Operational "tacit" is
+reserved for: NO channel's delta closes the gap (possession absent + grounding insufficient +
+induction insufficient) = the H-message cell. Name-only success = internalization, never
+articulation evidence.
