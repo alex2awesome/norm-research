@@ -255,3 +255,14 @@ parse-fail rate — backend already templates with enable_thinking=False, so thi
 surgical addition) + osl_sweep --readout flag. COST NOTE: thinking generation is 10-100×
 logprob reads → think panels run the FOCUSED slate (bases × definition + planted), 20-probe
 smoke test gates any ladder. Prereg prediction recorded in task #26.
+
+### GLM REVIVED (2026-08-06): Lite plan active — 3b frontier leg UNBLOCKED
+
+User bought z.ai Lite (10k credits/wk ≈ 87M glm-5.2 tok/wk). Verified: `.z-ai-api-key.txt`
+LIVE (laptop+sk3, identical) + `.z-ai-api-key-spangher.txt` LIVE (distinct string);
+alexander-spangher still dead. **Thinking mode works on the subscription endpoint**
+(`thinking:{type:enabled,budget_tokens:N}`, returns thinking blocks; smoke 248 tok @ budget
+256) and glm-4.7 alias resolves → 3b gains the frontier leg: GLM-4.7/5.2 think toggle AND a
+thinking-BUDGET dial (third dose-response instrument, zero marginal cost). Plan: 100-call
+trace-length smoke on real metric prompts first, then the humor focused slate think/no-think
+(~21M tok ≈ 25% of one week). Weekly use-it-or-lose-it batching.
