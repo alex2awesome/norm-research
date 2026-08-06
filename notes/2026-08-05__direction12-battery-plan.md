@@ -106,3 +106,41 @@ CPU build from local artifacts tonight; grows columns as 1a/1c land.
 ## Decision points to bring to the user (not before data)
 - After 1a: hover extension + mixed-arm? After 1c gates: which metrics go into 1e's matched-
   complexity comparison set. After 2b: regime census refresh wording.
+
+## 1c FIRST READ (2026-08-06 00:55Z — ladder complete in 35 min, logprob readouts, 2,466 rows)
+
+Balanced agreement with the frozen frontier-dossier reference, big-tier locals
+(qwen25-14b/32b, llama70b, qwen25-72b), all 41 bases, reference recomputed per item from 4
+frontier executors' dossier verdicts (unanimity + tie rates stored in refstats):
+
+| class | name | defn | dossier* | corpus-ex | def+ex | corpus-ex MM | authored-ex | authored MM |
+|---|---|---|---|---|---|---|---|---|
+| PLANTED | .582 | **.889** | .885 | .606 | .885 | .548 | .653 | .527 |
+| REACHES-ANCHOR | .722 | .797 | .835 | .772 | .803 | **.784** | .774 | .762 |
+| DIALECT-SUSPECT | .782 | .818 | .911 | — | — | — | .813 | .771 |
+| TACIT-CANDIDATE | .700 | .738 | .791 | — | — | — | .737 | .690 |
+
+(*dossier is favored by construction — the reference IS dossier-anchored; compare among
+non-dossier arms and vs placebos.)
+
+**Findings (first-read, big tier):**
+1. **The demonstration channel is weak everywhere as a standalone.** Exemplars never beat a
+   definition in any class. Sharpest on PLANTED (mechanical rules with code truth): 8 examples
+   .606 vs the stated rule .889 — even 70B-class locals barely induce "wordcount>median" from
+   examples. Direct evidence for Noah's "models are not good enough at learning from tacit
+   examples" — and it extends to fully-mechanical content.
+2. **Corpus exemplars FAIL their content gate on REACHES** (.772 true vs .784 mismatched —
+   the placebo does as well): the small lift over name is generic anchoring, not content.
+3. **Authored contrast exemplars carry real content exactly where criteria are contested**:
+   TACIT-CANDIDATE +.047 over placebo (.737/.690), DIALECT +.042 — the largest content-specific
+   exemplar effects — and reach parity with definitions there. But:
+4. **The dossier's edge is NOT reducible to its exemplar section** (authored-ex ≪ dossier in
+   every class): whatever the 400-word dossier transmits, most of it is not the examples.
+5. Placebo ordering sane everywhere (MM ≤ true arm; PLANTED placebos at floor) — instrument
+   behaves.
+
+Caveats attached: dossier-anchored reference (see *), 8 exemplars fixed (k-scaling is 1a's
+job), big-tier aggregate only (per-executor β fits + small tier pending), exemplar-item
+masking applied uniformly per base. Artifacts: sk3 outputs/osl_multi/zxaex_firstread.json
+(+ local snapshot outputs/osl_multi_local/zxaex_firstread_20260806.json), panels
+mbar_zxaex_humor_<exec>.npz ×9, freeze_zxa_ex_humor_v1.json.
