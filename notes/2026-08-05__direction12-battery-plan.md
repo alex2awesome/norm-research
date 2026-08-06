@@ -200,3 +200,15 @@ rule-induction survives the format and label controls. No contradiction with pri
 a recognizable subset of contested, gestalt-type criteria transmit better by showing than
 telling, including one where telling outright fails; **strong form NOT supported** — channels
 are uncorrelated rather than anti-correlated, and many tacit bases respond to neither.
+
+## ALL-DOMAINS EXPANSION LAUNCHED (2026-08-06 ~02:59Z, user directive: past humor into all domains)
+
+freeze_zxa_ex_{creative_writing,peer_review,math,news_homepages}_v1.json built (46/29/47/66
+entries; long-text tasks: 3+3 exemplars truncated 500ch). Corpus-base decisiveness by task:
+CW 8/11, math 9/10, news 8/21, peer 3/10 — the contested-crowd pattern replicates across
+domains (peer/news weakest). Ladders on sk3 GPU5 (small execs) + GPU7 (big), ~36 panels.
+Launch hiccups fixed en route: meta.task must be HYPHENATED preset name; meta needs
+n_probes (merged runner fields from v1 freezes); self-match kill trap avoided via bash -s.
+PLANTED replication comes free: 5 planted bases × each new task = cross-domain planted table.
+Queued next: k-scaling exemplar arms (k∈{2,8,16,32}, humor) after this ladder; CoT/generative
+arm = design note pending; user ruled NO OpenRouter for 2b (wait for local GPUs).
