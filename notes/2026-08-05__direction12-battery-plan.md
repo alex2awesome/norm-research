@@ -324,3 +324,15 @@ skip-if-exists (requires per_family present). Registry +12 entries (gptoss/r1qwe
 phi/mistral/seedoss/glmz families; MoE = z-points only per axis discipline).
 NEXT CPU: 3a family-verdict join (qwen3 5-rung y vs frozen crowd × llama/qwen25 verdicts →
 plateaus-everywhere set).
+
+### Triage post-mortem (2026-08-06 ~11:00Z): premature — downloads still in flight
+
+10/11 legs crashed instantly with NoneType/EngineCore errors = WEIGHTS NOT YET DOWNLOADED
+(9 downloads active; R1-32B at 9.6/65GB — NAT64 is slow). Auto-relaunch armed: triage refires
+when download count hits 0 (lane resume-safe; the degenerate gpt-oss-20b file will retry by
+the era-guard). REAL finding from the run: **gpt-oss is incompatible with the logprob battery
+in this env** — 120b fails snapshot-path resolution; 20b loads but nan_rate=1.00 (harmony
+reasoning-channel format defeats first-token P(YES)) → gpt-oss routes to 3b's generative
+readout for ANY use, and likely drops as 2b listener. 2b listener fallback order:
+(1) any triage survivor with z>2.546; (2) GLM-5.2 API hard-readout panels next weekly window
+(~65M tokens); (3) disclose 2b as bounded-by-current-frontier.
