@@ -5656,3 +5656,11 @@ Table 1 ONLY via fresh same-session rescores — hover row v2 = 5 candidates (st
 truematch10110 + bm2400 + official + mipro-shipped) in one session; pupa row = 4 candidates
 (official + merge-shipped + mipro-shipped + unitrecomb) in one session with the SAME glm-5.2
 judge for all four. Never splice raw arm numbers into the table.
+
+## HB201-addendum (2026-08-06 ~10:25Z) — MIPROv2-hover LANDED; PUPA legs retried
+
+MIPROv2-hover (heavy, 4.6h): **seed .356 → best .485 raw** (own 5-pass session) — the
+"never run on HoVer" cell now has a measurement; enters Table 1 ONLY via the 5-candidate
+re-mint rescore (HB201 rule). PUPA legs aborted on teardown-lag (busy-guard saw the dying
+hover server; zero GLM spend); relaunched as pupa_chain_sk1.sh with wait-for-free before each
+leg. Raw .485 never quoted against certified numbers (cross-session).
