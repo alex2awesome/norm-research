@@ -310,3 +310,17 @@ they ran locally tonight). LESSON for the registry: skip-if-exists guards must c
 READOUT ERA, not just existence; same trap class as prenanfix/.bak leakage.
 2b hinges on the fresh 32B z clearing qwen25-32b's 2.546; if not, the de-censoring listener
 falls to gpt-oss-120b (weights down). 3a family-verdict join runs after the battery lands.
+
+### Fresh qwen3-32b battery + reasoning-slate triage (2026-08-06 ~10:50Z)
+
+qwen3-32b TRUE z = **2.424** (auc .919) — ladder complete & monotone (0.98/1.19/1.98/2.32/2.42)
+but BELOW qwen25-32b (2.546) → not a frontier point; 2b listener falls to the triage winners.
+**Battery triage chain launched (GPU5, 11 models)**: gpt-oss-120b first (2b candidate), then
+r1-distills / phi4-reasoning / magistral / seed-oss / glm-z1 / gpt-oss-20b. Dual purpose:
+(i) pick the 2b listener (need z>2.546); (ii) map instrument compatibility — reasoning models
+with forced-<think> templates may break the no-think logprob readout (degenerate battery = a
+FINDING that routes them to 3b's generative readout, not a bug). Era-guard added to
+skip-if-exists (requires per_family present). Registry +12 entries (gptoss/r1qwen/r1llama/
+phi/mistral/seedoss/glmz families; MoE = z-points only per axis discipline).
+NEXT CPU: 3a family-verdict join (qwen3 5-rung y vs frozen crowd × llama/qwen25 verdicts →
+plateaus-everywhere set).
