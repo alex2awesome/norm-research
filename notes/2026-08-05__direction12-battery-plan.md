@@ -212,3 +212,30 @@ n_probes (merged runner fields from v1 freezes); self-match kill trap avoided vi
 PLANTED replication comes free: 5 planted bases × each new task = cross-domain planted table.
 Queued next: k-scaling exemplar arms (k∈{2,8,16,32}, humor) after this ladder; CoT/generative
 arm = design note pending; user ruled NO OpenRouter for 2b (wait for local GPUs).
+
+## Direction 3 added (user, 2026-08-06): family-robustness + reasoning-as-articulation
+
+**3a (#25) family-robust plateau census.** Finding that motivates it: 63/185 plateau-adjacent
+metrics get DIFFERENT family verdicts, and the split is structured — Qwen saturates early on
+PROSE-ECONOMY constructs (economy/concision/endings cluster, 7/8 top examples) while Llama
+saturates early on PERFORMANCE/PERSONA constructs (delivery, comic voice, conjecture-
+refutation, actionable suggestions). Same fault line the z×a exchange-rate work found
+independently (compressed-quotable: Llama metric-B / Qwen metric-A) — two instruments, one
+family-culture split. Plan: Qwen3 ladder (1.7/4/8/14/32B, registry extended, weights
+downloading to sk3) as the third staircase, no_think mode → "plateaus-in-ALL-families" set =
+the executor-robust plateau candidates. Launches on GPUs 5/7 when EXALL finishes.
+**Hive-mind caveat (queued appendix discussion, user raised):** model families share
+pretraining corpora and practice, so cross-family agreement is NOT independence — an
+everywhere-plateau bounds EXECUTOR-RELATIVE tacitness (the paper's construct) and must never
+be quoted as human-tacitness. Mitigations: family-conditional verdicts always reported; a
+non-US-lab family point (GLM hard rungs) in the triangulation; planted anchors certify the
+instrument independently of shared culture.
+
+**3b (#26) self-articulation arm.** User: reasoning models "are essentially doing extra
+articulation." Qwen3 hybrid thinking = same weights ± reasoning → the cleanest possible test:
+think−no_think gain per metric class = the value of SELF-articulation, comparable to the
+external-articulation arms in the same grid. Requires the generative readout path (also
+serves the CoT-amplified exemplar rebuttal leg). Sharpest prediction to test: reasoning gains
+should concentrate where external articulation fails (contested classes) IF self-articulation
+accesses content that external strings cannot; if instead gains mirror the definition arm,
+reasoning is just internal restatement.
