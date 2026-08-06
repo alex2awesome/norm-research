@@ -144,3 +144,30 @@ job), big-tier aggregate only (per-executor β fits + small tier pending), exemp
 masking applied uniformly per base. Artifacts: sk3 outputs/osl_multi/zxaex_firstread.json
 (+ local snapshot outputs/osl_multi_local/zxaex_firstread_20260806.json), panels
 mbar_zxaex_humor_<exec>.npz ×9, freeze_zxa_ex_humor_v1.json.
+
+## 2a FIRST PASS + 1c-v2 replication arms + unblocks (2026-08-06 ~01:30Z)
+
+**2a (labels found LOCALLY — datasets/prompt-optimality-test/runs/, task unblocked).** Joins
+perfect (0 unmatched). Hover Qwen3 ladder: window replicates and extends — 1.7B mild+ / 4B
+PEAK (craft +.042 89%pos > mech +.029 81%) / 8B ≈0 / 14B +.035 / 32B negative. AIME: 1.7B
+floor (units hurt) / 8B strongly NEGATIVE (−.059) / 32B positive (+.053, 88%pos) — window
+sits high on hard tasks. TWO CAVEATS OWED: (i) the 8B trough is partly SELECTION-REGRESSION,
+not window — pools were screened on 8B behavior (delta_8b/won_8b), so 8B re-measures inherit
+winner's-curse regression while other rungs measure fresh; HB172's "8B≈0" carries the same
+caveat. (ii) aime-8B sign here (strongly negative) conflicts with HB172's "8B 75% pos" —
+different measurement pass; reconcile against HB172's source before quoting either.
+Artifact: outputs/analyses/unit_value_by_type_20260805/.
+
+**1c-v2 ICL-replication arms RUNNING** (sk3 GPU5+7, freeze_zxa_ex2: 14 bases × 2 arms):
+`exemplars_fmt` (canonical interleaved Text→Yes/No demos, same items) tests the format
+hypothesis; `exemplars_shuf` (same items, ~half labels wrong — the Min et al. 2022 control)
+tests content-vs-anchoring. Emergence check ALREADY DONE from existing rows: content-specific
+exemplar effect (true−mismatched) grows with scale — PLANTED ~0 below 14B → +.07/+.11 @70B/72B
+corpus, +.17/+.15 authored; TACIT ~0 → +.05-.08; REACHES flat everywhere = Wei-et-al-style
+emergent in-context label learning, in-house.
+
+**2b scoped for OpenRouter**: 260 metrics × 300 probes ≈ 78k judgments, hard YES/NO readout
+(no logprobs on OR), est. $25–80 at big-open-model pricing — no 4-GPU local 405B needed;
+dialect-discount rules apply (compare orderings not levels). Awaiting user OK on ~$50.
+**1e, 2d, 1d: user green-lit ("do it").** 1d next CPU block; 1e after ex2 harvest; 2d needs
+training-infra plan.
