@@ -5586,3 +5586,27 @@ scores under the arm's own 5-pass final test, quoted as a range next to the sing
 disclosure; certification rescore only if a seed lands within the certified CI of a decision.
 Box note: arms run on sk1 (sk2 occupied); seed variance thus includes box variance — disclosed.
 GPU0 = hvcert server (in use); GPU7 taken by another user 21:30Z; GPUs 5-6 left free.
+
+## HB200 (2026-08-06) — HOVER FULL-PARITY CERTIFIED, BRANCH A: THE M_ω vs GEPA LINE IS CLOSED
+
+hvcert10110 same-session rescore landed (attempt-3, sk1-server/sk2-client, one fingerprint
+2026-08-05T21:20:24Z port 8203, k=5 verified in blocks, n=300, 20k paired bootstraps; frozen
+HB197 §3 rule applied verbatim):
+
+| candidate | certified mean |
+|---|---|
+| M_ω `unitrecomb_stair` | .5767 |
+| GEPA@10,110 (FULL parity = M_ω's actual hover spend) | .5020 |
+| GEPA@2,400 | .4740 |
+| GEPA@600 | .4706 |
+
+- **Primary contrast M_ω − GEPA@10,110: +.0747 [+.0480, +.1027] p<1e-5 → CI>0 → BRANCH A.**
+- GEPA budget curve certified in ONE session: 600→2,400 +.003 (n.s.; replicates HB191
+  budget-insensitivity at 4×) but 2,400→10,110 **+.0280 [+.0060,+.0507] p=.012** — GEPA does
+  improve at full parity on hover; refines "budget-insensitive" to "insensitive at 4×, mildly
+  sensitive at 17×"; M_ω leads regardless.
+- **Line closed (user directive 2026-08-05):** all three stars now survive budget matching —
+  hotpot +.0693 @16,700 (HB195), hover +.0747 @10,110 (this), ifbench +.0361 @2,400
+  (HB197/198, scoped). Certified same-session numbers replace all older quotes.
+- Registry note per HB198(d): housekeeping checks passed (one fingerprint ✓, k=5 ✓, n=300 ✓,
+  shipped candidates rescored ✓); raw .5033 never quoted against certified numbers.
