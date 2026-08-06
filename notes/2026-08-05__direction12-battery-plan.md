@@ -281,3 +281,18 @@ and dossier .89 work — the 500-char truncation of ~2,000-char homepage probes 
 exemplar recognizability, and the news reference has only 2 frontier voters. Flag, don't quote.
 Peer REACHES definition .515 < name .719 is n=1-base × 4 execs — noisy, park.
 Artifacts: sk3 outputs/osl_multi/zxaex_read_{task}.json.
+
+## k-SCALING HARVEST (2026-08-06 ~07:00Z): the exemplar channel is FLAT in k
+
+Dose-response k=2/8/16/32 (humor, 14 decisive bases, same reference/masking; big tier):
+- PLANTED: .576 → .593 → .602 → .600 — a +.03 crawl that stops by k16; definition = .877.
+  QUADRUPLING the examples (8→32) adds nothing; the stated rule's lead is untouchable at any
+  dose we can fit in context.
+- REACHES: .748 → .760 → .764 → .764 — flat, and ≤ the mismatched placebo (.771) at EVERY k:
+  the anchoring interpretation is dose-independent.
+- Small tier: flat at ~chance on planted; mildly DECLINING in k on reaches (.590→.561) —
+  below the capability floor, more examples add confusion, not signal.
+**Verdict: the exemplar channel saturates by k≈2–8 in the metric frame — "more examples" is
+not a transmission path for rules or criteria.** ICL rollover prediction confirmed here;
+the benchmark-frame version (1a, k to 20 with token matching) still running. Artifacts:
+sk3 outputs/osl_multi/zxaex3_kcurve.json + mbar_zxaex3_humor_*.npz.
