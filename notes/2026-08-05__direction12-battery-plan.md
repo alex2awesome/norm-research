@@ -366,3 +366,29 @@ label quality — even perfect examples of "contains a digit" barely beat the ba
 70B-class, while the stated rule scores .84-.89 against actual truth. The unlabeled-examples
 concern does NOT touch the planted headline. (It remains live for CONTESTED metrics — exactly
 what the flip-functional lanes are measuring now.)
+
+## 1c-v3 PILOT RESULTS (2026-08-06): functional selection WORKS at 70B — and the crowd was
+## suppressing it
+
+Family-crossed pilot (5 contested humor bases scoreable; 2 broke on sparse refs — v2 fixes):
+
+**qwen25-14b selection: functional never beats definition** (sets stay near-seed; train gains
+don't transfer). Consistent with the emergence curve — 14B can't read example content.
+
+**llama70b selection: functional exemplars WIN on the predicted cells:**
+- "Shared knowledge & reference accessibility" (frontier obj): **functional .908 > name .864 >
+  definition .773** — a +.135 holdout show-beats-tell win, and **2/3 selected labels CONTRADICT
+  the crowd majority** — the flips are doing the work. This is the same base that was
+  definition-NEGATIVE in the earlier scan; the user's functional design recovered the signal
+  the consensus labeler was destroying.
+- "Balancing humor with pathos" (encoder obj): functional .907 > definition .878.
+- Definition-friendly metrics stay definition-friendly (Concision: def .818 ≫ functional .665)
+  — functional selection does not fake wins where the statement channel is genuinely better.
+
+**Answer to "how much is crowd labeling affecting things": on contested metrics, materially —
+it was suppressing real demonstration-channel wins that only appear when (a) labels are chosen
+by transmission (user's flip design) and (b) the reader is at content-emergence scale (70B).**
+Caveats: n=5 bases, single split, no confirmation passes — deltas ~2-3σ, promising not
+certified. V2 (queued): full-bank ambivalence panel → 16/16 coverage, confirmation passes on
+accepted flips, multi-split holdout, then the ladder rerun of winning functional sets.
+Artifacts: outputs/osl_multi_local/flip_functional_{qwen25-14b,llama70b}.json.
