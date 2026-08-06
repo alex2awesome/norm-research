@@ -336,3 +336,20 @@ reasoning-channel format defeats first-token P(YES)) → gpt-oss routes to 3b's 
 readout for ANY use, and likely drops as 2b listener. 2b listener fallback order:
 (1) any triage survivor with z>2.546; (2) GLM-5.2 API hard-readout panels next weekly window
 (~65M tokens); (3) disclose 2b as bounded-by-current-frontier.
+
+## 1c-v3 SPEC (user design, 2026-08-06): FUNCTIONAL exemplar validity via flip-influence
+
+User's construction, adopted: an example-label assignment is CORRECT iff it improves
+transmission — flip m(x_i), re-run decoder, accept iff HELD-OUT reconstruction MI rises.
+Replaces the consensus labeler (which structurally fails on contested metrics — 0/16 TACIT
+crowd-certifiable, the biased-slice problem the user identified). Design: candidates =
+crowd-AMBIVALENT items only (~20-40/metric — the ones consensus discards); batched flips with
+greedy refinement (~15-30 decoder+rescore cycles/metric); train/holdout split for
+selection-vs-report (Q1 machinery); confirmation passes on accepted flips (winner's-curse);
+scope disclosure: correctness is encoder-relative (transmission of m_ω's concept, T-lower-bound
+framing). Pilot: the 16 humor TACIT-CANDIDATEs, next free GPU. Readout: do functionally-
+selected exemplars beat definitions where definitions fail — the un-biased version of the
+show-vs-tell hunt.
+ALSO (user base-rate demand): labeled-domain replications = (a) 1a gold Q→A exemplars
+(running); (b) planted arms re-selected by CODE TRUTH (launching now — kills the crowd-label
+confound on the headline stated≫shown claim); (c) silver-labeled humor/CW exemplars queued.
