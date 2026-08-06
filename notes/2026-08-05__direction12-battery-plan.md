@@ -239,3 +239,19 @@ serves the CoT-amplified exemplar rebuttal leg). Sharpest prediction to test: re
 should concentrate where external articulation fails (contested classes) IF self-articulation
 accesses content that external strings cannot; if instead gains mirror the definition arm,
 reasoning is just internal restatement.
+
+### 3b expanded to MULTI-FAMILY reasoning slate (user, 2026-08-06) + build scope
+
+Reasoning gain measured three ways, family-crossed (motivated by the dialect findings):
+1. **Same-weights toggle**: Qwen3 1.7-32B think vs no_think.
+2. **Matched-base pairs** (reasoning-trained vs instruct of the SAME base already in panels):
+   R1-Distill-Qwen-14B/32B ↔ Qwen2.5-14B/32B-Instruct; R1-Distill-Llama-8B ↔
+   Llama-3.1-8B-Instruct; Phi-4-reasoning ↔ phi-4.
+3. **Non-US-lab point**: GLM-Z1-32B-0414 (weights TBD).
+Weights downloading to sk3 (cache on the 84T array, 10T free — the 438G scare was the root
+mount, not the cache). Build: vllm_backend.score_binary_gen (chat template with
+enable_thinking=True / R1-native, generate, parse post-</think> YES/NO, hard 0/1 +
+parse-fail rate — backend already templates with enable_thinking=False, so this is a
+surgical addition) + osl_sweep --readout flag. COST NOTE: thinking generation is 10-100×
+logprob reads → think panels run the FOCUSED slate (bases × definition + planted), 20-probe
+smoke test gates any ladder. Prereg prediction recorded in task #26.
