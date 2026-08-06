@@ -392,3 +392,15 @@ Caveats: n=5 bases, single split, no confirmation passes — deltas ~2-3σ, prom
 certified. V2 (queued): full-bank ambivalence panel → 16/16 coverage, confirmation passes on
 accepted flips, multi-split holdout, then the ladder rerun of winning functional sets.
 Artifacts: outputs/osl_multi_local/flip_functional_{qwen25-14b,llama70b}.json.
+
+## 1c-v3 SCALE-UP LAUNCHED (2026-08-06 ~21:00Z, user directive: more metrics, more flips,
+## airtight train/test)
+
+flip_functional_v2: ~73 non-planted slate bases × 5 domains; candidates 24 items × both
+labels (48 proposals), 6×8 greedy rounds, set cap 12. **Leakage protocol upgraded to
+three-way stable-hash split**: train-A (selection, ΔA≥.01) / train-B (confirmation gate —
+accepted flip must not degrade B) / holdout H (touched ONCE, at the end). Plus a
+**selection-null leak detector** every 3rd base (search vs permuted labels; holdout scored vs
+TRUE ref must sit ≈ name — if null shows gains, the harness leaks). Long-text exemplars
+truncated 500ch. Selection executors BOTH at content-emergence scale: llama70b (GPU7, live)
++ qwen25-72b (GPU5, waits behind triage). Outputs flip_functional_v2_<exec>.json.
