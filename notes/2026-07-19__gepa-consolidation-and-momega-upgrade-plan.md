@@ -5639,3 +5639,20 @@ Advisor (Fable, standing order) CONFIRMS branch A. Registry items, closed here:
    CI; divergent seed ⇒ same-session rescore before any claim moves). If ifbench seed 1 ships
    a non-seed candidate, soften "returned the unmodified seed at both budgets" to per-seed.
    Token-parity measurement is hotpot-scoped; hover/ifbench token accounting unmeasured.
+
+## HB201 (2026-08-06) — Table-1 hole-filling chain launched (user directive)
+
+sk1 GPU0 (freed by killing the idle hvcert server, PID 559218) now runs the chain:
+(1) **MIPROv2 on hover** (arm mipro, tag miprov2sk1, MIPRO-heavy spends what it spends) —
+closes the "MIPROv2 never run on HoVer" candidate-set gap. (2) **PUPA GEPA+Merge @600** +
+(3) **PUPA MIPROv2** — unblocked by the revived GLM Lite subscription; judge + untrusted model
+= glm-5.2 via z.ai, IDENTICAL wiring to the existing PUPA cells (comparability preserved;
+new-account caveat disclosed). ZAI_KEY_FILE pinned to the live key (the default lookup prefers
+the dead alexander- file). GLM smoke from sk1 passed pre-flight; pupa legs auto-skip if GLM
+unreachable. Token draw est. 15-60M of this week's 87M window.
+
+**Post-chain requirement (session-of-record rule, HB200-addendum §3):** new cells enter
+Table 1 ONLY via fresh same-session rescores — hover row v2 = 5 candidates (stair +
+truematch10110 + bm2400 + official + mipro-shipped) in one session; pupa row = 4 candidates
+(official + merge-shipped + mipro-shipped + unitrecomb) in one session with the SAME glm-5.2
+judge for all four. Never splice raw arm numbers into the table.
