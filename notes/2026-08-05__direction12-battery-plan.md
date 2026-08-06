@@ -11,13 +11,20 @@ local failure explanations. Task IDs = harness task list #16–#24; update BOTH 
 |---|---|---|---|---|
 | #16 | 1a unit-vs-exemplar prefix | **RUNNING** since 08-05 ~22:30Z | sk3 GPU6 | harvest on "MODES1A COMPLETE" (monitor armed) |
 | #17 | 2c remedy-verdict table | **v1 BUILT** (1,270 rows; β columns pending 1c) | CPU local | join per-metric β/κ when 1c lands |
-| #18 | 1d content-count law | queued (CPU) | local | locate labels file + proposals join |
-| #19 | 1c z×a exemplar arms | queued | sk3 | locate mbar per-item scores → selection → freeze → ladder |
-| #20 | 1b example-blind GEPA | queued | sk1 (first free GPU) | patch --blind-feedback, launch @16,700 |
-| #21 | 2a type-conditioned unit values | queued (CPU) | local | locate omega_unit_labels_checkability.json |
+| #18 | 1d content-count law | labels IN HAND (494 steps, local); needs per-step score join | local | trace extractor provenance → join round scores |
+| #19 | 1c z×a exemplar arms | **RUNNING** (freeze built: 124 entries; ladder on GPU5+7 since 08-06 00:06Z) | sk3 GPU5+7 | harvest on 2× "LANE-DONE" (monitor armed) |
+| #20 | 1b feedback-blind GEPA | **RUNNING** (hotpot @16,700, since 08-05 ~23:55Z) | sk3 GPU3 | v1 = feedback-blind (traces still visible); trace-blind = v2 decision after |
+| #21 | 2a type-conditioned unit values | **BLOCKED**: labels file lost on all boxes | — | regenerate via HB172 recipe (Codex wave) |
 | #22 | 2b de-censor RISING tail | queued (big GPU); TARGET LIST READY (260 oids) | sk3 ×4 GPUs | after 1a/1c settle; needs 405B-FP8 TP=4 |
 | #23 | 1e calibration frontier | queued (after 1c) | sk3 | build constructs after exemplar formatting exists |
 | #24 | 2d LoRA in-weights probe | DEFERRED | — | needs user re-confirm before start |
+
+**1c first structural finding (before any GPU result)**: crowd-labelable exemplars exist for
+9/10 REACHES-anchors and 5/5 planted but 0/16 TACIT-CANDIDATE and 0/10 DIALECT-SUSPECT — for
+contested criteria no consensus labeler can certify a demonstration. Covered instead by the
+`exemplars_authored` arm (dossier CONTRAST-EXEMPLARS section, all 41 bases) with its own
+mismatched placebo; corpus-exemplar arms run on the 14 decisive bases. Fit-time rule: mask
+zxa.exemplar_idx items (verbatim in rubric).
 
 Also in flight (campaign, not battery): hvcert10110 hover rescore (sk1 GPU0 srv / sk2 client);
 hotpot GEPA seeds s1/s2 (sk1 GPU1/2); ifbench→aime chain (sk1 GPU3); hover 5-pass prefix
