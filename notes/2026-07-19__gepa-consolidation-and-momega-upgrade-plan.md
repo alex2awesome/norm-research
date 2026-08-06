@@ -5610,3 +5610,32 @@ HB197 §3 rule applied verbatim):
   (HB197/198, scoped). Certified same-session numbers replace all older quotes.
 - Registry note per HB198(d): housekeeping checks passed (one fingerprint ✓, k=5 ✓, n=300 ✓,
   shipped candidates rescored ✓); raw .5033 never quoted against certified numbers.
+
+## HB200-ADDENDUM (2026-08-06) — advisor rulings on hover branch A + required registry lines
+
+Advisor (Fable, standing order) CONFIRMS branch A. Registry items, closed here:
+1. **Block census (required before quoting):** hvcert10110 attempts 1–2 crashed at data load
+   and wrote ZERO rescore blocks under the tag; attempt 3 produced the only complete
+   4-candidate same-fingerprint set — "newest blocks" had no discretion.
+2. **Missing CIs, now recorded from the same bootstrap run:** M_ω − GEPA@600 = +.1060
+   [+.0773, +.1353]; M_ω − GEPA@2,400 = +.1027 [+.0740, +.1320] (both p<1e-5, same session).
+3. **Session-of-record rule (adopt):** each table row quotes exactly ONE scoring session —
+   the newest containing the complete candidate set for the row's strongest contrast. Earlier
+   certified sessions retire to independent-replication status in their own blocks: hover
+   M_ω−GEPA@600 now positive in three independent sessions (+.0860 HB190 / +.0967 HB191 /
+   +.1060 HB200) — appendix replication line, like ifbench's four.
+4. **Statement of record + Table-1 budget-story sentence:** advisor's exact drafts queued
+   (in the advisor transcript, mirrored in CAMPAIGN_STATE queue): hover row .577/.502/.474/.471
+   with actual calls; budget summary = all three stars survive equal-call matching, ties clause
+   mandatory ("GEPA reaches parity at 1/11–1/42 spend on the other three").
+5. **Phrasing bans updated:** "diminishing returns that never close the gap" is HOTPOT-SCOPED —
+   hover's certified curve is flat-THEN-rising (+.003 at 4×, +.028* on the 2,400→10,110 leg),
+   the opposite shape; per-benchmark budget curves mandatory. Never: raw .5033 vs certified;
+   HB191 numbers as row-of-record (replication only); .474-vs-.471 as "GEPA improved" (n.s.);
+   blanket "budget-insensitive on hover"; "GEPA saturates"; "full parity" for ifbench;
+   "equal compute".
+6. **Live exposure:** single-seed until the sk1 seed arms land — hold the HB199 pre-commitment
+   (per-seed descriptive range; certification rescore ONLY if a seed lands near the decision
+   CI; divergent seed ⇒ same-session rescore before any claim moves). If ifbench seed 1 ships
+   a non-seed candidate, soften "returned the unmodified seed at both budgets" to per-seed.
+   Token-parity measurement is hotpot-scoped; hover/ifbench token accounting unmeasured.
