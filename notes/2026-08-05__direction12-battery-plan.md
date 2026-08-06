@@ -171,3 +171,32 @@ emergent in-context label learning, in-house.
 dialect-discount rules apply (compare orderings not levels). Awaiting user OK on ~$50.
 **1e, 2d, 1d: user green-lit ("do it").** 1d next CPU block; 1e after ex2 harvest; 2d needs
 training-infra plan.
+
+## 1c-v2 REPLICATION HARVEST + per-base Noah-hypothesis test (2026-08-06 ~02:10Z; 8/9 execs,
+## final re-harvest after qwen25-72b lands)
+
+**Format leg (exemplars_fmt, canonical interleaved demos, same items):** PLANTED .671 vs
+list-format .606 (+.065 — format real but small) — still ≈.22 below the stated rule (.889).
+REACHES .781 ≈ list .772 ≈ placebo .784.
+**Label leg (exemplars_shuf, ~half labels wrong — Min et al. control):** PLANTED .589 vs fmt
+.671 (−.082: labels DO carry content at big tier, consistent with the emergence curve);
+REACHES .759 vs .781 (−.022: labels nearly irrelevant — anchoring-dominated).
+**Verdict (firm):** we replicate BOTH halves of the ICL literature in one instrument —
+Min-style content-insensitivity below the emergence point and on already-internalized
+criteria; Wei-style emergent label-learning at 70B-class; and the stated>shown gap for
+rule-induction survives the format and label controls. No contradiction with prior work.
+
+**Per-base channel comparison (big tier, 29 bases with all arms):**
+- corr(definition gain, exemplar content-specific gain) = +.45 overall but −.03 EXCLUDING
+  PLANTED → for real bank metrics the two channels are UNCORRELATED (neither redundant nor
+  systematically complementary).
+- Exemplars>definitions bases are gestalt/pattern constructs: "Framing via titles/headlines"
+  (+.100), "High-concept hook uniqueness" (+.092), "Accumulation/format-subversion" (+.052),
+  "Self-deprecation" (+.036, def_gain only +.008), and "Shared knowledge and reference
+  accessibility" (+.034 with def_gain NEGATIVE −.012 — the cleanest show-beats-tell case).
+- Definitions>>exemplars: all 5 planted (statable rules) + "Genre/style classification"
+  (taxonomic content).
+**Noah's hypothesis ("ICL helps where words fail"): WEAK FORM SUPPORTED** — at the item level
+a recognizable subset of contested, gestalt-type criteria transmit better by showing than
+telling, including one where telling outright fails; **strong form NOT supported** — channels
+are uncorrelated rather than anti-correlated, and many tacit bases respond to neither.
