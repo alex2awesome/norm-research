@@ -440,3 +440,27 @@ of "tacit comprehension" would not produce three independent curves. Operational
 reserved for: NO channel's delta closes the gap (possession absent + grounding insufficient +
 induction insufficient) = the H-message cell. Name-only success = internalization, never
 articulation evidence.
+
+## 1a + 1b HARVESTS (2026-08-06 ~22:00Z) + three-capabilities figure
+
+**1a COMPLETE (gold-labeled benchmark frame, same-session, 5 passes):** hotpot seed .409;
+UNIT curve climbs to .627 @k=40 (still rising); EXEMPLAR curve (gold Q→A demos) climbs to
+.564 @k=16 then ROLLS OVER (.541 @k=20) — the ICL-literature rollover, observed with
+ground-truth examples. Token-matched at ~2,700-2,850 added chars: units .607 vs examples .541
+(+.066). Examples DO help over seed (+.13-.15 — real few-shot gains on a real task) but the
+articulated-unit channel dominates at every matched budget and keeps climbing. **The
+stated>shown ordering survives the labeled domain — user's base-rate demand fully answered
+(gold labels, no crowd anywhere).** Artifact: runs/prefix_modes1a_hotpot.json (sk3) + local.
+
+**1b COMPLETE (feedback-blind GEPA @16,700): seed .411 → best .412 (+.001).** Sighted GEPA at
+the same budget: .408 → .580. **Removing the metric's textual feedback kills GEPA's entire
+improvement** — prompt optimization is feedback-compilation; scores alone teach nothing.
+(v1 scope: feedback strings blanked; GEPA's reflective traces still nominally available —
+yet zero progress, so the feedback text was the load-bearing example-mediated signal.)
+
+**Three-capabilities figure BUILT** (user request): possession (name level) / grounding
+(def−name) / induction (exemplar−placebo) vs battery-z, per family (solid Llama / dashed
+Qwen2.5), bank-metrics + planted panels. Story visible at a glance: possession rises early
+and family-locally; grounding positive at every scale (planted: +.20-.39); induction pinned
+at ~0 until z≈1.5 then climbs in BOTH families. outputs/analyses/figs_20260806/
+three_capabilities_emergence.png (+ .py).
