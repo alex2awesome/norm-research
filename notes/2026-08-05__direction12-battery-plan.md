@@ -296,3 +296,17 @@ Dose-response k=2/8/16/32 (humor, 14 decisive bases, same reference/masking; big
 not a transmission path for rules or criteria.** ICL rollover prediction confirmed here;
 the benchmark-frame version (1a, k to 20 with token matching) still running. Artifacts:
 sk3 outputs/osl_multi/zxaex3_kcurve.json + mbar_zxaex3_humor_*.npz.
+
+## Qwen3 staircase COMPLETE + stale-battery catch (2026-08-06 ~10:35Z)
+
+All 5 rungs × battery + humor285 + 9 task panels done (45 panels, rc=0 throughout).
+Fresh battery ladder: 1.7B z=0.98 → 4B 1.19 → 8B 1.98 → 14B 2.32 — clean dense monotone
+staircase; 8B matches Qwen2.5-14B (generational gain ~one size class).
+**CATCH: the apparent 32B inversion (z=1.55) was a STALE FILE** — outputs/osl/qwen3-32b.json
+was the July OpenRouter HARD-readout probe (api_serving/hard_readout keys, different z scale,
+never poolable); the lane's skip-if-exists guard suppressed tonight's battery. Archived to
+qwen3-32b_APIHARD_stale_20260706.json.bak; fresh battery re-running on GPU5 (panels are fine —
+they ran locally tonight). LESSON for the registry: skip-if-exists guards must check the file's
+READOUT ERA, not just existence; same trap class as prenanfix/.bak leakage.
+2b hinges on the fresh 32B z clearing qwen25-32b's 2.546; if not, the de-censoring listener
+falls to gpt-oss-120b (weights down). 3a family-verdict join runs after the battery lands.
