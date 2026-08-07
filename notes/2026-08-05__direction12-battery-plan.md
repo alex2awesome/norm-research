@@ -555,3 +555,23 @@ HURTS: peer "reproducibility evidence" −.204, news framing criteria — weak r
 Ladder-assignment table = the §4 money object; feeds: #27 (rung-1 seam join), #28 full-bank
 campaign (middle fork), 2c verdicts (rungs 4-5), flip-v2 (demonstration prong), 3b
 (self-articulation column). Every lane now serves ONE exhibit.
+
+## PREREG — ABSTRACTNESS VALIDATION OF THE LADDER (frozen 2026-08-06, BEFORE the join is run)
+
+Danger named (user): circularity — "abstract" defined by rung makes the ladder a tautology.
+Design: the ladder's axis stays OPERATIONAL (receiver complement, measured); abstractness is
+a validation correlate ONLY, tested with two instruments independent of all transmission
+results: (i) published lexical concreteness norms (Brysbaert et al. 40k) over metric
+name+definition; (ii) our blinded 9-type/externality labels (assigned 07-28 from names,
+blind to regime, before the mode grid existed; κ=.75).
+FROZEN PREDICTIONS (computed only after final rung assignments from the full-bank campaign):
+  P1 mean concreteness decreases monotonically down the rungs;
+  P2 beyond-text share increases monotonically down the rungs;
+  P3 (the discriminating one): the two middle prongs (statement- vs demonstration-articulable)
+     are INDISTINGUISHABLE in concreteness but DIFFER in type profile (rule/taxonomy vs
+     gestalt/configural) — a kind-difference at matched abstractness that a single
+     abstractness scalar cannot produce.
+Landing zones: all hold → ladder tracks abstractness except where it forks by kind; a rung
+breaks monotonicity → reportable structure (watch: compilable-but-abstract normative
+standards); weak overall → "operational ladder does not reduce to lexical abstractness"
+(publishable as such). No abstractness language in the core results either way.
