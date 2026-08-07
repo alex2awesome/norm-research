@@ -483,3 +483,39 @@ three_capabilities_emergence.png (+ .py).
    seam-noncompiling pick out the SAME items ("four instruments, one boundary"), with
    disagreement cells shown honestly. Join-feasibility check first (seam labels are
    sub-rule-level).
+
+## §4.2b "STATEMENTS VERSUS DEMONSTRATIONS" — CONTENT PLAN (the examples program in the paper)
+
+Tie-in sentence from §4.2: the decompression rungs (name→definition→explanation→exemplars→
+dossier) rescue smaller executors; this subsection asks what each rung KIND actually carries.
+
+Paragraph-level plan (result → artifact):
+1. **Setup + the two frames** (metric grid template with rubric slot; benchmark prefix frame).
+   One design figure or a compact prose description; the arms table (name/definition/dossier/
+   corpus-ex/authored-ex + placebos) → appendix for full grids.
+2. **Stated ≫ shown on statable content, 5/5 domains** — the planted table (exemplars ~.55-.62
+   vs stated rule .71-.89 in every domain), WITH the code-truth control (label-quality confound
+   dead) and the labeled-domain replication (1a gold demos). [all-domains harvest + exct +
+   prefix_modes1a artifacts]
+3. **The channel is dose-flat**: k-scaling (metric frame 2→32 flat; benchmark frame rolls over
+   at k≈16 while units climb to k=40; token-matched +.066 units). ICL-literature positioning
+   paragraph HERE (Noah's citation: scaling-in-articulations vs scaling-in-examples; Min/Wei
+   replication-in-one-instrument). [ex3 kcurve + modes1a]
+4. **Content-from-examples is emergent and placebo-gated**: mismatched/shuffled/format controls;
+   emergence table (content-specific gain ~0 below 14B → +.07-.17 at 70B-class). [read2 +
+   controls]
+5. **Where demonstrations win**: the gestalt subset (per-base table: headline framing +.100,
+   hooks +.092, shared-knowledge with NEGATIVE def gain); authored-contrast arms cover
+   contested metrics (crowd-labelable-exemplars coverage table 14/15 uncontested vs 0/26
+   contested = the structural finding). [per-base scan + coverage counts]
+6. **Functional selection (the flip design)**: labels validated by transmission itself;
+   A-select/B-confirm/H-report protocol + null detector; pilot: 70B finds wins the crowd
+   suppressed (+.135 Shared-knowledge, 2/3 labels contradict crowd), 14B finds nothing
+   (emergence-consistent); v2 scale-up results slot here when harvested. [flip v1/v2 jsons]
+7. **The receiver-capabilities synthesis**: possession/grounding/induction dissociation —
+   THE FIGURE (three_capabilities_emergence.png, re-rendered with flip-v2) — feeding the §4
+   unifying thesis; forward-pointer to 3b (self-articulation) closing the capability set.
+Appendix companions: full mode-grid tables per domain + placebo columns; flip protocol +
+per-base results; exemplar-coverage-by-class table; news instrument-suspect flag.
+Discussion deposits: division-of-labor, interactional-expert inversion + scale prediction,
+1b feedback-compilation cross-reference.
