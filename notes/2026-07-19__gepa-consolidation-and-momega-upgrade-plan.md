@@ -5664,3 +5664,18 @@ MIPROv2-hover (heavy, 4.6h): **seed .356 → best .485 raw** (own 5-pass session
 re-mint rescore (HB201 rule). PUPA legs aborted on teardown-lag (busy-guard saw the dying
 hover server; zero GLM spend); relaunched as pupa_chain_sk1.sh with wait-for-free before each
 leg. Raw .485 never quoted against certified numbers (cross-session).
+
+## HB202 (2026-08-06 pm) — ifbench seed replicate + reasoning-battery triage + ops
+
+**ifbench seed-1 @2,400: seed .415 → accepted candidate .404 (test-REGRESSED) — 2/2 seeds now
+ship-the-seed.** "GEPA gained nothing from 4× budget on IFBench" is seed-robust; the per-seed
+disclosure upgrades from single-seed to 2/2. (Same-box caveat: sk1.)
+**Reasoning-model logprob compatibility (triage, fresh batteries):** R1-Distill-Qwen-14B/32B
+= EXACTLY .500 AUC (degenerate — forced-think template defeats first-token P(YES); as
+predicted → generative readout mandatory). **Phi-4-reasoning WORKS (z=1.671, composite .967)
+and scores BELOW its base phi4 (1.928)** — first matched-base datum: reasoning training
+costs −.26 z of no-think battery performance. No 2b listener found yet (need z>2.546);
+remaining candidates magistral/seed-oss/glm-z1 pending re-triage; fallback = GLM-5.2 API
+next weekly window. **Ops:** AIME iso-compute relaunched with settle-wait (teardown race,
+3rd occurrence — lane pattern now defaults to waitfree); PUPA merge ALIVE but GLM-slow
+(vllm log current, state checkpoints sparse); consolidation refreshed (1.2GB, 183 results).
