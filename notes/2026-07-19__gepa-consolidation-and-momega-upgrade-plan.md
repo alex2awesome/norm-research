@@ -5679,3 +5679,29 @@ remaining candidates magistral/seed-oss/glm-z1 pending re-triage; fallback = GLM
 next weekly window. **Ops:** AIME iso-compute relaunched with settle-wait (teardown race,
 3rd occurrence — lane pattern now defaults to waitfree); PUPA merge ALIVE but GLM-slow
 (vllm log current, state checkpoints sparse); consolidation refreshed (1.2GB, 183 results).
+
+## HB203 (2026-08-06 evening) — OVERNIGHT LANDINGS + ADVISOR RULINGS (fleet-wide data audit)
+
+**Landed raw:** PUPA official_merge @600: seed .60486 → best .78494 (n=221; regression_flag
+false; code-verified VAL-selected/test-scored-once — advisor's retract condition does NOT
+trigger). hover MIPROv2 @2400: .356 → .48466. ifbench seed-1 replicate .415→.404 (HB202).
+hover 5-pass unit-prefix curve COMPLETE: k=1..32, k=32 mean .5553 still climbing toward M_ω
+.5767 (artifact sk2 runs/prefix_5pass_hover.json, copied to consolidated archive).
+**Advisor (Fable) rulings:** (1) PUPA re-mint = same-session k=5 of seed+best+comparators on
+identical 221 items, certified judge (not GLM-in-loop), anchor passes, 20k paired bootstrap;
+re-verify seed level too. (2) MIPROv2-hover paper line once re-minted: "matched-budget
+MIPROv2 ≈ GEPA (.485 vs .474) and GEPA@4x (.502) still leaves ~.07-.09 to M_ω — margin not
+an artifact of a single/weak optimizer baseline"; NEVER "MIPROv2 beats GEPA" (.011 < noise).
+**NEVER-QUOTE additions:** .78494 next to certified numbers pre-re-mint; flip-v2 "null
+matches functional" as same-population claim (cross-composition); any flip-v2 K-of-5-domains
+tally (honest denominator 3: peer n=0 degenerate, news instrument-suspect).
+**flip-v2 same-bases check (advisor-mandated, run tonight):** restricted to the 5 humor
+bases WITH null controls: d_true +.101 vs d_null +.059, paired +.042, true>null 8/10 —
+label-dependent component UNDERDETERMINED at n=5 (pooled read had suggested pure format).
+At-scale leg MUST run the null selector on ALL bases. Global-flip concern excluded by
+construction (null labels = independent md5-random per item, not a permutation).
+CW/encoder-objective cell (+.071, 5/5): exactly ONE preregistered follow-up (advisor
+decision rule: same-bases null matches → kill; functional > null → scoped footnote).
+**Ops:** sk3 triage chain relaunched on GPU7 after cache-layout fix (new hf CLI wrote
+models--* WITHOUT hub/ prefix → 9 symlinks under shared_hf_cache/hub/). Consolidated
+archive topped up (62 sk1 result.json + prefix curve + flip-v2 + fresh battery jsons).

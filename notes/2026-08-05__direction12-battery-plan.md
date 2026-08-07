@@ -575,3 +575,77 @@ Landing zones: all hold → ladder tracks abstractness except where it forks by 
 breaks monotonicity → reportable structure (watch: compilable-but-abstract normative
 standards); weak overall → "operational ladder does not reduce to lexical abstractness"
 (publishable as such). No abstractness language in the core results either way.
+
+## §4.3 OSL — IDEAL-INSIGHTS SCHEME (user request 2026-08-06; the target claims for the section)
+
+Roles terminology settled (user): encoder = proposer of the articulation; receiver = the
+executor applying the rubric to make measurements; decoder = the model reconstructing the
+rubric from measurements. Encoder-ladder arm DECLINED (user): the bound requires the BEST
+encoder; a ladder of weaker encoders tightens nothing. Frontier-authored strings stay.
+
+The six target insights (each = one exhibit; status in parens):
+
+I1 CAPABILITY-BOUNDED vs ARTICULATION-BOUNDED census — per metric: curve still rising at
+   frontier (remedy = better receiver) vs plateau below ceiling (residual survives every
+   receiver we can buy = the articulation bound binds). Headline split X%/Y%.
+   (census done; 27%-of-rising deep-censored tail needs 2b listener or a disclosure caveat.)
+I2 PLATEAUS ARE FAMILY-ROBUST — plateau-everywhere set replicated across Llama/Qwen2.5/Qwen3
+   staircases; dialect set quantified & structured (Qwen prose-economy / Llama persona).
+   Answers hive-mind + dialect critiques. (3a staircases done; family-verdict join pending.)
+I3 ONE CURVE = A STACK OF PROCESS BOUNDS — decompose z-curve into internalization (name),
+   grounding (definition), induction (examples), self-articulation (reasoning): different
+   emergence points (possession early, grounding everywhere, induction top-of-ladder,
+   reasoning TBD via 3b think-toggle/budget-dial). Which process binds depends on receiver
+   scale. (three-capabilities figure done; 3b = the missing panel.)
+I4 WHAT KIND OF THING RESISTS — the plateau set is not random: enriched beyond-text/gestalt
+   (within-domain p=.049 humor/.004 peer), abstractness prereg P1-P3 as validation. Noah's
+   "how much is there vs what kind of thing is it". (join pending final rungs.)
+I5 FALLING LIMBS = DIVERGENCE-TOWARD-TRUTH — bigger receivers disagree with the crowd
+   because they are righter (verified on planted/code-truth); OSL curves are not monotone-
+   good and must not be read as degradation. (established on planted; general form = 2c join.)
+I6 LAW-NESS / PREDICTIVITY — LOO backtest .036-.063: low-z behavior PREDICTS frontier
+   transmission → cheap small-model probes forecast whether articulation will work for a new
+   metric. This is what makes it a scaling LAW and not a census. (done; needs write-up.)
+(+I7 = the 2c verdict table as the section's closer: every failure gets its remedy —
+   better receiver / better statement / demonstrations / nothing-works — Noah's literal
+   closing line "what can we do about the gap".)
+
+2d LoRA in-weights probe — DESIGN ANSWER (user asked what it looks like): ground truth is
+NOT flips (≤12 items, too few) and NOT task labels (reconstruction-only rule) — it is the
+same frontier-dossier reference verdicts every exemplar arm uses (~150 train-split items per
+metric). LoRA rank-8 on a small executor per metric = the WEIGHT channel toward the same
+reference the PROMPT channel targets; compare asymptote profile vs the ICL k-curve (which
+rolls over at k≈16). Controls: permuted-label LoRA + mismatched-metric adapter. Cost ~1-2
+GPU-days for a 20-metric × 2-base pilot + new peft training loop. RECOMMENDATION: park as
+future-work — the ICL rollover already carries the in-context half of Noah's point; revisit
+only if reviewers ask for the in-weights contrast. (Awaiting user ruling.)
+
+## FLIP-V2 HARVEST — llama70b selector COMPLETE 5/5 domains (2026-08-06 ~20:15 PT)
+
+Paired holdout functional−definition, 20k bootstrap (outputs/osl_multi_local/
+flip_functional_v2_llama70b.json; analysis inline, this session):
+| task | frontier obj | encoder obj | NULL control |
+|---|---|---|---|
+| humor | +.036 [−.020,+.093] n=22 | +.026 [−.014,+.064] n=28 | **+.059 win 4/5 n=5** |
+| creative_writing | −.002 n=4 | **+.071 [+.035,+.136] 5/5** | −.031 n=1 |
+| math | −.033 n=2 | −.002 n=5 | — |
+| news_homepages | −.014 n=11 | −.010 n=11 | −.023 n=3 |
+| peer_review | n=0 (holdout scoring returned null — 2 bases, min-count fails) | | |
+READ: the humor "gain" does NOT separate from the label-PERMUTED null selector — same-size
+boost with no label information = content-free exemplar-format effect, not transmission.
+Verdict shaping: optimized selection does NOT recover definition-level transmission beyond
+format; the ONE surviving cell is CW/encoder-objective (n=5, all-wins) — flag for the
+at-scale leg, don't headline. qwen25-72b selector (4/5 tasks, news mid-run): functional ≤
+definition throughout (humor encoder 10/28 wins) — selector-dependence replicates v1 pilot.
+Peer instrument gap: holdout min-counts fail at 2 bases — needs bigger peer slate in Leg 1.
+
+## OVERNIGHT sk1 LANDINGS (2026-08-06): PUPA merge + MIPROv2-hover raw numbers
+- PUPA official_merge @600 calls: seed_test .60486 → best_test .78494 (n_test 221) — raw,
+  needs the 4-candidate one-judge re-mint rescore before any Table-1 use.
+- hover MIPROv2 @2400: seed .356 → best .48466 — lands between GEPA@2400 (.4740) and
+  GEPA@10110 (.5020), far below M_ω .5767 (all HB200 certified scale); re-mint rescore
+  (5-candidate incl. MIPROv2-shipped) required before quoting side-by-side.
+- ifbench seed-1 replicate @2400: .415 → .404 (ships-the-seed 2/2, already HB202).
+- Triage chain RELAUNCHED on sk3 GPU7 after cache-layout fix (hf CLI wrote models--* WITHOUT
+  hub/ prefix; 9 symlinks added shared_hf_cache/hub/ → ../models--*). gpt-oss-120b still
+  rc=1 (incompatible, expected); magistral-24b running.
