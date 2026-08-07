@@ -848,3 +848,26 @@ Exhibit v1 landed: outputs/analyses/channel_scale_20260807/ — 9/30 top-rung li
 (authored 7/9, mostly REACHES); NOTE per-family view weakens the additive claim (def+ex >
 def only top-qwen REACHES +.023/.034 and llama endpoints) — P5 of the 4.2b skeleton must
 use the per-family numbers, not the pooled 4/5-domains line.
+
+## 3b MATCHED-BASE HARVEST (2026-08-07 13:30 PT): POST-TRAINING ≠ INFERENCE-TIME THINKING
+
+R1-distill vs same-pretraining instruct base, generative readout both sides (R1 native-think
+vs base no-think — the mode difference IS the treatment), humor, vs frontier-dossier ref:
+| pair | DIALECT | PLANTED | REACHES | TACIT-C |
+|---|---|---|---|---|
+| r1-14b vs qwen25-14b | **+.089** | +.003 | −.056 | +.004 |
+| r1-32b vs qwen25-32b | **+.090** | +.069 | −.083 | −.036 |
+READ: reasoning POST-TRAINING gains concentrate on DIALECT-SUSPECT (both rungs, +.09) and
+persist at 32B — a different signature from the within-model think toggle (planted-heavy,
+vanishing by 8B). REACHES degrade under R1 (−.06/−.08; deliberation hurts already-anchored
+constructs — consistent with the overthinking cells). TACIT-CANDIDATE ≈ 0 both rungs: the
+tacit wall holds under reasoning post-training too. n=5-9/class, needs paired bootstrap;
+dialect n=6. Mechanism question for §4.3 prose: does distilled deliberation re-align
+family dialect (R1 trained on DeepSeek traces), or does deliberation help contested-but-
+statable constructs generally? Cross-family test would need r1-llama-8b vs llama8b (gen
+readout run pending — r1-llama-8b logprob was degenerate).
+INSTRUMENT FLAGS: phi4-reasoning under GEN readout = chance on all classes (.47-.50) while
+its LOGPROB battery is healthy (auc .842) — its template defeats the </think> parse; gen
+numbers INVALID for phi4-reasoning until a template-specific parse lands (queue with the
+rescue-agent parser work). R1 enable_thinking no-op CONFIRMED exactly (think−nothink =
++.000/.001 all classes — same native mode both passes).
