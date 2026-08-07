@@ -826,3 +826,25 @@ flip becomes a named result with figure iff ex−def>0, 95% CI excluding 0, ≥2
 null-controlled, in ≥2 receiver families OR one frontier receiver; else stays footnote.
 Framing language captured in the audit transcript. Note hygiene: duplicate flip-verdict
 section removed (audit caught it).
+
+## SCALE-UP DIRECTIVE (user 2026-08-07 pm): "instruments need more scale" + frontier receivers
+
+Mapping instrument → scale-up in flight/queued:
+1. stated-vs-shown grid → full-bank flip-v3 (284 bases, GPU3 queue, running tonight) + Leg 1
+   full-bank arms when GPUs allow.
+2. code-truth → more planted rules only if user asks (parked).
+3. gold-label benchmark → done at benchmark scale (hotpot).
+4. k-dose → full-bank replication rides Leg 1.
+5. flip → v3 full-bank + functional-rubric LADDER (12 execs, queued ahead of v3).
+6. think×examples → 4-domain replication done; CIs pending.
+LIMIT LEG (user: "expand this scale question with bigger models incl GLM 5.2"):
+- GLM-5.2 ex-arm panel LAUNCHED (API agent): humor+math, authored/bare pairs + def_ex,
+  150-probe deterministic subset, 35M-token hard cap inside weekly window, planted-anchor
+  gate ≥.85, output mbar_zxaglmex_{task}_glm-52.npz + per-class limit table vs qwen25-32b.
+- gpt-oss-120b as 2nd frontier receiver: gated on GPU5 rescue validation (65GB MXFP4 fits
+  one B200; harmony parse rule from rescue agent) — then ex-arm panel via score_binary_gen.
+- Llama-405B-FP8 TP=4: still blocked on 4 simultaneously-free GPUs (other lineage holds 6/7).
+Exhibit v1 landed: outputs/analyses/channel_scale_20260807/ — 9/30 top-rung limit cells
+(authored 7/9, mostly REACHES); NOTE per-family view weakens the additive claim (def+ex >
+def only top-qwen REACHES +.023/.034 and llama endpoints) — P5 of the 4.2b skeleton must
+use the per-family numbers, not the pooled 4/5-domains line.
