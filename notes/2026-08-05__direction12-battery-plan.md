@@ -464,3 +464,22 @@ Qwen2.5), bank-metrics + planted panels. Story visible at a glance: possession r
 and family-locally; grounding positive at every scale (planted: +.20-.39); induction pinned
 at ~0 until z≈1.5 then climbs in BOTH families. outputs/analyses/figs_20260806/
 three_capabilities_emergence.png (+ .py).
+
+## PAPER-2 STRUCTURE DECISIONS (user, 2026-08-06 evening)
+
+1. §4 order: **Tacit-knowledge isomorphism FIRST, then "Statements versus demonstrations" as
+   its own subsection** with the rung-ladder tie-in (name→definition→explanation→exemplars→
+   dossier: 4.2 shows rungs rescue smaller models; 4.2b measures what each rung KIND carries).
+2. **Receiver-capabilities + reasoning material goes INTO paper #2** (not held for #4).
+3. User critique adopted: §4 lacks a unifying claim. Proposed thesis (recorded for the
+   Discussion/section-lead): transmission = string content + receiver complement; the four
+   subsections measure four complements (capability / internalization / induction /
+   zero-complement mechanization); articulable = some complement available, tacit = none.
+   Supporting devices: (a) three-capabilities dissociation figure (built); (b) acquisition
+   ordering as §4's arc (grounding early → possession mid/dialect → induction late →
+   self-articulation frontier → mechanization as receiver-elimination limit, explaining the
+   seam cliff's location); (c) NEW ANALYSIS (first Phase-2 item): per-metric cross-instrument
+   boundary agreement — do OSL-bounded/beyond-text, mode-grid all-channels-fail, and
+   seam-noncompiling pick out the SAME items ("four instruments, one boundary"), with
+   disagreement cells shown honestly. Join-feasibility check first (seam labels are
+   sub-rule-level).
