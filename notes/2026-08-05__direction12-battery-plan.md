@@ -787,22 +787,6 @@ consistent with family-dialect ownership. stated≫shown stands; footnote text s
 cannot" and cite both selectors. User's flip-functional design: VALIDATED as an instrument
 (the null control + three-way split did exactly their job).
 
-## FLIP VERDICT CLOSED (2026-08-06 23:00 PT) — null-all control in; ADVISOR RULE → FOOTNOTE
-
-Full-n within-base paired contrast (v2 true objectives vs v2b null-all, llama70b selector):
-humor n=22: d_true +.039 vs d_null +.004 → paired +.035 CI[+.017,+.054], true>null 82%;
-CW n=4: paired +.062 CI[+.015,+.145] 4/4; news null (instrument-suspect); peer/math n<3.
-The earlier "null matches functional" was the cross-composition artifact (advisor called
-it). Applying the PRE-AGREED decision rule (functional>null ⇒ scoped shown-channel
-footnote, NOT an overturn): **flip-selected exemplars carry a real label-dependent
-component (~+.04 over definition) — but ONLY for the llama70b selector/receiver; qwen25-72b
-shows functional ≤ definition everywhere.** Receiver-relative demonstration channel:
-demonstrations add where definitions are weakly absorbed (llama def .746 vs qwen .876) —
-consistent with family-dialect ownership. stated≫shown stands; footnote text should say
-"selection can recover a small, receiver-specific exemplar channel that placebo selection
-cannot" and cite both selectors. User's flip-functional design: VALIDATED as an instrument
-(the null control + three-way split did exactly their job).
-
 ## QUEUED (user 2026-08-07 am): CHANNEL x SCALE OSL EXHIBIT + edge-case emphasis
 
 User: edge cases where demonstrations succeed are of primary interest; want ALL variants
@@ -828,3 +812,17 @@ the domain's texts are readable by a 1.7B), mid-ladder ≈0-to-negative 4/4. Top
 32B planted +.103 is the one outlier vs the CW/peer negative-at-top pattern (32B REACHES
 −.090 fits) — top-rung behavior stays "mixed, needs CIs", do not fold into the
 overthinking claim yet. Artifacts mbar_zxagen_{mode}_math_qwen3-*.npz.
+
+## FABLE AUDIT RULING (2026-08-07): §4.2b STAYS A SUBSECTION — do not fold
+
+Verdict: the examples program is six orthogonal instruments converging on ONE
+characterization (capability-gated / dose-saturated / receiver-relative / additive-only),
+and demonstrating that the bound survives every adversarial manipulation IS the thesis of
+an "upper bounds" paper. Folding would overload §4.2, bury the code-truth + null-selector
+controls reviewers of negative results demand, and forfeit the standalone ICL contribution.
+Skeleton P1-P7 adopted (P6 = flip as methodological positive with scoped footnote; P7 =
+think-wall bridge to §4.3). CONTINGENCY RULE FROZEN: structure fixed, only prose promotes —
+flip becomes a named result with figure iff ex−def>0, 95% CI excluding 0, ≥2 domains,
+null-controlled, in ≥2 receiver families OR one frontier receiver; else stays footnote.
+Framing language captured in the audit transcript. Note hygiene: duplicate flip-verdict
+section removed (audit caught it).
