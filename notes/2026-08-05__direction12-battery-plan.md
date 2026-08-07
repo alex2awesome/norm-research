@@ -519,3 +519,22 @@ Appendix companions: full mode-grid tables per domain + placebo columns; flip pr
 per-base results; exemplar-coverage-by-class table; news instrument-suspect flag.
 Discussion deposits: division-of-labor, interactional-expert inversion + scale prediction,
 1b feedback-compilation cross-reference.
+
+## §4 ORDER FINAL (user, 2026-08-06) + EXAMPLES-AT-SCALE CAMPAIGN
+
+**Order: 4.1 code seam → 4.2 tacit isomorphism → 4.2b statements-vs-demonstrations → 4.3 OSL.**
+Arc = ascending receiver-dependence (receiver eliminated → grounding → induction → capability);
+each section hands its residual to the next; survives-all-four = the tacit remainder. Mirrors
+the intro's Collins criteria order (coded string → better string → better listener) — the
+unification made structural.
+
+**Examples campaign NOT finished — full-bank scale-up (extends Phase 1 by ~2-3 days):**
+Leg 1: corpus-exemplar + mm arms over all 1,270 bank metrics against a DEFINITION-anchored
+frontier reference (bank-wide panels exist; anchor change flagged — conservative for
+show-vs-tell). ~1 day on 2 B200s when flip-v2 frees GPUs 5/7.
+Leg 2: GLM-4.7 authored (+)/(−) contrast exemplars for ~300 metrics (all 65 BOUNDED +
+contested classes + stratified RISING/REACHES sample); ~0.5-1M tokens; gated authoring;
+starts next work block (API-only).
+Leg 3: flip-functional at scale over the contested tail with the same A/B/H + null protocol,
+after Leg 2 so all arms ride one ladder.
+§4.2b tables fill from full-bank versions; slate results become the pilot/replication tier.
