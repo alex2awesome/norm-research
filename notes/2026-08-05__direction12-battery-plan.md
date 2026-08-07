@@ -802,3 +802,20 @@ consistent with family-dialect ownership. stated≫shown stands; footnote text s
 "selection can recover a small, receiver-specific exemplar channel that placebo selection
 cannot" and cite both selectors. User's flip-functional design: VALIDATED as an instrument
 (the null control + three-way split did exactly their job).
+
+## QUEUED (user 2026-08-07 am): CHANNEL x SCALE OSL EXHIBIT + edge-case emphasis
+
+User: edge cases where demonstrations succeed are of primary interest; want ALL variants
+crossed with model size, OSL-style. Two parts:
+(A) ANALYSIS JOIN (no GPU): assemble one exhibit from EXISTING panels — arms name/def/
+    def+ex/corpus-ex/authored-ex(+placebos) x 9-executor ladder x 4-5 domains (36 panels)
+    + think/nothink ladders (humor/CW/peer/math) → per-class curves over z per channel;
+    treat channel curves like OSL regimes (emergence point, plateau, crossings). Edge-case
+    callouts: def+ex>def cells, 70B-class content emergence, receiver-relative flip channel.
+(B) NEW RUNS: flip-selected (functional) rubrics scored across the FULL local ladder
+    (logprob readout, both selectors' selected sets, exemplar_idx masked) — tests whether
+    the llama-receiver-specific +.035 channel is a curve (grows/shrinks with z) or a point.
+    Plus math think-panel (launched GPU3) + R1 matched-base gen pairs (launched GPU5).
+Morning allocations: GPU3 math think-ladder; GPU5 r1-qwen-14b/32b + phi4-reasoning +
+qwen25-14b/32b gen pairs; GPU6 agent A magistral-load fix; GPU7 OCCUPIED by other lineage
+(PID 2122639 — hands off) → agent B (seed-oss/gpt-oss rescue) does CPU diagnosis first.
