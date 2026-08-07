@@ -733,3 +733,26 @@ FROZEN PREDICTIONS:
     content; the induction boundary is a capability wall that compute cannot cross.
   Discriminator: think-gain(true−mm) vs think-gain(definition) per rung; report both with
     paired bootstrap over bases. Landing either way is §4.2b/§4.3 bridge material.
+
+## 3b-EX HARVEST (2026-08-06 22:40 PT) — PREREG DISCRIMINATOR: P-RESTATE
+
+Content-specific exemplar effect (true−mismatched, exemplar_idx masked, vs frontier ref):
+| rung | corpus nt→th (gain) | authored nt→th (gain) | definition think-gain (ref: 3b panel) |
+|---|---|---|---|
+| 1.7B | .000→.003 (+.003) | −.006→.023 (+.029) | planted +.335 / dialect +.196 |
+| 4B | .016→.042 (+.026) | .022→.057 (+.035) | planted +.207 |
+| 8B | .022→.039 (+.017) | .037→.040 (+.003) | ≈0 |
+| 14B | .005→.054 (+.049) | .018→.043 (+.025) | planted +.095 |
+| 32B | .047→.051 (+.004) | .046→.050 (+.004) | ≈0 |
+READ: think-gains on the CONTENT-FROM-EXAMPLES channel are +.00 to +.05 at every rung —
+an order of magnitude below the stated-channel gains at small z (+.20-.34). No leftward
+shift of the induction emergence point: a thinking 1.7B executes stated rules at frontier
+level yet still extracts ≈nothing from demonstrations. **P-RESTATE: reasoning amplifies
+stated content; the induction boundary is a capability wall that inference-time compute
+does not cross.** (Small positive gains at 4B/14B = "at most marginal" pending paired
+bootstrap — do not claim exactly zero.) Bridge sentence for §4.2b→§4.3: the two remedies
+that DON'T work at small scale (examples, k-dose) and the one that DOES (thinking over
+statements) triangulate the same conclusion — transmission is bounded by what can be
+STATED, and compute only helps execute statements, not induce or receive what statements
+don't carry. n=14 corpus / 29 authored pairs; humor; qwen3 family.
+Artifacts: mbar_zxagenex_{mode}_humor_qwen3-*.npz (10 files) + inline harvest.
