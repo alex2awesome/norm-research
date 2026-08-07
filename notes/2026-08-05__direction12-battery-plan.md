@@ -538,3 +538,20 @@ starts next work block (API-only).
 Leg 3: flip-functional at scale over the contested tail with the same A/B/H + null protocol,
 after Leg 2 so all arms ride one ladder.
 §4.2b tables fill from full-bank versions; slate results become the pilot/replication tier.
+
+## THE TARGET EXHIBIT (user scheme, 2026-08-06): THE ARTICULABILITY LADDER
+
+Per-metric assignment to highest achievable rung: COMPILES → STATEMENT-ARTICULABLE →
+DEMONSTRATION-ARTICULABLE → CAPABILITY-BOUNDED (rising) → PLATEAUS-EVERYWHERE (remainder).
+First population computed (big tier, cross-domain): compilables = attribution/lexical/numeric/
+counts/format/normative (seam); statement top = genre classification +.158, incongruity
+mechanics +.133/.100/.095, line-by-line justifiability +.087 (rule/taxonomy-shaped);
+demonstration top = headline framing +.178 (+.100 vs own definition), format-subversion +.153,
+satire tone +.115, hooks +.099 (gestalt-shaped); plateau = persona/enculturation/reception.
+**AMENDMENT (data-forced): the middle is a FORK not a step** — def-gain ⊥ ex-gain (r≈−.03);
+statement vs demonstration prongs differ in KIND (intension-friendly vs configural), rejoining
+at the capability rung. Bonus cell to watch at scale: STATEMENT-NEGATIVE metrics (definition
+HURTS: peer "reproducibility evidence" −.204, news framing criteria — weak refs, hedged).
+Ladder-assignment table = the §4 money object; feeds: #27 (rung-1 seam join), #28 full-bank
+campaign (middle fork), 2c verdicts (rungs 4-5), flip-v2 (demonstration prong), 3b
+(self-articulation column). Every lane now serves ONE exhibit.
