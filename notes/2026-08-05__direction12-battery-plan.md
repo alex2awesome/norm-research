@@ -649,3 +649,67 @@ Peer instrument gap: holdout min-counts fail at 2 bases — needs bigger peer sl
 - Triage chain RELAUNCHED on sk3 GPU7 after cache-layout fix (hf CLI wrote models--* WITHOUT
   hub/ prefix; 9 symlinks added shared_hf_cache/hub/ → ../models--*). gpt-oss-120b still
   rc=1 (incompatible, expected); magistral-24b running.
+
+## FLIP-V2 qwen25-72b selector COMPLETE (2026-08-06 20:49) — CONTRADICTS the llama70b cells
+
+Paired functional−definition, 20k bootstrap (flip_functional_v2_qwen25-72b.json, local):
+null-to-NEGATIVE in EVERY domain×objective — humor frontier −.013 [−.048,+.020], encoder
+−.007; CW frontier −.036* / encoder −.051* (the llama70b +.071 5/5 cell is **−.051 under
+qwen**: selector-specific, as advisor suspected); math/news negative. With the STRONGER
+selector, optimized exemplar selection never beats the stated definition. Remaining open
+cell: llama70b null-on-ALL-bases (v2b, running GPU3) → then flip verdict final.
+
+## OPS INCIDENT (2026-08-06 ~21:00): CUDA enumeration mismatch + zombie stubs
+battery_triage_lane's CUDA_VISIBLE_DEVICES=7 landed on PHYSICAL GPU6 (bus E3) — lane lacked
+CUDA_DEVICE_ORDER=PCI_BUS_ID (the standing rule; flip lanes got lucky). Chain left ALONE
+(working, just mislabeled: its remaining legs occupy physical 6). Killed by explicit PID:
+mag-waiter wrapper 1406990→child 1406992, orphan EngineCore stubs 559429 (GPU5, flip-qwen
+teardown residue) + 1313292 (GPU7, magistral timeout residue). gen_smoke_lane.sh +
+mag_retry.sh now export CUDA_DEVICE_ORDER=PCI_BUS_ID; smoke relaunched on physical GPU5
+(setsid, immune to ssh-channel death — 1st relaunch died silently with its ssh); magistral
+solo retry (timeout 5400) queued behind the chain for physical 7. Backend fix en route to
+smoke: sk3 OfflineVLLM has no _maybe_lora (local-only refactor) → score_binary_gen now
+calls eng.generate(texts, sp) plainly; magistral 40-min hang at weight-load under
+load_format=auto = separate issue, retry will tell.
+
+## 3b SMOKE PASSED + FULL-LADDER THINK PANEL LAUNCHED (2026-08-06 ~21:00)
+
+**Smoke (gen_smoke_{qwen3-8b,r1-qwen-14b}.json):** qwen3-8b — nan 0.0 all readouts,
+gen-nothink vs logprob agreement 1.00 (instrument-valid), think flips 15% of verdicts,
+think traces mean 1,583 / max 2,819 chars, truncation 0.0. r1-qwen-14b — logprob nan 1.0
+but GEN nan 0.0 (readout RESCUES the R1 family), thinks natively in both modes
+(nothink_has_think_tag 1.0) → matched-base pairs measurable, no within-model toggle.
+**Triage chain complete:** glm-z1-32b WORKS (z=1.31, auc .788, nan 0) — non-US-lab point
+banked; r1-llama-8b exactly .500 (degeneracy signature 3rd family member); r1-qwen-7b nan
+.82 / 1.5b auc .53; seed-oss-36b all-nan (incompatible, gen-readout rescue candidate);
+magistral solo retry running (physical 7, timeout 5400).
+**LAUNCHED: gen_think_panel across FULL qwen3 ladder** (definition arm, all humor slate
+bases incl. planted, 300 probes, both modes, MAX_GEN 1536): GPU5 chain 8b→32b, GPU6 chain
+1.7b→4b→14b. Outputs mbar_zxagen_{think,nothink}_humor_{exec}.npz. Harvest = think−nothink
+gain per metric class vs z: prereg prediction in task #26 (gains concentrate on contested
+classes iff self-articulation > restatement). Ops hardening: lanes now abort-if-busy after
+waitfree (no proceed-anyway), setsid launches, CUDA_DEVICE_ORDER=PCI_BUS_ID pinned.
+
+## 3b HARVEST — THINK-GAIN LADDER COMPLETE (2026-08-06 21:10 PT): PREREG LANDING ZONE 2
+
+Full qwen3 ladder, definition arm, balanced agreement vs frontier-dossier ref, think−nothink:
+| z | PLANTED | DIALECT | REACHES | TACIT-CAND |
+|---|---|---|---|---|
+| 1.7B z=.98 | **+.335** (.605→.940) | +.196 | +.144 | +.113 |
+| 4B z=1.19 | **+.207** | +.097 | −.029 | +.059 |
+| 8B z=1.98 | +.030 | −.008 | −.029 | −.022 |
+| 14B z=2.32 | +.095 | −.001 | −.006 | +.013 |
+| 32B z=2.42 | +.015 | +.062 | −.032 | −.018 |
+READ: think-gains are (a) INVERSELY capability-graded — large below z≈1.2, ≈0 from 8B up;
+(b) ordered PLANTED ≫ DIALECT > REACHES > TACIT-CAND at the small end — largest exactly
+where content is code-checkable, smallest on the contested/tacit classes. A thinking 1.7B
+hits .940 on planted = frontier no-think level. This is the prereg's SECOND landing zone:
+reasoning = internal restatement/derivation of already-articulable content (compute
+amplification for EXECUTING stated rules), NOT access to inarticulable content. The tacit
+residual survives inference-time reasoning at every rung → the articulation bound is not
+breached by self-articulation. Slots into §4.3 as the I3 panel closer + receiver-complement
+framing (reasoning complements CAPABILITY, not articulation).
+Caveats: humor only, definition arm only, one family, n=5-9/class, ref=no-think frontier.
+Artifacts: sk3 outputs/osl_multi/mbar_zxagen_{think,nothink}_humor_qwen3-*.npz (10 files);
+harvest inline this session. Extension candidates (tomorrow, user call): 2nd domain (CW),
+name-arm (does thinking rescue possession?), R1 matched-base pairs via same readout.
