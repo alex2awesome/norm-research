@@ -770,3 +770,35 @@ paired bootstrap; do not headline before CIs. n small (CW 3-4/class, peer 1-5).
 Artifacts: mbar_zxagen_{mode}_{creative_writing,peer_review}_qwen3-*.npz (20 files).
 3b domain matrix now: humor FULL (def+ex panels), CW def, peer def; remaining: math/news
 def panels + R1 matched-base pairs (tomorrow's block, GPUs free once flip-null ends).
+
+## FLIP VERDICT CLOSED (2026-08-06 23:00 PT) — null-all control in; ADVISOR RULE → FOOTNOTE
+
+Full-n within-base paired contrast (v2 true objectives vs v2b null-all, llama70b selector):
+humor n=22: d_true +.039 vs d_null +.004 → paired +.035 CI[+.017,+.054], true>null 82%;
+CW n=4: paired +.062 CI[+.015,+.145] 4/4; news null (instrument-suspect); peer/math n<3.
+The earlier "null matches functional" was the cross-composition artifact (advisor called
+it). Applying the PRE-AGREED decision rule (functional>null ⇒ scoped shown-channel
+footnote, NOT an overturn): **flip-selected exemplars carry a real label-dependent
+component (~+.04 over definition) — but ONLY for the llama70b selector/receiver; qwen25-72b
+shows functional ≤ definition everywhere.** Receiver-relative demonstration channel:
+demonstrations add where definitions are weakly absorbed (llama def .746 vs qwen .876) —
+consistent with family-dialect ownership. stated≫shown stands; footnote text should say
+"selection can recover a small, receiver-specific exemplar channel that placebo selection
+cannot" and cite both selectors. User's flip-functional design: VALIDATED as an instrument
+(the null control + three-way split did exactly their job).
+
+## FLIP VERDICT CLOSED (2026-08-06 23:00 PT) — null-all control in; ADVISOR RULE → FOOTNOTE
+
+Full-n within-base paired contrast (v2 true objectives vs v2b null-all, llama70b selector):
+humor n=22: d_true +.039 vs d_null +.004 → paired +.035 CI[+.017,+.054], true>null 82%;
+CW n=4: paired +.062 CI[+.015,+.145] 4/4; news null (instrument-suspect); peer/math n<3.
+The earlier "null matches functional" was the cross-composition artifact (advisor called
+it). Applying the PRE-AGREED decision rule (functional>null ⇒ scoped shown-channel
+footnote, NOT an overturn): **flip-selected exemplars carry a real label-dependent
+component (~+.04 over definition) — but ONLY for the llama70b selector/receiver; qwen25-72b
+shows functional ≤ definition everywhere.** Receiver-relative demonstration channel:
+demonstrations add where definitions are weakly absorbed (llama def .746 vs qwen .876) —
+consistent with family-dialect ownership. stated≫shown stands; footnote text should say
+"selection can recover a small, receiver-specific exemplar channel that placebo selection
+cannot" and cite both selectors. User's flip-functional design: VALIDATED as an instrument
+(the null control + three-way split did exactly their job).
