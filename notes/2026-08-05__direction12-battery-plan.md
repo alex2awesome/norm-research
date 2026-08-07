@@ -819,3 +819,12 @@ crossed with model size, OSL-style. Two parts:
 Morning allocations: GPU3 math think-ladder; GPU5 r1-qwen-14b/32b + phi4-reasoning +
 qwen25-14b/32b gen pairs; GPU6 agent A magistral-load fix; GPU7 OCCUPIED by other lineage
 (PID 2122639 — hands off) → agent B (seed-oss/gpt-oss rescue) does CPU diagnosis first.
+
+## MATH THINK-LADDER (2026-08-07 12:40 PT): 4/4 DOMAINS DIRECTIONALLY CONSISTENT
+math PLANTED think-gain: 1.7B +.070 / 4B +.017 / 8B −.035 / 14B +.027 / 32B +.103;
+REACHES: +.131/+.011/−.048/+.050/−.090. Small-z gain positive in 4/4 domains
+(1.7B planted: humor +.335, CW +.209, peer +.135, math +.070 — magnitude tracks how much
+the domain's texts are readable by a 1.7B), mid-ladder ≈0-to-negative 4/4. Top-rung: math
+32B planted +.103 is the one outlier vs the CW/peer negative-at-top pattern (32B REACHES
+−.090 fits) — top-rung behavior stays "mixed, needs CIs", do not fold into the
+overthinking claim yet. Artifacts mbar_zxagen_{mode}_math_qwen3-*.npz.
