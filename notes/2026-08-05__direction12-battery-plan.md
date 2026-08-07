@@ -756,3 +756,17 @@ statements) triangulate the same conclusion — transmission is bounded by what 
 STATED, and compute only helps execute statements, not induce or receive what statements
 don't carry. n=14 corpus / 29 authored pairs; humor; qwen3 family.
 Artifacts: mbar_zxagenex_{mode}_humor_qwen3-*.npz (10 files) + inline harvest.
+
+## THINK-LADDER CROSS-DOMAIN REPLICATION (2026-08-06 22:50 PT): CW + PEER CONFIRM
+
+PLANTED think-gain by rung — humor / creative_writing / peer_review:
+1.7B +.335/+.209/+.135 · 4B +.207/+.201/+.093 · 8B +.030/+.017/+.043 ·
+14B +.095/−.033/+.003 · 32B +.015/−.076/−.078
+**Inverse capability-grading of the think-gain on stated rules replicates 3/3 domains**
+(peer is perfectly monotone). NEW sub-finding: think-gain goes NEGATIVE at top rungs in
+CW and peer (−.03 to −.12 at 14B/32B incl. CW dialect −.121 n=1) — overthinking cost on
+already-mastered content, consistent with phi4-reasoning < base phi4 (−.26z). Flag for
+paired bootstrap; do not headline before CIs. n small (CW 3-4/class, peer 1-5).
+Artifacts: mbar_zxagen_{mode}_{creative_writing,peer_review}_qwen3-*.npz (20 files).
+3b domain matrix now: humor FULL (def+ex panels), CW def, peer def; remaining: math/news
+def panels + R1 matched-base pairs (tomorrow's block, GPUs free once flip-null ends).
