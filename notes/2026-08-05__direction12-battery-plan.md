@@ -713,3 +713,23 @@ Caveats: humor only, definition arm only, one family, n=5-9/class, ref=no-think 
 Artifacts: sk3 outputs/osl_multi/mbar_zxagen_{think,nothink}_humor_qwen3-*.npz (10 files);
 harvest inline this session. Extension candidates (tomorrow, user call): 2nd domain (CW),
 name-arm (does thinking rescue possession?), R1 matched-base pairs via same readout.
+
+## PREREG — 3b-EX: THINKING x SCALE x EXAMPLES (frozen 2026-08-06 ~21:20 PT, BEFORE harvest)
+
+User directive: "thinking + scale + examples, we still need to more fully explore."
+Design: exemplar arms (exemplars / exemplars_mm / def_exemplars / exemplars_authored /
+exemplars_authored_mm, from freeze_zxa_ex_humor_v1) x qwen3 ladder x think/no-think,
+same generative readout + frontier-dossier reference + exemplar_idx masking as all ex arms.
+Launched GPU5 behind CW ladder; outputs mbar_zxagenex_{mode}_humor_{exec}.npz.
+FROZEN READOUT: content-specific exemplar effect = (true − mismatched), separately for
+corpus and authored pairs, per rung, per mode. The think-gain OF that difference is the
+quantity of record (not raw exemplar levels — format effects cancel in the mm-subtraction).
+FROZEN PREDICTIONS:
+  P-RESCUE: thinking raises (true−mm) below the no-think emergence point (z<2) — reasoning
+    substitutes for induction capability; induction emergence shifts LEFT. Would partly
+    reopen the demonstration channel and qualify stated≫shown at small scale.
+  P-RESTATE (favored by tonight's definition panel): thinking leaves (true−mm) ≈ 0 at all
+    rungs while it lifts definition/planted transmission — reasoning amplifies only STATED
+    content; the induction boundary is a capability wall that compute cannot cross.
+  Discriminator: think-gain(true−mm) vs think-gain(definition) per rung; report both with
+    paired bootstrap over bases. Landing either way is §4.2b/§4.3 bridge material.
