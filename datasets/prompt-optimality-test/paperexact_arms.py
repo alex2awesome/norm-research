@@ -266,12 +266,16 @@ def make_reflection_lm(model: str, patient: bool = False, cache: bool = True):
 
 # ---------------------------------------------------------------- arms
 def arm_official(program, bench, metric_fb, log_path, budget_calls, reflection_model,
-                 use_merge=False):
+                 use_merge=False, gepa_seed=0, blind_feedback=False):
     def gepa_metric(gold, pred, trace=None, pred_name=None, pred_trace=None):
         out = metric_fb(gold, pred, trace)
-        return out if isinstance(out, dspy.Prediction) else dspy.Prediction(score=out, feedback="")
+        if not isinstance(out, dspy.Prediction):
+            out = dspy.Prediction(score=out, feedback="")
+        if blind_feedback:
+            out = dspy.Prediction(score=out.score, feedback="")
+        return out
 
-    gepa = dspy.GEPA(metric=gepa_metric, max_metric_calls=budget_calls,
+    gepa = dspy.GEPA(metric=gepa_metric, max_metric_calls=budget_calls, seed=gepa_seed,
                      reflection_lm=make_reflection_lm(reflection_model),
                      use_merge=use_merge,
                      track_stats=True, log_dir=str(Path(log_path).parent / "gepa_logs"))
@@ -336,7 +340,7 @@ def arm_inhouse(program, bench, metric, metric_fb, log_path, budget_calls, refle
             if budget["remaining"] < panel_n:
                 break
             try:
-                raw = _as_text(refl(prompt)[0])
+                raw = refl(prompt)[0]
                 raw = raw[raw.index("{"): raw.rindex("}") + 1]
                 cand = {k: str(v) for k, v in json.loads(raw).items() if k in cur}
                 if not cand or cand_hash({**cur, **cand}) == cand_hash(cur):
@@ -725,6 +729,10 @@ def main():
     ap.add_argument("--max-tokens", type=int, default=8000,
                     help="paper-exact is 8000 (Appendix E.2); sk2 server max_model_len is "
                          "16384, so leave prompt headroom")
+    ap.add_argument("--blind-feedback", action="store_true",
+                    help="1b ablation: GEPA reflection sees scores only (feedback strings blanked)")
+    ap.add_argument("--gepa-seed", type=int, default=0,
+                    help="seed for dspy.GEPA (seed-replication arms; default 0 = every prior run)")
     ap.add_argument("--budget-calls", type=int, default=None,
                     help="default: 600 (official/inhouse, the declared paper budget) or 2400 "
                          "(unitrecomb — its paired selection needs the larger declared budget; "
@@ -834,10 +842,11 @@ def main():
 
     if a.arm == "official":
         best = arm_official(program, bench, metric_fb, log_path, a.budget_calls,
-                            a.reflection_model)
+                            a.reflection_model, gepa_seed=a.gepa_seed,
+                            blind_feedback=a.blind_feedback)
     elif a.arm == "official_merge":
         best = arm_official(program, bench, metric_fb, log_path, a.budget_calls,
-                            a.reflection_model, use_merge=True)
+                            a.reflection_model, use_merge=True, gepa_seed=a.gepa_seed)
     elif a.arm == "mipro":
         best = arm_mipro(program, bench, metric, log_path, a.budget_calls,
                          a.reflection_model)

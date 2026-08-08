@@ -1,0 +1,4 @@
+import sys, runpy
+sys.argv = [sys.argv[0], *sys.argv[1:], "--model-dir",
+            "/lfs/skampere3/0/alexspan/.cache/huggingface/hub/models--meta-llama--Llama-3.2-3B-Instruct"]
+runpy.run_path("/lfs/skampere3/0/alexspan/norm-research/methods/metric_seam/llama_multi_score_sk3.py", run_name="__main__")
