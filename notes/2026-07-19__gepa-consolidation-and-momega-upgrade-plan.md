@@ -5705,3 +5705,24 @@ decision rule: same-bases null matches → kill; functional > null → scoped fo
 **Ops:** sk3 triage chain relaunched on GPU7 after cache-layout fix (new hf CLI wrote
 models--* WITHOUT hub/ prefix → 9 symlinks under shared_hf_cache/hub/). Consolidated
 archive topped up (62 sk1 result.json + prefix curve + flip-v2 + fresh battery jsons).
+
+## HB204 (2026-08-08) — HOVER 5-CANDIDATE RE-MINT CERTIFIED (incl. MIPROv2 cell)
+
+One server session (sk2 GPU7, port 8232, vllm0251 env, 01:10-02:56 PT), k=5 passes,
+n=300 items, 20k paired bootstraps on item means:
+| candidate | mean | M_ω delta | CI |
+|---|---|---|---|
+| M_ω (unitrecomb_stair) | .5687 | — | — |
+| GEPA@10,110 | .5027 | **+.0660*** | [+.0400,+.0927] |
+| MIPROv2@2,400 | .4940 | **+.0747*** | [+.0447,+.1060] |
+| GEPA@2,400 | .4873 | +.0813* | [+.0540,+.1087] |
+| seed | .4527 | +.1160* | [+.0887,+.1453] |
+Cross-session consistency with HB200: GEPA@10110 .5027 vs .5020 (dead-on); M_ω .5687 vs
+.5767 (within pass noise); the certified M_ω-vs-GEPA@10110 delta +.0660 vs +.0747 —
+row-of-record = THIS session (newest complete). Advisor's MIPROv2 one-liner CONFIRMED:
+matched-budget MIPROv2 (.4940) ≈ GEPA (.4873-.5027); the M_ω margin is not a
+single-optimizer artifact. HOVER ROW CLOSED including baseline-robustness cell.
+PUPA leg: first attempt rc=1 (unitrecomb/result.json absent on sk2 — the pupa M_ω
+candidate is unitrecomb_v8failmine); corrected pupa-only lane (port 8233) queued on
+first-free sk2 GPU. First remint attempt (Fri eve) failed: campaign .venv has NO vllm —
+server env is envs/vllm0251 (record for all future sk2 serves) + export HOME required.
