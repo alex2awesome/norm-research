@@ -1154,3 +1154,38 @@ comparisons unaffected — same ref both arms).
 
 Artifact: sk3 outputs/osl_multi/flip_functional_v3_llama70b.json (222 bases). Advisor
 audit of this landing pending. GPU3 freed; assigned to queued gpt-oss-120b load test.
+
+## flip-v3 advisor verdict + required re-stratification (2026-08-08 16:30) — gradient CONFIRMED on independent stratifier
+
+**Advisor rulings (adopted):** (a) null control valid but certifies "the shown channel is
+label-sensitive," NEVER "exemplars add +.022" (null sets carry actively-misleading
+exemplars; fun .888 < def .970). (b) def-strength stratification partly regression-to-
+the-mean (stratifying on the subtrahend) + ref-adjacency biases fun−def negative (def
+text nested in the dossier that made half the ref votes) — so −.09* is an upper bound on
+true subtraction and the def-stratified numbers are superseded by the ambivalence-
+stratified ones below. (c) def<.85 tail (n=4) never quoted as a stratum — anecdote only;
+quantitative tail claim rests on flip-v2's 41-base slate. (d) BAN "demonstrations hurt"
+headlines; the quotable harm-adjacent cell is the mid stratum ("even with headroom,
+appended exemplar sets reduced agreement on average"). fracpos .53 was dilution by
+55 identical-set bases (greedy accepted nothing) — report set-differing bases.
+
+**Required CPU-only re-stratification (ran, n=203, crowd-ambivalence terciles; amb =
+frac items with .3<cons<.7 from the 11-executor crowd — independent of the holdout ref):**
+
+| tercile | n | fun−def | CI | fracpos | real-vs-null | CI |
+|---|---|---|---|---|---|---|
+| low-amb (codified) | 69 | −.1065* | [−.1305,−.0842] | .07 | +.0149* | [+.0058,+.0254] |
+| mid-amb | 66 | −.0787* | [−.1025,−.0569] | .09 | +.0285* | [+.0140,+.0443] |
+| high-amb (contested) | 68 | −.0582* | [−.0781,−.0396] | .21 | +.0230* | [+.0130,+.0342] |
+
+real-vs-null among SET-DIFFERING bases (148 of 203): **+.0302* [+.0213,+.0397],
+fracpos .72** (the diluted .53 is retired).
+
+**Standing claims (advisor-cleared):** the shown channel is label-sensitive at bank
+scale (+.030* on set-differing bases, positive in every tercile); the
+definition-weakness/contestedness gradient is REAL on an independent stratifier
+(deficit −.107→−.079→−.058 monotone, fracpos .07→.21) — but on the bank even the
+contested tercile remains net-negative vs definitions; the positive tail is a property
+of flip-v2's curated maximally-contested slate. Criterion 4's "better demonstration"
+remedy column may cite flip-v3 for the bank-scale label component + gradient direction
+and flip-v2 for the tail.
