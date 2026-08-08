@@ -1001,3 +1001,13 @@ available — morning decision, no new experiments without user OK).
 OPS: flipqueue waiter died silently pre-launch (no FLIPQ lines) + ALL sk3 GPUs taken
 overnight by other users → ladder+flip-v3 GPU-starved; hardened first-free waiter (GPUs
 3/5/6/7, double-check claim) relaunching now; watchdog pattern extended to FLIPQ.
+
+## OPS (2026-08-08 ~10:30): FLIP QUEUE DEADLOCK BROKEN — the fossil-launcher pattern
+8h stall root cause: the original staging ssh's `bash -c` shell (PID 2231584) survived as
+a fossil whose CMDLINE contained the lane's full heredoc text — including the literal gate
+pattern "executor magistral-24b|magfix_test" — so every gate check in both lane instances
+pgrep-matched the corpse of their own creator, forever. Killed fossil + duplicate lane;
+surviving lane started in <2 min (ladder-llama1b rc=0 in 89s; 12-exec ladder ~2-4h, then
+flip-v3 284-base chain ~30h). RULE: gate patterns must NEVER appear inside launcher
+cmdlines — stage scripts via scp (not ssh heredoc) when the script text contains pgrep
+patterns, or gate on marker files instead of process greps.
