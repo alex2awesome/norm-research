@@ -975,3 +975,9 @@ GEPA@16,700 gained ~nothing on seed 1 where seed 0 gained materially. Seed-depen
 GEPA's improvement now: ifbench 2/2 seeds ship-the-seed + hotpot seed-1 ships-the-seed.
 Replication tier only (sk1 box, raw); seed 2 still running. Quote alongside the certified
 row as seed-robustness evidence, never as row-of-record.
+
+## HOTPOT SEED-2 LANDED (2026-08-08): SEED SLATE COMPLETE
+truematch16700_s2 raw: .404 → .4167 (+.013, regr False). Three-seed picture: seed0
+material gain / seed1 +.003 / seed2 +.013 — GEPA's hotpot improvement at full budget is
+small-to-nil on 2 of 3 seeds. Replication tier; quote as seed-robustness alongside the
+certified row. Both hotpot seed lanes done; sk1 has only AIME running.
