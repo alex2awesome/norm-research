@@ -1060,3 +1060,67 @@ Artifacts: sk3 outputs/osl_multi/{mbar_flipladder_*.npz (12), flipladder_mask_v1
 flipladder_curve_v1.json, flipladder_harvest.py}; laptop mirror
 outputs/osl_multi_local/flipladder/. flip-v3 (284-base full-bank) confirmed chained on
 GPU3 (v3 START 13:20, pid 1638360, ~30h).
+
+## Flip-ladder CORRECTION + Fable advisor verdict (2026-08-08 ~14:30): news limb RETRACTED — probe-universe mismatch
+
+**Advisor verdict (relayed):** instrument sound, humor story survives; but the news
+definition baseline was flagged as "a different instrument" (.98 panel vs .51 flip-v2 on
+the same base/objective) and BLOCKED pending a text diff. The diff came back clean
+(freeze rubric == slate rubric byte-equal), which forced a deeper audit — and found the
+real cause:
+
+**ROOT CAUSE (worse than the advisor's hypothesis): the news z×a panel was scored on a
+DIFFERENT PROBE UNIVERSE.** freeze_zxa_news_homepages_v1.json meta shows
+`probes_file: news_probes.jsonl` (360 curated probes), while the other four tasks use
+the same silver_r2 src_dirs that `_load_texts` reads. Text-hash overlap between
+news_probes.jsonl and current `_load_texts("news-homepages")` probes: **0 of 300.**
+PLANTED alignment test (panel rows vs code-computed truth on current probes, llama70b):
+humor .92-.93 (aligned), CW .73-.81 / math .55-.77 / peer .74-.82 (aligned; genuine
+executor error on long texts), **news .50 flat (fully misaligned)**.
+
+**Retractions (never quote):**
+- Flip-ladder news limb, BOTH arms and BOTH readings — the "deficit widens to −.267*"
+  curve AND the fallback "functional never transfers in news." Nothing about news
+  examples was measured: every panel↔fresh join in news paired item i of one probe set
+  with item i of an unrelated set.
+- Flip-v2 news selection + holdout rows: the selection greedy optimized a scrambled
+  reference (noise-fitting); news functional sets are meaningless artifacts.
+- My earlier sentence "'examples catch up in the limit' is falsified in at least one
+  domain" — WRONG. Correct: **unproven everywhere, falsified nowhere; news is excluded
+  for instrument invalidity, not evidence.**
+
+**Scope audit (what is NOT contaminated):** saturation census + news-plateau reliability
+screen read mbar2/mbar285 crowd panels only (single probe source) — SAFE. Channel×scale
+exhibit joins are panel-internal — SAFE. GLM limit answer + 3b panels are humor/CW/peer/
+math — SAFE. flip-v3 (running) is humor-only — SAFE. The news z×a panel itself remains
+valid as a self-contained instrument on news_probes.jsonl.
+
+**Clean re-harvest (news excluded, flipladder_curve_v2_nonews.json), pooled
+humor+CW+math, sel=llama70b, functional−definition:** frontier −.040* (1B) → −.112*
+(3B) → n.s. (7-8B) → −.062* (14B) → −.105* (gemma 27B) → −.024 n.s. (32B) →
+**+.026 n.s. (70B, pos=.50)** → −.030* (72B); encoder llama70b **+.028
+[−.003,+.059]** — the only positive point estimates sit on the selection-matched
+llama70b diagonal, for both objectives, neither significant.
+
+**Advisor phrasing rules (adopted):**
+- BAN "monotonically narrows" — the curve is non-monotone (14B and gemma-27B re-dips).
+  Say: "significant deficit at low-to-mid z, modulated by receiver family, becoming
+  statistically indistinguishable from zero at the top same-family rungs."
+- Say "parity-consistent" never "parity" (top-rung CIs are wide).
+- Small-rung deltas are floor-compressed (both arms near .50) — never read cross-rung
+  delta magnitudes as a dose curve; top-rung cells are the level-valid ones.
+- gemma2-27b cell = different base subset (n=28) — "consistent with receiver-relativity,"
+  never a matched-composition comparison.
+- Selection-at-70B conservativeness sentence (the exhibit's strongest): the selection
+  bias favors the functional arm precisely at the selecting rungs — and even there it
+  only reaches parity; low-rung deficits conflate capability with downward transfer and
+  are not attributed to capability alone.
+- Criterion-3 closure phrasing = cross-instrument convergence: "three instruments —
+  flip-ladder, flip-v2, and the GLM-5.2 exemplar leg — agree that demonstrations at best
+  tie definitions at every measured z including frontier." (The GLM-5.2 anchor measured
+  planted/zxaglmex exemplars, not the flip sets; scoring flip sets on GLM-5.2 would be
+  new scoring — needs user OK, not required under this phrasing.)
+
+Artifacts: flipladder_curve_v2_nonews.json (sk3 + laptop mirror); v1 json retained but
+its news rows and pooled table are superseded. LANDMINE memorized:
+reference_news_zxa_probe_universe.
