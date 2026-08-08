@@ -5726,3 +5726,19 @@ PUPA leg: first attempt rc=1 (unitrecomb/result.json absent on sk2 — the pupa 
 candidate is unitrecomb_v8failmine); corrected pupa-only lane (port 8233) queued on
 first-free sk2 GPU. First remint attempt (Fri eve) failed: campaign .venv has NO vllm —
 server env is envs/vllm0251 (record for all future sk2 serves) + export HOME required.
+
+## HB205 (2026-08-08) — CODE-INTEGRITY AUDIT: certificate-artifact impact assessment
+
+Cross-box audit (outputs/analyses/code_integrity_20260808/): 327 identical / 16 divergent /
+1,127 box-only. Key impact: sk2's bound_rank_certificate.py predated the 07-25 noise-note
+retraction and minted hover (07-26) + livebench (07-25) rank-certificate JSONs whose
+EMBEDDED metadata carries the retracted "conservative on true skill" claim. Diff review:
+the fix was INTERPRETATION-ONLY — the k/(N+1) measured-score bound arithmetic is unchanged,
+so the minted NUMBERS remain valid as PROTOCOL-RELATIVE measured-score bounds. RULES:
+(1) never quote those artifacts' embedded noise-note text; (2) Fig-3 caption must use the
+corrected reading (measured-score, protocol-relative, NOT true skill); (3) fixed file
+shipped to sk2 (reconciliation agent) so future mints are clean. Other repairs in flight:
+sk1 NUL-corrupted ablation_battery.py restored; laptop pulling the boxes' newer
+paperexact_arms.py; 167 sk3-only metric files pulled into repo; ENVIRONMENTS.md manifest
+added with env-freeze rule (envs are instruments: pinned, documented, never modified
+mid-campaign — sk2 server env = envs/vllm0251).
