@@ -937,3 +937,14 @@ REFERENCE-UNRELIABLE, excluded. 10/20 have normal-to-perfect frontier agreement 
 GENUINE plateau candidates. Fisher p=.081 exploratory, not prereg. QUOTE: the
 family-robust plateau set with reliable reference ≈ **10/1,032 ≈ 1%**. Artifacts sk3
 outputs/osl_multi/news_plateau_reliability_v1.{md,json,py}. Criterion-6 analysis debt: CLEAR.
+
+## PHRASING RULE (user catch, 2026-08-07): SHAPE vs LEVEL — never conflate
+BANNED: "virtually nothing is untransmittable to every listener" and any phrasing implying
+the ~1% plateau census shows metrics are ARTICULABLE. The census classifies curve SHAPE
+(still-rising somewhere = listener-limited NOW); it says nothing about asymptotic LEVEL.
+CORRECT FORM: "almost no construct is provably articulation-bounded for every family
+within our range (the certifiable wall is listener-indexed), but rising curves do not
+close the articulation gap — the frontier-level residual is the paper's bound, and for
+tacit classes it survives every remedy." Deep-censored tail (260) = UNKNOWN asymptote,
+never 'articulable'. Strong articulability (transmission→ceiling) is established only
+for compiles/statement-articulable rungs.
