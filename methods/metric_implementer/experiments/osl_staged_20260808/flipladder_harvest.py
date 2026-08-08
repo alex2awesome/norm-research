@@ -19,7 +19,10 @@ from methods.metric_implementer import config as cfgmod
 
 B = "/lfs/skampere3/0/alexspan"
 OM = f"{B}/outputs/osl_multi"
-TASKS = ["humor", "creative_writing", "math", "news_homepages"]
+# news EXCLUDED (2026-08-08): the news z×a panel was scored on news_probes.jsonl
+# (360 curated probes, ZERO text overlap with _load_texts) — any panel↔fresh join
+# in news is item-wise unrelated noise. PLANTED alignment: humor .92, news .50.
+TASKS = ["humor", "creative_writing", "math"]
 LADDER = ["llama1b", "llama3b", "qwen25-3b", "mistral7b", "qwen25-7b", "llama8b",
           "phi4", "qwen25-14b", "gemma2-27b", "qwen25-32b", "llama70b", "qwen25-72b"]
 NBOOT = 20000
@@ -87,6 +90,8 @@ rows = []
 some_ex = next(ex for ex in LADDER if lad[ex])
 for key in lad[some_ex]:
     TASK, rest = key.split("|", 1)
+    if TASK not in ctx:          # excluded task (news) — ladder npz still carries its rows
+        continue
     base, tag = rest.split("||")
     _, sel, obj = tag.rsplit("_", 2)          # functional_{sel}_{obj}
     sel = tag[len("functional_"):-len(obj) - 1]
@@ -157,7 +162,7 @@ for TASK in TASKS:
                     "ci": [round(float(np.percentile(bm, 2.5)), 4),
                            round(float(np.percentile(bm, 97.5)), 4)]})
 
-json.dump(out, open(f"{OM}/flipladder_curve_v1.json", "w"), indent=1)
+json.dump(out, open(f"{OM}/flipladder_curve_v2_nonews.json", "w"), indent=1)
 
 print(f"rows={len(rows)}")
 for c in out["cells"]:
@@ -170,4 +175,4 @@ for c in out["cells"]:
     else:
         print(f"{c['sel']:12s} {c['obj']:8s} {c['ex']:12s} n_fun={c['n_fun']:3d} "
               f"fun={c['fun_mean']:.3f} (no definition panel)")
-print("DONE ->", f"{OM}/flipladder_curve_v1.json")
+print("DONE ->", f"{OM}/flipladder_curve_v2_nonews.json")
