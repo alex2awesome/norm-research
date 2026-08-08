@@ -928,3 +928,12 @@ concentrates in Qwen2.5 (consistent with prose-economy dialect ownership); qwen3
 overall rising rate (90%) = its rung range is less saturated, not a dialect claim.
 Criterion-6 remaining: the 20 news bright-line-compliance plateau metrics need the
 frontier-voter reliability check before the plateau list is quoted.
+
+## NEWS-PLATEAU RELIABILITY SCREEN (2026-08-07 eve) — 10/20 SURVIVE
+Frontier-pair agreement discriminates (degeneracy/base-rate flags do NOT — they fire
+panel-wide on bright-line metrics): 10/20 plateau metrics fall below control-p25 agreement
+(.48-.86; refusal-adjacent news harm/privacy/identity norms + math translation) =
+REFERENCE-UNRELIABLE, excluded. 10/20 have normal-to-perfect frontier agreement =
+GENUINE plateau candidates. Fisher p=.081 exploratory, not prereg. QUOTE: the
+family-robust plateau set with reliable reference ≈ **10/1,032 ≈ 1%**. Artifacts sk3
+outputs/osl_multi/news_plateau_reliability_v1.{md,json,py}. Criterion-6 analysis debt: CLEAR.
