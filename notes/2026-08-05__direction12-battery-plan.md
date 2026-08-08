@@ -968,3 +968,10 @@ evidence stands ONLY on the independent instruments (verdict-level disagreement 
 QUEUED before quoting the 362: (i) apply the frontier-pair reliability filter (screen
 method) to the full saturated set; (ii) frontier-receiver check (GLM-5.2 / gpt-oss-120b)
 on a sample of "saturated" metrics — saturated-at-local-frontier ≠ saturated forever.
+
+## HOTPOT SEED-1 LANDED (2026-08-08 ~01:30): SHIPS-THE-SEED AGAIN
+truematch16700_s1 (sk1, raw): seed_test .4087 → best_test .4120 (+.003, regr False) —
+GEPA@16,700 gained ~nothing on seed 1 where seed 0 gained materially. Seed-dependence of
+GEPA's improvement now: ifbench 2/2 seeds ship-the-seed + hotpot seed-1 ships-the-seed.
+Replication tier only (sk1 box, raw); seed 2 still running. Quote alongside the certified
+row as seed-robustness evidence, never as row-of-record.
