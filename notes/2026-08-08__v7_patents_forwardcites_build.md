@@ -365,6 +365,33 @@ bank): **anchor_pos .688 > anchor_neg .383 > anchor_scram .185** — ordering
 holds with real separation at both steps, so the judge is demonstrably graded,
 not merely able to spot nonsense. NA .156, mean .687.
 
+**Production anchor result (shard 0, 1,988 items):** `valid: True` on **attempt 0**
+— pos .6875 > neg .3833 > scram .1852, no retries. The recalibration holds in
+the real run, not just the smoke.
+
+**Shard-0 score health:** NA .162, mean .684, values spread 0.0 / 0.5 / 1.0 =
+27.5% / 8.1% / 64.4%. No silent collapse to an extreme (the guided-decoding
+failure mode this program checks for every batch).
+
+**A SUBSTANTIVE CEILING FINDING, not a defect.** Two Track-A claim-craft
+criteria come back near-constant at the top:
+
+| criterion | 1.0 | 0.5 | 0.0 | NA |
+|---|---:|---:|---:|---:|
+| Orphan Element Test | **97.8%** | 0.3% | 1.8% | 0.1% |
+| Interdependent Limitations | **98.1%** | 0.5% | 1.3% | 0.1% |
+
+Both are real properties and the judge is answering them correctly; they simply
+do not vary on a **granted-patent** population, because prosecution already
+enforces them — an examiner objects to an orphan element or a flat, mutually
+unrelated limitation list long before allowance. The population is censored on
+exactly these defects. Read the other way, this is a small piece of evidence
+about where the patents VERDICT cell's signal lives and why it cannot also live
+here: claim-craft defects are selected out at grant, so a community/impact y
+cannot be predicted from their presence. They are left in the matrix (~2%
+off-modal clears the `clean_cols` degeneracy threshold) and will surface in the
+ledger's `collapsed_criteria` screen; no intervention.
+
 **vLLM sizing on a saturated box.** Gemma-4-31B loads 58.99 GiB of weights plus
 ~1.8 GiB of CUDA graphs, so a fixed `--util` is the wrong knob when co-tenants
 move: `--util 0.36` on a card with 66.9 GiB free left **0.05 GiB** of KV cache
