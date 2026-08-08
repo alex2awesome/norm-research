@@ -1235,3 +1235,41 @@ none blocking — math-domain GLM replication stays user-gated.
 Artifacts: sk3 outputs/osl_multi/{mbar_zxagen_think_humor_gpt-oss-120b.npz,
 mbar_zxagenex_think_humor_gpt-oss-120b.npz, frontier_limit_humor_v2.json,
 gptossex_limit_humor_v1.json (superseded by v2), harvest_gptossex.py}.
+
+## Criterion-3 advisor rulings (2026-08-08 17:20) — CLOSED with qualifiers; phrasing law
+
+Advisor verdict on a2697f6: **criterion 3 CLOSED** — curve-or-point answered (curve),
+overtake answered NO with CIs at two frontier receivers — subject to:
+
+**Headline swap:** gpt-oss-120b is the HEADLINE receiver (not a ref voter, readout
+distinct from all 4 voters); GLM-5.2 is corroborating, with the voter-circularity
+disclosure on its def-anchored cells (its planted ex−def −.210 is magnitude-inflated by
+self-agreement; never present −.210 and −.142 as two estimates of one quantity).
+
+**Additive channel DEMOTED to suggestive:** 28 uncorrected CIs ⇒ ~1.4 expected false
+positives and both ALL|additive lower bounds sit near zero; the receivers disagree in
+shape (gpt-oss fracpos .43 = minority-driven, consistent with flip-v3's def-weakness
+gating; GLM .79 = broad). Required phrasing: "consistent with a small additive channel
+at frontier (+.03–.04, CIs marginally excluding zero, uncorrected for multiplicity;
+concentrated in a minority of bases on gpt-oss)." BAN "additive channel certified/real
+at frontier"; BAN quoting planted|additive as significant (CI[+.0000,…], fracpos .20 =
+boundary artifact).
+
+**Other bans/requirements:** cross-receiver claims are SIGNATURE replication — ban any
+cross-column magnitude comparison or pooling; construct sample stays n=5 planted/9
+reaches regardless of receiver count ("5 code-checkable planted constructs," never
+percentages); reaches ex−def +.034* NEVER standalone — only inside the
+construct-nonspecific-benefit (anchoring/format) sentence, corroborated by its negative
+authored gate (−.038); every frontier sentence carries "(humor)" — closure may not say
+"across domains" while the math-domain GLM replication stays user-gated; the closure
+sentence keeps the cross-instrument form (flip-SELECTED sets were never frontier-scored
+— a gpt-oss pass on them would remove that caveat; new scoring, user-gated).
+
+**Safe headline (advisor-authored):** "At two frontier receivers spanning different
+architectures and readouts, demonstrations read fine and still lose to definitions
+where content is checkable — the gate opens; the gap never closes (humor, 5 planted
+constructs, CI'd)."
+
+Open user-gated unlocks for criterion 3's caveats: (1) GLM math-domain replication
+(drops the humor qualifier), (2) frontier scoring of the flip-selected sets on
+gpt-oss-120b (free+local now, ~minutes at observed throughput).
