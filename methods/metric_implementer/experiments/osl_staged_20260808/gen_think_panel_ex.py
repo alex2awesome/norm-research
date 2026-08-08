@@ -38,7 +38,9 @@ prompts = [ap._YESNO_TEXTFIRST.format(text=t[:MX], rubric=r) for _, r in rubs fo
 names = np.array([b for b, _ in rubs], object)
 print(f"[{EX}] {len(rubs)} rubrics x {len(probes)} probes = {len(prompts)} prompts/mode",
       flush=True)
-for mode, think in (("nothink", False), ("think", True)):
+MODES = ((("think", True),) if "gpt-oss" in EX else
+         (("nothink", False), ("think", True)))  # Harmony analysis channel is always on
+for mode, think in MODES:
     flat = np.asarray(ex.score_binary_gen(prompts, thinking=think, max_gen_tokens=MAX_GEN),
                       float)
     M = flat.reshape(len(rubs), len(probes))
