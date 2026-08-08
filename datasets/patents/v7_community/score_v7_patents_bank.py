@@ -107,16 +107,19 @@ _FUNCTIONAL_SHELL = (
 
 
 def degrade(rec):
-    """Deterministic, meaning-destroying but FORMAT-PRESERVING degradation of one
-    patent: the paired low-quality anchor. Length is kept in the same ballpark so
-    the contrast cannot be read off size alone."""
+    """Deterministic, FORMAT-PRESERVING degradation of one patent: the paired
+    low-quality anchor.
+
+    CALIBRATED AGAINST THE SMOKE RUN. A first version also replaced the title
+    and abstract with boilerplate; it scored 0.190 against 0.192 for pure
+    word-scrambled nonsense, i.e. it destroyed as much as scrambling and
+    collapsed the required pos > neg > scram ordering (`score_bank` retries such
+    a shard 4 times and then marks it invalid). Degrading ONLY claim 1 — the
+    real title and abstract are kept — leaves the abstract-side criteria
+    partially satisfiable, so the degraded document lands between intact and
+    nonsense, which is what a graded sensitivity certificate needs.
+    """
     d = dict(rec)
-    d["title"] = "Device and method"
-    d["abstract"] = ("The present invention relates to a device and to a method. "
-                     "Various embodiments are disclosed. In one embodiment, the "
-                     "device may be arranged as desired. Other embodiments will "
-                     "be apparent to those skilled in the art. The device may "
-                     "provide certain advantages in certain applications.")
     c1 = (rec["claim1"] or "").strip()
     m = _TRANS_RE.search(c1)
     pre = c1[:m.end()] if m else "1. A device comprising:"

@@ -119,7 +119,10 @@ CURATED_MERGE = {
         ("Claim Scope Matches Disclosed Contribution", "same concept"),
     "Explicit Engineering Trade Off":
         ("Competing Constraint Resolution", "same concept"),
-    "Jargon Explained In Context": ("In Claim Term Definition", "same concept"),
+    # direction chosen AFTER the smoke: the claim-internal version ("In Claim
+    # Term Definition") came back at NA .78 because claims rarely define terms
+    # inline, so the broader document-level sibling is the survivor.
+    "In Claim Term Definition": ("Jargon Explained In Context", "same concept"),
     "Conditional Logic Specificity":
         ("Condition Responsive Behavior", "narrower case of the same"),
     "Abstract Plain Register":
@@ -143,6 +146,18 @@ CURATED_RARE = {
     "Novelty In Structure Not Field Of Use":
         "budget trim; overlaps Concrete Versus Abstract Boundary",
     "Title Names The Mechanism": "budget trim; keeps one title-side Track B probe",
+}
+# Dropped AFTER the 27-row Gemma smoke (`v7_smoke.log`), on measured judge
+# behaviour rather than prediction. Threshold: NA > 0.70, or NA > 0.70 together
+# with every scored value identical. Criteria whose NA is high but MEANINGFUL
+# (domain-gated, e.g. "Method Step Causal Chain" at .63 NA on apparatus claims)
+# are KEPT -- an NA that means "this document is not a method" is information,
+# not a failure.
+SMOKE_DROP = {
+    "Numeric Parameters Tied To Function":
+        "smoke NA 0.85 -- most claims recite no numeric parameter at all",
+    "Chemical Or Biological Mechanism Disclosed":
+        "smoke NA 0.81 AND every scored value 0.0 -- no variance to contribute",
 }
 
 
@@ -193,13 +208,26 @@ def main():
             audit["dropped"].append({"name": nm, "reason": "curated: low variance",
                                      "term": CURATED_RARE[nm],
                                      "origin": d["origin"]})
+        elif nm in SMOKE_DROP:
+            audit["dropped"].append({"name": nm, "reason": "post-smoke: high NA",
+                                     "term": SMOKE_DROP[nm], "origin": d["origin"]})
         else:
             staged.append(d)
     missing = ([n for n in CURATED_MERGE if n not in {d["name"] for d in survivors}]
-               + [n for n in CURATED_RARE if n not in {d["name"] for d in survivors}])
+               + [n for n in CURATED_RARE if n not in {d["name"] for d in survivors}]
+               + [n for n in SMOKE_DROP if n not in {d["name"] for d in survivors}])
     assert not missing, f"curation names not found in proposals: {missing}"
-    for _, (into, _) in CURATED_MERGE.items():
-        assert into in {d["name"] for d in staged}, f"merge survivor missing: {into}"
+    staged_names = {d["name"] for d in staged}
+    for dropped_nm, (into, _) in CURATED_MERGE.items():
+        if into in staged_names:
+            continue
+        # the only legitimate way a survivor can be absent is that the smoke
+        # dropped it too; then the whole concept leaves the bank, logged.
+        assert into in SMOKE_DROP, f"merge survivor missing: {into}"
+        audit["dropped"].append(
+            {"name": dropped_nm, "reason": "post-smoke: merge survivor dropped",
+             "term": f"merged into {into!r}, which SMOKE_DROP removed "
+                     f"({SMOKE_DROP[into]})"})
     print(f"after curated merge: {len(staged)}")
     survivors = staged
 

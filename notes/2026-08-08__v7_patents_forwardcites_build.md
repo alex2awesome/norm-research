@@ -327,9 +327,86 @@ repo: `gt_fwdcites.py`, `v7_agg_cites.py`, `build_v7_population.py`,
 
 ---
 
+## 8b. A-bank construction, in numbers
+
+68 raw proposals → 66 after the metadata + circularity bans (2 dropped, both on
+"influence") → 35 after the curated semantic merge, the lexical pass, and the
+post-smoke drops. **Final bank: 35 criteria, 28 Track A / 7 Track B**, 560,000
+judge calls at n = 16,000.
+
+The lexical dedup fired **0 times** on 68 candidates: the four proposers were
+given different angles and re-derived the same concepts in different *words*
+(antecedent basis twice, functional-language-needs-structure three times,
+element interdependency three times, claim-scope-vs-contribution three times,
+causal mechanism at three loci). 20 merges were therefore made by reading all 66
+survivors; each is recorded in `build_rubrics.py:CURATED_MERGE` with its
+survivor and reason, and mirrored into `rubrics_audit.json`.
+
+Post-smoke drops were made on **measured** judge behaviour, threshold NA > 0.70:
+"Numeric Parameters Tied To Function" (NA .85), "Chemical Or Biological
+Mechanism Disclosed" (NA .81 and every scored value 0.0), and "Numeric Threshold
+Tied To Rationale" (its merge survivor was one of those). High-but-*meaningful*
+NA was kept: "Method Step Causal Chain" sits at NA .63 because it is
+domain-gated on method claims, and an NA that means "this document is not a
+method" is information, not a failure.
+
+Smoke health (27 rows × 37 criteria): overall NA .189, mean score .674.
+
+**Anchor calibration.** The first constructed degradation replaced title,
+abstract and claim 1 with boilerplate and scored **.190 against .192 for pure
+word-scrambled nonsense** — it destroyed as much as scrambling, collapsing the
+required pos > neg > scram ordering (`score_bank` retries such a shard four
+times, then marks it invalid). Recalibrated to degrade **only claim 1**, keeping
+the real title and abstract, so abstract-side criteria stay partially
+satisfiable and the degraded document lands between intact and nonsense.
+
 ## 9. Ledger
 
-*(filled in when the A bank and dense arm land — see §10)*
+**V legs (final, frozen layer-1 estimators, n = 16,000, 15,973 groups,
+pos rate .509):**
+
+| leg | AUC | 95% CI (group bootstrap) |
+|---|---:|---|
+| V_lin (58 surface cols) | **.5899** | [.5812, .5991] |
+| V_nl (GBM, seeds 0/1/2) | **.5950** | seeds .5961 / .5949 / .5942 |
+| V_interact | +.0051 | |
+| STRUCT_lin (declared nuisance: num_claims + 3 lengths) | **.6018** | [.5932, .6105] |
+| V+STRUCT_lin | **.6222** | [.6133, .6311] |
+| V+STRUCT_nl | **.6218** | seeds .6222 / .6220 / .6213 |
+
+The notable result here is that **the 4-column STRUCT block alone (.6018) beats
+the entire 58-column V surface block (.5899)**, and almost all of that is
+`num_claims` (.596 alone). Claim count is the single strongest observable on this
+cell — and it is *not* visible to any instrument, because only claim 1 is shown.
+That is precisely why it is banked as STRUCT and Δ is quoted over V + A + STRUCT
+as well as over V + A.
+
+**A legs, T and Δ_beyond: PENDING.** Both remaining jobs are launched and
+resumable; the box is running 8/8 GPUs at 100% from other agents' campaigns, so
+they are grinding rather than blocked:
+
+| job | state |
+|---|---|
+| dense T (Llama-3.1-8B LoRA, seeds 42/1/2, GPU 2) | training, seed 42 at step ~150/1600 |
+| A-bank full scoring (Gemma-4-31B, 560K calls) | bank frozen and smoke-validated; awaiting GPU headroom |
+
+To finish, in order:
+
+```bash
+export HOME=/lfs/skampere3/0/alexspan
+cd /lfs/skampere3/0/alexspan/norm-research
+# 1. A bank (shard-checkpointed: re-running skips finished shards)
+CUDA_VISIBLE_DEVICES=N /lfs/skampere3/0/alexspan/envs/gemma4/bin/python \
+    datasets/patents/v7_community/score_v7_patents_bank.py --battery 50 --util 0.85
+# 2. dense arm is already chained (RUN_DONE-sentinel resumable); it scores itself
+# 3. the ledger
+/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python \
+    methods/taste_decomposition/patents_fwdcites_layer1.py
+```
+
+Step 3 asserts the OOF reproduction rule itself (reloads the saved OOF array and
+ids from disk, reassembles, and requires the assembled-order AUC to match the
+published figure to < 1e-9).
 
 ---
 
