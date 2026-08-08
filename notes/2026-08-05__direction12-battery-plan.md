@@ -895,3 +895,25 @@ at large scale, never moves tacit.
 PARKED (n.s., direction only): R1-14B all cells; CW/math 32B planted; 32B tacit cells —
 tacit wall CIs straddle 0 in every reasoning cell (no significant gain ANYWHERE on
 TACIT-CANDIDATE at 8B+: the wall statement is "no certified gain", not "certified zero").
+
+## FAMILY-VERDICT JOIN v1 (2026-08-07, task #25/3a closure): PLATEAU-EVERYWHERE IS RARE
+
+1,032 metric-task rows × 3 families (Llama/Qwen2.5/Qwen3; frontier-pair reference with
+self-exclusion at the voters' own rungs; artifacts outputs/analyses/family_join_20260807/):
+(a) FLAT-or-FALLING in ALL 3 families: **20/1032 = 1.9%**, 16/20 in news — bright-line
+    compliance norms (plagiarism, privacy/dignity, defamation) where frontier-agreement
+    FALLS with capability in every family. Interpretation caution: falling-vs-frontier is
+    not the I5 falling-vs-crowd pattern; do not conflate. Possibly frontier-voter
+    unreliability on refusal-adjacent content — investigate before quoting the list.
+(b) Dialect set (rising in exactly one family): 169/1032 = 16.4%, ownership qwen3 68% /
+    qwen25 25% / llama 7% — qwen3's 90% RISING base rate inflates its share; needs
+    base-rate control before the ownership split is quoted.
+(c) HIVE-MIND PROBE (the user's standing worry): qwen25-vs-qwen3 verdict disagreement
+    46.0% ≈ llama-vs-qwen25 51.2% ≫ same-generation similarity — same-lab different-
+    generation families disagree about as much as cross-lab → family-dialect is NOT a
+    lab artifact (caveat: raw rates not base-rate-controlled; flag in prose).
+RESHAPES I1/I2: executor-relative tacitness is overwhelmingly FAMILY-relative; the
+"plateaus-everywhere" residual is tiny and domain-concentrated. §4.3 headline becomes
+"the wall is real but listener-indexed" — cleanly consistent with the receiver-relative
+flip channel and dialect-persistent reasoning gains. Coverage gap: mbar2_humor_sup_
+qwen25-32b.npz missing (132 metrics at 4/5 qwen25 rungs) — cheap backfill when a GPU idles.
