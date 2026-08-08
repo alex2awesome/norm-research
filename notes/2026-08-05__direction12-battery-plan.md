@@ -1011,3 +1011,52 @@ surviving lane started in <2 min (ladder-llama1b rc=0 in 89s; 12-exec ladder ~2-
 flip-v3 284-base chain ~30h). RULE: gate patterns must NEVER appear inside launcher
 cmdlines — stage scripts via scp (not ssh heredoc) when the script text contains pgrep
 patterns, or gate on marker files instead of process greps.
+
+## Flip-ladder harvest (2026-08-08 ~13:45): the shown channel is a CURVE in z — and it never crosses
+
+**Instrument.** flip_ladder.py scored the flip-selected functional rubrics (from
+flip_functional_v2_{llama70b,qwen25-72b}.json, frontier + encoder objectives) across all
+12 local receiver rungs (llama 1B→70B, qwen2.5 3B→72B, mistral7b, phi4, gemma2-27b) on
+4 domains (humor/CW/math/news). Harvest (flipladder_harvest.py, CPU-only): balanced
+accuracy vs the SAME objective reference for both arms, stable-hash holdout only,
+exemplar items masked via flipladder_mask_v1.json, paired 20k bootstrap over bases.
+Definition baselines from the existing z×a panels. Validation: per-base recompute
+reproduces flip-v2's holdout exactly (Compressed-quotable-phrasing fun .8114 = v2 .8114).
+
+**Harvest bug caught before any numbers were recorded**: the per-task `frontier_ref`
+closure late-bound to the last task's panels (news), silently dropping all non-news
+frontier rows (n=11, fun≈.50 flat). Fixed via default-arg binding; rows 1438→2108.
+Lesson: eager-bind (default args) any per-task closure stored in a loop.
+
+**Pooled (sel=llama70b, functional−definition, paired CI):** negative at EVERY rung,
+frontier objective −.041* (1B) → −.101* (3B) → −.084* (32B) → −.057 n.s. (70B) →
+−.079* (72B); encoder objective same shape, 70B −.027 n.s. Same picture for
+sel=qwen25-72b. mistral7b/phi4 (and gemma on some tasks) have no definition panel —
+level-only rungs, disclosed.
+
+**Per-domain (the real answer):**
+| domain | shape of Δ(z) | endpoints |
+|---|---|---|
+| humor (n=22/28 pairs) | deficit NARROWS with z | 1B −.056* → 27B −.111* (gemma outlier) → 32B −.027 n.s. → **70B +.036 n.s. (only positive point)** → 72B −.019 n.s. |
+| news (n=11) | deficit WIDENS with z | 1B −.043 → 70B −.267*; functional stuck at chance .43–.58 while definitions climb to .98 |
+| CW / math | below n≥6 pairing threshold (6 and 5 bases) | excluded from per-domain tables |
+
+**Reading (criterion 3):** (a) the shown/functional channel is a CURVE in z, not a
+point — in humor the deficit shrinks toward the top of the local ladder and touches
+parity only there; (b) demonstrations never robustly OVERTAKE definitions at any
+measured z — best case parity at ~70B in one domain, positive point estimate only at
+llama70b (the very receiver family that selected and favored functional in flip-v2 —
+receiver-relativity again), and GLM-5.2 re-opens the definition advantage at frontier;
+(c) the shape is domain-dependent — news widens, so "examples catch up in the limit"
+is falsified in at least one domain and unproven in all; (d) gemma2-27b (cross-family)
+shows the deepest mid-ladder humor deficit — receiver-family matters at every scale.
+
+Caveats to carry: news functional sets may be badly selected to begin with (news crowds
+least decisive at selection time); selection ran AT 70B/72B, so small-rung deficits
+conflate transfer-down with capability (the top-rung endpoint is the clean cell).
+Fable advisor audit pending; verdict to be appended.
+
+Artifacts: sk3 outputs/osl_multi/{mbar_flipladder_*.npz (12), flipladder_mask_v1.json,
+flipladder_curve_v1.json, flipladder_harvest.py}; laptop mirror
+outputs/osl_multi_local/flipladder/. flip-v3 (284-base full-bank) confirmed chained on
+GPU3 (v3 START 13:20, pid 1638360, ~30h).
