@@ -981,3 +981,23 @@ truematch16700_s2 raw: .404 → .4167 (+.013, regr False). Three-seed picture: s
 material gain / seed1 +.003 / seed2 +.013 — GEPA's hotpot improvement at full budget is
 small-to-nil on 2 of 3 seeds. Replication tier; quote as seed-robustness alongside the
 certified row. Both hotpot seed lanes done; sk1 has only AIME running.
+
+## GLM-5.2 FRONTIER LIMIT ANSWER (harvested 2026-08-08 ~02:30; panel landed 16:57)
+Humor, 150-probe subset, vs 3-voter frontier-dossier ref, exemplar_idx masked:
+| class | def | ex-alone | ex_mm | authored | auth_mm | def+ex |
+|---|---|---|---|---|---|---|
+| PLANTED | .898 | .712 | .520 | .697 | .521 | .894 |
+| REACHES | .805 | .836 | .831 | .798 | .773 | .834 |
+| DIALECT | .781 | — | — | .751 | .748 | — |
+| TACIT-C | .737 | — | — | .682 | .620 | — |
+READ: (1) definitions dominate demonstrations at the strongest receiver we can access —
+no class shows ex>def beyond placebo (reaches ex .836 ≈ mm .831 = anchoring); (2) the
+CONTENT effect is the largest we've measured (planted true−mm +.19, tacit authored +.06)
+— the induction gate keeps opening with capacity, the LEVEL never catches stated.
+CRITERION-3 VERDICT (pending CIs, n=5-9/cell): "the gate opens; the gap never closes."
+def+ex ≈ def at frontier (planted .894 vs .898; reaches +.029 ≈ the top-qwen additive
+cells). math domain + glm-4.7 replication NOT run (agent stopped after humor; budget was
+available — morning decision, no new experiments without user OK).
+OPS: flipqueue waiter died silently pre-launch (no FLIPQ lines) + ALL sk3 GPUs taken
+overnight by other users → ladder+flip-v3 GPU-starved; hardened first-free waiter (GPUs
+3/5/6/7, double-check claim) relaunching now; watchdog pattern extended to FLIPQ.
