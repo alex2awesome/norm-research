@@ -371,11 +371,13 @@ class OfflineVLLM(_BaseVLLM):
         templates think natively), generate, parse the final pos/neg verdict from the
         post-</think> text. Returns hard 1.0/0.0 with nan on parse-fail; callers must
         report the nan rate. 10-100x the cost of score_binary — focused slates only.
-        KNOWN-INVALID: phi4-reasoning (template defeats the </think> split); gpt-oss needs
-        skip_special_tokens=False + Harmony final-channel split; seed-oss closes with
-        </seed:think> — per-model terminators pending integration."""
+        gpt-oss (Harmony): handled — skip_special_tokens=False + final-channel split
+        (validated by ossfix_gptoss120b_gen 2026-08-08, 5/5 probes, nan 0.0).
+        KNOWN-INVALID: phi4-reasoning (template defeats the </think> split); seed-oss
+        closes with </seed:think> — per-model terminators pending integration."""
         import re as _re
         from vllm import SamplingParams
+        harmony = "gpt-oss" in str(self.model)
         eng = self._engine(self.model, self.cfg)
         tok = eng.get_tokenizer()
         texts = []
@@ -388,7 +390,8 @@ class OfflineVLLM(_BaseVLLM):
             except TypeError:
                 s = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
             texts.append(s)
-        sp = SamplingParams(temperature=0.0, max_tokens=max_gen_tokens, seed=int(seed))
+        sp = SamplingParams(temperature=0.0, max_tokens=max_gen_tokens, seed=int(seed),
+                            **({"skip_special_tokens": False} if harmony else {}))
         outs = eng.generate(texts, sp,
                             **(self._maybe_lora() if hasattr(self, "_maybe_lora") else {}))
         self.stats.n_calls += 1
@@ -398,7 +401,10 @@ class OfflineVLLM(_BaseVLLM):
         for o in outs:
             txt = (o.outputs[0].text if o.outputs else "") or ""
             raw.append(txt)
-            tail = txt.rsplit("</think>", 1)[-1]
+            if harmony and "<|channel|>final<|message|>" in txt:
+                tail = txt.rsplit("<|channel|>final<|message|>", 1)[-1]
+            else:
+                tail = txt.rsplit("</think>", 1)[-1]
             toks = _re.findall(r"[A-Z]+", tail.upper())
             verdict = next((t for t in toks if t in (P, N)), None)
             if verdict is None:
