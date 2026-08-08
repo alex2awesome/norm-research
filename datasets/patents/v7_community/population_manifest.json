@@ -1,0 +1,77 @@
+{
+  "cell": "patents_forwardcites",
+  "built": "2026-08-08",
+  "seed": 20260808,
+  "n": 16000,
+  "n_groups": 15973,
+  "pos_rate": 0.509375,
+  "y_primary": "y_fwd5 = within-(grant_year x CPC class) median split of the count of DISTINCT patents citing this patent that were themselves granted in [grant_year, grant_year+5] (calendar-year resolution). Cohort median ties dropped.",
+  "y_secondary_never_merged": [
+    "y_fwd5_examiner",
+    "y_fwd5_nonexaminer",
+    "y_fwd_alltime",
+    "y_fwd5_topquartile"
+  ],
+  "citation_category_era_finding": "PatentsView citation_category is era-dependent: blank for citing patents granted <2002; examiner/'cited by other' 2002-2012; examiner/applicant 2013+. 'cited by other' IS the applicant bucket in the middle era, so the literal 'cited by applicant' count is identically 0 for early cohorts. The examiner-independent measure used here is tot5 - exm5. All citing years inside a 2005-2015 grant cohort's 5-year window fall in 2005-2020, i.e. wholly inside the era where 'cited by examiner' is reliably marked.",
+  "self_citation_limitation": "PatentsView tables downloaded here carry no assignee, so applicant SELF-citations cannot be identified and are included in y_fwd5. Mitigation: y_fwd5_examiner counts only examiner-added citations, which are third-party by construction and therefore immune to the self-citation trap; it is reported beside the primary y.",
+  "dropped_degenerate_cohort_rows": 211371,
+  "window_years": 5,
+  "min_cohort": 50,
+  "n_cohorts": 884,
+  "universe_n": 2159557,
+  "dropped_small_cohort_rows": 3174,
+  "text_fields": [
+    "title",
+    "abstract",
+    "claim1"
+  ],
+  "text_coverage_before_filter": {
+    "has_abstract": 1.0,
+    "has_claim1": 1.0,
+    "has_title": 1.0
+  },
+  "split_sizes": {
+    "train": 12787,
+    "test": 1640,
+    "eval": 1573
+  },
+  "split_pos_rates": {
+    "eval": 0.5238397965670692,
+    "test": 0.4951219512195122,
+    "train": 0.5094236333776492
+  },
+  "grouping": "MinHash-LSH (64 perms, 16x4 bands, Jaccard>=0.6 on 5-gram shingles of title+claim1) unioned with exact normalised-title match",
+  "group_size_max": 8,
+  "n_multi_member_groups": 17,
+  "leak_battery": {
+    "grant_year_alone_auc": 0.491107623773983,
+    "cpc_section_alone_auc": 0.5062479309132117,
+    "cohort_identity_oof_auc": 0.5320062443827909,
+    "cohort_identity_insample_auc_AND_PERM_NULL": {
+      "insample": 0.6330113633699347,
+      "perm_null_ci95": [
+        0.6056757168535815,
+        0.6169647217771872
+      ],
+      "reading": "the in-sample figure is an overfit statistic (~13 sampled rows per cohort); it is quotable only against the permutation null."
+    },
+    "family_within_group_y_agreement": 0.7303921568627451,
+    "n_multi_member_rows": 44,
+    "num_claims_alone_auc": 0.5955083193310148,
+    "text_charlen_alone_auc": 0.5252030479465437,
+    "claim1_charlen_alone_auc": 0.5228091125786409,
+    "group_size_vs_y_corr": 0.013033916687403958,
+    "note": "grant_year / cpc / cohort MUST sit at ~.50: y is a within-cohort split, so any departure means the cohort thresholds leaked. num_claims and char length are DECLARED NUISANCE channels -- measured here, never given to a feature block, a judge prompt or the dense text."
+  },
+  "excluded_by_design": [
+    "examiner id/art unit",
+    "assignee/inventor identity",
+    "filing & grant dates",
+    "patent number",
+    "CPC codes",
+    "num_claims",
+    "any citation count"
+  ],
+  "splitter": "stable sha1 hash of family_group into 80/10/10 ('v7-split|' + group). REPLACES the imported stable_hash_bucket_map, which collapses to a single bucket on near-singleton groups -- see v7_fix_splits.py docstring.",
+  "n_families_straddling_splits": 0
+}
