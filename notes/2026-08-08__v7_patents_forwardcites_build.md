@@ -360,6 +360,18 @@ times, then marks it invalid). Recalibrated to degrade **only claim 1**, keeping
 the real title and abstract, so abstract-side criteria stay partially
 satisfiable and the degraded document lands between intact and nonsense.
 
+Recheck after recalibration (`v7_smoke3.log`, 15 rows, the frozen 35-criterion
+bank): **anchor_pos .688 > anchor_neg .383 > anchor_scram .185** — ordering
+holds with real separation at both steps, so the judge is demonstrably graded,
+not merely able to spot nonsense. NA .156, mean .687.
+
+**vLLM sizing on a saturated box.** Gemma-4-31B loads 58.99 GiB of weights plus
+~1.8 GiB of CUDA graphs, so a fixed `--util` is the wrong knob when co-tenants
+move: `--util 0.36` on a card with 66.9 GiB free left **0.05 GiB** of KV cache
+and the engine refused to start. The launcher now sizes util from *measured*
+free memory (`util = (free_MiB - 4000) / 183359`), which is what every relaunch
+in this build used.
+
 ## 9. Ledger
 
 **V legs (final, frozen layer-1 estimators, n = 16,000, 15,973 groups,
@@ -387,8 +399,11 @@ they are grinding rather than blocked:
 
 | job | state |
 |---|---|
-| dense T (Llama-3.1-8B LoRA, seeds 42/1/2, GPU 2) | training, seed 42 at step ~150/1600 |
-| A-bank full scoring (Gemma-4-31B, 560K calls) | bank frozen and smoke-validated; awaiting GPU headroom |
+| dense T (Llama-3.1-8B LoRA, seeds 42/1/2, GPU 2) | training; seed 42 first validation checkpoint (step 160/1600) already at **eval AUC .5953** |
+| A-bank full scoring (Gemma-4-31B, 560K calls, GPU 1) | launched, 8 shards, `--battery 50` |
+
+The dense arm reaching .5953 at 10% of training — level with V_nl (.5950) and
+below V+STRUCT (.6218) — is an early read only, not a T. Do not quote it.
 
 To finish, in order:
 
