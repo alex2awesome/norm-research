@@ -1189,3 +1189,49 @@ contested tercile remains net-negative vs definitions; the positive tail is a pr
 of flip-v2's curated maximally-contested slate. Criterion 4's "better demonstration"
 remedy column may cite flip-v3 for the bank-scale label component + gradient direction
 and flip-v2 for the tail.
+
+## Frontier limit cells with CIs — BOTH receivers (2026-08-08 17:05): the GLM signature replicates on gpt-oss-120b
+
+gpt-oss-120b rescued (single B200, 65GB MXFP4, Harmony parse 5/5) and run through the
+def+exemplar humor panels via score_binary_gen think-mode (~16 min total; nan 0.0000/
+0.0002). harvest_gptossex.py now computes BOTH frontier receivers' cells with paired 20k
+bootstraps from one artifact (frontier_limit_humor_v2.json) — this also clears the GLM
+CI analysis debt. Reference = 4-voter frontier dossier majority, exemplar-idx masked,
+same conventions as harvest_glmex_final.
+
+| contrast (humor) | GLM-5.2 | gpt-oss-120b |
+|---|---|---|
+| planted ex−def | −.210* [−.328,−.114] | −.142* [−.288,−.013] |
+| planted content gate (corpus ex − mm) | +.199* [+.130,+.286] | +.287* [+.248,+.328] |
+| planted content gate (authored) | +.202* [+.048,+.349] | +.304* [+.186,+.426] |
+| reaches ex−def | +.043 n.s. | +.034* [+.001,+.081] |
+| reaches content gate (corpus) | +.001 n.s. | −.004 n.s. |
+| ALL ex−def | −.047 n.s. | −.029 n.s. |
+| ALL content gate (corpus) | +.072* | +.100* |
+| ALL additive (def+ex − def) | +.038* [+.009,+.065] | +.034* [+.001,+.085] |
+
+**Convergent frontier signature (2 architecture-distinct receivers, now with CIs):**
+(1) demonstrations ALONE never overtake definitions — significantly worse on planted
+(where content is code-checkable), n.s. negative overall; (2) the content gate is wide
+open at frontier on both receivers (+.20-.30* planted) — capacity to READ examples is
+not the bottleneck; the gap to definitions persists anyway ("the gate opens; the gap
+never closes" now replicated with CIs); (3) the ONLY ex≥def cells (reaches) are
+placebo-matched on both receivers (gate ≈ 0: mm does as well as true examples) —
+anchoring, never quotable as content wins (gpt-oss reaches ex−def +.034* carries this
+interpretation, not a demonstration win); (4) NEW certified nuance: examples appended
+TO definitions add +.034-.038* at both frontier receivers — the additive channel is
+small but real at frontier, consistent with the additive-only characterization.
+
+Caveats: gpt-oss cells use the generative think-mode readout, GLM cells the API readout
+— qualitative convergence, never pool the two columns; reaches/tacit rows are
+authored-exemplar-only for some arms (freeze design); n per class is small (5-9),
+class-level CIs are the quotable unit.
+
+Criterion 3 status: curve-or-point answered (flip-ladder: curve, parity-consistent top
+rungs only, selection-matched diagonal); overtake-in-the-limit answered NO with CIs at
+TWO frontier receivers + cross-instrument convergence phrasing per advisor. Remaining:
+none blocking — math-domain GLM replication stays user-gated.
+
+Artifacts: sk3 outputs/osl_multi/{mbar_zxagen_think_humor_gpt-oss-120b.npz,
+mbar_zxagenex_think_humor_gpt-oss-120b.npz, frontier_limit_humor_v2.json,
+gptossex_limit_humor_v1.json (superseded by v2), harvest_gptossex.py}.
