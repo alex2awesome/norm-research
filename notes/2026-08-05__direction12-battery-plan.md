@@ -1124,3 +1124,33 @@ llama70b diagonal, for both objectives, neither significant.
 Artifacts: flipladder_curve_v2_nonews.json (sk3 + laptop mirror); v1 json retained but
 its news rows and pooled table are superseded. LANDMINE memorized:
 reference_news_zxa_probe_universe.
+
+## flip-v3 full-bank harvest (2026-08-08 16:10): label component replicates at 222 bases; exemplar value is definition-weakness-gated
+
+flip-v3 (humor, 284-base bank → 222 with valid refs/crowd, sel=llama70b, ref=frontier2v,
+A-select/B-confirm/H-report, null control on every base) finished rc=0 in ~2.6h (sets are
+tiny: mean 2.7 items, 0.5 crowd-flips). All numbers paired 20k bootstraps on holdout:
+
+| readout | n | delta | CI |
+|---|---|---|---|
+| REAL-vs-NULL functional (label-dependent component) | 203 | **+.0221*** | [+.0154,+.0292] |
+| fun−def, def≥.95 stratum (saturated bank majority, 164) | 164 | −.0926* | [−.1069,−.0791] |
+| fun−def, def .85−.95 | 35 | −.0334* | [−.0600,−.0080] |
+| fun−def, def<.85 (contested) | 4 | too few for CI — but top wins live here (Compressed .80→.95) | — |
+
+Bank means: name .835, definition .970, functional .888.
+
+**Reading:** (1) flip-v2's label-dependent component (+.035 on the 41-base contested
+slate) REPLICATES at full-bank scale (+.022*), now certified on 203 bases — the flip
+channel carries real label information. (2) But the bank is definition-saturated (81%
+of bases def≥.95 vs the 2-voter ref), and there exemplars actively subtract (−.09*).
+The fun−def gradient is monotone in definition strength: −.093 → −.033 → positive tail.
+Exemplars are a remedy for constructs whose definitions fail, not an additive channel on
+top of working definitions — feeds criterion 4's verdict table ("better demonstration"
+remedy = the def-weak tail) and reconciles v2 (contested slate, positive) with v3 (full
+bank, negative): same instrument, opposite strata. (3) Disclose: executor llama70b is
+one of the two frontier2v voters (partial self-agreement inflates absolute levels; delta
+comparisons unaffected — same ref both arms).
+
+Artifact: sk3 outputs/osl_multi/flip_functional_v3_llama70b.json (222 bases). Advisor
+audit of this landing pending. GPU3 freed; assigned to queued gpt-oss-120b load test.
