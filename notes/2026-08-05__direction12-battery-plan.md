@@ -948,3 +948,23 @@ close the articulation gap — the frontier-level residual is the paper's bound,
 tacit classes it survives every remedy." Deep-censored tail (260) = UNKNOWN asymptote,
 never 'articulable'. Strong articulability (transmission→ceiling) is established only
 for compiles/statement-articulable rungs.
+
+## CENSUS CORRECTION (user challenge, 2026-08-07 eve): SATURATION definition replaces slope
+
+User challenged the 1.9% plateau-everywhere number (expected 10-20%). ROOT CAUSE: the join
+classified RISING by whole-ladder OLS slope > .01/z — dominated by the steep small-model
+segment, i.e. answers "did capability EVER help" (nearly always yes; also produced qwen3's
+90% artifact). The saturation question is "does the TOP rung still buy anything":
+RISING_f := top_minus_mid_f > .02 (noise-indexed; SE≈.03 per point).
+**CORRECTED CENSUS: saturated-in-all-3-families = 362/1,032 = 35.1%** (range 21% at
+threshold 0 → 39% at .03; quote the range with .02 point estimate). By task: humor 130 /
+CW 97 / news 91 / peer 36 / math 8. Still-gaining rates now balanced (.30/.37/.32).
+**RETRACTIONS**: (a) the 1.9% plateau-everywhere headline — definition artifact, never
+quote; (b) the qwen25 2.27x sole-riser enrichment — under the saturation definition ALL
+families' sole-gainer ratios are 0.77-0.95 (≈ or below independence): the family-join
+"dialect ownership" is definition-sensitive and NOT supported as enrichment. Dialect
+evidence stands ONLY on the independent instruments (verdict-level disagreement 46-51%,
+63 disagreement metrics, dialect-persistent reasoning gains) — cite those, not the join.
+QUEUED before quoting the 362: (i) apply the frontier-pair reliability filter (screen
+method) to the full saturated set; (ii) frontier-receiver check (GLM-5.2 / gpt-oss-120b)
+on a sample of "saturated" metrics — saturated-at-local-frontier ≠ saturated forever.
