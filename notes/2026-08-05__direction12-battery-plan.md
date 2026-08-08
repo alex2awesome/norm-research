@@ -876,3 +876,22 @@ rescue-agent parser work). R1 enable_thinking no-op CONFIRMED exactly (think−n
 Same benchmark, merge arm seed was .6049 → the two PUPA arms used inconsistent eval configs
 (judge path suspected). NEVER compare .878 vs .785 raw; the 4-candidate one-judge re-mint
 (HB203 spec) is MANDATORY and now also diagnostic. sk1 GPU0 freed; hotpot seeds + AIME remain.
+
+## BOOTSTRAP-CI PASS (2026-08-07 pm) — reasoning cells sorted into CERTIFIED vs PARKED
+
+20k paired bootstrap over bases (* = CI excludes 0):
+CERTIFIED: (1) small-z (1.7B) toggle gains in ALL tested classes, 4/4 domains — humor
+planted +.335* [.242,.414], dialect +.196*, reaches +.144*, tacit +.113*; CW planted
++.209*; peer planted +.135*; math planted +.070*, reaches +.131*.
+(2) OVERTHINKING at top rung, 3 domains: humor 32B reaches −.032* [−.064,−.002]; peer 32B
+planted −.078* [−.141,−.016]; math 32B reaches −.090* [−.125,−.070]. Upgrade from
+"flagged" to supported scoped sub-finding (class-specific, not blanket).
+(3) DIALECT persistence: humor 32B toggle dialect +.062* [.030,.094] AND R1-32B pair
+dialect +.090* [.017,.170] — deliberation keeps helping DIALECT constructs at top rungs
+in BOTH mechanisms (toggle + post-training). New coherent thread: reasoning helps
+contested/dialect constructs at every scale, planted only at small scale, HURTS reaches
+at large scale, never moves tacit.
+(4) R1-32B reaches degradation −.083* [−.123,−.041].
+PARKED (n.s., direction only): R1-14B all cells; CW/math 32B planted; 32B tacit cells —
+tacit wall CIs straddle 0 in every reasoning cell (no significant gain ANYWHERE on
+TACIT-CANDIDATE at 8B+: the wall statement is "no certified gain", not "certified zero").
