@@ -917,3 +917,14 @@ RESHAPES I1/I2: executor-relative tacitness is overwhelmingly FAMILY-relative; t
 "the wall is real but listener-indexed" — cleanly consistent with the receiver-relative
 flip channel and dialect-persistent reasoning gains. Coverage gap: mbar2_humor_sup_
 qwen25-32b.npz missing (132 metrics at 4/5 qwen25 rungs) — cheap backfill when a GPU idles.
+
+## DIALECT OWNERSHIP, BASE-RATE-CONTROLLED (2026-08-07 pm) — criterion-6 debt closed
+RISING base rates: llama .683 / qwen25 .578 / qwen3 .902 (n=1,032). Sole-riser enrichment
+vs independence: llama 12 obs / 29.1 exp = **0.41** (UNDER); qwen25 42/18.5 = **2.27**
+(the only enriched family); qwen3 115/124.3 = **0.92** (≈ chance — its raw 68% share was
+pure base-rate artifact). Controlled ownership: qwen25 63% / qwen3 26% / llama 11%.
+QUOTE THIS, never the raw 68%-qwen3 split. Reading: genuine family-specific reception
+concentrates in Qwen2.5 (consistent with prose-economy dialect ownership); qwen3's high
+overall rising rate (90%) = its rung range is less saturated, not a dialect claim.
+Criterion-6 remaining: the 20 news bright-line-compliance plateau metrics need the
+frontier-voter reliability check before the plateau list is quoted.
