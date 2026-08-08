@@ -871,3 +871,8 @@ its LOGPROB battery is healthy (auc .842) — its template defeats the </think> 
 numbers INVALID for phi4-reasoning until a template-specific parse lands (queue with the
 rescue-agent parser work). R1 enable_thinking no-op CONFIRMED exactly (think−nothink =
 +.000/.001 all classes — same native mode both passes).
+
+## PUPA MIPROv2 RAW (2026-08-07 pm): .8484 → .8782 (regr False) — SEED DISCREPANCY FLAG
+Same benchmark, merge arm seed was .6049 → the two PUPA arms used inconsistent eval configs
+(judge path suspected). NEVER compare .878 vs .785 raw; the 4-candidate one-judge re-mint
+(HB203 spec) is MANDATORY and now also diagnostic. sk1 GPU0 freed; hotpot seeds + AIME remain.
