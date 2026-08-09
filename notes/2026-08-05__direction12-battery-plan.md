@@ -1512,3 +1512,25 @@ advantage is construct-nonspecific calibration; exemplar content is real but thi
 (r~=.20 cross-receiver), with one construct — taste/timing on charged material —
 carrying large, receiver-robust content that still does not overtake a strong
 definition."
+
+## Norm-boundary theme: blinded categorization rank test PASSED (2026-08-09 ~10:45)
+
+Codex companion down (exit 137 on fresh threads too) → blinded judge = FRESH Sonnet
+subagent (zero session context, names-only input). Categories over all 203 names:
+30 norm-boundary / 114 mechanics / 59 other
+(outputs/osl_multi_local/metric_categories_blind_v1.json). Advisor-specified test:
+one-sided rank-permutation (100k) of CONTINUOUS content components (fun−mm) for
+norm-boundary vs rest:
+
+| leg | nb median vs rest | p | LOO (drop Taste-and-timing) |
+|---|---|---|---|
+| qwen25-72b | +.0320 vs .0000 | .0059 | .0116 (robust) |
+| gpt-oss-120b | +.0089 vs −.0036 | .0474 | .0799 (marginal) |
+| avg of receivers | +.0222 vs .0000 | .0095 | .0180 (robust) |
+
+**Status upgrade: "norm-boundary constructs carry more exemplar content" is now a
+SUPPORTED FINDING** (blind categories, continuous components, LOO-robust at qwen and
+combined; gptoss leg marginal without the top construct — disclose). Mechanics and
+other medians are exactly ~0 on all legs. Phrasing: content-not-winning framing still
+applies; theme claims cite this test, never the p=.44 winner-set. Taste-and-timing
+confirmed norm-boundary under blind assignment.
