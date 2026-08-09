@@ -1474,3 +1474,41 @@ other users' training) and the 3h fixed-backend battery still hit its cap at the
 init line. Backend mistral-flags fix is committed (correct + keeps the door open);
 executor stays OUT of all slates; GPU7 verified clean. Not load-bearing: reasoning
 program closed with 4 families.
+
+## Bundled advisor verdict (2026-08-09 ~10:20) — WEAKENING of the 7/203 claim + phrasing law
+
+**Load-bearing correction (weakens a887a5c):** the both-receiver winner SET is at
+chance — marginal rates P(content>=.05) are .202 (qwen) and .153 (gptoss), predicting
+6.3 joint hits under independence; observed 7; permutation p=.44. The set of 7 must
+never be presented as a replicated set, and the 6-metric table is not re-quotable
+without this disclosure. What survives: (i) continuous content components correlate
+across receivers r~=.20 (n=203, p~=.005) — the honest set-level claim; (ii) "Taste and
+timing on traumatic/charged subjects" is INDIVIDUALLY quotable (joint ~5.1 sigma/
+4.4 sigma); Profanity/edginess is suggestive-only; the other five are not quotable.
+**Framing trap:** content != winning — Taste-and-timing fun−def is −.050 at qwen (its
+definition sits at .990 ceiling). BAN "examples beat definitions on these metrics" for
+content winners; REQUIRED: "examples demonstrably carry construct-specific content (vs
+placebo) — mostly WITHOUT beating the definition."
+
+**Other rulings:** (a) BAN "calibration-need x content" as a formula (no interaction
+test; two receivers = two points) — required statement: construct-nonspecific
+calibration term with receiver-dependent SIGN (+.06*/−.13*) plus a small content term
+detectable at one receiver. (c) math = corroborating-only: REQUIRED "humor (29
+constructs); corroborated in math (7 constructs, 4 planted; small-sample)"; BAN
+"(humor+math)" as co-equal or "across domains"; never conflate the .619 anchor pass
+(code truth) with harvest cells (dossier refs). (d) NEVER merge the two ledgers: 70B
+ledger = fun−def wins, slate-level label-sensitivity (no mm arm); cross-receiver
+ledger = fun−mm content, mostly without fun−def wins; one merged "metrics where
+examples help" list is BANNED. Gestalt theme = consistent-with 1c-v2 Noah weak-form,
+not a tested categorization. (b-theme) "social-norm boundary" = HYPOTHESIS until the
+blinded-categorization rank test runs (all 203 names categorized blind to scores, then
+rank-test continuous content vs category; CPU-only — QUEUED via Codex blind judge per
+standing rule). No retractions on the mm-control resolution, math landing, or
+magistral park.
+
+**Advisor safe summary (program-level):** "Optimized exemplar sets beat definitions
+only at the receivers that selected them; at frontier receivers their apparent
+advantage is construct-nonspecific calibration; exemplar content is real but thin
+(r~=.20 cross-receiver), with one construct — taste/timing on charged material —
+carrying large, receiver-robust content that still does not overtake a strong
+definition."
