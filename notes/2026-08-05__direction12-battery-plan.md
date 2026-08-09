@@ -1386,3 +1386,31 @@ pace directive.
 
 Artifacts: mbar_flipgptoss_gpt-oss-120b.npz, mbar_flipgptossmm_gpt-oss-120b.npz,
 flipgptossmm_mask_v1.json; scripts staged in repo.
+
+## Examples-help program (user directive 2026-08-09 ~03:20): traces, ledger v0, at-scale expansion
+
+**Trace peek (mechanism CONFIRMED, 12 Harmony analysis traces read verbatim):** gpt-oss
+reads definitions as conjunctive checklists and requires every clause clearly satisfied
+("somewhat brief, but is it quotable? ... Probably not -> NO"); on a definition ordinary
+texts can fully satisfy (Observational humor) it says YES readily. Collapse severity
+tracks clause-stack strictness; exemplars work by demonstrating that holistic/partial
+satisfaction counts (operating-point calibration). tracepeek_gptoss.py.
+
+**Provisional per-metric examples-help ledger (existing certified data, fun-def >= +.05
+on holdout):** flip-v2 slate: 16 distinct metrics win at 70B-class receivers (top:
+Cringe/awkwardness calibrated +.148, Surprise-misdirection-dual-read +.143, Concrete
+imagery +.141, Incongruity-and-surprise mechanics +.140, Principled-counterexamples
+(math) +.124, One-liners setup-punch +.10); flip-v3 bank: 7/203 (top: Compressed
+quotable phrasing +.150, Misdirection-expectation-subversion +.087, Meme culture +.083,
+Single-panel cartoon economy +.077, Surprise payoffs +.065). THEME: winners are
+overwhelmingly surprise/incongruity/timing/imagery mechanics — gestalt, show-don't-tell
+constructs — independently reproducing the 1c-v2 "Noah weak-form" (gestalt constructs
+show>tell). Taxonomy-like constructs are absent from the win list.
+
+**At-scale expansion LAUNCHED (task #28 leg 1):** flipv3_multirecv.py scores all 222
+flip-v3 sets + definition + donor-mm control at additional receivers; v3sets_lane.sh
+GPU6 chains qwen25-72b -> gpt-oss-120b (unified_v1 interpreter = first post-cutover
+measurement lane). Harvest gives the CONTENT-CERTIFIED (mm-controlled) per-metric
+ledger across receivers. Magistral retry #2 running under unified_v1 on GPU7 (old
+ai_usage vllm 0.17 wedged at init on PixtralForConditionalGeneration — orphan killed by
+PID; unified_v1 gained pinned pandas==2.2.3, to replicate on sk1/sk2).
