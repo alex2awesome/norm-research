@@ -1414,3 +1414,21 @@ measurement lane). Harvest gives the CONTENT-CERTIFIED (mm-controlled) per-metri
 ledger across receivers. Magistral retry #2 running under unified_v1 on GPU7 (old
 ai_usage vllm 0.17 wedged at init on PixtralForConditionalGeneration — orphan killed by
 PID; unified_v1 gained pinned pandas==2.2.3, to replicate on sk1/sk2).
+
+## v3sets qwen25-72b leg harvest (2026-08-09 04:15, ref = flip-v3's own crowd-panel 2-voter, 203 triples)
+
+| contrast | delta | CI | pos |
+|---|---|---|---|
+| fun − def | −.1186* | [−.1336,−.1036] | .03 |
+| fun − mm (CONTENT) | +.0135* | [+.0021,+.0250] | .50 |
+| mm − def (ANCHOR) | −.1321* | [−.1475,−.1171] | .00 |
+
+Receiver contrast crystallizing: at qwen25-72b (which did NOT select these sets, and
+whose definition-mode does NOT collapse) ANY exemplar block actively hurts (−.13*) —
+the opposite sign of gpt-oss's anchoring benefit (+.06*) — while a small real content
+component survives cross-receiver transfer (+.0135*, true sets hurt less than donor
+sets). Content-certified per-metric wins at qwen: 2/203 (Play/safety frame content
++.309; Editing craft +.113). First-pass lesson for the ledger: exemplar VALUE at a
+receiver = calibration-need x content, both receiver-relative; the earlier 22-triple
+harvest (wrong ref universe: 41-slate panels vs bank) was discarded before recording.
+gpt-oss leg chaining; combined 3-receiver per-metric ledger on its END.
