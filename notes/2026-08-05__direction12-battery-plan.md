@@ -1349,3 +1349,40 @@ are parse noise, never quotable; the census doubles as a parser-health monitor.
 PUPA waiter confirmed single (sk2 pid 1800112; a duplicate I spawned during a status
 check was killed by PID). AIME still running on sk1; hotpot seeds 1/2 DONE
 (.409->.412, .404->.417); sk1 PUPA-MIPROv2 candidate DONE (.848->.878).
+
+## Flip-sets at frontier + mm control (2026-08-09 ~02:4x): apparent crossing is 100% anchoring — criterion-3 answer UNCHANGED, strengthened
+
+flip_gptoss.py scored the flip-v2 selected sets (both selectors x frontier/encoder) +
+same-readout definition_gen arm at gpt-oss-120b (gen Harmony readout; 210 rows, then
+168 mm-control rows via flip_gptoss_mm.py — donor-base exemplar swap, union masking).
+
+Headline-looking number that MUST NEVER be quoted alone: fun−def +.0562* [+.0340,+.0794]
+(all 4 sel x obj cells +.05-.06*) — the first apparent z where the shown channel exceeds
+definitions. The mm control resolves it:
+
+| decomposition (n=112 triples, union mask) | delta | CI | pos |
+|---|---|---|---|
+| fun − mm (CONTENT) | **−.0055 n.s.** | [−.0183,+.0069] | .49 |
+| mm − def (ANCHORING) | +.0617* | [+.0360,+.0887] | .67 |
+
+Donor-swapped sets deliver the FULL benefit: the flip-selected sets transmit ZERO
+construct-specific content at the frontier receiver. Mechanism (entropy diagnostic):
+gpt-oss's definition-only decoding collapses toward all-NO (31% degenerate, med frac_yes
+.087) and ANY exemplar block un-collapses it (functional rows 4.2% degenerate, medH .83)
+— decoder calibration, not transmission. Same construct-nonspecific-benefit signature as
+the GLM/gpt-oss reaches cells; the pattern now covers the flip-OPTIMIZED sets at the
+receiver where they looked best.
+
+**Standing conclusions:** criterion 3 unchanged — demonstrations never overtake
+definitions on CONTENT at any measured z including frontier, now verified for the
+flip-selected sets themselves (the caveat "flip sets never frontier-scored" is REMOVED
+with a null result). The flip channel's label-dependent component (real at 70B-class:
+flip-v2 +.035*, flip-v3 +.030*) does NOT survive transfer to the frontier receiver —
+receiver-relativity again. BAN: quoting fun−def +.056* at gpt-oss as a flip win or a
+crossing; it is anchoring and appears only inside the construct-nonspecific-benefit
+sentence. Process note: landing resolved by its own pre-registered-style control;
+advisor audit folded into the next landing's pass (GLM math) per the user's 2026-08-08
+pace directive.
+
+Artifacts: mbar_flipgptoss_gpt-oss-120b.npz, mbar_flipgptossmm_gpt-oss-120b.npz,
+flipgptossmm_mask_v1.json; scripts staged in repo.
