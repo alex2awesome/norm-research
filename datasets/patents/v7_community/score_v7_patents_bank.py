@@ -229,7 +229,20 @@ def build_v7_patents():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--util", type=float, default=0.85)
-    ap.add_argument("--max-model-len", type=int, default=4096)
+    # 8192, NOT 4096. The first full pass died in shard 7 (7/8 shards written)
+    # on `VLLMValidationError: maximum context length is 4096 tokens ... your
+    # prompt contains at least 4097 input tokens`. Cause: the truncation above is
+    # in CHARACTERS but the engine limit is in TOKENS, and patent claims are
+    # unusually token-dense (reference numerals, chemical names, indexed
+    # variables), so a claim inside the 4,200-char budget can still exceed 4,096
+    # tokens once the system prompt and criterion block are added.
+    # The fix raises the CAP and leaves every prompt's CONTENT byte-identical, so
+    # shards 0-6 stay valid and comparable: any prompt already under 4,096 tokens
+    # tokenizes and decodes identically at temperature 0 under a larger cap, and
+    # 8,192 is far inside Gemma-4's native context so no RoPE scaling is
+    # triggered. Re-truncating instead would have changed shard 7's prompts and
+    # made it inconsistent with the seven already banked.
+    ap.add_argument("--max-model-len", type=int, default=8192)
     ap.add_argument("--battery", type=int, default=50)
     ap.add_argument("--smoke", type=int, default=0)
     a = ap.parse_args()

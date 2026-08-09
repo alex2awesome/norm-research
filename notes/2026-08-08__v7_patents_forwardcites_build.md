@@ -392,6 +392,37 @@ cannot be predicted from their presence. They are left in the matrix (~2%
 off-modal clears the `clean_cols` degeneracy threshold) and will surface in the
 ledger's `collapsed_criteria` screen; no intervention.
 
+**THE FULL PASS CRASHED AT 7/8 SHARDS AND WAS RESUMED — read this before
+treating the bank as one homogeneous run.** The first full pass wrote shards 0–6
+and then died inside shard 7 with
+
+```
+vllm.exceptions.VLLMValidationError: This model's maximum context length is
+4096 tokens. However, you requested 0 output tokens and your prompt contains
+at least 4097 input tokens
+```
+
+Cause: the truncation in `score_v7_patents_bank.py` is expressed in
+**characters** while the engine limit is in **tokens**, and patent claims are
+unusually token-dense (reference numerals, chemical names, indexed variables),
+so a claim sitting inside the 4,200-character budget can still exceed 4,096
+tokens once the system prompt and criterion block are prepended. Only shard 7
+happened to contain such a document.
+
+Fix: raise the **cap** to `--max-model-len 8192` and leave every prompt's
+**content byte-identical**. This is the choice that keeps the bank homogeneous:
+any prompt already under 4,096 tokens tokenizes and decodes identically at
+temperature 0 under a larger cap, and 8,192 is far inside Gemma-4's native
+context so no RoPE scaling is triggered. Re-truncating instead would have
+changed shard 7's prompts and made that shard inconsistent with the seven
+already banked. `score_bank` skips shards whose `.npz` already exists, so the
+resume scored shard 7 only, then wrote `_meta.json` and ran the battery.
+
+**Consequence for reading the bank: shards 0–6 and shard 7 were scored by two
+separate engine instantiations.** Same model, same weights, same temperature 0,
+same prompts — but if a shard-level anomaly ever shows up in shard 7
+specifically, this is the first thing to check.
+
 **vLLM sizing on a saturated box.** Gemma-4-31B loads 58.99 GiB of weights plus
 ~1.8 GiB of CUDA graphs, so a fixed `--util` is the wrong knob when co-tenants
 move: `--util 0.36` on a card with 66.9 GiB free left **0.05 GiB** of KV cache
