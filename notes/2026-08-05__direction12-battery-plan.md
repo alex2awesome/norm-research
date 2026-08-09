@@ -1453,3 +1453,24 @@ TASTE construct — tacit-taxonomy tie-in). Caveats: threshold-selected from 203
 (descriptive; no multiplicity correction — but +.44/+.31 replicated cross-architecture
 is far beyond the noise floor); bank means hide this tail (gptoss mean content ~0).
 Advisor audit bundled with GLM-math landing.
+
+## GLM-5.2 MATH replication landed + magistral PARKED (2026-08-09 ~10:00)
+
+**GLM math (zxa_glm_ex math leg, 7.74M tokens, planted-anchor overall .619 — weaker
+instrument than humor .9, disclose):** bespoke harvest (glmexmath_harvest_v1.json,
+4-voter refs, n=7 bases; stock harvest_glmex_final printed empties on math freeze —
+superseded). Signature REPLICATES: ex−def ALL −.0933* [−.1845,−.0046] with NO ex>=def
+cell in any class (math lacks even humor's reaches anchoring win); content gates OPEN
+(authored +.1745* ALL / +.2470* planted; corpus +.06 n.s. at this n); additive +.039
+n.s. Criterion-3 scope qualifier relaxes: "(humor + math; construct samples 29 and 7)"
+— still never "across domains" unqualified. Small-n + subset + weak-anchor caveats
+attach to every math cell.
+
+**Magistral PARKED (final).** Five attempts documented: auto-format wedges pre-load
+indefinitely (2x 90min, both vllm versions); mistral-format flags DO load weights
+(166GB observed) but time-to-first-token exceeds 60 min on this box (memtrack: ~25 min
+silent pre-load stall + load + compile; contended host I/O suspected — GPUs 0-4 run
+other users' training) and the 3h fixed-backend battery still hit its cap at the same
+init line. Backend mistral-flags fix is committed (correct + keeps the door open);
+executor stays OUT of all slates; GPU7 verified clean. Not load-bearing: reasoning
+program closed with 4 families.
