@@ -1273,3 +1273,26 @@ constructs, CI'd)."
 Open user-gated unlocks for criterion 3's caveats: (1) GLM math-domain replication
 (drops the humor qualifier), (2) frontier scoring of the flip-selected sets on
 gpt-oss-120b (free+local now, ~minutes at observed throughput).
+
+## Decoder-channel MI upper-bound census (user request, 2026-08-08 ~18:00)
+
+Formalization: for a fixed decoder-output row, the reference maximizing MI is the row
+itself, so each channel row's upper bound = H(pred), the entropy of the decoder's own
+verdicts. Logged per (task x channel x receiver x base): frac_yes, H_pred, achieved MI
+vs the 4-voter frontier ref, efficiency MI/min(H_pred,H_ref), degeneracy flag
+(frac_yes <=.02 or >=.98). 6,318 rows; news panel-internal only (probe-universe
+landmine); balanced accuracy was already immune to constant rows (scores .5) — MI makes
+the collapse explicit. mi_upper_census.py / mi_upper_census_v1.json.
+
+**Findings:** (1) degenerate outcomes are common and structured — the mm placebo arm is
+most degenerate everywhere (39-57%) with MI ~0 (placebo validity confirmed); (2) channel
+ordering: name = high entropy, lowest efficiency (.06-.15) — talkative, uninformative;
+dossier = lowest entropy (22-53% degenerate) but highest MI/efficiency when varying
+(medEff .24-.55, maxMI up to 1.0) — richer articulation spends output entropy and
+converts it to information; (3) degeneracy is capability-graded (llama 48.7% -> 14.2%
+1B->70B); (4) two mirror-image receiver anomalies: qwen25-3b 89.2% degenerate/medH .000
+(explains its dead-flat ladder cells — channel bound zero) vs gemma2-27b 0.5%
+degenerate/medH .943 but medMI .004 (variance WITHOUT information — same lesson as the
+A-bank degeneracy audit, matches gemma's cross-family flip-ladder outlier). Caveats:
+plug-in MI small-sample upward bias (flags not third decimals); output degeneracy is
+receiver-relative, not construct-intrinsic (falls with z).
