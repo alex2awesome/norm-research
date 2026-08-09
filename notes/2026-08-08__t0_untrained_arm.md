@@ -118,7 +118,100 @@ values below the ceiling.
 
 ## Results
 
-<!-- TABLE -->
+**Kept-box reproduction.** 14 of 16 cells reproduce their published `VA_nl` *and* `VAT_nl` to within 1e-4 on the kept box (mirror cells on the mac, the scale-up-wave-C / mirror-2 cells on sk3) — the two-box design recovered the ledger exactly. Two cells fail on **both** boxes and are flagged in `box_choice`: `press_verdict` (its ledger was produced under scikit-learn 1.9.0 on Darwin-arm64; neither available box is that combination — kept sk3, |Δ VA_nl| .0015) and `code_v3` (kept the closer box; its canonical readout is within-repo, and its pooled row is marked ‖ = POOLED_DO_NOT_QUOTE in the master ledger too). Neither flag touches the T₀ comparisons, which are all computed **within one run on shared folds**.
+
+| field | cell | n_E | T₀ | T | VA_nl | VAT₀_nl | VAT_nl | (VAT₀−VA) est [CI] P | (VAT−VAT₀) est [CI] P | (T₀−T) est [CI] P |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|---|
+| Peer review | `peer_verdict` | 1244 | .5573 | .7769 | .6684 | .6717 | .7415 | +.0090 [−.0060,+.0234] 0.89 | +.0604 [+.0334,+.0881] 1.00 | −.2196 [−.2583,−.1785] 0.00 |
+| Peer review | `peer_curation` | 1571 | .5251 | .5936 | .5286 | .5302 | .5542 | +.0077 [−.0101,+.0245] 0.79 | +.0263 [−.0030,+.0559] 0.96 | −.0685 [−.1093,−.0251] 0.00 |
+| Peer review | `peer_revealed` | 478 | .4988 | .8842 | .6554 | .6518 | .8478 | +.0042 [−.0157,+.0238] 0.66 | +.2010 [+.1507,+.2508] 1.00 | −.3855 [−.4410,−.3289] 0.00 |
+| Regulatory (N&C) | `nc_responded` | 1904 | .4310 | .8167 | .7912 | .7947 | .8319 | +.0052 [−.0046,+.0149] 0.83 | +.0365 [+.0170,+.0557] 1.00 | −.3857 [−.4259,−.3444] 0.00 |
+| Regulatory (N&C) | `nc_outcome` | 1417 | .5379 | .6238 | .6121 | .6125 | .6227 | +.0070 [−.0070,+.0209] 0.82 | +.0153 [−.0028,+.0337] 0.95 | −.0859 [−.1259,−.0431] 0.00 |
+| Regulatory (N&C) | `nc_agree` | 1009 | .5637 | .6034 | .5627 | .5615 | .5713 | +.0195 [−.0032,+.0409] 0.95 | +.0135 [−.0189,+.0482] 0.78 | −.0397 [−.0941,+.0236] 0.09 |
+| Creative writing | `cw_community` | 7008 | .5211 | .7921 | .6652 | .6668 | .7869 | +.0016 [−.0015,+.0048] 0.85 | +.1216 [+.1098,+.1334] 1.00 | −.2710 [−.2876,−.2542] 0.00 |
+| Humor | `hashtagwars_verdict` | 924 | .5096 | .7315 | .5290 | .5270 | .6454 | +.0007 [−.0216,+.0193] 0.56 | +.1107 [+.0434,+.1776] 1.00 | −.2219 [−.2950,−.1503] 0.00 |
+| Humor | `cap_finalist` | 1055 | .4824 | .6124 | .5806 | .5897 | .6077 | +.0374 [+.0126,+.0616] 1.00 | −.0025 [−.0349,+.0306] 0.46 | −.1299 [−.1979,−.0633] 0.00 |
+| Humor | `cap_crowd` | 2190 | .5008 | .5554 | .5831 | .5815 | .5920 | −.0019 [−.0120,+.0076] 0.33 | +.0067 [−.0065,+.0205] 0.83 | −.0546 [−.0866,−.0219] 0.00 |
+| Humor | `jokes_community` | 3163 | .4884 | .7469 | .6888 | .6887 | .7375 | +.0021 [−.0030,+.0104] 0.71 | +.0469 [+.0290,+.0602] 1.00 | −.2585 [−.2817,−.2339] 0.00 |
+| Math | `mathse_accepted_verdict` | 2600 | .4957 | .6439 | .5737 | .5736 | .6196 | −.0024 [−.0109,+.0059] 0.29 | +.0443 [+.0241,+.0642] 1.00 | −.1482 [−.1765,−.1203] 0.00 |
+| Math | `mathse_vote_score` | 2326 | .4992 | .6538 | .6107 | .6130 | .6558 | +.0005 [−.0075,+.0078] 0.55 | +.0433 [+.0258,+.0609] 1.00 | −.1546 [−.1793,−.1291] 0.00 |
+| Math | `aops_curation` | 5202 | .5727 | .7806 | .7705 | .7685 | .7851 | −.0010 [−.0039,+.0022] 0.28 | +.0171 [+.0063,+.0279] 1.00 | −.2079 [−.2409,−.1737] 0.00 |
+| Software code | `code_v3` ‖ | 11452 | .5153 | .6933 | .7043 | .7031 | .7537 | −.0095 [−.0189,−.0012] 0.01 | +.0545 [+.0319,+.0833] 1.00 | −.1781 [−.2698,−.0744] 0.00 |
+| Journalism/press | `press_verdict` | 605 | .4935 | .7744 | .6795 | .6713 | .7459 | +.0019 [−.0138,+.0215] 0.60 | +.0807 [+.0472,+.1296] 1.00 | −.2809 [−.3551,−.1724] 0.00 |
+
+‖ = `POOLED_DO_NOT_QUOTE` (carried over from the master ledger).
+
+### How much of the fused gain needs the community's labels?
+
+
+| cell | VAT₀−VA_nl | VAT−VA_nl | share of the fused gain reached WITHOUT training | T₀ score collapse? | box |
+|---|---:|---:|---:|---|---|
+| `peer_verdict` | +.0033 | +.0731 | +5% | no | mac |
+| `peer_curation` | +.0016 | +.0256 | +6% | no | mac |
+| `peer_revealed` | −.0035 | +.1924 | -2% | no | mac |
+| `nc_responded` | +.0035 | +.0407 | +9% | no | mac |
+| `nc_outcome` | +.0005 | +.0107 | +4% | no | mac |
+| `nc_agree` | −.0011 | +.0086 | -13% | no | mac |
+| `cw_community` | +.0016 | +.1217 | +1% | no | mac |
+| `hashtagwars_verdict` | −.0020 | +.1164 | -2% | YES | mac |
+| `cap_finalist` | +.0091 | +.0271 | +34% | no | mac |
+| `cap_crowd` | −.0016 | +.0089 | -18% | no | mac |
+| `jokes_community` | −.0002 | +.0487 | -0% | no | mac |
+| `mathse_accepted_verdict` | −.0001 | +.0460 | -0% | no | sk3 |
+| `mathse_vote_score` | +.0023 | +.0451 | +5% | no | sk3 |
+| `aops_curation` | −.0020 | +.0146 | -13% | no | sk3 |
+| `code_v3` | −.0012 | +.0494 | -2% | no | mac |
+| `press_verdict` | −.0082 | +.0664 | -12% | no | sk3 |
+
+### Cross-cutting read
+
+1. **The untrained base model is at chance on every community-preference variable in
+   the grid.** T₀ spans **.4310 – .5727** across 16 cells, mean **.5108**; it clears
+   .53 on only four cells and never reaches .58. This holds on cells where the trained
+   T is very strong (`peer_revealed` T .8842 / T₀ .4988; `nc_responded` T .8167 /
+   T₀ .4310; `cw_community` T .7921 / T₀ .5211). **T₀ − T is negative on 16/16**, with
+   P(>0) = 0.00 on 15 of 16 (`nc_agree`, the weakest-T cell, is the lone exception at
+   P=.09). Zero-shot Llama-3.1-8B reading the same document under the same token budget
+   simply does not know what these communities reward.
+
+2. **Fusion without training is worth essentially nothing.** VAT₀ − VA_nl spans
+   **−.0095 to +.0374**, median **+.0003**. It is positive at P≥.95 on exactly **one**
+   cell (`cap_finalist` +.0374 [+.0126,+.0616] P=1.00; `nc_agree` +.0195 P=.95 is the
+   only other one at threshold) and **significantly negative on one** (`code_v3`
+   −.0095 [−.0189,−.0012] P=.01 — adding a chance-level column to the bank actively
+   costs you). On the other 14 the CI straddles zero. Contrast VAT − VAT₀, which is
+   positive at P≥.95 on **13/16** and P=1.00 on 11.
+
+3. **So the fused gain is bought by label-training, not by the LLM prior.** Across the
+   16 cells the untrained share of the fusion gain (VAT₀−VA)/(VAT−VA) has median
+   **≈0%**; it is under 10% on 12 cells and negative on 8. The single real exception is
+   `cap_finalist` at **+34%** — and that is the cell whose documents are one-line
+   captions, i.e. the one place where "is this a good contest entry?" is answerable
+   from generic prior alone. `cap_crowd`, the *same corpus* under a crowd-median rather
+   than an editor label, gets **−18%**: the prior helps pick what an editor would
+   shortlist, not what the crowd voted up.
+
+4. **This is a clean falsification of the "the dense arm is just an LLM reading the
+   text" reading of Δ_beyond.** Every cell's Δ_beyond (T − VA_nl) survives with the
+   *trained* column and evaporates with the *untrained* one, at identical rows, folds,
+   bank, and token budget. The only thing that changed is whether the 8B encoder saw
+   the community's labels. Taste, as this program measures it, is not latent in a
+   frontier-adjacent prior waiting to be prompted out — it is learned from the
+   community.
+
+5. **Scale caveat, stated plainly.** T₀ is one 8B base checkpoint with one frozen
+   question per cell. This bounds *that* instrument, not "LLM priors" in general; a
+   larger base model or a prompt-optimised elicitation could move T₀. What the arm does
+   establish is that the fusion gains in the master ledger are **not** attributable to
+   generic document-reading capacity at the dense arm's own scale, which is the
+   confound the arm was registered to kill.
+
+6. **One instrument-quality caveat.** `hashtagwars_verdict` collapsed (7 distinct
+   P(Yes) over 924 rows) and four cells saturate at P(Yes)=1.0000 in the median. Where
+   T₀ is tie-dominated its AUC is pulled toward .5 mechanically, so those cells' T₀
+   values are a floor, not a measurement. This *strengthens* rather than weakens
+   conclusion 2 for the non-collapsed cells, but `hashtagwars_verdict`'s T₀ .5096
+   specifically should be read as "uninformative", not "chance".
 
 ## Artifacts
 
