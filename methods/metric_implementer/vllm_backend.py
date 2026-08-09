@@ -268,6 +268,12 @@ class OfflineVLLM(_BaseVLLM):
             kwargs["block_size"] = int(bs)  # FlashInfer head_size-256 bug (gemma-2) needs 32/64
         if os.environ.get("VLLM_ENFORCE_EAGER"):
             kwargs["enforce_eager"] = True  # skip compile/cudagraph (gemma-3 init-hang diagnosis)
+        if "magistral" in str(model).lower():
+            # Magistral ships tekken.json only (no HF tokenizer files); the auto format
+            # path silently wedges before weight load (2026-08-09 diagnosis). Vendor-
+            # recommended mistral-format flags are required.
+            kwargs.update(tokenizer_mode="mistral", config_format="mistral",
+                          load_format="mistral")
         if lora_path:
             kwargs["enable_lora"] = True
             kwargs["max_lora_rank"] = int(getattr(cfg, "vllm_max_lora_rank", 0) or 64)
