@@ -1432,3 +1432,24 @@ sets). Content-certified per-metric wins at qwen: 2/203 (Play/safety frame conte
 receiver = calibration-need x content, both receiver-relative; the earlier 22-triple
 harvest (wrong ref universe: 41-slate panels vs bank) was discarded before recording.
 gpt-oss leg chaining; combined 3-receiver per-metric ledger on its END.
+
+## v3sets COMBINED ledger (2026-08-09 04:40): 7/203 metrics with cross-receiver CONTENT — norm-boundary constructs
+
+gpt-oss leg landed (25 min); v3sets_ledger_v1.json (203 triples per receiver, flip-v3
+crowd-panel ref, union masks). Receiver-level decomposition (paired 20k):
+qwen25-72b fun−def −.1186* / CONTENT +.0135* / ANCHOR −.1321*;
+gpt-oss-120b fun−def +.0588* / CONTENT −.0040 n.s. / ANCHOR +.0628*.
+
+Per-metric: 7/203 metrics have content >= +.05 at BOTH receivers — Taste-and-timing on
+traumatic/charged subjects (+.440 qwen / +.313 gptoss), Profanity/edginess standards
+(+.211/+.157), Timeliness/topicality (+.154/+.136), Social distance/power/facework
+(+.174/+.077), International translatability (+.191/+.052), Persona authenticity
+(+.120/+.076), + Recurring-bits/Storytelling single-receiver. THEME: cross-receiver
+content winners are SOCIAL-NORM BOUNDARY constructs (where-is-the-line), complementing
+the 70B ledger's gestalt/surprise-mechanics winners. Two certified faces of
+examples-help: (a) show-dont-tell mechanics at selecting receivers, (b) norm-boundary
+constructs with receiver-robust exemplar content ("Taste and timing" is literally a
+TASTE construct — tacit-taxonomy tie-in). Caveats: threshold-selected from 203
+(descriptive; no multiplicity correction — but +.44/+.31 replicated cross-architecture
+is far beyond the noise floor); bank means hide this tail (gptoss mean content ~0).
+Advisor audit bundled with GLM-math landing.
