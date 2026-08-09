@@ -1296,3 +1296,35 @@ degenerate/medH .943 but medMI .004 (variance WITHOUT information — same lesso
 A-bank degeneracy audit, matches gemma's cross-family flip-ladder outlier). Caveats:
 plug-in MI small-sample upward bias (flags not third decimals); output degeneracy is
 receiver-relative, not construct-intrinsic (falls with z).
+
+## MI upper-bound census v2 — exemplar arms, gen panels, flip rows (task #29, 2026-08-08 ~18:40)
+
+mi_upper_census_v2.py / mi_upper_census_v2.json, 5,649 rows; same conventions as v1;
+news excluded entirely (gen/flip rows are fresh-probe scored). Findings:
+
+**Exemplar channels (pooled):** def_exemplars has the best channel profile — lowest
+degeneracy (22.5%), highest medMI (.082) and medEff (.300) — examples ON TOP of
+definitions preserve output entropy and add information (channel-level echo of the
+additive result). Bare exemplars ≈ their mm placebos in entropy (H .43 vs .45) but
+carry ~1.5x the efficiency (.173/.186 vs .115/.117) — the exemplar channel's
+label-relevant content is real but thin pooled; mm efficiency ~.11 is the anchoring
+floor.
+
+**Flip functional rows:** mechanically explains the ladder — qwen25-3b 100% degenerate
+(its ladder cells were constant-output, bound zero), llama1b 76%; top rungs llama70b/
+qwen25-72b ~0% degenerate, medEff .31. gemma2-27b: 0% degenerate, medH .731, medEff
+.031 — variance-without-information REPLICATES on the functional channel; gemma's
+flip-ladder deficit is a receiver-information failure, not a collapse.
+
+**Gen panels — think toggle is an entropy valve at small scale:** qwen3-1.7b nothink
+52.8% degenerate/medH .122 → think 4.2%/medH .831 (MI .000→.025); effect shrinks
+up-ladder (14b 13.9→6.9%, 32b 4.2→2.8%) — the inversely capability-graded think-gain
+expressed as channel entropy. gpt-oss-120b think: 39% degenerate but medEff .376
+(highest of all gen receivers) — frontier decisiveness, same entropy-for-efficiency
+trade as the dossier arm.
+
+**Instrument-health catch:** phi4-reasoning gen rows = 0% degenerate, medMI .001,
+medEff .009 — the census independently detected the KNOWN-INVALID phi4 parser
+(variance-without-information signature). RULE: phi4-reasoning score_binary_gen rows
+are parse noise, never quotable; the census doubles as a parser-health monitor.
+(qwen25/R1 think==nothink identical rows = toggle inertness, known validation.)
