@@ -1,0 +1,117 @@
+{
+  "artifact": "T0 (UNTRAINED-T) FUSION ARM -- FROZEN ELICITATION TEMPLATES",
+  "frozen_utc": "2026-08-08T21:05:00Z",
+  "frozen_before_any_scoring": true,
+  "design_source": "notes/2026-07-27__vat-run-registry.md, entry '2026-08-08 -- FROZEN DESIGN (before any scoring): UNTRAINED-T FUSION ARM'",
+  "rule": "ONE fixed template per cell, written for ALL cells BEFORE any score exists. NO iteration of any template after seeing any score (that would make T0 trained-by-selection). NO bank-criterion text in any prompt. If a cell's score distribution collapses to one answer, that is RECORDED, not fixed.",
+  "model": {
+    "checkpoint": "meta-llama/Llama-3.1-8B",
+    "why": "the exact base checkpoint the program's LoRA dense T trains from (methods/dense/train_reward_model.py --base_model default, line 84)",
+    "mode": "ZERO-SHOT, no LoRA, no chat template (base checkpoint has chat_template=false), offline batch vLLM",
+    "sampling": "temperature=0.0, max_tokens=1, allowed_token_ids = the Yes/No variant set below, logprobs over that masked set"
+  },
+  "prompt_format": {
+    "template": "{question}\n\n{document}\n\nAnswer Yes or No.\n",
+    "order": "question sentence, then the document, then the fixed instruction",
+    "document_truncation": {
+      "tokenizer": "meta-llama/Llama-3.1-8B",
+      "max_length": 1024,
+      "side": "right (tail dropped)",
+      "add_special_tokens": false,
+      "why": "the SAME max length the trained dense T used (train_reward_model.py --max_length default 1024; score_eval_dense_v4.py DENSE_SCORE_MAXLEN=1024). The 1024 budget applies to the DOCUMENT; the question and the instruction are added on top so that every cell's document budget is identical to T's."
+    },
+    "document_definition": "the document string the trained dense T read for that row, byte-identical where the dense chain's own split file carries it (see t0_rows/<cell>.meta.json text_source). Cells whose dense text is pre-formatted (e.g. 'CONTEST HASHTAG: ...\\n\\nTWEET: \"...\"') keep that formatting -- T saw it too."
+  },
+  "score": {
+    "definition": "P(Yes) = sum(exp(logprob) over POS variants) / (sum over POS + sum over NEG), computed from the FIRST generated token with the logits masked to the variant set",
+    "yes_no_variants": {
+      "note": "candidate surface forms; only those that encode to a SINGLE token under the Llama-3.1-8B tokenizer are used, and the realised id set is recorded in the score file",
+      "pos": ["Yes", " Yes", "yes", " yes", "YES", " YES"],
+      "neg": ["No", " No", "no", " no", "NO", " NO"]
+    }
+  },
+  "cells": {
+    "peer_verdict": {
+      "question": "Will the machine learning paper with the following abstract be accepted at the conference it was submitted to?",
+      "preference_variable": "ICLR venue decision: accepted vs rejected",
+      "document": "paper abstract (no header)"
+    },
+    "peer_curation": {
+      "question": "Will the following accepted machine learning conference paper be selected for an oral or spotlight presentation rather than a poster?",
+      "preference_variable": "presentation tier among ACCEPTED papers: oral/spotlight vs poster",
+      "document": "TITLE: ...\\n\\nABSTRACT: ..."
+    },
+    "peer_revealed": {
+      "question": "Will the following machine learning conference paper go on to be cited more often than most other papers published at the same venue in the same year?",
+      "preference_variable": "OpenAlex citation count in the top quartile within venue x year (bottom quartile = 0; middle 50% dropped)",
+      "document": "title, blank line, abstract (no labels)"
+    },
+    "nc_responded": {
+      "question": "Will the following public comment on a United States federal agency rulemaking receive a response from the agency in the final rule?",
+      "preference_variable": "comment matched to a response-to-comments passage in the agency's final rule",
+      "document": "raw public comment text (no header)"
+    },
+    "nc_outcome": {
+      "question": "Will the agency change the rule in response to the following public comment on a United States federal agency rulemaking?",
+      "preference_variable": "majority of the comment's matched response labels are MADE (rule changed) rather than NONE; ties dropped",
+      "document": "raw public comment text (no header)"
+    },
+    "nc_agree": {
+      "question": "Will the agency agree with the following public comment on a United States federal agency rulemaking?",
+      "preference_variable": "majority of the comment's matched response types are accepted/agree rather than disagree; ties dropped",
+      "document": "raw public comment text (no header)"
+    },
+    "cw_community": {
+      "question": "Will the following story written in response to a writing prompt be upvoted by readers on the online writing forum where it was posted?",
+      "preference_variable": "r/WritingPrompts story comment score >= 10 (corpus balanced 50/50)",
+      "document": "PROMPT: ...\\n\\nSTORY: ..."
+    },
+    "hashtagwars_verdict": {
+      "question": "Will the following tweet be selected by the show's staff as one of the top entries in this hashtag contest?",
+      "preference_variable": "editorial selection into the episode's top-10 or as the winner",
+      "document": "CONTEST HASHTAG: #...\\n\\nTWEET: \"...\""
+    },
+    "cap_finalist": {
+      "question": "Will the following reader-submitted caption be chosen by the editors as a finalist in the cartoon caption contest?",
+      "preference_variable": "editor-picked finalist; negatives are hard (crowd top-20 captions that were NOT picked)",
+      "document": "caption text only"
+    },
+    "cap_crowd": {
+      "question": "Will the following reader-submitted caption be rated more highly by readers than the typical caption entered in the same cartoon caption contest?",
+      "preference_variable": "crowd_mean strictly above the median crowd_mean of its own contest (>=100 votes; ties dropped)",
+      "document": "caption text only"
+    },
+    "jokes_community": {
+      "question": "Will the following joke posted to an online joke forum be upvoted more than most other jokes posted there?",
+      "preference_variable": "Reddit score in the top quartile of its (length x format x topic) stratum; bottom quartile = 0",
+      "document": "post title followed by the joke body"
+    },
+    "mathse_accepted_verdict": {
+      "question": "Will the following answer be marked as the accepted answer by the person who asked the mathematics question?",
+      "preference_variable": "asker marked this answer accepted",
+      "document": "QUESTION: ...\\n\\nANSWER:\\n..."
+    },
+    "mathse_vote_score": {
+      "question": "Will the following answer receive a higher vote score than the typical answer to the same mathematics question?",
+      "preference_variable": "vote score strictly above the median answer score on its own question; ties dropped",
+      "document": "QUESTION: ...\\n\\nANSWER:\\n..."
+    },
+    "aops_curation": {
+      "question": "Does the following forum solution take substantially the same approach as the official editorial solution to the same competition problem?",
+      "preference_variable": "LLM-judge match label: the forum solution takes substantially the same approach as the editorial/wiki solution. NOT a preference or popularity signal -- the only cell in the grid whose y is a match label, so its question names the match, not a preference.",
+      "document": "Problem: ...\\n\\nSolution: ..."
+    },
+    "code_v3": {
+      "question": "Will the following GitHub pull request be merged into the repository?",
+      "preference_variable": "pull request merged vs closed without merge",
+      "document": "v3 enriched card: Title / Description / Review comments / Diff (pre-formatted, may carry a truncation marker)"
+    },
+    "press_verdict": {
+      "question": "Will the following press release be written up by multiple news outlets?",
+      "preference_variable": "picked up by >=3 distinct tracked news outlets; negatives are topic-matched releases with zero pickups",
+      "document": "full raw press-release text"
+    }
+  },
+  "label_definition_provenance": "each cell's preference_variable was read off the cell's own builder/manifest before this file was written; the evidence trail (file:line per cell) is summarised in notes/2026-08-08__t0_untrained_arm.md",
+  "no_labels_seen": "no y value and no T0 score existed at the time this file was written; the questions were derived from label DEFINITIONS (builder code and manifests) only"
+}
