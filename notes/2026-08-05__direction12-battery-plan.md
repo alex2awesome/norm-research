@@ -1328,3 +1328,24 @@ medEff .009 — the census independently detected the KNOWN-INVALID phi4 parser
 (variance-without-information signature). RULE: phi4-reasoning score_binary_gen rows
 are parse noise, never quotable; the census doubles as a parser-health monitor.
 (qwen25/R1 think==nothink identical rows = toggle inertness, known validation.)
+
+## User go-ahead round (2026-08-09 ~01:50): four launches
+
+1. **unified_v1 B200 SMOKE PASSED** (sk3 GPU6, Qwen3-8B engine boot + score_binary
+   logic check .9999/.0000) — env-unification gate CLEARED. CUTOVER DATE 2026-08-09:
+   new lanes use envs/unified_v1; in-flight lanes finish on their original interpreter;
+   never mix pre/post-cutover numbers in one comparison. (sk1/sk2 unified builds to be
+   verified before their next new lane.)
+2. **magistral-24b retry** launched (mag_retry.sh as-is, GPU7, pid 534896, MAGRETRY
+   markers watched).
+3. **flip-sets at frontier** launched (flip_gptoss.py, GPU5, pid 544778): flip-v2
+   functional rubrics (both selectors x frontier/encoder) + same-readout definition_gen
+   arm, humor/CW/math, gpt-oss-120b generative Harmony readout — removes criterion-3's
+   "flip sets never frontier-scored" caveat when harvested vs flipladder_mask_v1.
+4. **GLM-5.2 math exemplar replication** launched (zxa_glm_ex.py glm-5.2 math, API,
+   pid 546350): smoke projects 8.7M tokens (cap 35M, weekly Lite 87M ok); planted
+   anchors first; resume-safe JSONL — on landing, drops criterion-3's "(humor)" scope
+   qualifier if the signature replicates.
+PUPA waiter confirmed single (sk2 pid 1800112; a duplicate I spawned during a status
+check was killed by PID). AIME still running on sk1; hotpot seeds 1/2 DONE
+(.409->.412, .404->.417); sk1 PUPA-MIPROv2 candidate DONE (.848->.878).
