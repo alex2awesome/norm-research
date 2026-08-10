@@ -1534,3 +1534,28 @@ combined; gptoss leg marginal without the top construct — disclose). Mechanics
 other medians are exactly ~0 on all legs. Phrasing: content-not-winning framing still
 applies; theme claims cite this test, never the p=.44 winner-set. Taste-and-timing
 confirmed norm-boundary under blind assignment.
+
+## De-censoring run: verdict = DISCLOSED, with a principled reason (2026-08-10 ~13:30)
+
+The 69-metric deep-censored tail (top_minus_mid>.02 in ALL 3 families; supersedes the
+retracted ~235 OLS-tail) scored on gpt-oss-120b (gen readout, GPU6, 69/69, then 67
+with valid refs). Result: gpt-oss recovers LESS than every local top rung — vs
+llama70b/qwen25-72b −.296* each (both are ref voters, adjacency-inflated), vs the
+clean non-voter qwen3-32b **−.1343* [−.1624,−.1064]**, pos .15; only 5/67 individual
+ceiling breaks >=+.05 (Setting-as-active-engine +.102, Category/market-fit +.092,
+Setting-as-thematic-agent +.081, Constructive-sequential-proofs +.076,
+Incongruity-mechanics +.050). Instrument check: NOT the gpt-oss def-collapse artifact
+(med frac_yes .331, 7.2% degenerate — healthy variance, low ref agreement = the gemma
+signature).
+
+**Criterion-4 verdict (the goal's "de-censored by a stronger listener OR explicitly
+disclosed"):** the tail CANNOT be de-censored against a local-dialect reference — the
+crowd ref's two voters are the same families whose ladders the tail is still climbing,
+so any outside listener is structurally disadvantaged; gpt-oss's
+variance-without-ref-agreement on these constructs is the listener-indexed thesis
+applied to the reference itself. VERDICT ROW: "asymptote unknown; not de-censorable
+under the local-dialect reference; 5 individual ceiling-breaks stand as existence
+proofs that some tail constructs keep gaining beyond local ladders." Never phrase as
+"the tail is inarticulable" or "gpt-oss is weaker." Task #22 CLOSED as
+measured+disclosed. Artifacts: mbar_decensor_gptoss.npz, decensor_harvest_v1.json,
+decensor_tail_v1.json (+ laptop mirrors).
