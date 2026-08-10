@@ -1,0 +1,175 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 21,
+  "n_chunks": 42,
+  "chunk_chars": 39869,
+  "model": "gpt-5-mini",
+  "elapsed_s": 122.9059761660028,
+  "input_tokens": 15016,
+  "output_tokens": 5547,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "advanced TeX users / macro writers who design custom output routines",
+    "subtask_short": "designing TeX output routines",
+    "subtask_description": "Guidance and concrete rules for writing and debugging plain TeX output routines (headlines, footlines, page numbering, multi-column layout, marks, index continuation lines). Targets advanced TeX macro authors who must control page breaking and insertion behavior.",
+    "subtask_keywords": [
+      "tex",
+      "output_routine",
+      "typesetting",
+      "macros",
+      "advanced"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Page-number register and explicit numeric assignment",
+        "description": "plain TeX makes \\pageno an abbreviation for \\count0, so you can say \\pageno=100 to set the next page number.",
+        "guidance": "Use \\pageno to set page numbers directly when you want to force specific numbering; be aware of TeX's update of \\pageno during output routines."
+      },
+      {
+        "name": "Use \\folio to format negative page numbers as roman numerals",
+        "description": "The \\folio macro converts negative page numbers to roman numerals; Appendix B defines \\folio as \\ifnum\\pageno<0 \\romannumeral-\\pageno \\else\\number\\pageno \\fi.",
+        "guidance": "If your document uses negative \\pageno values for front-matter, use \\folio to get roman numerals automatically."
+      },
+      {
+        "name": "Always specify the font name when defining headlines/footlines",
+        "description": "It is important to include the name of each font explicitly whenever you are defining a headline or footline because an output routine can come into action at somewhat unpredictable times.",
+        "guidance": "If you don't specify the font (e.g. \\tenrm), the page number or headline might be typeset in whatever font happens to be current when TeX outputs the page, causing mysterious effects."
+      },
+      {
+        "name": "Adjust \\voffset when using headlines to preserve top margin",
+        "description": "When you use headlines, it is generally wise to set \\voffset to the equivalent of two lines of text so that there will still be a margin of one inch at the top of your output pages.",
+        "guidance": "Set \\voffset appropriately (example shows \\voffset=2\\baselineskip) whenever headlines are placed at the top to avoid losing the top margin."
+      },
+      {
+        "name": "Define output routine as a token list and rely on grouping",
+        "description": "The current \\output routine is defined as a token list parameter (like \\everypar) and TeX automatically inserts a begingroup and endgroup around it to keep local changes from leaking out.",
+        "guidance": "Rely on this grouping to make local changes (e.g. change \\baselineskip while placing a headline) without disturbing the surrounding document state."
+      },
+      {
+        "name": "Default output routine behaviour",
+        "description": "If no \\output routine has been specified, or if the user has said \\output={}, TeX supplies its own routine essentially equivalent to \\output={\\shipout\\box255}.",
+        "guidance": "The default simply ships out the page with no headline/footline and without changing the page number; redefine \\output when you need headlines/footlines or other processing."
+      },
+      {
+        "name": "Use \\shipout to produce DVI output and be mindful of \\write expansion timing",
+        "description": "\\shipout(box) sends the contents of the box to the dvi file; all \\write commands that appear inside the box are performed as that box is being shipped out, and \\write expands macros during TeX's scanning.",
+        "guidance": "Because \\write inside a shipped box may be delayed relative to macro definitions, ensure any macros used by a \\write are properly defined at the time of the \\shipout that performs the \\write."
+      },
+      {
+        "name": "Ensure macros used in \\write are defined at shipout time (delayed writes)",
+        "description": "It is necessary to be sure that all macros that might appear within the text of a \\write are properly defined when a \\shipout command is given. For example, \\obeyspaces makes spaces active and so a definition for an active space should exist during the next \\shipout even if TeX no longer makes spaces active at that time.",
+        "guidance": "Be careful with category-code or active-character changes if their expansion appears in deferred \\write content."
+      },
+      {
+        "name": "Inspect \\insertpenalties and \\outputpenalty in output routine",
+        "description": "Just before the output routine begins, insertions are put into their own vboxes and \\insertpenalties is set equal to the total number of holdover insertions; furthermore \\outputpenalty is set to the penalty at the current breakpoint. An output routine can do special things when these quantities have special values.",
+        "guidance": "Use these parameters to detect special situations such as a \\supereject (\\outputpenalty = -20000) or whether insertions are being held over (\\insertpenalties > 0)."
+      },
+      {
+        "name": "Detect and handle \\supereject via \\outputpenalty and \\insertpenalties",
+        "description": "The output routine of plain TeX recognizes a \\supereject (which ejects all held-over insertions) by the fact that \\supereject causes \\outputpenalty to be -20000, and by using \\insertpenalties to decide if any insertions are being held over.",
+        "guidance": "Check for \\outputpenalty > -20000 vs <= -20000 to decide whether to call a \\dosupereject routine (which clears held insertions)."
+      },
+      {
+        "name": "Avoid output routines that fail to make progress",
+        "description": "To prevent endless looping, your output routine should always make progress of some sort whenever it comes into play. TeX has a loop-detection mechanism using \\deadcycles and \\maxdeadcycles (plain TeX sets \\maxdeadcycles to 25). If \\deadcycles >= \\maxdeadcycles when an output routine is about to start, TeX issues an error and performs the default output routine instead of yours.",
+        "guidance": "Never write an output routine that simply reinserts everything (e.g. \\output={\\unvbox255 \\penalty\\outputpenalty}) without changing the situation; always ensure the routine ships out something or modifies state to converge."
+      },
+      {
+        "name": "\\box255 must be void at start and finish of output routine",
+        "description": "When your output routine is finished, \\box255 should be void. Similarly, \\box255 should be void when TeX is getting ready to fill it with a new page of material just before starting an output routine. If \\box255 is nonvoid at either of those times, TeX will complain that you are misusing this special register and the register contents will be destroyed.",
+        "guidance": "Always either \\shipout\\box255 or move/unbox its contents elsewhere so \\box255 is empty at the appropriate times."
+      },
+      {
+        "name": "Structure page construction with \\makeheadline, \\pagebody, \\makefootline",
+        "description": "Plain TeX's \\plainoutput is an abbreviation for \\shipout\\vbox{\\makeheadline \\pagebody \\makefootline} followed by \\advancepageno and a \\dosupereject check.",
+        "guidance": "Use this pattern (construct a vbox to hold headline, page body, and footline, then \\shipout that vbox) as a clean, modular approach to building pages."
+      },
+      {
+        "name": "Position headline reference point relative to top line",
+        "description": "The \\makeheadline macro constructs a vbox positioned so that the reference point of the headline is exactly 24pt above the reference point of the top line on the page (example uses a magic constant -22.5pt equal to topskip - height of strut - 2\\baselineskip).",
+        "guidance": "Compute and use the appropriate offsets so headlines sit consistently above the main text even when fonts or top lines vary."
+      },
+      {
+        "name": "Set \\boxmaxdepth=\\maxdepth inside page vbox to preserve depths",
+        "description": "The \\pagebody macro sets \\boxmaxdepth=\\maxdepth so that the vbox will be constructed under the same assumptions that TeX's page builder used to set up \\box255.",
+        "guidance": "This ensures consistent treatment of box depths when reconstructing page contents inside the output routine."
+      },
+      {
+        "name": "Unbox insertions (\\topins, \\footins) so their glue participates with main page glue",
+        "description": "The \\pagecontents macro unboxes \\topins and \\footins so that the glue coming from insertions can help out the glue on the main page. The \\footnoterule macro places a dividing line and makes a net contribution of 0pt to the height of the vertical list.",
+        "guidance": "Unboxing insertions allows their glue/stretch to interact with the page glue (important for correct spacing and ragged-bottom behavior)."
+      },
+      {
+        "name": "Implement ragged-bottom by inserting infinite glue",
+        "description": "Ragged-bottom setting is achieved by inserting infinite glue (\\vfil) which overpowers the stretchability of \\topskip.",
+        "guidance": "Use conditional \\ifraggedbottom to insert \\kern-\\dimen etc. and \\vfil when appropriate."
+      },
+      {
+        "name": "Advance page number respecting negative numbering schemes",
+        "description": "The \\advancepageno macro normally advances \\pageno by +1; but if \\pageno is negative (for roman numerals) the advance is by -1. Example: \\ifnum\\pageno<0 \\global\\advance\\pageno by -1 \\else \\global\\advance\\pageno by 1 \\fi.",
+        "guidance": "Use conditional advancement so numbering direction matches the sign convention for roman numeral front-matter."
+      },
+      {
+        "name": "Clear held-over insertions with a \\dosupereject routine",
+        "description": "The \\dosupereject macro is designed to clear out any insertions that have been held over (illustrations, footnotes, or both) by inserting an empty line and \\vfill\\supereject if \\insertpenalties>0.",
+        "guidance": "Use \\dosupereject to force ejects that remove held insertions; be careful to adjust vertical spacing (negative \\kern to cancel \\topskip) so layout remains correct."
+      },
+      {
+        "name": "For multicolumn layout, use a \\fullhsize and keep headlines/footlines spanning full width",
+        "description": "Introduce a new dimension \\fullhsize to represent the width of an entire page; set \\hsize to the column width and make headlines/footlines use \\fullline (an \\hbox to \\fullhsize) so they span both columns.",
+        "guidance": "Columns themselves should have independent insertions (footnotes/illustrations) as if they were facing pages; don't change \\pagebody macro for this."
+      },
+      {
+        "name": "Implement two-column output by saving left column and outputting when right is ready",
+        "description": "Use a flag (e.g. \\lr set to L or R) and a box register (e.g. \\leftcolumn) to store the left column when completed; when a right column completes, \\shipout a vbox combining both columns and \\advancepageno.",
+        "guidance": "Example: \\output uses \\global\\setbox\\leftcolumn=\\columnbox; when the right column arrives call \\doubleformat to \\shipout the pair. Ensure \\columnbox produces width \\hsize boxes (use \\leftline{\\pagebody})."
+      },
+      {
+        "name": "At end of multicolumn mode, supply an empty column if necessary",
+        "description": "When double-column setting ends there is a chance the final column has fallen at the left; use \\supereject and check the \\lr flag to supply an empty right-hand column (e.g. \\null\\vfill\\eject) so all accumulated material prints.",
+        "guidance": "This avoids losing the last left-column content when no matching right column exists; column-balancing is trickier when footnotes/insertions are involved."
+      },
+      {
+        "name": "Use \\mark to record page-range information for headlines and index placement",
+        "description": "\\mark{(mark text)} inserts a mark token list into the vertical list; when a page is boxed TeX makes available \\botmark (most recent mark on that page), \\firstmark (first mark on that page), and \\topmark (what \\botmark was just before the current page was boxed). If there is no mark on a page all three equal the previous \\botmark.",
+        "guidance": "Use marks to inform output routines about what appears on the page (guide words, section numbers, etc.). Be careful where you place \\mark relative to breaks to get the intended semantics."
+      },
+      {
+        "name": "Place marks before page-breaking penalties to get correct top-of-page values",
+        "description": "To have the mark reflect the state of affairs at the top of a page, put the \\mark just before the \\sectionbreak instead of just after the \\leftline (i.e. before the page break), so \\topmark will reflect the section current at the top line.",
+        "guidance": "Think about where the page break might occur; placing the mark before the break makes \\topmark correspond to the top of the page."
+      },
+      {
+        "name": "Pack multiple pieces of information into marks and select components with \\iftrue/\\iffalse trick",
+        "description": "If you need marks to carry two pieces of information (e.g. section numbers for bottom and top) you can put two-part marks like '1.2.7\\else1.2.8' and use \\iftrue and \\iffalse (or expand with \\iftrue\\botmark\\fi) to select left or right component when building the headline.",
+        "guidance": "Use paired marks (one before and one after a potential break) so \\botmark's left component represents bottom and \\topmark's right component represents top; more generally you can pack N pieces separated by \\else and select any one."
+      },
+      {
+        "name": "Marks in horizontal/vertical/internal modes have different visibility",
+        "description": "When \\mark is used in vertical mode TeX puts it into the main vertical list. In horizontal mode a \\mark is treated like \\vadjust or \\insert: after the paragraph has been broken into lines each mark goes into the main vertical list just after the box for the line where it originally appeared. A mark locked too deeply inside a box will not migrate and won't appear as \\firstmark or \\botmark. Marks in internal vertical mode go into a vbox and are not accessible in the main vertical list.",
+        "guidance": "Be mindful where you issue \\mark so it will be visible to output routines; for marks that must appear in the main vertical list avoid boxing them too deeply."
+      },
+      {
+        "name": "Use \\vsplit-produced \\splitfirstmark and \\splitbotmark when splitting vertical lists",
+        "description": "The \\vsplit command (used to break up vertical lists manually) sets up \\splitfirstmark and \\splitbotmark which expand to the first and last marks appearing in the list that was split off. These values (and \\topmark, \\firstmark, \\botmark) are global.",
+        "guidance": "When you manually split vboxes to produce columns of equal height, use these split-mark macros to determine the mark information for each piece."
+      },
+      {
+        "name": "For index continuation lines, use marks and infinite \\maxdepth to compute spacing correctly",
+        "description": "When building an index where continuation lines like 'Main entry (continued):' must be inserted at page breaks, set \\maxdepth=\\maxdimen so \\box255 has the true depth of the last box, create marks for main/sub entries, and in the output routine compare \\dp255 and \\prevdepth to insert a compensating \\kern before inserting the continuation lines.",
+        "guidance": "Techniques shown: use \\obeylines, redefine \\par to examine the next token with \\futurelet, store current main/sub entry texts in token registers (\\maintoks, \\subtoks), and in the output routine do \\dimen0=\\dp255 then \\advance\\dimen0 by -\\prevdepth \\kern\\dimen0 to maintain correct interline spacing when inserting new boxes at the page break."
+      },
+      {
+        "name": "When splitting \\botmark into components, write parsing routines robust to null marks",
+        "description": "To separate components of \\botmark use a macro invoked like \\expandafter\\inxcheck\\botmark\\sub\\end and have parsing macro treat the case where \\botmark is null (argument #1 null) so tests like \\ifx\\next\\empty work reliably.",
+        "guidance": "Always consider the null-mark case; define an \\empty macro and write parsing code that handles the absence of separators safely, preventing accidental expansion errors in the output routine."
+      }
+    ]
+  }
+}

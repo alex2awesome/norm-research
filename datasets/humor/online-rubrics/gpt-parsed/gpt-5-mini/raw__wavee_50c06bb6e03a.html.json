@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_50c06bb6e03a.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10286,
+  "output_tokens": 3674,
+  "elapsed_s": 2147.0037254169583,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in multimodal NLP/computer vision working on humorous cartoon captioning",
+    "subtask_short": "new_yorker_cartoon_captioning",
+    "subtask_description": "Generate winning-style captions for New Yorker cartoons (humorous, culturally-informed single-line captions) and evaluate generated captions against human winners using automated and manual metrics. Focus is on image-only inputs, few-shot/CoT prompting, and finetuning approaches for multimodal models.",
+    "subtask_keywords": [
+      "humor",
+      "image_captioning",
+      "new_yorker",
+      "vision_transformer",
+      "multimodal"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "BLEU score",
+        "description": "Bilingual Evaluation Understudy (BLEU) score metric, designed to evaluate the quality of text via n-gram overlap.",
+        "guidance": "Used as an automated quality evaluation metric for generated captions, but all models performed poorly on BLEU in this task. BLEU operates on n-grams and therefore captures word-level overlap rather than semantic or humorous quality; the paper argues BLEU is not well-suited for evaluating New Yorker-style humorous captions."
+      },
+      {
+        "name": "ROUGE scores (ROUGE-1, ROUGE-2, ROUGE-L)",
+        "description": "Recall-Oriented Understudy for Gisting Evaluation (ROUGE) metrics for summarization/translation evaluation, reported as ROUGE-1, ROUGE-2, and ROUGE-L.",
+        "guidance": "ROUGE was used to compare models; some models achieve higher ROUGE but the authors caution ROUGE still measures n-gram overlap and fails to capture semantic meaning, humor, or multiple valid humorous outputs. ROUGE improvements can reflect metric-fitting rather than genuine humorous quality."
+      },
+      {
+        "name": "SS-SCORE (manual comparative selection metric)",
+        "description": "A proposed manual evaluation metric: for each test image, compare all machine-generated captions, use the human-written winning caption as a reference, select the best machine-generated caption; aggregate how often each model produced the best caption across test images into a proportion (SS-SCORE).",
+        "guidance": "SS-SCORE selects the single best machine caption per image (relative to other machine outputs) using human caption as reference. The paper specifies three qualitative criteria (see separate entries) that annotators should consider when judging captions. SS-SCORE is intended to better reflect human notions of humorous caption quality than BLEU/ROUGE."
+      },
+      {
+        "name": "Manual quality criterion: descriptive meaning beyond listing features",
+        "description": "Captions should contain descriptive information about the cartoon that extends beyond listing features in the image.",
+        "guidance": "A good caption lets an observer internalize why the situation is described that way or why a character would say the line. Anti-pattern: captions that only enumerate visible objects/features without implying meaning or motive are lower quality."
+      },
+      {
+        "name": "Manual quality criterion: convey humor, wit, or fitting voice",
+        "description": "Good captions need not exhaustively describe the scene but should convey humor, wit, or a voice that aptly fits the context of the cartoon.",
+        "guidance": "Focus on producing a humorous stance/voice appropriate to the scene rather than comprehensive description. The goal is stylistic fit and comedic impact rather than completeness."
+      },
+      {
+        "name": "Manual quality criterion: thematic similarity to winning caption",
+        "description": "A caption that addresses similar themes as the contest-winning caption may be more favorably judged (i.e., resemblance to the official winning entry can increase selection likelihood).",
+        "guidance": "While not strictly required, matching the winning entry's themes or angles can increase the chance of being selected as best among machine outputs; this is used as part of SS-SCORE judgments."
+      },
+      {
+        "name": "Principle: winning captions presuppose deep understanding & cultural references",
+        "description": "Winning New Yorker captions rarely merely describe the cartoon; they presuppose a deep understanding of the scene and leverage cultural references and context.",
+        "guidance": "High-quality captions often rely on implicit background knowledge, cultural or topical references, and social reasoning; models must capture such nuances rather than perform literal image description. Anti-pattern: literal/object-only captions that miss intended subtext."
+      },
+      {
+        "name": "Generation constraint: do not leak metadata \u2014 produce caption from image alone",
+        "description": "The contest task mimics human entrants who produce captions from the image alone; providing human-annotated metadata to the model is considered leaking information and not representative of real contest conditions.",
+        "guidance": "While prepending metadata to targets can improve automated metrics (e.g., ROUGE), it gives models privileged information humans don't have and can artificially inflate performance. Evaluation/generation should prefer image-only inputs to emulate contest constraints."
+      },
+      {
+        "name": "Empirical observation: high-quality captions often take the form of character dialogue/statements",
+        "description": "High-quality New Yorker-style captions commonly read as statements made by characters in the cartoon (use of pronouns and first-person/character voice).",
+        "guidance": "Models that learn to produce dialogue-like captions (e.g., starting with 'I always find it strange...') better match human winning styles. Guideline for generation: encourage pronouns and character voice when appropriate."
+      },
+      {
+        "name": "Principle: automated n-gram metrics are insufficient for humor evaluation",
+        "description": "BLEU and ROUGE operate on n-grams and therefore capture word-level overlap rather than the semantic, cultural, and humorous qualities essential for caption quality.",
+        "guidance": "Relying solely on BLEU/ROUGE can misrepresent model capability on humor tasks; use human evaluation or tailored metrics (e.g., SS-SCORE) that consider semantic fit, wit, and style diversity."
+      },
+      {
+        "name": "Benchmark task categories (from prior work): matching, quality ranking, explanation",
+        "description": "Prior benchmarks for New Yorker captions propose three tasks: matching (identify true caption among fakes), quality ranking, and explanation (explain why a caption is humorous).",
+        "guidance": "These tasks provide complementary evaluation axes: matching and ranking are classification/ranking tasks (GPT-4 did well), while explanation stresses deeper understanding and is still challenging for LLMs; use these tasks to probe different model capabilities."
+      },
+      {
+        "name": "Production guideline: few-shot prompting (5-shot) improves stylistic adaptation",
+        "description": "Presenting models with a small set of example cartoon-caption pairs (5-shot) helps models adapt to the specific tone and style of winning captions.",
+        "guidance": "Empirical result: GPT-4V performed substantially better in the 5-shot setting than Chain-of-Thought prompting; for GPT-4V, 5-shot nearly doubled SS-SCORE relative to CoT. Use diverse, high-quality examples to teach style."
+      },
+      {
+        "name": "Production guideline: Chain-of-Thought (CoT) prompting for structured reasoning",
+        "description": "Chain-of-Thought prompting encourages intermediate reasoning steps (describe scene, list uncanny aspects, draft and refine multiple caption concepts) to improve decision-making for caption generation.",
+        "guidance": "CoT can produce improvements by forcing structured analysis (object descriptions, uncanny aspects, multiple drafts, roasting and refinements). However, for GPT-4V in this study CoT underperformed 5-shot; CoT may still be useful for models lacking strong few-shot capabilities."
+      },
+      {
+        "name": "Production guideline: finetuning with LoRA/QLoRA reduces compute while adapting models",
+        "description": "Use Low-Rank Adaptation (LoRA) and quantized LoRA (QLoRA) to finetune large models efficiently by updating low-rank parameter matrices rather than full weights.",
+        "guidance": "Practical finetuning setup used: 7B parameter model, QLoRA, r=32, learning rate 1e-4, \u03b1=16, 10 epochs on A100 80GB. LoRA/QLoRA can adapt multimodal models to the captioning task with reduced memory/compute costs; do note finetuning may still not fix poor image understanding if base vision encoder lacks relevant supervision."
+      },
+      {
+        "name": "Model selection principle: larger models and more recent pretraining data help humor/cultural knowledge",
+        "description": "Models with larger parameter counts and more recent pretraining data (e.g., GPT-4V) tend to perform better because they have broader world knowledge useful for topical/cultural references in captions.",
+        "guidance": "Empirical finding: GPT-4V outperformed other tested models on SS-SCORE and qualitative examples due to size and up-to-date knowledge; prefer large, well-pretrained multimodal models when targeting human-like humor and topical references."
+      }
+    ]
+  }
+}

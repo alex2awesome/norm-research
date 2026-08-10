@@ -1,0 +1,176 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_275c1f893eed.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "wavee_275c1f893eed.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39979,
+  "model": "gpt-5-mini",
+  "elapsed_s": 50.954626207996625,
+  "input_tokens": 12829,
+  "output_tokens": 5874,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "biomedical researchers performing single-cell RNA-seq, histology/flow cytometry, ddPCR and translational CAR\u2011T clinical studies",
+    "subtask_short": "scRNA-seq and CAR\u2011T methods reporting",
+    "subtask_description": "Methods and reporting requirements for single\u2011cell RNA\u2011seq analysis, histology/immunostaining, RNAscope, flow cytometry, ddPCR/ctDNA assays, and statistical/reporting standards in a CAR\u2011T clinical study. Includes procedural parameters, validation controls, and checklist items for reproducible reporting.",
+    "subtask_keywords": [
+      "single_cell_rna_seq",
+      "car_t",
+      "flow_cytometry",
+      "ddpcr_ctdna",
+      "histology",
+      "reporting_standards"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Lineage doublet identification",
+        "description": "Cell-type doublets ('lineage doublets') were identified as cells expressing markers of more than one lineage: T cells (CD2, CD3E, CD3D, CD3G, CD247, CD7 and GD2\u2011CAR), B cells (CD19, CD22 and PAX5), microglia/myeloid cells (CD14, CD68, CD163, CSF1R and AIF1) or astrocytes (GFAP).",
+        "guidance": "Use canonical lineage marker expression to assign cell types and flag cells co-expressing markers from multiple lineages as doublets."
+      },
+      {
+        "name": "Differential expression analysis (FindMarkers on SCT counts)",
+        "description": "Differential expression analysis was performed on SCT counts modelled as a negative binomial distribution using the FindMarkers pipeline.",
+        "guidance": "Normalize with SCTransform (SCT) and model counts with a negative binomial framework (FindMarkers) for DEG detection."
+      },
+      {
+        "name": "Subsetting Seurat object for multiple comparisons",
+        "description": "The large Seurat object was subset into various smaller objects to enable multiple comparisons across different DIPG CSF samples.",
+        "guidance": "Subset large integrated objects into smaller Seurat objects when performing multiple pairwise or group-specific comparisons to simplify downstream analysis."
+      },
+      {
+        "name": "Scaling and dimensionality reduction (UMAP)",
+        "description": "Seurat objects underwent scaling and dimensionality reduction based on the UMAP algorithm.",
+        "guidance": "Scale data and use UMAP for visualizing cellular relationships after appropriate dimension reduction (PCA/Harmony)."
+      },
+      {
+        "name": "Myeloid fraction identification via AddModuleScore",
+        "description": "Myeloid fractions were identified using the 'AddModuleScore' function in Seurat to isolate cells with relatively high expression of myeloid genes (AIF1, CSF1R, CX3CR1, CD14, CD68 and CD163), compared to their expression of B cell-related (CD19, CD22 and PAX5) and T cell-related (CD2, CD3E, CD3D, CD3G, CD247 and CD7) genes.",
+        "guidance": "Use module scoring to define cell subsets by relative expression of marker gene modules and compare modules for competing lineages."
+      },
+      {
+        "name": "Scoring disease-associated signatures (DAM, MDSC)",
+        "description": "Scoring of cells based on disease-associated myeloid (DAM) or myeloid-derived suppressor cell (MDSC) gene expression was implemented using the 'AddModuleScore' and 'FeaturePlot' functions in Seurat. DAM genes included SPP1, GPNMB, IGF1, CLEC7A, LPL, CD9, CD63, LGALS3, FABP5, ITGAX, APOE and TYROBP. MDSC genes included CD33, CD14, CD15 and IL4RA.",
+        "guidance": "Define curated gene lists for signatures of interest and apply module scoring and visualization (FeaturePlot) to identify signature\u2011high cells."
+      },
+      {
+        "name": "Volcano plots and GO analysis tools",
+        "description": "Volcano plot analysis was conducted using the R-based 'EnhancedVolcano' package. Gene ontology (GO) analysis was performed using the R-based 'ReactomePA' package.",
+        "guidance": "Use publication-ready plotting and pathway analysis tools (EnhancedVolcano, ReactomePA) for visualization and interpretation of DEGs."
+      },
+      {
+        "name": "Single-cell expression score computation (control gene set of 100 genes)",
+        "description": "Given a set of genes (Gj) for a gene set, a score SCj(i) quantifying the scaled expression (Z\u2011score) of Gj for each cell i was computed as: SC(i) = average[Er(Gj, i)] \u2212 average[Er(Gcont, i)]. For each gene of the gene set, its control gene set contains 100 genes with the most similar aggregated expression level to that gene.",
+        "guidance": "Compute per\u2011cell signature scores by subtracting the average scaled expression of a matched control gene set (100 expression\u2011matched genes per gene) to control for expression level biases."
+      },
+      {
+        "name": "HVG selection and PCA",
+        "description": "Highly variable genes (HVGs) were selected using the FindVariableFeatures function in Seurat and the scaled expression values of these HVGs were used for PCA.",
+        "guidance": "Select HVGs with FindVariableFeatures and perform PCA on scaled HVG expression prior to batch correction and UMAP construction."
+      },
+      {
+        "name": "Batch correction with Harmony and choice of dimensions",
+        "description": "Applied Harmony linear adjustment to the first 30 principal components with default parameters to generate a corrected embedding; chose the first 20 Harmony\u2011corrected dimensions for constructing UMAP embeddings by RunUMAP in Seurat.",
+        "guidance": "Use Harmony on an initial set of PCs (here first 30) to remove sample-specific variation, then select a subset (here 20) of Harmony\u2011corrected dimensions for UMAP."
+      },
+      {
+        "name": "Graph-based clustering (Louvain via FindClusters)",
+        "description": "Clustered cells by the Louvain algorithm based FindClusters in Seurat after constructing UMAP embeddings.",
+        "guidance": "Use graph\u2011based clustering (Louvain) on integrated/corrected embeddings to define cell clusters; inspect mixing of samples across clusters to evaluate integration."
+      },
+      {
+        "name": "DEG identification thresholds and statistical testing",
+        "description": "Identified differentially expressed genes (DEGs) by FindAllMarkers and tested genes that were detected in a minimum of 30% of the cells within each cluster and that showed at least a 0.5\u2011fold mean log difference. Utilized Wilcoxon rank\u2011sum test with Bonferroni correction for multiple testing and only kept genes with adjusted P < 0.05.",
+        "guidance": "Apply detection frequency (\u226530%) and effect size (\u22650.5 log fold) filters, use nonparametric Wilcoxon tests with conservative multiple testing correction (Bonferroni), and retain DEGs with adjusted P < 0.05; manually inspect top DEGs for cluster annotation."
+      },
+      {
+        "name": "Cluster annotation by manual inspection and enrichment testing",
+        "description": "Cell clusters were annotated with manual inspection of their top DEGs. Also tested for enrichment of described gene sets (GO biological processes) and compared expression programmes of each cell cluster with those of a published glioblastoma\u2011associated myeloid cell dataset.",
+        "guidance": "Combine manual expert inspection of marker DEGs with systematic GO/pathway enrichment and comparison to published reference datasets to assign cluster identities."
+      },
+      {
+        "name": "Immunohistochemistry standard protocol elements",
+        "description": "Immunohistochemistry (other than for GD2 and H3K27M) was performed on formalin\u2011fixed paraffin\u2011embedded tissue sections per standard protocols including deparaffinization, antigen retrieval, incubation with primary antibody, and detection per the manufacturers' instructions.",
+        "guidance": "Follow standard FFPE IHC workflows (deparaffinize \u2192 antigen retrieval \u2192 primary antibody incubation \u2192 detection) and adhere to manufacturer instructions for reagents."
+      },
+      {
+        "name": "Antibody/staining specifics and platform assignments",
+        "description": "Specific antibodies and staining conditions used: CD3 (Ventana; rabbit polyclonal, prediluted) and CD163 (Ventana; monoclonal mouse, prediluted) performed on Ventana BenchMark Ultra with CC1 antigen retrieval; CD4 (Leica; mouse monoclonal, 1:40) and CD8 (Dako; monoclonal mouse, 1:400) performed on Leica Bond with ER2 antigen retrieval.",
+        "guidance": "Report exact antibody clones, vendors, dilutions, antigen retrieval conditions and automated stainer platforms used for reproducibility."
+      },
+      {
+        "name": "Sequential double\u2011staining protocol for H3K27M and GD2 IHC",
+        "description": "For H3K27M and GD2 IHC: cryosections fixed with 4% PFA, endogenous peroxidase neutralized, permeabilized, blocked; sequential double\u2011staining conducted with H3K27M primary developed with peroxidase secondary and DAB, then GD2 primary developed with polymer\u2011based alkaline phosphatase secondary and blue AP substrate; quench steps between developments; mounted and imaged by light microscopy.",
+        "guidance": "When performing sequential chromogenic double stains, develop and quench each chromogen sequentially and document fixation, permeabilization, blocking, antibody dilutions, development reagents, quenching and imaging platform."
+      },
+      {
+        "name": "Immunofluorescence protocol elements",
+        "description": "For immunofluorescence: primary tumour samples fixed in 4% PFA overnight then transferred to 30% sucrose until sunk, serial 40\u2011\u00b5m cryosections, block in 3% normal donkey serum in 0.3% Triton X\u2011100 in TBS for 1 h, primary antibodies stained overnight at 4 \u00b0C (antibody dilutions provided), secondary antibody incubation 2 h at room temperature, mount with ProLong Gold and image by confocal microscopy.",
+        "guidance": "Report fixation, cryoprotection, section thickness, blocking/permeabilization conditions, primary/secondary antibody dilutions and incubation times, mounting medium and imaging modality for IF."
+      },
+      {
+        "name": "RNAscope in situ hybridization protocol and controls",
+        "description": "For RNAscope: cryosections fixed with cold 4% PFA, dehydrated, pretreated with RNAscope hydrogen peroxide (10 min), treated with RNAscope protease IV (30 min), stained following RNAscope 2.5 HD Duplex Assay kit manual. Control cells (GD2\u2011CAR T cells) processed with RNAscope Multiplex v2 Assay and stained alongside tissue samples. A custom probe targeting the GD2\u2011CAR construct sequence was used. Slides counterstained with hematoxylin and imaged.",
+        "guidance": "Follow kit protocols for pretreatment, protease digestion, hybridization, amplification and detection; include positive (cultured GD2\u2011CAR T cells) and negative tissue controls for probe validation; report probe sequence when custom."
+      },
+      {
+        "name": "Antibody validation requirements",
+        "description": "All antibodies were validated as per the manufacturer except 1A7. For 1A7 (anti\u2011GD2 CAR idiotype antibody), untransduced T cells were used as a biologic control.",
+        "guidance": "State whether antibodies were validated per manufacturer and describe additional validation strategies (e.g., biologic negative controls) for custom or non\u2011standard reagents."
+      },
+      {
+        "name": "RNAscope validation controls",
+        "description": "For RNAscope analysis of the GD2 CAR construct, validation was performed using a positive control (cultured GD2\u2011CAR T\u2011cells) and a negative control (autopsy brain tissue sample from an untreated patient).",
+        "guidance": "Include both positive and negative controls when validating in situ hybridization probes to confirm specificity and signal interpretation."
+      },
+      {
+        "name": "Flow cytometry gating and controls",
+        "description": "Single\u2011cell suspensions were stained with listed antibodies and gating was performed using fluorescence minus one controls (FMO) on a BD LSRFortessa. DIPG cells were gated to evaluate GD2 expression in the CD45\u2212, B7\u2011H3+ population.",
+        "guidance": "Use FMO controls for gating; explicitly report gating strategy and populations assessed (e.g., CD45\u2212 B7\u2011H3+ for tumor cells). Provide representative gating figures."
+      },
+      {
+        "name": "Flow cytometry plot and axis reporting standards",
+        "description": "Confirm that: the axis labels state the marker and fluorochrome used (e.g. CD4\u2011FITC); axis scales are clearly visible (include numbers along axes only for bottom left plot of group); all plots are contour plots with outliers or pseudocolor plots; and a numerical value for number of cells or percentage (with statistics) is provided.",
+        "guidance": "Prepare flow cytometry plots with clear marker/fluorochrome labels, visible scales, appropriate plot types, and include quantitative annotations for cell counts or percentages with statistical summaries."
+      },
+      {
+        "name": "Flow cytometry sample preparation and staining parameters",
+        "description": "PBMC were isolated by gradient centrifugation on Ficoll. Two to five million PBMC were stained with fixable Live/Dead aqua, preincubated with Fc block for 5 min, then stained at room temperature with fluorochrome\u2011conjugated mAbs in a 15\u2011color, 17\u2011parameter staining combination.",
+        "guidance": "Report cell isolation method, cell counts used for staining, viability dye, Fc block conditions, staining temperature/duration and panel complexity."
+      },
+      {
+        "name": "ctDNA / ddPCR assay workflow and controls",
+        "description": "Cell\u2011free DNA (cfDNA) was extracted from 1\u20134 mL of CSF and subjected to 7 cycles pre\u2011amplification followed by 40 cycles of digital droplet PCR (ddPCR). Validation included serial dilution of mutant H3K27M gBlock against fixed wild\u2011type background to demonstrate linear detection. Inclusion of negative (pre\u2011amplified water) and positive (conditioned medium from H3K27M\u2011mutated DIPG cell cultures) controls for each ddPCR assay was performed alongside patient samples. Limit of detection defined (1 mutation per mL). QuantaSoft Pro software models starting concentration using Poisson: Copies per droplet = \u2212ln(1\u2212p) where p = fraction of positive droplets.",
+        "guidance": "Describe input volumes, pre\u2011amplification and PCR cycles, use serial dilution for linearity validation, include positive/negative controls on each run, report limit of detection, and state quantification model (Poisson) and software used."
+      },
+      {
+        "name": "ddPCR validation by serial dilution and positive/negative controls",
+        "description": "Validation of ddPCR assay through serial dilution of mutant H3K27M gBlock against a fixed background of wild type H3K27M gBlock demonstrates linear mutant H3K27M detection. Inclusion of negative and positive controls for each ddPCR assay was performed alongside patient samples.",
+        "guidance": "Validate ddPCR linearity with serial dilutions and always run both negative and positive controls with patient samples to ensure assay performance."
+      },
+      {
+        "name": "Data availability requirements",
+        "description": "All manuscripts must include a data availability statement. This statement should provide accession codes, unique identifiers, or web links for publicly available datasets; a description of any restrictions on data availability; and, for clinical datasets or third party data, ensure adherence to policy. The single\u2011cell RNA sequencing data has been uploaded to GEO (GSE186802). All raw data are provided in the source data files.",
+        "guidance": "Provide explicit accession numbers/links and describe restrictions; deposit central datasets (e.g., scRNA\u2011seq) to public repositories (GEO) and provide source data files."
+      },
+      {
+        "name": "Software and code availability policy",
+        "description": "For manuscripts utilizing custom algorithms or software that are central to the research but not yet described in published literature, software must be made available to editors and reviewers. Authors are strongly encouraged to deposit code in a community repository (e.g. GitHub).",
+        "guidance": "Make custom code available to reviewers/editors and ideally publicly deposit code in a community repository for transparency and reproducibility."
+      },
+      {
+        "name": "Statistics reporting checklist",
+        "description": "For all statistical analyses, confirm presence of: exact sample size (n) for each experimental group; statement whether measurements were from distinct samples or repeated; the statistical test(s) used and whether one\u2011 or two\u2011sided; description of all covariates tested; description of any assumptions or corrections (normality tests, multiple comparisons adjustments); full description of statistical parameters including central tendency and variation (means, SD or CIs); for null hypothesis testing, report test statistic with confidence intervals, effect sizes, degrees of freedom and P value (give P values as exact values whenever suitable); for Bayesian analysis, information on priors and MCMC settings; for hierarchical/complex designs, identify appropriate level for tests and full reporting of outcomes; estimates of effect sizes (e.g. Cohen's d) and how calculated.",
+        "guidance": "Include comprehensive statistical reporting in figure legends, tables or Methods according to this checklist to improve transparency and reproducibility."
+      },
+      {
+        "name": "Life sciences study design reporting items",
+        "description": "Sample size: disclose number of subjects. Data exclusions: disclose any exclusions. Replication: disclose technical replicates (ctDNA and RT\u2011PCR in triplicate, cytokine analyses in duplicate). Randomization: state whether randomization performed. Blinding: state whether blinding performed. Ethics oversight: report IRB approval and clinical trial registration (NCT04196413). Outcomes: state primary, secondary and exploratory objectives.",
+        "guidance": "Explicitly report study design elements (sample size, exclusions, replication, randomization, blinding), ethical approvals and trial registration, and define primary/secondary/exploratory endpoints."
+      }
+    ]
+  }
+}

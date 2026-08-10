@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_42abe283368d.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13987,
+  "output_tokens": 3833,
+  "elapsed_s": 2151.07323349989,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / computational-humor researchers and practitioners developing or evaluating one-liner joke generation with LLMs",
+    "subtask_short": "one-liner humor generation evaluation",
+    "subtask_description": "Developing and evaluating one-liner joke generation using an LLM-driven multi-step pipeline (seed dataset \u2192 decomposition \u2192 association mining \u2192 prompt-driven generation) with human annotation benchmarks. Focus is on producing concise one- or two-sentence jokes and measuring understandability, offensiveness, novelty, and funniness via crowdsourced labels.",
+    "subtask_keywords": [
+      "humor",
+      "one_liners",
+      "llm",
+      "human_annotation",
+      "generation_pipeline"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Seed dataset quality selection",
+        "description": "Create a seed dataset of high-quality jokes by taking 100 random one-liners from the \u201c16000 OneLiners\u201d dataset and ranking them with human assessors, comparing them in a pairwise manner. Use ten assessors per pair to avoid individual biases, aggregate pairwise scores into global ranks and use the top 30 jokes.",
+        "guidance": "Use pairwise comparisons with multiple assessors (10 per pair) to reduce individual bias; aggregate to get global ranks and select top-performing items as a high-quality seed set for policy inference."
+      },
+      {
+        "name": "Decompose joke into building blocks",
+        "description": "Analyze each joke to identify its humorous elements, potential audience reception, and categorize it based on humor types; discuss elements contributing to humor such as structure, play on words, unexpected twist, or cultural references.",
+        "guidance": "Prompts: assume expert knowledge in humor theory and practice (structural elements, cultural influences, psychology). The decomposition should extract logic/principles used in each joke to enable later distillation into a policy (see Appendix A prompts)."
+      },
+      {
+        "name": "Distill human-derived humor-generation policy (Phumor policy)",
+        "description": "Formulate a list of typical (repeated) elements used for construction of jokes by generalizing decomposed building blocks into unique, formal, abstract descriptions of humor elements (the humor-generation policy).",
+        "guidance": "Avoid semantic doubles and provide only unique elements with formal abstract descriptions (no details of particular jokes). The policy should capture universal rules frequently used in humor constructions and serve as Phumor policy for prompting LLM-based generation."
+      },
+      {
+        "name": "Topic selection constraint",
+        "description": "Select a topic by randomly choosing from the top 10,000 most frequent English words, excluding profanity, stopwords and words less than 4 letters long.",
+        "guidance": "This constraint standardizes topic sampling and avoids offensive/low-content seeds and very short words that are less productive for association mining."
+      },
+      {
+        "name": "Generate 20 free associations (Passociations)",
+        "description": "Given a theme, provide a numbered list of 20 free associations with it: different meanings, different contexts, stereotypes, puns, exaggerations, incongruity, cultural references, juxtaposition. Use short descriptions (1-5 words each).",
+        "guidance": "Produce diverse associations spanning multiple senses/contexts of the theme. This step aims to surface distant/conceptual links needed for novel joke construction."
+      },
+      {
+        "name": "Expand associations to 10\u201315 words",
+        "description": "Rewrite and expand each of the 20 associations into longer and more detailed items (10-15 words each), avoiding repetitions and similar word use across sentences while keeping mention of the original theme.",
+        "guidance": "Make associations richer and more specific to enable downstream combination and refinement; produce a numbered list."
+      },
+      {
+        "name": "Refine and combine associations (reduce to \u22646)",
+        "description": "Analyze and review expanded associations, group complementary items into combined items, delete weak or poorly related items, and produce a final list no longer than 6 items with distinct meanings or contexts.",
+        "guidance": "Rules: complementary items can be combined; weak items deleted; final list \u22646; ensure items are meaningfully different. This yields Passociations used in the final prompt."
+      },
+      {
+        "name": "One-liner format and structural constraint",
+        "description": "Jokes should be one-liners: concise, self-contained, delivered in 1-2 sentences with a two-part structure where the first part (setup) establishes a scenario and the second part (punchline) delivers an unexpected twist or conclusion that subverts the setup.",
+        "guidance": "When generating, ensure one- or two-sentence jokes with clear setup \u2192 punchline structure. This is a hard format constraint for the target genre."
+      },
+      {
+        "name": "Allowed comedic strategies for generation",
+        "description": "When generating jokes, you may use one or several of the following strategies: wordplay or pun, misdirection, exaggeration, stereotyping, satire, absurdity or surreal humor, dark humor, juxtaposition.",
+        "guidance": "The prompt explicitly lists these strategies as recommended devices; use them to construct setups/punchlines. Note ethical concerns: stereotyping and dark humor can be offensive (see Offensive/Inappropriate criterion)."
+      },
+      {
+        "name": "Generate multiple candidate jokes (7\u201310)",
+        "description": "Based on the theme and the final list of associations, write a list of 7\u201310 jokes following the one-liner rules and recommended strategies.",
+        "guidance": "Produce several candidates per topic to enable selection/filtering and human evaluation; diversity across candidates is encouraged."
+      },
+      {
+        "name": "Understandable (comprehension) label",
+        "description": "Label whether you understood the meaning of the text. If you don\u2019t understand the meaning (regardless of whether it should be perceived as funny), mark 'No' and skip the rest of annotation for this sample.",
+        "guidance": "Understandability is a gate: incomprehensible texts are excluded from further evaluation. Use native-language comprehension; cultural knowledge issues may affect understandability."
+      },
+      {
+        "name": "Offensive / Inappropriate label",
+        "description": "Mark whether you find the text offensive or inappropriate (racist, biased against marginalized groups, or generally offensive). Rate 'No' for not offensive and 'Yes' for offensive. If 'Yes', annotator may optionally skip rest of the annotation.",
+        "guidance": "Flagging offensiveness is both an evaluative metric and safety filter. Note the pipeline also applies automated moderation (OpenAI Moderation API) before human annotation."
+      },
+      {
+        "name": "Is a joke? (intended humor) label",
+        "description": "Mark whether you think the text is intended to be a joke, even if it is not funny. Use 'No' if it's not a joke, 'Yes' if it is intended as a joke. If 'No', skip rest of annotation for this sample.",
+        "guidance": "Distinguish intended humor from non-jokes; label as 'Yes' even for jokes that fall flat. Examples from paper clarify borderline cases."
+      },
+      {
+        "name": "Novelty / Known label (Have you heard that joke before?)",
+        "description": "Annotators mark whether they have heard the joke before; used to estimate novelty of generated jokes (fraction labeled as already known vs unknown).",
+        "guidance": "Novelty is subjective and dependent on annotator knowledge; use this label to compute % known and % novel. The paper reports reductions in 'known' fraction as evidence of novelty improvement."
+      },
+      {
+        "name": "Funniness rating (1\u20135 scale) with anchor descriptions",
+        "description": "Rate funniness on a scale of 1\u20135 (1 very not funny, 5 very funny). Anchors: score 1 = not funny or fails to achieve intended effect; score 3 = average joke that may elicit chuckles/groans; score 5 = a good joke you'd want to share/tell to others.",
+        "guidance": "Collect numeric funniness scores from multiple annotators (paper uses five per sample) and aggregate (averages or per-annotator analyses). Expect low inter-annotator agreement due to subjectivity."
+      },
+      {
+        "name": "Explanation field",
+        "description": "Annotators provide a concise natural-language explanation of why the joke is funny.",
+        "guidance": "Use this qualitative explanation for analysis and to understand the mechanics that led to perceived humor; useful for error analysis and refining policies."
+      },
+      {
+        "name": "Automated moderation threshold",
+        "description": "Filter generated jokes using OpenAI Moderation API with a threshold on harassment equal to 0.02; validate jokes and filter out texts exceeding threshold before annotation.",
+        "guidance": "Automated filter serves as a pre-screen to reduce offensive content reaching human annotators; the pipeline still records Offensive labels from humans and notes differences across datasets."
+      },
+      {
+        "name": "Dataset cleaning rules for human baseline (ReJ)",
+        "description": "For Reddit-derived ReJ dataset, filter out examples containing quotation marks, parentheses, emoticons, and those not ending with proper punctuation marks; substitute multiple contiguous underscores with relevant punctuation marks.",
+        "guidance": "Cleaning aims to remove artifacts that hinder comprehension or make comparisons with model-generated jokes unfair."
+      },
+      {
+        "name": "Annotation redundancy and assessor counts",
+        "description": "Use multiple annotators per sample to mitigate subjectivity: five different assessors per label for jokes in main experiments; ten assessors per pair for pairwise ranking in seed dataset.",
+        "guidance": "Aggregate annotations (averages or majority decisions) to form sample-level scores. Record assessor counts because results depend on sample size and cultural background of annotators."
+      },
+      {
+        "name": "Ablation experimental conditions",
+        "description": "Compare multiple pipeline variants to isolate contributions: [zero-shot] GPT-4 naive prompt, [no-assoc] policy-only, [assoc-v1] associations from step 2 + policy, [assoc-v2] associations from step 3 + policy, [full] associations from step 4 + policy.",
+        "guidance": "Run controlled ablations and evaluate each condition using the same human labeling pipeline to assess the impact of each component (associations, policy)."
+      },
+      {
+        "name": "Statistical significance testing",
+        "description": "Test differences in distributions of funniness, joke, understandable and known scores using Mann-Whitney U rank test; perform tests on averages per example and on all annotator scores.",
+        "guidance": "Report p-values for comparisons (e.g., full algorithm vs zero-shot vs reddit) and interpret significance cautiously given sample sizes; use both per-example averaged tests and tests on all scores to validate findings."
+      }
+    ]
+  }
+}

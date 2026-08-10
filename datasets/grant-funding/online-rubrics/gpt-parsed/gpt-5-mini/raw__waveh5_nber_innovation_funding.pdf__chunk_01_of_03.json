@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/waveh5_nber_innovation_funding.pdf",
+  "task": "grant-funding",
+  "source_dir": "raw",
+  "source_file": "waveh5_nber_innovation_funding.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39928,
+  "model": "gpt-5-mini",
+  "elapsed_s": 59.256324667003355,
+  "input_tokens": 10971,
+  "output_tokens": 4060,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academic researchers in finance/economics studying climate risks and asset pricing",
+    "subtask_short": "estimating temperature risk premia",
+    "subtask_description": "The paper develops a theoretical model linking temperature (climate) risks to asset prices and implements empirical tests estimating equity exposure (betas) to temperature trends and the cross-sectional price (risk premia) of those exposures using US and international data.",
+    "subtask_keywords": [
+      "asset_pricing",
+      "climate_risk",
+      "temperature_trend",
+      "equity_valuations",
+      "panel_regression"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Temperature beta estimation (time-series regression)",
+        "description": "Estimate equity exposure to temperature risks by regressing portfolio excess returns on temperature variations controlling for market and consumption growth risks: re_{i,t} = \n    \u00175r_i + \u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003\u0003  (Eq. 19)",
+        "guidance": "Include the K-year moving-average change in temperature (\u000394T^K_t), the market excess return (re_{M,t}) and the innovation in smoothed aggregate consumption growth (\u0003_C,t) as controls. Vary horizon K (1\tto\t10) to separate short-run (weather) vs low-frequency (global warming) components. Use first-differences of trailing moving averages to avoid look-ahead bias and estimation error; results robust to HP-filter-based trend construction."
+      },
+      {
+        "name": "Choice of horizon K (distinguish short-run vs long-run temperature risks)",
+        "description": "Use K-year trailing moving averages with K ranging from 1 to 10: K=1 captures annual/short-run (weather) fluctuations; large K captures low-frequency (global-warming) temperature trends.",
+        "guidance": "Long-horizon (K\u0003>\u00031) measures isolate trend/global warming effects; short-horizon (K=1) mostly captures weather. Report results across multiple K to show frequency dependence. The paper emphasizes low-frequency effects as most relevant to priced climate risk."
+      },
+      {
+        "name": "Controls for market and consumption risks",
+        "description": "Control for market risk (CRSP value-weighted excess return) and macro growth risk (innovation in smoothed per-capita consumption growth) in time-series regressions of returns on temperature.",
+        "guidance": "Motivated by CAPM and consumption-based CAPM frameworks; avoid adding ad-hoc empirical factors. These controls capture alternative sources of return variation that might confound temperature exposures."
+      },
+      {
+        "name": "Construction of temperature factor (moving-average vs HP filter; first differences)",
+        "description": "Construct temperature exposures using de-meaned changes in K-year moving-average trends; alternative: use Hodrick-Prescott filter-based trend.",
+        "guidance": "Prefer one-sided trailing moving-average first-differences because they are observable and not subject to look-ahead bias; HP-filter results are similar but HP is two-sided (uses future data). Also possible to use innovations in trailing moving-average instead of first differences."
+      },
+      {
+        "name": "Industry classification and portfolio construction",
+        "description": "Construct industry portfolios and classify industries into high and low heat-exposure groups following NIOSH and Graff Zivin & Neidell (2014); use standard 25 size/book-to-market portfolios from Kenneth French for cross-section.",
+        "guidance": "High heat-exposure industries: mining, oil & gas extraction, construction, transportation, utilities. Low exposure: manufacturing, wholesale, retail, services, communications. Exclude agricultural (too few public firms) and financial sectors (excluded)."
+      },
+      {
+        "name": "Cross-sectional regression to estimate price of temperature risk (Fama-MacBeth)",
+        "description": "Estimate the price of temperature risks by regressing average excess returns across portfolios on estimated temperature betas, controlling for market and consumption betas; use Fama-MacBeth procedure and Shanken (1992)-corrected standard errors.",
+        "guidance": "Report both standard Fama-MacBeth t-statistics and Shanken-corrected t-statistics to account for estimation error in betas. Use extended asset menus (25 portfolios plus industry portfolios) for robustness."
+      },
+      {
+        "name": "Monte Carlo simulation for inference under the null",
+        "description": "Construct Monte Carlo null distribution by simulating temperature series of matching sample size, estimating betas on simulated series, and running cross-sectional regressions; repeat 10,000 times to form distribution of t-statistics.",
+        "guidance": "Use the Monte Carlo distribution to compute p-value* as fraction of simulated Shanken-corrected t-statistics less than the sample statistic. This checks that observed pricing would be unlikely under no temperature effect."
+      },
+      {
+        "name": "Time-varying risk price parameterization (lambda_t linear in temperature level)",
+        "description": "Parameterize the conditional price of temperature risk as: \n    \u0003t = \u0003\u000394T + \u0003T \u0000b7 \u000394T \u0000b7 T_t (Eq. 20), allowing the price to depend on the temperature level.",
+        "guidance": "Estimate via two-step approach: first run time-series regressions with interaction term T_{t-1} \u0000b7 \u000394T_t to capture conditional exposures (Eq. 21), then cross-sectionally estimate prices on the set of betas (including the interaction beta). Test whether both constant and time-varying components are significant and negative at long horizons."
+      },
+      {
+        "name": "Panel regression of price-dividend ratios on temperature using Arellano-Bond GMM",
+        "description": "Estimate dynamic panel regressions of log price-dividend ratios on K-year moving-average local temperature and macro controls: v_{i,t} = \n    \u00175v_i + \u0003K T^K_{i,t} + \u0003' x X_{i,t} + \u0003_v v_{i,t-1} + \u0003_{i,t} (Eq. 22), using Arellano & Bond GMM on first-differenced data.",
+        "guidance": "Use two global price-dividend principal components to control for global macro risks and local controls (inflation, unemployment, real interest rate, GDP growth). Use White robust variance estimator. Interpret coefficient \u0003K as semi-elasticity of asset prices to temperature."
+      },
+      {
+        "name": "Use of price-dividend ratio as proxy for wealth-to-consumption",
+        "description": "Use log price-dividend (or price-consumption) ratios as market proxies for the wealth-to-consumption ratio when mapping theory to data.",
+        "guidance": "Justify with literature showing price-dividend factors capture expected growth and macroeconomic uncertainty (e.g., Jagannathan & Marakani). Use principal components of price-dividend ratios to control for common global macro factors in panel regressions."
+      },
+      {
+        "name": "Orthogonalization of short- and long-run temperature components",
+        "description": "Separate long-run (LR^K_{i,t} = K-year moving-average) and short-run (SR_{i,t} = annual orthogonalized wrt LR) temperature variations and include both in regressions to identify their separate effects (Eq. 23).",
+        "guidance": "Orthogonalize to avoid collinearity and to attribute effects properly. Empirical finding: LR (low-frequency) effects are the dominant channel; SR effects small and often insignificant once LR is controlled for."
+      },
+      {
+        "name": "Panel VAR to estimate joint dynamics and impulse responses",
+        "description": "Estimate a panel VAR with Yi,t = (T^8_{i,t}, T_{i,t}, v_{i,t})' and global controls to recover impulse responses of equity prices to shocks in trend and annual temperature (Eq. 24).",
+        "guidance": "Include country fixed effects and price-dividend global controls. Use 8-year moving average to capture low-frequency trend. Plot impulse responses with two-standard-error bands to assess persistence and significance."
+      },
+      {
+        "name": "Data selection and construction (US and international datasets)",
+        "description": "US: 25 size/book-to-market portfolios and industry portfolios, CRSP value-weighted market, per-capita real consumption (NIPA), NOAA contiguous-US temperature, annual data 1934-2014. Global: 39 countries, Berkeley Earth land-surface temperature anomaly (relative to 1951-1980), price-dividend from Global Financial Data, country macro data from World Bank (1980-2009), sample 1970-2012 for temperatures.",
+        "guidance": "Document sample spans and data sources clearly; note limitations (e.g., international sample tilted towards developed economies, agricultural sector excluded due to thin public-firm listing). Use consistent units (deg F for US, deg C anomaly for global) and convert/interpret elasticities appropriately."
+      },
+      {
+        "name": "Excess return construction and leverage adjustment",
+        "description": "Construct excess returns by subtracting the CRSP risk-free rate from portfolio returns. When interpreting price responses, account for market leverage (e.g., leverage around three) to map price-consumption ratio responses into equity price responses.",
+        "guidance": "Report both consumption-claim price changes and implied equity-price changes after applying plausible leverage factors; clarify the transformation and its quantitative implications."
+      },
+      {
+        "name": "Robustness checks and time-variation analysis",
+        "description": "Assess robustness to alternative temperature trend constructions (HP filter vs trailing moving-average), alternative horizon choices, additional controls, and subsample/overlapping-sample analyses to detect time-variation in elasticities and premiums.",
+        "guidance": "Use overlapping samples (e.g., 1980-2000, then extend to 2005, 2009) to examine whether the price/elasticity of temperature risk has risen over time. Report Monte Carlo p-values and sensitivity to asset menu expansion."
+      },
+      {
+        "name": "Inference adjustments for beta estimation error (Shanken correction)",
+        "description": "Adjust cross-sectional inference for sampling error in estimated betas using Shanken (1992)-corrected standard errors.",
+        "guidance": "Report both uncorrected and Shanken-corrected t-statistics; rely on corrected statistics for significance claims about factor prices. Combine with Monte Carlo checks for further assurance."
+      }
+    ]
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 21,
+  "n_chunks": 31,
+  "chunk_chars": 39742,
+  "model": "gpt-5-mini",
+  "elapsed_s": 317.5503102500006,
+  "input_tokens": 14778,
+  "output_tokens": 9203,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "Users and developers of the PARI/GP library (mathematicians and computational number theorists) who call or implement the documented functions",
+    "subtask_short": "PARI/GP library function usage",
+    "subtask_description": "Reference guidance for correct inputs, flags, algorithmic behavior, limitations, and recommended usage for PARI/GP functions (power series, Thue solvers, linear algebra routines, etc.). Intended to guide callers about preconditions, complexity trade-offs, and pitfalls.",
+    "subtask_keywords": [
+      "pari_gp",
+      "library_manual",
+      "math_software",
+      "function_reference"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "polzagier polynomial index bounds",
+        "description": "If m < 0 or m \u2265 n, P(m)_n = 0. We have P_n := P(0)_n is T_n(2x \u2212 1), where T_n is the Legendre polynomial of the second kind. For n > m > 0, P(m)_n is the m-th difference with step 2 of the sequence n^{m+1} P_n.",
+        "guidance": "Use polzagier(n,m) only respecting the index bounds; for out-of-range m the polynomial is zero. The documentation gives an explicit relation to Legendre polynomials and a difference formula, useful for understanding returned polynomials."
+      },
+      {
+        "name": "serconvol (Hadamard product) semantics",
+        "description": "Convolution (or Hadamard product) of two power series x and y; if x = \u03a3 a_k X^k and y = \u03a3 b_k X^k then serconvol(x,y) = \u03a3 a_k b_k X^k.",
+        "guidance": "Inputs should be power series (or objects with series-like coefficients). Use convol(x,y) in code; it's the pointwise product of series coefficients."
+      },
+      {
+        "name": "serlaplace input requirement",
+        "description": "x must be a power series with non-negative exponents or a polynomial. If x = \u03a3 (a_k/k!) X^k then the result is \u03a3 a_k X^k.",
+        "guidance": "Do not call laplace on series with negative valuation; intended to convert exponential generating functions to ordinary generating functions by removing factorial denominators."
+      },
+      {
+        "name": "serreverse valuation precondition",
+        "description": "Reverse power series t of s is defined such that t(s) = x; s must be a power series whose valuation is exactly equal to one.",
+        "guidance": "Ensure input series s has valuation 1 (i.e., linear term nonzero) before calling serreverse; examples show inverting tan(x) to get series for arctan-like series."
+      },
+      {
+        "name": "subst general substitution semantics",
+        "description": "Replace the simple variable y by the argument z in the 'polynomial' expression x. Every type is allowed for x, but if it is not a genuine polynomial (or power series, or rational function), the substitution will be done as if the scalar components were polynomials of degree zero.",
+        "guidance": "Beware of substituting non-square matrices: substitution by a non-square matrix is forbidden and raises an error. If x is a power series then z must be a polynomial, power series, or rational function. For vectors/matrices/lists, substitution applies to each entry. Use gsubst(x,y,z) where y is variable number."
+      },
+      {
+        "name": "substpol polynomial-substitution method",
+        "description": "The difference with subst is that y is allowed to be any polynomial here. The substitution is done moding out all components of x (recursively) by y \u2212 t, where t is a new free variable of lowest priority. Then substituting t by z in the resulting expression.",
+        "guidance": "Use substpol when you need to replace a polynomial expression (e.g., x^2) by another symbol. Examples show how substitutions like x^4+x^2+1 with x^2 -> y produce y^2+y+1. gdeflate attempts to write T(x) as t(x^d) to factor out d-th power structure; returns NULL if it fails."
+      },
+      {
+        "name": "substvec simultaneous replacement semantics",
+        "description": "v being a vector of monomials of degree 1 (variables), w a vector of expressions of the same length, replace in the expression x all occurrences of v_i by w_i. The substitutions are done simultaneously; more precisely, the v_i are first replaced by new variables in x, then these are replaced by the w_i.",
+        "guidance": "Use substvec to avoid cascading replacements; examples show swapping variables and preventing unintended algebraic simplifications."
+      },
+      {
+        "name": "sumformal requirement and meaning",
+        "description": "Formal sum of the polynomial expression f with respect to the main variable (or v if provided); it is assumed that the base ring has characteristic zero. Returns F, a polynomial in v vanishing at 0, such that F(b) \u2212 F(a) = \u03a3_{v=a+1}^b f(v).",
+        "guidance": "Use sumformal to get closed-form polynomial antiderivatives for discrete sums of polynomial functions. Examples show summation formulas and verification by subst."
+      },
+      {
+        "name": "taylor expansion behavior vs Ser",
+        "description": "Taylor expansion around 0 of x with respect to simple variable t. x can be any reasonable type (e.g. rational function). Contrary to Ser, which takes the valuation into account, this function adds O(t^d) to all components of x.",
+        "guidance": "taylor(x,t,d) always truncates/pads to order d uniformly across components; Ser may behave differently. Be aware of variable priority issues demonstrated in examples (Ser raising 'main variable must have higher priority' error)."
+      },
+      {
+        "name": "thue: input and conditionality (GRH)",
+        "description": "Returns all integer solutions of P(x,y)=a where tnf was created with thueinit(P). If tnf was computed without assuming GRH (flag 1 in thueinit), then the result is unconditional. Otherwise, it depends in principle on the truth of the GRH, but may still be unconditionally correct in some favorable cases. The result is conditional on the GRH if a \u2260 \u00b11 and P has a single irreducible rational factor whose tentative class number h and regulator R (as computed assuming the GRH) satisfy h > 1 and R/0.2 > 1.5.",
+        "guidance": "Prefer creating thueinit with flag=1 to certify unconditionally if you need guaranteed correctness. Passing a bare polynomial causes an implicit thueinit(P,0) which is wasteful if multiple RHS are needed. Reducible and non-monic polynomials are allowed. If there are infinitely many solutions, an error is issued."
+      },
+      {
+        "name": "thue performance and overflow notes",
+        "description": "The general philosophy is to disprove the existence of large solutions then to enumerate bounded solutions naively. The implementation will overflow when there exist huge solutions and the equation has degree > 2 (the quadratic imaginary case is special).",
+        "guidance": "For high-degree equations or huge right-hand sides, the routine can overflow; quadratic cases are much easier. One can speed up by writing P = Q(x^d) and solving the smaller-degree Q equation then filtering d-th power solutions."
+      },
+      {
+        "name": "thueinit preconditions for finiteness",
+        "description": "Initializes tnf corresponding to P, a non-constant univariate polynomial with integer coefficients. P must either have at least two distinct irreducible factors over Q, or have one irreducible factor T with degree > 2 or two conjugate complex roots: under these necessary and sufficient conditions, the equation has finitely many integer solutions.",
+        "guidance": "If flag non-zero, certify results unconditionally; otherwise assume GRH (faster). The hardest case is deg P > 2 irreducible with at least one real root (Bilu-Hanrot algorithm used). The routine will raise domain errors for linear polynomials."
+      },
+      {
+        "name": "linear-algebra base-ring assumption",
+        "description": "Since PARI does not have a strong typing system, scalars live in unspecified commutative base rings. We thus assume that the base ring is a domain and work over its field of fractions. If the base ring is not a domain, one gets an error as soon as a non-zero pivot turns out to be non-invertible. Some functions, e.g. mathnf or mathnfmod, specifically assume that the base ring is Z.",
+        "guidance": "When calling linear algebra functions, ensure that the coefficient ring is appropriate (prefer integral matrices when requested). Expect pivot/invertibility errors if base ring has zero divisors."
+      },
+      {
+        "name": "algdep reliability and precision guidance",
+        "description": "Finds a polynomial of degree at most k with integer coefficients having z as approximate root. The polynomial obtained is not necessarily the 'correct' one and may not be irreducible. Internally lindep([1,z,...,z^k],flag) is used. A non-zero flag may improve behavior if the input is known to huge accuracy: if flag > 0 the computation is done with an accuracy of flag decimal digits; the parameter flag should be smaller than the number of correct decimal digits in the input. algdep itself uses exact operations; operand sizes depend on input accuracy.",
+        "guidance": "Do not trust low-precision inputs. Increase realprecision and/or use flag to control accuracy heuristics. Check the returned polynomial by subst or finding its roots. The documentation demonstrates stepwise increases in precision to obtain stable results."
+      },
+      {
+        "name": "charpoly flag-method selection and assumptions",
+        "description": "Characteristic polynomial of A. The value of flag is significant for matrices: flag=0 uses Le Verrier's method (assumes n! invertible, O(n^4)), flag=1 uses Lagrange interpolation (O(n^4)), flag=2 uses Hessenberg form (assumes base ring is a field, O(n^3) but may suffer coefficient explosion), flag=3 uses Berkowitz (division-free, valid over any ring, O(n^4)), flag=4 uses modular algorithm assuming x integral, flag=5 (default) chooses the 'best' method given x (usually Berkowitz except for Z or safe fields).",
+        "guidance": "Prefer default flag=5; for integer matrices use flag=4; for fields where coefficient explosion not an issue (finite fields, reals) prefer flag=2. Be aware of assumptions such as invertibility of n! and the base ring being a field for certain algorithms."
+      },
+      {
+        "name": "concat type and dimension rules",
+        "description": "Concatenation of x and y. If x or y is not a vector or matrix, it is considered as a one-dimensional vector. Matrices are concatenated horizontally (number of rows stays the same). If y omitted, x must be a row vector or list, whose elements are concatenated left to right.",
+        "guidance": "To concatenate vertically use transpose or matconcat/Mat. Empty matrix [;] is compatible with any number of rows; empty vectors have different behavior. Use Mat or matconcat to form two-row/column matrices explicitly."
+      },
+      {
+        "name": "forqfvec enumeration contract",
+        "description": "forqfvec(v,q,b,expr) evaluates expr for all vectors v such that q(v) \u2264 b. The formal variable v runs through all such vectors in turn.",
+        "guidance": "Use forqfvec to iterate lattice points inside quadratic-form bounds. The alternative C callback variant expects the callback to return 0 to continue and 1 to stop early."
+      },
+      {
+        "name": "lindep algorithm and input-type behavior",
+        "description": "Finds a small non-trivial integral linear combination between components of v. If v has real/complex entries the function uses a floating point (variable precision) LLL algorithm; flag = 0 uses an internally chosen accuracy, flag > 0 uses 'flag' decimal digits. If v is p-adic, flag is ignored and LLL-reduces a suitable (dual) lattice. For matrix input, returns a non-trivial kernel vector if one exists. For polynomial/power series inputs, finds relations with coefficients in the base field; when input contains power series, they are first converted to minimal common absolute accuracy then truncated to polynomials (can produce small non-zero combinations), so prefer t_POL.",
+        "guidance": "For guaranteed integer relations, supply high-precision inputs or use flag to request precision; prefer polynomial types to series to avoid t-adic truncation artifacts. Use deplin, padic_lindep, or Xadic_lindep variants for specialized settings."
+      },
+      {
+        "name": "matadjoint algorithm choices and cost",
+        "description": "Adjoint matrix N of M satisfies M*N = det(M)*Id. If flag=0 or omitted, try Leverrier-Faddeev algorithm (assumes n! invertible); if it fails or flag=1 compute T=charpoly(M) and return (\u22121)^{n\u22121}(T(x)\u2212T(0))/x evaluated at M. Both algorithms are O(n^4) operations and are usually slower than computing charpoly or inverse directly.",
+        "guidance": "Avoid calling matadjoint when you can compute inverse or characteristic polynomial more efficiently. Beware of factorial-invertibility assumptions with flag=0."
+      },
+      {
+        "name": "matcompanion semantics",
+        "description": "Return the left companion matrix to the non-zero polynomial x.",
+        "guidance": "Use matcompanion to build companion matrices for polynomial root/eigenvalue computations."
+      },
+      {
+        "name": "matconcat block-dimension rules",
+        "description": "Build a matrix from entries of v which may be t_VEC (concatenate horizontally), t_COL (vertically), or t_MAT. Each entry v_{i,j} has natural length and height; Hi = max_j length(v_{i,j}), Lj = max_i height(v_{i,j}). The (i,j)-th block is Hi \u00d7 Lj. A scalar is seen as scalar times identity of size min(Hi,Lj). Blocks are extended by zero columns/rows as needed.",
+        "guidance": "Use matconcat to build block matrices robustly; scalar entries will become identity blocks of appropriate size. Several examples illustrate uncommon layouts including block-diagonal and ragged inputs."
+      },
+      {
+        "name": "matdet algorithm selection",
+        "description": "Determinant of square matrix x. If flag=0, use method depending on coefficients: integer entries -> modular Dixon/Pernet/Stein; real/p-adic -> Gaussian elimination with maximal pivot; intmod -> Gaussian elimination with first non-zero pivot; other cases -> Gauss-Bareiss. If flag=1, use classical Gaussian elimination (usually worse).",
+        "guidance": "Stick with default flag=0 for best algorithm selection; choose flag=1 only for debugging or special pivot needs. For integer matrices consider ZM_det or matdetint for lattice determinants."
+      },
+      {
+        "name": "matdetint lattice determinant semantics",
+        "description": "Let B be m\u00d7n integer matrix. The determinant D of the lattice generated by columns is sqrt(det(B^T B)) if B has maximal rank m, and 0 otherwise. The function computes a positive multiple of D (Gauss-Bareiss). When B is square it returns |det B|.",
+        "guidance": "To get exact D when rank is maximal and matrix non-square, use matdet( mathnfmod(B, matdetint(B)) ). For large dimensions consider using mathnf or other reduction methods for speed."
+      },
+      {
+        "name": "mateigen algorithmic fragility",
+        "description": "Returns complex eigenvectors of x as columns. The function first computes the characteristic polynomial and approximates its complex roots, then computes eigenspaces as kernels of x \u2212 \u03bb_i. This algorithm is ill-conditioned and likely to miss kernel vectors if some roots of the characteristic polynomial are close or if there are multiple roots.",
+        "guidance": "For symmetric matrices use qfjacobi; for Hermitian matrices convert to a real block matrix and apply qfjacobi. Use mateigen with caution on matrices with clustered or multiple eigenvalues; flag=1 returns eigenvalues and eigenvectors as [L,H]."
+      },
+      {
+        "name": "matfrobenius output modes",
+        "description": "Returns the Frobenius form of square matrix M. If flag=1 returns only the elementary divisors as a vector of polynomials. If flag=2 returns [F,B] where F is Frobenius form and B is basis change so that M = B^{-1} F B.",
+        "guidance": "Choose flag according to whether you need both the form and the change-of-basis matrix or only the elementary divisors."
+      },
+      {
+        "name": "mathess (Hessenberg) semantics",
+        "description": "Returns a matrix similar to square matrix x which is in upper Hessenberg form (zero entries below first subdiagonal).",
+        "guidance": "Useful as preprocessing for eigenvalue algorithms like Hessenberg QR. Use mathess (hess) to reduce matrices to Hessenberg form."
+      },
+      {
+        "name": "mathilbert construction",
+        "description": "Creates the Hilbert matrix of order n with coefficient (i,j) = 1/(i + j \u2212 1).",
+        "guidance": "Hilbert matrices are ill-conditioned; expect numerical instability in floating-point computations using mathilbert."
+      },
+      {
+        "name": "mathnf flags and algorithm trade-offs",
+        "description": "Computes Hermite normal form (HNF) of M over Euclidean ring R (Z or K[X]). Flag bits: 1 = complete output [H,U] where U is unimodular transformation (U can be huge). Flag 2 deprecated. flag=4 returns [H,U] using LLL reduction yielding provably small U (slower but polynomial). flag=5 uses Batut's algorithm and returns [H,U,P] (faster, U usually worse). For dense large matrices flag=4 fastest; when M has maximal rank mathnfmod(M, matdetint(M)) may be faster; U can be recovered as M^{-1}H.",
+        "guidance": "Pick flag based on trade-off between speed and smallness of U. Use mathnfmod for memory-constrained cases. Expect U entries to be large when kernel is large."
+      },
+      {
+        "name": "mathnfmod memory vs speed",
+        "description": "If x is a matrix of maximal rank with integer entries, and d is a multiple of the determinant of the lattice spanned by columns, mathnfmod(x,d) finds the upper triangular HNF. It uses much less memory than mathnf but is in general slower.",
+        "guidance": "Use mathnfmod when memory is the limiting resource or when you know a multiple d of determinant. For full HNF and U prefer mathnf with appropriate flag."
+      },
+      {
+        "name": "mathnfmodid construction behavior",
+        "description": "Outputs the (upper triangular) HNF of x concatenated with the diagonal matrix with diagonal d. If d is integer the function concatenates d times the identity matrix.",
+        "guidance": "Useful to compute HNF together with appended diagonal constraints; examples show both vector and integer d cases."
+      },
+      {
+        "name": "mathouseholder representation advantage",
+        "description": "mathouseholder(Q,v) applies a sequence Q of Householder transforms (as returned by matqr(M,1)) to vector or matrix v.",
+        "guidance": "When flag=1 in matqr, Q is a compact, stable representation of orthogonal transforms; apply it with mathouseholder rather than multiplying by explicit Q for numerical stability and speed."
+      },
+      {
+        "name": "matimage default method and flag",
+        "description": "Gives a basis for image of matrix x as columns. If flag = 0 use standard Gauss pivot. If flag = 1 use matsupplement (much slower).",
+        "guidance": "Keep default flag=0 unless you need the alternative behavior. Returns basis columns; combine with matimagecompl for complementary column indices."
+      },
+      {
+        "name": "matindexrank selection",
+        "description": "x being of rank r, returns vectors y and z giving lists of rows and columns (starting from 1) such that the extracted matrix vecextract(x,y,z) is invertible.",
+        "guidance": "Use matindexrank to find an invertible r\u00d7r submatrix and corresponding indices for rank-based extraction."
+      },
+      {
+        "name": "matintersect applicability and alternatives",
+        "description": "Given x,y matrices with same number of rows and whose columns are independent, finds a basis of the Q-vector space equal to intersection of column spaces. For fractional ideals use idealintersect (faster). For general Z_K-modules use nfhnf (slower but more general).",
+        "guidance": "Choose specialized routines for algebraic number theory modules; matintersect is for rational vector-space intersections."
+      },
+      {
+        "name": "matinverseimage solution semantics",
+        "description": "Given matrix x and column vector or matrix y, returns a preimage z of y by x if one exists (i.e., x z = y), an empty vector/matrix otherwise. The complete inverse image is z + Ker x; a basis of kernel can be obtained by matker.",
+        "guidance": "Use matinverseimage to compute particular solutions; combine with matker to describe full solution set. Examples demonstrate no-solution returns empty and multiple-column handling."
+      },
+      {
+        "name": "matker integral-flag and behavior",
+        "description": "Gives a basis for the kernel of matrix x as columns. The matrix can have entries of any type compatible with arithmetic. If x is known to have integral entries, set flag = 1.",
+        "guidance": "Use flag=1 for integral matrices when appropriate (may select faster or integer-specialized code paths). Use ker/keri aliases as documented."
+      },
+      {
+        "name": "matkerint LLL-reduced kernel basis",
+        "description": "Gives an LLL-reduced Z-basis for the lattice equal to the kernel of matrix x with rational entries. The flag parameter is deprecated.",
+        "guidance": "If x is known integral, prefer kerint; for rational entries call matkerint to get a reduced integer basis of kernel. Deprecated flags should be ignored."
+      },
+      {
+        "name": "matmuldiagonal performance shortcut",
+        "description": "Product of matrix x by diagonal matrix whose diagonal entries are those of vector d. Equivalent to, but much faster than x * matdiagonal(d).",
+        "guidance": "Use matmuldiagonal to multiply by diagonals efficiently."
+      },
+      {
+        "name": "matmultodiagonal semantics and risk",
+        "description": "Product of matrices x and y assuming result is diagonal. Much faster than x * y in that case. The result is undefined if x * y is not diagonal.",
+        "guidance": "Only use when you know algebraically that x*y is diagonal; otherwise do not rely on this function."
+      },
+      {
+        "name": "matpascal construction with q-parameter",
+        "description": "Creates the lower triangular Pascal triangle of order n+1 (binomial coefficients up to n). If q given, compute the q-Pascal triangle (q-binomial coefficients).",
+        "guidance": "Use matpascal / matqpascal to generate combinatorial matrices; q parameter yields q-analogues."
+      },
+      {
+        "name": "matqr Householder vs explicit Q",
+        "description": "Returns [Q,R] the QR-decomposition. If flag=1 the orthogonal matrix is returned as a sequence of Householder transforms (applying such a sequence is stabler and faster than multiplication by the corresponding Q matrix). The function raises an error if precision is too low or x is singular.",
+        "guidance": "Prefer flag=1 for numerical stability and apply mathouseholder to apply Q; when exact Q is needed use flag=0. Check for singularity and sufficient precision before calling."
+      },
+      {
+        "name": "matrix constructor expression parameters",
+        "description": "Creation of m\u00d7n matrix whose coefficients are given by expression expr with formal parameters X (rows) and Y (columns), X from 1..m and Y from 1..n. If one of last 3 parameters omitted, fill matrix with zeroes.",
+        "guidance": "Use the matrix constructor to generate matrices from formulas; remember row/column index ranges start at 1."
+      },
+      {
+        "name": "matrixqz modes and p-parameter behavior",
+        "description": "Behavior depends on sign of p: if p \u2265 0 assume A has maximal rank n \u2264 m and return integer B with Im_Q B = Im_Q A and gcd of all n\u00d7n minors coprime to p (p=0 gives gcd 1). If p = \u22121, return HNF basis of Z^n \u2229 Im_Z A. If p = \u22122, return HNF basis of Z^n \u2229 Im_Q A.",
+        "guidance": "Choose p parameter to control whether you want integral bases with gcd normalization or intersections with integer lattices; examples illustrate conversion from rational matrices to integral ones with coprime minors."
+      },
+      {
+        "name": "matsize row/column semantics",
+        "description": "For vector or matrix x, returns row vector [#rows, #columns] (1 for row vector, 1 for column vector).",
+        "guidance": "Use matsize to query dimensions robustly; distinguishes row/column vector shapes."
+      },
+      {
+        "name": "matsnf Smith normal form and flag bits",
+        "description": "Outputs vector of elementary divisors (diagonal of Smith normal form) normalized so d_n | d_{n-1} | ... | d_1. Flag bits: 1 (complete output) outputs [U,V,D] with UXV = D; 2 (generic input) allows polynomial entries (input must be square); 4 (cleanup) deletes elementary divisors equal to 1 and shortens outputs accordingly.",
+        "guidance": "Request complete output only when you need U and V (they can be large). Use cleanup to get compact list of nontrivial divisors. For polynomial matrices set the appropriate flag if needed."
+      },
+      {
+        "name": "matsolve (Dixon vs Gaussian) selection",
+        "description": "Matsolve(M,B): if M and B are integral uses Dixon p-adic lifting method; otherwise uses Gaussian elimination. Equivalent to M^{-1}*B but faster for integral inputs.",
+        "guidance": "Prefer matsolve/gauss for systems with integral matrices for better performance; use ZM_gauss variants for integer-specialized behavior."
+      },
+      {
+        "name": "matsolvemod congruence-system semantics",
+        "description": "Given integral M, column vector D of non-negative integer moduli, and integral B, gives a small integer solution to \u03a3_i m_{i,j} x_j \u2261 b_i (mod d_i) if one exists, otherwise returns zero. D or B can be a single integer shorthand. If flag=1, returns all solutions as [x,u] where u columns give basis of homogeneous system. If no solution exists returns zero.",
+        "guidance": "Use matsolvemod for modular linear systems; use flag=1 if you need full solution space. Shorthand helps for uniform moduli."
+      }
+    ]
+  }
+}

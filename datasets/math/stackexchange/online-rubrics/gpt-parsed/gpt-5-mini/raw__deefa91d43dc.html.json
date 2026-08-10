@@ -1,0 +1,154 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/deefa91d43dc.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17187,
+  "output_tokens": 4454,
+  "elapsed_s": 2058.6900051250122,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "users of the Coq proof assistant who write and manage proofs (proof script authors, tactic authors, Coq plugin users)",
+    "subtask_short": "coq proof-mode usage",
+    "subtask_description": "Guidelines and behavioral rules for using Coq's proof mode: how proof state is represented, entering/exiting proofs, key proof-mode commands/tactics, structuring proofs (bullets/focus), goal management (shelving, reordering), proof-term handling and verification, and related configuration options.",
+    "subtask_keywords": [
+      "coq",
+      "proof_mode",
+      "tactics",
+      "proof_development",
+      "ltac"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of proof mode",
+        "description": "Proof mode is used to prove theorems. Coq enters proof mode when you begin a proof (e.g. with Theorem or Goal) and exits when you complete a proof (e.g. with Qed). Tactics are available only in proof mode.",
+        "guidance": "Most commands can be used both in and out of proof mode, but some only work in or outside proof mode. User interfaces usually indicate proof mode; tactics produce syntax errors outside proof mode."
+      },
+      {
+        "name": "Proof state composition",
+        "description": "The proof state consists of one or more unproven goals. Each goal has a conclusion (the statement to be proven) and a local context containing named hypotheses, variables and local definitions. The conclusion is shown below a line and the local context above it.",
+        "guidance": "Items in the local context are ordered; an item can only refer to items that appear before it. The local context may include section-local variables and hypotheses defined in the current section. The local context shows names followed by ':' and their types."
+      },
+      {
+        "name": "Goals and subgoals numbering and focus",
+        "description": "Goals are numbered from 1 to N at each proof step to permit applying a tactic to specific goals. Some tactics create new goals (subgoals). The local context is shown for the first goal only unless explicit selectors are used.",
+        "guidance": "Use goal selectors or focus mechanisms to operate on specific goals. The term 'goal' may refer to an entire goal or its conclusion depending on context."
+      },
+      {
+        "name": "Proof term and Show Proof",
+        "description": "A proof script is a sequence of tactics; the real proof is a proof term (a term in Gallina). Show Proof displays the incomplete proof term; holes are existential variables named like ?Goal.",
+        "guidance": "Show Existentials shows each existential with the hypotheses and conclusion for the associated goal. Users may inspect proof terms occasionally to understand the constructed proof."
+      },
+      {
+        "name": "Kernel verification at Qed/Save/Defined",
+        "description": "Qed passes the completed proof term to Coq's kernel to check that the proof term is well-typed and that its type matches the theorem statement; if verified the proof term is added to the global environment as an opaque constant. Save behaves similarly but uses the given name; Defined makes the proof transparent.",
+        "guidance": "It's very rare for a proof term to fail verification; such failures generally indicate a bug in a tactic or misuse of unsafe tactics. Large proofs are fully rechecked and may take time or memory; be aware of potential memory overflow. Use Defined if you want the proof body available for conversion and typechecking."
+      },
+      {
+        "name": "Commands semantics: Goal, Qed, Save, Defined, Admitted, Abort",
+        "description": "Goal asserts an unnamed proposition for quick tests; Qed/Save/Defined close proofs with different visibility (opaque/transparent); Admitted declares the current goal as an axiom (give up); Abort cancels current proof development (with variants to abort nested or all proofs).",
+        "guidance": "Unnamed goals get a generated name Unnamed_thm; Save/Defined override names from Theorem. Use Admitted only to temporarily bypass proofs. Abort and its variants allow managing nested proofs or canceling all current proofs."
+      },
+      {
+        "name": "Proof command (proof term one-shot)",
+        "description": "Proof term applies in proof mode and is equivalent to exact term. You must provide the full proof as a proof term followed by Qed.",
+        "guidance": "Use of this command is discouraged (e.g. doesn't work well with Proof General); it must immediately follow the command that opened proof mode."
+      },
+      {
+        "name": "Proof using annotations and section variables",
+        "description": "Proof using allows declaring the set of section variables used by the proof. At Qed time Coq verifies that the set of section variables used in the proof is a subset of the declared one.",
+        "guidance": "Proof using expressions can include Type, All, set operations (+, -, *) and explicit lists. Set Default Proof Using and the Suggest Proof Using flag help manage or suggest annotations. Use Collection ident := section_var_expr to name collections for compact annotations."
+      },
+      {
+        "name": "Existential variables handling",
+        "description": "Existential commands let you instantiate or manage existential variables: 'Existential natural : type := term' can instantiate an existential variable (deprecated). Grab Existential Variables was deprecated; Unshelve is the recommended replacement.",
+        "guidance": "Use instantiate tactic during proof edition for interactive instantiation. 'Show Existentials' displays open existential variables with context and type. Deprecated commands are marked since 8.13."
+      },
+      {
+        "name": "Proof modes and Option Default Proof Mode",
+        "description": "Coq supports different proof modes (which determine the tactic language): e.g. 'Classic' activates Ltac (prelude), 'Noedit' activates no tactic language (default when prelude not loaded), 'Ltac2' activates Ltac2. Plugins may define additional proof modes.",
+        "guidance": "Set Option Default Proof Mode to choose which mode to start with. Proof mode affects which syntactic constructs and tactic definitions are available."
+      },
+      {
+        "name": "Navigation in the proof tree (Undo, Restart, Focus, Unfocus)",
+        "description": "Undo cancels the effect of the last command/tactic (or goes back to a given state number). Restart restores the proof to the original goal. Focus/Unfocus (and focused tactic forms) let you focus on a single goal or the nth goal.",
+        "guidance": "Focus is deprecated in favor of bullets or focusing brackets with goal selectors. Focused subproofs can only be unfocused when fully solved. Use goal naming and refine to name goals for easier focus handling."
+      },
+      {
+        "name": "Braced subproofs and named focused subproofs",
+        "description": "Tactic { ... } (without terminating period) focuses on the first goal; {n: ... } focuses on the nth goal; [{ident}] focuses on a named goal. When a focused goal is proved a message suggests how to unfocus or focus the next one.",
+        "guidance": "Goals are existential variables; to name a goal use refine ?[ident] or wrap in an Ltac definition. Focused subproofs must be fully solved before unfocusing with }."
+      },
+      {
+        "name": "Bullets for structuring proofs",
+        "description": "Bullets (-, +, *) can be used instead of { } to structure proofs. The first use of a bullet focuses the first goal; the same bullet cannot be reused until the focused proof is finished. Different bullets nest levels and scope does not go beyond enclosing braces.",
+        "guidance": "In Proof General you must use bullets with priority ordering (outer - ; inner **). When a focused goal is proved a message suggests the right bullet or } to unfocus. Errors are raised for wrong or mandatory bullets if the expected nesting/ordering is not respected."
+      },
+      {
+        "name": "Mandatory bullets and Default Goal Selector !",
+        "description": "Using Default Goal Selector with the ! selector forces tactic scripts to keep focus to exactly one goal (e.g. using bullets) or use explicit goal selectors.",
+        "guidance": "This enforces stricter proof scripts (prevents implicit multi-goal tactics) and helps make scripts robust."
+      },
+      {
+        "name": "Bullets behavior option",
+        "description": "Option Bullet Behavior controls bullet activation: 'None' makes bullets inactive; 'Strict Subproofs' (default) makes bullets active.",
+        "guidance": "Set this option to change whether bullets are enforced and how subproofs are checked."
+      },
+      {
+        "name": "Reordering goals (cycle, swap, revgoals)",
+        "description": "Tactics exist to reorder focused/selected goals: 'cycle int' reorders selected goals to put first integer goals after others (or negative values move last integer goals to the front). 'swap i j' exchanges specified goals. 'revgoals' reverses order of selected goals.",
+        "guidance": "These tactics are most useful with a goal selector like all:. Different selectors (e.g. 1,3:) change the effect; behavior depends on the selector used. Indexing goals uses 1-based positive/negative for backward counting."
+      },
+      {
+        "name": "Postponing and shelving goals (shelve, shelve_unifiable, Unshelve, unshelve)",
+        "description": "Goals can be shelved so they are not displayed; shelved goals can be solved by unification or brought back with Unshelve. 'shelve_unifiable' shelves only goals that are mentioned in other goals (unifiable). 'unshelve tactic' performs tactic then unshelves existential variables added to the shelf.",
+        "guidance": "Shelving is useful to hide intermediate goals and defer work. Unshelve appends shelved goals to the current goal list."
+      },
+      {
+        "name": "give_up tactic",
+        "description": "The give_up tactic removes the focused goals from the proof without solving them; they cannot be solved later in the proof so the proof cannot be closed.",
+        "guidance": "Use give_up when editing a proof to choose to write the proof script in a non-sequential order; it's a way to abandon goals during interactive editing (not for finishing a proof)."
+      },
+      {
+        "name": "Commands to request proof information (Show ...)",
+        "description": "A family of Show commands provides proof information: Show ident n? displays current goals (or nth); Show Proof Diffs shows the proof term and diffs; Show Conjectures prints names of theorems currently being proved; Show Intro/Intros simulate naming from intro; Show Existentials displays open existentials; Show Match displays a match template for a type; Show Universes displays universe constraints; Show Goal at displays a goal by proof/goal IDs.",
+        "guidance": "These commands are useful for scripting, tooling (company-coq, Prooftree), and for writing robust scripts (e.g. Show Intro to avoid anonymous intros). Some show variants are only available in certain interfaces (coqtop, CoqIDE, Proof General)."
+      },
+      {
+        "name": "Show Proof Diffs and diff options",
+        "description": "Show Proof Diffs displays the proof term generated by applied tactics and can highlight differences between proof steps. Option Diffs has values 'on', 'off', 'removed' controlling how changes are highlighted (on highlights additions; removed also shows removals).",
+        "guidance": "In coqtop use -diffs and -color options; in CoqIDE enable diffs from the View menu; Proof General can display diffs. Color tags (diff.added, diff.removed, etc.) are configurable. By default diffs show additions; 'removed' prints both old and new with removed tokens in red."
+      },
+      {
+        "name": "How diffs are calculated",
+        "description": "Diffs are calculated by selecting the old proof state before the last tactic that changed the proof, matching new goals to old derived goals (matching hypotheses by name), tokenizing items via lexer, and applying the Myers diff algorithm on tokens to produce highlights.",
+        "guidance": "Changes that only affect the view (like all: swap 1 2) are ignored. Goals completed in the last proof step will not be shown even with 'removed'. Compacted hypotheses are handled specially. Aside from highlighting, 'on' output should be identical to undiffed output."
+      },
+      {
+        "name": "Controlling proof-mode display of hypotheses (Hyps Limit)",
+        "description": "Option Hyps Limit n controls the maximum number of hypotheses displayed in goals after a tactic application. All hypotheses remain usable even if not printed.",
+        "guidance": "When unset, it returns to the default behavior of printing all available hypotheses. Use this to limit noisy contexts for readability."
+      },
+      {
+        "name": "Flag Nested Proofs Allowed",
+        "description": "When turned on (off by default), Nested Proofs Allowed enables support for nested proofs: you can insert a new assertion command before the current proof is finished; Coq temporarily switches to the nested proof and when it finishes the nested statement is made available and Coq switches back to the outer proof.",
+        "guidance": "This enables proving lemmas locally inside a proof; be aware of scoping and naming implications."
+      },
+      {
+        "name": "Flag Printing Goal Names",
+        "description": "When turned on, the name of the goal is printed in proof mode, which is useful for cross references between goals.",
+        "guidance": "Useful when scripts create or manage multiple named goals; interacts with focusing and named goals facilities."
+      },
+      {
+        "name": "Controlling memory usage and optimizing proofs",
+        "description": "Commands exist to inspect and reduce memory use: Print Debug GC prints heap statistics. Optimize Proof shrinks the data structures representing the current proof. Optimize Heap (and the tactic optimize_heap) performs a heap compaction.",
+        "guidance": "Large proofs may require these operations to avoid memory issues. Memory parameters can be set through the OCAMLRUNPARAM environment variable. Optimize Proof is intended to reduce the footprint of proof representation before long idle times or serialization."
+      },
+      {
+        "name": "Deprecated/transition notes (Grab Existential Variables, Existential command)",
+        "description": "Some commands previously used for existential management are deprecated (e.g. Grab Existential Variables and the Existential natural := term command). Use modern alternatives like Unshelve and instantiate.",
+        "guidance": "The documentation marks deprecated features (since 8.13) and recommends replacement tactics/commands to keep proofs forward-compatible."
+      }
+    ]
+  }
+}

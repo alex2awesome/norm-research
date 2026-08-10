@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_6bfc74d05ed8.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17608,
+  "output_tokens": 3460,
+  "elapsed_s": 1416.68952991697,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in formal verification / formalized mathematics (users of HOL Light, Isabelle/HOL, proof assistant developers)",
+    "subtask_short": "formalization of mathematical proofs",
+    "subtask_description": "Formalizing a large mathematical theorem (the Kepler conjecture) across proof assistants, including formal verification of inequalities, linear programs, library development, session composition, and audit procedures.",
+    "subtask_keywords": [
+      "formal_proof",
+      "hol_light",
+      "isabelle_hol",
+      "kepler_conjecture",
+      "nonlinear_inequalities"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Faithful formal statement of the theorem",
+        "description": "The formalized statement must match the common understanding of the mathematical theorem (e.g., the_kepler_conjecture as formalized agrees with the traditional Kepler conjecture about packing density).",
+        "guidance": "Auditors should examine the definitions used to ensure the meaning of the final theorem agrees with the intended theorem; check details like normalization (unit radius), precise quantifier bounds (r \u2265 1), and any error terms introduced for finite containers."
+      },
+      {
+        "name": "No unapproved axioms",
+        "description": "The formal development must not introduce unapproved or extra axioms beyond the trusted core.",
+        "guidance": "Auditors should check that no new axioms were added to the system; verify that new constants/types are defined conservatively and that the kernel remains the only trusted inference engine."
+      },
+      {
+        "name": "Small, scrutinized kernel (LCF approach)",
+        "description": "Use an LCF-style architecture with a small kernel so that soundness depends only on a small, well-audited code base.",
+        "guidance": "Prefer proof assistants with a tiny, well-reviewed kernel (HOL Light's kernel is just a few hundred lines); verify any formal proofs of the kernel itself where available."
+      },
+      {
+        "name": "Formal computation inside the proof assistant",
+        "description": "All formal numerical computations used in verification (e.g., interval arithmetic, Taylor approximations) must be carried out within the proof assistant so each result is a theorem in the system.",
+        "guidance": "Do not rely on native floating-point operations for formal results; represent computations with formal finite-precision numbers, natural numbers, and derive theorems for every arithmetic operation so the verification is fully inside HOL Light/Isabelle."
+      },
+      {
+        "name": "Use of interval arithmetic for inequalities",
+        "description": "Nonlinear inequalities should be verified using interval arithmetic (interval extensions of functions) to obtain rigorous bounds.",
+        "guidance": "Construct interval extensions (natural and improved) for elementary functions; use subdivision and improved extensions (Taylor interval approximations) to reduce overestimation; formalize interval operations in the assistant."
+      },
+      {
+        "name": "Taylor interval approximations",
+        "description": "Improve natural interval extensions by using Taylor approximations (second-order/multivariate) centered near the midpoint to get tighter interval bounds.",
+        "guidance": "Choose expansion point y close to midpoint to minimize remainder bound w; compute interval extensions of derivatives once; use Taylor interval approximations to reduce required subdivisions and to prove monotonicity via derivative sign intervals."
+      },
+      {
+        "name": "Subdivision and monotonicity reduction",
+        "description": "Subdivide rectangular domains and use monotonicity (via sign of partial derivatives) to reduce dimension or domain size when verifying multivariate inequalities.",
+        "guidance": "Apply monotonicity arguments where a partial derivative has fixed sign to reduce verification on a k-dimensional rectangle to an adjoining (k-1)-dimensional rectangle; combine with Taylor intervals to minimize subdivisions."
+      },
+      {
+        "name": "Handling sharp inequalities at domain corners",
+        "description": "For inequalities that are sharp (equality at some domain corner x0), verify f(x0)=0 by exact arithmetic, show f<0 outside a small neighborhood, and establish sign of partial derivatives on that neighborhood.",
+        "guidance": "Compute f(x0) exactly inside the system, use Taylor intervals to show negativity off a small neighborhood U, and verify derivative signs on U so the maximum occurs at x0."
+      },
+      {
+        "name": "Finite-dimensional rectangular domain restriction",
+        "description": "Nonlinear inequalities are expressed over rectangular domains D = [a1,b1]\u00d7...\u00d7[an,bn] (n \u2264 6) with functions built from basic arithmetic and selected elementary functions.",
+        "guidance": "Formulate inequalities as \u2200x \u2208 D => disjunction of fi(x) < 0; ensure functions are analytic on neighborhood points where needed; keep number of variables small (\u22646) for tractability."
+      },
+      {
+        "name": "Separation of informal search and formal verification",
+        "description": "Use an informal search (heuristic) phase to find suitable subdivisions, choose which disjuncts to verify, and precision; then run a formal verification that accepts the search output and produces formal theorems.",
+        "guidance": "The search phase finds subdivisions and minimal precision; the formal phase consumes this plan and constructs machine-checkable proofs (theorems) inside the assistant."
+      },
+      {
+        "name": "Use of formal finite-precision numerals and adjustable precision",
+        "description": "Represent numbers with provable finite-precision numerals in the proof assistant and permit dynamic adjustment of precision during verification.",
+        "guidance": "Provide arithmetic procedures for numerals in arbitrary base; the informal search should try to find minimal precision necessary; ultimately all low-level arithmetic is done with natural numbers in the assistant."
+      },
+      {
+        "name": "Record and replay of formal proofs",
+        "description": "Export recorded proof objects from high-level proof scripts and import/replay them in a minimal core session to speed verification and increase trust.",
+        "guidance": "Recording allows replay in a small trusted environment (e.g., HOL Zero), making verification faster and enabling cross-system checks; keep exported proofs available for independent replay."
+      },
+      {
+        "name": "Combine distributed sessions safely",
+        "description": "When proofs are developed in multiple independent sessions (parallelization), use a trusted mechanism to combine theorems into a single session without redoing all proofs, while maintaining trustworthiness.",
+        "guidance": "Use a specially modified version of the assistant that can accept theorems from other sessions in a controlled way; auditors should inspect this modification and the reconstruction mechanism; ensure constants/types consistency back to kernel primitives."
+      },
+      {
+        "name": "Faithful translation between proof systems",
+        "description": "When using multiple proof assistants (Isabelle/HOL, HOL Light), the translation of statements (e.g., tame classification) must be faithful and checked.",
+        "guidance": "Auditors should verify that translations (including long lists like tame graphs) are identical across systems; reconcile differing notions (e.g., planarity) and check that hand translations involve no mathematical reasoning errors\u2014only rote syntax mapping."
+      },
+      {
+        "name": "Formal verification of linear programs via dual certificates",
+        "description": "Verify infeasibility of linear programs by finding dual solutions (certificates), modifying them to sufficient precision, converting to integer coefficients, and checking the weighted sum yields contradiction inside the assistant.",
+        "guidance": "Use external LP solvers to find initial duals (imprecise), then adjust to 'modified dual solutions' with precise rational/integer coefficients (by scaling) so the formal verifier can sum constraints with these weights to produce an explicit contradiction; ensure variable bounds and nonnegativity are formalized."
+      },
+      {
+        "name": "Automatic case splitting for linear relaxations",
+        "description": "Introduce case splits (x \u2264 a or a \u2264 x) to tighten linear relaxations; generate cases automatically before formal verification.",
+        "guidance": "An informal procedure should enumerate required cases; the formal verification is then applied to each case; this leads to many linear programs but they are individually verifiable."
+      },
+      {
+        "name": "Convert dual solutions to exact integer arithmetic",
+        "description": "Scale and convert modified dual solutions to integer coefficients so the formal verification can be reduced to exact integer arithmetic.",
+        "guidance": "Multiply coefficients by a sufficiently large power of 10 (or appropriate base) to clear denominators; perform summation/checks using formal integer arithmetic inside the assistant."
+      },
+      {
+        "name": "Performance and parallelization expectations",
+        "description": "Large formal verifications (e.g., thousands of inequalities) may require substantial CPU-hours but can be parallelized across many cores and repeated independently.",
+        "guidance": "Example: 23,000 inequalities required ~5000 processor-hours on Azure (parallelized); rechecks on different hardware are recommended to confirm identical results."
+      },
+      {
+        "name": "Library development and modularization",
+        "description": "Formalization requires building or extending libraries (topology, geometry, measure, spherical trigonometry, hypermaps, fans, polyhedra, Voronoi partitions, etc.) and organizing work into modular, independent chapters to ease collaboration.",
+        "guidance": "Make statements more precise, explicitly state hypotheses, and break long proofs into shorter lemmas; minimize interdependence across chapters for parallel development."
+      },
+      {
+        "name": "Explicit specification of computational subclaims",
+        "description": "Separate the formal proof into text formalization and explicit computational subclaims (nonlinear inequalities, tame classification, linear programming results), so a final theorem can assume these as named hypotheses.",
+        "guidance": "Structure the final theorem to depend on conjunctions like the_nonlinear_inequalities, import_tame_classification, and linear_programming_results so parts can be verified independently and then combined."
+      },
+      {
+        "name": "Audit steps for distributed formal proofs",
+        "description": "Auditing a distributed formal proof involves executing proof scripts, examining definitions, verifying no unapproved axioms, auditing proof system internals and any special modifications, and checking cross-system consistency.",
+        "guidance": "Specifically check: that scripts produce claimed theorems, correctness of definitions, absence of extra axioms, the design of modified assistants used to combine sessions, and consistency of lists and translations (e.g., tame graphs). Assume malicious intent when auditing; check for possible exploit vectors."
+      },
+      {
+        "name": "Reconciliation of differing formal notions",
+        "description": "When parts of the project use different formal notions (e.g., two different notions of planarity), provide explicit bridging proofs or procedures to relate them.",
+        "guidance": "Document and formally prove equivalences or translations (e.g., relate recursive tame graph planarity to hypermap planarity based on Euler characteristic) so that libraries interoperate safely."
+      },
+      {
+        "name": "Use of external tools only for noncertified assistance",
+        "description": "External tools (GLPK, C# programs, LP solvers) may be used to find informal artifacts (e.g., dual solutions), but the final certified verification must be performed inside the proof assistant with adjusted/checked data.",
+        "guidance": "Treat external outputs as heuristic aids; convert and certify any useful external result (e.g., dual certificate) into an exact representation and recheck inside the assistant before accepting it as a formal proof ingredient."
+      },
+      {
+        "name": "Make blueprint precise and suitable for formalization",
+        "description": "When preparing an informal proof for formalization, rework it into a 'blueprint' that replaces heavy topology with combinatorial notions where possible, makes hypotheses explicit, and introduces partitions and concepts better adapted to formal proof techniques.",
+        "guidance": "Examples include replacing plane graph topology with hypermaps, using Marchal partition rules, reorganizing into major concepts to limit new library work, and embracing computation where helpful."
+      }
+    ]
+  }
+}

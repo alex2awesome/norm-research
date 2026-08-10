@@ -1,0 +1,154 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_0052c668ac87.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 5378,
+  "output_tokens": 3406,
+  "elapsed_s": 1512.7050674168859,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / machine-learning researchers and practitioners working on financial trend prediction from text (news headlines)",
+    "subtask_short": "predicting stock trends from headlines",
+    "subtask_description": "Use natural language processing on news headlines (top 25 per trading day) to predict same-day DJIA closing-direction (up/down) via various preprocessing, embedding and classification/regression models. The paper evaluates embedding options and algorithms and reports practical limitations.",
+    "subtask_keywords": [
+      "nlp",
+      "financial_prediction",
+      "news_headlines",
+      "djia",
+      "machine_learning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset scope \u2014 top 25 headlines per trading day (2008\u20132015)",
+        "description": "Analyze the top 25 news headlines of each open-market day from 2008 to late 2015 to predict the end-of-day DJIA value for the same day.",
+        "guidance": "Collect consistent daily headline sets (top 25) and align them with same-day market close; be aware that era choice affects results (broad training eras may dilute temporal relevance)."
+      },
+      {
+        "name": "Prediction target \u2014 same-day DJIA trend",
+        "description": "Predict the end-of-day value/trend (up/down) of the DJIA index for the same day the headlines are published.",
+        "guidance": "Rationale: traders respond quickly to news and markets should adjust within hours. Ensure timestamps and release windows align with market hours."
+      },
+      {
+        "name": "Preprocessing \u2014 remove stop words",
+        "description": "Remove very common words (e.g., 'the', 'a', 'and') that add little to sentiment or context analysis.",
+        "guidance": "Use a stop-word list to reduce noise; keep in mind removing stop words may drop syntactic cues but typically helps sentiment/context features."
+      },
+      {
+        "name": "Preprocessing \u2014 named entity handling (remove or treat specially)",
+        "description": "Filter named entities (organizations, people, countries) \u2014 either remove them for sentiment analysis (they would otherwise be counted as neutral) or keep/use them in context analysis with human-extracted importance.",
+        "guidance": "If removed: reduces neutral 'smoothing' effect for sentiment. If kept: they can be highly informative but require human knowledge to assign importance, which breaks full autonomy and may add human error."
+      },
+      {
+        "name": "Preprocessing \u2014 remove punctuation",
+        "description": "Remove all punctuation from the corpus because the current models do not take them into account.",
+        "guidance": "Authors removed punctuation; note that including punctuation might yield results in other setups but they found no supporting literature as of writing."
+      },
+      {
+        "name": "Handling variable-length text \u2014 do not concatenate raw word encodings",
+        "description": "Texts are varying length so you cannot simply encode each word and concatenate without losing information; use aggregation to fixed-length vectors.",
+        "guidance": "Aggregation strategies include summing Word2Vec vectors, TF-IDF vectors (vocabulary-sized), Bag-of-Words counts, or N-gram encodings."
+      },
+      {
+        "name": "Word2Vec embedding and aggregation \u2014 sum vectors",
+        "description": "When using Word2Vec, aggregate word vectors by summing; the paper reports summing vectors outperforms mean and sum of distances by ~4\u20135%.",
+        "guidance": "Prefer sum aggregation for headline-level representation if using Word2Vec; test alternatives but validate empirically."
+      },
+      {
+        "name": "TF-IDF representation",
+        "description": "TF-IDF is defined as the number of times a word appears in the top 25 headlines of the day divided by the number of times it appeared in the corpus, producing a vocabulary-sized vector with values between 0 and 1.",
+        "guidance": "Use TF-IDF to capture relative importance of words on a given day vs corpus frequency; results depend on vocabulary size and corpus composition."
+      },
+      {
+        "name": "Bag-of-Words representation",
+        "description": "Bag-of-Words counts the occurrences of words in the headlines and produces a vocabulary-sized vector of strictly positive integers.",
+        "guidance": "Simple and effective baseline; in this study linear regression on Bag-of-Words performed best (57% accuracy)."
+      },
+      {
+        "name": "N-grams augmentation",
+        "description": "N-grams find frequent groups of n words and create features (n among m vector) that can be combined with other embeddings like Word2Vec.",
+        "guidance": "Augment embeddings with N-grams to capture multi-word expressions; tune n and vocabulary to avoid exploding dimensionality."
+      },
+      {
+        "name": "Model choice \u2014 logistic regression for binary outputs",
+        "description": "Logistic regression is a potential algorithm when used with an activation function that outputs either binary target classes.",
+        "guidance": "Good baseline for binary classification; interpretability and calibration advantages, but may be limited for high-dimensional sparse vectors without regularization."
+      },
+      {
+        "name": "Model choice \u2014 SVM for high-dimensional vectors",
+        "description": "Use an SVM due to its ability to learn large multi-dimensional vectors.",
+        "guidance": "SVMs handle high-dimensional spaces well; consider kernel choice, scaling, and computational cost on large vocabularies."
+      },
+      {
+        "name": "Model choice \u2014 Gaussian Naive Bayes as basic text baseline",
+        "description": "Gaussian Naive Bayes was attempted as a popular basic text classification technique.",
+        "guidance": "Use as a fast baseline; may underperform on correlated features and when Gaussian assumptions don't hold."
+      },
+      {
+        "name": "Model choice \u2014 LSTM risks overfitting/not learning relation",
+        "description": "LSTM was attempted but models tended to overfit training data and did not learn a relation between input and output; did not improve on randomness.",
+        "guidance": "Be cautious with sequence models on small/noisy headline datasets; regularization, more data, or architectures tuned to headline length may be needed."
+      },
+      {
+        "name": "Model choice \u2014 MLP can extract links",
+        "description": "A dense feed-forward (MLP) neural network managed to extract a link between the news and the index's value in the authors' experiments.",
+        "guidance": "MLP can work on aggregated vectors; tune architecture and regularization to avoid overfitting."
+      },
+      {
+        "name": "Evaluation metric \u2014 accuracy and output confidence check",
+        "description": "Report classification accuracy; note predicted single-value outputs often cluster around 0.5 indicating low confidence in class selection.",
+        "guidance": "Use accuracy for binary trend prediction but also monitor output distributions/confidence; values near 0.5 suggest models not learning signal beyond chance."
+      },
+      {
+        "name": "Empirical baseline results per algorithm",
+        "description": "Reported per-algorithm validation accuracies (e.g., Logistic Regression 0.57, LDA 0.51, KNN 0.46, Decision Tree 0.49, SVM 0.53, Random Forest 0.50, XGBoost 0.52, Naive Bayes 0.53, LSTM 0.55, MLP 0.53).",
+        "guidance": "Use these as rough benchmarks for similar experimental setups; linear regression on Bag-of-Words achieved the highest reported 57% accuracy."
+      },
+      {
+        "name": "Temporal validity and training-window recommendation",
+        "description": "Models should be trained on short time frames because headline contexts and recurring actors change over time; recommend training on ~9 months and testing on up to 3 months (moving window).",
+        "guidance": "Avoid long training eras where learned features become irrelevant; moving windows (e.g., 9+3 months) help maintain relevance. Less than 2 months of training may lack sufficient data points."
+      },
+      {
+        "name": "Statistical/era dependence caveat",
+        "description": "Results are era-dependent: picking a different time period will likely produce different results (rise of broadband, algorithmic strategies, changes in news behavior).",
+        "guidance": "Be cautious in generalizing findings across eras; include temporal robustness checks and consider concept drift."
+      },
+      {
+        "name": "Need for frequent corpus/model updates",
+        "description": "Most resources are vocabulary-dependent and rely on humans to update corpora for new words, expressions, and individuals; models must be updated frequently and retrained from scratch if the root data changes.",
+        "guidance": "Plan maintenance and retraining pipelines; online learning may be difficult due to varying vector lengths across days."
+      },
+      {
+        "name": "Data bias \u2014 negativity and objectivity in news",
+        "description": "World news outlets have commercial biases and humans have negativity bias; many headlines are objective and the few subjective ones are often negative, skewing sentiment data toward negative.",
+        "guidance": "Account for editorial and sentiment biases when interpreting model outputs; consider source diversification or reweighting if possible."
+      },
+      {
+        "name": "Multimodal and indicator combination effects",
+        "description": "Combining sentiment, subjectivity, and financial indicators (multimodal learning) did not provide much greater results in this study; financial indicators provided only a very slight boost.",
+        "guidance": "Test multimodal combinations but validate significance; don't assume simple combination will beat baseline randomness."
+      },
+      {
+        "name": "Semi-autonomous enhancement via human-featured data",
+        "description": "Performance might improve by adding human-featured data such as NER linked to importance or pointers about what news is good or bad, but that implies a semi-autonomous system that depends on the human who created the features.",
+        "guidance": "Consider human-in-the-loop features to capture importance/context, while acknowledging scalability, potential human error, and loss of full autonomy."
+      },
+      {
+        "name": "Alternative data suggestion \u2014 tweets for company-specific sentiment",
+        "description": "Using archives of tweets to train models on sentiment towards specific companies (e.g., airlines, Tesla) may yield stronger priors and better trend prediction than headlines for a national index.",
+        "guidance": "For company-level prediction, leverage social-media sentiment where it correlates more directly with consumer opinion and stock movements; tailor data source to prediction granularity."
+      },
+      {
+        "name": "Practical limitation \u2014 breaking news adaptation",
+        "description": "System inability to react to breaking news due to lack of prior context; models trained on past data may not know enough about novel events to correctly predict trends.",
+        "guidance": "Incorporate mechanisms for rapid adaptation (manual signals, human flags, or specialized modules for novel-event detection) if real-time reaction to breaking news is required."
+      },
+      {
+        "name": "Model reliability \u2014 marginal improvement over chance",
+        "description": "Over long periods, there was little to no correlation between news sentiment and DJIA trends; word embedding techniques yielded results only slightly better than random.",
+        "guidance": "Treat headline-based trend prediction as weak signal; validate against strong baselines and avoid deploying as sole trading strategy without additional robust indicators."
+      }
+    ]
+  }
+}

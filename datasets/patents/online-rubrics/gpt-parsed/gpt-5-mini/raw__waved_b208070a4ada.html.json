@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/waved_b208070a4ada.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 7052,
+  "output_tokens": 3276,
+  "elapsed_s": 2931.816247791983,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "patent attorneys, medicinal chemists, cheminformaticians, and researchers drafting chemical composition patents",
+    "subtask_short": "chemical patent claim drafting",
+    "subtask_description": "Automated generation and expansion of Markush-structure-based composition patent claims from a set of example compounds (scaffold + R groups), including guidance on input/output formats, library curation, and algorithmic rules for expanding claim coverage.",
+    "subtask_keywords": [
+      "chemical_patent",
+      "markush_structure",
+      "claim_drafting",
+      "cheminformatics",
+      "web_server"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Claims should include key compounds and structural derivatives",
+        "description": "In the pharmaceutical industry, claims should include key compounds and all structural derivatives that are likely to have the same effects.",
+        "guidance": "This is achieved by using Markush structures that describe a common core scaffold plus variable R groups to capture structural derivatives for broad protection."
+      },
+      {
+        "name": "Use Markush structures to describe series of compounds",
+        "description": "Markush structures describe a series of chemical compounds having a common core structure and variable substituents called R groups.",
+        "guidance": "When drafting composition claims, represent a set of analogs as a scaffold with defined R groups to capture related compounds in a single claim."
+      },
+      {
+        "name": "Ensure novelty by searching prior art using Markush queries",
+        "description": "To ensure the novelty of a new composition patent, one needs to make sure that no compound in the claims is taken by prior arts. Performing a structure search using the Markush structure as input is the most efficient method.",
+        "guidance": "Use large chemical patent databases (example given: SureChEMBL) to perform Markush-based structure searches rather than only exact-structure searches; incorporate these searches into claim-drafting workflow to avoid claiming known compounds."
+      },
+      {
+        "name": "Derive input Markush by identifying scaffold and R group variations from example compounds",
+        "description": "To generate the input Markush structure, one needs to study the compounds they want to patent to identify the input scaffold and R group variations.",
+        "guidance": "Algorithmic tools (e.g., RDKit FindMCS) can be used to extract the invariable core (scaffold) and variable substructures (R groups) from a set of analogs as the starting Markush scaffold and R group collections."
+      },
+      {
+        "name": "Maximize patent coverage by adding new R-group variations",
+        "description": "The next step in drafting compositional patent claims is to maximize patent coverage. Adding variations beyond the current Markush structure relies on the experience of patent attorneys.",
+        "guidance": "Automated systems should not only recapitulate observed substituents but also propose common/likely R-group variations (from curated libraries) to broaden claim scope and reduce dependence on manual attorney extension."
+      },
+      {
+        "name": "R-group library curation: remove duplicates and filter undesirable groups",
+        "description": "When building an R group library, remove duplicates including optical isomers, and filter out R groups with deuterium, phosphorus, and long aliphatic carbon chains (>6 atoms).",
+        "guidance": "Example implementation removed 5183 duplicates and filtered out 2 R groups with deuterium, 2 with phosphorus, and 133 with aliphatic chains longer than 6 atoms to produce a curated set of 269 R groups."
+      },
+      {
+        "name": "Define common substituent groups and categorize with SMARTS",
+        "description": "Identify common groups along with their text terms from patent claims (e.g., hydroxyl, cyano, halo, alkyl, aryl, heteroaryl) and generate SMARTS notations for detecting them.",
+        "guidance": "Categorize R groups into a set of categories (the paper used 57 categories, including composite categories such as alkyl\u2013aryl) to enable automated detection and textual description generation of substituents."
+      },
+      {
+        "name": "Generate textual R-group descriptions from distal-to-attachment ordering",
+        "description": "If the R group comprises several common groups, the text term describing the R group should be generated from the most distant common group moving to the ones near the attachment point.",
+        "guidance": "This ordering rule yields more consistent and chemically meaningful textual definitions for complex substituents when producing claim text."
+      },
+      {
+        "name": "If R-group matches library substituent, expand same-position variations",
+        "description": "For R groups attached to a carbon chain or ring in the scaffold, if the R group structure exactly matches any of the common substituents on the corresponding main structure in our library, the rest of the common substituents will be added to the same ring or carbon chain.",
+        "guidance": "This is the algorithmic rule used to expand local variation sets within the Markush representation to increase claim breadth by adding substituents that commonly occur at the same position in similar scaffolds."
+      },
+      {
+        "name": "Input file format and minimum content requirement",
+        "description": "Input file is accepted as MDL SD file, and the file should contain more than one compound that shares the same core structure.",
+        "guidance": "Users must submit SD files with multiple analogs sharing a scaffold; single-compound submissions are not suitable. The server expects platform-independent MDL SD format as input."
+      },
+      {
+        "name": "Output formatting for claims",
+        "description": "The chemical scheme of the Markush structure is shown after the first sentence of the claims, and the definition of the R groups follows. Results can be downloaded in MS Word format (.docx).",
+        "guidance": "Present the visual Markush scheme immediately in the claim text and follow with explicit R-group definitions so the generated claims are readable and ready for human editing and inclusion in patent drafts."
+      },
+      {
+        "name": "Use R-group libraries from approved drugs to increase coverage",
+        "description": "R groups from approved drugs (e.g., DrugBank extraction) can be used to broaden the set of candidate R substituents for claim expansion; example: 364 different R groups from approved drugs compared to the 269-group library.",
+        "guidance": "Comparative analysis (paper example: 84.8% of R groups from approved drugs covered by library) can be used to evaluate and justify the library coverage and motivate adding more sources to improve expansion quality."
+      },
+      {
+        "name": "Filter compound datasets by molecular weight and size during library construction",
+        "description": "When extracting R groups from approved drugs, filter out big molecules (MW > 800 Da), tiny molecules (MW < 100 Da and molecules with less than 6 carbon atoms), and duplicates including optical isomers.",
+        "guidance": "These filters focus the library on small-molecule substituents relevant to typical small-molecule pharmaceutical claims and avoid including irrelevant or problematic fragments."
+      },
+      {
+        "name": "Treat generated claims as first draft and checklist; require human review",
+        "description": "The resulting claim can serve as a first draft to reduce human labor and as a checklist while drafting claims to avoid omitting common R-group variations that should be covered and protected.",
+        "guidance": "Automated outputs are intended to assist patent attorneys and scientists; final claim language and legal scope decisions must be reviewed and adjusted by experienced practitioners."
+      },
+      {
+        "name": "Privacy and data-retention practices for a public claim-drafting server",
+        "description": "Input files are deleted immediately after computation at the end of the session; output files are removed within 12 hours; the server does not generate or retain any log file so user IP addresses are not traceable via the server.",
+        "guidance": "For web-based claim-drafting tools, state clear data-retention and privacy behaviors to reassure users (especially when working with confidential proprietary compounds)."
+      }
+    ]
+  }
+}

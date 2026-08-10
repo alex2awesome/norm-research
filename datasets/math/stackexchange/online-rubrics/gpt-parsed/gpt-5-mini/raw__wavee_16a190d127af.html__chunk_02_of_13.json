@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_16a190d127af.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_16a190d127af.html",
+  "chunk_idx": 2,
+  "n_chunks": 13,
+  "chunk_chars": 38592,
+  "model": "gpt-5-mini",
+  "elapsed_s": 36.86080904198752,
+  "input_tokens": 10611,
+  "output_tokens": 3582,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and practitioners designing and analyzing federated learning algorithms and systems",
+    "subtask_short": "designing_federated_learning_algorithms",
+    "subtask_description": "Guidance and theoretical/empirical criteria for designing, analyzing, and deploying federated learning (FL) algorithms\u2014covering optimization, convergence, communication/computation trade-offs, personalization, and systems-level constraints for cross-device and cross-silo settings.",
+    "subtask_keywords": [
+      "federated_learning",
+      "optimization",
+      "distributed_ml",
+      "cross_device",
+      "convergence_analysis"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Statelessness requirement",
+        "description": "Devices are likely to participate no more than once in the training of a given model, so stateless algorithms are necessary.",
+        "guidance": "This rules out direct application of stateful optimization algorithms like ADMM and stateful compression strategies that modify updates based on residual compression errors from previous rounds."
+      },
+      {
+        "name": "Client sampling / small participants per round",
+        "description": "Total number of devices is huge, necessitating algorithms that only require a handful of clients to participate per round (client sampling).",
+        "guidance": "Algorithms must operate when only a random subset M of clients participate each round; do not assume all clients are available. Analysis should account for intermittent participation and randomly sampled client sets."
+      },
+      {
+        "name": "Composability with secure aggregation, differential privacy, and compression",
+        "description": "Algorithms should compose with other techniques like cryptographic secure aggregation protocols, differential privacy (DP), and model/update compression.",
+        "guidance": "Expressing algorithms in terms of primitives like \u201csum over selected clients\u201d and \u201cbroadcast to selected clients\u201d provides a valuable separation of concerns, but may exclude certain techniques (e.g. asynchronous updates) that are incompatible with those primitives."
+      },
+      {
+        "name": "Support for primitives (sum/broadcast) to enable separation of concerns",
+        "description": "Express optimization algorithms in terms of primitives like sum over selected clients and broadcast to selected clients to enable combination with other systems techniques.",
+        "guidance": "This aids composability with DP and secure aggregation, but may rule out approaches that rely on other interaction patterns (e.g. async or residual-state compression)."
+      },
+      {
+        "name": "Local computation / reduced communication (Federated Averaging)",
+        "description": "Performing multiple local SGD steps and communicating less frequently (Federated Averaging / local SGD) addresses data locality and limited communication on mobile devices.",
+        "guidance": "While this saves communication, it introduces optimization-theory challenges (divergence between local models) and trade-offs between number of local steps K and convergence; choose K and M carefully."
+      },
+      {
+        "name": "Convergence guarantees under formal assumptions (IID case)",
+        "description": "Provide theoretical convergence rates under standardized stochastic optimization assumptions (e.g., H-smoothness, bounded stochastic gradient variance \u03c3^2) for the IID-data case.",
+        "guidance": "Convergence should be framed as upper bounds on E[F(x_T)] \u2212 F(x^*); compare to baselines (minibatch SGD, single-device SGD) and report terms separating 'statistical' and 'optimization' contributions (e.g., \u03c3/\u221a(T K M) vs H/(T K)^2)."
+      },
+      {
+        "name": "Comparison to natural baselines (mini-batch SGD and sequential SGD)",
+        "description": "Evaluate federated algorithms relative to minibatch SGD (accelerated minibatch) and sequential (single-device) SGD baselines to identify which terms (statistical vs optimization) are optimal.",
+        "guidance": "Use these baselines to interpret whether federated methods match statistical optimality or optimization optimality, and to highlight gaps (e.g., inability to match accelerated mini-batch SGD)."
+      },
+      {
+        "name": "Wall-clock convergence and runtime-aware design",
+        "description": "Assess convergence in wall-clock time taking into account per-iteration cost from communication and local computation, not just number of iterations.",
+        "guidance": "Design choices (M, K, compression, etc.) should be tuned to minimize wall-clock error vs time; e.g., increasing K reduces communication but may slow per-step progress in terms of total sequential SGD steps."
+      },
+      {
+        "name": "Trade-off tuning of number of local steps K",
+        "description": "Choose K to balance increased divergence between local models (hurting per-step error) against reduced communication and per-iteration wall-clock time.",
+        "guidance": "Adaptive strategies (e.g., adaptive K based on training loss) can be used. The optimal K depends on relative costs of communication vs computation and on dataset size N, M, T."
+      },
+      {
+        "name": "Choice of client set size M per round (scalability vs straggler risk)",
+        "description": "Selecting a larger set of clients per round improves convergence but increases vulnerability to slow/failed clients (tail delays).",
+        "guidance": "Techniques include over-provisioning and accepting first M updates, time windows letting clients do as many updates as possible, fixing \u03c4 local updates with asynchronous updates, but asynchronous approaches may complicate DP/secure aggregation."
+      },
+      {
+        "name": "Robustness to stragglers and computational heterogeneity",
+        "description": "Algorithms must handle unpredictable client slowdown or failure (stragglers) and heterogeneity in clients' compute capabilities.",
+        "guidance": "Approaches: over-provisioning clients, time-windowed variable local steps Ki, asynchronous/lock-free updates; theoretical analysis of error convergence under these is an open challenge and impacts bias."
+      },
+      {
+        "name": "Aggregation weighting and global update rule",
+        "description": "Choice of aggregation (e.g., weighted average by local dataset size vs simple average) affects convergence; the original FedAvg uses weights proportional to dataset sizes.",
+        "guidance": "For IID data weighted average reduces to simple average; unclear which aggregation yields fastest error convergence in practice\u2014aggregation should be considered a design parameter to tune/justify."
+      },
+      {
+        "name": "Handling non-IID data and modeling heterogeneity",
+        "description": "Algorithms should address diverse non-IID client data using assumptions like bounded inter-client gradient variance, bounded optimal objective difference, or bounded gradient dissimilarity.",
+        "guidance": "Techniques include adding proximal terms (FedProx), control variates (SCAFFOLD), modified sampling, or algorithms with specific non-IID convergence analysis; state assumptions explicitly when proving convergence."
+      },
+      {
+        "name": "Explicit non-IID assumption disclosure (BCGV, BOGV, BGV, etc.)",
+        "description": "State the key non-IID assumptions used for analysis (e.g., bounded inter-client gradient variance, bounded optimal gradient variance, bounded gradient dissimilarity) and report which assumptions each convergence result relies on.",
+        "guidance": "Use notation/tables to summarize which algorithms require which non-IID/convexity/auxiliary assumptions and present simplified convergence rates accordingly."
+      },
+      {
+        "name": "Use and costs of variance-reduction, momentum, and adaptive methods",
+        "description": "Incorporate techniques like control variates (SCAFFOLD), client/server momentum, local-adaptive methods (Adagrad), and server-level adaptive optimization to improve convergence/generalization.",
+        "guidance": "Be explicit about per-round communication costs (e.g., local momentum may double per-round communication), and whether methods require state on clients or only server changes; analyzing acceleration benefits in FL is challenging and often open."
+      },
+      {
+        "name": "Decentralized and periodic decentralized variants",
+        "description": "Consider connections to decentralized optimization (PD-SGD, MATCHA) to reduce communication by leveraging network topology and periodic communication.",
+        "guidance": "Periodic decentralized SGD can be adapted to local-update regimes and possibly improve performance via randomized client sampling or topology-aware mixing; provide convergence analysis under stated network/connectivity assumptions."
+      },
+      {
+        "name": "Personalization, multi-task learning, and multi-model approaches",
+        "description": "When data is heterogeneous, consider multi-model approaches (per-client or per-group models), featurization, multi-task learning (e.g., MOCHA), local fine-tuning, and meta-learning (MAML/Reptile) for personalization.",
+        "guidance": "Different approaches have different system requirements: multi-task often requires stateful clients and full participation (suitable for cross-silo), whereas fine-tuning and featurization can work with stateless clients. Discuss trade-offs and practical constraints."
+      },
+      {
+        "name": "Evaluation metrics for personalized performance",
+        "description": "Define comprehensive metrics for measuring personalized performance\u2014e.g., decide whether small improvements across all clients or large improvements for a subset is preferable.",
+        "guidance": "Explicitly state personalization objectives and population-level metrics; this area lacks consensus and is highlighted as an open problem."
+      },
+      {
+        "name": "When is a global FL-trained model preferable?",
+        "description": "Analyze conditions under which a global federated model outperforms independently trained per-device models (depends on dataset sizes, degree of non-IIDness, partitioning type).",
+        "guidance": "Consider multiple baselines (per-device hk, global hFL) and quantify expected improvement; account for vertical partitioning and record linkage challenges where feature sets differ across parties."
+      },
+      {
+        "name": "Hyperparameter tuning cost and robustness",
+        "description": "Hyperparameter optimization (HPO) is expensive in FL due to limited device resources and long wall-clock training; FL adds more hyperparameters (aggregation rule, clients per round, local optimizer configs, compression).",
+        "guidance": "Design algorithms that are easy-to-tune or robust (same hyperparameters work across datasets), and investigate adaptive/self-tuning algorithms; explicitly account for limited HPO budget in evaluation."
+      },
+      {
+        "name": "System-level constraints for model/architecture design",
+        "description": "Adapting neural architecture design and ML workflows (augmentation, feature engineering, model selection, debugging) to resource-constrained, decentralized datasets is necessary.",
+        "guidance": "Consider compute, communication, and client heterogeneity constraints when proposing architectures and training workflows; few public datasets with auxiliary features exist, so benchmark suitability should be discussed."
+      },
+      {
+        "name": "Sampling bias from realistic client eligibility",
+        "description": "In practice, servers may not be able to sample uniformly\u2014only devices meeting eligibility (charging, idle, free WiFi) are selected; client availability varies diurnally and by characteristics.",
+        "guidance": "Algorithms and analyses should account for non-uniform, changing sampling (e.g., semi-cyclic sampling) and the resulting objective mismatch or bias; consider convergence under such selection processes."
+      }
+    ]
+  }
+}

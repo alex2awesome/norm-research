@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_deb0bca66ec3.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 6655,
+  "output_tokens": 3315,
+  "elapsed_s": 2192.4519678340293,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners working on computational humor / humor recognition",
+    "subtask_short": "humor_recognition_with_cnn",
+    "subtask_description": "Designing, training, and evaluating convolutional-neural-network models to classify sentences as humorous or non-humorous, including dataset construction across joke types and languages and model/experiment setup. Focus is on supervised binary text classification for humor detection in English and Chinese.",
+    "subtask_keywords": [
+      "humor",
+      "nlp",
+      "cnn",
+      "classification",
+      "dataset",
+      "english_chinese"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset composition: balanced positive and negative samples",
+        "description": "To fairly evaluate the performance on humor recognition, we need the dataset to consist of both humorous (positive) and non-humorous (negative) samples.",
+        "guidance": "The paper constructs four datasets (16000 One-Liners, Pun of the Day, Short Jokes, PTT Jokes) with differing joketypes, sentence lengths, sizes and languages; statistics are given in Table 1. Ensure balanced positive/negative sets when forming experiments."
+      },
+      {
+        "name": "Dataset diversity across joke types and languages",
+        "description": "Use datasets with distinct joketypes, sentence lengths, data sizes and languages to conduct comprehensive and comparative experiments.",
+        "guidance": "The authors collected four datasets spanning one-liners, puns, short jokes (various types) and political jokes from PTT (Chinese), enabling evaluation of generality across English and Chinese and across joke types."
+      },
+      {
+        "name": "Negative-sample selection to minimize domain differences",
+        "description": "Select negative (non-humor) samples carefully to avoid deceptive performance due to domain differences between positives and negatives.",
+        "guidance": "When negatives are taken from news/formal resources (e.g., WMT16 news, YahooNews), mitigate domain differences by selecting negatives whose words all appear in the positive samples and whose average text length is close to the humorous ones. This was applied for ShortJokes and PTTJokes negatives."
+      },
+      {
+        "name": "Definition and characteristics of one-liners",
+        "description": "A one-liner is a joke that usually has very few words in a single sentence with comic effects and interesting linguistic structure.",
+        "guidance": "One-liners require producing the humorous effect with very few words, while longer jokes can have a more complex linguistic structure. Treat one-liners as a distinct category when constructing datasets."
+      },
+      {
+        "name": "Use of pre-trained word embeddings (GloVe) as input representation",
+        "description": "Convert tokenized input sentences to a 2D matrix (L x d) using pre-trained word vectors (GloVe) as the embedding layer.",
+        "guidance": "Authors used GloVe embeddings trained on 6B tokens with 400K vocabulary (Wikipedia2014+Gigaword5). Each row of the input matrix is a word (or segment/character) embedding; the CNN window width is typically set equal to the embedding dimension."
+      },
+      {
+        "name": "Filter/window size selection tied to sentence length",
+        "description": "Choose convolutional filter/window sizes according to average sentence length in the dataset; typical range tried in the paper: 3 to 20.",
+        "guidance": "The paper experimented with filter sizes from 3 to 20; the baseline windowsizes in prior work were (5,6,7). Set filter sizes according to dataset sentence-length statistics to capture appropriate n-gram features."
+      },
+      {
+        "name": "Number of filters per filter size",
+        "description": "Apply a substantial number of filters per filter size (the authors used 100\u2013200 filters for each filter size).",
+        "guidance": "The paper evaluates increasing filter size and number (denoted F) and reports improved performance when expanding filter counts. Total number of filters affects the flattened feature dimension before classification."
+      },
+      {
+        "name": "Pooling and flattening before classification",
+        "description": "After convolutional layers, apply max-pooling and then flatten the pooled outputs to form a 1D feature vector for prediction.",
+        "guidance": "The flattened vector (concatenation of pooled features across all filters) is connected to downstream layers (fully connected / highway) and then to the output layer for classification."
+      },
+      {
+        "name": "Use of highway networks to enable deeper models",
+        "description": "Use highway network architecture (shortcut connections with learned gates) to allow training of much deeper networks and to improve stability and performance.",
+        "guidance": "Highway layers permit information to flow through several layers via gate units that regulate flow. The authors set highway layers = 3 (HN=3) because it provided better stability and accuracy in training. Compare variants with and without highway layers (CNN, CNN+HN)."
+      },
+      {
+        "name": "Regularization with dropout",
+        "description": "Use dropout to regularize the network and reduce overfitting.",
+        "guidance": "The authors used a dropout rate of 0.5 in experiments."
+      },
+      {
+        "name": "Evaluation protocol: cross-validation",
+        "description": "Validate model performance using k-fold cross-validation to obtain robust estimates.",
+        "guidance": "The paper uses 10-fold cross-validation for experiments across datasets."
+      },
+      {
+        "name": "Reported evaluation metrics: Accuracy, Precision, Recall, F1",
+        "description": "Report standard binary-classification metrics including Accuracy, Precision, Recall, and F1 to evaluate humor recognition performance.",
+        "guidance": "Tables report Accuracy, Precision, Recall and F1 across datasets and model variants; F1 is emphasized for comparisons."
+      },
+      {
+        "name": "Compare to established baselines and ablation variants",
+        "description": "Compare the proposed model against prior methods (e.g., RandomForest+Word2Vec+HumanCentricFeature, previous CNNs) and ablate components such as increased filters (F) and highway networks (HN).",
+        "guidance": "The authors compare: PreviousWork (Word2Vec+HCF), CNN baseline, CNN+F (increase filters), CNN+HN (add highway layers), and CNN+F+HN. Use such controlled variants to attribute performance gains."
+      },
+      {
+        "name": "Hyperparameter reporting and selection",
+        "description": "Report key architectural and training hyperparameters (filter sizes, filter counts, embedding source, highway layers, dropout rate) and choose them based on dataset characteristics.",
+        "guidance": "Explicit choices in the paper: GloVe embeddings (Wikipedia+Gigaword), filter sizes range 3\u201320, 100\u2013200 filters per size, HN layers = 3, dropout = 0.5; selection motivated by average sentence length and stability in training."
+      },
+      {
+        "name": "Error analysis through TP/FP/TN/FN examples",
+        "description": "Provide qualitative examples of true positives, false positives, true negatives and false negatives to understand model behavior and failure modes.",
+        "guidance": "The paper lists sample sentences per category and interprets failures (e.g., proverbs misclassified as jokes, subtle jokes missed). Use such analysis to identify model limits (irony, cultural/external knowledge, proverbs vs jokes)."
+      },
+      {
+        "name": "Consideration of external knowledge and humor types in difficulty",
+        "description": "Acknowledge that many humor types require substantial external knowledge (irony, wordplay, metaphor, sarcasm) which complicates automated recognition.",
+        "guidance": "The introduction and discussion note that humor detection difficulty varies with audience background and knowledge; model improvements should consider external/contextual knowledge or language-specific phenomena."
+      }
+    ]
+  }
+}

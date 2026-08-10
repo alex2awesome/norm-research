@@ -1,0 +1,234 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/llms_critique_meta_review.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18386,
+  "output_tokens": 5479,
+  "elapsed_s": 803.5444575420115,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers, area-chairs/meta-reviewers, and researchers studying AI-assisted peer review",
+    "subtask_short": "LLM-assisted paper meta-reviewing",
+    "subtask_description": "Evaluating and producing sentence-level annotations of review quality (Deficient vs. reliable), comparing human vs. LLM-generated reviews, and benchmarking LLMs as reviewers and meta-reviewers for NLP conference submissions.",
+    "subtask_keywords": [
+      "nlp",
+      "peer_review",
+      "meta-review",
+      "llm_evaluation",
+      "dataset"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Deficient review segments (core definition)",
+        "description": "Deficient review segments are sentences that: (1) contain factual errors or misinterpretations of the submission; (2) lack constructive feedback; (3) express overly subjective, emotional, or offensive judgments (e.g., \"I don\u2019t like this work because it is written like by a middle school student\"); (4) describe downsides of the submission without supporting evidence (e.g., \"This work misses some related work\").",
+        "guidance": "Annotators should mark each sentence that meets any of these conditions as 'Deficient' and provide an explanation. These criteria are used both for annotator labeling and in LLM prompting (Labeling-All and Select-Deficient prompts). Do not rely solely on author rebuttals to decide deficiency."
+      },
+      {
+        "name": "Paper selection criteria for dataset curation",
+        "description": "Select papers according to: i) Only consider NLP papers; ii) Human-written reviews are publicly accessible; iii) Maintain equal distribution of accepted and rejected papers.",
+        "guidance": "Collect initial-submission (pre-rebuttal) versions from OpenReview; require 3\u20135 individual reviews per submission and include meta-reviews and author rebuttals. Discard papers if annotators suspect reviews were AI-generated."
+      },
+      {
+        "name": "Use initial submission (pre-rebuttal) as annotation scope",
+        "description": "Assess reviews written before the rebuttal phase \u2014 i.e., reviews based on the original submission.",
+        "guidance": "Annotators must avoid considering experiments or content added during rebuttal; this keeps the meta-reviewing task knowledge- and reasoning-intensive but scoped to the original submission."
+      },
+      {
+        "name": "Segment-level annotation protocol",
+        "description": "Segment reviews by sentence and, for each sentence, label (a) whether it is Deficient, and (b) provide an explanation if it is.",
+        "guidance": "Annotators must read the original submission, all individual reviews, meta-reviews, and author rebuttals to form contextual judgments. The sentence-level approach allows detection of problematic segments even when overall review quality is high."
+      },
+      {
+        "name": "Annotator expertise and recruitment standard",
+        "description": "Recruit annotators from the NLP community with multiple first-authored publications in top-tier NLP venues and extensive reviewing experience; many annotators should have area-chairing experience and/or Ph.D. degrees.",
+        "guidance": "In ReviewCritique, annotators included 40 members (16 with Ph.D., 11 faculty, 15 with area-chair experience). High expertise is required because sentence-level deficiency annotation is highly expert-demanding."
+      },
+      {
+        "name": "Annotator assignment and workload guideline",
+        "description": "Assign annotators to papers that align with their expertise; limit to one paper per week to ensure thoughtful annotations.",
+        "guidance": "This pacing supports thorough reading and discussion; regular meetings were used to resolve issues during the multi-month annotation period."
+      },
+      {
+        "name": "Annotation quality control procedure",
+        "description": "Each paper's reviews are independently annotated by two annotators; disagreements are resolved by a senior expert (area-chair experience) who examines conflicts and removes or rewrites unconvincing explanations.",
+        "guidance": "Independence of initial annotations reduces bias; senior adjudication ensures consistency and reliability of final labels/explanations."
+      },
+      {
+        "name": "Do not rely solely on author rebuttal to infer Deficient",
+        "description": "Author rebuttals are not sufficient evidence to label a review segment Deficient because rebuttals may be incorrect, incomplete, or strategically written.",
+        "guidance": "Annotators should use rebuttals as one of multiple information sources but not as the deterministic arbiter of deficiency."
+      },
+      {
+        "name": "Review components to evaluate (dimensions)",
+        "description": "When assessing reviews (human or LLM-generated), analyze components such as summary, strengths, weaknesses, writing/clarity, and recommendation score.",
+        "guidance": "Perform component-level analysis: e.g., check summary accuracy, whether strengths are merely rephrased from the paper, whether weaknesses are in-scope and actionable, whether writing judgments are accurate, and whether recommendation scores discriminate accepted vs. rejected papers."
+      },
+      {
+        "name": "Review generation guideline (required sections and ratings)",
+        "description": "A reviewer should provide: Summary of the paper; Strengths and Weaknesses; Clarity, Quality, Novelty, and Reproducibility evaluation; Summary of the review; Correctness assessment; Technical Novelty and Significance; Empirical Novelty and Significance; Ethics review flag (YES/NO); Recommendation (with constrained options); Confidence level.",
+        "guidance": "When prompting LLMs to generate reviews, include canonical reviewer guidelines (e.g., ICLR review guidelines) and use the conference's review template/format. Example prompts (Table 14) enforce these elements."
+      },
+      {
+        "name": "Labeling-All prompting strategy",
+        "description": "Given the paper and list of indexed review segments, require the LLM to output a list of triples like (id, Deficient or not, explanation).",
+        "guidance": "This prompt asks the model to make a binary decision for each segment and provide an explanation for Deficient labels; used to evaluate LLMs as meta-reviewers."
+      },
+      {
+        "name": "Select-Deficient prompting strategy",
+        "description": "Given the paper and list of indexed review segments, require the LLM to output only the indices and explanations for segments it believes are Deficient (i.e., output tuples (id, explanation) only for predicted Deficient segments).",
+        "guidance": "This prompt reduces output verbosity and focuses on segments the LLM flags as problematic."
+      },
+      {
+        "name": "Ensembling decision rules (Both 'No' / Either 'No')",
+        "description": "Ensemble two prompting strategies by: i) Both 'No' \u2014 consider a segment Deficient only if both prompts classify it as Deficient; ii) Either 'No' \u2014 consider a segment Deficient if either prompt does.",
+        "guidance": "These ensembling rules adjust precision/recall trade-offs for final Deficient decisions."
+      },
+      {
+        "name": "Meta-review evaluation metric: per-paper averaged F1 (precision/recall/F1)",
+        "description": "Compute F1 for identified Deficient segments on each paper, then average across papers; report precision, recall, and F1.",
+        "guidance": "This per-paper averaging accounts for paper-level variance. Observe that higher recall than precision indicates a tendency to over-identify Deficient segments."
+      },
+      {
+        "name": "Explanation quality metrics: ROUGE / BERTScore",
+        "description": "When an LLM correctly labels a segment Deficient, evaluate its explanation against expert explanations using ROUGE-1/2/L and BERTScore.",
+        "guidance": "These metrics measure lexical overlap and semantic similarity; low scores indicate LLMs struggle to articulate human-like rationales."
+      },
+      {
+        "name": "ITF-IDF review diversity metric (intra-LLM specificity)",
+        "description": "ITF-IDF: a segment-level diversity metric inspired by TF-IDF measuring how specific a single LLM's review segments are across different papers (formulas given in the paper).",
+        "guidance": "Higher ITF-IDF suggests more paper-specific, diverse segments; lower suggests repetitive, generic suggestions. Implementation uses sentence similarity (SentenceBERT) and a threshold t (default 0.5)."
+      },
+      {
+        "name": "Inter-LLM review complementarity metric (pairwise similarity)",
+        "description": "Measure pairwise similarity between different LLMs' reviews for the same paper using BERTScore (or similar) to assess whether different LLMs provide complementary reviews.",
+        "guidance": "High pairwise BERTScore between LLMs indicates low complementarity (similar reviews); compare with inter-human reviewer similarity to contextualize."
+      },
+      {
+        "name": "Requirement to conceal submission meta-info during LLM-review annotation",
+        "description": "When annotating LLM-generated reviews, conceal submission metadata (e.g., 'Under review at ICLR 2022') so annotators are less likely to search externally and remain blind to LLM provenance.",
+        "guidance": "This reduces potential bias; however, it cannot guarantee complete unawareness of LLM-generated text."
+      },
+      {
+        "name": "Two-annotator independence requirement",
+        "description": "Two annotators independently annotate each paper's reviews without access to each other's annotations to prevent bias.",
+        "guidance": "Independence avoids influence; disagreements are escalated to a senior expert for resolution."
+      },
+      {
+        "name": "Avoid truncating crucial prompt components when context-limited",
+        "description": "When model context length is limited (e.g., some open-source LLMs), keep instruction, paper title, and review text intact and truncate the full paper body text if necessary.",
+        "guidance": "Prioritize components crucial for meta-review judgment; document truncation choices and their potential impact on evaluation."
+      },
+      {
+        "name": "Review evaluation expectation: meta-reviewers should be careful and responsible",
+        "description": "Meta-reviewing is knowledge- and reasoning-intensive; meta-reviewers are expected to be aware of the submission and rebuttals and to identify unreasonable elements and distill constructive comments.",
+        "guidance": "This frames evaluation expectations against which LLMs are benchmarked: the task requires domain expertise and nuanced judgment that LLMs currently struggle to match."
+      },
+      {
+        "name": "Fine-grained error type: Misunderstanding",
+        "description": "The reviewer misinterprets claims or ideas presented in the paper, leading to inaccurate or irrelevant comments.",
+        "guidance": "Identified as a dominant human error type; check whether criticism contradicts submission content."
+      },
+      {
+        "name": "Fine-grained error type: Neglect",
+        "description": "The reviewer overlooks important details explicitly stated in the paper, resulting in unwarranted questions or critiques.",
+        "guidance": "Annotators should flag sentences that ask for or criticize aspects already present in the submission."
+      },
+      {
+        "name": "Fine-grained error type: Vague Critique",
+        "description": "The review lacks specificity, claiming missing components without clearly identifying what is missing.",
+        "guidance": "Vague critiques should be distinguished from constructive high-level suggestions by checking for actionable specifics."
+      },
+      {
+        "name": "Fine-grained error type: Inaccurate Summary",
+        "description": "The summary in the review misrepresents the main content or contributions of the paper.",
+        "guidance": "Compare summary sentences with paper content to detect errors or important omissions."
+      },
+      {
+        "name": "Fine-grained error type: Out-of-scope",
+        "description": "The reviewer suggests additional methods, experiments, or analyses that are beyond the intended scope of the paper.",
+        "guidance": "Flag suggestions that demand work or scope expansion unrelated to paper's stated goals; common in LLM-generated weaknesses."
+      },
+      {
+        "name": "Fine-grained error type: Misunderstanding of the Submission Rule",
+        "description": "The reviewer believes the submission format violates conference rules, but this is not actually the case.",
+        "guidance": "Verify claims about formatting/rules against the submission call and instructions."
+      },
+      {
+        "name": "Fine-grained error type: Subjective",
+        "description": "The review makes assertions about the paper\u2019s clarity or quality without providing sufficient justification or evidence.",
+        "guidance": "Subjective statements lacking evidence or examples should be labeled Deficient."
+      },
+      {
+        "name": "Fine-grained error type: Invalid Criticism",
+        "description": "The reviewer\u2019s criticism is considered invalid, especially when suggesting impractical experiments or trivializing results.",
+        "guidance": "Assess whether suggested critiques are technically meaningful and feasible given the paper's scope."
+      },
+      {
+        "name": "Fine-grained error type: Misinterpret Novelty",
+        "description": "The reviewer questions the novelty of the work without substantiating their claims with relevant references.",
+        "guidance": "Novelty critiques should cite prior work or provide concrete comparisons; otherwise label as Deficient."
+      },
+      {
+        "name": "Fine-grained error type: Superficial Review",
+        "description": "The reviewer appears to have only skimmed the paper, providing generic or unsupported comments about the presence or absence of weaknesses.",
+        "guidance": "Look for formulaic or generic sentences that could apply to most papers; these are common in LLM outputs."
+      },
+      {
+        "name": "Fine-grained error type: Writing",
+        "description": "Discrepancies arise when the reviewer praises the writing, while annotators or meta-reviewers judge it as unclear and needing improvement.",
+        "guidance": "Check writing-quality statements against the submission's clarity; praise without justification can be Deficient."
+      },
+      {
+        "name": "Fine-grained error type: Inexpert Statement",
+        "description": "The reviewer exhibits a lack of domain knowledge, leading to unnecessary or irrelevant concerns.",
+        "guidance": "Flag claims revealing domain misunderstanding or proposing unrealistic expectations for the field."
+      },
+      {
+        "name": "Fine-grained error type: Missing Reference",
+        "description": "The reviewer proposes alternative frameworks or methods without providing justification or citing relevant references.",
+        "guidance": "Recommendations for comparisons or references should be accompanied by citations or concrete examples."
+      },
+      {
+        "name": "Fine-grained error type: Experiment",
+        "description": "Conflicting opinions about the design of experiments; the reviewer praises them while annotators suggest additional baselines or tests.",
+        "guidance": "Assess whether experimental critique is specific and actionable or generic and unsupported."
+      },
+      {
+        "name": "Fine-grained error type: Contradiction",
+        "description": "The reviewer contradicts themselves within the review, such as criticizing the experiments while later stating they are comprehensive.",
+        "guidance": "Detect internal inconsistency within review text; contradictions indicate low-quality reviewing."
+      },
+      {
+        "name": "Fine-grained error type: Summary Too Short",
+        "description": "The provided summary is excessively brief, offering little to no insight into the actual content of the paper.",
+        "guidance": "Summaries should capture main objectives, methods, and findings; extremely short summaries are Deficient."
+      },
+      {
+        "name": "Fine-grained error type: Typo",
+        "description": "The review contains typographical errors that may affect clarity or understanding.",
+        "guidance": "Minor but clear typos that impede reading should be noted; typographical issues alone may or may not justify Deficient, depending on severity."
+      },
+      {
+        "name": "Fine-grained error type: Copy-pasted Summary",
+        "description": "The summary is directly copied from the submission.",
+        "guidance": "Copy-pasted summaries indicate lack of independent synthesis and can be marked Deficient."
+      },
+      {
+        "name": "Fine-grained error type: Concurrent Work",
+        "description": "The reviewer requests comparisons with work conducted concurrently, which may not have been available to authors.",
+        "guidance": "Requests to compare against concurrent submissions are often unreasonable; flag as Deficient when inappropriate."
+      },
+      {
+        "name": "Fine-grained error type: Unstated statement",
+        "description": "Statements made in the review are not supported by content in the paper.",
+        "guidance": "Check for claims that lack grounding in the submission text; unsupported assertions should be labeled Deficient."
+      },
+      {
+        "name": "Fine-grained error type: Duplication",
+        "description": "The review segment is a repetition or duplication of a previous segment within the same review.",
+        "guidance": "Duplicative segments reduce informativeness and should be flagged; common in some LLM outputs."
+      }
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/bceadc34fd56.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8794,
+  "output_tokens": 3612,
+  "elapsed_s": 3218.9762450831477,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI researchers and patent practitioners (patent attorneys) working on automated patent drafting",
+    "subtask_short": "automated patent specification drafting",
+    "subtask_description": "Generate full patent specifications (detailed description, figure descriptions, etc.) from inventor-supplied claims and drawing text using fine-tuned LLMs and preprocessing/mapping steps. The work focuses on producing legally coherent, well-structured patent specification text aligned to claims and drawings.",
+    "subtask_keywords": [
+      "patent",
+      "specification_drafting",
+      "automated",
+      "claims_to_spec",
+      "llm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Specification must incorporate and support all features present in the claims",
+        "description": "The generated specification must incorporate and support all the features present in the claims (formalized in the paper as: the generated specification must incorporate and support all the features present in the claims C).",
+        "guidance": "This is a hard requirement: each claim element/feature should be described in the specification so that claims have explicit support. The system formalizes inputs as claims C, drawings B, and component pairs N and targets generating S that satisfies 'incorporate and support all the features present in the claims.' Mapping between claim features and drawing components is used to ensure coverage."
+      },
+      {
+        "name": "Specification must accurately describe drawings using the drawing descriptions",
+        "description": "The generated specification must accurately describe the drawings using the drawing descriptions B (the specification must 'accurately describe the drawings using the drawing descriptions').",
+        "guidance": "Patentformer takes drawing text/descriptions as input (users can edit/add image description). Because the current model is text-only, quality of figure-descriptive content depends on the supplied image descriptions. Improving figure-descriptive quality is tied to better image-text integration (multimodality)."
+      },
+      {
+        "name": "Specification must correctly reference components using component name-number pairs",
+        "description": "The generated specification must correctly reference the components in the drawings by utilizing the component name-number pairs in N (the complete set of component name-number pairs).",
+        "guidance": "Patent drawings require unique identifiers for each element; Patentformer extracts component name-number pairs and uses them in generated text so that references in the specification point to the correct drawing elements. Correct referencing is validated during mapping and post-processing."
+      },
+      {
+        "name": "Conform to standard patent document structure and formal legal writing style",
+        "description": "Patents are legal documents that adhere to a precise writing style and typically comprise organized sections (title, abstract, field, background, summary, independent/dependent claims, drawings, brief description of drawings, detailed description/specification).",
+        "guidance": "Generated outputs are post-processed to conform to standard patent writing conventions. Fine-tuning on patent corpora (public USPTO data) is used to teach the stylistic and structural conventions of patent writing so that generated specifications follow the expected sections and legal style."
+      },
+      {
+        "name": "Drawings must adhere to patent office requirements and label elements with unique identifiers",
+        "description": "Drawings must adhere to the patent office\u2019s requirements and must label each element referenced in the specification with a unique identifier.",
+        "guidance": "The system extracts and uses the drawing text and unique component numbers; compliance with PTO drawing labeling rules is necessary because the specification will reference those identifiers. The paper notes that figures are expensive to create and must be sufficiently detailed to support the patent."
+      },
+      {
+        "name": "Legal quality / compliance (including compliance with 35 U.S.C. \u00a7112)",
+        "description": "Legal quality is the most important aspect of patent drafting; generated documents must be legally coherent and practitioners must verify compliance with 35 U.S.C. 112 when using AI drafting tools.",
+        "guidance": "The user study asked an expert patent writer to rate legal quality (0\u2013100) and legal quality scored nearly full\u2014indicating the fine-tuned model learns legal conventions. The paper emphasizes that practitioners should take extra care to verify technical accuracy and statutory compliance when using AI-generated drafts."
+      },
+      {
+        "name": "Linguistic quality (well-written, coherent natural language)",
+        "description": "Linguistic quality refers to the readability and writing quality of the generated specification (the user is satisfied with the linguistics and the model 'inherits the ability to generate well-written documents').",
+        "guidance": "Even with token encryption during fine-tuning (e.g., <fig num>), the model maintained good linguistic quality. Human evaluation included a linguistic score (0\u2013100). Post-processing may further improve linguistic fluency."
+      },
+      {
+        "name": "Figure-descriptive quality",
+        "description": "Figure-descriptive quality measures how well the generated text describes and interprets patent figures.",
+        "guidance": "The paper notes the model lacks ability to understand images directly (it uses image descriptions as text), which limits figure-descriptive and technical quality. They propose multimodal LVLMs as a future direction to improve this dimension. Human evaluation included a figure-descriptive score (0\u2013100)."
+      },
+      {
+        "name": "Technical quality (technical accuracy and detail)",
+        "description": "Technical quality measures the technical correctness and level of technical detail in the generated specification.",
+        "guidance": "Technical quality suffered because the model is text-only and may not capture visual/technical aspects from figures. Human experts scored technical quality as one of four orthogonal measures. Improving modality and richer training data can increase technical quality."
+      },
+      {
+        "name": "Mapping accuracy between claims and drawing components (matching strategy and precision@k)",
+        "description": "Claims must be mapped to corresponding drawing features/components. Patentformer provides a Mapping Interface and an automatic matching strategy based on cosine similarity and BLEU-1 and BLEU-2 scores, using a threshold of 0.1 to select up to the top five matching components per claim feature.",
+        "guidance": "Automatic mapping using the described strategy yielded precision@5 = 0.565 and precision@3 = 0.6 on ~6,000 samples. Manual correction via the GUI is supported; mapping accuracy directly affects whether the generated specification properly ties claims to figures and components."
+      },
+      {
+        "name": "Human evaluation using orthogonal dimensions scored 0\u2013100",
+        "description": "System quality was assessed in a user study where an expert assigned a score from 0 to 100 for each of four orthogonal dimensions: linguistic, legal, figure descriptive, and technical quality.",
+        "guidance": "This human-evaluation rubric treats legal quality as most important. The study used thirty generations to compute scores and interpret system readiness. Use similar multi-dimension human scoring when validating automated drafting tools."
+      },
+      {
+        "name": "Train on patent-specific, enriched datasets and fine-tune LLMs",
+        "description": "Fine-tune the underlying LLM on patent corpora and use a specialized training data construction methodology that transforms plain text into an enriched representation (the paper used Patent-2015-2024-G06F with 1,006,494 samples from USPTO G06F).",
+        "guidance": "Specialized enrichment of training tuples (C', B', N' representations) significantly enhances output quality. The authors truncated text to 512 tokens for T5-11B training and used post-processing strategies described in their work. Public release of dataset is used to reproduce and extend the method."
+      },
+      {
+        "name": "Account for model token-length constraints and long-specification generation limits",
+        "description": "Most pretrained LLMs are constrained by fixed token limits (e.g., 512, 1024, 2048, or 4096 tokens), which hinder the ability to generate coherent, lengthy patent specifications that normally span multiple pages.",
+        "guidance": "Design preprocessing/enrichment and chunking strategies to work within token limits (the authors truncated to 512 tokens for T5-11B). Consider model selection or architectural changes (or multimodal/long-context models) to handle long specifications."
+      },
+      {
+        "name": "Post-processing and cleaning to enforce patent writing conventions",
+        "description": "A final post-processing step refines generated text to conform to standard patent writing conventions before presenting to the user.",
+        "guidance": "Post-processing includes cleaning, reformatting, and ensuring references to figures/components are consistent and follow legal and editorial conventions. This step is necessary even after LLM generation to meet office and legal requirements."
+      },
+      {
+        "name": "Performance and runtime constraints (generation time varies by hardware and use case)",
+        "description": "Generation time depends on compute: reported average times were ~3152.4 \u00b1 160.00 s (CPU only), 92 \u00b1 5.79 s (GPU A100), and 807 \u00b1 449.25 s for actual GPU use cases.",
+        "guidance": "System should automatically switch to CPU if GPU unavailable; runtime varies with number of claim features and mappings. Consider runtime when integrating into practitioners\u2019 workflows."
+      },
+      {
+        "name": "Preference for multimodal (vision-language) models to improve figure and technical understanding",
+        "description": "Because the current model is text-to-text and takes image descriptions as input rather than images, it lacks multimodal understanding that would improve figure-descriptive and technical quality.",
+        "guidance": "The paper recommends developing LVLMs / vision-language models to automatically interpret patent figures (instead of relying on user-provided descriptions) to reduce manual input and improve generation fidelity."
+      }
+    ]
+  }
+}

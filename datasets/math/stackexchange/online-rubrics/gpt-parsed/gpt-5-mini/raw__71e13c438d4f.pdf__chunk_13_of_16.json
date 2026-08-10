@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/71e13c438d4f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "71e13c438d4f.pdf",
+  "chunk_idx": 13,
+  "n_chunks": 16,
+  "chunk_chars": 39508,
+  "model": "gpt-5-mini",
+  "elapsed_s": 133.28276154199557,
+  "input_tokens": 12608,
+  "output_tokens": 6219,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of the Metamath program (proof authors, proof-assistant users, and database maintainers)",
+    "subtask_short": "metamath proof_assistant usage",
+    "subtask_description": "Instructions and formal/formatting rules for using the Metamath program: saving proofs, producing LaTeX/HTML outputs, using text tools, compressed-proof format, and the formal-system definitions that underlie Metamath databases.",
+    "subtask_keywords": [
+      "metamath",
+      "proof_assistant",
+      "latex_html_output",
+      "compressed_proofs",
+      "tools_utility"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "save new_proof command behavior",
+        "description": "save new_proof label [/normal] [/compressed] \u2014 saves the proof in progress from the Proof Assistant into the source buffer; can save completed proofs or proofs in progress.",
+        "guidance": "If an incomplete proof is saved, user assignments made with let step or let variable and any ambiguous unifications resolved manually will be lost. To facilitate later recovery, run improve all before save new_proof so the saved incomplete proof contains maximal information. Note: the proof is not permanently written to disk until a write source command is executed. Optional qualifiers: /normal saves in normal (sequence-of-labels) format (default); /compressed saves in compressed format (reduces database storage; see Appendix B)."
+      },
+      {
+        "name": "LaTeX output preconditions",
+        "description": "Database must include necessary typesetting information to generate LaTeX output.",
+        "guidance": "Typesetting mappings are provided via $t (typesetting) comments in the database (see section 4.4.2). Without the typesetting information the show ... /tex and related commands cannot produce correct LaTeX symbols. Ensure $t comments exist and are correct before attempting LaTeX generation."
+      },
+      {
+        "name": "Generating LaTeX from Metamath",
+        "description": "Use show statement and show proof commands with the /tex qualifier (show statement also has /simple_tex) to emit LaTeX source to an opened tex file.",
+        "guidance": "Typical sequence: read database (e.g., read set.mm); open a tex file (open tex example.tex); use show statement <label> /tex and show proof <label> with desired qualifiers (e.g., /all/lemmon/renumber/tex); then close tex and process the .tex file with a LaTeX engine such as pdflatex to produce PDF. /simple_tex produces more hand-editable output. Use open tex before show commands; otherwise output has no destination."
+      },
+      {
+        "name": "open tex command and /no_header qualifier",
+        "description": "open tex file-name [/no_header] \u2014 opens a file for writing LaTeX source and writes a LaTeX header to it unless /no_header is used.",
+        "guidance": "The LaTeX header/trailer are included by default so that the output is ready to process with pdflatex. If you prefer to manage headers/trailers yourself (for embedding into an existing document), use /no_header to prevent the automatic inclusion."
+      },
+      {
+        "name": "close tex command behavior",
+        "description": "close tex \u2014 writes a trailer to any LaTeX file opened with open tex (unless /no_header was used) and closes the file.",
+        "guidance": "Always close the tex file when finished to ensure trailer/footer are written. If /no_header was used on open tex, close tex will not write a standard trailer."
+      },
+      {
+        "name": "LaTeX symbol mapping via $t typesetting comment",
+        "description": "The mapping from ASCII tokens to LaTeX/math symbols is defined in a $t (typesetting) comment in the database.",
+        "guidance": "Define ASCII\u2192symbol translations inside $t comments so show ... /tex can translate tokens into appropriate LaTeX code. Appendix A gives sample representations showing ASCII token, displayed symbol, defining labels, and a short description. New definitions can be added to the database; a complete list is available on metamath.org."
+      },
+      {
+        "name": "Creating HTML output prerequisite",
+        "description": "The database must include necessary typesetting information (similar to LaTeX) before HTML output can be generated.",
+        "guidance": "Ensure $t comments and any htmldef/althtmldef entries (or other HTML symbol mappings) exist in the database before invoking HTML-generation commands."
+      },
+      {
+        "name": "show statement /html and wildcard behavior",
+        "description": "show statement label-match /html produces HTML files for matching $a or $p statements; output files are named label-match.html for each match.",
+        "guidance": "When label-match contains wildcard (*) characters, HTML files are produced for every matching statement. If wildcard is used, two additional files (mmdefinitions.html and mmascii.html) are also produced. To generate only those two additional files without matching statements, use ?* as label-match (it matches no statement labels)."
+      },
+      {
+        "name": "/alt_html, /brief_html, /brief_alt_html qualifiers for HTML",
+        "description": "/alt_html uses althtmldef symbol representations; /brief_html emits compact definition/theorem lists (good for copying); /brief_alt_html is the brief form using alternate symbols.",
+        "guidance": "/alt_html: use alternate HTML symbol strings defined by althtmldef statements in the $t comment. /brief_html: produces pages listing definitions and theorems with symbol strings suitable for copy/paste into other pages (e.g., tutorials). /brief_alt_html: same as /brief_html but using althtmldef mappings."
+      },
+      {
+        "name": "Comment markup controls HTML comment rendering",
+        "description": "A statement's comment can include special markup to control its HTML rendering.",
+        "guidance": "Use the comment-markup features documented in Section 4.4.1 to adjust how comments appear in the generated HTML (e.g., formatting, linking). The write theorem_list and write bibliography commands perform complete error checking for these features as a side effect."
+      },
+      {
+        "name": "write theorem_list command and /theorems_per_page",
+        "description": "write theorem_list [/theorems_per_page number] writes a list of all $a and $p statements into mmtheorems.html (and additional files when needed).",
+        "guidance": "Default /theorems_per_page is 100. Note: Metamath version 0.177 presumes 100 theorems per page for 'Nearby theorems' links; specifying a number other than 100 will make individual pages out of sync with those links and is discouraged for generating the main theorem list for the web site."
+      },
+      {
+        "name": "write bibliography command behavior",
+        "description": "write bibliography filename \u2014 reads an existing HTML bibliographic cross-reference file (typically mmbiblio.html) and updates it per bibliographic links in database comments, updating only the section between <!-- #START# --> and <!-- #END# -->.",
+        "guidance": "The original input file is renamed to filename~1. Bibliographic references are indicated in comments using bracketed reference names (e.g., 'Theorem 3.1 of [Monk] p. 22'). Ensure comments contain correct reference tokens for proper updates."
+      },
+      {
+        "name": "write recent_additions command and /limit",
+        "description": "write recent_additions filename [/limit number] \u2014 updates an existing 'Recent Additions' HTML file (normally mmrecent.html) between <!-- #START# --> and <!-- #END# --> with descriptions of most recently added theorems.",
+        "guidance": "/limit specifies how many most recent theorems to write; default is 100. The original input file is renamed to filename~1."
+      },
+      {
+        "name": "tools utility purpose and invocation",
+        "description": "tools \u2014 enters a general-purpose ASCII text-file manipulation utility (TOOLS> prompt) for common global edits and building submit files.",
+        "guidance": "Tools provides an easy-to-learn interface for users unfamiliar with Unix shell commands; equivalent and more powerful operations can often be done in the Unix shell. Typical use: prepare submit input files from lists produced by show label or show usage, perform substitutions, add strings to lines, tokenize files, etc. Exit tools with exit."
+      },
+      {
+        "name": "tools subcommands and semantics",
+        "description": "tools provides line-by-line editing and other file-processing commands such as add, clean, delete, insert, substitute, tag, swap, break, build, count, number, parallel, reverse, right, sort, match, unduplicate, duplicate, unique, type, copy, submit (and each has specific semantics).",
+        "guidance": "Concise meanings: add \u2014 prepend/append string to each line; clean \u2014 trim spaces/tabs & convert characters; delete \u2014 delete a section; insert \u2014 insert at a column; substitute \u2014 make substitutions; tag \u2014 add string to a range; swap \u2014 swap line halves; break \u2014 tokenize into one token per line; build \u2014 combine tokens into multi-token lines; count \u2014 count occurrences; number \u2014 create numbered list; parallel \u2014 merge two files side-by-side; reverse \u2014 reverse line order; right \u2014 right-justify; sort \u2014 sort lines; match \u2014 extract lines containing or not containing a string; unduplicate/duplicate/unique \u2014 utilities concerning duplicates (note they sort as a side-effect); type \u2014 display first lines (like head); copy \u2014 safe cat; submit \u2014 run a script of tools commands. Use help within tools for details (help <command>)."
+      },
+      {
+        "name": "Using tools to build Metamath submit scripts",
+        "description": "Use break to get one statement label per line, then use add/insert/substitute/parallel to construct command sequences for each statement, possibly using a separator (e.g., '@') that is later replaced with newline.",
+        "guidance": "Common pattern: break statement labels into one-per-line; add strings before/after to form command fragments; if multiple commands per statement are required, place them on a single line separated by a designated character (e.g., '@'), then use substitute to replace the separator with '\\n' to expand into multiple command lines. parallel is useful when a label must appear multiple times on a line. This supports building submit scripts that perform Proof Assistant operations automatically."
+      },
+      {
+        "name": "tools example session illustrates usage",
+        "description": "Example interaction: create a file, number lines, add strings to beginning/end of each line, display the file, exit tools.",
+        "guidance": "Example shows interactive prompting and confirmation messages (e.g., 'The file n.txt has 3 lines; 3 were changed.'). Use TYPE to inspect results. This example demonstrates the basic flow and prompts to expect."
+      },
+      {
+        "name": "ASCII symbol table conventions (Appendix A samples)",
+        "description": "ASCII token \u2192 Symbol \u2192 Labels \u2192 Description mapping defines how ASCII sequences map to displayed math symbols and their meaning in the set.mm database.",
+        "guidance": "Appendix A provides representative mappings (not exhaustive). Examples: '|-' maps to 'It is provable that...'; 'ph', 'ps', 'ch' correspond to wff boolean variables \u03c6, \u03c8, \u03c7; '-.' corresponds to logical not \u00ac; '->' corresponds to \u2192 (implies); '<->' corresponds to \u2194; '\\/' and '/\\' map to \u2228 and \u2227; 'A.' and 'E.' map to \u2200 and \u2203; '[ y / x ]' denotes substitution; '{y|\u03d5}' denotes class comprehension; '=', '\u2208', '\u2286', '\u222a', '\u2229', '\\' have their usual set-theoretic meanings; '(/)' denotes power class P; '<A,B>' denotes ordered pair; '(F ` A)' denotes function application. Use these labels and descriptions when authoring $t comments and when interpreting database tokens."
+      },
+      {
+        "name": "Compressed proof format structure (Appendix B)",
+        "description": "A compressed proof (between $= and $.) consists of: a left parenthesis, a sequence of statement labels, a right parenthesis, and a sequence of uppercase letters A\u2013Z (with optional whitespace).",
+        "guidance": "Whitespace must surround the parentheses and labels. The uppercase-letter sequence encodes a sequence of integers via a base-20 / base-5 hybrid mapping (A=1..T=20, UA=21..UT=40, VA=41.. etc.). Letter Z tags a proof step identical to one defined later; Z is placed immediately after the least-significant-letter for the referenced integer. The compressed format maps integers to: 1..m \u2192 mandatory hypotheses labels (in RPN order), m+1..m+n \u2192 labels listed in the parentheses (in order), and m+n+1 upward \u2192 references to steps tagged with Z (first Z-tagged step is m+n+1, etc.). Compressed proofs are used efficiently by Metamath without converting to normal proofs."
+      },
+      {
+        "name": "Compressed proof error and usage rules",
+        "description": "Validation rules for compressed proofs and conventions for unknown steps.",
+        "guidance": "Errors reported if: a label in the parenthesis list does not refer to a prior $p or $a statement or a non-mandatory hypothesis of the statement being proved; or a Z-tagged proof step is referenced before its Z tag appears. Unknown steps/subproofs may be represented by '?'. Whitespace may be omitted between '?' and the uppercase letters representing the remainder of the proof."
+      },
+      {
+        "name": "Formal-system primitives and expressions (Appendix C)",
+        "description": "Formal system primitives: SM (symbols), partitioned into CN (constants) and VR (variables); expressions EX are finite sequences of symbols; EXC are constant-prefixed expressions; EX2 are constant-variable pairs.",
+        "guidance": "In Metamath: SM ~ declared math symbols, CN ~ $c statements, VR ~ $v statements; EXC corresponds to permissible expressions for $e, $a, $p; EX2 corresponds to permissible $f expressions. When authoring databases/formal-systems, ensure consistency between declared symbols and the intended expression classes."
+      },
+      {
+        "name": "Substitution \u03c3 and its application",
+        "description": "A substitution \u03c3 defined by a map F: VR \u2192 EX applies simultaneously to expressions: variables replaced per F, constants unchanged, concatenation preserved; \u03c3(\u2205)=\u2205.",
+        "guidance": "Substitutions are simultaneous (all variables replaced according to F). Use \u03c3(E) to denote substitution applied to a collection. Duplicates may result after substitution (\u03c3(E) can have fewer elements). This formalizes how Metamath applies substitutions when matching axioms/hypotheses."
+      },
+      {
+        "name": "Pre-statement and statement structure (D, T, H, A) and constraints",
+        "description": "A pre-statement is a quadruple (D, T, H, A) where D \u2286 DV (distinct-variable restrictions), T \u2286 EX2 (variable-type hypotheses), H \u2286 EXC (logical hypotheses, finite), and A \u2208 EXC (assertion). Additional constraints: V(H \u222a {A}) \u2286 V(T), and T's members must associate each variable with a unique type (for e,f \u2208 T, e1 = f1 whenever e \u2260 f). TM denotes mandatory variable-type hypotheses; DM denotes mandatory distinct-variable restrictions.",
+        "guidance": "When authoring $d, $f, $e, and $a/$p frames in a Metamath database, ensure that every variable used in logical hypotheses or the assertion has a corresponding variable-type declaration in T, and that each variable's type is unique within T. Distinct-variable restrictions in D specify substitutions that are not allowed (e.g., to prevent substituting the same variable for two formal parameters)."
+      },
+      {
+        "name": "Closure and provability conditions for a pre-statement",
+        "description": "The closure C of a pre-statement is the smallest set of expressions containing T \u222a H and closed under axiom-instantiation rule: if an axiomatic statement in \u0393 can be matched by a substitution \u03c3 whose mandatory hypotheses map into C and whose distinct-variable restrictions are satisfied, then \u03c3(A) \u2208 C.",
+        "guidance": "A pre-statement is provable if its assertion A is in its closure. The conditions require (a) matching mandatory hypotheses of an axiom by substitution into C, and (b) satisfying distinct-variable restrictions (after substitution, either the two expressions contain no variables or their variable sets are disjoint except where D declares them distinct). This formalizes Metamath's notion of provability: $p statements correspond to elements of the formal-system universe obtained via closure."
+      },
+      {
+        "name": "Relationship between formal-system notions and Metamath database constructs",
+        "description": "Mapping: formal-system D \u2194 $d, T \u2194 $f, H \u2194 $e, A \u2194 $a/$p; axiomatic statements \u2194 $a frames; provable statements \u2194 $p frames.",
+        "guidance": "Understanding these correspondences is essential for building valid Metamath frames. A $a statement is an 'axiom' (no proof), while a $p statement has a proof that demonstrates the assertion is in the closure. Once a statement is provable it may be used like an axiom in later proofs (adding it to the axiomatic set does not change the universe if VR is infinite)."
+      },
+      {
+        "name": "Design of variable-type hypotheses and distinct-variable restrictions",
+        "description": "Each variable used in logical hypotheses/assertion must have a unique variable-type declaration; distinct-variable restrictions specify forbidden identifications of variables under substitution.",
+        "guidance": "Examples: for first-order theorem schemes where two formal variables must remain distinct, include the pair {x,y} in D to ban substitutions making them identical. Do not omit necessary distinct-variable restrictions, else invalid substitutions could prove nonsense; conversely, unnecessary restrictions make schemes less general."
+      },
+      {
+        "name": "Axiomatization and unambiguous syntax (example: propositional calculus)",
+        "description": "When defining language constructs (e.g., wff formation), specify syntax unambiguously (use parentheses or an unambiguous notation) to avoid ambiguity in substitution and parsing.",
+        "guidance": "Example: define wff (\u03d5 \u2192 \u03c8) with explicit parentheses; omitting parentheses would make expressions like \u00ac\u03d5 \u2192 \u03c8 ambiguous (is it \u00ac(\u03d5 \u2192 \u03c8) or (\u00ac\u03d5 \u2192 \u03c8)?). There is no implicit operator precedence in the formal system, so axioms and formation rules must enforce unambiguous structure."
+      }
+    ]
+  }
+}

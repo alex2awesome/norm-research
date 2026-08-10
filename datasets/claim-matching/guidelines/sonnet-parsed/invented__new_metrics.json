@@ -1,0 +1,121 @@
+{
+  "source_file": "invented",
+  "domain": "invented",
+  "title": "Invented claim-matching discriminators",
+  "extracted": {
+    "subtask_short": "novel claim-matching discriminators",
+    "subtask_description": "criteria separating a true claim-reference match from a plausible near-miss",
+    "rubrics_metrics": [
+      {
+        "name": "Shared-term referent disambiguation across domains",
+        "description": "Tests whether a term or phrase that appears in both the claim and the reference actually denotes the same underlying object, signal, or domain, rather than being a coincidental lexical overlap. Many technical vocabularies reuse the same word (e.g., 'mesh', 'gateway', 'profile') for structurally different things across sub-domains. The matcher must trace the term back to its referent in the reference's own context and check that referent belongs to the same class the claim invokes, not just that the string matches.",
+        "guidance": "Positive: claim requires a 'mesh' clock-distribution structure and the reference's 'mesh' is explicitly the clock/voltage-wire mesh feeding the array. Near-miss: the reference's 'mesh' is a power-and-ground strap mesh (a different domain object that happens to share the word) with no clock-distribution function attached to it."
+      },
+      {
+        "name": "Operation-type and verb-class identity",
+        "description": "Checks that the reference describes the same class of operation the claim's operative verb names (e.g., comparing, generating, routing, computing), not merely an operation in the same subject area. Two passages can discuss the same objects while performing categorically different actions on them (comparing values vs. recommending an action based on values). The matcher isolates the claim's main verb/operation and confirms the reference performs that same category of act, not an adjacent one.",
+        "guidance": "Positive: claim requires 'comparing consumption to a target profile' and reference literally compares intake against a benchmark. Near-miss: reference instead 'generates personalized advice based on the impact of' intake -- a different operation (recommendation generation) applied to related data, not a comparison."
+      },
+      {
+        "name": "Intermediary vs. terminal positional role",
+        "description": "Determines whether an entity in the reference occupies the same position in a data/control flow that the claim assigns to it -- specifically whether it acts as a pass-through/relay (e.g., 'routed through') versus being a terminal source or destination of the action. A component can be topically on-point yet functionally misplaced in the flow. The matcher traces what happens immediately before and after the entity's involvement in the reference.",
+        "guidance": "Positive: claim needs a request 'routed through' a gateway, and reference shows the entity receiving the request and forwarding it onward to a further processing stage. Near-miss: reference shows the entity as the final recipient that itself resolves the request (a terminal endpoint), with nothing described as passing further through it."
+      },
+      {
+        "name": "Qualifier and conditional-clause satisfaction",
+        "description": "Verifies that a restrictive modifier or conditional clause attached to a claim term ('for diabetic intake', 'when unlocked', 'only if X') is substantively addressed by the reference, not just the unqualified general case. A reference can disclose the broad concept while remaining silent on the specific condition that narrows it. The matcher isolates each qualifier phrase and checks for a corresponding substantive match, not just topical adjacency.",
+        "guidance": "Positive: claim requires comparison 'to a targeted profile for diabetic intake limits' and reference discusses comparison against a diabetes-specific limit. Near-miss: reference only supports comparing intake to generic customizable goals or benchmarks, with no diabetic-specific limit named or implied."
+      },
+      {
+        "name": "Temporal sequencing relative to a trigger event",
+        "description": "Checks that an action the claim places at a specific point in a sequence (e.g., 'after interrupts are unlocked', 'once calibration completes') is described in the reference as occurring at that same relative position, not merely as happening at an unspecified time. Passages often mention both the trigger and the action without linking them temporally. The matcher looks for an explicit or clearly implied ordering between the trigger and the claimed action in the reference.",
+        "guidance": "Positive: reference describes the controller clearing a lock/in-service state, which specifically clears the way for the next interrupt to be serviced -- an explicit after-relationship. Near-miss: reference mentions 'first or subsequent interrupt' in a different context (e.g., timing-parameter updates) without tying the subsequent event to an unlocking trigger."
+      },
+      {
+        "name": "Cross-referential same-instance coreference",
+        "description": "Tests whether, when a claim asserts that two named things are the SAME instance or correspond to one another (e.g., 'the second interrupt corresponds to the first'), the reference establishes an equivalent identity or correspondence link between two mentions, rather than merely introducing two same-type instances with no stated relationship. Two objects of the same class appearing in a passage is not the same as those two objects being linked as corresponding to each other.",
+        "guidance": "Positive: reference explicitly ties a later event back to an earlier one it 'corresponds to' (e.g., the same interrupt being re-raised and identified as such). Near-miss: reference discusses 'a first or subsequent interrupt' as a general class without stating that the subsequent one is the same interrupt or tied back to the first."
+      },
+      {
+        "name": "Causal-direction fidelity",
+        "description": "Checks that when the claim asserts A causes, triggers, or governs B, the reference describes the dependency running in that same direction, not reversed or merely co-occurring. Passages can describe two events or states that are causally related but flipped (B enabling A rather than A producing B), or merely correlated without any causal claim. The matcher isolates the cause and effect terms and confirms their roles are not swapped.",
+        "guidance": "Positive: claim says X triggers Y, and reference states that when X occurs, Y results. Near-miss: reference states that Y's occurrence is a precondition that permits X, or that X and Y tend to appear together without either driving the other."
+      },
+      {
+        "name": "Hedged-alternative vs. operative disclosure",
+        "description": "Distinguishes a reference that presents the matching feature as the actual, operative configuration from one that buries it as just one of several optional alternatives ('may', 'or alternatively', 'in some embodiments') with no indication that this is the variant actually used or combined with the surrounding described system. A feature listed among many undifferentiated options is weaker support than one described as the operating configuration.",
+        "guidance": "Positive: reference states the clock 'is implemented' in a described arrangement as part of the described design. Near-miss: reference lists the arrangement as one of several interchangeable possibilities ('may be implemented as A, B, or C') without indicating which, if any, is actually instantiated in the described system."
+      },
+      {
+        "name": "Aggregate-vs-instance granularity match",
+        "description": "Checks whether the claim refers to a single concrete instance or event while the reference only offers a generic, aggregate, or population-level statement (or the reverse), such that the level of specificity does not actually transfer. A general capability statement about a class of things is not the same as a statement about one particular instance behaving that way. The matcher checks whether the granularity level in claim and reference actually align.",
+        "guidance": "Positive: claim requires 'the sensor reports a reading' and reference describes that specific sensor producing a reading in the described scenario. Near-miss: reference only states that 'sensors provide various readings' as a general design fact, without tying any single reading to the specific instance or event the claim requires."
+      },
+      {
+        "name": "Component-boundary and partition fidelity",
+        "description": "When a claim distinguishes between multiple similar components (e.g., 'the first gateway' vs. 'the second gateway', 'a first server' vs. 'a second server'), checks that the reference draws the same partition -- i.e., treats them as genuinely distinct entities with distinct roles -- rather than conflating them into one component or splitting one claimed component into two unrelated reference entities.",
+        "guidance": "Positive: reference names two distinct servers with distinct described functions that map cleanly onto the claim's 'first' and 'second' components. Near-miss: reference describes only a single server performing both functions, or attributes the two functions to entities that don't correspond to the claim's partition at all."
+      },
+      {
+        "name": "Input/output boundary fidelity",
+        "description": "Verifies that the quantity the claim designates as the INPUT to an operation and the quantity it designates as the OUTPUT/result are assigned the same way in the reference, not swapped. Passages describing the same two quantities can accidentally (or the matcher can mistakenly read them as) reversing which one feeds into which.",
+        "guidance": "Positive: claim requires 'receiving X to produce Y' and reference describes X being taken as input and Y being generated from it. Near-miss: reference describes Y as the thing supplied and X as something derived from or reported alongside it -- the same two quantities, wrong direction."
+      },
+      {
+        "name": "State-transition vs. steady-state description",
+        "description": "Checks that when the claim describes an event or change of state (e.g., 'unlocking', 'becoming available', 'switching to'), the reference actually describes that transition occurring, rather than only describing a static property, general capability, or default configuration without any described change. A capability that a system 'can' do is not the same as a described instance of it happening.",
+        "guidance": "Positive: reference narrates a specific unlocking event followed by a described consequence. Near-miss: reference only states that the system 'has a lock feature' or 'supports locking and unlocking' as a general design property, with no transition actually depicted."
+      },
+      {
+        "name": "Comparative-baseline correspondence",
+        "description": "When the claim compares a quantity to a baseline, threshold, or reference point of a specific kind (e.g., 'a targeted profile for diabetic intake limits', 'a prior measurement'), checks that the reference's comparison is anchored to the same TYPE of baseline, not a different, more generic comparison basis. Two passages can both describe 'comparing to a goal' while the goals are of fundamentally different kinds.",
+        "guidance": "Positive: reference compares intake specifically against a diabetes-specific limit, matching the claim's baseline type. Near-miss: reference compares intake against a generic customizable goal with no relation to the specific limit-type the claim requires."
+      },
+      {
+        "name": "Specific-value vs. general-mention disclosure",
+        "description": "Distinguishes a reference that discloses a precise parameter, number, named threshold, or concrete configuration the claim requires from one that only gestures at the same general category without the specific value. A reference can be squarely on-topic and still fail to disclose the particular value or setting the claim element depends on.",
+        "guidance": "Positive: claim requires a specific numeric or named threshold and the reference states that same value or name. Near-miss: reference discusses the same general parameter category ('a threshold may be set') without ever committing to the specific value or naming the specific instance the claim requires."
+      },
+      {
+        "name": "Structural vs. functional/outcome correspondence",
+        "description": "Checks whether the reference's physical or logical arrangement of parts matches what the claim describes, as opposed to merely achieving a similar outcome through a different arrangement. Two systems can produce the same end effect while being built or organized in different ways; the matcher should distinguish disclosure of the claimed structure itself from disclosure of only the resulting behavior.",
+        "guidance": "Positive: claim requires a specific tree-and-mesh arrangement of conductors and reference describes that same layout of conductive elements. Near-miss: reference describes a different layout (e.g., only a flat mesh of power lines) that happens to distribute something across the array, without the claimed structural arrangement."
+      },
+      {
+        "name": "Same-mechanism vs. same-result equivalence",
+        "description": "Tests whether the reference achieves the claimed effect through the same underlying mechanism or process the claim implies, rather than merely producing a comparable end result by a different route. A shared result is weaker evidence of match than a shared mechanism, since many different processes can converge on similar outcomes.",
+        "guidance": "Positive: claim's effect is achieved via the same intermediate process/mechanism described in the reference (same causal chain). Near-miss: reference reaches a similar-looking final state via a described mechanism that operates on entirely different intermediate steps or principles."
+      },
+      {
+        "name": "Explicit statement vs. merely-implied disclosure",
+        "description": "Distinguishes content the reference states outright from content that is only reachable by the reader supplying an inference the passage itself never makes. A near-miss reference may allow a plausible-sounding inference toward the claimed feature, but the matcher should flag when that inference requires adding information not present in the text.",
+        "guidance": "Positive: reference directly states the claimed relationship or feature in its own words. Near-miss: reference contains adjacent facts from which the claimed feature could be inferred by a reader, but never states the inference itself."
+      },
+      {
+        "name": "Performs-the-step vs. merely-enables-the-step",
+        "description": "Checks whether the reference describes the claimed step actually being carried out, versus describing a capability, component, or precondition that would allow the step to be performed without ever stating that it is performed. A reference can supply all the enabling machinery for an action while never depicting the action's occurrence.",
+        "guidance": "Positive: reference narrates the action taking place (e.g., 'the controller executes the interrupt'). Near-miss: reference describes a component capable of supporting that action ('the controller can service interrupts') without ever describing an instance of it doing so."
+      },
+      {
+        "name": "Directionality and order-of-relationship fidelity",
+        "description": "For claims that assert a relational or ordering property between two elements (e.g., 'X regulates Y', 'X occurs before Y', 'X is a subset of Y'), checks that the reference's relation runs in the matching direction and not the inverse or a symmetric substitute. Relational claims are especially vulnerable to references that mention the same two elements in reverse or undirected relation.",
+        "guidance": "Positive: reference states the controlling element governs the controlled element in the same direction the claim asserts. Near-miss: reference describes the same two elements but has the claimed 'controlled' element instead constraining or triggering the 'controlling' one."
+      },
+      {
+        "name": "Entity-role assignment alignment",
+        "description": "Checks that a component or actor identified in the reference plays the SAME functional role the claim assigns to it (e.g., controller vs. controlled, initiator vs. responder, automated system vs. manual operator), not merely that a similarly-named or similarly-typed entity appears. The same type of component can be described performing a structurally different role in the reference's system.",
+        "guidance": "Positive: the referenced component is described initiating and directing the process, matching the claim's assignment of it as the controlling actor. Near-miss: a same-named or same-type component appears in the reference but is described as a passive recipient or manually operated by a user, not fulfilling the claimed role."
+      },
+      {
+        "name": "Negative-limitation satisfaction",
+        "description": "When the claim includes a negative limitation ('without', 'excluding', 'other than', 'not last'), checks that the reference's description is actually congruent with that exclusion -- i.e., the excluded thing is genuinely absent or ruled out -- rather than the reference being silent on it (which does not establish the exclusion) or actively including the excluded thing.",
+        "guidance": "Positive: reference explicitly describes the excluded condition as absent or ruled out in the same way the claim requires. Near-miss: reference simply never mentions the excluded condition one way or another, or specifies a different, unrelated exclusion (e.g., excluding 'last' events when the claim's negative limitation concerns something else entirely)."
+      },
+      {
+        "name": "Degree/quantity/threshold correspondence",
+        "description": "Checks that an approximate magnitude, comparative degree, or quantifier in the claim ('substantially', 'at least', 'a majority of', 'a plurality') is matched by a congruent degree in the reference, rather than the reference merely disclosing any nonzero or unspecified amount of the same quantity. Degree words carry real scope that a generic mention does not satisfy.",
+        "guidance": "Positive: claim requires 'at least two' of a component and reference specifies a plurality or an explicit count meeting that floor. Near-miss: reference mentions the component only in the singular or with an unspecified count, never establishing that the claimed minimum quantity is met."
+      }
+    ]
+  }
+}

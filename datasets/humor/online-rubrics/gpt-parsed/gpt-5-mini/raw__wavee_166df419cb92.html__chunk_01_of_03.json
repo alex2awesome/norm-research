@@ -1,0 +1,111 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_166df419cb92.html",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "wavee_166df419cb92.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39878,
+  "model": "gpt-5-mini",
+  "elapsed_s": 40.9959415839985,
+  "input_tokens": 12182,
+  "output_tokens": 3364,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and developers working on multimodal humor/captioning and alignment",
+    "subtask_short": "cartoon captioning evaluation",
+    "subtask_description": "Evaluation and training guidelines for multimodal models to interpret, rank, and generate New Yorker-style cartoon captions; focuses on perceptual grounding, captionist-style reasoning traces, and stylistic quality used as RL rewards.",
+    "subtask_keywords": [
+      "cartoon",
+      "captioning",
+      "humor",
+      "multimodal",
+      "evaluation",
+      "llm_alignment"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Visual perception judge / perception reward",
+        "description": "Evaluates whether model reasoning is grounded in salient visual details by comparing the model\u2019s reasoning against curated visual references and outputting a binary vector indicating whether each reference is explicitly reflected in the reasoning.",
+        "guidance": "Each cartoon is associated with up to ten curated reference descriptions (entities, background elements, incongruities). The judge returns per-attribute binary scores that are directly linked to a perception reward (R_p), encouraging explanations that reference concrete visual anchors rather than abstract or unsupported interpretations. Example: prompt returns binary tags for each attribute (Fig. C.4). Anti-pattern: reasoning that ignores curated visual references or hallucinates unsupported entities."
+      },
+      {
+        "name": "Style judge / style reward (overall)",
+        "description": "Evaluates linguistic quality of captions and explanations and returns a binary vector across defined stylistic dimensions; aggregated into a style reward (R_s) used during preference alignment.",
+        "guidance": "Designed to capture stylistic fidelity to captionist practice; the style judge complements perception and accuracy signals to encourage outputs that are both visually grounded and stylistically consistent with professional humor writing. Outputs are binary for each checked dimension and used directly in the reward function (Fig. C.5)."
+      },
+      {
+        "name": "Natural phrasing (style judge dimension)",
+        "description": "Use of idiomatic, everyday expressions (natural phrasing) in captions and explanations.",
+        "guidance": "Judge checks whether phrasing reads like idiomatic, conversational captionist commentary. Encourages wording that feels natural and avoids stilted or overly formal constructions. Anti-pattern: robotic or unnatural sentence structures that break the captionist tone."
+      },
+      {
+        "name": "Punctuation (style judge dimension)",
+        "description": "Effective use of punctuation: neither missing nor overused.",
+        "guidance": "Judge checks punctuation usage for clarity and comedic timing. Excessive punctuation or missing punctuation that obscures meaning or punchline placement reduces the style score. Guidance: punctuation should support readability and delivery of payoff."
+      },
+      {
+        "name": "Wordplay (style judge dimension)",
+        "description": "Presence and quality of puns, double meanings, or playful lexical twists.",
+        "guidance": "Judge checks for intentional wordplay that contributes to humor. Encourages captions/explanations that exploit linguistic ambiguity appropriately. Anti-patterns: accidental homophone usage that doesn't serve a joke, or forced puns that break natural phrasing."
+      },
+      {
+        "name": "Metaphor (style judge dimension)",
+        "description": "Use of figurative expressions grounded in the cartoon imagery.",
+        "guidance": "Judge evaluates whether metaphors are image-grounded and contribute to comedic interpretation. Abstract or unrelated metaphors that do not map to the scene are penalized."
+      },
+      {
+        "name": "Punchline placement (style judge dimension)",
+        "description": "Delivering the payoff at the end (effective punchline placement).",
+        "guidance": "Judge checks whether the caption structures setup and payoff correctly, placing the comedic payoff at the end for maximal effect. Anti-pattern: splitting or burying the punchline such that payoff is weakened."
+      },
+      {
+        "name": "Accuracy / correctness (matching & ranking)",
+        "description": "Selecting the correct caption (matching) or the crowd-preferred/funnier caption (ranking) as measured against ground truth or crowd labels.",
+        "guidance": "Matching task: present five candidates with one correct option; model must choose the caption that best matches the described scene (Fig. C.6). Ranking task: present two captions and choose the one preferred by crowds (Fig. C.7). Accuracy contributes to reward signals and is combined with perception/style/format rewards during PA."
+      },
+      {
+        "name": "Controlled output format compliance",
+        "description": "Models are required to produce outputs in the controlled format <think>...</think><answer>...</answer> to enforce explicit reasoning traces and enable automatic parsing and evaluation.",
+        "guidance": "Applied to all multimodal evaluations (Fig. C.8, C.9). Ensures 'think before answering' behavior and that reasoning traces are explicit. Noncompliant outputs can be parsed as format errors and penalized via format reward component."
+      },
+      {
+        "name": "Structured reasoning trace generation",
+        "description": "Reasoning traces must be structured, step-by-step reconstructions: reconstruct the scene, identify salient incongruities, infer speaker intent, analyze humor mechanisms (e.g., wordplay, cultural references), and justify the caption.",
+        "guidance": "Prompts (matching/ranking) enforce structured reasoning around scene description, incongruity detection, and caption justification (Fig. C.1, C.2). Traces are rephrased into captionist-style commentary emphasizing concise, observational, image-grounded language (Fig. C.3). Use of teacher models (DeepSeek-R1) and rephrasing with GPT-4o to match professional commentary is part of the pipeline. Anti-patterns: shallow, surface-level explanations that fail to connect setup to payoff; verbose annotation-style phrasing instead of captionist language."
+      },
+      {
+        "name": "Conciseness / economical explanations",
+        "description": "Explanations should be concise, well-structured, and economical\u2014anchored in salient cues rather than verbose, shallow descriptions.",
+        "guidance": "RM-only outputs were observed to be fluent but shallow and verbose; RM+PA outputs are expected to be concise, filter distractors, and highlight multiple interacting humor mechanisms. Scoring favors succinct reasoning that directly links visual incongruity to punchline strength (Appendix D examples)."
+      },
+      {
+        "name": "Perceptual grounding / avoidance of hallucination",
+        "description": "Reasoning and caption selection must be explicitly grounded in observed scene elements to avoid misidentification and propagation of perception errors.",
+        "guidance": "Perception reward and curated anchors are designed to reduce hallucinations (Appendix E notes visual perception errors e.g., misidentifying a Viking as the Grim Reaper). Models that misidentify salient entities propagate errors through reasoning and are penalized. Scaling model capacity reduces some errors but grounding checks remain essential."
+      },
+      {
+        "name": "Avoidance of niche-jargon / generalizable interpretation",
+        "description": "Prefer interpretations that capture the broader incongruity and comedic effect rather than relying on overly specific or niche cues and jargon.",
+        "guidance": "Appendix D shows RM-only models sometimes rely on literal or highly specific cues (e.g., coffee grounds) while RM+PA integrates broader absurdities. Scoring favors captions/explanations that generalize humor mechanisms and avoid niche knowledge that reduces transferability."
+      },
+      {
+        "name": "Reward aggregation and multi-objective alignment",
+        "description": "Binary outputs from perception and style judges (and accuracy/format signals) are aggregated into composite reward functions used during reinforcement learning (PA) to align models with human judgment across multiple dimensions.",
+        "guidance": "Preference Alignment uses EasyR1 with GRPO; perception and style rewards often saturate early while accuracy and format rewards continue improving (Appendix B Figures). The aggregated reward balances perceptual grounding, stylistic fidelity, correctness, and format compliance to guide RL optimization."
+      },
+      {
+        "name": "\"Think before answering\" / enforce chain-of-thought",
+        "description": "Instructional protocol that requires models to produce explicit reasoning traces ('think before answering') prior to emitting a final choice.",
+        "guidance": "Applied uniformly across multimodal evaluation to ensure performance differences reflect reasoning ability rather than prompt design. Enforced via required <think> and <answer> tags (Fig. C.8, C.9). This enables automatic parsing and judge evaluation of the trace itself."
+      },
+      {
+        "name": "Evaluation modality protocols (text-only vs multimodal)",
+        "description": "Separate evaluation settings: text-only evaluation uses curated scene annotations to isolate reasoning ability; multimodal evaluation provides images and enforces explicit output format and grounding.",
+        "guidance": "Text-only setting isolates reasoning by providing near-perfect perception via structured annotations (Fig. C.6); multimodal setting tests integrated perception+reasoning and requires image-grounded traces (Fig. C.8). Different prompts (matching vs ranking) are used in each setting and results should be compared with this context in mind."
+      }
+    ]
+  }
+}

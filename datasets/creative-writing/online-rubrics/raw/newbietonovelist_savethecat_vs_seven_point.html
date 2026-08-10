@@ -1,0 +1,1653 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="profile" href="https://gmpg.org/xfn/11" />
+	<title>Save the Cat! Fifteen Beats Vs. The Seven Point Story Structure &#8211; Newbie to Novelist</title>
+<meta name='robots' content='max-image-preview:large' />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=772'
+					+ '&is_singular=1';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9uZXdiaWV0b25vdmVsaXN0LmNvbQ%3D%3D"
+		+ "&wpcomid=176085296"
+		+ "&time=" + Math.floor( Date.now() / 1000 );
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//widgets.wp.com' />
+<link rel='dns-prefetch' href='//wordpress.com' />
+<link rel="alternate" type="application/rss+xml" title="Newbie to Novelist &raquo; Feed" href="https://newbietonovelist.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Newbie to Novelist &raquo; Comments Feed" href="https://newbietonovelist.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Newbie to Novelist &raquo; Save the Cat! Fifteen Beats Vs. The Seven Point Story&nbsp;Structure Comments Feed" href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='/_static/??-eJxtzN0KQEAQQOEXssaKcCHPsq1Jy+xPZjavL1JKLr86HTiSsjEIBgGfVaK8uMCwoiRjt8fAOYCPcyZk2JGM4KxSZPmotMwF/B/Jbfh+b1355EfdddWg26av1xMpeTR5&cssminify=yes' type='text/css' media='all' />
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/common.min.css */
+</style>
+<style id="wp-block-heading-inline-css">
+h1:where(.wp-block-heading).has-background,h2:where(.wp-block-heading).has-background,h3:where(.wp-block-heading).has-background,h4:where(.wp-block-heading).has-background,h5:where(.wp-block-heading).has-background,h6:where(.wp-block-heading).has-background{padding:1.25em 2.375em}h1.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h1.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h2.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h2.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h3.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h3.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h4.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h4.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h5.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h5.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h6.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h6.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]){rotate:180deg}
+/*# sourceURL=https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/heading/style.min.css */
+</style>
+<style id="wp-block-image-inline-css">
+.wp-block-image>a,.wp-block-image>figure>a{display:inline-block}.wp-block-image img{box-sizing:border-box;height:auto;max-width:100%;vertical-align:bottom}@media not (prefers-reduced-motion){.wp-block-image img.hide{visibility:hidden}.wp-block-image img.show{animation:show-content-image .4s}}.wp-block-image[style*=border-radius] img,.wp-block-image[style*=border-radius]>a{border-radius:inherit}.wp-block-image.has-custom-border img{box-sizing:border-box}.wp-block-image.aligncenter{text-align:center}.wp-block-image.alignfull>a,.wp-block-image.alignwide>a{width:100%}.wp-block-image.alignfull img,.wp-block-image.alignwide img{height:auto;width:100%}.wp-block-image .aligncenter,.wp-block-image .alignleft,.wp-block-image .alignright,.wp-block-image.aligncenter,.wp-block-image.alignleft,.wp-block-image.alignright{display:table}.wp-block-image .aligncenter>figcaption,.wp-block-image .alignleft>figcaption,.wp-block-image .alignright>figcaption,.wp-block-image.aligncenter>figcaption,.wp-block-image.alignleft>figcaption,.wp-block-image.alignright>figcaption{caption-side:bottom;display:table-caption}.wp-block-image .alignleft{float:left;margin:.5em 1em .5em 0}.wp-block-image .alignright{float:right;margin:.5em 0 .5em 1em}.wp-block-image .aligncenter{margin-left:auto;margin-right:auto}.wp-block-image :where(figcaption){margin-bottom:1em;margin-top:.5em}.wp-block-image.is-style-circle-mask img{border-radius:9999px}@supports ((-webkit-mask-image:none) or (mask-image:none)) or (-webkit-mask-image:none){.wp-block-image.is-style-circle-mask img{border-radius:0;-webkit-mask-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>');mask-image:url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50"/></svg>');mask-mode:alpha;-webkit-mask-position:center;mask-position:center;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain}}:root :where(.wp-block-image.is-style-rounded img,.wp-block-image .is-style-rounded img){border-radius:9999px}.wp-block-image figure{margin:0}.wp-lightbox-container{display:flex;flex-direction:column;position:relative}.wp-lightbox-container img{cursor:zoom-in}.wp-lightbox-container img:hover+button{opacity:1}.wp-lightbox-container button{align-items:center;backdrop-filter:blur(16px) saturate(180%);background-color:#5a5a5a40;border:none;border-radius:4px;cursor:zoom-in;display:flex;height:20px;justify-content:center;opacity:0;padding:0;position:absolute;right:16px;text-align:center;top:16px;width:20px;z-index:100}@media not (prefers-reduced-motion){.wp-lightbox-container button{transition:opacity .2s ease}}.wp-lightbox-container button:focus-visible{outline:3px auto #5a5a5a40;outline:3px auto -webkit-focus-ring-color;outline-offset:3px}.wp-lightbox-container button:hover{cursor:pointer;opacity:1}.wp-lightbox-container button:focus{opacity:1}.wp-lightbox-container button:focus,.wp-lightbox-container button:hover,.wp-lightbox-container button:not(:hover):not(:active):not(.has-background){background-color:#5a5a5a40;border:none}.wp-lightbox-overlay{box-sizing:border-box;cursor:zoom-out;height:100vh;left:0;overflow:hidden;position:fixed;top:0;visibility:hidden;width:100%;z-index:100000}.wp-lightbox-overlay .wp-lightbox-close-button{align-items:center;cursor:pointer;display:flex;font-family:inherit;gap:8px;justify-content:center;line-height:1;min-height:40px;min-width:40px;padding:0 4px;position:absolute;right:calc(env(safe-area-inset-right) + 16px);top:calc(env(safe-area-inset-top) + 16px);z-index:5000000}.wp-lightbox-overlay .wp-lightbox-close-button:focus,.wp-lightbox-overlay .wp-lightbox-close-button:hover,.wp-lightbox-overlay .wp-lightbox-close-button:not(:hover):not(:active):not(.has-background){background:none;border:none}.wp-lightbox-overlay .wp-lightbox-close-button:has(.wp-lightbox-close-text:not([hidden])) .wp-lightbox-close-icon svg{height:1em;width:1em}.wp-lightbox-overlay .wp-lightbox-close-icon svg{display:block}.wp-lightbox-overlay .wp-lightbox-navigation-button-next,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev{align-items:center;bottom:16px;cursor:pointer;display:flex;font-family:inherit;gap:4px;justify-content:center;line-height:1;min-height:40px;min-width:40px;padding:0 8px;position:absolute;z-index:2000002}.wp-lightbox-overlay .wp-lightbox-navigation-button-next[hidden],.wp-lightbox-overlay .wp-lightbox-navigation-button-prev[hidden]{display:none}@media (min-width:960px){.wp-lightbox-overlay .wp-lightbox-navigation-button-next,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev{bottom:50%;transform:translateY(-50%)}}.wp-lightbox-overlay .wp-lightbox-navigation-button-next:focus,.wp-lightbox-overlay .wp-lightbox-navigation-button-next:hover,.wp-lightbox-overlay .wp-lightbox-navigation-button-next:not(:hover):not(:active):not(.has-background),.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:focus,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:hover,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:not(:hover):not(:active):not(.has-background){background:none;border:none;padding:0 8px}.wp-lightbox-overlay .wp-lightbox-navigation-button-next:has(.wp-lightbox-navigation-text:not([hidden])) .wp-lightbox-navigation-icon svg,.wp-lightbox-overlay .wp-lightbox-navigation-button-prev:has(.wp-lightbox-navigation-text:not([hidden])) .wp-lightbox-navigation-icon svg{display:block;height:1.5em;width:1.5em}.wp-lightbox-overlay .wp-lightbox-navigation-button-prev{left:calc(env(safe-area-inset-left) + 16px)}.wp-lightbox-overlay .wp-lightbox-navigation-button-next{right:calc(env(safe-area-inset-right) + 16px)}.wp-lightbox-overlay .wp-lightbox-navigation-icon svg{vertical-align:middle}.wp-lightbox-overlay .lightbox-image-container{height:var(--wp--lightbox-container-height);left:50%;overflow:hidden;position:absolute;top:50%;transform:translate(-50%,-50%);transform-origin:top left;width:var(--wp--lightbox-container-width);z-index:2000001}.wp-lightbox-overlay .wp-block-image{align-items:center;box-sizing:border-box;display:flex;height:100%;justify-content:center;margin:0;position:relative;transform-origin:0 0;width:100%;z-index:3000000}.wp-lightbox-overlay .wp-block-image img{height:var(--wp--lightbox-image-height);min-height:var(--wp--lightbox-image-height);min-width:var(--wp--lightbox-image-width);width:var(--wp--lightbox-image-width)}.wp-lightbox-overlay .wp-block-image figcaption{display:none}.wp-lightbox-overlay button{background:none;border:none}.wp-lightbox-overlay .scrim{background-color:#fff;height:100%;opacity:.9;position:absolute;width:100%;z-index:2000000}.wp-lightbox-overlay.active{visibility:visible}@media not (prefers-reduced-motion){.wp-lightbox-overlay.active{animation:turn-on-visibility .25s both}.wp-lightbox-overlay.active img{animation:turn-on-visibility .35s both}.wp-lightbox-overlay.show-closing-animation:not(.active){animation:turn-off-visibility .35s both}.wp-lightbox-overlay.show-closing-animation:not(.active) img{animation:turn-off-visibility .25s both}.wp-lightbox-overlay.zoom.active{animation:none;opacity:1;visibility:visible}.wp-lightbox-overlay.zoom.active .lightbox-image-container{animation:lightbox-zoom-in .4s}.wp-lightbox-overlay.zoom.active .lightbox-image-container img{animation:none}.wp-lightbox-overlay.zoom.active .scrim{animation:turn-on-visibility .4s forwards}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active){animation:none}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .lightbox-image-container{animation:lightbox-zoom-out .4s}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .lightbox-image-container img{animation:none}.wp-lightbox-overlay.zoom.show-closing-animation:not(.active) .scrim{animation:turn-off-visibility .4s forwards}}@keyframes show-content-image{0%{visibility:hidden}99%{visibility:hidden}to{visibility:visible}}@keyframes turn-on-visibility{0%{opacity:0}to{opacity:1}}@keyframes turn-off-visibility{0%{opacity:1;visibility:visible}99%{opacity:0;visibility:visible}to{opacity:0;visibility:hidden}}@keyframes lightbox-zoom-in{0%{transform:translate(calc((-100vw + var(--wp--lightbox-scrollbar-width))/2 + var(--wp--lightbox-initial-left-position)),calc(-50vh + var(--wp--lightbox-initial-top-position))) scale(var(--wp--lightbox-scale))}to{transform:translate(-50%,-50%) scale(1)}}@keyframes lightbox-zoom-out{0%{transform:translate(-50%,-50%) scale(1);visibility:visible}99%{visibility:visible}to{transform:translate(calc((-100vw + var(--wp--lightbox-scrollbar-width))/2 + var(--wp--lightbox-initial-left-position)),calc(-50vh + var(--wp--lightbox-initial-top-position))) scale(var(--wp--lightbox-scale));visibility:hidden}}
+/*# sourceURL=https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/image/style.min.css */
+</style>
+<style id="wp-block-image-theme-inline-css">
+:root :where(.wp-block-image figcaption){color:#555;font-size:13px;text-align:center}.is-dark-theme :root :where(.wp-block-image figcaption){color:#ffffffa6}.wp-block-image{margin:0 0 1em}
+/*# sourceURL=https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/image/theme.min.css */
+</style>
+<style id="wp-block-list-inline-css">
+ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:1.25em 2.375em}
+/*# sourceURL=https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/list/style.min.css */
+</style>
+<style id="wp-block-paragraph-inline-css">
+.is-small-text{font-size:.875em}.is-regular-text{font-size:1em}.is-large-text{font-size:2.25em}.is-larger-text{font-size:3em}.has-drop-cap:not(:focus):first-letter{float:left;font-size:8.4em;font-style:normal;font-weight:100;line-height:.68;margin:.05em .1em 0 0;text-transform:uppercase}body.rtl .has-drop-cap:not(:focus):first-letter{float:none;margin-left:.1em}p.has-drop-cap.has-background{overflow:hidden}:root :where(p.has-background){padding:1.25em 2.375em}:where(p.has-text-color:not(.has-link-color)) a{color:inherit}p.has-text-align-left[style*="writing-mode:vertical-lr"],p.has-text-align-right[style*="writing-mode:vertical-rl"]{rotate:180deg}
+/*# sourceURL=https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/paragraph/style.min.css */
+</style>
+<style id="wp-block-library-inline-css-extra">
+.has-text-align-justify {
+	text-align:justify;
+}
+.has-text-align-justify{text-align:justify;}
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+
+<style id="classic-theme-styles-inline-css">
+.wp-block-button__link{background-color:#32373c;border-radius:9999px;box-shadow:none;color:#fff;font-size:1.125em;padding:calc(.667em + 2px) calc(1.333em + 2px);text-decoration:none}.wp-block-file__button{background:#32373c;color:#fff}.wp-block-accordion-heading{margin:0}.wp-block-accordion-heading__toggle{background-color:inherit!important;color:inherit!important}.wp-block-accordion-heading__toggle:not(:focus-visible){outline:none}.wp-block-accordion-heading__toggle:focus,.wp-block-accordion-heading__toggle:hover{background-color:inherit!important;border:none;box-shadow:none;color:inherit;padding:var(--wp--preset--spacing--20,1em) 0;text-decoration:none}.wp-block-accordion-heading__toggle:focus-visible{outline:auto;outline-offset:0}.wp-block-tab:not(.has-text-color){color:inherit!important}.wp-block-tab:not(.has-background){background-color:inherit!important}.wp-block-tab:focus,.wp-block-tab:hover{text-decoration:none}.wp-block-tab:focus-visible{outline:auto;outline-offset:0}
+/*# sourceURL=/wp-content/plugins/gutenberg-core/v23.1.0/build/styles/block-library/classic.min.css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='/_static/??-eJx9jEEOAiEQBD/kQECjeDC+ZWEnijIwYWA3/l72op689KFTVXplCCU3zE1z6reYRYfiUwlP0VYZpwxIJE4IFRd10HOU9iFA2iuhCiI7/ROiDt9WxfETT20jCOc4YUIa2D9t5eGA91xRBMZS7ATtPkTZvCtdzNEZt7f2fHq8Afl7R7w=&cssminify=yes' type='text/css' media='all' />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--primary: #274367;--wp--preset--color--secondary: #f3a595;--wp--preset--color--background: #ffffff;--wp--preset--color--foreground: #1d1e1e;--wp--preset--color--foreground-light: #1d1e1e;--wp--preset--color--foreground-dark: #1d1e1e;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 16.66px;--wp--preset--font-size--medium: 24px;--wp--preset--font-size--large: 28.8px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--normal: 20px;--wp--preset--font-size--huge: 34.56px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--bricolage-grotesque: 'Bricolage Grotesque', sans-serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--dm-serif-display: 'DM Serif Display', serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--fahkwang: Fahkwang, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fjalla-one: 'Fjalla One', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--gabarito: Gabarito, system-ui;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--ibarra-real-nova: 'Ibarra Real Nova', serif;--wp--preset--font-family--instrument-serif: 'Instrument Serif', serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--noto-sans-mono: 'Noto Sans Mono', sans-serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--pt-serif: 'PT Serif', serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--rufina: Rufina, serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--syne: Syne, sans-serif;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--urbanist: Urbanist, sans-serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.wp-site-blocks) > * { margin-block-start: 24px; margin-block-end: 0; }:where(.wp-site-blocks) > :first-child { margin-block-start: 0; }:where(.wp-site-blocks) > :last-child { margin-block-end: 0; }:root { --wp--style--block-gap: 24px; }:root :where(.is-layout-flow) > :first-child{margin-block-start: 0;}:root :where(.is-layout-flow) > :last-child{margin-block-end: 0;}:root :where(.is-layout-flow) > *{margin-block-start: 24px;margin-block-end: 0;}:root :where(.is-layout-constrained) > :first-child{margin-block-start: 0;}:root :where(.is-layout-constrained) > :last-child{margin-block-end: 0;}:root :where(.is-layout-constrained) > *{margin-block-start: 24px;margin-block-end: 0;}:root :where(.is-layout-flex){gap: 24px;}:root :where(.is-layout-grid){gap: 24px;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-color{color: var(--wp--preset--color--primary) !important;}.has-secondary-color{color: var(--wp--preset--color--secondary) !important;}.has-background-color{color: var(--wp--preset--color--background) !important;}.has-foreground-color{color: var(--wp--preset--color--foreground) !important;}.has-foreground-light-color{color: var(--wp--preset--color--foreground-light) !important;}.has-foreground-dark-color{color: var(--wp--preset--color--foreground-dark) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-background-color{background-color: var(--wp--preset--color--primary) !important;}.has-secondary-background-color{background-color: var(--wp--preset--color--secondary) !important;}.has-background-background-color{background-color: var(--wp--preset--color--background) !important;}.has-foreground-background-color{background-color: var(--wp--preset--color--foreground) !important;}.has-foreground-light-background-color{background-color: var(--wp--preset--color--foreground-light) !important;}.has-foreground-dark-background-color{background-color: var(--wp--preset--color--foreground-dark) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-border-color{border-color: var(--wp--preset--color--primary) !important;}.has-secondary-border-color{border-color: var(--wp--preset--color--secondary) !important;}.has-background-border-color{border-color: var(--wp--preset--color--background) !important;}.has-foreground-border-color{border-color: var(--wp--preset--color--foreground) !important;}.has-foreground-light-border-color{border-color: var(--wp--preset--color--foreground-light) !important;}.has-foreground-dark-border-color{border-color: var(--wp--preset--color--foreground-dark) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-normal-font-size{font-size: var(--wp--preset--font-size--normal) !important;}.has-huge-font-size{font-size: var(--wp--preset--font-size--huge) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-bricolage-grotesque-font-family{font-family: var(--wp--preset--font-family--bricolage-grotesque) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-dm-serif-display-font-family{font-family: var(--wp--preset--font-family--dm-serif-display) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-fahkwang-font-family{font-family: var(--wp--preset--font-family--fahkwang) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fjalla-one-font-family{font-family: var(--wp--preset--font-family--fjalla-one) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-gabarito-font-family{font-family: var(--wp--preset--font-family--gabarito) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-ibarra-real-nova-font-family{font-family: var(--wp--preset--font-family--ibarra-real-nova) !important;}.has-instrument-serif-font-family{font-family: var(--wp--preset--font-family--instrument-serif) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-noto-sans-mono-font-family{font-family: var(--wp--preset--font-family--noto-sans-mono) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-pt-serif-font-family{font-family: var(--wp--preset--font-family--pt-serif) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-rufina-font-family{font-family: var(--wp--preset--font-family--rufina) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-syne-font-family{font-family: var(--wp--preset--font-family--syne) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-urbanist-font-family{font-family: var(--wp--preset--font-family--urbanist) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-10-1' href='/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.css?m=1777406400i&cssminify=yes' type='text/css' media='all' />
+<link rel='stylesheet' id='verbum-gutenberg-css-css' href='https://widgets.wp.com/verbum-block-editor/block-editor.css?ver=1771405207' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='/_static/??/wp-content/mu-plugins/comment-likes/css/comment-likes.css,/i/noticons/noticons.css?m=1436783281j&cssminify=yes' type='text/css' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='print-css-13-1' href='/wp-content/themes/pub/varia/print.css?m=1738187798i&cssminify=yes' type='text/css' media='print' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-14-1' href='/_static/??-eJx9j80KwjAQhF/IdVGLwYP4LGlc05VNNuSnxbc34EWp9DYD3wwzuCRwGivFinWiQAVTGzHTfWIRLPUltHel7PA/ONvMFjm6DwpLchpWgdAgSfMcS28eRX2XHjv1ZbdCnhREna2s8cfAQyznrYGrJ7dwPRhzNMNwOZ2fb49AXxU=&cssminify=yes' type='text/css' media='all' />
+<style id="jetpack-global-styles-frontend-style-inline-css">
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+/*# sourceURL=jetpack-global-styles-frontend-style-inline-css */
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-16-1' href='/_static/??-eJyNjcsKAjEMRX/IGgaqgwvxU6TTlDZjmhTTIv69D9yIG3f3wOUcuDUXVXqSDnW4xiOTGKyptxAvHwYbAlVxcDKwEq4JA+L9PUnyNppt4G/RmSTCMogRTCMFdqxZ7Qt+lL2k+owXD5l1Cfw6nOpxmme/837aH9YHfvpKpw==&cssminify=yes' type='text/css' media='all' />
+<script id="jetpack_related-posts-js-extra">
+var related_posts_js_options = {"post_heading":"h4"};
+//# sourceURL=jetpack_related-posts-js-extra
+</script>
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"176085296","postID":"772","siteURL":"https://newbietonovelist.com","xhrURL":"https://newbietonovelist.com/wp-admin/admin-ajax.php","nonce":"0d227c72f5","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https://s0.wp.com/wp-content/js/wpcom-proxy-request.js?m=1513050504i&amp;ver=20211021","shortlink":"https://wp.me/pbUPPq-cs","i18n":{"followedText":"New posts from this site will now appear in your \u003Ca href=\"https://wordpress.com/reader\"\u003EReader\u003C/a\u003E","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","shortLinkCopied":"Shortlink copied to clipboard."}};
+//# sourceURL=wpcom-actionbar-placeholder-js-extra
+</script>
+<script id="jetpack-mu-wpcom-settings-js-before">
+var JETPACK_MU_WPCOM_SETTINGS = {"assetsUrl":"https://s0.wp.com/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/"};
+//# sourceURL=jetpack-mu-wpcom-settings-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??/wp-content/mu-plugins/jetpack-plugin/sun/_inc/build/related-posts/related-posts.min.js,/wp-content/js/rlt-proxy.js?m=1755011788j'></script>
+<script id="rlt-proxy-js-after">
+	rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+//# sourceURL=rlt-proxy-js-after
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://newbietonovelist.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+<link rel="canonical" href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" />
+<link rel='shortlink' href='https://wp.me/pbUPPq-cs' />
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/?format=json&amp;url=https%3A%2F%2Fnewbietonovelist.com%2F2020%2F09%2F23%2Fsave-the-cat-fifteen-beats-vs-the-seven-point-story-structure%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/?format=xml&amp;url=https%3A%2F%2Fnewbietonovelist.com%2F2020%2F09%2F23%2Fsave-the-cat-fifteen-beats-vs-the-seven-point-story-structure%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Save the Cat! Fifteen Beats Vs. The Seven Point Story Structure" />
+<meta property="og:url" content="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" />
+<meta property="og:description" content="Understanding Story Structure I recently began outlining book two of the Uprising trilogy. And whenever my outlining process begins, I know I need to dust off my copy of Save the Cat! Writes a Nove…" />
+<meta property="article:published_time" content="2020-09-23T18:03:15+00:00" />
+<meta property="article:modified_time" content="2023-05-29T14:45:56+00:00" />
+<meta property="og:site_name" content="Newbie to Novelist" />
+<meta property="og:image" content="https://i0.wp.com/newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?fit=1200%2C675&#038;ssl=1" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="675" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom" />
+<meta name="twitter:text:title" content="Save the Cat! Fifteen Beats Vs. The Seven Point Story&nbsp;Structure" />
+<meta name="twitter:image" content="https://i0.wp.com/newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?fit=1200%2C675&#038;ssl=1&#038;w=640" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="search" type="application/opensearchdescription+xml" href="https://newbietonovelist.com/osd.xml" title="Newbie to Novelist" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<link rel="pingback" href="https://newbietonovelist.com/xmlrpc.php"><meta name="description" content="Understanding Story Structure I recently began outlining book two of the Uprising trilogy. And whenever my outlining process begins, I know I need to dust off my copy of Save the Cat! Writes a Novel by Jessica Brody. Despite the title of this post, and the fact that I use Save the Cat!, I&#039;m not&hellip;" />
+<style type="text/css" id="custom-colors-css">	@media screen and (max-width: 560px) {
+		/* Prevent background color hovers on mobile */
+		.site-header .main-navigation > div,
+		.site-header .main-navigation > div > ul > li.current-menu-item > a,
+		.site-header .main-navigation > div > ul > li.current-menu-item li.current-menu-item > a,
+		.site-header .main-navigation > div > ul > li.current-menu-item li.focus > a,
+		.site-header .main-navigation > div > ul > li.current-menu-item li:hover > a,
+		.site-header .main-navigation > div > ul > li.focus > a,
+		.site-header .main-navigation > div > ul > li.focus li.current-menu-item > a,
+		.site-header .main-navigation > div > ul > li.focus li.focus > a,
+		.site-header .main-navigation > div > ul > li.focus li:hover > a,
+		.site-header .main-navigation > div > ul > li:hover > a,
+		.site-header .main-navigation > div > ul > li:hover li.current-menu-item > a,
+		.site-header .main-navigation > div > ul > li:hover li.focus > a,
+		.site-header .main-navigation > div > ul > li:hover li:hover > a,
+		.site-header .main-navigation > div > ul > li:hover li > a {
+			background: transparent;
+			color: inherit;
+		}
+		.site-header .main-navigation > div > ul > li.current-menu-item li.focus > a,
+		.site-header .main-navigation > div > ul > li.current-menu-item li:hover > a,
+		.site-header .main-navigation > div > ul > li.focus > a,
+		.site-header .main-navigation > div > ul > li.focus li.current-menu-item > a,
+		.site-header .main-navigation > div > ul > li.focus li.focus > a,
+		.site-header .main-navigation > div > ul > li.focus li:hover > a,
+		.site-header .main-navigation > div > ul > li:hover > a,
+		.site-header .main-navigation > div > ul > li:hover li.current-menu-item > a,
+		.site-header .main-navigation > div > ul > li:hover li.focus > a,
+		.site-header .main-navigation > div > ul > li:hover li:hover > a {
+			text-decoration: underline;
+		}
+	}
+	.screen-reader-text:focus,
+			body,
+			.wp-block-table.is-style-stripes tbody tr:nth-child(odd),
+			table.is-style-stripes tbody tr:nth-child(odd),
+			body .widget_eu_cookie_law_widget #eu-cookie-law,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative input.accept,
+			.main-navigation > div,
+			.main-navigation > div > ul > li > .sub-menu { background-color: #ffffff;}
+.a8c-posts-list-item__featured span,
+			.a8c-posts-list__view-all,
+			.a8c-posts-list__view-all:focus,
+			.a8c-posts-list__view-all:hover,
+			.button,
+			.button:focus,
+			.button:hover,
+			.sticky-post,
+			.wp-block-button__link,
+			.wp-block-button__link:focus,
+			.wp-block-button__link:hover,
+			.wp-block-file .wp-block-file__button,
+			.wp-block-file a.wp-block-file__button:active,
+			.wp-block-file a.wp-block-file__button:focus,
+			.wp-block-file a.wp-block-file__button:hover,
+			.wp-block-file a.wp-block-file__button:visited,
+			.wp-block-file__button,
+			.wp-block-file__button:focus,
+			.wp-block-file__button:hover,
+			.wp-block-search .wp-block-search__button,
+			.wp-block-gallery .blocks-gallery-image figcaption,
+			.wp-block-gallery .blocks-gallery-item figcaption,
+			.wp-block-pullquote.is-style-solid-color,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.accept,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.accept:focus,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.accept:hover,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.has-focus.accept,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative,
+			button,
+			button.has-focus,
+			button:focus,
+			button:hover,
+			button[data-load-more-btn],
+			input.has-focus[type="submit"],
+			input:focus[type="submit"],
+			input:hover[type="submit"],
+			input[type="submit"],
+			.main-navigation > div > ul > li.current-menu-item > a,
+			.main-navigation > div > ul > li.current-menu-item li > a,
+			.main-navigation > div > ul > li.focus > a,
+			.main-navigation > div > ul > li.focus li > a,
+			.main-navigation > div > ul > li:hover > a,
+			.main-navigation > div > ul > li:hover li > a { color: #ffffff;}
+.wp-block-table.is-style-stripes tbody tr:nth-child(odd),
+			table.is-style-stripes tbody tr:nth-child(odd) { background-color: #FFFFFF;}
+.comments-area .comment-list,
+			.widget_archive ul,
+			.widget_authors ul,
+			.widget_categories ul,
+			.widget_jp_blogs_i_follow ul,
+			.widget_links ul,
+			.widget_meta ul,
+			.widget_nav_menu ul,
+			.widget_pages ul,
+			.widget_recent_comments ul,
+			.widget_recent_entries ul,
+			.widget_rss ul,
+			.widget_rss_links ul,
+			.widget_top-click ul,
+			.widget_top-posts ul,
+			.widget_upcoming_events_widget ul { border-bottom-color: #FFFFFF;}
+.comments-area .children > li,
+			.comments-area .comment-list > li,
+			.widget_archive li,
+			.widget_authors li,
+			.widget_categories li,
+			.widget_jp_blogs_i_follow li,
+			.widget_links li,
+			.widget_meta li,
+			.widget_nav_menu li,
+			.widget_pages li,
+			.widget_recent_comments li,
+			.widget_recent_entries li,
+			.widget_rss li,
+			.widget_rss_links li,
+			.widget_top-click li,
+			.widget_top-posts li,
+			.widget_upcoming_events_widget li { border-top-color: #FFFFFF;}
+.has-primary-background-color[class],
+			.has-primary-background-color.has-background-dim[class],
+			.has-secondary-background-color[class],
+			.has-secondary-background-color.has-background-dim[class],
+			.has-foreground-background-color[class],
+			.has-foreground-background-color.has-background-dim[class],
+			.has-foreground-dark-background-color[class],
+			.has-foreground-dark-background-color.has-background-dim[class],
+			.has-foreground-light-background-color[class],
+			.has-foreground-light-background-color.has-background-dim[class],
+			.has-background-color[class],
+			.has-background-dark-color[class],
+			.has-background-light-color[class] { color: #ffffff;}
+.has-background-background-color[class],
+			.has-background-background-color.has-background-dim[class] { background-color: #ffffff;}
+.has-background-dark-color[class],
+			.has-background-dark-color.has-background-dim[class] { color: #E5E5E5;}
+.has-background-dark-background-color[class],
+			.has-background-dark-background-color.has-background-dim[class] { background-color: #E5E5E5;}
+.has-background-light-color[class],
+			.has-background-light-color.has-background-dim[class] { color: #FFFFFF;}
+.has-background-light-background-color[class],
+			.has-background-light-background-color.has-background-dim[class] { background-color: #FFFFFF;}
+.wp-block-code,
+			.wp-block-table td,
+			.wp-block-table th,
+			body .widget_eu_cookie_law_widget #eu-cookie-law,
+			input[type="color"],
+			input[type="date"],
+			input[type="datetime"],
+			input[type="datetime-local"],
+			input[type="email"],
+			input[type="month"],
+			input[type="number"],
+			input[type="password"],
+			input[type="range"],
+			input[type="search"],
+			input[type="tel"],
+			input[type="text"],
+			input[type="time"],
+			input[type="url"],
+			input[type="week"],
+			.wp-block-search .wp-block-search__input:focus,
+			select,
+			table td,
+			table th,
+			textarea,
+			 { border-color: #E5E5E5;}
+.comment-list .children > li,
+			.comment-list > li,
+			.entry-footer,
+			.wp-block-pullquote,
+			#jp-relatedposts h3.jp-relatedposts-headline em:before { border-top-color: #E5E5E5;}
+.comment-list,
+			.wp-block-pullquote,
+			hr,
+			hr.wp-block-separator { border-bottom-color: #E5E5E5;}
+hr.wp-block-separator.is-style-dots:before { color: #E5E5E5;}
+.comments-area:before,
+			.post-navigation:before,
+			.pagination:before,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative input.accept.has-focus,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative input.accept:focus,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative input.accept:hover { background-color: #E5E5E5;}
+.a8c-posts-list-item__featured span,
+			.a8c-posts-list__view-all,
+			.button,
+			.main-navigation #toggle:focus + #toggle-menu,
+			.sticky-post,
+			.wp-block-button__link,
+			.wp-block-file .wp-block-file__button,
+			.wp-block-file__button,
+			.wp-block-pullquote.is-style-solid-color,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.accept,
+			button,
+			button[data-load-more-btn],
+			.wp-block-search .wp-block-search__button,
+			.wp-block-search .wp-block-search__button:focus,
+			.wp-block-search .wp-block-search__button:hover,
+			.wp-block-search .wp-block-search__button:not(.has-background-color):hover,
+			input[type="submit"],
+			.main-navigation > div > ul > li.current-menu-item > a,
+			.main-navigation > div > ul > li.current-menu-item li.current-menu-item > a,
+			.main-navigation > div > ul > li.current-menu-item li.focus > a,
+			.main-navigation > div > ul > li.current-menu-item li:hover > a,
+			.main-navigation > div > ul > li.focus > a,
+			.main-navigation > div > ul > li.focus li.current-menu-item > a,
+			.main-navigation > div > ul > li.focus li.focus > a,
+			.main-navigation > div > ul > li.focus li:hover > a,
+			.main-navigation > div > ul > li:hover > a,
+			.main-navigation > div > ul > li:hover li.current-menu-item > a,
+			.main-navigation > div > ul > li:hover li.focus > a,
+			.main-navigation > div > ul > li:hover li:hover > a { background-color: #274367;}
+.a8c-posts-list-item__title a:active,
+			.a8c-posts-list-item__title a:focus,
+			.a8c-posts-list-item__title a:hover,
+			.comment-meta .comment-metadata a:active,
+			.comment-meta .comment-metadata a:focus,
+			.comment-meta .comment-metadata a:hover,
+			.comment-navigation a:active,
+			.comment-navigation a:focus,
+			.comment-navigation a:hover,
+			.footer-navigation .footer-menu a:hover,
+			.main-navigation a:hover,
+			.page-title a:active,
+			.page-title a:focus,
+			.page-title a:hover,
+			.pagination .nav-links > *.current,
+			.pagination .nav-links > *:active,
+			.pagination .nav-links > *:focus,
+			.pagination .nav-links > *:hover,
+			.post-navigation a:active,
+			.post-navigation a:focus,
+			.post-navigation a:hover,
+			.site-info a:hover,
+			.site-title a:hover,
+			.social-navigation a,
+			.wp-block-button.is-style-outline.wp-block-button__link,
+			.wp-block-button.is-style-outline .wp-block-button__link,
+			.wp-block-button.is-style-outline:not(.has-text-color),
+			.wp-block-button.is-style-outline:not(.has-text-color):active,
+			.wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),
+			.wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color):active,
+			.wp-block-newspack-blocks-homepage-articles article .entry-title a,
+			.wp-block-newspack-blocks-homepage-articles article .entry-title a:active,
+			.wp-block-newspack-blocks-homepage-articles article .entry-title a:focus,
+			.wp-block-newspack-blocks-homepage-articles article .entry-title a:hover,
+			a,
+			article .entry-header .entry-title a:active,
+			article .entry-header .entry-title a:focus,
+			article .entry-header .entry-title a:hover { color: #274367;}
+.wp-block-quote { border-left-color: #274367;}
+.wp-block-quote[style*="text-align: right"],
+			.wp-block-quote[style*="text-align:right"] { border-right-color: #274367;}
+.has-primary-color[class],
+			.has-primary-color.has-background-dim[class] { color: #274367;}
+.has-primary-background-color[class],
+			.has-primary-background-color.has-background-dim[class] { background-color: #274367;}
+.a8c-posts-list__item .a8c-posts-list-item__meta a:active,
+			.a8c-posts-list__item .a8c-posts-list-item__meta a:hover,
+			.comment-meta .comment-metadata,
+			.comment-meta .comment-metadata a:active,
+			.comment-meta .comment-metadata a:hover,
+			.entry-footer a:active,
+			.entry-footer a:hover,
+			.entry-meta a:active,
+			.entry-meta a:hover,
+			.main-navigation,
+			.main-navigation a,
+			.main-navigation a:link,
+			.main-navigation a:visited,
+			.post-navigation a,
+			.screen-reader-text:focus,
+			.social-navigation a:hover,
+			.wp-block-button.is-style-outline .wp-block-button__link.has-focus,
+			.wp-block-button.is-style-outline .wp-block-button__link:focus,
+			.wp-block-button.is-style-outline .wp-block-button__link:hover,
+			.wp-block-button.is-style-outline.wp-block-button__link.has-focus,
+			.wp-block-button.is-style-outline.wp-block-button__link:focus,
+			.wp-block-button.is-style-outline.wp-block-button__link:hover,
+			.wp-block-code,
+			.wp-block-code pre,
+			.wp-block-newspack-blocks-homepage-articles article .cat-links a:active,
+			.wp-block-newspack-blocks-homepage-articles article .cat-links a:hover,
+			.wp-block-newspack-blocks-homepage-articles article .entry-meta a:active,
+			.wp-block-newspack-blocks-homepage-articles article .entry-meta a:hover,
+			.wp-block-newspack-blocks-homepage-articles article .entry-title a:hover,
+			.wp-block-pullquote,
+			.wp-block-table.is-style-stripes tbody tr:nth-child(odd),
+			table.is-style-stripes tbody tr:nth-child(odd),
+			a:hover,
+			body,
+			body .widget_eu_cookie_law_widget #eu-cookie-law,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative input.accept { color: #1d1e1e;}
+.a8c-posts-list__view-all:focus,
+			.a8c-posts-list__view-all:hover,
+			.button:focus,
+			.button:hover,
+			.has-focus.a8c-posts-list__view-all,
+			.has-focus.button,
+			.has-focus.wp-block-button__link,
+			.has-focus.wp-block-file__button,
+			.has-foreground-background-color[class],
+			.wp-block-button__link:focus,
+			.wp-block-button__link:hover,
+			.wp-block-file__button:focus,
+			.wp-block-file__button:hover,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.accept:focus,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.accept:hover,
+			body .widget_eu_cookie_law_widget #eu-cookie-law input.has-focus.accept,
+			body .widget_eu_cookie_law_widget #eu-cookie-law.negative,
+			button.has-focus,
+			button:focus,
+			button:hover,
+			input.has-focus[type="submit"],
+			input:focus[type="submit"],
+			input:hover[type="submit"],
+			.main-navigation > div > ul > li.current-menu-item li > a,
+			.main-navigation > div > ul > li.focus li > a,
+			.main-navigation > div > ul > li:hover li > a { background-color: #1d1e1e;}
+input[type="color"]:focus,
+			input[type="date"]:focus,
+			input[type="datetime"]:focus,
+			input[type="datetime-local"]:focus,
+			input[type="email"]:focus,
+			input[type="month"]:focus,
+			input[type="number"]:focus,
+			input[type="password"]:focus,
+			input[type="range"]:focus,
+			input[type="search"]:focus,
+			input[type="tel"]:focus,
+			input[type="text"]:focus,
+			input[type="time"]:focus,
+			input[type="url"]:focus,
+			input[type="week"]:focus,
+			textarea:focus { border-color: #1d1e1e;}
+.site { border-top-color: #1d1e1e;}
+.a8c-posts-list__item .a8c-posts-list-item__meta,
+			.comment-meta .comment-metadata,
+			.comment-navigation a,
+			.entry-footer,
+			.entry-meta,
+			.footer-navigation .footer-menu,
+			.pagination .nav-links > *,
+			.post-navigation .meta-nav,
+			.site-branding,
+			.site-info,
+			.wp-block-image figcaption,
+			.wp-block-latest-comments .wp-block-latest-comments__comment-date,
+			.wp-block-latest-posts .wp-block-latest-posts__post-date,
+			.wp-block-newspack-blocks-homepage-articles article .cat-links,
+			.wp-block-newspack-blocks-homepage-articles article .entry-meta,
+			.wp-block-pullquote .wp-block-pullquote__citation,
+			.wp-block-pullquote cite,
+			.wp-block-pullquote footer,
+			.wp-block-quote .wp-block-quote__citation,
+			.wp-block-quote cite,
+			.wp-block-quote footer,
+			.wp-block-quote.is-large .wp-block-quote__citation,
+			.wp-block-quote.is-large cite,
+			.wp-block-quote.is-large footer,
+			.wp-block-quote.is-style-large .wp-block-quote__citation,
+			.wp-block-quote.is-style-large cite,
+			.wp-block-quote.is-style-large footer,
+			.wp-block-video figcaption,
+			figcaption { color: #4F5353;}
+.site-title { color: #040505;}
+body .widget_eu_cookie_law_widget #eu-cookie-law.negative { border-color: #040505;}
+.wp-block-search .wp-block-search__input { border-color: #1d1e1e;}
+.wp-block-search .wp-block-search__input { border-color: rgba( 29, 30, 30, 0.8 );}
+.has-background-background-color[class],
+			.has-background-background-color.has-background-dim[class],
+			.has-background-dark-background-color[class],
+			.has-background-dark-background-color.has-background-dim[class],
+			.has-background-light-background-color[class],
+			.has-background-light-background-color.has-background-dim[class],
+			.has-foreground-color[class] { color: #1d1e1e;}
+.has-background-dim[class],
+			.has-foreground-background-color[class],
+			.has-foreground-background-color.has-background-dim[class] { background-color: #1d1e1e;}
+.has-foreground-dark-color[class],
+			.has-foreground-dark-color.has-background-dim[class] { color: #040505;}
+.has-foreground-dark-background-color[class],
+			.has-foreground-dark-background-color.has-background-dim[class] { background-color: #040505;}
+.has-foreground-light-color[class],
+			.has-foreground-light-color.has-background-dim[class] { color: #4F5353;}
+.has-foreground-light-background-color[class],
+			.has-foreground-light-background-color.has-background-dim[class] { background-color: #4F5353;}
+.has-secondary-color[class],
+			.has-secondary-color.has-background-dim[class] { color: #f3a595;}
+.has-secondary-background-color[class],
+			.has-secondary-background-color.has-background-dim[class] { background-color: #f3a595;}
+</style>
+<link rel="icon" href="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=32" sizes="32x32" />
+<link rel="icon" href="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=192" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=180" />
+<meta name="msapplication-TileImage" content="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=270" />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-5' href='/_static/??-eJydzNEKwjAMBdAfsqbCsE/ip8jMwuiWNmFJKft7FdRn8e3ey+VA14BSnapDaUG5zbkaLOQ64vruYK3CLVeEOwuuBtaz0nZEswP8DBSZGpMBjps0I/5+PsOfXs/TTG7gokHFnsl8Z3pp13I5pZSGeB5iXB68H1iq&cssminify=yes' type='text/css' media='all' />
+
+</head>
+
+<body class="wp-singular post-template-default single single-post postid-772 single-format-standard wp-custom-logo wp-embed-responsive wp-theme-pubvaria wp-child-theme-pubredhill customizer-styles-applied singular image-filters-enabled jetpack-reblog-enabled custom-colors">
+
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	
+<header id="masthead" class="site-header responsive-max-width has-logo has-title-and-tagline has-menu" role="banner">
+	<div class="site-branding">
+
+			<div class="site-logo"><a href="https://newbietonovelist.com/" class="custom-logo-link" rel="home"><img width="274" height="120" src="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_full-2-2.png" class="custom-logo" alt="Newbie to Novelist" decoding="async" srcset="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_full-2-2.png 274w, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_full-2-2.png?w=150&amp;h=66 150w" sizes="(max-width: 274px) 100vw, 274px" data-attachment-id="47" data-permalink="https://newbietonovelist.com/cropped-ntn-logo_full-2-2-png/" data-orig-file="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_full-2-2.png" data-orig-size="274,120" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="cropped-ntn-logo_full-2-2.png" data-image-description="&lt;p&gt;https://newbietonovelist.files.wordpress.com/2020/04/cropped-ntn-logo_full-2-2.png&lt;/p&gt;
+" data-image-caption="" data-large-file="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_full-2-2.png?w=274" /></a></div>
+								<p class="site-title"><a href="https://newbietonovelist.com/" rel="home">Newbie to Novelist</a></p>
+			
+				<p class="site-description">
+				Published or Not You&#039;re a Writer!			</p>
+	</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" aria-label="Main Navigation">
+
+		<input type="checkbox" role="button" aria-haspopup="true" id="toggle" class="hide-visually">
+		<label for="toggle" id="toggle-menu" class="button">
+			Menu			<span class="dropdown-icon open">+</span>
+			<span class="dropdown-icon close">&times;</span>
+			<span class="hide-visually expanded-text">expanded</span>
+			<span class="hide-visually collapsed-text">collapsed</span>
+		</label>
+
+		<div class="menu-primary-container"><ul id="menu-primary-1" class="main-menu" aria-label="submenu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-19"><a href="https://newbietonovelist.com/">Home</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-20"><a href="https://newbietonovelist.com/blog-2/">Posts</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-489"><a href="https://newbietonovelist.com/current-works-in-progress/">Projects</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-21"><a href="https://newbietonovelist.com/about/">About</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-22"><a href="https://newbietonovelist.com/contact/">Contact</a></li>
+</ul></div>	</nav><!-- #site-navigation -->
+		<nav class="social-navigation" role="navigation" aria-label="Social Links Menu">
+		<div class="menu-social-container"><ul id="menu-social" class="social-links-menu"><li id="menu-item-607" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-607"><a href="https://twitter.com/newbie2novelist"><span class="screen-reader-text">Twitter</span><svg class="svg-icon" width="26" height="26" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M22.23,5.924c-0.736,0.326-1.527,0.547-2.357,0.646c0.847-0.508,1.498-1.312,1.804-2.27 c-0.793,0.47-1.671,0.812-2.606,0.996C18.324,4.498,17.257,4,16.077,4c-2.266,0-4.103,1.837-4.103,4.103 c0,0.322,0.036,0.635,0.106,0.935C8.67,8.867,5.647,7.234,3.623,4.751C3.27,5.357,3.067,6.062,3.067,6.814 c0,1.424,0.724,2.679,1.825,3.415c-0.673-0.021-1.305-0.206-1.859-0.513c0,0.017,0,0.034,0,0.052c0,1.988,1.414,3.647,3.292,4.023 c-0.344,0.094-0.707,0.144-1.081,0.144c-0.264,0-0.521-0.026-0.772-0.074c0.522,1.63,2.038,2.816,3.833,2.85 c-1.404,1.1-3.174,1.756-5.096,1.756c-0.331,0-0.658-0.019-0.979-0.057c1.816,1.164,3.973,1.843,6.29,1.843 c7.547,0,11.675-6.252,11.675-11.675c0-0.178-0.004-0.355-0.012-0.531C20.985,7.47,21.68,6.747,22.23,5.924z"></path></svg></a></li>
+<li id="menu-item-25" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-25"><a href="https://www.instagram.com/newbietonovelist/"><span class="screen-reader-text">Instagram</span><svg class="svg-icon" width="26" height="26" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12,4.622c2.403,0,2.688,0.009,3.637,0.052c0.877,0.04,1.354,0.187,1.671,0.31c0.42,0.163,0.72,0.358,1.035,0.673 c0.315,0.315,0.51,0.615,0.673,1.035c0.123,0.317,0.27,0.794,0.31,1.671c0.043,0.949,0.052,1.234,0.052,3.637 s-0.009,2.688-0.052,3.637c-0.04,0.877-0.187,1.354-0.31,1.671c-0.163,0.42-0.358,0.72-0.673,1.035 c-0.315,0.315-0.615,0.51-1.035,0.673c-0.317,0.123-0.794,0.27-1.671,0.31c-0.949,0.043-1.233,0.052-3.637,0.052 s-2.688-0.009-3.637-0.052c-0.877-0.04-1.354-0.187-1.671-0.31c-0.42-0.163-0.72-0.358-1.035-0.673 c-0.315-0.315-0.51-0.615-0.673-1.035c-0.123-0.317-0.27-0.794-0.31-1.671C4.631,14.688,4.622,14.403,4.622,12 s0.009-2.688,0.052-3.637c0.04-0.877,0.187-1.354,0.31-1.671c0.163-0.42,0.358-0.72,0.673-1.035 c0.315-0.315,0.615-0.51,1.035-0.673c0.317-0.123,0.794-0.27,1.671-0.31C9.312,4.631,9.597,4.622,12,4.622 M12,3 C9.556,3,9.249,3.01,8.289,3.054C7.331,3.098,6.677,3.25,6.105,3.472C5.513,3.702,5.011,4.01,4.511,4.511 c-0.5,0.5-0.808,1.002-1.038,1.594C3.25,6.677,3.098,7.331,3.054,8.289C3.01,9.249,3,9.556,3,12c0,2.444,0.01,2.751,0.054,3.711 c0.044,0.958,0.196,1.612,0.418,2.185c0.23,0.592,0.538,1.094,1.038,1.594c0.5,0.5,1.002,0.808,1.594,1.038 c0.572,0.222,1.227,0.375,2.185,0.418C9.249,20.99,9.556,21,12,21s2.751-0.01,3.711-0.054c0.958-0.044,1.612-0.196,2.185-0.418 c0.592-0.23,1.094-0.538,1.594-1.038c0.5-0.5,0.808-1.002,1.038-1.594c0.222-0.572,0.375-1.227,0.418-2.185 C20.99,14.751,21,14.444,21,12s-0.01-2.751-0.054-3.711c-0.044-0.958-0.196-1.612-0.418-2.185c-0.23-0.592-0.538-1.094-1.038-1.594 c-0.5-0.5-1.002-0.808-1.594-1.038c-0.572-0.222-1.227-0.375-2.185-0.418C14.751,3.01,14.444,3,12,3L12,3z M12,7.378 c-2.552,0-4.622,2.069-4.622,4.622S9.448,16.622,12,16.622s4.622-2.069,4.622-4.622S14.552,7.378,12,7.378z M12,15 c-1.657,0-3-1.343-3-3s1.343-3,3-3s3,1.343,3,3S13.657,15,12,15z M16.804,6.116c-0.596,0-1.08,0.484-1.08,1.08 s0.484,1.08,1.08,1.08c0.596,0,1.08-0.484,1.08-1.08S17.401,6.116,16.804,6.116z"></path></svg></a></li>
+<li id="menu-item-23" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-23"><a target="_blank" rel="noopener" href="https://www.facebook.com/Newbie-to-Novelist-102148721478254/"><span class="screen-reader-text">Facebook</span><svg class="svg-icon" width="26" height="26" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M20.007,3H3.993C3.445,3,3,3.445,3,3.993v16.013C3,20.555,3.445,21,3.993,21h8.621v-6.971h-2.346v-2.717h2.346V9.31 c0-2.325,1.42-3.591,3.494-3.591c0.993,0,1.847,0.074,2.096,0.107v2.43l-1.438,0.001c-1.128,0-1.346,0.536-1.346,1.323v1.734h2.69 l-0.35,2.717h-2.34V21h4.587C20.555,21,21,20.555,21,20.007V3.993C21,3.445,20.555,3,20.007,3z"></path></svg></a></li>
+<li id="menu-item-26" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-26"><a href="https://www.pinterest.com/lpinkasavage/novel-aesthetics/"><span class="screen-reader-text">Pinterest</span><svg class="svg-icon" width="26" height="26" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12.289,2C6.617,2,3.606,5.648,3.606,9.622c0,1.846,1.025,4.146,2.666,4.878c0.25,0.111,0.381,0.063,0.439-0.169 c0.044-0.175,0.267-1.029,0.365-1.428c0.032-0.128,0.017-0.237-0.091-0.362C6.445,11.911,6.01,10.75,6.01,9.668 c0-2.777,2.194-5.464,5.933-5.464c3.23,0,5.49,2.108,5.49,5.122c0,3.407-1.794,5.768-4.13,5.768c-1.291,0-2.257-1.021-1.948-2.277 c0.372-1.495,1.089-3.112,1.089-4.191c0-0.967-0.542-1.775-1.663-1.775c-1.319,0-2.379,1.309-2.379,3.059 c0,1.115,0.394,1.869,0.394,1.869s-1.302,5.279-1.54,6.261c-0.405,1.666,0.053,4.368,0.094,4.604 c0.021,0.126,0.167,0.169,0.25,0.063c0.129-0.165,1.699-2.419,2.142-4.051c0.158-0.59,0.817-2.995,0.817-2.995 c0.43,0.784,1.681,1.446,3.013,1.446c3.963,0,6.822-3.494,6.822-7.833C20.394,5.112,16.849,2,12.289,2"></path></svg></a></li>
+</ul></div>	</nav><!-- .social-navigation -->
+</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+	<section id="primary" class="content-area">
+		<main id="main" class="site-main">
+
+			
+<article id="post-772" class="post-772 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized tag-dan-wells tag-fantasy-novel-writing tag-fiction-writing tag-jessica-brody tag-novel-writing tag-outlining tag-plot-development tag-plot-structure tag-plotting tag-plotting-a-novel tag-save-the-cat tag-save-the-cat-beat-sheet tag-save-the-cat-fifteen-points tag-seven-point-story-structure tag-story-structure tag-writing-tips entry">
+
+	<header class="entry-header responsive-max-width">
+		<h1 class="entry-title">Save the Cat! Fifteen Beats Vs. The Seven Point Story&nbsp;Structure</h1>				<div class="entry-meta">
+			<span class="byline"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted by</span><span class="author vcard"><a class="url fn n" href="https://newbietonovelist.com/author/newbietonovelist/">L. P. Savage</a></span></span><span class="posted-on"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><path id="a" d="M0 0h24v24H0V0z"></path></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"></use></clipPath><path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"></path></svg><a href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" rel="bookmark"><time class="entry-date published" datetime="2020-09-23T14:03:15-04:00">September 23, 2020</time><time class="updated" datetime="2023-05-29T10:45:56-04:00">May 29, 2023</time></a></span><span class="cat-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted in</span><a href="https://newbietonovelist.com/category/uncategorized/" rel="category tag">Uncategorized</a></span><span class="tags-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Tags:</span><a href="https://newbietonovelist.com/tag/dan-wells/" rel="tag">Dan Wells</a>, <a href="https://newbietonovelist.com/tag/fantasy-novel-writing/" rel="tag">Fantasy novel writing</a>, <a href="https://newbietonovelist.com/tag/fiction-writing/" rel="tag">Fiction writing</a>, <a href="https://newbietonovelist.com/tag/jessica-brody/" rel="tag">Jessica Brody</a>, <a href="https://newbietonovelist.com/tag/novel-writing/" rel="tag">Novel Writing</a>, <a href="https://newbietonovelist.com/tag/outlining/" rel="tag">Outlining</a>, <a href="https://newbietonovelist.com/tag/plot-development/" rel="tag">Plot development</a>, <a href="https://newbietonovelist.com/tag/plot-structure/" rel="tag">Plot structure</a>, <a href="https://newbietonovelist.com/tag/plotting/" rel="tag">plotting</a>, <a href="https://newbietonovelist.com/tag/plotting-a-novel/" rel="tag">Plotting a novel</a>, <a href="https://newbietonovelist.com/tag/save-the-cat/" rel="tag">Save the cat</a>, <a href="https://newbietonovelist.com/tag/save-the-cat-beat-sheet/" rel="tag">Save the Cat Beat sheet</a>, <a href="https://newbietonovelist.com/tag/save-the-cat-fifteen-points/" rel="tag">Save the cat fifteen points</a>, <a href="https://newbietonovelist.com/tag/seven-point-story-structure/" rel="tag">seven point story structure</a>, <a href="https://newbietonovelist.com/tag/story-structure/" rel="tag">Story structure</a>, <a href="https://newbietonovelist.com/tag/writing-tips/" rel="tag">writing tips</a></span>		</div><!-- .meta-info -->
+			</header>
+
+	
+			<figure class="post-thumbnail">
+				<img width="1568" height="882" src="https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=1568" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" decoding="async" srcset="https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=1568 1568w, https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=150 150w, https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=300 300w, https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=768 768w, https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=1024 1024w, https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=1440 1440w, https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png 1920w" sizes="(max-width: 1568px) 100vw, 1568px" data-attachment-id="773" data-permalink="https://newbietonovelist.com/save-the-cat/" data-orig-file="https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png" data-orig-size="1920,1080" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="Save the Cat" data-image-description="" data-image-caption="" data-large-file="https://newbietonovelist.com/wp-content/uploads/2020/09/save-the-cat.png?w=750" />			</figure><!-- .post-thumbnail -->
+
+		
+	<div class="entry-content">
+		
+<h3 class="wp-block-heading">Understanding Story Structure</h3>
+
+
+
+<p class="wp-block-paragraph">I recently began outlining book two of the Uprising trilogy. And whenever my outlining process begins, I know I need to dust off my copy of <em><a href="https://www.jessicabrody.com/books/non-fiction/save-cat-writes-novel/about/">Save the Cat! Writes a Novel</a></em> by Jessica Brody. Despite the title of this post, and the fact that I use Save the Cat!, I&#8217;m not declaring it the winner. </p>
+
+
+
+<p class="has-text-align-center has-foreground-dark-color has-text-color has-medium-font-size wp-block-paragraph">There is no right or wrong way to do it.</p>
+
+
+
+<p class="wp-block-paragraph">I had previously mapped out my <a href="https://newbietonovelist.wordpress.com/2020/06/10/developing-a-writing-process/">writing process</a> of how I craft a novel from concept to creation. The Save the Cat! beat sheet is invaluable to me as a checklist to ensure I&#8217;m setting my story up for success.</p>
+
+
+
+<p class="wp-block-paragraph">Both of these approaches utilize a <strong><a rel="noreferrer noopener" href="https://newbietonovelist.com/2020/04/21/start-at-the-very-beginning/" target="_blank">three act structure</a></strong>. Please keep in mind that these are not the only two ways to plot a novel. While studying structure, I have found that both of these examples have very close similarities that I felt it warranted a side-by-side comparison. </p>
+
+
+
+<h4 class="wp-block-heading">Where is this cat and how do I save it?</h4>
+
+
+
+<p class="wp-block-paragraph">In case you aren’t familiar, Blake Snyder created <a href="https://savethecat.com/">The Save the Cat! Beat Sheet</a> as a template of the <strong>15 plot points</strong> that compose every great screenplay. Jessica Brody then came along and decided to take the same concept and adapt it to novel writing (because why fix what isn&#8217;t broken?).</p>
+
+
+
+<h5 class="wp-block-heading">Wait… Every good story needs a good hero!</h5>
+
+
+
+<p class="wp-block-paragraph">Before diving into the Save the Cat! Beat sheet, Jessica Brody encourages writers to take some time to <a href="https://newbietonovelist.com/2021/10/13/preptober-week-2-characters/" target="_blank" rel="noreferrer noopener">flesh out the hero of the story</a>.</p>
+
+
+
+<p class="wp-block-paragraph">The hero should have three things:</p>
+
+
+
+<p class="has-medium-font-size wp-block-paragraph">1. <strong>A Problem</strong>––The hero’s flaws</p>
+
+
+
+<p class="wp-block-paragraph">These are the aspects about them that will transform during the arc of a character’s development. They can be intrinsic flaws (a source of conflict from within the hero) or extrinsic flaws (a setback forced upon the hero).</p>
+
+
+
+<p class="has-medium-font-size wp-block-paragraph">2. <strong>A Want</strong>––The hero’s goals</p>
+
+
+
+<p class="wp-block-paragraph">This is the A story or the story’s premise. It is the exciting problem that the reader is hoping will be solved by the end of the story.</p>
+
+
+
+<p class="has-medium-font-size wp-block-paragraph">3. <strong>A Need</strong>––The lesson to be learned</p>
+
+
+
+<p class="wp-block-paragraph">This is the B-story, otherwise thought of as the moral of the story or what the story is really about.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Once the hero has these three things</strong>, the 15 beats will sketch a path for the hero to transform from who they were at the beginning to who they are at the end of the story (and it keeps that transformation engaging and meaningful to the reader).</p>
+
+
+
+<h4 class="wp-block-heading">Overview of the 15 Beats:</h4>
+
+
+
+<figure class="wp-block-image size-large is-resized"><img data-attachment-id="777" data-permalink="https://newbietonovelist.com/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example/" data-orig-file="https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png" data-orig-size="1056,816" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example" data-image-description="" data-image-caption="" data-large-file="https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=750" src="https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=1024" alt="" class="wp-image-777" width="546" height="421" srcset="https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=1024 1024w, https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=546 546w, https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=150 150w, https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=300 300w, https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png?w=768 768w, https://newbietonovelist.com/wp-content/uploads/2020/09/pubcvdktacnbprdb0ooq_save_the_cat_beat_sheet_example.png 1056w" sizes="(max-width: 546px) 100vw, 546px" /><figcaption class="wp-element-caption"><a href="https://www.savannahgilbo.com/blog/plotting-save-the-cat">Image Credit:</a></figcaption></figure>
+
+
+
+<ol class="wp-block-list" type="1">
+<li><strong>Opening Image</strong>–– That status of the character at the beginning of the story, this should oppose the final image.</li>
+
+
+
+<li><strong>Theme Stated</strong>––A subtle allusion to what the story is really about.</li>
+
+
+
+<li><strong>Set-Up</strong>–– Shows the hero living in their opening status, it illustrates their flaws in examples of their work, home, and social life.</li>
+
+
+
+<li><strong>Catalyst</strong>–– Often thought of as the <strong>inciting incident</strong>. It is a moment/event that disrupts how the hero lives in their world.</li>
+
+
+
+<li><strong>Debate</strong>–– The hero is resistant to the change that has to occur.</li>
+
+
+
+<li><strong>Break into Two</strong>––The hero can no longer fight it; it is now time to begin their journey of change. &nbsp;</li>
+
+
+
+<li><strong>B Story</strong>–– Introduces a helper character that will assist the hero in discovering the theme and eventually what they really need. &nbsp;</li>
+
+
+
+<li><strong>Fun and Games</strong>––The promise of the premise, this is all the <a href="https://newbietonovelist.com/2020/08/28/11-tension-creating-tropes/" target="_blank" rel="noreferrer noopener">tension-filled</a> action and adventure that the hero will encounter on their journey.  </li>
+
+
+
+<li><strong>Midpoint</strong>–– Either a false victory or a false failure. The A storyline and B storyline will co-mingle and the stakes will be raised.</li>
+
+
+
+<li><strong>Bad Guys Close In</strong>–– Similar to fun and games, it is how the hero will recover after the midpoint before reaching their lowest point.</li>
+
+
+
+<li><strong>All Is Lost</strong>–– The lowest point. &nbsp;</li>
+
+
+
+<li><strong>Dark Night of the Soul</strong>–– How a character reacts to their lowest point.</li>
+
+
+
+<li><strong>Break into Three</strong>–– The epiphany moment where the hero understands what they have to do to fix their problem.</li>
+
+
+
+<li><strong>Finale</strong>–– The hero puts their plan into action and leads to the climax.</li>
+
+
+
+<li><strong>Final Image</strong>–– The hero at the end of the story, should have changed significantly from who they were at the beginning of the story. &nbsp;</li>
+</ol>
+
+
+<div class="wp-block-image">
+<figure class="aligncenter size-large"><img data-attachment-id="776" data-permalink="https://newbietonovelist.com/to-save/" data-orig-file="https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png" data-orig-size="1920,1080" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="to-save" data-image-description="" data-image-caption="" data-large-file="https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=750" width="1024" height="576" src="https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=1024" alt="" class="wp-image-776" srcset="https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=1024 1024w, https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=150 150w, https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=300 300w, https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=768 768w, https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png?w=1440 1440w, https://newbietonovelist.com/wp-content/uploads/2020/09/to-save.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></figure>
+</div>
+
+
+<p class="wp-block-paragraph"></p>
+
+
+
+<h4 class="wp-block-heading">The Seven Point Story Structure</h4>
+
+
+
+<p class="wp-block-paragraph">This approach also follows a <strong>three-act structure</strong>, and if you find all fifteen beats intimidating, it breaks things down into fewer steps. </p>
+
+
+
+<p class="wp-block-paragraph">I had originally seen this approach attributed to writer Dan Wells and his original breakdown of this approach is on <a href="https://www.youtube.com/watch?v=KcmiqQ9NpPE&amp;list=PLC430F6A783A88697">YouTube videos</a>, filmed during a live writing conference. I highly recommend watching these videos or listening to him discuss this style of story structure on the <a href="https://writingexcuses.com/2012/10/07/writing-excuses-7-41-seven-point-story-structure/">Writing Excuses podcast</a>.  </p>
+
+
+
+<p class="wp-block-paragraph">I took the liberty of splicing the fifteen Save the Cat! beats into where I find they fit within the Seven Point Story Structure. </p>
+
+
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img data-attachment-id="781" data-permalink="https://newbietonovelist.com/image2/" data-orig-file="https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg" data-orig-size="620,253" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="image2" data-image-description="" data-image-caption="" data-large-file="https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg?w=620" loading="lazy" src="https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg?w=620" alt="" class="wp-image-781" width="522" height="213" srcset="https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg?w=522 522w, https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg?w=150 150w, https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg?w=300 300w, https://newbietonovelist.com/wp-content/uploads/2020/09/image2.jpg 620w" sizes="(max-width: 522px) 100vw, 522px" /><figcaption class="wp-element-caption"><a href="https://www.critiquecircle.com/blog.asp?blogID=280">Image Credit:</a></figcaption></figure>
+</div>
+
+
+<ol class="wp-block-list">
+<li><strong>Hook</strong> <em>(Opening Image/Theme Stated/Set up)</em>— Where the character starts at the beginning (should heavily oppose where they are at the end). &nbsp;</li>
+
+
+
+<li><strong>Plot turn 1</strong> <em>(Catalyst/Debate/ Break into 2)</em>— This will be an event that sets the story into motion. The main conflict is introduced and the hero embarks on their journey.</li>
+
+
+
+<li><strong>Pinch point 1</strong> <em>(B story/Fun &amp; Games)</em>— There is tension added and often the antagonist is introduced (or does something devious).</li>
+
+
+
+<li><strong>Midpoint</strong> <em>(Midpoint)</em>— Instead of<a href="https://newbietonovelist.com/2020/12/16/how-to-use-motivation-reaction-units-to-enhance-your-storytelling/" target="_blank" rel="noreferrer noopener"> being reactive</a>, the midpoint encourages the hero to become more active. Something must be done.</li>
+
+
+
+<li><strong>Pinch point 2</strong> <em>(Bad Guys Closing in/All is Lost/Dark Night of the Soul</em><strong>)</strong>— The stakes have never been higher. The character is at the darkest moment or has lost everything.</li>
+
+
+
+<li><strong>Plot turn 2 </strong><em>(Break into three)</em>— The main character starts to move toward the resolution. They now understand what they have to do to achieve what they set out to do.</li>
+
+
+
+<li><strong>Resolution</strong> <em>(Finale/Final image)</em>— The hero reaches the climax. They will either win or lose at this moment.</li>
+</ol>
+
+
+
+<h4 class="wp-block-heading">And the winner is&#8230;</h4>
+
+
+
+<p class="wp-block-paragraph">You! As I said at the very beginning, there&#8217;s no right or wrong way to do this. But by better understanding story structure, the easier it is to craft and organize your plot––no matter the stage you are in of your story. </p>
+
+
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img data-attachment-id="33" data-permalink="https://newbietonovelist.com/cropped-ntn-logo_icon-2-png/" data-orig-file="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png" data-orig-size="512,512" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="cropped-ntn-logo_icon-2.png" data-image-description="&lt;p&gt;https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png&lt;/p&gt;
+" data-image-caption="" data-large-file="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=512" loading="lazy" src="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=512" alt="" class="wp-image-33" width="184" height="184" srcset="https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=184 184w, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=368 368w, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=150 150w, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=300 300w" sizes="(max-width: 184px) 100vw, 184px" /></figure>
+</div>
+
+
+<p class="has-small-font-size wp-block-paragraph">If you liked this article, please leave your thoughts in the comments or follow my feed on this topic and more on my <a href="https://www.instagram.com/newbietonovelist/">Instagram feed</a>!</p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-twitter-772"
+				class="share-twitter sd-button share-icon"
+				href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/?share=twitter"
+				target="_blank"
+				aria-labelledby="sharing-twitter-772"
+				>
+				<span id="sharing-twitter-772" hidden>Share on X (Opens in new window)</span>
+				<span>X</span>
+			</a></li><li class="share-facebook"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-facebook-772"
+				class="share-facebook sd-button share-icon"
+				href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/?share=facebook"
+				target="_blank"
+				aria-labelledby="sharing-facebook-772"
+				>
+				<span id="sharing-facebook-772" hidden>Share on Facebook (Opens in new window)</span>
+				<span>Facebook</span>
+			</a></li><li class="share-end"></li></ul></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-176085296-772-6a005c8c33443' data-src='//widgets.wp.com/likes/index.html?ver=20260510#blog_id=176085296&amp;post_id=772&amp;origin=newbietonovelist.wordpress.com&amp;obj_id=176085296-772-6a005c8c33443&amp;domain=newbietonovelist.com' data-name='like-post-frame-176085296-772-6a005c8c33443' data-title='Like or Reblog'><div class='likes-widget-placeholder post-likes-widget-placeholder' style='height: 55px;'><span class='button'><span>Like</span></span> <span class='loading'>Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div></div>	</div><!-- .entry-content -->
+
+	<footer class="entry-footer responsive-max-width">
+		<span class="byline"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted by</span><span class="author vcard"><a class="url fn n" href="https://newbietonovelist.com/author/newbietonovelist/">L. P. Savage</a></span></span><span class="posted-on"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><path id="a" d="M0 0h24v24H0V0z"></path></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"></use></clipPath><path clip-path="url(#b)" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"></path></svg><a href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" rel="bookmark"><time class="entry-date published" datetime="2020-09-23T14:03:15-04:00">September 23, 2020</time><time class="updated" datetime="2023-05-29T10:45:56-04:00">May 29, 2023</time></a></span><span class="cat-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Posted in</span><a href="https://newbietonovelist.com/category/uncategorized/" rel="category tag">Uncategorized</a></span><span class="tags-links"><svg class="svg-icon" width="16" height="16" aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg><span class="screen-reader-text">Tags:</span><a href="https://newbietonovelist.com/tag/dan-wells/" rel="tag">Dan Wells</a>, <a href="https://newbietonovelist.com/tag/fantasy-novel-writing/" rel="tag">Fantasy novel writing</a>, <a href="https://newbietonovelist.com/tag/fiction-writing/" rel="tag">Fiction writing</a>, <a href="https://newbietonovelist.com/tag/jessica-brody/" rel="tag">Jessica Brody</a>, <a href="https://newbietonovelist.com/tag/novel-writing/" rel="tag">Novel Writing</a>, <a href="https://newbietonovelist.com/tag/outlining/" rel="tag">Outlining</a>, <a href="https://newbietonovelist.com/tag/plot-development/" rel="tag">Plot development</a>, <a href="https://newbietonovelist.com/tag/plot-structure/" rel="tag">Plot structure</a>, <a href="https://newbietonovelist.com/tag/plotting/" rel="tag">plotting</a>, <a href="https://newbietonovelist.com/tag/plotting-a-novel/" rel="tag">Plotting a novel</a>, <a href="https://newbietonovelist.com/tag/save-the-cat/" rel="tag">Save the cat</a>, <a href="https://newbietonovelist.com/tag/save-the-cat-beat-sheet/" rel="tag">Save the Cat Beat sheet</a>, <a href="https://newbietonovelist.com/tag/save-the-cat-fifteen-points/" rel="tag">Save the cat fifteen points</a>, <a href="https://newbietonovelist.com/tag/seven-point-story-structure/" rel="tag">seven point story structure</a>, <a href="https://newbietonovelist.com/tag/story-structure/" rel="tag">Story structure</a>, <a href="https://newbietonovelist.com/tag/writing-tips/" rel="tag">writing tips</a></span>	</footer><!-- .entry-footer -->
+
+				
+</article><!-- #post-${ID} -->
+
+	<nav class="navigation post-navigation" aria-label="Posts">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="https://newbietonovelist.com/2020/09/16/writing-show-and-tell/" rel="prev"><span class="meta-nav" aria-hidden="true">Previous Post</span> <span class="screen-reader-text">Previous post:</span> <br/><span class="post-title">Writing: Show and&nbsp;Tell</span></a></div><div class="nav-next"><a href="https://newbietonovelist.com/2020/09/29/free-downloadable-calendars-for-october-2020/" rel="next"><span class="meta-nav" aria-hidden="true">Next Post</span> <span class="screen-reader-text">Next post:</span> <br/><span class="post-title">Free, Downloadable Calendars for October&nbsp;2020</span></a></div></div>
+	</nav>
+<div id="comments" class="comments-area responsive-max-width">
+
+			<h2 class="comments-title">
+			2 thoughts on &ldquo;<span>Save the Cat! Fifteen Beats Vs. The Seven Point Story&nbsp;Structure</span>&rdquo;		</h2><!-- .comments-title -->
+
+		
+		<ol class="comment-list">
+					<li id="comment-31" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="https://newbietonovelist.wordpress.com/2020/10/07/killing-your-darlings/" class="url" rel="ugc external nofollow">Killing Your Darlings</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-45" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="https://newbietonovelist.com/2021/02/02/5-tips-for-writing-romantic-subplots/" class="url" rel="ugc">5 Tips for Writing Romantic Subplots</a> 			</div>
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://newbietonovelist.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+
+
+
+<div class="comment-form__verbum transparent"></div><div class="verbum-form-meta"><input type='hidden' name='comment_post_ID' value='772' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+
+			<input type="hidden" name="highlander_comment_nonce" id="highlander_comment_nonce" value="29565ae90c" />
+			<input type="hidden" name="verbum_show_subscription_modal" value="" /></div><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="f96b0097cd" /></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="232"/><script>
+document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );
+</script>
+</p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+		</main><!-- #main -->
+	</section><!-- #primary -->
+
+
+	</div><!-- #content -->
+
+	
+	<footer id="colophon" class="site-footer responsive-max-width">
+			
+	<aside class="widget-area responsive-max-width" role="complementary" aria-label="Footer">
+		<section id="top-posts-3" class="widget widget_top-posts"><h2 class="widget-title">Top Posts</h2><ul><li><a href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" class="bump-view" data-bump-view="tp" aria-current="page">Save the Cat! Fifteen Beats Vs. The Seven Point Story Structure</a></li><li><a href="https://newbietonovelist.com/2021/02/02/romancing-the-beat-overview-featuring-disneys-tangled/" class="bump-view" data-bump-view="tp">Romancing the Beat Overview: Featuring Disney&#039;s Tangled</a></li><li><a href="https://newbietonovelist.com/2022/08/16/word-choice-how-anglo-saxon-vs-latinate-origin-words-can-impact-your-writing/" class="bump-view" data-bump-view="tp">Word Choice – How Anglo-Saxon vs. Latinate origin words can impact your writing</a></li><li><a href="https://newbietonovelist.com/2022/10/02/11-most-common-world-building-mistakes-how-to-avoid-them/" class="bump-view" data-bump-view="tp">11 Most Common World-Building Mistakes &amp; How to Avoid Them</a></li><li><a href="https://newbietonovelist.com/2023/08/01/the-60-scene-method-to-plotting-a-novel/" class="bump-view" data-bump-view="tp">The 60-Scene Method to Plotting A Novel</a></li><li><a href="https://newbietonovelist.com/2023/06/06/tips-for-writing-a-mystery-novel/" class="bump-view" data-bump-view="tp">Tips For Writing a Mystery Novel</a></li><li><a href="https://newbietonovelist.com/2022/02/27/how-to-write-satisfying-enemies-to-lovers/" class="bump-view" data-bump-view="tp">How to Write Satisfying Enemies to Lovers</a></li><li><a href="https://newbietonovelist.com/2021/11/18/8-things-to-try-when-you-get-stuck-while-writing/" class="bump-view" data-bump-view="tp">8 Things to Try When You Get Stuck While Writing</a></li><li><a href="https://newbietonovelist.com/2021/02/18/creating-a-book-playlist-with-guest-author-mindy-mckinley/" class="bump-view" data-bump-view="tp">Creating A Book Playlist: with Guest Author Mindy McKinley</a></li><li><a href="https://newbietonovelist.com/2021/05/06/the-art-of-writing-badly/" class="bump-view" data-bump-view="tp">The Art of Writing Badly</a></li></ul></section>	</aside><!-- .widget-area -->
+
+
+	
+		<div class="site-info">
+		<a class="site-name" href="https://newbietonovelist.com/" rel="home">Newbie to Novelist</a><span class="comma">,</span>
+<a href="https://wordpress.com/?ref=footer_custom_svg" title="Create a website or blog at WordPress.com" rel="nofollow"><svg style="fill: currentColor; position: relative; top: 1px;" width="14px" height="15px" viewBox="0 0 14 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-labelledby="title" role="img">
+				<desc id="title">Create a website or blog at WordPress.com</desc>
+				<path d="M12.5225848,4.97949746 C13.0138466,5.87586309 13.2934037,6.90452431 13.2934037,7.99874074 C13.2934037,10.3205803 12.0351007,12.3476807 10.1640538,13.4385638 L12.0862862,7.88081544 C12.4453251,6.98296834 12.5648813,6.26504621 12.5648813,5.62667922 C12.5648813,5.39497674 12.549622,5.17994084 12.5225848,4.97949746 L12.5225848,4.97949746 Z M7.86730089,5.04801561 C8.24619178,5.02808979 8.58760099,4.98823815 8.58760099,4.98823815 C8.9267139,4.94809022 8.88671369,4.44972248 8.54745263,4.46957423 C8.54745263,4.46957423 7.52803983,4.54957381 6.86996227,4.54957381 C6.25158863,4.54957381 5.21247202,4.46957423 5.21247202,4.46957423 C4.87306282,4.44972248 4.83328483,4.96816418 5.17254589,4.98823815 C5.17254589,4.98823815 5.49358462,5.02808979 5.83269753,5.04801561 L6.81314716,7.73459399 L5.43565839,11.8651647 L3.14394256,5.04801561 C3.52312975,5.02808979 3.86416859,4.98823815 3.86416859,4.98823815 C4.20305928,4.94809022 4.16305906,4.44972248 3.82394616,4.46957423 C3.82394616,4.46957423 2.80475558,4.54957381 2.14660395,4.54957381 C2.02852925,4.54957381 1.88934333,4.54668493 1.74156477,4.54194422 C2.86690406,2.83350881 4.80113651,1.70529256 6.99996296,1.70529256 C8.638342,1.70529256 10.1302017,2.33173369 11.2498373,3.35765419 C11.222726,3.35602457 11.1962815,3.35261718 11.1683554,3.35261718 C10.5501299,3.35261718 10.1114609,3.89113285 10.1114609,4.46957423 C10.1114609,4.98823815 10.4107217,5.42705065 10.7296864,5.94564049 C10.969021,6.36482346 11.248578,6.90326506 11.248578,7.68133501 C11.248578,8.21992476 11.0413918,8.84503256 10.7696866,9.71584277 L10.1417574,11.8132391 L7.86730089,5.04801561 Z M6.99996296,14.2927074 C6.38218192,14.2927074 5.78595654,14.2021153 5.22195356,14.0362644 L7.11048207,8.54925635 L9.04486267,13.8491542 C9.05760348,13.8802652 9.07323319,13.9089317 9.08989995,13.9358945 C8.43574834,14.1661896 7.73285573,14.2927074 6.99996296,14.2927074 L6.99996296,14.2927074 Z M0.706448182,7.99874074 C0.706448182,7.08630113 0.902152921,6.22015756 1.25141403,5.43749503 L4.25357806,13.6627848 C2.15393732,12.6427902 0.706448182,10.4898387 0.706448182,7.99874074 L0.706448182,7.99874074 Z M6.99996296,0.999 C3.14016476,0.999 0,4.13905746 0,7.99874074 C0,11.8585722 3.14016476,14.999 6.99996296,14.999 C10.8596871,14.999 14,11.8585722 14,7.99874074 C14,4.13905746 10.8596871,0.999 6.99996296,0.999 L6.99996296,0.999 Z" id="wordpress-logo-simplified-cmyk" stroke="none" fill=“currentColor” fill-rule="evenodd"></path>
+			</svg></a>	</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+
+</div><!-- #page -->
+
+<!--  -->
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/files/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/pub/redhill/*","/wp-content/themes/pub/varia/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="grofiles-cards-js" src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202619d1133547e8a1f2801609f51cef12522abe7f6647d869e9fbc974fe356a37e613"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+//# sourceURL=wpgroho-js-extra
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile →': 'Edit your profile →',
+							'View profile →': 'View profile →',
+							'Contact': 'Contact',
+							'Send money': 'Send money',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Gravatar not found.': 'Gravatar not found.',
+							'Too Many Requests.': 'Too Many Requests.',
+							'Internal Server Error.': 'Internal Server Error.',
+							'Is this you?': 'Is this you?',
+							'Claim your free profile.': 'Claim your free profile.',
+							'Email': 'Email',
+							'Home Phone': 'Home Phone',
+							'Work Phone': 'Work Phone',
+							'Cell Phone': 'Cell Phone',
+							'Contact Form': 'Contact Form',
+							'Calendar': 'Calendar',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+		<div id="actionbar" dir="ltr" style="display: none;"
+			class="actnbr-pub-redhill actnbr-has-follow actnbr-has-actions">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-comment" href="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/#comments">
+							<svg class="gridicon gridicons-comment" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M12 16l-5 5v-5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2h-7z"/></g></svg>							<span>Comment						</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+						<a class="actnbr-action actnbr-actn-reblog" href="">
+							<svg class="gridicon gridicons-reblog" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M22.086 9.914L20 7.828V18c0 1.105-.895 2-2 2h-7v-2h7V7.828l-2.086 2.086L14.5 8.5 19 4l4.5 4.5-1.414 1.414zM6 16.172V6h7V4H6c-1.105 0-2 .895-2 2v10.172l-2.086-2.086L.5 15.5 5 20l4.5-4.5-1.414-1.414L6 16.172z"/></g></svg><span>Reblog</span>
+						</a>
+					</li>
+									<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="http://newbietonovelist.com">
+				<img loading='lazy' alt='' src='https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=50' srcset='https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=50 1x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=75 1.5x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=100 2x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=150 3x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=200 4x' class='avatar avatar-50' height='50' width='50' />				Newbie to Novelist			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 56 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="176085296" />
+										<input type="hidden" name="source" value="https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="e2e08d4939" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fnewbietonovelist.com%252F2020%252F09%252F23%252Fsave-the-cat-fifteen-beats-vs-the-seven-point-story-structure%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+								<li class="actnbr-sitename">
+			<a href="http://newbietonovelist.com">
+				<img loading='lazy' alt='' src='https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=50' srcset='https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=50 1x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=75 1.5x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=100 2x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=150 3x, https://newbietonovelist.com/wp-content/uploads/2020/04/cropped-ntn-logo_icon-2.png?w=200 4x' class='avatar avatar-50' height='50' width='50' />				Newbie to Novelist			</a>
+		</li>
+								<li class="actnbr-folded-follow">
+										<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+								</li>
+														<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+							<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fnewbietonovelist.com%252F2020%252F09%252F23%252Fsave-the-cat-fifteen-beats-vs-the-seven-point-story-structure%252F">Log in</a></li>
+																<li class="actnbr-shortlink">
+										<a href="https://wp.me/pbUPPq-cs">
+											<span class="actnbr-shortlink__text">Copy shortlink</span>
+											<span class="actnbr-shortlink__icon"><svg class="gridicon gridicons-checkmark" height="16" width="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M9 19.414l-6.707-6.707 1.414-1.414L9 16.586 20.293 5.293l1.414 1.414"/></g></svg></span>
+										</a>
+									</li>
+																<li class="flb-report">
+									<a href="https://wordpress.com/abuse/?report_url=https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/" target="_blank" rel="noopener noreferrer">
+										Report this content									</a>
+								</li>
+															<li class="actnbr-reader">
+									<a href="https://wordpress.com/reader/blogs/176085296/posts/772">
+										View post in Reader									</a>
+								</li>
+															<li class="actnbr-subs">
+									<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+								</li>
+																<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+														</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "DOMContentLoaded", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "/wp-content/mu-plugins/actionbar/actionbar.css?v=20250116";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "/wp-content/mu-plugins/actionbar/actionbar.js?v=20250204";
+	document.body.appendChild( script );
+} );
+</script>
+
+			<div id="jp-carousel-loading-overlay">
+			<div id="jp-carousel-loading-wrapper">
+				<span id="jp-carousel-library-loading"><svg class="jetpack-spinner" width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"/><path d="M 50 4 A 46 46 0 0 1 96 50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1.4s" from="0 50 50" to="360 50 50" repeatCount="indefinite"/></path></svg></span>
+			</div>
+		</div>
+		<div class="jp-carousel-overlay" style="display: none;">
+
+		<div class="jp-carousel-container">
+			<!-- The Carousel Swiper -->
+			<div
+				class="jp-carousel-wrap swiper jp-carousel-swiper-container jp-carousel-transitions"
+				itemscope
+				itemtype="https://schema.org/ImageGallery">
+				<div class="jp-carousel swiper-wrapper"></div>
+				<div class="jp-swiper-button-prev swiper-button-prev">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskPrev" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="9" height="12">
+							<path d="M16.2072 16.59L11.6496 12L16.2072 7.41L14.8041 6L8.8335 12L14.8041 18L16.2072 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskPrev)">
+							<rect x="0.579102" width="23.8823" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+				<div class="jp-swiper-button-next swiper-button-next">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskNext" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="8" height="12">
+							<path d="M8.59814 16.59L13.1557 12L8.59814 7.41L10.0012 6L15.9718 12L10.0012 18L8.59814 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskNext)">
+							<rect x="0.34375" width="23.8822" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<!-- The main close buton -->
+			<div class="jp-carousel-close-hint">
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<mask id="maskClose" mask-type="alpha" maskUnits="userSpaceOnUse" x="5" y="5" width="15" height="14">
+						<path d="M19.3166 6.41L17.9135 5L12.3509 10.59L6.78834 5L5.38525 6.41L10.9478 12L5.38525 17.59L6.78834 19L12.3509 13.41L17.9135 19L19.3166 17.59L13.754 12L19.3166 6.41Z" fill="white"/>
+					</mask>
+					<g mask="url(#maskClose)">
+						<rect x="0.409668" width="23.8823" height="24" fill="#FFFFFF"/>
+					</g>
+				</svg>
+			</div>
+			<!-- Image info, comments and meta -->
+			<div class="jp-carousel-info">
+				<div class="jp-carousel-info-footer">
+					<div class="jp-carousel-pagination-container">
+						<div class="jp-swiper-pagination swiper-pagination"></div>
+						<div class="jp-carousel-pagination"></div>
+					</div>
+					<div class="jp-carousel-photo-title-container">
+						<h2 class="jp-carousel-photo-caption"></h2>
+					</div>
+					<div class="jp-carousel-photo-icons-container">
+						<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-info" aria-label="Toggle photo metadata visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskInfo" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M12.7537 2C7.26076 2 2.80273 6.48 2.80273 12C2.80273 17.52 7.26076 22 12.7537 22C18.2466 22 22.7046 17.52 22.7046 12C22.7046 6.48 18.2466 2 12.7537 2ZM11.7586 7V9H13.7488V7H11.7586ZM11.7586 11V17H13.7488V11H11.7586ZM4.79292 12C4.79292 16.41 8.36531 20 12.7537 20C17.142 20 20.7144 16.41 20.7144 12C20.7144 7.59 17.142 4 12.7537 4C8.36531 4 4.79292 7.59 4.79292 12Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskInfo)">
+										<rect x="0.8125" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+							</span>
+						</a>
+												<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-comments" aria-label="Toggle photo comments visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskComments" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M4.3271 2H20.2486C21.3432 2 22.2388 2.9 22.2388 4V16C22.2388 17.1 21.3432 18 20.2486 18H6.31729L2.33691 22V4C2.33691 2.9 3.2325 2 4.3271 2ZM6.31729 16H20.2486V4H4.3271V18L6.31729 16Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskComments)">
+										<rect x="0.34668" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+
+								<span class="jp-carousel-has-comments-indicator" aria-label="This image has comments."></span>
+							</span>
+						</a>
+											</div>
+				</div>
+				<div class="jp-carousel-info-extra">
+					<div class="jp-carousel-info-content-wrapper">
+						<div class="jp-carousel-photo-title-container">
+							<h2 class="jp-carousel-photo-title"></h2>
+						</div>
+						<div class="jp-carousel-comments-wrapper">
+															<div id="jp-carousel-comments-loading">
+									<span>Loading Comments...</span>
+								</div>
+								<div class="jp-carousel-comments"></div>
+								<div id="jp-carousel-comment-form-container">
+									<span id="jp-carousel-comment-form-spinner"><svg class="jetpack-spinner" width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"/><path d="M 50 4 A 46 46 0 0 1 96 50" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1.4s" from="0 50 50" to="360 50 50" repeatCount="indefinite"/></path></svg></span>
+									<div id="jp-carousel-comment-post-results"></div>
+																														<form id="jp-carousel-comment-form">
+												<label for="jp-carousel-comment-form-comment-field" class="screen-reader-text">Write a Comment...</label>
+												<textarea
+													name="comment"
+													class="jp-carousel-comment-form-field jp-carousel-comment-form-textarea"
+													id="jp-carousel-comment-form-comment-field"
+													placeholder="Write a Comment..."
+												></textarea>
+												<div id="jp-carousel-comment-form-submit-and-info-wrapper">
+													<div id="jp-carousel-comment-form-commenting-as">
+																													<fieldset>
+																<label for="jp-carousel-comment-form-email-field">Email</label>
+																<input type="text" name="email" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-email-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-author-field">Name</label>
+																<input type="text" name="author" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-author-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-url-field">Website</label>
+																<input type="text" name="url" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-url-field" />
+															</fieldset>
+																											</div>
+													<input
+														type="submit"
+														name="submit"
+														class="jp-carousel-comment-form-button"
+														id="jp-carousel-comment-form-button-submit"
+														value="Post Comment" />
+												</div>
+											</form>
+																											</div>
+													</div>
+						<div class="jp-carousel-image-meta">
+							<div class="jp-carousel-title-and-caption">
+								<div class="jp-carousel-photo-info">
+									<h3 class="jp-carousel-caption" itemprop="caption description"></h3>
+								</div>
+
+								<div class="jp-carousel-photo-description"></div>
+							</div>
+							<ul class="jp-carousel-image-exif" style="display: none;"></ul>
+							<a class="jp-carousel-image-download" href="#" target="_blank" style="display: none;">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.84615 5V19H19.7775V12H21.7677V19C21.7677 20.1 20.8721 21 19.7775 21H5.84615C4.74159 21 3.85596 20.1 3.85596 19V5C3.85596 3.9 4.74159 3 5.84615 3H12.8118V5H5.84615ZM14.802 5V3H21.7677V10H19.7775V6.41L9.99569 16.24L8.59261 14.83L18.3744 5H14.802Z" fill="white"/>
+									</mask>
+									<g mask="url(#mask0)">
+										<rect x="0.870605" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+								<span class="jp-carousel-download-text"></span>
+							</a>
+							<div class="jp-carousel-image-map" style="display: none;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		</div>
+		
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https://newbietonovelist.com/2020/09/23/save-the-cat-fifteen-beats-vs-the-seven-point-story-structure/":772};
+	</script>
+					<script>
+	/(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
+	</script>
+	
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/wp-content/mu-plugins/likes/queuehandler.js?m=1741961244i'></script>
+<script id="wp-hooks-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/hooks/index.min.js?m=1778170586i&#038;ver=7496969728ca0f95732d"></script>
+<script id="wp-i18n-js" crossorigin='anonymous' src="https://s0.wp.com/wp-content/plugins/gutenberg-core/v23.1.0/build/scripts/i18n/index.min.js?m=1778170586i&#038;ver=125448662852c5e18937"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="verbum-settings-js-before">
+window.VerbumComments = {"Log in or provide your name and email to leave a reply.":"Log in or provide your name and email to leave a reply.","Log in or provide your name and email to leave a comment.":"Log in or provide your name and email to leave a comment.","Receive web and mobile notifications for posts on this site.":"Receive web and mobile notifications for posts on this site.","Name":"Name","Email (address never made public)":"Email (address never made public)","Website (optional)":"Website (optional)","Leave a reply. (log in optional)":"Leave a reply. (log in optional)","Leave a comment. (log in optional)":"Leave a comment. (log in optional)","Log in to leave a reply.":"Log in to leave a reply.","Log in to leave a comment.":"Log in to leave a comment.","Logged in via %s":"Logged in via %s","Log out":"Log out","Email":"Email","(Address never made public)":"(Address never made public)","Instantly":"Instantly","Daily":"Daily","Reply":"Reply","Comment":"Comment","WordPress":"WordPress","Weekly":"Weekly","Notify me of new posts":"Notify me of new posts","Email me new posts":"Email me new posts","Email me new comments":"Email me new comments","Cancel":"Cancel","Write a comment...":"Write a comment...","Write a reply...":"Write a reply...","Website":"Website","Optional":"Optional","We'll keep you in the loop!":"We'll keep you in the loop!","Loading your comment...":"Loading your comment...","Discover more from":"Discover more from Newbie to Novelist","Subscribe now to keep reading and get access to the full archive.":"Subscribe now to keep reading and get access to the full archive.","Continue reading":"Continue reading","Never miss a beat!":"Never miss a beat!","Interested in getting blog post updates? Simply click the button below to stay in the loop!":"Interested in getting blog post updates? Simply click the button below to stay in the loop!","Enter your email address":"Enter your email address","Subscribe":"Subscribe","Comment sent successfully":"Comment sent successfully","Save my name, email, and website in this browser for the next time I comment.":"Save my name, email, and website in this browser for the next time I comment.","hovercardi18n":{"Edit your profile \u2192":"Edit your profile \u2192","View profile \u2192":"View profile \u2192","Contact":"Contact","Send money":"Send money","Gravatar not found.":"Gravatar not found.","This profile is private.":"This profile is private.","Too Many Requests.":"Too Many Requests.","Internal Server Error.":"Internal Server Error.","Sorry, we are unable to load this Gravatar profile.":"Sorry, we are unable to load this Gravatar profile."},"siteId":176085296,"postId":772,"mustLogIn":false,"requireNameEmail":false,"commentRegistration":false,"connectURL":"https://newbietonovelist.wordpress.com/public.api/connect/?action=request\u0026domain=newbietonovelist.com","logoutURL":"https://newbietonovelist.wordpress.com/wp-login.php?action=logout\u0026_wpnonce=9959f1b468","homeURL":"https://newbietonovelist.com/","subscribeToBlog":true,"subscribeToComment":true,"isJetpackCommentsLoggedIn":false,"jetpackUsername":"","jetpackUserId":0,"jetpackSignature":"","jetpackAvatar":"https://0.gravatar.com/avatar/?s=96\u0026amp;d=identicon\u0026amp;r=G","enableBlocks":true,"enableSubscriptionModal":true,"currentLocale":"en","isJetpackComments":false,"allowedBlocks":["core/paragraph","core/list","core/code","core/list-item","core/quote","core/image","core/embed","core/quote","core/code"],"embedNonce":"97b07cb0c6","verbumBundleUrl":"/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/features/verbum-comments/dist/index.js","isRTL":false,"vbeCacheBuster":1771405207,"iframeUniqueId":0,"colorScheme":false}
+//# sourceURL=verbum-settings-js-before
+</script>
+<script data-wp-strategy="defer" defer id="verbum-dynamic-loader-js" src="/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/assets/dynamic-loader.js?m=1772522099i&#038;minify=false&#038;ver=8b5296f9195db92c42e4"></script>
+<script id="comment-like-js-extra">
+var comment_like_text = {"loading":"Loading...","swipeUrl":"https://s0.wp.com/wp-content/mu-plugins/comment-likes/js/lib/swipe.js?m=1382645497i&amp;ver=20131008"};
+//# sourceURL=comment-like-js-extra
+</script>
+<script id="coblocks-loader-js-extra">
+var wpcom_coblocks_js = {"coblocks_masonry_js":"https://s0.wp.com/wp-content/plugins/coblocks/2.18.1-simple-rev.4/dist/js/coblocks-masonry.min.js?m=1681832297i","coblocks_lightbox_js":"https://s0.wp.com/wp-content/plugins/coblocks/2.18.1-simple-rev.4/dist/js/coblocks-lightbox.min.js?m=1681832297i","jquery_core_js":"/wp-includes/js/jquery/jquery.min.js","jquery_migrate_js":"/wp-includes/js/jquery/jquery-migrate.min.js","masonry_js":"/wp-includes/js/masonry.min.js","imagesloaded_js":"/wp-includes/js/imagesloaded.min.js"};
+var coblocksLigthboxData = {"closeLabel":"Close Gallery","leftLabel":"Previous","rightLabel":"Next"};
+//# sourceURL=coblocks-loader-js-extra
+</script>
+<script id="jetpack-carousel-js-extra">
+var jetpackSwiperLibraryPath = {"url":"/wp-content/mu-plugins/jetpack-plugin/sun/_inc/blocks/swiper.js"};
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https://newbietonovelist.com/wp-admin/admin-ajax.php","nonce":"188131027d","display_exif":"1","display_comments":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","image_label":"Open image in full-screen.","download_original":"View full size \u003Cspan class=\"photo-size\"\u003E{0}\u003Cspan class=\"photo-size-times\"\u003E\u00d7\u003C/span\u003E{1}\u003C/span\u003E","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"0","login_url":"https://newbietonovelist.wordpress.com/wp-login.php?redirect_to=https%3A%2F%2Fnewbietonovelist.com%2F2020%2F09%2F23%2Fsave-the-cat-fifteen-beats-vs-the-seven-point-story-structure%2F","blog_id":"176085296","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"stats_query_args":"blog=176085296&v=wpcom&tz=-4&user_id=0&subd=newbietonovelist","is_public":"1"};
+//# sourceURL=jetpack-carousel-js-extra
+</script>
+<script id="sharing-js-js-extra">
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":"1"};
+//# sourceURL=sharing-js-js-extra
+</script>
+<script id="jetpack-script-data-js-before">
+window.JetpackScriptData = {"site":{"host":"wpcom","is_wpcom_platform":true}};
+//# sourceURL=jetpack-script-data-js-before
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='/_static/??-eJydUNluAjEM/KEmYUspvFT9FGQSQ72bS7ED4u+7Yg+2qGqrvtnjOTIxl6xsioJRTKgq+3qiyMamEHpIeeqQTfsA6JafzEJ4Vx18sh2bZ93sdKOYQvaoCp71i3HEMjgNJOUTOCw6UJz8KFpf3dfAgtlfl6RvXtuiZLCd6qFL7oXjwXCN021/xuhSMVAlBRAhO6uAGYXNoZJ3M8i2UBblQOAPwYu8fV9i9LJQUmX0M20CfqkDHXFAUWu9Guwm4FhuZPeDdooYPuJh/XcT/oCCDpy73kaKp7HCe3hrttvN667ZrJr2ExE/25s='></script>
+<script id="sharing-js-js-after">
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-twitter' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-twitter' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+						return false;
+					}
+				} );
+			} )();
+var windowOpen;
+			( function () {
+				function matches( el, sel ) {
+					return !! (
+						el.matches && el.matches( sel ) ||
+						el.msMatchesSelector && el.msMatchesSelector( sel )
+					);
+				}
+
+				document.body.addEventListener( 'click', function ( event ) {
+					if ( ! event.target ) {
+						return;
+					}
+
+					var el;
+					if ( matches( event.target, 'a.share-facebook' ) ) {
+						el = event.target;
+					} else if ( event.target.parentNode && matches( event.target.parentNode, 'a.share-facebook' ) ) {
+						el = event.target.parentNode;
+					}
+
+					if ( el ) {
+						event.preventDefault();
+
+						// If there's another sharing window open, close it.
+						if ( typeof windowOpen !== 'undefined' ) {
+							windowOpen.close();
+						}
+						windowOpen = window.open( el.getAttribute( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+						return false;
+					}
+				} );
+			} )();
+//# sourceURL=sharing-js-js-after
+</script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/72x72/","ext":".png","svgUrl":"https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/","svgExt":".svg","source":{"concatemoji":"/wp-includes/js/wp-emoji-release.min.js?m=1764078722i&ver=7.0-RC2-62280"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=/wp-includes/js/wp-emoji-loader.min.js
+</script>
+	<iframe src='https://widgets.wp.com/likes/master.html?ver=20260510#ver=20260510' scrolling='no' id='likes-master' name='likes-master' style='display:none;'></iframe>
+	<div id='likes-other-gravatars' role="dialog" aria-hidden="true" tabindex="-1"><div class="likes-text"><span>%d</span></div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+	<script src="//stats.wp.com/w.js?68" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'176085296','blog_tz':'-4','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+		// Prevent sending pageview tracking from WP-Admin pages.
+		_stq.push(['view', {'blog':'176085296','v':'wpcom','tz':'-4','user_id':'0','post':'772','subd':'newbietonovelist'}]);
+		_stq.push(['extra', {'crypt':'UE5tW3cvZGRhdy1reE9vRTJxZ3krVkdXUlpHaU9EZ01MVTRxcmkzUDItM1pkX244MW5mLmNUJkJ3eFplU0Z3dnU4ZEs/ejIldk1dZi98bFIvTWxvTk9WZ2MtUkhNWnQvZEk0WExkNENocnpsXW9fWFNtNXU3VytNOTUxdXosJWJpNXwvJls4OTN+bjYuPXRYJm1+SVhaOGxRQyxMQj9BNnNSPWdjSXVHfFcraGt3d1JVUnk9PVZ3eDNRK3YzTVpmaz9jNUlCRDArWV01a0VfTUJNTD0uS2pwT256MGcu'}]);
+_stq.push([ 'clickTrackerInit', '176085296', '772' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<meta id="bilmur" property="bilmur:data" content="" data-provider="wordpress.com" data-service="simple" data-site-tz="America/New_York" data-custom-props="{&quot;logged_in&quot;:&quot;0&quot;,&quot;wptheme&quot;:&quot;pub\/redhill&quot;,&quot;wptheme_is_block&quot;:&quot;0&quot;}"  >
+		<script defer src="/wp-content/js/bilmur.min.js?i=17&amp;m=202619"></script> 	
+<script>
+(function() {
+	'use strict';
+
+	const fetches = {};
+	const promises = {};
+	const urls = {
+		'wp-polyfill': '/wp-includes/js/dist/vendor/wp-polyfill.min.js?m=1775575011i&ver=3.15.0',
+		'verbum': '/wp-content/mu-plugins/jetpack-mu-wpcom-plugin/sun/jetpack_vendor/automattic/jetpack-mu-wpcom/src/build/verbum-comments/verbum-comments.js?m=1777406400i&minify=false&ver=daa565a7d230e522cf9c'
+	};
+	const loaders = {
+		'verbum': () => {
+			fetchExternalScript('wp-polyfill');
+			fetchExternalScript('verbum');
+			promises['wp-polyfill'] = promises['wp-polyfill'] || loadWPScript('wp-polyfill');
+			promises['verbum'] = promises['verbum'] || promises['wp-polyfill'].then( () => loadWPScript('verbum') );
+			return promises['verbum'];
+		},
+		
+	};
+	const scriptExtras = {
+		
+	};
+
+	window.WP_Enqueue_Dynamic_Script = {
+		loadScript: (handle) => {
+			if (!loaders[handle]) {
+				console.error('WP_Enqueue_Dynamic_Script: unregistered script `' + handle + '`.');
+			}
+			return loaders[handle]();
+		}
+	};
+
+	function fetchExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		fetches[handle] = fetches[handle] || fetch(urls[handle], { mode: 'no-cors' });
+		return fetches[handle];
+	}
+
+	function runExtraScript(handle, type, index) {
+		const id = 'wp-enqueue-dynamic-script:' + handle + ':' + type + ':' + (index + 1);
+		const template = document.getElementById(id);
+		if (!template) {
+			return Promise.reject();
+		}
+
+		const script = document.createElement( 'script' );
+		script.innerHTML = template.innerHTML;
+		document.body.appendChild( script );
+		return Promise.resolve();
+	}
+
+	function loadExternalScript(handle) {
+		if (!urls[handle]) {
+			return Promise.resolve();
+		}
+
+		return fetches[handle].then(() => {
+			return new Promise((resolve, reject) => {
+				const script = document.createElement('script');
+				script.onload = () => resolve();
+				script.onerror = (e) => reject(e);
+				script.src = urls[handle];
+				document.body.appendChild(script);
+			});
+		});
+	}
+
+	function loadExtra(handle, pos) {
+		const count = (scriptExtras[handle] && scriptExtras[handle][pos]) || 0;
+		let promise = Promise.resolve();
+
+		for (let i = 0; i < count; i++) {
+			promise = promise.then(() => runExtraScript(handle, pos, i));
+		}
+
+		return promise;
+	}
+
+	function loadWPScript(handle) {
+		// Core loads scripts in this order. See: https://github.com/WordPress/WordPress/blob/a59eb9d39c4fcba834b70c9e8dfd64feeec10ba6/wp-includes/class-wp-scripts.php#L428.
+		return loadExtra(handle, 'translations')
+			.then(() => loadExtra(handle, 'before'))
+			.then(() => loadExternalScript(handle))
+			.then(() => loadExtra(handle, 'after'));
+	}
+} )();
+</script>
+
+</body>
+</html>
+<!--
+	generated in 0.583 seconds
+	159066 bytes batcached for 300 seconds
+-->

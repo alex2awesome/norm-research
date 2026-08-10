@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_eead3f3ff934.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 6906,
+  "output_tokens": 2755,
+  "elapsed_s": 2188.964345292188,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on computational humor and text classification",
+    "subtask_short": "joke humor classification",
+    "subtask_description": "Designing, training, and evaluating models that predict whether a joke (from corpora such as Reddit, Short Jokes, or Pun of the Day) is humorous. Covers dataset construction/labeling, model choice (Transformer/BERT), training, baselines, and evaluation metrics.",
+    "subtask_keywords": [
+      "humor",
+      "classification",
+      "nlp",
+      "transformer",
+      "reddit",
+      "datasets"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Humor labeling cutoff (Reddit)",
+        "description": "Use Reddit upvote score distribution to label jokes as funny or not: the authors identified a major jump between the 0-200 upvote range and 200+ and used this natural divide as the cutoff.",
+        "guidance": "This cutoff produced 13,884 not-funny jokes and 2,025 funny jokes. The choice is data-driven (based on observed score distribution) but is audience-specific to Reddit r/Jokes and may not generalize to other sources."
+      },
+      {
+        "name": "Dataset variants (body, punchline, full)",
+        "description": "Create separate datasets for the body of the joke only, the punchline only, and a combined full (body + punchline) version.",
+        "guidance": "Run experiments on each variant to determine which part of a joke carries more predictive signal; the paper found models and humans relied more on the punchline for humor prediction."
+      },
+      {
+        "name": "Negative sample matching for Short Jokes",
+        "description": "When constructing non-joke (negative) samples for the Short Jokes dataset, extract sentences from a news crawl that match the jokes' word and character distribution.",
+        "guidance": "This matching avoids trivial distributional cues between positive and negative examples, making classification rely on content rather than length/format differences."
+      },
+      {
+        "name": "Train/validation/test split and stratification",
+        "description": "Split datasets into a 75/25 percent split, stratifying by labels.",
+        "guidance": "Stratification preserves class proportions across splits; authors then applied up/downsampling steps described for training and evaluation."
+      },
+      {
+        "name": "Handle class imbalance via upsampling (training)",
+        "description": "Upsample the minority (humorous) class in the training set until it reaches an even 50% share.",
+        "guidance": "This helps the model learn despite an uneven amount of non-humorous jokes. Use only on training; validation and test are handled separately to maintain evaluation integrity."
+      },
+      {
+        "name": "Balance validation/test via downsampling for interpretable accuracy",
+        "description": "Downsample validation and test sets into a 50/50 class split so that accuracy is balanced and easily understood.",
+        "guidance": "Balanced test sets ensure that accuracy isn\u2019t dominated by the majority class; consider reporting metrics beyond accuracy for unbalanced real-world distributions."
+      },
+      {
+        "name": "Model choice: pre-trained BERT Transformer",
+        "description": "Use pre-trained BERT (multi-layer bidirectional Transformer encoder) as the base model and fine-tune with an additional output layer for the humor classification task.",
+        "guidance": "Justified by BERT's ability to recognize and attend to important words in sentence/paragraph contexts; self-attention layers can extract crucial features for humor detection."
+      },
+      {
+        "name": "Training hyperparameters and procedure",
+        "description": "Selected hyperparameters include learning rate = 2e-05, max sequence length = 128, training up to 7 epochs, and creating checkpoints.",
+        "guidance": "These are the authors' chosen values; use checkpointing to select best model and monitor overfitting. Hyperparameters may need tuning per dataset."
+      },
+      {
+        "name": "Baselines for comparison",
+        "description": "Use previous strong models such as a CNN with Highway Layers (and variants like Word2Vec+HCF) and human performance as baselines.",
+        "guidance": "Including both model baselines and human performance allows assessment relative to past automated approaches and to human-level judgment (general population vs Reddit users)."
+      },
+      {
+        "name": "Human baseline methodology",
+        "description": "Collect human judgments via Mechanical Turk: 199 unique participants rated ~30 jokes each using prompts (context provided for body/punchline-only examples); use majority vote to compute human labels.",
+        "guidance": "Designing prompts that clarify context (e.g., 'Below is the punchline ...') yields comparable human labels; majority vote yields a consensus label for comparison against dataset labels and model predictions."
+      },
+      {
+        "name": "Evaluation metrics (Accuracy, Precision, Recall, F1)",
+        "description": "Report Accuracy, Precision, Recall, and F1 Score for model evaluation, matching metrics used in prior work (e.g., Chen and Soo 2018) for comparability.",
+        "guidance": "Report all four metrics, especially on balanced test splits; for imbalanced real-world data consider also reporting class-wise metrics, ROC/AUC, and calibration."
+      },
+      {
+        "name": "Transfer evaluation without fine-tuning",
+        "description": "Evaluate a model trained on one dataset (Reddit) directly on other humor identification datasets (Short Jokes, Puns) without additional fine-tuning to test transfer capability.",
+        "guidance": "This tests generalization of learned humor features across datasets; for datasets with balanced labels (Short Jokes, Puns) no up/downsampling was applied during evaluation."
+      },
+      {
+        "name": "Interpretation of body vs punchline contributions",
+        "description": "Compare model performance on body-only vs punchline-only datasets to infer which part of a joke carries more weight for humor.",
+        "guidance": "Authors observed higher reliance on punchline across models and humans; consider this when designing features or architectures that weigh punchline information more heavily."
+      },
+      {
+        "name": "Caveat: audience-specific humor and subjectivity",
+        "description": "Recognize that humor is subjective and that labels drawn from a specific community (Reddit r/Jokes) reflect that community's tastes; models may learn audience-specific humor.",
+        "guidance": "Interpret high accuracy as modeling a target audience's preferences rather than absolute truth; when deploying models consider the target audience and potential domain shifts."
+      },
+      {
+        "name": "Comparative reporting and significance",
+        "description": "Compare new method results to prior work (e.g., CNN variants) using the same metrics and datasets to demonstrate improvement.",
+        "guidance": "Present tables of Accuracy/Precision/Recall/F1 across methods and datasets; quantify improvements (e.g., Transformer achieved 0.931 F1 on Puns, 0.986 on Short Jokes) and discuss possible reasons (self-attention features)."
+      },
+      {
+        "name": "Open data/code for reproducibility",
+        "description": "Release code and datasets publicly to enable reproducibility and reuse.",
+        "guidance": "Authors made their code and datasets open source; releasing data and code is recommended for evaluation transparency and fair comparison."
+      }
+    ]
+  }
+}

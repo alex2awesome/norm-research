@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/77bb0c472b1f.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "77bb0c472b1f.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39934,
+  "model": "gpt-5-mini",
+  "elapsed_s": 35.52645545799896,
+  "input_tokens": 12004,
+  "output_tokens": 2998,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine learning researchers and dataset creators working on language-model-based mathematical problem solving",
+    "subtask_short": "evaluating math problem-solving models",
+    "subtask_description": "Standards and experimental practices for building and evaluating language models on the MATH benchmark and related pretraining corpus (AMPS), including dataset composition, formatting, prompting, human evaluation protocol, and observed model behaviors.",
+    "subtask_keywords": [
+      "math_benchmark",
+      "dataset",
+      "language_models",
+      "step_by_step_solutions",
+      "amps"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Include step-by-step answer explanations in dataset",
+        "description": "In addition to having answers, all MATH problems also include answer explanations, which models can learn from to generate their own step-by-step solutions.",
+        "guidance": "The dataset should contain full step-by-step solutions (not only final answers) so models can be trained/fine-tuned to produce multi-step reasoning. This is presented as a core feature of MATH and a rationale for its usefulness."
+      },
+      {
+        "name": "AMPS: diverse pretraining corpus covering K-12 mathematics",
+        "description": "AMPS is a diverse pretraining corpus that can enable future models to learn virtually all of K-12 mathematics.",
+        "guidance": "AMPS mixes examples from Khan Academy and algorithmically generated Mathematica modules; it contains several hundred exercise types/modules, formatted in LaTeX, and aims for broad K-12 coverage to support pretraining."
+      },
+      {
+        "name": "Problem curation and difficulty: competition-level and carefully curated",
+        "description": "MATH dataset is carefully curated by the competition mathematics community and contains competition-level problems that are difficult.",
+        "guidance": "Contrast with other datasets (which may be noisy or only final answers). Emphasize selection of challenging, high-quality problems rather than noisy scraped items."
+      },
+      {
+        "name": "Format graphical problems as asymptote code",
+        "description": "For graphical mathematical figures, express figures in asymptote code so text-based models can process graphical math problems.",
+        "guidance": "The dataset includes asymptote representations (Figure 7 example) enabling concise specification of visual mathematics problems without requiring multi-modal models."
+      },
+      {
+        "name": "Preserve LaTeX tokens in tokenization/processing",
+        "description": "AMPS is formatted in LaTeX; tokenizers that remove LaTeX symbols (e.g., T5 tokenizer) are problematic, so prefer tokenizers that preserve LaTeX (e.g., BART tokenizer).",
+        "guidance": "Choice of model/tokenizer should account for LaTeX preservation; BART's tokenizer does not remove LaTeX symbols, motivating its use in experiments."
+      },
+      {
+        "name": "Provide step-by-step solutions during training to improve performance",
+        "description": "Providing models with step-by-step during training can further improve performance; an ablation showed fine-tuning with only the final answer decreased GPT-2 (1.5B) accuracy by 0.6% (to 6.3%).",
+        "guidance": "Training examples should include full rationales/solutions rather than only final answers to help models learn to generate multi-step reasoning and improve final-answer accuracy."
+      },
+      {
+        "name": "Allowing models to see partial ground-truth solutions (hints) at inference",
+        "description": "Conditioning models on a portion of the ground-truth step-by-step solution during inference (hints) can improve accuracy; experiments used fractions of solution text from 0% to 99%.",
+        "guidance": "Prompting format used: '(Partial Step-by-Step Solution without Final Answer) Final Answer:'; even with 99% (all solution text except final answer) GPT-2 (0.7B) attained only ~40% accuracy, indicating room for improvement."
+      },
+      {
+        "name": "Do not rely on model-generated scratch space with current models",
+        "description": "Conditioning on model-generated scratch (letting the model generate intermediate 'scratch' steps and then answer) can hurt performance; for GPT-2 (1.5B) this decreased accuracy to 5.3%.",
+        "guidance": "Hypothesized 'snowballing effect': partially generated solutions with mistakes can derail subsequent generations. Until generation is more reliable, avoid relying on a model's own scratch generations for final answer prediction on this dataset."
+      },
+      {
+        "name": "Dataset provenance and cleaning standards",
+        "description": "AMPS is large and clean because questions are algorithmically generated; contrasts drawn to datasets (e.g., MathQA, AQuA-RAT) whose rationales are noisy, incomplete, or incorrect.",
+        "guidance": "Prefer algorithmic generation and careful curation to reduce noisy/inconsistent annotations; cleaning can reduce dataset size but improve quality (examples cited where cleaning halved dataset size)."
+      },
+      {
+        "name": "Coverage breadth: include topics omitted by other corpora",
+        "description": "AMPS covers many analytic functions and concepts (e.g., logarithms, geometry) that some prior corpora (e.g., DeepMind Mathematics) omit; AMPS has far more exercise types/modules.",
+        "guidance": "Design pretraining corpora to cover a wide range of mathematical topics and problem types rather than only parameter variations (e.g., coefficient ranges)."
+      },
+      {
+        "name": "Human evaluation protocol for dataset baselines",
+        "description": "Human evaluation used participants with strong mathematical background (university CS students), six participants total, one hour to solve twenty math problems without calculators; consent and (offered) remuneration noted.",
+        "guidance": "Human baselines for MATH should use participants with substantial math ability, controlled timing, and no calculators to approximate intended difficulty; note small sample limitations and that some participants were authors."
+      },
+      {
+        "name": "Difficulty correlates with problem and solution length",
+        "description": "Problems with long questions or long ground-truth solutions tend to be more difficult for models.",
+        "guidance": "Account for length (question length and solution length) when analyzing model performance across difficulty levels and subjects; visualize accuracy vs. length as diagnostic."
+      },
+      {
+        "name": "Experimental prompting format for partial-solution hints",
+        "description": "The exact prompt used when providing partial step-by-step solutions was '(Partial Step-by-Step Solution without Final Answer) Final Answer:' during both fine-tuning and evaluation.",
+        "guidance": "Use consistent prompt formatting across training and evaluation when testing the impact of partial-solution hints; vary fraction of solution text shown (e.g., 0%, 25%, 50%, 75%, 99%)."
+      },
+      {
+        "name": "Report model-architecture/tokenizer interactions and comparative baselines",
+        "description": "Evaluate multiple architectures and tokenizers (e.g., GPT-2 family, BART) because architecture/tokenizer choices affect ability to handle LaTeX and overall accuracy; BART-Large (0.4B) obtained 4.9% on MATH's test set.",
+        "guidance": "Include comparisons across architectures and document how tokenization and encoder/decoder structure interact with dataset formatting (LaTeX, asymptote), even if they do not markedly improve accuracy."
+      },
+      {
+        "name": "Legal compliance and licensing considerations for collected content",
+        "description": "AMPS uses Khan Academy content (MIT License) and Mathematica-generated outputs (calculator-like, not copyrighted); MATH problems are from MAA and the authors argue reuse for research is within law.",
+        "guidance": "Provide attribution when required (Khan Academy MIT license), verify status of source problem IP (MAA historically not enforcing problem IP), and document compliance rationale for dataset assembly and distribution."
+      }
+    ]
+  }
+}

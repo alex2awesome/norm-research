@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 81,
+  "n_chunks": 92,
+  "chunk_chars": 39970,
+  "model": "gpt-5-mini",
+  "elapsed_s": 517.0578660829997,
+  "input_tokens": 11293,
+  "output_tokens": 5204,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP library authors, package developers, and advanced GAP users implementing operations/methods/objects",
+    "subtask_short": "GAP method & constructor design",
+    "subtask_description": "Guidelines and rules for declaring/installing GAP operations, constructors, methods, immediate/early methods, logical implications, and for creating new objects and list/iterator representations in the GAP library. Focused on correct applicability, ranking, performance, and representation choices.",
+    "subtask_keywords": [
+      "gap",
+      "methods",
+      "constructors",
+      "package_development",
+      "object_creation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Constructor first-argument and result constraints",
+        "description": "For constructors the first argument must always be a filter. The result of a method is expected to lie in that filter. For method selection the argument filter must be a subset of the filter specified by the method being tested for match (i.e., the argument filter must imply the method filter).",
+        "guidance": "Method ranking for constructors differs: only the rank of the first argument is considered and the normal ranking order is reversed (ranks multiplied by -1), ensuring the \u201cmost general\u201d applicable constructor is selected. If no method guarantees a suitable object a \"No Method Found\" error is returned."
+      },
+      {
+        "name": "NewConstructor / DeclareConstructor requirements (args-filts semantics)",
+        "description": "NewConstructor(name, args-filts) / DeclareConstructor(name, filters): args-filts describes requirements about arguments: number of arguments must equal length(args-filts), the i-th argument must lie in args-filts[i] for i \u2260 1. The first argument is a filter and must be a subset of args-filts[1].",
+        "guidance": "Each method installed for the constructor via InstallMethod must require the i-th argument to lie in args-filts[i] (i \u2260 1); first argument is a filter and tested by subset relation. InstallOtherMethod may be used to install methods for different argument tuples or different arities."
+      },
+      {
+        "name": "InstallMethod: signature and restrictions",
+        "description": "InstallMethod(opr[, info][, famp], args-filts[, val], method) installs a function method method for operation opr. args-filts should be a list of filters describing requirements for arguments; info is an optional descriptive string, famp a families predicate, val an integer or function adjusting method rank.",
+        "guidance": "Default values: info = \"\"; famp = ReturnTrue; val = 0. It is not possible to use InstallMethod to install a method for which entries of args-filts do not imply the respective requirements of the operation opr; use InstallOtherMethod to override this restriction."
+      },
+      {
+        "name": "InstallOtherMethod: unrestricted method installation",
+        "description": "InstallOtherMethod(opr[, info][, famp], args-filts[, val], method) installs a method like InstallMethod but without the restriction that the number of arguments must match a declaration of opr and without requiring args-filts to imply opr's requirements.",
+        "guidance": "Use when you need methods for different arities or to override the operation's declared argument filters. Same semantics for info, famp, val as InstallMethod."
+      },
+      {
+        "name": "InstallEarlyMethod semantics and cautions",
+        "description": "InstallEarlyMethod(opr, method) installs an 'early' method that bypasses method dispatch and is always the first method called when invoking the operation (per arity). No argument checks are performed.",
+        "guidance": "Use very sparingly \u2014 early methods are a tool with sharp edges: inputs must be validated manually, early methods prevent interception by regular methods regardless of their rank, and an operation can have at most one early method per arity. If an early method is not applicable it can call TryNextMethod() to resume regular dispatch. Early methods are intended chiefly as optimizations for special cases."
+      },
+      {
+        "name": "InstallMethodWithRandomSource requirements",
+        "description": "InstallMethodWithRandomSource / InstallOtherMethodWithRandomSource are helpers for adding methods usable both with and without a random source. They accept the same arguments as InstallMethod/InstallOtherMethod with extra requirements.",
+        "guidance": "First member of args-filts must be IsRandomSource and info is compulsory and must begin 'for a random source and'. These helper functions install two methods: one expecting an explicit random source and a wrapper that supplies GlobalMersenneTwister as the first argument."
+      },
+      {
+        "name": "Applicability of methods (basic applicability rules)",
+        "description": "A method is applicable for an argument tuple iff: the number of arguments equals length(args-filts), the i-th argument lies in filter args-filts[i], and famp returns true on the families of the arguments. Max supported arguments for methods is six.",
+        "guidance": "For unary ops famp is ReturnTrue; for binary ops typical famp is IsIdenticalObj (both arguments in same family). Note: properties occurring among filters will not be tested by dispatch if they are not known; to enforce such tests use redispatching."
+      },
+      {
+        "name": "Method ranking and selection",
+        "description": "If multiple applicable methods exist the one with highest rank is selected. Rank is usually the sum of the ranks of the filters in args-filts, including involved filters.",
+        "guidance": "The optional val argument in InstallMethod modifies rank: if val is integer, add it; if val is a 0-arg function, add its return value at recalculation time; if val is [filters] or [filters, abs], ignore args-filts filters for rank and instead take sum of given filters plus abs (if provided). For constructors, special rank rules apply (see NewConstructor)."
+      },
+      {
+        "name": "Rank modification via val argument",
+        "description": "The val argument supplied to InstallMethod can change a method's priority relative to others in three ways: integer addend, function returning integer, or list [filters] or [filters, abs] to replace args-filts ranking basis.",
+        "guidance": "Using a function is useful when ranks are dynamic (can grow due to implications). Using [filters,abs] can mark certain required filters so they don't count toward rank. Be aware that ranks can change during a session as implications are added."
+      },
+      {
+        "name": "Preference assumption and efficiency criterion",
+        "description": "Method ranking is based on the assumption that a method installed for a special situation should be preferred to a method installed for a more general situation (more specific \u2192 higher priority).",
+        "guidance": "An efficient method is one that needs little time and storage. GAP cannot guarantee optimal choice in all cases (e.g., competing specializations that are incomparable); library authors should design filters/ranks to reflect expected efficiencies."
+      },
+      {
+        "name": "Partial methods and TryNextMethod behavior",
+        "description": "After a method has been selected and called, it may give up by calling TryNextMethod(), terminating its execution and causing dispatch to continue with the next applicable method (by decreasing rank).",
+        "guidance": "If a partial method modifies the type of its arguments (e.g., computes and stores an attribute), it should not exit via TryNextMethod(); instead it should call the operation again so newly available information can affect dispatch. Example: a method that inspects group size and then gives up must be careful if computing size changes object type."
+      },
+      {
+        "name": "RedispatchOnCondition for enforcing property tests",
+        "description": "RedispatchOnCondition(oper[, info], fampred, reqs, cond, val) installs a method under conditions fampred and reqs with absolute val; cond is a list of filters to be explicitly tested if their property values are not known.",
+        "guidance": "If the tests in cond pass and store the properties, the operation is dispatched again (and will then find methods requiring those properties); otherwise the method exits via TryNextMethod. Use this instead of installing methods under weaker conditions and explicitly testing (which lowers rank and makes code uglier). cond may have unbound entries to ignore some arguments for tests."
+      },
+      {
+        "name": "InstallImmediateMethod semantics and constraints",
+        "description": "InstallImmediateMethod(opr[, info], filter, rank, method) installs method as an immediate method for attribute or property opr: the method is called automatically as soon as an object lies in filter (if the value is not yet known).",
+        "guidance": "Immediate methods have an integer rank (default 0). They are also installed as ordinary methods for opr to ensure correctness if immediate methods are disabled. Immediate methods must be extremely cheap (\"zero cost methods\") and must not be used to force storing defining information in objects. If an immediate method exits via TryNextMethod, the setter is not run."
+      },
+      {
+        "name": "IsNoImmediateMethodsObject usage",
+        "description": "IsNoImmediateMethodsObject(obj) is a filter; if set on an object, immediate methods will be ignored for that object.",
+        "guidance": "Use this for performance-critical object types (e.g., many small objects or compressed representations) where immediate methods for IsTrivial etc. are inappropriate and expensive. Examples include pcgs, compressed vectors, and matrices over small finite fields."
+      },
+      {
+        "name": "InstallTrueMethod (logical implications between filters)",
+        "description": "InstallTrueMethod(newfil, filt) installs a logical implication that newfil is implied by filt by installing an immediate method for newfil that requires filt and always returns true.",
+        "guidance": "Logical implications cannot be switched off; install implications before creating types/objects so newly created types will include the implied filter. Adding implications can change filter ranks and thus method selection; use SuspendMethodReordering/ResumeMethodReordering to suspend/perform reordering during bulk implication installs."
+      },
+      {
+        "name": "Suspend/Resume/Reset method reordering control",
+        "description": "SuspendMethodReordering(), ResumeMethodReordering(), ResetMethodReordering() control whether InstallTrueMethod invokes the potentially expensive method reordering process when implications are added.",
+        "guidance": "Suspend reordering before mass-installation of implications (e.g., loading the library or a package), then Resume. Calls can be nested; Reset exits all nested suspensions and resumes reordering immediately (useful for error recovery)."
+      },
+      {
+        "name": "Guidance on ambiguous operations and mathematical terms",
+        "description": "Operations usually represent unique mathematical concepts; when the same term denotes different concepts (e.g., Degree for polynomials vs permutation actions), the GAP library prefers distinct operations/attributes (e.g., RankMat, RankAction) rather than overloading a single ambiguous operation.",
+        "guidance": "Use underlying mathematically precise operations/attributes for implementation and storage so stored information has full mathematical precision and is less likely to be misapplied. Ambiguous operations used for user convenience must avoid conflicts; ambiguous operations are declared centrally (lib/overload.g). Avoid introducing an operation that delegates to multiple meanings when types overlap and conflict can arise."
+      },
+      {
+        "name": "Objectify semantics for creating objects",
+        "description": "Objectify(type, data) turns a plain list or plain record data into an object with given type. If data is a list it becomes a positional object; if a record it becomes a component object. Objectify returns the created object.",
+        "guidance": "Data is changed in-place and will no longer be a plain list/record unless the type itself is list/record. Use Objectify to create new domain-specific objects (see examples in later sections)."
+      },
+      {
+        "name": "ObjectifyWithAttributes for efficient initialization",
+        "description": "ObjectifyWithAttributes(obj, type, attr1, val1, ...) turns obj (plain list/record) into an object of type and sets listed attributes immediately during creation to avoid repeated type changes.",
+        "guidance": "If type's filter list includes these attributes (and properties include values) and no special setter methods exist for the attributes, they are set simultaneously without type changes, producing substantial speedup. Otherwise it falls back to ordinary Objectify followed by setter calls."
+      },
+      {
+        "name": "Component object access and implementation cautions",
+        "description": "Component objects (IsComponentObjectRep) provide access via obj!.name and assignment via obj!.name := val. name must be among admissible component names for the representation (NewRepresentation).",
+        "guidance": "Prefer that only a few low-level functions use !.; avoid using !. in user interaction code. Even immutable objects allow !. access to store newly discovered information, but be very careful to keep stored information consistent with representation. NamesOfComponents(obj) returns list of component names currently bound."
+      },
+      {
+        "name": "Positional object access and implementation cautions",
+        "description": "Positional objects (IsPositionalObjectRep) provide access via obj ![pos] and assignment via obj ![pos] := val; pos must be an admissible position for the representation.",
+        "guidance": "Prefer few low-level functions use ![]; avoid using ![] in user interactions. Even immutable objects allow ![]/assignment for storing newly discovered information. When implementing iterators or other representations, choose positional or component representation consistently and provide the required iterator methods (IsDoneIterator, NextIterator)."
+      },
+      {
+        "name": "Implementing new list objects: minimal methods",
+        "description": "To implement new list-like objects (objects in category IsList), it suffices to provide methods for the basic list operations Length, [] (element access), and IsBound[] (check bound-ness).",
+        "guidance": "For mutable lists also implement []:= (assignment) and Unbind[]. All other list operations (Add, Append, Sum, etc.) are built on these primitives, so implementing them provides full list behavior."
+      }
+    ]
+  }
+}

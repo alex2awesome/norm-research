@@ -1,0 +1,178 @@
+1.  **Analyze the Request:**
+    *   **Input:** 60 abstracts of machine-learning conference paper submissions where a DENSE model and a SCORECARD model disagree the most (split between `dense_high_card_low` and `dense_low_card_high`).
+    *   **Task:** Propose exactly 15 NEW quality-relevant criteria (properties of an abstract that a careful reviewer would treat as evidence of research quality) to explain the disagreement.
+    *   **Constraints:**
+        *   Don't ask for the scorecard's bank; propose what actually matters.
+        *   Label-blind: no mention of acceptance, rejection, scores, etc. Judgeable from abstract text alone.
+        *   Scorable 0-10 by an independent judge (clear high/low ends).
+        *   Composite/interaction criteria allowed and encouraged.
+        *   Grounded in the slice: cite >= 2 row ids for each criterion.
+        *   Distinct criteria (no 15 variations of the same idea).
+    *   **Output Format:** Exactly one JSON object: `{"criteria": [{"id": "C01", "name": "...", "instruction": "...", "rationale": "..."}, ...]}`.
+
+2.  **Analyze the Data (Row by Row Analysis / Themes):**
+    *   *R01 (D-high, C-low):* ASR multilingual multi-task. Asks a specific question (separate highly conflicting objectives vs keep in one?), investigates 3 frameworks. Systematic investigation of alternatives.
+    *   *R02 (D-low, C-high):* Visual long-tailed recognition, IKL (Implicit Uncertainty Reg, Implicit Correlation Labeling). Lightweight, plug-and-play. Buzzwordy, vague claims ("great potential").
+    *   *R03 (D-low, C-high):* Node perturbation vs backprop. Relates NP to directional derivatives + decorrelation. Grandiose framing of BP ("dominant and most successful"), but NP improvements only "approach" BP. Theory-heavy, somewhat dense.
+    *   *R04 (D-low, C-high):* GCReinSL, combining SL and RL (stitching). Dense jargon ("Q-conditioned maximization supervised learning"). Wordy, potentially overcomplicating simple ideas.
+    *   *R05 (D-high, C-low):* Progressive distillation for diffusion models. Halves sampling steps to 4 steps, FID 3.0 on CIFAR-10. Very concrete numbers, clear algorithm, strong impact.
+    *   *R06 (D-high, C-low):* PaRa (Parameter Rank Reduction) for T2I personalization. Explicitly controls rank. 2x fewer learnable params. Clear mechanism, simple idea.
+    *   *R07 (D-high, C-low):* Bayesian meta-learning for 3D shape completion. "isolate object-specific properties from object-agnostic". Good formulation.
+    *   *R08 (D-low, C-high):* MONeT, memory bottleneck. "automatic framework that minimizes...". Reduces memory 3x, 9-16% overhead. Clear, but maybe lacks deep theoretical insight (engineering trick).
+    *   *R09 (D-high, C-low):* BGRL, graph representation learning without negative examples (Bootstrapped). Scalable by design, 2-10x memory reduction. Won KDD Cup 2021. Extremely strong empirical validation.
+    *   *R10 (D-low, C-high):* Weighted SGD (WSGD). "In this paper, we adopt distributionally robust optimization (DRO) *in hope* to achieve...". Vague phrasing ("in hope").
+    *   *R11 (D-low, C-high):* FlashSampling. Eliminates softmax. Up to 384% faster. Solid engineering, but maybe lacks theoretical depth or broad impact.
+    *   *R12 (D-low, C-high):* Reverse alignment for LLMs. Whistleblower paper. Slightly alarmist tone ("acts as a whistleblower").
+    *   *R13 (D-low, C-high):* Binder. Training-free neural-symbolic framework. Uses GPT-3 Codex. High reliance on proprietary model (Codex) for core functionality.
+    *   *R14 (D-low, C-high):* EEG BCI classifier. CRNN-TA, guided grad-CAM, shuffled-crossover. Bag of disconnected tricks. "good potential", "3% higher than winner".
+    *   *R15 (D-high, C-low):* Recall architecture for thinking systems (overthinking problem). Explicit copy of problem in memory, incremental training. Clear problem definition ("overthinking") and principled solution.
+    *   *R16 (D-high, C-low):* ContextRef, a benchmark for referenceless metrics. Assess robustness checks. Shows fine-tuning yields improvements. Strong empirical/evaluation contribution.
+    *   *R17 (D-low, C-high):* Semantic Field Subspace (SAFARI). Jargon-heavy ("Semantic Shifts", extends Weyl's Theorem). Unclear practical utility.
+    *   *R18 (D-low, C-high):* Semantic Membership Inference Attack (SMIA). Specific improvement (67.39% vs 58.90%). Narrow incremental improvement.
+    *   *R19 (D-high, C-low):* Models where parameters are natural language strings (instead of Gaussians). Highly novel concept, stepping away from standard representations. "Proof-of-concept applications".
+    *   *R20 (D-low, C-high):* PAR-AdvGAN for adversarial examples. Progressive Auto-Regression iteration. Incremental adversarial attack paper.
+    *   *R21 (D-high, C-low):* Multi-agent dual learning. New record on IWSLT 2014 De-En (35.44) and WMT 2018 En-De (49.61). Very strong empirical results (record-breaking).
+    *   *R22 (D-low, C-high):* CoPS (Cross-Task Experience Sharing). Provavel pessimism-based strategy. Dense abstract, maybe overselling ("bridges the gap").
+    *   *R23 (D-high, C-low):* HyperHuman, latent structural diffusion. Builds large-scale dataset HumanVerse (340M). High resource contribution.
+    *   *R24 (D-high, C-low):* Weakly supervised pretraining for knowledge injection. Explicit focus on real-world entities. Consistent improvements.
+    *   *R25 (D-high, C-low):* MultiBERTs, 25 checkpoints. Addresses statistical inference from a single checkpoint (reproducibility/methodology issue). Highly useful methodological contribution.
+    *   *R26 (D-high, C-low):* Test-Time Adaptation Image Compression (TTA-IC). Addresses mismatch in joint probability approximation. Theoretical rigor + practical fix (distribution regularization).
+    *   *R27 (D-low, C-high):* NTK alignment in GNNs. Pure theory, very dense. Translates alignment to graph shift operator. "Theoretical insights... validated by experiments".
+    *   *R28 (D-low, C-high):* Task-aware activation function search (TAFS) for GNNs. Bi-level stochastic optimization, Lipschitz regularization. Over-engineered solution for a small component (activation function).
+    *   *R29 (D-high, C-low):* ScImage, benchmark for scientific image generation. Novel task framing (scientific images). Evaluates spatial, numeric, attribute comprehension.
+    *   *R30 (D-high, C-low):* Metabench. Distills 6 benchmarks to < 3% of size. Identifies underlying common factor. Very practical, saves compute, rigorous stats.
+    *   *R31 (D-high, C-low):* LLaVA-Plus. Maintains skill repository, multimodal tools. End-to-end training approach. Systematizes tool use.
+    *   *R32 (D-high, C-low):* Non-stationary influence kernels for point processes. High expressiveness, theoretical performance guarantees. Bridges ML and classic stats.
+    *   *R33 (D-low, C-high):* UDA based on generative models. One-step EM + marginal constraint. "source data is locked away".
+    *   *R34 (D-low, C-high):* Momentum-based methods generalization error. Algorithmic stability framework. Pure theory paper on a well-trodden topic.
+    *   *R35 (D-low, C-high):* Diffusion models for anomaly detection (Diffusion Time Estimation). Simplifying DDPM. Orders of magnitude faster.
+    *   *R36 (D-low, C-high):* Pseudo-labeling for semantic segmentation. "simple and novel re-design". Vague phrasing.
+    *   *R37 (D-high, C-low):* Deep Schema Grounding (DSG). Visual abstractions. Uses schemas (dependency graphs). Introduces novel benchmark (Visual Abstractions).
+    *   *R38 (D-low, C-high):* LIME (benchmark curation). Less is more. Reduces samples by 76%. Evaluation paper.
+    *   *R39 (D-high, C-low):* JudgeLM. Fine-tuning LLMs as judges. Systematic analysis of biases (position, knowledge, format). High practical value.
+    *   *R40 (D-high, C-low):* Human similarity judgments. Language-based similarity approximation vs DNNs. Very rigorous, 206,339 human judgments.
+    *   *R41 (D-high, C-low):* CUBE-LLM. Extends MLLMs to 3D grounding. LV3D dataset. Pure data scaling makes 3D strong.
+    *   *R42 (D-high, C-low):* MasKD. Receptive token for distillation. Pixel-wise attention. Clean, principled method.
+    *   *R43 (D-low, C-high):* Pruning + Differential Privacy. Novel connection. "to the best of our knowledge, first work".
+    *   *R44 (D-high, C-low):* Dynamic Token Normalization (DTN) for ViTs. Intra-token and inter-token normalization. Unified formulation.
+    *   *R45 (D-low, C-high):* Subgoal-based demonstration learning for theorem proving. Combines subgoals with diffusion models for organization. Clunky combination of methods.
+    *   *R46 (D-low, C-high):* HIVEX. Environment suite for ecological challenges (Wind farm, wildfire, etc.). Toy scenarios. "we hope to advance".
+    *   *R47 (D-high, C-low):* COMM. CLIP + DINO multi-level merging. Clear empirical insight (shallow CLIP features + DINO works well).
+    *   *R48 (D-low, C-high):* Random Forest Bootstrap rate > 1. Re-examining an approach on 36 datasets. Narrow scope, simple finding.
+    *   *R49 (D-high, C-low):* FCM (Future Context Modeling). Masking past tokens in PaLM. "simple technique that significantly boosts...". Highly impactful, simple idea.
+    *   *R50 (D-low, C-high):* Flat Hilbert Bayesian Inference (FHBI). Adversarial functional perturbation in RKHS. Very dense, mathematical.
+    *   *R51 (D-high, C-low):* Soft Value Iteration Network (SVIN) for robot navigation (planetary rovers). Practical application, real data (Curiosity rover).
+    *   *R52 (D-high, C-low):* K-Adapter. Continual knowledge infusion. Prevents catastrophic forgetting. Clean plug-in architecture.
+    *   *R53 (D-high, C-low):* Lipreading. 3,886 hours dataset. Integrated system. Significantly beats human lipreaders.
+    *   *R54 (D-low, C-high):* Rarity score for generative models. Image-wise uncommonness.
+    *   *R55 (D-high, C-low):* Variational approach for continuous speech attributes (paralinguistics). Enhances speech tokens.
+    *   *R56 (D-low, C-high):* CerebroVoice (bilingual brain-to-speech dataset). sEEG recordings.
+    *   *R57 (D-high, C-low):* Parallel wave generation. Distills Gaussian IAF. Closed-form KL divergence. First text-to-wave architecture. Very solid.
+    *   *R58 (D-low, C-high):* Unifying LPA and GCN. Feature/label smoothing.
+    *   *R59 (D-low, C-high):* Dataset distillation. Examines cost surfaces.
+    *   *R60 (D-low, C-high):* Gridded pseudo-token TNPs for weather forecasting.
+
+3.  **Identify Patterns / Formulate Criteria:**
+    *   **Pattern 1 (Novelty of paradigm vs. incremental tweaking):**
+        *   Dense_high (R05, R19, R30, R49) introduces a genuinely new paradigm or radically reframes a problem (parameters as language strings, 4-step distillation, masking past tokens, distilling benchmarks). Scorecard might just see "yet another X" or "applies Y to Z" (e.g., R14, R11, R48).
+        *   *Criterion:* **Paradigm-Shifting Conceptual Framing**.
+    *   **Pattern 2 (Clear mechanistic cause-and-effect vs. opaque jargon):**
+        *   Dense_high (R06, R15, R26, R42) clearly explains *why* a method works (restricting rank limits generation space; explicit memory prevents forgetting; mismatch in distributions causes rate cost; attention mask finds pixels of interest).
+        *   Dense_low (R02, R04, R22, R50, R28) uses dense jargon and "black-box" combinations ("pessimism-based strategy", "adversarial functional perturbation in RKHS", "semantic field subspace").
+        *   *Criterion:* **Transparent Mechanistic Rationale**.
+    *   **Pattern 3 (Magnitude of empirical impact / concrete numbers):**
+        *   Dense_high (R05: "4 steps", "FID of 3.0"; R21: "35.44 BLEU", "49.61 BLEU"; R09: "2-10x reduction", "KDD Cup winner"; R53: "40.9% WER vs 86.4% human"). The dense model loves concrete, verifiable, massive empirical wins.
+        *   Dense_low (R14: "3% higher", R18: "AUC of 67.39% vs 58.90%", R43: "novel connection").
+        *   *Criterion:* **Concrete Magnitude of System Improvement**.
+    *   **Pattern 4 (Resource contribution - Datasets/Benchmarks):**
+        *   Dense_high (R23: HumanVerse 340M; R29: ScImage; R30: Metabench; R37: Visual Abstractions; R40: 206k judgments; R41: LV3D; R53: 3886h dataset). High dense score for releasing massive/valuable resources.
+        *   Dense_low (R46: HIVEX; R56: CerebroVoice). These are also resources, but maybe less rigorously benchmarked or too niche.
+        *   *Criterion:* **Scale and Rigor of Resource Contribution**.
+    *   **Pattern 5 (Identifying and targeting a specific failure mode / "The named problem"):**
+        *   Dense_high (R15: "overthinking" phenomenon; R24: knowledge capture; R26: "mismatch between refined Gaussian conditional"; R47: lack of analysis of visual encoders). They name a very specific, previously unrecognized problem and fix *that*.
+        *   Dense_low (R02: "uncertainty... bias"; R12: "vulnerable to jailbreak"; R36: "structured outputs... render particular difficulties"). Vague problem statements.
+        *   *Criterion:* **Specificity of Targeted Failure Mode**.
+    *   **Pattern 6 (Connecting two previously disparate fields/ideas elegantly):**
+        *   Dense_high (R19: NLP + statistical modeling; R32: point processes + non-stationary kernels; R52: knowledge + adapters; R07: Bayesian meta-learning + implicit 3D).
+        *   *Criterion:* **Elegant Cross-Disciplinary Synthesis**.
+    *   **Pattern 7 (Verification via real-world / out-of-distribution generalization):**
+        *   Dense_high (R09: orders of magnitude larger graph; R51: Curiosity rover; R53: held-out set, professional lipreaders). Goes beyond standard toy datasets.
+        *   Dense_low (R27: multivariate time series; R34: theoretical bound; R59: toy distillation).
+        *   *Criterion:* **High-Fidelity Real-World Validation**.
+    *   **Pattern 8 (Reproducibility / Methodological standardization):**
+        *   Dense_high (R25: MultiBERTs - 25 checkpoints, statistical rigor; R39: JudgeLM - addresses biases in judges; R30: sparse benchmark to replace bloated ones).
+        *   *Criterion:* **Methodological or Evaluative Standardization**.
+    *   **Pattern 9 (Over-reliance on complex architectures / "Bag of tricks"):**
+        *   Dense_low (R14: CRNN-TA, guided grad-CAM, shuffled-crossover, attention mechanism; R28: bi-level optimization, Lipschitz regularization for activation functions; R45: subgoals + diffusion models for organization). Cramming multiple trendy, complex components into one paper without clear theoretical unity.
+        *   *Criterion (Low end is bag of tricks):* **Architectural Parsimony and Cohesion**.
+    *   **Pattern 10 (Hedging vs. Confidence in claims):**
+        *   Dense_low (R02: "great potential", R10: "in hope to achieve", R46: "we hope to advance").
+        *   Dense_high (R05: "without losing much quality, achieving, for example, FID of 3.0"; R21: "set a new record").
+        *   *Criterion:* **Decisiveness of Central Claims**.
+    *   **Pattern 11 (Deep theoretical insight leading to practical simplification):**
+        *   Dense_high (R05: distillation -> 4 steps; R35 is dense_low, wait. R15: steady state; R57: closed-form KL divergence). Deriving a simple/fast method from math.
+        *   Dense_low (R08: automated checkpointing framework - just engineering).
+        *   *Criterion:* **Theory-Driven Algorithmic Simplification**.
+    *   **Pattern 12 (Addressing core scaling bottlenecks):**
+        *   Dense_high (R09: 2-10x memory reduction for large graphs; R05: eliminating sampling time; R11 is dense_low but addresses softmax compute... wait, R11 is dense_low. Why? Maybe R11's fix is just an engineering trick (partitioning + Gumbel), whereas R09 redesigns the objective).
+        *   *Criterion:* **Fundamental Bottleneck Resolution**.
+    *   **Pattern 13 (Unification of disparate frameworks):**
+        *   Dense_high (R44: unified formulation for normalization; R58 is dense_low... unifying LPA and GCN. Maybe R58 is just incremental). Let's look at R31: LLaVA-Plus unifying tools.
+        *   *Criterion:* **Principled Unification of Existing Paradigms**.
+    *   **Pattern 14 (Interpretability / Explainability actually driving the solution):**
+        *   Dense_high (R37: Deep Schema Grounding, explicit structured representations; R19: natural language parameters for explainability; R47: analyzing shallow vs deep features).
+        *   Dense_low (R02: "extract the knowledge hidden", vague).
+        *   *Criterion:* **Structural Transparency for Complex Reasoning**.
+    *   **Pattern 15 (Utility of the proposed benchmark/evaluation):**
+        *   Dense_high (R16: ContextRef with robustness checks; R30: Metabench reconstructs scores with 1.24% RMSE; R39: JudgeLM analyzes position/knowledge/format bias).
+        *   Dense_low (R38: LIME just filters uninformative samples; R54: Rarity score).
+        *   *Criterion:* **Diagnostic Depth of Evaluation Frameworks**.
+
+4.  **Refine and Format Criteria (Checking Constraints):**
+    *   Constraint Check: Exactly 15? Yes.
+    *   Constraint Check: 0-10 scorable? Yes, will specify what 10 and 0 look like.
+    *   Constraint Check: Ground in >=2 row ids? Yes.
+    *   Constraint Check: Distinct? Yes, need to ensure no overlap (e.g., between Impact, Bottleneck, and Parsimony).
+
+    *Let's review the 15 proposed criteria:*
+    1.  **Paradigm-Shifting Conceptual Framing**: Proposes a fundamentally new mental model rather than an incremental fix. (10 = radically reframes problem; 0 = standard incremental tweak). Grounding: R19, R49, R14 (neg), R11 (neg).
+    2.  **Transparent Mechanistic Rationale**: Clearly explains the *cause-and-effect* of why the proposed method works. (10 = explicit logical link between design choice and outcome; 0 = jargon-filled black box). Grounding: R06, R42, R17 (neg), R50 (neg).
+    3.  **Concrete Magnitude of Empirical Impact**: Quantifiable, decisive improvements over baselines. (10 = massive, concrete numerical wins (e.g., 10x faster, 35% better); 0 = vague "comparable" or tiny 1-2% gains without context). Grounding: R05, R21, R18 (neg), R48 (neg).
+    4.  **Scale and Rigor of Resource Contribution**: Release of massive datasets, robust benchmarks, or standardized checkpoints. (10 = highly valuable, rigorously evaluated large-scale resource; 0 = small, niche, or toy dataset). Grounding: R23, R25, R46 (neg), R56 (neg).
+    5.  **Specificity of Targeted Failure Mode**: Identifies and names a highly specific, previously unrecognized failure mode. (10 = names a precise problem and solves exactly that; 0 = targets a broad, generic issue like "bias" or "uncertainty"). Grounding: R15, R26, R02 (neg), R12 (neg).
+    6.  **Architectural Parsimony and Cohesion**: Avoids a "bag of tricks" approach; uses minimal, elegant components. (10 = achieves results with simple, unifying mechanism; 0 = crams multiple disconnected trendy components like "CRNN + attention + augmentation + grad-CAM"). Grounding: R49, R44, R14 (neg), R45 (neg).
+    7.  **Decisiveness of Central Claims**: Avoids hedging language; confident claims based on evidence. (10 = absolute, well-supported claims; 0 = uses phrases like "in hope to achieve", "great potential"). Grounding: R30, R53, R10 (neg), R46 (neg).
+    8.  **High-Fidelity Real-World Validation**: Tested on out-of-distribution, real-world data or systems, not just standard toy datasets. (10 = deployed in or validated on messy real-world environments (e.g., Mars rover, KDD cup massive graph); 0 = only synthetic or standard CIFAR/ImageNet benchmarks). Grounding: R51, R09, R27 (neg), R60 (neg).
+    9.  **Methodological or Evaluative Standardization**: Solves a meta-problem in research (e.g., reproducibility, benchmark redundancy, evaluator bias). (10 = introduces a standard that changes how the community evaluates; 0 = evaluates using standard ad-hoc methods). Grounding: R25, R39, R36 (neg), R38 (neg).
+    10. **Theory-Driven Algorithmic Simplification**: Uses deep mathematical/theoretical insight to make a complex algorithm simpler or faster, without loss of quality. (10 = derives a closed-form or simplified version from theory; 0 = engineering heuristics or brute-force search). Grounding: R57, R05, R08 (neg), R11 (neg).
+    11. **Principled Unification of Existing Paradigms**: Merges two historically separate concepts or architectures into a single cohesive framework. (10 = seamless, theoretically grounded unification; 0 = shallow combination). Grounding: R31, R44, R04 (neg), R58 (neg).
+    12. **Diagnostic Depth of Evaluation Frameworks**: For benchmark/eval papers, does it uncover *why* models fail or provide robustness checks? (10 = provides deep diagnostic insights (e.g., context dependence, specific biases); 0 = just provides a new metric or leaderboard). Grounding: R16, R30, R54 (neg), R38 (neg).
+    13. **Structural Transparency for Complex Reasoning**: Explicitly uses structured representations (graphs, code, schemas) to solve complex reasoning tasks. (10 = maps problem to explicit, interpretable structure; 0 = relies purely on end-to-end black-box neural fields). Grounding: R37, R19, R02 (neg), R20 (neg).
+    14. **Identification of Scaling Limitations**: Focuses on the fundamental limits of current models as they grow, and addresses those limits. (10 = targets memory/compute bottlenecks that block the next order of magnitude; 0 = ignores scaling, focuses on small-scale accuracy). Grounding: R09, R53, R48 (neg), R28 (neg).
+    15. **Generalizability of the Proposed Technique**: Can the method be applied broadly across tasks without re-engineering? (10 = clearly demonstrated as a plug-and-play across diverse domains; 0 = heavily tailored to one specific dataset/task). Grounding: R52, R42, R43 (neg), R14 (neg).
+
+5.  **Review against constraints and refine phrasing:**
+    *   Make sure instructions are highly actionable for a 0-10 judge.
+    *   Ensure JSON is perfectly valid (no trailing commas, correct quotes).
+    *   Verify exactly 2 row IDs cited per rationale.
+    *   Check label-blindness: no acceptance/rejection mentions.
+    *   Ensure names are <= 12 words.
+
+    *Self-Correction during drafting:*
+    *   C04: Scale and Rigor of Resource Contribution. Needs to be clear that a 10 means massive/high-quality, 0 means toy/niche. Grounded in R23, R25 (pos) and R46, R56 (neg).
+    *   C05: Specificity of Targeted Failure Mode. R15 "overthinking", R26 "mismatch". Neg: R02 "uncertainty", R12 "jailbreak".
+    *   C12: Diagnostic Depth of Evaluation Frameworks. Pos: R16 "robustness checks", R30 "underlying common factor". Neg: R38 "filters uninformative", R54 "uncommonness".
+    *   C13: Structural Transparency. Pos: R37 "schemas", R19 "language strings". Neg: R02 "implicit knowledge", R20 "AdvGAN".
+    *   C14: Identification of Scaling Limitations. Pos: R09 "orders of magnitude larger", R53 "3886 hours". Neg: R48 "36 datasets", R28 "activation functions". (R48 is just dataset property, not scaling limit; R28 is tiny detail).
+
+6.  **Final Polish of the JSON:**
+    *   Escape characters properly if needed (none needed, pure text).
+    *   Count criteria: 15.
+    *   Format strictly as requested: `{"criteria": [{"id": "C01", "name": "...", "instruction": "...", "rationale": "..."}, ...]}`.
+
+    *(Self-Correction during final output generation)*: Ensure all rationale strings explicitly mention the row IDs and why they fit the dense_high / dense_low dynamic. Emphasize the `dense_high_card_low` vs `dense_low_card_high` split.
+
+    *Let's double check row IDs.*
+    R02 (D-low), R05 (D-high), R06 (D-high), R09 (D-high), R10 (D-low), R11 (D-low), R12 (D-low), R14 (D-low), R15 (D-high), R16 (D-high), R17 (D-low), R19 (D-high), R20 (D-low), R21 (D-high), R23 (D-high), R25 (D-high), R26 (D-high), R27 (D-low), R28 (D-low), R30 (D-high), R31 (D-high), R36 (D-low), R37 (D-high), R38 (D-low), R39 (D-high), R42 (D-high), R44 (D-high), R45 (D-low), R46 (D-low), R48 (D-low), R49 (D-high), R50 (D-low), R51 (D-high), R52 (D-high), R53 (D-high), R54 (D-low), R56 (D-low), R57 (D-high), R58 (D-low).
+
+    Everything looks solid. Ready to produce output.

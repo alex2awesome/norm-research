@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_449fd011eeb3.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 14865,
+  "output_tokens": 4756,
+  "elapsed_s": 1431.8163326659705,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners working on misinformation/exaggeration detection, claim-strength classification, and scientific press-release analysis",
+    "subtask_short": "exaggeration detection in press releases",
+    "subtask_description": "Detect whether a press release (or news article) exaggerates, downplays, or accurately reports the main finding of a paired scientific abstract/paper, using paired data and semi-supervised/few-shot learning techniques.",
+    "subtask_keywords": [
+      "press_release",
+      "exaggeration_detection",
+      "claim_strength",
+      "health_science",
+      "few_shot_nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Exaggeration label space (pair-level)",
+        "description": "The goal is to predict a label l \u2208 {0, 1, 2} for a given document pair (t, s), where 0 implies the target document undersells the source document, 1 implies the target document accurately reflects the source document, and 2 implies the target document exaggerates the source document.",
+        "guidance": "This is the primary prediction target for the paired (press release, abstract) task (T1). The paper uses this tripartite label for evaluation on paired conclusion sentences."
+      },
+      {
+        "name": "Task formulation T1: direct paired inference",
+        "description": "T1 is an inference task consisting of labeled document pairs used to learn to predict l directly from both press release (t) and source abstract (s).",
+        "guidance": "Training data is of the form (t, s, l). Models consume both the press release sentence and the abstract sentence for final prediction. Used to evaluate pair-level exaggeration directly."
+      },
+      {
+        "name": "Task formulation T2: claim-strength classification then comparison",
+        "description": "T2 is a classification task where classifiers are trained to predict claim strength l of sentences from source and target domains separately (no paired documents required at train time). At test time, predicted claim strengths for the pair (t, s) are compared to derive the final exaggeration label.",
+        "guidance": "This formulation trains on sentences (d \u2208 D) labeled with claim strength and then compares predicted strengths (l_t vs l_s) to derive whether the press release exaggerates, downplays, or matches the abstract. Previous work used this to estimate prevalence; authors evaluate it on paired labelled instances here."
+      },
+      {
+        "name": "Focus on main finding / conclusion sentence",
+        "description": "Simplify the problem by focusing on detecting when the main finding (primary conclusion) of a paper is exaggerated in the press release; identify the main finding sentence in the abstract and the sentence in the press release describing it.",
+        "guidance": "All labeled training and test data are assumed to have main-finding sentences already identified; semi-supervised pipeline includes a conclusion-detection step to find these sentences in unlabeled data. Evaluation is at sentence level (conclusion sentence pairs)."
+      },
+      {
+        "name": "Conclusion sentence identification procedure",
+        "description": "For unlabeled data, train a conclusion-detection classifier (single-task PET) to pick the main conclusion sentence from full-text press releases and abstracts, choosing the sentence with the maximum score sp(1|x).",
+        "guidance": "Patterns and verbalizers for conclusion detection are provided (patterns P0..P5 and verbalizers for 0/1). Implementation details: sentence-tokenize abstracts using SciSpaCy and select candidate sentences; for gold data, map provided paraphrases to the best-matching sentence using ROUGE and manually fix mismatches."
+      },
+      {
+        "name": "Claim strength labeling scheme (origin & mapping)",
+        "description": "Use claim-strength labels from Sumner et al. (2014) / Bratton et al. (2019) mapped to the labels from Li et al. (2017). The Li et al. labels used include: 0 = statement of no relationship, 1 = statement of correlation, 2 = conditional statement of causation, 3 = statement of causation.",
+        "guidance": "Sumner et al.'s original multi-level labels (e.g., 'No relationship mentioned', 'Statements of correlation', 'Conditional causation', 'Statement of causation') are mapped into Li et al.'s 4-level scheme for consistency. Verbalizer choices later reflect these strength categories (e.g., 'estimated' for correlational, 'cautious' for conditional causal, 'proven' for causal)."
+      },
+      {
+        "name": "Deriving pair-level exaggeration label from claim strengths",
+        "description": "Define final exaggeration label le from press-release claim strength l_\u03c1 and abstract claim strength l_\u03b3 as: le = 0 if l_\u03c1 < l_\u03b3 (undersells), le = 1 if l_\u03c1 = l_\u03b3 (same/accurate), le = 2 if l_\u03c1 > l_\u03b3 (exaggerates).",
+        "guidance": "This is the rule used when using T2 (strength-classification) to derive the paired exaggeration label at test time. The paper emphasizes that only the direction of change matters (press > abstract \u2192 exaggerates)."
+      },
+      {
+        "name": "Paired-data requirement and pairing method",
+        "description": "Benchmark data must consist of paired press release and abstract tuples where the press release is written about the paired scientific paper; pairing is performed by matching press releases with paper DOIs and querying Semantic Scholar for the abstract.",
+        "guidance": "When collecting unlabeled data, discard press releases without DOIs. For gold data, the authors used Sumner et al. and Bratton et al. expert annotations and automatically collected missing abstracts via the Semantic Scholar API, with manual inspection to ensure correctness."
+      },
+      {
+        "name": "Unlabeled data constraints & selection",
+        "description": "Unlabeled press release / abstract pairs must include a DOI to enable reliable pairing; press release content used is restricted to title, lead sentence, and first three sentences.",
+        "guidance": "Authors crawled ScienceDaily (via Wayback Machine) between 2016-01-01 and 2020-01-01, discarded posts lacking DOIs, and paired remaining press releases with abstracts via Semantic Scholar, yielding 7,741 unlabeled pairs. Restricting PR content to leading content follows journalistic 'inverted pyramid' assumption that main conclusion appears early."
+      },
+      {
+        "name": "Gold dataset construction and quality control",
+        "description": "Use expert-annotated datasets (Sumner et al., 2014; Bratton et al., 2019) as the gold test set; automatically retrieve missing abstracts and perform manual inspection, discarding missing/incorrect abstracts and manually fixing sentence alignments that do not correspond to a single sentence.",
+        "guidance": "Initial original data had 823 pairs; after collection and cleaning, authors obtained 663 press release/abstract pairs labeled for claim strength and exaggeration. They sample 100 instances as training for few-shot (T1) leaving 553 for testing. Gold press-release sentences were gathered directly from provided press releases."
+      },
+      {
+        "name": "Sentence matching for gold conclusions (ROUGE-based)",
+        "description": "Map provided paraphrase-of-conclusion to a concrete sentence in the abstract by sentence-tokenizing (SciSpaCy) and finding the best matching sentence using ROUGE score; manually fix cases where the best match does not correspond to a single sentence.",
+        "guidance": "This procedure is used to obtain gold conclusion sentences from abstracts when only paraphrases were provided in the original annotations."
+      },
+      {
+        "name": "Evaluation metric and reporting protocol",
+        "description": "Use macro-F1 as the primary evaluation metric, computed via sklearn's precision_recall_fscore_support implementation; report average performance over 5 random seeds.",
+        "guidance": "Macro-F1 is used to account for class imbalance across the three exaggeration classes. The paper also reports precision and recall in tables, and computes per-class and aggregate metrics as needed."
+      },
+      {
+        "name": "Training data and few-shot protocol",
+        "description": "Few-shot setup: for T1 use 100 expert-annotated paired instances (200 sentences total) as training; for T2 use 200 claim-strength sentences (100 from press, 100 from abstracts) for few-shot experiments. Full-data experiments use larger stratified samples (e.g., 4,500 instances for T2).",
+        "guidance": "Authors report results for combinations of |T2| and |T1| (e.g., 200,0 or 200,100) and compare supervised, PET, and MT-PET under these data regimes."
+      },
+      {
+        "name": "Pattern-Verbalizer Pair (PVP) selection & verbalizer discovery",
+        "description": "Define PVPs (patterns + verbalizers) for both main and auxiliary tasks; use PETAL to automatically find candidate verbalizers then manually filter and iterate until satisfactory patterns and verbalizers are found.",
+        "guidance": "Ensure PVPs between T1 and T2 are roughly equivalent. Verbalizers capture label meanings (examples: 'mistaken', 'wrong', 'preliminary', 'proven'). The paper lists concrete patterns (Table 1, Table 3) and verbalizers (Table 2, Table 4) used for tasks."
+      },
+      {
+        "name": "MT-PET multi-task semi-supervised training design",
+        "description": "Extend PET by training pattern-verbalizer pairs from both a main task and one or more auxiliary tasks simultaneously, using complementary cloze-style QA tasks during training to leverage related data when main-task data is limited.",
+        "guidance": "Mechanics: for each model in the ensemble, randomly select a task (main or auxiliary) per batch, use a hyperparameter \u03b1_c to weight loss per task, train multiple models (one per PVP tuple), combine model logits on unlabeled data via a weighted average (weights = model accuracy on train set), then distill into a final classifier via KL-divergence on soft labels."
+      },
+      {
+        "name": "Weighting, ensembling and distillation scheme",
+        "description": "Compute final soft labels for unlabeled samples as a weighted combination of ensemble model scores, where model weights w_i are the accuracy of each model on the main task train set; then train a final classifier using KL-divergence between model predictions and these soft labels.",
+        "guidance": "Loss for each model is cross-entropy on the selected task normalized over verbalizer scores and weighted by \u03b1_c. Distillation hyperparameters include temperature and KL loss settings (paper gives specifics in reproducibility section)."
+      },
+      {
+        "name": "Class imbalance handling in training",
+        "description": "Weigh the cross-entropy loss during supervised and distillation training according to the label distribution to counteract class imbalance.",
+        "guidance": "Hyperparameter details and search bounds provided in Appendix B; in T1 experiments hyperparameters were selected via 4-fold cross-validation on 100 training examples."
+      },
+      {
+        "name": "Preprocessing: discard and filter problematic instances",
+        "description": "Discard press releases without DOIs; discard missing or incorrect abstracts retrieved automatically; manually inspect and fix sentence alignments that do not correspond to a single sentence.",
+        "guidance": "This quality control prevents noisy or incorrectly paired training/testing examples that would invalidate label alignment between press release and paper."
+      },
+      {
+        "name": "Input truncation for press releases (journalistic heuristic)",
+        "description": "Use only the title, lead sentence, and first three sentences of each press release when creating examples.",
+        "guidance": "This choice is motivated by journalism's 'inverted pyramid' structure where the main conclusion is typically presented early in the text (P\u00f6ttker, 2003). It both reduces noise and focuses models on likely conclusion-bearing sentences."
+      },
+      {
+        "name": "Reporting reproducibility artifacts and compute details",
+        "description": "Report computing infrastructure, average runtimes per experiment, model parameter counts, and that experiments used RoBERTa-base (124,647,170 parameters).",
+        "guidance": "Authors ran experiments on a shared cluster with specified CPU/RAM/GPU resources, provide runtimes per setting (Table 9) and note that few-shot settings do not use a validation set; these practices are recommended for reproducibility of reported results."
+      },
+      {
+        "name": "Error analysis categories & difficulty indicators",
+        "description": "Be explicit about which example categories are most difficult: pairs involving direct causal claims (mismatches between causal and non-causal claims) are the hardest; examples where both statements are correlational are easiest.",
+        "guidance": "Use per-category error analysis to understand model strengths/weaknesses (e.g., MT-PET helps most for causal mismatches). This should guide dataset curation (include causal cases) and model diagnostics."
+      },
+      {
+        "name": "Use of in-domain masked language modeling as a baseline",
+        "description": "Compare MT-PET/PET results to a baseline where PET is augmented with in-domain MLM pretraining on T1 data to assess whether gains come from domain closeness or from multi-task pattern training.",
+        "guidance": "Authors found MLM on T1 data improves performance, but MT-PET still outperforms MLM-augmented PET, indicating benefits from auxiliary PVP signals in addition to in-domain LM adaptation."
+      },
+      {
+        "name": "Model selection, seeds, and reporting practice",
+        "description": "Report average metrics across multiple random seeds (authors use 5 seeds) and use stratified random sampling for training/test splits where applicable.",
+        "guidance": "This reduces variance in few-shot evaluations and makes comparisons between supervised, PET, and MT-PET more reliable."
+      },
+      {
+        "name": "Hyperparameter search & recommended settings",
+        "description": "Perform hyperparameter search (bounds provided) using cross-validation on the few-shot training data; authors list final hyperparameters for T1/T2 and for distillation (epochs, batch size, learning rate, warmup steps, weight decay, temperature).",
+        "guidance": "Examples from paper: T1 supervised/PET: epochs=10, batch_size=4, lr\u22485.598e-05, warmup_steps=50; T2 supervised/PET: lr=3e-05; distillation: epochs=3, lr=1e-05, temperature=2.0. Weight cross-entropy loss by label distribution."
+      }
+    ]
+  }
+}

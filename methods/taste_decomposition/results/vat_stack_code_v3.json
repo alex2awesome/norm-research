@@ -1,0 +1,491 @@
+{
+  "cell": "code_v3",
+  "direction": "1_mirror2",
+  "POOLED_DO_NOT_QUOTE": true,
+  "pooled_caveat": "pooled AUC on this cell is composition-dominated and the two dense-held-out halves contradict each other (eval T .6488 / VA_nl .7422 vs test T .7373 / VA_nl .5806). The published readout for this cell is WITHIN-REPO (closure/code_v3/abank_rescore/within_repo.py); the pooled-E arm below is recorded for schema uniformity ONLY and is marked POOLED_DO_NOT_QUOTE.",
+  "n_E": 11452,
+  "pos_rate_E": 0.8037897310513448,
+  "n_groups_E": 255,
+  "population": "ALL 11,452 rows of the code_v3 (GitHub PR merge, v3 enriched text) closure population -- every row is dense_split in {eval,test} by construction (the A bank was scored on the dense v3 chain's eval+test only and the chain's train repositories are repo-disjoint from both); dense preds joined BY ID (repo/pr_number)",
+  "group_column": "repository (REPO -- the canonical grouping unit for this cell)",
+  "dense_dir": "methods/taste_decomposition/closure/code_v3/dense_seed42 (mirror of sk3 datasets/code-review/dense_standard_v3/rm_out_seed42)",
+  "family": "clean_once",
+  "family_reason": "readout_code_v3.py applies its clean_cols (median fill + degeneracy screen) ONCE per split and then feeds one fixed NaN-free matrix to StandardScaler+LogisticRegression(C=1, max_iter=2000) and to the frozen HistGB grid -- byte-identical to the frozen engine's clean_once family (capagg.clean_cols / linear_oof_family2 / gbm_oof_raw).",
+  "sklearn": {
+    "required": "1.8.0",
+    "this_run": "1.8.0",
+    "match": true,
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "platform_this_run": "Linux-x86_64",
+    "platform_required": "Linux-x86_64 (sk3)",
+    "platform_landmine": "GroupKFold's group->fold assignment uses np.argsort (kind='quicksort', unstable) over group sizes, so equal-sized groups are ordered by the sort kernel and the fold assignment is ARCHITECTURE-dependent. Verified: byte-identical matrices + identical sklearn 1.8.0/numpy 2.2.6/scipy 1.17.1 give different fold fingerprints on linux-x86_64 vs macOS-arm64 (aops_curation VA_lin .77116 vs .76922). Reproduce a cell on the platform its published Layer-1 ran on."
+  },
+  "n_features_raw": {
+    "V_exec": 17,
+    "V_text": 19,
+    "A_scores": 83,
+    "A_applied_indicators": 83
+  },
+  "n_full_population": 11452,
+  "dense_seeds_available": [
+    "seed42"
+  ],
+  "dense_seed_note": "only seed 42 has per-row predictions (sk3 datasets/code-review/dense_standard_v3 has an rm_out_seed1 directory with no preds_*.csv and eval_pass_results.json holds only seed42).",
+  "join_assertions": {
+    "n_bank_rows": 11452,
+    "bank_ids_unique": true,
+    "id_join_key": "repo/pr_number",
+    "dense_split_counts": {
+      "eval": 5822,
+      "test": 5630
+    },
+    "dense_pred_id_provenance": "closure/code_v3/dense_seed42/preds_{eval,test}.csv DO carry ids (repo, pr_number) -- cells_code.load() joins them to the bank BY row_id = repo + '/' + pr_number and asserts every bank row is present (`dense seed 42 missing rows`). No row-order recovery needed. Mirror of sk3 datasets/code-review/dense_standard_v3/rm_out_seed42/.",
+    "dense_seeds_available": [
+      42
+    ],
+    "dense_prob_finite": 11452,
+    "T_recheck_vs_eval_pass_results": {
+      "eval": {
+        "recomputed": 0.6488015170335136,
+        "published": 0.6488
+      },
+      "test": {
+        "recomputed": 0.7373442861247739,
+        "published": 0.7373
+      }
+    },
+    "y_equal_elementwise": true,
+    "y_equal_note": "y comes from the same V_matrix_v3.parquet rows the A shards and the dense preds were both keyed to; the dense preds' own `judgement` column was additionally used by the upstream builder. The T re-check above (recomputed vs eval_pass_results.json, both splits, |diff| < 1e-3) is the join's end-to-end evidence."
+  },
+  "va_reproduction_gate": {
+    "eval": {
+      "tol": 0.006,
+      "source": "results/code_v3_enriched_layer1.json ['splits']['eval'] linear_layer1.VA / nonlinear.VA.auc_mean",
+      "VA_lin": {
+        "published": 0.6058365612729659,
+        "reproduced": 0.6058365612729659,
+        "abs_diff": 0.0,
+        "pass": true
+      },
+      "VA_nl_mean": {
+        "published": 0.742188128540677,
+        "reproduced": 0.742188128540677,
+        "abs_diff": 0.0,
+        "pass": true
+      },
+      "VA_nl_seeds_reproduced": [
+        0.7420343966892524,
+        0.7430526325859035,
+        0.7414773563468751
+      ],
+      "pass": true
+    },
+    "test": {
+      "tol": 0.006,
+      "source": "results/code_v3_enriched_layer1.json ['splits']['test'] linear_layer1.VA / nonlinear.VA.auc_mean",
+      "VA_lin": {
+        "published": 0.5403220304777754,
+        "reproduced": 0.5403222341218227,
+        "abs_diff": 2.0364404729189545e-07,
+        "pass": true
+      },
+      "VA_nl_mean": {
+        "published": 0.5805816779957244,
+        "reproduced": 0.5805816779957244,
+        "abs_diff": 0.0,
+        "pass": true
+      },
+      "VA_nl_seeds_reproduced": [
+        0.5743519690037469,
+        0.5778112704354256,
+        0.5895817945480009
+      ],
+      "pass": true
+    },
+    "pass": true
+  },
+  "fullfit_at_E": {
+    "eval": {
+      "note": "E covers this split entirely, so the full-population (=within-split) Layer-1 fit and the E-refit are the SAME fit on the SAME rows; this block is the published within-split Layer-1 value, reproduced.",
+      "VA_lin_fullfit_at_E": 0.6058365612729659,
+      "VA_nl_fullfit_at_E_seeds": [
+        0.7420343966892524,
+        0.7430526325859035,
+        0.7414773563468751
+      ],
+      "VA_nl_fullfit_at_E_mean_of_seed_aucs": 0.742188128540677,
+      "VA_nl_fullfit_at_E_seedmean_probs": 0.7462718952911327
+    },
+    "test": {
+      "note": "E covers this split entirely, so the full-population (=within-split) Layer-1 fit and the E-refit are the SAME fit on the SAME rows; this block is the published within-split Layer-1 value, reproduced.",
+      "VA_lin_fullfit_at_E": 0.5403222341218227,
+      "VA_nl_fullfit_at_E_seeds": [
+        0.5743519690037469,
+        0.5778112704354256,
+        0.5895817945480009
+      ],
+      "VA_nl_fullfit_at_E_mean_of_seed_aucs": 0.5805816779957244,
+      "VA_nl_fullfit_at_E_seedmean_probs": 0.5822582454965646
+    }
+  },
+  "per_split_T": {
+    "eval": {
+      "n": 5822,
+      "T": 0.6488015170335136
+    },
+    "test": {
+      "n": 5630,
+      "T": 0.7373442861247739
+    }
+  },
+  "arms": {
+    "layer1_bank": {
+      "arm": "layer1_bank",
+      "family": "clean_once",
+      "n_features_VA": 193,
+      "n_features_VA_prescreen": 202,
+      "T_E": 0.6933418134675071,
+      "VA_lin_E": 0.6254934879676614,
+      "VA_nl_E_seeds": [
+        0.6969353791052686,
+        0.6877743443065012,
+        0.6950155038028857
+      ],
+      "VA_nl_E_mean": 0.6932417424048851,
+      "VA_nl_E_spread": 0.009161034798767398,
+      "VAT_lin_E": 0.6888391474709354,
+      "VAT_nl_E_seeds": [
+        0.740986944509512,
+        0.7432025850388483,
+        0.7505798908170638
+      ],
+      "VAT_nl_E_mean": 0.744923140121808,
+      "VAT_nl_E_spread": 0.009592946307551808,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.044051565404243376,
+        "ci95": [
+          0.020219906977538765,
+          0.07302345375053665
+        ],
+        "p_gt_0": 0.9995,
+        "n_boot_used": 2000,
+        "n_groups": 255
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": 0.04764513104200485,
+        "ci95": [
+          -0.048035165144930586,
+          0.16683796775591067
+        ],
+        "p_gt_0": 0.6765,
+        "n_boot_used": 2000,
+        "n_groups": 255
+      },
+      "quote_status": "POOLED_DO_NOT_QUOTE"
+    }
+  },
+  "per_split": {
+    "eval": {
+      "arm": "layer1_bank_eval",
+      "family": "clean_once",
+      "quote_status": "POOLED_WITHIN_SPLIT_DO_NOT_QUOTE (use within_repo below)",
+      "n": 5822,
+      "n_groups": 112,
+      "n_features_VA": 191,
+      "n_features_VA_prescreen": 202,
+      "T_E": 0.6488015170335136,
+      "VA_lin_E": 0.6058365612729659,
+      "VA_nl_E_seeds": [
+        0.7420343966892524,
+        0.7430526325859035,
+        0.7414773563468751
+      ],
+      "VA_nl_E_mean": 0.742188128540677,
+      "VA_nl_E_spread": 0.0015752762390284225,
+      "VAT_lin_E": 0.6422907860965086,
+      "VAT_nl_E_seeds": [
+        0.7228529295759722,
+        0.7009285722695456,
+        0.7085095086860029
+      ],
+      "VAT_nl_E_mean": 0.7107636701771737,
+      "VAT_nl_E_spread": 0.021924357306426612,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": -0.01918146711328017,
+        "ci95": [
+          -0.10176670306104721,
+          0.07235941912730942
+        ],
+        "p_gt_0": 0.3525,
+        "n_boot_used": 2000,
+        "n_groups": 112
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": 0.07405141254245862,
+        "ci95": [
+          -0.029894265955038836,
+          0.17852598565196476
+        ],
+        "p_gt_0": 0.66,
+        "n_boot_used": 2000,
+        "n_groups": 112
+      }
+    },
+    "test": {
+      "arm": "layer1_bank_test",
+      "family": "clean_once",
+      "quote_status": "POOLED_WITHIN_SPLIT_DO_NOT_QUOTE (use within_repo below)",
+      "n": 5630,
+      "n_groups": 143,
+      "n_features_VA": 191,
+      "n_features_VA_prescreen": 202,
+      "T_E": 0.7373442861247739,
+      "VA_lin_E": 0.5403222341218227,
+      "VA_nl_E_seeds": [
+        0.5743519690037469,
+        0.5778112704354256,
+        0.5895817945480009
+      ],
+      "VA_nl_E_mean": 0.5805816779957244,
+      "VA_nl_E_spread": 0.015229825544254005,
+      "VAT_lin_E": 0.6298260329997032,
+      "VAT_nl_E_seeds": [
+        0.6739489777985224,
+        0.6786608937652134,
+        0.6794711934294656
+      ],
+      "VAT_nl_E_mean": 0.6773603549977337,
+      "VAT_nl_E_spread": 0.005522215630943239,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.09959700879477551,
+        "ci95": [
+          0.02640989878223941,
+          0.1919292500994416
+        ],
+        "p_gt_0": 1.0,
+        "n_boot_used": 2000,
+        "n_groups": 143
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.06339530832625151,
+        "ci95": [
+          -0.1451617467290844,
+          0.019804260437316666
+        ],
+        "p_gt_0": 0.0805,
+        "n_boot_used": 2000,
+        "n_groups": 143
+      }
+    }
+  },
+  "within_repo": {
+    "eval": {
+      "min_repo_n": 20,
+      "T_dense": {
+        "n_repos": 71,
+        "n_rows": 5384,
+        "nwtd": 0.7092547315788292,
+        "median": 0.727299016772701
+      },
+      "VA_nl_E_refit_seed0": {
+        "n_repos": 71,
+        "n_rows": 5384,
+        "nwtd": 0.646607671729236,
+        "median": 0.6617647058823529
+      },
+      "VAT_nl_E_refit_seed0": {
+        "n_repos": 71,
+        "n_rows": 5384,
+        "nwtd": 0.6955188748053166,
+        "median": 0.7025
+      },
+      "VA_nl_published_fullfit_seedmean": {
+        "n_repos": 71,
+        "n_rows": 5384,
+        "nwtd": 0.6516741271418514,
+        "median": 0.6857142857142857
+      },
+      "delta_VAT_nl_minus_VA_nl": {
+        "n_repos": 71,
+        "n_rows": 5384,
+        "a_nwtd": 0.6955188748053166,
+        "b_nwtd": 0.646607671729236,
+        "a_median": 0.7025,
+        "b_median": 0.6617647058823529,
+        "delta_nwtd": 0.048911203076080545,
+        "delta_median": 0.05205320994794682,
+        "a_wins_repos": 50,
+        "wilcoxon_p": 0.0003572006402576531,
+        "jackknife_se": 0.014594963005424658,
+        "jackknife_ci95": [
+          0.020305075585448217,
+          0.07751733056671287
+        ]
+      },
+      "delta_VAT_nl_minus_T": {
+        "n_repos": 71,
+        "n_rows": 5384,
+        "a_nwtd": 0.6955188748053166,
+        "b_nwtd": 0.7092547315788292,
+        "a_median": 0.7025,
+        "b_median": 0.727299016772701,
+        "delta_nwtd": -0.013735856773512634,
+        "delta_median": -0.014814814814814725,
+        "a_wins_repos": 32,
+        "wilcoxon_p": 0.3880261505088499,
+        "jackknife_se": 0.014514966197617161,
+        "jackknife_ci95": [
+          -0.04218519052084227,
+          0.014713476973817002
+        ]
+      }
+    },
+    "test": {
+      "min_repo_n": 20,
+      "T_dense": {
+        "n_repos": 73,
+        "n_rows": 4900,
+        "nwtd": 0.6539829408905247,
+        "median": 0.6771978021978022
+      },
+      "VA_nl_E_refit_seed0": {
+        "n_repos": 73,
+        "n_rows": 4900,
+        "nwtd": 0.5947751919591427,
+        "median": 0.6188524590163934
+      },
+      "VAT_nl_E_refit_seed0": {
+        "n_repos": 73,
+        "n_rows": 4900,
+        "nwtd": 0.6312360647814796,
+        "median": 0.6703296703296703
+      },
+      "VA_nl_published_fullfit_seedmean": {
+        "n_repos": 73,
+        "n_rows": 4900,
+        "nwtd": 0.6149948269199622,
+        "median": 0.6302367941712204
+      },
+      "delta_VAT_nl_minus_VA_nl": {
+        "n_repos": 73,
+        "n_rows": 4900,
+        "a_nwtd": 0.6312360647814796,
+        "b_nwtd": 0.5947751919591427,
+        "a_median": 0.6703296703296703,
+        "b_median": 0.6188524590163934,
+        "delta_nwtd": 0.0364608728223369,
+        "delta_median": 0.017799043062200925,
+        "a_wins_repos": 39,
+        "wilcoxon_p": 0.011047668471688213,
+        "jackknife_se": 0.01507611748773611,
+        "jackknife_ci95": [
+          0.006911682546374122,
+          0.06601006309829968
+        ]
+      },
+      "delta_VAT_nl_minus_T": {
+        "n_repos": 73,
+        "n_rows": 4900,
+        "a_nwtd": 0.6312360647814796,
+        "b_nwtd": 0.6539829408905247,
+        "a_median": 0.6703296703296703,
+        "b_median": 0.6771978021978022,
+        "delta_nwtd": -0.022746876109045022,
+        "delta_median": -0.024731968810916105,
+        "a_wins_repos": 31,
+        "wilcoxon_p": 0.04951934036970125,
+        "jackknife_se": 0.013964773513390894,
+        "jackknife_ci95": [
+          -0.05011783219529117,
+          0.004624079977201129
+        ]
+      }
+    },
+    "reproduction_check_vs_published": {
+      "source": "closure/code_v3/abank_rescore/within_repo_dense_vs_vanl.json",
+      "published": {
+        "eval": {
+          "n_repos_scored": 71,
+          "n_rows": 5384,
+          "dense_within_median": 0.727299016772701,
+          "va_nl_within_median": 0.6857142857142857,
+          "dense_within_nwtd": 0.7092547315788292,
+          "va_nl_within_nwtd": 0.6516741271418514,
+          "dense_beats_va_nl_repos": 44,
+          "wilcoxon_p": 0.00600584821918478
+        },
+        "test": {
+          "n_repos_scored": 73,
+          "n_rows": 4900,
+          "dense_within_median": 0.6771978021978022,
+          "va_nl_within_median": 0.6302367941712204,
+          "dense_within_nwtd": 0.6539829408905247,
+          "va_nl_within_nwtd": 0.6149948269199622,
+          "dense_beats_va_nl_repos": 43,
+          "wilcoxon_p": 0.0400398879311832
+        }
+      },
+      "recomputed": {
+        "eval": {
+          "dense_within_nwtd": 0.7092547315788292,
+          "dense_within_median": 0.727299016772701,
+          "va_nl_within_nwtd": 0.6516741271418514,
+          "va_nl_within_median": 0.6857142857142857
+        },
+        "test": {
+          "dense_within_nwtd": 0.6539829408905247,
+          "dense_within_median": 0.6771978021978022,
+          "va_nl_within_nwtd": 0.6149948269199622,
+          "va_nl_within_median": 0.6302367941712204
+        }
+      }
+    }
+  },
+  "status": "GATE_PASSED_PROCEED",
+  "ensemble": {
+    "arm": "layer1_bank",
+    "family": "clean_once",
+    "n_features_VA": 193,
+    "n_features_VA_prescreen": 202,
+    "T_E": 0.6933418134675071,
+    "VA_lin_E": 0.6254934879676614,
+    "VA_nl_E_seeds": [
+      0.6969353791052686,
+      0.6877743443065012,
+      0.6950155038028857
+    ],
+    "VA_nl_E_mean": 0.6932417424048851,
+    "VA_nl_E_spread": 0.009161034798767398,
+    "VAT_lin_E": 0.6888391474709354,
+    "VAT_nl_E_seeds": [
+      0.740986944509512,
+      0.7432025850388483,
+      0.7505798908170638
+    ],
+    "VAT_nl_E_mean": 0.744923140121808,
+    "VAT_nl_E_spread": 0.009592946307551808,
+    "boot_group_VAT_nl_minus_VA_nl": {
+      "estimate": 0.044051565404243376,
+      "ci95": [
+        0.020219906977538765,
+        0.07302345375053665
+      ],
+      "p_gt_0": 0.9995,
+      "n_boot_used": 2000,
+      "n_groups": 255
+    },
+    "boot_group_VAT_nl_minus_T": {
+      "estimate": 0.04764513104200485,
+      "ci95": [
+        -0.048035165144930586,
+        0.16683796775591067
+      ],
+      "p_gt_0": 0.6765,
+      "n_boot_used": 2000,
+      "n_groups": 255
+    },
+    "quote_status": "POOLED_DO_NOT_QUOTE"
+  },
+  "runtime_sec": 342.9968988895416
+}

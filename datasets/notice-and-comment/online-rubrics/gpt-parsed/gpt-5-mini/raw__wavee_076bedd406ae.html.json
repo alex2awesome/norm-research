@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_076bedd406ae.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15217,
+  "output_tokens": 4895,
+  "elapsed_s": 1563.8927272500005,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/ML researchers and practitioners in financial auditing (audit firms, compliance engineers) working on automated compliance verification with LLMs",
+    "subtask_short": "LLM-based auditing compliance evaluation",
+    "subtask_description": "Designing, prompting, and evaluating large language models to determine whether text passages from financial reports comply with regulatory accounting requirements (IFRS / HGB). Involves dataset annotation, prompt engineering, model selection, and class-level metric reporting.",
+    "subtask_keywords": [
+      "financial_auditing",
+      "llm",
+      "compliance_check",
+      "ifrs",
+      "hgb",
+      "prompting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Precision, Recall, F1 (per-class)",
+        "description": "Precision(c) = |TP(c)| / (|TP(c)| + |FP(c)|), Recall(c) = |TP(c)| / (|TP(c)| + |FN(c)|), F1(c) = 2 * (Precision(c)*Recall(c)) / (Precision(c)+Recall(c)). Here c \u2208 C represents the class (either \u201cyes\u201d, \u201cno\u201d, \u201cunclear\u201d, or \u201cnot applicable\u201d).",
+        "guidance": "Compute precision, recall, and F1 for each predicted class; use these per-class scores to analyze model strengths and weaknesses (e.g., models may be overly confident in 'yes'/'no' and ignore 'unclear')."
+      },
+      {
+        "name": "Macro and Micro averaging",
+        "description": "Macro average: unweighted mean of per-class recalls (Recall_macro = (1/|C|) \u03a3_i Recall(c_i)). Micro average: support-weighted mean over classes (Recall_micro = \u03a3_i |TP(c_i)| / \u03a3_i (|TP(c_i)| + |FN(c_i)|)).",
+        "guidance": "Report both macro and micro averages across classes (and across prompts) to capture class-balance-insensitive and support-weighted performance respectively; use micro F1 to compare overall model/prompt performance."
+      },
+      {
+        "name": "Annotation label scheme (IFRS and HGB)",
+        "description": "IFRS: annotations labeled as 'yes', 'no', or 'unclear'. HGB: annotations labeled as 'yes', 'no', 'unclear', or 'not applicable'.",
+        "guidance": "Clarify label meanings to annotators (e.g., 'unclear' if insufficient context; 'not applicable' if requirement irrelevant). Use consistent label sets per jurisdiction/standard when evaluating models."
+      },
+      {
+        "name": "Dataset annotation & quality control process",
+        "description": "Annotations were done by PwC auditors: three auditors split annotation work, overseen by a senior auditor; labels were verified and fine-tuned through several rounds of review and by re-examining random annotated samples and qualitatively assessing false positives and negatives.",
+        "guidance": "Maintain multi-annotator workflow with senior oversight, iterative review rounds, random sample re-checks, and qualitative error analysis to produce reliable ground truth for compliance evaluation."
+      },
+      {
+        "name": "Evaluation grouping and averaging procedure",
+        "description": "All scores are grouped by the prompt used to query a model and then averaged across the dataset to determine the overall performance per class. Averages across all classes use macro and micro averaging.",
+        "guidance": "When comparing models, evaluate each model across all prompt variants, then report per-prompt averages and best-performing prompt for each model/dataset combination."
+      },
+      {
+        "name": "Baselines / model selection criteria",
+        "description": "Include multiple LLMs as baselines: open-source (Llama-2 7b, 13b, 70b) and proprietary (GPT-3.5-Turbo, GPT-3.5-Turbo-16k, GPT-4). Rationale: economic considerations, data privacy, and fine-tuning potential.",
+        "guidance": "Compare open-source and proprietary models across identical prompts and inference parameters; consider deployability trade-offs (cost, privacy, fine-tuning capability) when selecting models for production."
+      },
+      {
+        "name": "Prompt design factors: task phrasing and response structure",
+        "description": "Two key prompt factors: (1) task phrasing (how the task is presented, e.g., chain-of-thought, one-shot, Tree-of-Thought adaptations) and (2) permitted model response structure (open-ended explanations vs closed structured answers).",
+        "guidance": "Experiment with multiple phrasing techniques and response-structure constraints; the paper finds short prompts with examples and closed structured outputs often perform better than verbose CoT/TOT styles for this auditing task."
+      },
+      {
+        "name": "Response format: closed (JSON) vs open-ended",
+        "description": "Closed format constrains the model to return only 'yes', 'no', 'unclear' or 'not applicable' (often in a JSON schema). Open-ended allows explanations. The study observed that the 'closed' format yielded superior performance compared to 'open-ended'.",
+        "guidance": "Enforce machine-readable structured outputs (e.g., JSON with an 'answer' field) to improve consistency and enable automated aggregation/parsing; prefer closed schemas for production pipelines where possible."
+      },
+      {
+        "name": "Deployment objective: minimize false positives (practical requirement)",
+        "description": "In collaboration with auditors, the compliance check system should avoid false positive predictions at all costs. Detection of non-compliance ('No') is critical; the system should prioritize high precision and recall for the 'No' class.",
+        "guidance": "When optimizing models for deployment, tune toward conservative behavior that reduces false positives on compliance decisions (e.g., thresholding, calibration, human-in-the-loop verification for positives)."
+      },
+      {
+        "name": "Language / dataset-specific evaluation",
+        "description": "Evaluate models separately for different reporting standards/languages (IFRS primarily English; HGB German). Note: many LLMs are trained mainly on English and perform worse on non-English datasets (observed poorer performance on HGB).",
+        "guidance": "Assess language coverage of chosen models and consider language-specific models or fine-tuning; treat cross-language performance gaps as a key deployment risk factor."
+      },
+      {
+        "name": "Handling verbose / inconsistent outputs",
+        "description": "Some models (e.g., Llama-2 variants) produced verbose outputs or inconsistent machine-readable outputs for some prompt formats, causing heuristics/parsers to fail and yielding zero scores for some configurations.",
+        "guidance": "Design prompts and output validation heuristics robust to verbosity; enforce strict output schemas; preprocess or constrain model outputs to ensure consistent parsing in evaluation and production."
+      },
+      {
+        "name": "Sampling strategy for experiments",
+        "description": "Due to dataset size, random sampling was used: IFRS dataset -> sampled 10 reports and sub-sampled 100 requirements; HGB dataset -> randomly selected 3 reports and requirements with at least two annotations.",
+        "guidance": "Use representative random sampling while ensuring sufficient annotation density per requirement; report sampling procedure and any selection constraints."
+      },
+      {
+        "name": "Reporting per-model/per-prompt breakdowns (micro F1, best prompt identification)",
+        "description": "Report micro F1 scores per model and dataset for the best-performing prompt and averages over all prompts. Also report which prompt configuration was best per model/dataset.",
+        "guidance": "Provide detailed tables showing per-model, per-prompt, per-dataset micro/macro scores and identify best-performing prompt templates to guide prompt selection for deployment."
+      },
+      {
+        "name": "Prompt template I \u2014 In-Out-Sub-Template",
+        "description": "Simple Yes/No/Unclear/Not applicable answer. Short, point-by-point answers without explanation. Formatting in JSON schema. Example: System instructs expert auditor persona and requests JSON: {'answer':<'yes'|'no'>}.",
+        "guidance": "Use for concise classification of sub-requirements; enforces compact machine-readable answers suitable for automated pipelines."
+      },
+      {
+        "name": "Prompt template II \u2014 Cot-Sub-Template",
+        "description": "Chain-of-thought response leveraging intermediate explanations before the final answer. Specification of relevant line numbers from the document. No JSON schema formatting required.",
+        "guidance": "Use when wanting model internal reasoning traces and line references for human inspection; expect potentially lower raw classification performance and higher verbosity."
+      },
+      {
+        "name": "Prompt template III \u2014 In-Out-Template",
+        "description": "Simplified version of In-Out-Sub. Direct Yes/No/Unclear/Not applicable response. Formatting in JSON schema.",
+        "guidance": "Use for straightforward, compact classification without requiring sub-requirement decomposition."
+      },
+      {
+        "name": "Prompt template IV \u2014 Cot-Template",
+        "description": "Step-by-step response and explanation for each sub-request; detailed explanation for each sub-request. No JSON schema formatting.",
+        "guidance": "Suitable for eliciting detailed rationales per sub-requirement; expect verbose responses and need for parsers/heuristics if extracting final labels."
+      },
+      {
+        "name": "Prompt template V \u2014 In-Out-Tot-Template (Tree-of-Thought adaptation)",
+        "description": "Same as In-Out, with Tree-of-Thought prompting: imagine three experts giving stepwise thoughts and coming to a majority conclusion. Format output in JSON schema with a final 'answer'.",
+        "guidance": "Attempts to simulate multi-expert deliberation within a single prompt; computationally heavier in traditional TOT but here adapted into single-prompt style; may or may not improve performance."
+      },
+      {
+        "name": "Prompt template VI \u2014 In-Out-Tot-One-Shot-Template",
+        "description": "Same as In-Out-Tot, with the addition of a one-shot example (chosen example shows compliance). Includes multi-expert stepwise thinking and a final JSON answer.",
+        "guidance": "Adding a one-shot positive example can help model calibration toward the desired output format and decision; helpful when few exemplar cases are representative."
+      },
+      {
+        "name": "Prompt template VII \u2014 In-Out-One-Shot-Template",
+        "description": "Same as In-Out with addition of a one-shot example where the text passage complies with the requirement. Enforces JSON formatted answer.",
+        "guidance": "Use a concise example to show desired labeling behavior and output schema; can improve consistency and reduce parser errors."
+      },
+      {
+        "name": "Prompt template VIII \u2014 In-Out-One-Shot-No-Template",
+        "description": "Same as In-Out with a one-shot example where the chosen example does NOT comply with the requirement. Enforces JSON formatted answer.",
+        "guidance": "Provide negative example to demonstrate how to label non-compliance; useful for balancing examples across classes."
+      },
+      {
+        "name": "German-language prompt templates and label expansion",
+        "description": "German variants of the templates I\u2013VIII instruct an expert with perfect knowledge of the HGB standard. They explicitly support answers: 'yes', 'no', 'unclear', and 'not applicable'.",
+        "guidance": "When working with German/HGB data, use language-appropriate prompts and include the expanded label set; account for LLMs' weaker German proficiency in selection/fine-tuning."
+      },
+      {
+        "name": "Practical finding: short prompts + example often beat advanced prompting",
+        "description": "Empirical observation: prompt I ('In-Out-Sub-Template') achieved the best score in 4 out of 12 model/dataset cases; brief prompts paired with exemplary one-shot instructions can improve response quality. Advanced techniques (CoT, TOT) did not consistently outperform simpler prompts.",
+        "guidance": "Prioritize experimenting with brief, example-backed prompts before investing in costly multi-step prompting strategies; measure per-model/prompt performance rather than assuming more complex prompting helps."
+      },
+      {
+        "name": "Failure modes reporting (class-specific blindspots)",
+        "description": "Observed failure modes: models often failed to detect the 'unclear' class (tended to be overconfident in 'yes'/'no'); some models performed significantly worse on German HGB data; larger parameter size did not always imply better performance (Llama-2-70b sometimes worse than 7b).",
+        "guidance": "Report per-class confusion patterns and be cautious extrapolating from parameter count to real-world performance; include checks for overconfidence and class-coverage gaps."
+      }
+    ]
+  }
+}

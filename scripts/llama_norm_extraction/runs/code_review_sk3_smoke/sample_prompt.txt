@@ -1,0 +1,432 @@
+You are an expert software engineer reviewing a pull request.
+
+# Your task
+
+You will read one pull request review thread and extract every quality judgment the reviewer(s) makes about the proposed code change, then tag each judgment against a fixed list of canonical code quality norms.
+
+# Two levels of structure
+
+LEVEL 1 — PASSAGE: a paragraph or multi-sentence span where the reviewer(s) is making a quality judgment. Each pull request review thread usually contains 3-10 passages.
+
+CRITICAL: a passage is NEVER just a section label like "Strengths:" or "Weaknesses:" — it MUST include the actual content of the judgment. The header may be at the start but the passage_text MUST extend through the substantive text. A passage_text of less than 50 characters is almost always wrong.
+
+LEVEL 2 — SIGNAL: a specific phrase INSIDE the passage that EVIDENCES a code quality norm (without necessarily BEING the code quality norm). For example, the phrase "no tests for the new edge case" is a complaint that evidences a 'test coverage' norm; the phrase "thanks for splitting this into smaller commits" is praise that evidences a 'commit hygiene' norm; the phrase "`cgi` is deprecated since Python 3.11" is an observation that evidences a 'deprecated API avoidance' norm.
+
+Each signal has:
+- signal_text: an exact substring of THE PASSAGE (not the full pull request review thread), 10-200 chars
+- signal_type: exactly one of `complaint`, `praise`, `observation`, `suggestion`
+- polarity: exactly one of `positive`, `negative`, `neutral`
+- rubric_matches: a list of 0-3 integer ids from the vocabulary below. Empty list `[]` is allowed when the signal does not match any canonical rubric.
+
+# Norm vocabulary
+
+Each item below has the format `[id] name — short description`. Multi-label tagging: a signal can match 0-3 rubrics. Be strict — only tag a rubric if the signal genuinely instantiates that rubric. Do not match by surface keyword alone.
+
+[1] Macro usage policy and hygiene — Prefer language features (enums/consts/inline/functions) over macros. When macros are necessary, use safe, hygienic patterns (e.g., do { ... } while (0)), avoid
+[2] Macro usage policy and hygiene — Prefer language features (enums/consts/inline/functions) over macros. When macros are necessary, use safe, hygienic patterns (e.g., do { ... } while (0)), avoid
+[3] Appropriate use of established design patterns — Know common patterns and apply them when they fit recurring problems and improve readability/maintainability. Choose patterns with appropriate complexity, apply
+[4] Buffer and string handling safety — Size buffers correctly (including terminators), use bounds‑checked operations and safer, length‑aware APIs, validate sizes and signed/unsigned conversions, and 
+[5] Resource lifetime management and deterministic cleanup — Acquire and release resources safely and deterministically (RAII/context managers/using). Establish clear ownership models (e.g., reference counting/smart point
+[6] Control-flow clarity and low cognitive complexity — Keep control flow simple and easy to follow: minimize decision points and nesting, use guard clauses/early exits appropriately, avoid long switch/if-else chains
+[7] Public API usability, safety, and minimal surface — Design consumer‑friendly APIs that are consistent and hard to misuse; keep the public surface minimal/stable and evolve it conservatively to reduce churn.
+[8] Avoid duplication (DRY) with pragmatism — Eliminate duplicated logic/knowledge and factor out common behavior while balancing readability (e.g., Rule of Three, allow some duplication in tests). Keep a s
+[9] Blank lines and vertical whitespace usage — Where blank lines are required or forbidden within and between sections/declarations, and to avoid excessive consecutive/trailing blank lines.
+[10] C++ file‑local symbol linkage and namespace hygiene — Keep file‑local symbols internal (static/unnamed namespaces) and avoid using‑directives/aliases that leak into headers or widen scope unnecessarily; keep anonym
+[11] Function signature and declaration formatting — Use consistent declaration/definition styles; clearly place/wrap parameters (often one per line for long lists); and apply consistent line‑wrapping/indentation 
+[12] Avoid overengineering and speculative generality (second‑system effect) — Keep scope focused on real, common needs. Do not add abstractions or seldom‑used features for hypothetical futures; resist ‘second‑system’ overdesign unless jus
+[13] File/module length limits — Enforce maximum lines per file/module to preserve readability and reviewability.
+[14] Macro usage policy and hygiene — Prefer language features (enums/consts/inline/functions) over macros. When macros are necessary, use safe, hygienic patterns (e.g., do { ... } while (0)), avoid
+[15] Design patterns literacy and contextual application — Understand, adapt, and judiciously apply design/structural/integration patterns alongside modern frameworks to improve clarity, reuse, and decoupling.
+[16] Templates/generics and cast/sizeof spacing — Spacing rules for template/generic parameter lists (angle brackets, commas) and for casts/sizeof-like operators.
+[17] Simplicity (KISS/YAGNI) and complexity management — Prefer the simplest implementation that meets current, evidenced requirements. Avoid incidental complexity, speculative generality, premature optimization, and 
+[18] Conventions adherence (local and ecosystem) — Align with file/project conventions and relevant ecosystem standards; deviations are rare, well‑reasoned, and improve clarity/consistency.
+[19] Dead and unreachable code elimination — Identify and remove unreachable code paths, unused variables, and commented‑out/dead code to keep the codebase lean and maintainable.
+[20] Pointer/reference sigil placement — Place * and & consistently per project conventions (attach to type vs to identifier) with the prescribed spacing in declarations and expressions; note any langu
+[21] Consistency with conventions and existing codebase — Follow established community idioms and project conventions; use a consistent local style so unusual choices stand out. Align with existing patterns unless ther
+[22] One statement per line and post-conditional line breaks — Do not place multiple statements or assignments on a single line; require a line break after conditionals/guards to improve readability.
+[23] Macro usage policy and hygiene — Prefer language features (enums/consts/inline/functions) over macros. When macros are necessary, use safe, hygienic patterns (e.g., do { ... } while (0)), avoid
+[24] Header hygiene, self‑containment, and dependency control — Headers compile standalone with guards; include what they use; minimize and structure transitive/includes; group/sort includes; prefer forward declarations judi
+[25] Buffer and string handling safety — Size buffers correctly (including terminators), use bounds‑checked operations and safer, length‑aware APIs, validate sizes and signed/unsigned conversions, and 
+[26] Security by design, threat modeling, and risk management — Treat security as a first‑class design concern: perform threat modeling, choose safer languages/runtimes, reuse secure patterns, align with industry practices, 
+[27] Versioning, compatibility, and release policy — Apply consistent versioning and release processes (SemVer guidance, compatibility guarantees, feature/version gates), document breaking changes and upgrade path
+[28] Dead and unreachable code elimination — Identify and remove unreachable code paths, unused variables, and commented‑out/dead code to keep the codebase lean and maintainable.
+[29] Numeric correctness and overflow safety — Choose numeric representations carefully and prevent overflow/underflow (e.g., in bounds checks and average computations); avoid unsafe shifts/narrowing casts; 
+[30] Function signature and declaration formatting — Use consistent declaration/definition styles; clearly place/wrap parameters (often one per line for long lists); and apply consistent line‑wrapping/indentation 
+[31] JavaScript: function declarations vs expressions and placement — Adopt a consistent policy for function declarations vs (named) expressions and arrow functions (considering hoisting, tooling, and performance) and avoid declar
+[32] Import/include ordering and grouping — Standardize where import/include statements appear, how they are grouped (e.g., stdlib, third‑party, local), their ordering/alphabetization, and when to avoid w
+[33] Standards compliance and portability — Prefer portable, standards‑conforming code; avoid vendor/compiler‑specific extensions and undefined/unspecified behavior; account for platform‑dependent types a
+[34] Architectural layering, decoupling, and conceptual integrity — Partition systems into clear layers/modules with minimal coupling, maintain conceptual integrity, keep business logic independent of frameworks/UI, and enforce 
+[35] Change/PR size limits — Keep changes small and focused; enforce or recommend maximum lines/files changed to ease review.
+[36] Avoid magic and unnecessary metaprogramming — Refrain from surprising or ‘magical’ features (macros, heavy metaprogramming, DI/compile‑time tricks) unless clearly justified. Prefer simple, explicit, idiomat
+[37] Dependency hygiene and minimization — Minimize and manage dependencies; avoid unnecessary or heavy libraries and transitive bloat. Keep project structure understandable and dependency graph clean to
+[38] Return statements: necessity and consistency — Avoid superfluous returns that do not affect control flow and keep return style consistent within a function; require explicit returns when mandated by style.
+[39] Conventions adherence (local and ecosystem) — Align with file/project conventions and relevant ecosystem standards; deviations are rare, well‑reasoned, and improve clarity/consistency.
+[40] Comments and docstrings: formatting conventions — Formatting and placement conventions for comments/docstrings, including spacing, capitalization/punctuation, tags, and end‑of‑line comment spacing.
+[41] Control-flow clarity and low cognitive complexity — Keep control flow simple and easy to follow: minimize decision points and nesting, use guard clauses/early exits appropriately, avoid long switch/if-else chains
+[42] Global state minimization and management — Avoid globals and centralized unencapsulated state. When unavoidable, constrain and document usage (const/ALL_CAPS as applicable), prefer internal linkage/priva
+[43] Test design, isolation, and maintainability — Write small, focused, isolated tests with clear intent; design for testability; practice good hygiene (e.g., TDD red‑green‑refactor where useful); cover boundar
+[44] Switch/case statement formatting — Indentation, placement, and any single-line rules and fall‑through documentation for case/switch constructs.
+[45] Tabs/spaces and trailing‑whitespace policy — Use spaces (not tabs) per project policy; do not mix tabs/spaces unless explicitly allowed; avoid introducing trailing whitespace.
+[46] Header hygiene, self‑containment, and dependency control — Headers compile standalone with guards; include what they use; minimize and structure transitive/includes; group/sort includes; prefer forward declarations judi
+[47] API design quality, ergonomics, and stewardship — APIs are coherent, idiomatic, and efficient; reflect domain semantics, offer clear/stable behavioral guarantees, encourage readable call sites, and avoid bloate
+[48] Accessibility and inclusive design — Bake in accessibility and inclusion from the start; comply with a11y principles, address cognitive needs, and document/justify exceptions.
+[49] Performance optimization discipline — Prioritize correctness, safety, and clarity; avoid premature/micro-optimizations. Optimize only when profiling or evidence shows need; assess performance impact
+[50] Security by design, threat modeling, and risk management — Treat security as a first‑class design concern: perform threat modeling, choose safer languages/runtimes, reuse secure patterns, align with industry practices, 
+[51] Reuse proven libraries/systems and integrate safely — Prefer established libraries/standards and existing services; adopt new tech cautiously; integrate via safe patterns (e.g., anti‑corruption layers).
+[52] Function/method call spacing — Calls: no space before '(', standard comma spacing, and consistent rules for spaces immediately inside parentheses.
+[53] API design quality, ergonomics, and stewardship — APIs are coherent, idiomatic, and efficient; reflect domain semantics, offer clear/stable behavioral guarantees, encourage readable call sites, and avoid bloate
+[54] Local variable scope and initialization — Declare variables in the narrowest scope and initialize them at declaration, close to first use; ensure they are initialized before first use.
+[55] Architectural layering, decoupling, and conceptual integrity — Partition systems into clear layers/modules with minimal coupling, maintain conceptual integrity, keep business logic independent of frameworks/UI, and enforce 
+[56] Automated formatter/linter enforcement — Project formatting and linting are enforced consistently via the prescribed tools in local and CI workflows; configurations are respected, integration pitfalls 
+[57] Error prevention and robust error handling — Adopt a safety‑first posture: prevent errors where possible, apply balanced defensive checks, detect issues early, scope try/exception handling correctly, choos
+[58] Mypy configuration and reporting — Type checker configuration and outputs: Python version emulation, plugin loading, import/discovery/ignore patterns (follow_imports, stubs, exclude), Any/None/Op
+[59] Naming clarity, consistency, and conventions — Names (including parameters and aliases) are descriptive, consistent with project/domain terminology and conventions, communicate correct intent, and are approp
+[60] One statement per line and post-conditional line breaks — Do not place multiple statements or assignments on a single line; require a line break after conditionals/guards to improve readability.
+[61] Function signature and declaration formatting — Use consistent declaration/definition styles; clearly place/wrap parameters (often one per line for long lists); and apply consistent line‑wrapping/indentation 
+[62] Conventions adherence (local and ecosystem) — Align with file/project conventions and relevant ecosystem standards; deviations are rare, well‑reasoned, and improve clarity/consistency.
+[63] Avoid duplication (DRY) with pragmatism — Eliminate duplicated logic/knowledge and factor out common behavior while balancing readability (e.g., Rule of Three, allow some duplication in tests). Keep a s
+[64] Portability, compatibility, and cross‑platform design — Prefer standard, widely supported language features and abstractions; isolate platform specifics behind clear interfaces; use platform‑specific defines consiste
+[65] Architectural layering, decoupling, and conceptual integrity — Partition systems into clear layers/modules with minimal coupling, maintain conceptual integrity, keep business logic independent of frameworks/UI, and enforce 
+[66] Minimal, cohesive interfaces that encapsulate complexity — Hide implementation details behind small, client‑focused interfaces. Keep classes/interfaces single‑purpose and avoid bloated surfaces; add or expand interfaces
+[67] API stability and backward-compatible evolution — Define stability guarantees and evolve APIs with backward-compatible changes, additive extensibility, deprecation planning, and client impact management—especia
+[68] Resource‑oriented API design and simplicity — Design predictable, resource‑focused APIs (e.g., REST) with shallow, sensible resource models and minimal sub‑resource depth.
+[69] C++ file‑local symbol linkage and namespace hygiene — Keep file‑local symbols internal (static/unnamed namespaces) and avoid using‑directives/aliases that leak into headers or widen scope unnecessarily; keep anonym
+[70] Performance optimization discipline — Prioritize correctness, safety, and clarity; avoid premature/micro-optimizations. Optimize only when profiling or evidence shows need; assess performance impact
+[71] Comment and documentation style and placement — Write clear, grammatical comments/docstrings in the prescribed format; place them above the referenced code; use standardized tags (e.g., TODO/FIXME); avoid red
+[72] Templates/generics and cast/sizeof spacing — Spacing rules for template/generic parameter lists (angle brackets, commas) and for casts/sizeof-like operators.
+[73] Comment quality, clarity, and accuracy — Comments are clear, useful, and accurate; they explain intent/rationale where code can’t, adhere to conventions, and stay synchronized with code to avoid mislea
+[74] Prefer standard libraries and containers — Use standard containers/algorithms and project‑standard utilities instead of custom or ad‑hoc structures; extend existing libraries rather than creating new one
+[75] Line length and wrapping policy — Define and enforce project/language-specific maximum line/column width and how to wrap lines that exceed it, including documented exceptions and when to avoid b
+[76] Prefer composition and dependency injection — Favor composition over inheritance and depend on abstractions via DI to reduce coupling, improve testability, and enable flexible assembly of behavior.
+[77] Global state minimization and management — Avoid globals and centralized unencapsulated state. When unavoidable, constrain and document usage (const/ALL_CAPS as applicable), prefer internal linkage/priva
+[78] Control-flow clarity and low cognitive complexity — Keep control flow simple and easy to follow: minimize decision points and nesting, use guard clauses/early exits appropriately, avoid long switch/if-else chains
+[79] Resource lifetime management and deterministic cleanup — Acquire and release resources safely and deterministically (RAII/context managers/using). Establish clear ownership models (e.g., reference counting/smart point
+[80] Conditional and ternary expression usage and safety — Favor clear conditionals; avoid nested/unclear ternaries and constant conditions; do not abuse boolean short‑circuit operators as stand‑ins for conditionals/ter
+[81] Visual design fundamentals and coherence — Apply a consistent visual language (typography, contrast, hierarchy, spacing, wayfinding) that supports clarity, usability, and brand across surfaces.
+[82] Design patterns literacy and contextual application — Understand, adapt, and judiciously apply design/structural/integration patterns alongside modern frameworks to improve clarity, reuse, and decoupling.
+[83] Portability, compatibility, and cross‑platform design — Prefer standard, widely supported language features and abstractions; isolate platform specifics behind clear interfaces; use platform‑specific defines consiste
+[84] Macro usage policy and hygiene — Prefer language features (enums/consts/inline/functions) over macros. When macros are necessary, use safe, hygienic patterns (e.g., do { ... } while (0)), avoid
+[85] Test design quality and refactor‑resilience — Organize tests at appropriate levels with clear intent (one aspect per test, table‑driven where useful), evident data and edge cases, sufficient coverage, indep
+[86] Naming clarity, consistency, and conventions — Names (including parameters and aliases) are descriptive, consistent with project/domain terminology and conventions, communicate correct intent, and are approp
+[87] C++ namespace usage conventions and formatting — Use modern, file‑scoped namespaces; avoid global‑scope using directives in headers; keep one namespace per file where prescribed; do not indent namespace conten
+[88] Accessibility and inclusive design — Bake in accessibility and inclusion from the start; comply with a11y principles, address cognitive needs, and document/justify exceptions.
+[89] Accessibility and inclusive design — Bake in accessibility and inclusion from the start; comply with a11y principles, address cognitive needs, and document/justify exceptions.
+[90] Public API usability, safety, and minimal surface — Design consumer‑friendly APIs that are consistent and hard to misuse; keep the public surface minimal/stable and evolve it conservatively to reduce churn.
+[91] Algorithmic and implementation efficiency — Choose appropriate algorithms, data structures, and implementation patterns to meet performance goals; consider asymptotic costs, memory/GC pressure, eager vs. 
+[92] Avoid magic and unnecessary metaprogramming — Refrain from surprising or ‘magical’ features (macros, heavy metaprogramming, DI/compile‑time tricks) unless clearly justified. Prefer simple, explicit, idiomat
+[93] Control-flow clarity and low cognitive complexity — Keep control flow simple and easy to follow: minimize decision points and nesting, use guard clauses/early exits appropriately, avoid long switch/if-else chains
+[94] Semicolon usage rules and pitfalls — Follow consistent semicolon conventions, avoid ASI-related pitfalls in languages that insert semicolons, and remove redundant/double semicolons introduced by la
+[95] Security by design, threat modeling, and risk management — Treat security as a first‑class design concern: perform threat modeling, choose safer languages/runtimes, reuse secure patterns, align with industry practices, 
+[96] Braces policy for control statements — Always use braces for if/else/loop bodies; apply a consistent, explicit bracing/placement style and avoid trailing content after closing braces where prohibited
+[97] Design system use and minimal custom styling — Leverage existing design‑system components and architectures; minimize custom CSS and customize cautiously to control maintenance cost and enable coordinated up
+[98] Style and formatting conventions — Maintain readable, consistent formatting (layout, indentation, casing, grouping/ordering) that yields clean diffs and aids human readers.
+[99] Security assurance and compliance enablement — Plan and demonstrate security assurance: apply formal or rigorous practices, testing, and recognized standards/roadmaps to meet high‑assurance certifications an
+[100] Database schema and field naming conventions — Apply consistent, meaningful, and non‑reserved names for database artifacts; normalize field/column names (e.g., camelCase to snake_case where prescribed) and a
+[101] Commenting strategy and quality — Favor self‑explanatory code; comment the what/why and non‑obvious assumptions; keep comments minimal but sufficient, accurate, and maintained.
+[102] Error prevention and robust error handling — Adopt a safety‑first posture: prevent errors where possible, apply balanced defensive checks, detect issues early, scope try/exception handling correctly, choos
+[103] Resilience, availability, and fault tolerance — Systems continue operating under failures and load via redundancy, durability/backup, decomposition with coordinated fault handling, and traffic‑shaping/protect
+[104] Unit test structure, patterns, and regression safety — Tests follow Arrange/Act/Assert with isolation, use framework assertions, prefer table‑driven tests and externalized fixtures for clarity, and include tests wit
+[105] Testing strategy and layering (pyramid) — Adopt a balanced test mix emphasizing fast unit tests, few broad E2E/UI tests, pragmatic coverage, realistic data, limited brittle doubles, and awareness of aut
+[106] Line ending style: Unix LF — All files must use Unix (LF) line endings; flag deviations.
+[107] Source file encoding policy (UTF-8, BOM) — Require UTF‑8 source encoding with specified BOM usage (typically none); include any language-specific encoding declarations as needed.
+[108] Resource-oriented HTTP API design and modeling — Model RESTful APIs around coherent resources and relationships; use paths for identity, bodies for content, headers for metadata; use discoverable, human-friend
+[109] Comment and documentation content quality and maintenance — Comments/docs should explain intent, invariants, rationale, complexity and error handling; include examples where helpful; remain accurate with code changes and
+[110] Braces policy for control statements — Always use braces for if/else/loop bodies; apply a consistent, explicit bracing/placement style and avoid trailing content after closing braces where prohibited
+[111] Architecture decision records and rationale capture — ADRs/RFCs capture context, goals/non‑goals, alternatives, consequences, and rationale with lightweight governance; artifacts aid future re‑architecture and team
+[112] Numeric kinds and type requirements — Define language numeric kinds (integers/floats), their min/max bounds and defaults, and constraints for declaring ranged numeric types.
+[113] Change size and granularity for reviewability — Keep PRs small, focused on a single concern, and logically organized into coherent commits; split oversized or mixed changes into incremental slices.
+[114] Switch/case style, safety, and completeness — Use clear, safe switch statements: consistent formatting, prevent unintended fallthrough, place default appropriately, and avoid default when fully covering enu
+[115] Identifier naming and casing conventions — Follow project/language naming rules for identifiers (types, functions/methods, fields, constants, files/resources), including casing, delimiter/underscore rule
+[116] Algorithmic and implementation efficiency — Choose appropriate algorithms, data structures, and implementation patterns to meet performance goals; consider asymptotic costs, memory/GC pressure, eager vs. 
+[117] Refactoring to improve design safely — Continuously apply appropriate refactorings (e.g., extract/rename, split/decompose, substitute algorithm, adjust hierarchies/interfaces) to improve structure, r
+[118] Logging practices, routing, and performance/safety — Use consistent, structured logging; guard expensive evaluations; centralize and correctly route logs (incl. sensitive or high‑risk operations) with tamper‑resis
+[119] Prefer reuse via established libraries/components — Adopt proven standards, libraries, and internal components over bespoke re‑implementation to improve consistency, maintainability, and delivery speed; justify d
+[120] C++ namespace usage conventions and formatting — Use modern, file‑scoped namespaces; avoid global‑scope using directives in headers; keep one namespace per file where prescribed; do not indent namespace conten
+[121] Injection prevention and input handling — Prevent injection by strictly validating inputs with allow-lists, parameterizing commands/queries, and applying context-appropriate output encoding/sanitization
+[122] Naming clarity, consistency, and conventions — Names (including parameters and aliases) are descriptive, consistent with project/domain terminology and conventions, communicate correct intent, and are approp
+[123] Testing strategy and layering (pyramid) — Adopt a balanced test mix emphasizing fast unit tests, few broad E2E/UI tests, pragmatic coverage, realistic data, limited brittle doubles, and awareness of aut
+[124] Import statements: placement, ordering, and grouping — Place imports at the top, one per line; group by standard library/third‑party/local with blank lines; apply consistent ordering and formatting across files/modu
+[125] Commit message structure, content, and traceability — Commit messages follow project format with a concise verb+object summary of what changed, a clear rationale (why), structured details as needed, and links to is
+[126] Avoid global state and ensure safe initialization — Minimize or avoid mutable global state; prefer locals/module scope or dependency injection. Prevent initialization‑order hazards from global objects with constr
+[127] Style and formatting conventions — Maintain readable, consistent formatting (layout, indentation, casing, grouping/ordering) that yields clean diffs and aids human readers.
+[128] API design quality, ergonomics, and stewardship — APIs are coherent, idiomatic, and efficient; reflect domain semantics, offer clear/stable behavioral guarantees, encourage readable call sites, and avoid bloate
+[129] Documentation quality and maintenance — Produce clear, accurate, audience‑appropriate docs/specs; keep them current, modular, consistently detailed, and avoid duplication; support onboarding.
+[130] Stylelint rule configuration and conformance — Configure and enforce Stylelint rules and conformance: selector/property/value constraints (including disallowed/unknown properties), media/features/custom prop
+[131] Prefer direct function references over trivial wrappers — Pass or bind function/method references directly instead of creating redundant anonymous wrappers or wrapper lambdas.
+[132] Hot‑path performance hygiene — Avoid per‑iteration and startup overhead on hot/default paths; hoist repeatable computations, avoid needless allocations/callbacks, and choose efficient idioms 
+[133] Identifier naming and casing conventions — Follow project/language naming rules for identifiers (types, functions/methods, fields, constants, files/resources), including casing, delimiter/underscore rule
+[134] Brace and else placement policy for control‑flow blocks — Apply consistent rules for brace usage and placement (including single‑statement bodies) and else/elseif alignment in if/loop/do‑while chains per project policy
+[135] Brace and else placement policy for control‑flow blocks — Apply consistent rules for brace usage and placement (including single‑statement bodies) and else/elseif alignment in if/loop/do‑while chains per project policy
+[136] Design patterns literacy and contextual application — Understand, adapt, and judiciously apply design/structural/integration patterns alongside modern frameworks to improve clarity, reuse, and decoupling.
+[137] Multiline declarations, signatures, and call formatting — Format multiline lists/declarations/signatures and calls consistently: one item/parameter per line when wrapped, proper indentation, aligned closing delimiters,
+[138] Small, focused, reviewable changes — Keep changes well‑scoped and single‑purpose; prefer small, incremental CLs that ease review, merging, and rollback. Split large or mixed changes and manage inte
+[139] C++ file‑local symbol linkage and namespace hygiene — Keep file‑local symbols internal (static/unnamed namespaces) and avoid using‑directives/aliases that leak into headers or widen scope unnecessarily; keep anonym
+[140] Clarity and concision in written communication — Use clear, concise, and audience‑appropriate language in explanations, policies, and review comments; stay focused, avoid jargon and tangents, and justify chose
+[141] Commit message structure and content — Write accurate, descriptive commit messages with conventional subject/body separation and structured footers (e.g., issue references and explicit BREAKING CHANG
+[142] Code style guide adherence and consistency — Code follows the project’s chosen style guides and idioms consistently so it reads uniformly and is easy to review and maintain.
+[143] Intention‑revealing naming and conventions — Names clearly convey intent, are consistent and predictable, and follow project/language conventions (including casing); they balance brevity with clarity, avoi
+[144] Architectural and codebase consistency — Ensure changes fit established architecture, APIs, and codebase idioms; avoid idiosyncratic solutions that drift from project norms.
+[145] Unsafe Rust usage and API soundness — Use unsafe Rust only when necessary; confine and document all invariants; localize unsafety behind safe APIs; employ ownership/interior‑mutability patterns judi
+[146] Resource lifetime management and deterministic cleanup — Acquire and release resources safely and deterministically (RAII/context managers/using). Establish clear ownership models (e.g., reference counting/smart point
+[147] Treat warnings/lints as errors — Enable compiler warnings and lint checks, make violations build‑breaking where practical, fix rather than suppress, and document/justify rare exceptions.
+[148] Global state minimization and management — Avoid globals and centralized unencapsulated state. When unavoidable, constrain and document usage (const/ALL_CAPS as applicable), prefer internal linkage/priva
+[149] Type/class/interface/constructor naming (UpperCamelCase) — Class, interface, type, and constructor identifiers must use UpperCamelCase (StudlyCaps); constructors begin with a capital letter.
+[150] Resource‑oriented API design and simplicity — Design predictable, resource‑focused APIs (e.g., REST) with shallow, sensible resource models and minimal sub‑resource depth.
+[151] API design quality, ergonomics, and stewardship — APIs are coherent, idiomatic, and efficient; reflect domain semantics, offer clear/stable behavioral guarantees, encourage readable call sites, and avoid bloate
+[152] Hot‑path performance hygiene — Avoid per‑iteration and startup overhead on hot/default paths; hoist repeatable computations, avoid needless allocations/callbacks, and choose efficient idioms 
+[153] Cohesion and single responsibility — Decompose so each function/module/class has one clear responsibility (one reason to change) with strong cohesion and well‑defined boundaries.
+[154] Code smells: identification and targeted refactoring — Recognize common smells (duplication, long/large constructs, intimacy/coupling, data clumps, needless hierarchies, structural size smells) and apply appropriate
+[155] Comment quality, clarity, and accuracy — Comments are clear, useful, and accurate; they explain intent/rationale where code can’t, adhere to conventions, and stay synchronized with code to avoid mislea
+[156] Multicollinearity detection and mitigation — Identify multicollinearity (e.g., |ρ|>0.7, VIF≤5) and mitigate by variable selection/pruning or adjusted model specification.
+[157] Documentation IA, examples, and navigability — Organize docs around user tasks with clear IA, cross‑links, and examples/tutorials; ensure findability via titles, indexing, and related links.
+[158] Design‑system consistency and maturity — Adopt a reusable, cohesive design system as a single source of truth; ensure cross‑product coherence, brand/accessibility preservation, and ease of contribution
+[159] Accessibility and inclusive design practices — Designs and content follow WCAG/POUR and inclusive‑by‑default practices (keyboard/focus, ARIA restraint, color/contrast, clear labels/headings, alt text, respon
+[160] Safe and unsurprising C++ usage — Avoid surprising or dangerous C++ features; prefer safer, standard idioms; waivers are rare and justified.
+[161] Reliability engineering practices — Emphasize reliability explicitly; apply DfR/fault‑independence and use clear reasoning and artifacts to explain/mitigate failures.
+[162] Package and module organization principles — Organize code into cohesive, discoverable packages/modules with clear boundaries; avoid monoliths and overly tiny fragments; apply sound package principles.
+[163] Header hygiene, self‑containment, and dependency control — Headers compile standalone with guards; include what they use; minimize and structure transitive/includes; group/sort includes; prefer forward declarations judi
+[164] Developer tooling usability and formatter UX — Provide fast, clear, developer‑friendly tooling (CLI/IDE) with in‑editor fixes and opinionated yet composable formatting that respects team needs.
+[165] Test design quality and refactor‑resilience — Organize tests at appropriate levels with clear intent (one aspect per test, table‑driven where useful), evident data and edge cases, sufficient coverage, indep
+[166] Plain language and editorial style — Use clear, plain language and consistent style/voice in UI text and docs; avoid ambiguity and confusing phrasing; apply basic writing mechanics well.
+[167] Naming clarity, consistency, and conventions — Names (including parameters and aliases) are descriptive, consistent with project/domain terminology and conventions, communicate correct intent, and are approp
+[168] Small, cohesive functions and decomposition — Favor small, single‑purpose, cohesive functions with clear signatures. Decompose long/compound methods, separate intention from implementation, and organize fun
+[169] Conventions adherence (local and ecosystem) — Align with file/project conventions and relevant ecosystem standards; deviations are rare, well‑reasoned, and improve clarity/consistency.
+[170] Error handling API ergonomics — Design error types/hierarchies and helper interfaces for ergonomic, reusable, context‑rich error reporting and handling for callers.
+[171] Error prevention and robust error handling — Adopt a safety‑first posture: prevent errors where possible, apply balanced defensive checks, detect issues early, scope try/exception handling correctly, choos
+[172] Test design quality and refactor‑resilience — Organize tests at appropriate levels with clear intent (one aspect per test, table‑driven where useful), evident data and edge cases, sufficient coverage, indep
+[173] Accessibility and inclusive design practices — Designs and content follow WCAG/POUR and inclusive‑by‑default practices (keyboard/focus, ARIA restraint, color/contrast, clear labels/headings, alt text, respon
+[174] Resource-oriented HTTP API design and modeling — Model RESTful APIs around coherent resources and relationships; use paths for identity, bodies for content, headers for metadata; use discoverable, human-friend
+[175] API ergonomics, clarity, and least astonishment — Design APIs that are clear, minimal, and easy to use correctly. Keep parameters manageable, prefer explicit types/enums over booleans, provide sensible defaults
+[176] Documentation quality and maintenance — Produce clear, accurate, audience‑appropriate docs/specs; keep them current, modular, consistently detailed, and avoid duplication; support onboarding.
+[177] Class cohesion and scoped responsibilities (avoid god classes) — Ensure types are cohesive and well‑scoped: avoid god classes, excessive fields, or mixing unrelated responsibilities. Uphold single‑responsibility and keep beha
+[178] Control-flow clarity and low cognitive complexity — Keep control flow simple and easy to follow: minimize decision points and nesting, use guard clauses/early exits appropriately, avoid long switch/if-else chains
+[179] Loosely coupled service-oriented architecture — Favor decoupled, service‑oriented designs and evolve incrementally; partition functionality across services to reduce tight coupling and enable independent evol
+[180] ACSL specification constructs and usage — Use ACSL correctly and precisely: author contracts (requires/ensures/assigns/behaviors), memory allocation/leak predicates, and built-ins (\old, \result, \at); 
+[181] Prefer standard/established libraries over custom reimplementations — Use built‑in or well‑tested libraries/algorithms for common tasks instead of bespoke implementations unless there is a compelling, well‑justified benefit.
+[182] API stability and backward-compatible evolution — Define stability guarantees and evolve APIs with backward-compatible changes, additive extensibility, deprecation planning, and client impact management—especia
+[183] Arrow function body style and usage — Use arrow functions appropriately for callbacks and structure their bodies consistently: prefer concise implicit return only for single, side‑effect‑free expres
+[184] Prefer composition and dependency injection — Favor composition over inheritance and depend on abstractions via DI to reduce coupling, improve testability, and enable flexible assembly of behavior.
+[185] Test design, isolation, and maintainability — Write small, focused, isolated tests with clear intent; design for testability; practice good hygiene (e.g., TDD red‑green‑refactor where useful); cover boundar
+[186] Comments: clear, intentional, and why‑focused — Prefer self‑explanatory code; use comments sparingly to capture intent, rationale, trade‑offs, and non‑obvious context. Write clear, useful English, avoid resta
+[187] Configuration design: minimal, explicit, and managed — Expose configuration only for concrete needs, prefer explicit arguments over hidden defaults, and treat configuration as code with sound design and management p
+[188] Text contrast (WCAG) compliance — Verify text/image‑of‑text contrast meets WCAG AA/AAA thresholds using contrast checkers.
+[189] Comment and documentation content quality and maintenance — Comments/docs should explain intent, invariants, rationale, complexity and error handling; include examples where helpful; remain accurate with code changes and
+[190] Error handling quality, semantics, and reporting — Use clear, consistent error signaling/propagation; surface the happy path; provide ergonomic error types and actionable messages; avoid silent failures and pani
+[191] Comment and documentation content quality and maintenance — Comments/docs should explain intent, invariants, rationale, complexity and error handling; include examples where helpful; remain accurate with code changes and
+[192] Brace and else placement policy for control‑flow blocks — Apply consistent rules for brace usage and placement (including single‑statement bodies) and else/elseif alignment in if/loop/do‑while chains per project policy
+[193] Import statements: placement, ordering, and grouping — Place imports at the top, one per line; group by standard library/third‑party/local with blank lines; apply consistent ordering and formatting across files/modu
+[194] Multicollinearity detection and mitigation — Identify multicollinearity (e.g., |ρ|>0.7, VIF≤5) and mitigate by variable selection/pruning or adjusted model specification.
+[195] Intention‑revealing naming and conventions — Names clearly convey intent, are consistent and predictable, and follow project/language conventions (including casing); they balance brevity with clarity, avoi
+[196] Testing strategy, rigor, and methodology — A deliberate testing approach (requirements‑driven, TDD/BDD/ATDD as appropriate) with readable tests, adequate coverage/mix, disciplined techniques, and effecti
+[197] Security hardening and hygiene — Apply defense‑in‑depth and safe defaults: input validation/sanitization, minimize sensitive data, prefer vetted libraries, and design to limit impact of vulnera
+[198] Resource lifetime management and deterministic cleanup — Acquire and release resources safely and deterministically (RAII/context managers/using). Establish clear ownership models (e.g., reference counting/smart point
+[199] API ergonomics, clarity, and least astonishment — Design APIs that are clear, minimal, and easy to use correctly. Keep parameters manageable, prefer explicit types/enums over booleans, provide sensible defaults
+[200] Identifier naming conventions — Follow project/language naming rules for identifiers: consistent casing and word boundaries, acronym/initialism handling, and naming rules for modules/packages/
+[201] Design‑system consistency and maturity — Adopt a reusable, cohesive design system as a single source of truth; ensure cross‑product coherence, brand/accessibility preservation, and ease of contribution
+[202] Algorithmic and implementation efficiency — Choose appropriate algorithms, data structures, and implementation patterns to meet performance goals; consider asymptotic costs, memory/GC pressure, eager vs. 
+[203] Distributed systems trade‑offs and operational resilience — Balance consistency/availability/liveness, choose appropriate conflict resolution, and design for resilience (rollbacks, isolation, hot‑swapping, CAP‑aware choi
+[204] Prefer clarity/safety over premature optimization — Strive for simplicity and clarity first. Treat performance as secondary to safety and understandability; avoid premature micro-optimizations. Optimize only when
+[205] Line-wrapping and continuation conventions — Split long lines at sensible break points with consistent continuation alignment or hanging indents. Place operators per the style rules and prefer parentheses-
+[206] Global state minimization and management — Avoid globals and centralized unencapsulated state. When unavoidable, constrain and document usage (const/ALL_CAPS as applicable), prefer internal linkage/priva
+[207] Single Responsibility Principle — Each module/class should have one clear responsibility (one reason to change).
+[208] Language/platform and paradigm selection — Choose languages/platforms/paradigms to fit the problem and ecosystem; leverage features that prevent classes of bugs and improve verification/development workf
+[209] Contract annotations (pre/postconditions, invariants) — Express behavior and constraints with contract annotations (pre/postconditions, invariants, assertions, statement contracts), including explicit modified‑variab
+[210] Change/commit/PR communication quality — Titles and messages clearly summarize what and why, provide sufficient context/rationale, avoid narrating the diff, and scale detail to the change; large CLs ar
+[211] Contribution readiness and submission norms — Contributions meet baseline entry criteria (tests included, coding practices followed, debt reduced where possible) and are submitted in a state suitable for se
+[212] Choose fit-for-use abstractions and data representations — Create abstractions and select data structures that match how the program uses them, simplifying logic and avoiding designs that are too detailed or too coarse.
+[213] Atomic, focused change sets — Each PR/commit is a small, coherent, independent unit; unrelated changes are split to reduce reviewer load and ease integration.
+[214] Comment and documentation content quality and maintenance — Comments/docs should explain intent, invariants, rationale, complexity and error handling; include examples where helpful; remain accurate with code changes and
+
+# Worked examples
+
+## Example 1 (negative_python, language=Python, judgement=0)
+
+INPUT (unit_id=0b01001001/spectree#185):
+PR TITLE: Form data support
+
+REVIEW COMMENTS:
+Never been used?
+---
+Can combine all the `nonlocal` in one line.
+---
+It's OK to raise exceptions here. Explicit is better than implicit.
+
+I agree that combining these two parameters should be better. But I'm not sure if we should make some breaking changes now.
+---
+Refs: https://www.iana.org/assignments/media-types/media-types.xhtml
+
+How about the following?
+
+* font
+* video
+* message
+* model
+
+I wonder what's the major difference among these types for file handlers?
+---
+Since we already consume the stream buffer, why not just use `part.data` to access the data and content length?
+
+I'm not sure if it's possible to keep the buffer and let the user consume it later.
+---
+BTW, async falcon should also be in the TODO list.
+---
+```suggestion
+            form_data.parse_obj(data or {}) if form_data and data else None,
+```
+---
+if get the default `''` and split here index[0]  will raise an error
+---
+maybe if here?
+---
+Unused?
+---
+Can we assume that the user should provide `form` instead of `json` here?
+---
+UNSAFE behavior: `req.env`. This may cause the leak of the machine information.
+---
+Will [`falcon.Request.bounded_stream`](https://falcon.readthedocs.io/en/stable/api/request_and_response_wsgi.html?highlight=file#falcon.Request.bounded_stream) be better to avoid this exception?
+---
+I think `getattr(field, "filename", False)` will always return `None` since the type of `field` is always `cgi.FieldStorage`.
+---
+Is `filename*` a regex?
+---
+An... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "0b01001001/spectree#185", "passages": [{"passage_text": "Can combine all the `nonlocal` in one line.\n---\nIt's OK to raise exceptions here. Explicit is better than implicit.", "passage_polarity": "negative", "signals": [{"signal_text": "Can combine all the `nonlocal` in one line.", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [17]}, {"signal_text": "It's OK to raise exceptions here. Explicit is better than implicit.", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [57, 102]}]}, {"passage_text": "I agree that combining these two parameters should be better. But I'm not sure if we should make some breaking changes now.", "passage_polarity": "negative", "signals": [{"signal_text": "combining these two parameters should be better", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [7, 90]}, {"signal_text": "I'm not sure if we should make some breaking changes now", "signal_type": "observation", "polarity": "negative", "rubric_matches": [27, 67]}]}, {"passage_text": "Since we already consume the stream buffer, why not just use `part.data` to access the data and content length?\n\nI'm not sure if it's possible to keep the buffer and let the user consume it later.", "passage_polarity": "negative", "signals": [{"signal_text": "why not just use `part.data` to access the data and content length?", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [17]}]}, {"passage_text": "BTW, async falcon should also be in the TODO list.", "passage_polarity": "negative", "signals": [{"signal_text": "async falcon should also be in the TODO list", "signal_type": "complaint", "polarity": "negative", "rubric_matches": []}]}, {"passage_text": "if get the default `''` and split here index[0]  will raise an error", "passage_polarity": "negative", "signals": [{"signal_text": "split here index[0]  will raise an error", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [57, 102]}]}, {"passage_text": "UNSAFE behavior: `req.env`. This may cause the leak of the machine information.", "passage_polarity": "negative", "signals": [{"signal_text": "UNSAFE behavior: `req.env`", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [26, 50, 95]}, {"signal_text": "This may cause the leak of the machine information", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [26, 95]}]}, {"passage_text": "Will [`falcon.Request.bounded_stream`](https://falcon.readthedocs.io/en/stable/api/request_and_response_wsgi.html?highlight=file#falcon.Request.bounded_stream) be better to avoid this exception?", "passage_polarity": "negative", "signals": [{"signal_text": "Will [`falcon.Request.bounded_stream`](https://falcon.readthedocs.io/en/stable/api/request_and_response_wsgi.html?highlight=file#falcon.Request.bounded_stream) be better to avoid this exception?", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [57, 102]}]}, {"passage_text": "I think `getattr(field, \"filename\", False)` will always return `None` since the type of `field` is always `cgi.FieldStorage`.", "passage_polarity": "negative", "signals": [{"signal_text": "`getattr(field, \"filename\", False)` will always return `None`", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [57]}]}, {"passage_text": "Can we assume that the user should provide `form` instead of `json` here?", "passage_polarity": "negative", "signals": [{"signal_text": "Can we assume that the user should provide `form` instead of `json` here?", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [7, 90]}]}, {"passage_text": "elsewhere in this PR there is a condition that will raise exception if both `json` and `form` exist, so it seems like they are mutually exclusive\n---\n`cgi` is deprecated since Python 3.11", "passage_polarity": "negative", "signals": [{"signal_text": "there is a condition that will raise exception if both `json` and `form` exist", "signal_type": "observation", "polarity": "negative", "rubric_matches": [57]}, {"signal_text": "`cgi` is deprecated since Python 3.11", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [27, 67]}]}]}
+
+## Example 2 (positive_go, language=Go, judgement=1)
+
+INPUT (unit_id=kubernetes/minikube#4424):
+PR TITLE: Detect status before enable/disable addon
+
+REVIEW COMMENTS:
+Can you change this variable name to be little more informative? 
+---
+I think this logic can be moved to the respective command files. 
+---
+same for this too. 
+---
+Address done. Thanks
+---
+Address done. Thanks
+---
+Address done. Thanks
+Append my new UT result:
+![image](https://user-images.githubusercontent.com/12505594/59002746-084f1700-8846-11e9-8615-459e1a915f0f.png)
+
+---
+. No need to fail
+---
+removed. Thanks
+---
+for more consistency, lets use errors.Wrap in stead of `fmt.Errorf`
+---
+Thanks for adding the unit tests, two things to impriove this unit test
+1- first lets change the t.Fatalf to t.Error
+2- lets make the message in the following format:
+```
+t.Errorf("Expected to get error , got nil", )
+```
+---
+lets change this to Name()
+since this does not return the addon but returns a string.
+---
+lets exit with 0, because we don't want to fail automated minikubes tests used CI, if their addon was already set, this will make their script to fail.
+
+I rather we just warn the user but not exit with error. lets exit with code 0
+---
+Done. Thanks Medya
+---
+Done. Thanks Medya
+---
+Done. Thanks
+---
+Thanks Medya, should not errors.Wrap for this case
+---
+in go style usually there is no need to say Get, and also since the func on an addon, there is no need to say Addon in the name either, so I suggest changing it to just Name()
+---
+Thanks for all the changes, please change this to Name(). I think after this change it will ... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "kubernetes/minikube#4424", "passages": [{"passage_text": "Can you change this variable name to be little more informative?", "passage_polarity": "negative", "signals": [{"signal_text": "change this variable name to be little more informative", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [59, 86, 122, 143]}]}, {"passage_text": "I think this logic can be moved to the respective command files.", "passage_polarity": "negative", "signals": [{"signal_text": "this logic can be moved to the respective command files", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": []}]}, {"passage_text": "for more consistency, lets use errors.Wrap in stead of `fmt.Errorf`", "passage_polarity": "negative", "signals": [{"signal_text": "for more consistency, lets use errors.Wrap in stead of `fmt.Errorf`", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [18, 57, 102]}]}, {"passage_text": "Thanks for adding the unit tests, two things to impriove this unit test\n1- first lets change the t.Fatalf to t.Error\n2- lets make the message in the following format:\n```\nt.Errorf(\"Expected to get error , got nil\", )\n```", "passage_polarity": "mixed", "signals": [{"signal_text": "Thanks for adding the unit tests", "signal_type": "praise", "polarity": "positive", "rubric_matches": [43, 85, 104]}, {"signal_text": "lets change the t.Fatalf to t.Error", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [43, 85, 104]}, {"signal_text": "lets make the message in the following format", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [85, 104]}]}, {"passage_text": "lets change this to Name()\nsince this does not return the addon but returns a string.", "passage_polarity": "negative", "signals": [{"signal_text": "lets change this to Name()", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [59, 86, 143]}, {"signal_text": "this does not return the addon but returns a string", "signal_type": "observation", "polarity": "negative", "rubric_matches": [59, 143]}]}, {"passage_text": "lets exit with 0, because we don't want to fail automated minikubes tests used CI, if their addon was already set, this will make their script to fail.\n\nI rather we just warn the user but not exit with error. lets exit with code 0", "passage_polarity": "negative", "signals": [{"signal_text": "lets exit with 0, because we don't want to fail automated minikubes tests used CI", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [57, 102]}, {"signal_text": "I rather we just warn the user but not exit with error", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [57, 102]}]}, {"passage_text": "in go style usually there is no need to say Get, and also since the func on an addon, there is no need to say Addon in the name either, so I suggest changing it to just Name()", "passage_polarity": "negative", "signals": [{"signal_text": "in go style usually there is no need to say Get", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [18, 59, 143]}, {"signal_text": "I suggest changing it to just Name()", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [59, 143]}]}, {"passage_text": "Thanks for all the changes, please change this to Name(). I think after this change it will be good to go !", "passage_polarity": "mixed", "signals": [{"signal_text": "Thanks for all the changes", "signal_type": "praise", "polarity": "positive", "rubric_matches": []}, {"signal_text": "please change this to Name()", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [59, 143]}, {"signal_text": "after this change it will be good to go", "signal_type": "praise", "polarity": "positive", "rubric_matches": []}]}]}
+
+# Hard constraints (failures we have seen)
+
+1. **passage_text MUST be at least 50 chars** and MUST include the actual quality-judgment content, not just a section label. If a passage starts with "Strengths:", "Weaknesses:", "Pros:", "Cons:", etc., extend it to include the body text.
+
+2. **signal_text MUST be an exact substring of passage_text** — copy character-by-character, including punctuation, whitespace, and quotes. Do NOT paraphrase. If you can't find an exact span, skip that signal.
+
+3. **passage_text MUST be an exact substring of the pull request review thread text** — copy character-by-character.
+
+   - Do NOT add or remove whitespace anywhere — preserve ALL spacing, newlines, and tabs exactly as they appear in the source.
+   - Do NOT add spaces between CJK characters (Chinese / Japanese / Korean) and adjacent Latin characters. If the source is `这个group`, your passage_text contains `这个group`, NOT `这个 group`.
+   - Do NOT collapse markdown separators like `---` or `===` or `***`. If the source contains `---` between two paragraphs, the separator MUST appear inside your passage_text verbatim.
+   - When in doubt, copy a slightly longer span — the snap-to-source post-processor handles minor cases but cannot recover from character substitutions.
+
+4. **JSON escaping (CRITICAL — this is the #1 cause of broken output)**: the text often contains LaTeX commands like `\bullet`, `\mathcal`, `\theta`, `\alpha`. Inside a JSON string, a single backslash `\` followed by certain letters IS A CONTROL CHARACTER, not a literal backslash. So:
+
+   - Source has: `\bullet` (literal) → JSON string MUST contain `\\bullet` (escaped). Writing `\bullet` will produce a backspace character (0x08) in the output, NOT the LaTeX command.
+   - Source has: `\mathcal{O}` → JSON MUST be `\\mathcal{O}`.
+   - Source has: `\theta_0` → JSON MUST be `\\theta_0`.
+   - Source has: `\n` (literal backslash + n) → JSON MUST be `\\n`. Don't use `\n` because that produces an actual newline.
+
+   Every literal backslash in the source MUST be doubled in your JSON output. There are NO exceptions. If you are unsure, double the backslash — over-escaping is fine, under-escaping breaks parsing.
+
+5. **HIGH RECALL on signals**: aim 3-10 per passage. Don't miss quality judgments.
+
+6. **Capture both criticism and praise.** Code reviews vary by community: many threads are nit-skewed (formatting, naming, dead code), others are praise-skewed (LGTM, thanks, looks good). Extract both. Acknowledgements like 'Done. Thanks' are usually NOT signals on their own (no quality judgment) — skip them unless they contain a substantive claim. Inline code snippets, suggestions (```suggestion blocks), and back-and-forth threads are common; treat each substantive comment as one passage and combine short adjacent comments only if necessary to meet the 50-char minimum.
+
+7. **Empty rubric_matches `[]` is fine** — that signals a taxonomy gap, which is useful to surface.
+
+# Output format
+
+Output STRICT JSON on a SINGLE LINE. No markdown fences. No prose before or after. Schema:
+
+```
+{"unit_id": "<from input>", "passages": [
+  {"passage_text": "<exact substring of input, >=50 chars>",
+    "passage_polarity": "positive|negative|mixed",
+    "signals": [
+      {"signal_text": "<exact substring of passage_text>",
+        "signal_type": "complaint|praise|observation|suggestion",
+        "polarity": "positive|negative|neutral",
+        "rubric_matches": [<int>, ...]}
+    ]}
+]}
+```
+
+# Now process this pull request review thread
+
+unit_id: projectfluent/python-fluent#54
+
+text:
+PR TITLE: Migrate empty translations
+
+REVIEW COMMENTS:
+I think the trailing `{""}` is not what we want.
+---
+I think we should adjoin text elements and text expressions alike. That way, we don't end up with stray `{""}` in the output (and thus in the tests).
+---
+I'm OK with doing this but I think this is opposite to the direction the fix to handle leading/trailing whitespace would want to go. Do you want to deprioritize or maybe even wontfix [bug 1374246](https://bugzilla.mozilla.org/show_bug.cgi?id=1374246)?
+---
+Wouldn't leading/trailing just be trailing pass in `pattern_of`, cutting leading and trailing whitespace off of TextElement into a Placeable, or prefixing with an empty placeable?
+---
+Yes, but it also needs more handling in `CONCAT` so that `CONCAT(COPY(), COPY())` doesn't produce things like `Foo{" "}Bar` when the first `COPY` has trailing whitespace (or the second one has leading whitespace). I'd like to tackle it in a separate PR.
+
+I'll implement your original suggestion to join `TextElements` and `StringExpressions` alike. This might result in `TextElement("      Foo")` in some rare cases. The serializer currently serializes this with the whitespace (although I'd like to change the behavior in the future and throw: [bug 1397233](https://bugzilla.mozilla.org/show_bug.cgi?id=1397233)) but the parses ignores it, so in the end, the whitespace is lost.
+
+This is actually the status quo for translations with leading or trailing whitespace, like `key = \u0020Foo`. I'll unskip two tests to make it explicit. Implementing your suggestion now will prepare us to solve the leading/trailing whitespace issue uniformly in all transforms, regardless of whether it was part of the legacy translation or got concatenated from another legacy translation.
+---
+Can this be `white_expr`, as it's not empty?
+
+And yes, I still tend to prefer `{""}  foo` to `{"  "}foo`, in which case this would be an `empty_expr` ;-)
+---
+I'd prefer to have this method return lists of variable le
+
+Output rules:
+- Do NOT think aloud. Do NOT explain your reasoning.
+- Do NOT preface with "Let me", "The user", "First I'll", "The paper concerns", or any meta-text.
+- Do NOT summarize the input pull request review thread. Skip the introduction. Go DIRECTLY to identifying quality-judgment passages.
+- Begin your response with the character `{` and end with `}`.
+- Output exactly ONE JSON object on ONE line. Nothing else before or after.

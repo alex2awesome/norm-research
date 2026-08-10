@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_e6e8be03c72e.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17928,
+  "output_tokens": 4254,
+  "elapsed_s": 2206.604652374983,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on humor generation and evaluation for large language models",
+    "subtask_short": "LLM humor generation",
+    "subtask_description": "Guidelines and evaluation criteria for producing and assessing humorous outputs from LLMs using a persona-based Mixture-of-Thought (MoT) distillation pipeline, supervised fine-tuning, and preference-alignment experiments.",
+    "subtask_keywords": [
+      "humor",
+      "llm",
+      "mixture_of_thought",
+      "persona_based_distillation",
+      "preference_alignment",
+      "evaluation_protocol"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Cognitive Synergy Framework (persona-based MoT distillation)",
+        "description": "Operationalize psychological humor theories into multiple cognitive personas and adapt the Mixture-of-Thought (MoT) paradigm to model divergent thinking for humor generation.",
+        "guidance": "Instantiate distinct cognitive personas as latent experts within a MoT ensemble to route generation into low-probability, high-variance regions of semantic space where humor occurs. Use the ensemble to synthesize a diverse, theoretically grounded corpus of synthetic data for student model distillation. (Paper contribution: 'We introduce the Cognitive Synergy Framework, a methodology for generating diverse, high-quality humor data by deploying specialized psychological personas as latent experts.')"
+      },
+      {
+        "name": "Design explicit Cognitive Personas mapped to humor theories",
+        "description": "Define a small set of cognitive personas, each grounded in a specific psychological theory of humor and a cognitive focus (e.g., Neurotic, Cynic, Observer, Wordsmith, Optimist, Absurdist).",
+        "guidance": "Map each persona to a humor theory/mechanism and use them as soft constraints on the reasoning process to ensure candidate pool covers a wide spectrum of comedic mechanisms (Table 1). Example mappings: Neurotic\u2192Relief/Tension Release, Cynic\u2192Superiority/Social Critique, Wordsmith\u2192Linguistic/Ambiguity, Absurdist\u2192Incongruity/Surrealism. Monitor per-persona win rates and adjust persona design if some styles underperform or overfit (paper notes Neurotic and Absurdist dominated; Wordsmith often penalized when forced)."
+      },
+      {
+        "name": "Divergent reasoning via Mixture-of-Thought (MoT)",
+        "description": "Generate K distinct reasoning traces in parallel (instead of a single Chain-of-Thought) to explore multiple comedic angles before selecting a punchline.",
+        "guidance": "Seed reasoning paths with different cognitive priors to explore the 'long tail' of creative possibilities and avoid mode collapse toward generic, high-probability continuations. MoT should produce diverse candidate sets reflecting irony, absurdity, wordplay, observational humor, etc."
+      },
+      {
+        "name": "Generate many persona-conditioned candidates per prompt",
+        "description": "For each input prompt, synthesize a large candidate pool covering personas and intra-persona variations (example: 24 candidates per prompt: 4 per persona \u00d7 6 personas).",
+        "guidance": "High candidate multiplicity exposes the model to a broad quality spectrum and provides material for pairwise/group ranking and preference learning. The paper used \u223c28,800 candidates for 1,200 prompts (24 per prompt)."
+      },
+      {
+        "name": "Silver Teacher protocol: rank candidates using LLM-judged pairwise evaluation (Elo)",
+        "description": "Use an LLM judge to perform pairwise comparisons across candidates, aggregate match outcomes into a contest matrix, and fit a Bradley\u2013Terry (BT) model to estimate latent Elo-style ratings for each candidate.",
+        "guidance": "Presentation order should be randomized per match to mitigate position bias. Use an LLM judge (paper used Llama 3.3-70B-Instruct) to compute Elo ratings, then select winners/top candidates for training. Report confidence intervals (paper bootstrapped 95% CIs with 100 bootstrap samples) and statistical significance (non-overlapping CIs)."
+      },
+      {
+        "name": "SFT data construction: select multiple top-ranked candidates to avoid mode collapse",
+        "description": "When building supervised fine-tuning data, select a set of top Elo-ranked candidates per prompt (paper: top 10) rather than a single best example.",
+        "guidance": "Including multiple top-ranked candidates per prompt avoids collapsing the student to a single dominant style and teaches a diverse range of humor styles (wordplay, absurdity, sarcasm). In the paper SFT dataset DSFT had N=12,000 (top 10 \u00d7 1,200 prompts)."
+      },
+      {
+        "name": "Direct Preference Optimization (DPO) training from pairwise gaps",
+        "description": "Construct pairwise preference pairs (chosen yw vs. rejected yl) from ranked candidates and optimize the policy directly via DPO without a reward model.",
+        "guidance": "Create sharp-quality-gap pairs (paper: for each prompt, 5 pairs by randomly pairing top-5 with bottom-5 candidates \u2192 6,000 pairs). Use the DPO objective (provided in paper) with a suitable \u03b2 hyperparameter. Note: in this study DPO achieved similar performance to SFT, suggesting limited additional benefit when SFT data is high quality."
+      },
+      {
+        "name": "Offline Group Relative Policy Optimization (O-GRPO) formulation",
+        "description": "Use an offline group-relative objective by forming fixed 'Gold Groups' of candidates per prompt (G candidates), computing normalized group-relative advantages from Elo scores, and learning with advantage-weighted losses.",
+        "guidance": "Compute advantage Ai = (ri \u2212 \u00b5_group) / (\u03c3_group + \u03f5), derive weights wi via softmax temperature T (wi \u221d exp(Ai/T)), and use an exponentially-weighted SFT objective: LO-GRPO(\u03b8) = \u2212 E_x [ \u03a3_i w_i log \u03c0_\u03b8(y_i|x) ]. Paper used G=24 and found O-GRPO provided no improvement over high-quality SFT in this domain."
+      },
+      {
+        "name": "Cognitive Synergy Distillation (CSD) \u2014 include teacher reasoning traces carefully",
+        "description": "Train the student on the teacher's persona-specific reasoning traces alongside the final jokes (<think> \u2026</think> joke) so the student learns both content and planning.",
+        "guidance": "Use symmetric reasoning format for chosen and rejected responses in preference training to avoid shortcuts (so model cannot learn presence of reasoning correlates with winning). However, be cautious: the paper observed an 'explainer trap' where Think/CSD variants underperformed non-Think variants because distilled reasoning biased the model to explain rather than deliver the joke; distill reasoning only when it demonstrably improves generation."
+      },
+      {
+        "name": "Randomized, blinded pairwise evaluation with human validation",
+        "description": "Evaluate model outputs with pairwise comparisons, anonymize model identities, randomize presentation order, and validate a subset with blinded human evaluators.",
+        "guidance": "Mitigate position and identity bias by anonymization and random swapping. Report inter-annotator agreement, LLM\u2013human consensus, and micro-average correlations. The paper used 50-prompt automated evaluation and 60 human-curated pairwise comparisons (3 evaluators, 180 votes) with blinding and randomization; human agreement was low (31.7%) reflecting humor subjectivity. Use blinding and randomization as standard practice in subjective tasks."
+      },
+      {
+        "name": "Statistical aggregation: Bradley\u2013Terry model, Elo-scale ratings, and bootstrap CIs",
+        "description": "Aggregate pairwise match outcomes into a full contest matrix and fit a Bradley\u2013Terry model (MM algorithm) to estimate latent ratings; report Elo-scale ratings with bootstrap 95% confidence intervals.",
+        "guidance": "Use bootstrapping (paper: 100 samples) to compute CIs and claim statistical significance via non-overlapping intervals. Report head-to-head win-rate matrices and BT ratings for comparisons across models."
+      },
+      {
+        "name": "Measure and report humor feature prevalence among winners",
+        "description": "Annotate winning jokes with salient humor features (e.g., Surprise, Absurdity, Wordplay, Incongruity, Narrative, Sarcasm, Irony, Dark humor) and report prevalence to analyze what drives judged funniness.",
+        "guidance": "Quantify co-occurrence and prevalence (paper: Surprise 80%, Absurdity 74.8%, Wordplay 51.3%, etc.) to support claims about dominant mechanisms (expectation violation drives funniness). Use feature analysis to guide persona design and data curation."
+      },
+      {
+        "name": "Watch for and mitigate documented failure modes",
+        "description": "Identify and prevent common failure patterns: (1) generic punchlines defaulting to safe, high-probability completions, (2) overextended setups that bury the punchline, and (3) the 'explainer trap' where reasoning traces cause models to explain rather than deliver jokes.",
+        "guidance": "Address (1) via persona diversity and forcing low-probability, high-variance generation; (2) by constraining setup length and encouraging punchline brevity; (3) by ablation testing CSD/Think variants and preferring non-Think outputs if reasoning reduces punchiness. Provide concrete examples in development to detect these failure modes."
+      },
+      {
+        "name": "Prefer high-quality, diverse SFT data over alignment complexity in subjective domains",
+        "description": "In highly subjective tasks like humor, carefully curated, persona-diverse supervised fine-tuning data can outperform or match complex preference-alignment algorithms.",
+        "guidance": "The paper's central empirical finding: 'the quality of the underlying cognitive data (Cognitive Synergy Framework) is the primary driver of generation performance' \u2014 DPO matched SFT, O-GRPO underperformed. Prioritize diverse, high-quality SFT data before investing heavily in alignment stages."
+      },
+      {
+        "name": "Use group and pair construction choices intentionally (sizes, sampling strategies)",
+        "description": "Design the sizes and sampling strategies of groups and pairings to control signal/noise and learning dynamics (e.g., choose G, number of pairs per prompt, top/bottom bands).",
+        "guidance": "Paper choices: G=24 (all candidates), DPO pairs: 5 pairs per prompt by pairing top-5 with bottom-5; SFT: top-10 selected. These settings shape the sharpness of preference signals and the diversity preserved for SFT. Tune these hyperparameters with ablations and monitor training stability (early stopping, patience)."
+      },
+      {
+        "name": "Training best practices and hyperparameters for reproducible fine-tuning",
+        "description": "Apply controlled training setups (LoRA adapters, learning rates, batch sizes, sequence lengths, early stopping) and document them for reproducibility.",
+        "guidance": "Paper details: LoRA (r=16), SFT LR=2e-4 (linear), SFT epochs=3, DPO/O-GRPO epochs=5 with early stopping (patience=2), batch size global 16, max seq length 1024, bf16 precision. Report runtime and convergence behavior; use consistent settings across Think/non-Think ablations to isolate effects."
+      },
+      {
+        "name": "Evaluation fairness: hold out an evaluation set entirely",
+        "description": "Reserve an official held-out evaluation set that is never used during training or data synthesis for final testing.",
+        "guidance": "Paper held out SemEval 300-prompt evaluation set for final testing and used a 50-prompt subset for automated pairwise evaluation. Keep evaluation sets fully held-out to avoid leakage from synthetic training data."
+      },
+      {
+        "name": "Ethics and scope disclosure for humor generation",
+        "description": "Explicitly acknowledge risks of offensive content, dataset provenance, evaluator recruitment, and domain limitations (language/cultural coverage).",
+        "guidance": "Prefer creative mechanisms (wordplay, absurdity) over denigration; disclose that training data derived from public news headlines; report volunteer unpaid human evaluation and limitations (English-only SemEval 2026). Plan multilingual and culturally localized evaluation for future work."
+      }
+    ]
+  }
+}

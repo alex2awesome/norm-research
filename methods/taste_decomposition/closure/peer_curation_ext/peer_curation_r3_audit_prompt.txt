@@ -1,0 +1,127 @@
+You are auditing a pool of scoring criteria that were written by other
+models. Your job is a ROUTING decision, made blind: you are NOT told who wrote each
+criterion or what it was written for.
+
+For each criterion, decide:
+
+  "quality_relevant" -- the criterion measures a property that a careful expert would
+      count as genuine evidence about research quality. It is about the comic idea, the
+      craft, the wording choices, the content of the item.
+
+  "incidental" -- the criterion measures something that may well PREDICT how the item
+      fares but is not itself research quality: length or verbosity, typography, punctuation
+      or capitalisation habits, formatting and trailing furniture, boilerplate or
+      template phrasing, community/venue style markers, subject-matter or topic markers,
+      temporal tells, orthographic habits, or a textual fingerprint of some upstream
+      circumstance of the item's production (who wrote it, with what practice or
+      following, when, where in the run of entries).
+
+The corpus is: abstracts of machine-learning conference paper submissions. Each item is a abstract.
+
+SECOND JUDGEMENT, only for criteria you label "incidental". Some incidental channels have
+an upstream cause that plausibly ALSO produces genuinely better work (for example, a
+practised entrant may both be favoured for irrelevant reasons AND actually write better
+entries). Return `mixed`: true when you think the upstream cause plausibly produces real
+research quality too, false when the channel looks like pure nuisance. For criteria you label
+"quality_relevant", return mixed=false.
+
+Judge each criterion ON ITS OWN TEXT. Do not try to guess which pool it came from, and
+do not let the ORDER of the list influence you.
+
+CRITERIA:
+
+[X01] Artifact-release signaling
+On a 0-10 scale, judge how much the abstract advertises code, data, models, checkpoints, or project pages; assess only the extent of release signaling, never whether the artifacts are useful or reproducible.
+
+[X02] Unifying Abstraction Across Regimes
+Score 10 when one clearly defined principle explains or operates across genuinely different settings, with the mapping between settings made explicit; score 0 when multiple applications are merely listed without a shared abstraction.
+
+[X03] Resolution of Fundamental Trade-offs
+10 = Abstract demonstrates a method that breaks a well-known trade-off (e.g., efficiency vs. accuracy) through a novel insight (e.g., R03, R27); 0 = Abstract merely shifts a trade-off slightly along the Pareto frontier using more data or compute (e.g., R13, R34).
+
+[X04] Failure-Mechanism Fit
+Score 10 when the abstract identifies a concrete failure mechanism and the proposed design directly addresses that mechanism; score 0 when it states a generic problem and adds an unmotivated technique.
+
+[X05] Claims specified precisely enough to be checked by a reader
+Read only the abstract text. Score 0-10 how precisely the abstract pins down what was actually accomplished, so that a reader could in principle go and check it: the specific task or system acted on, the conditions or setting it was measured under, the comparison point it is being contrasted with, and what quantity was measured. Judge specification, in context - NOT how exciting, memorable, picturable or plainly worded the accomplishment is, and NOT how large it sounds. A dry numeric result is fully eligible for 10 if its task, setting, baseline and measured quantity are all stated. 10 = every claimed accomplishment is tied to a named task or system, a stated setting or condition, and an explicit comparison point, so nothing essential is left for the reader to guess. 0 = the accomplishments are asserted in unanchored terms (better, state of the art, strong performance, solves the problem, first of its kind) with no task, condition, comparison or measured quantity attached.
+
+[X06] Density of currently fashionable technical terms and paradigm names
+Read only the abstract text and count. Score 0-10 the extent to which currently fashionable technical terms and named paradigms occur - for example large language model or LLM, diffusion, NeRF, Transformer, foundation model, agentic, in-context, multimodal, scaling law, and comparable buzz-carrying labels of the moment. Estimate both how many distinct such terms appear and how often they recur, and combine into one extent score. 0 = no such terms anywhere. 3 = one such term appearing once or twice. 6 = two or three distinct such terms recurring through the abstract. 10 = four or more distinct fashionable terms, several of them repeated, saturating most sentences. You are explicitly instructed NOT to decide whether using these terms is good, bad, appropriate, or earned, and NOT to consider whether the work behind them is sound; score only how much of this vocabulary is present.
+
+[X07] Gives a mechanism for why the proposed approach should work
+Score 0-10 for whether the abstract supplies a reason or mechanism for why what it proposes should work, rather than only asserting that it does. 10 = an explicit causal or conceptual account; 0 = bare assertion with no reasoning.
+
+[X08] Abstract Length Brevity
+Score from 0 (very long) to 10 (very short) based strictly on the word count of the abstract text. Do not judge the quality of the length, only measure how brief it is.
+
+[X09] Domain-Valid Inductive Bias
+Score 10 when the representation or architecture encodes a domain symmetry, geometry, interaction law or physical constraint and explains why that structure is appropriate; score 0 when the architecture is domain-agnostic without justification.
+
+[X10] Amount of vivid, picturable, plain-language milestone phrasing
+Read only the abstract text and estimate extent. Score 0-10 how much of the abstract's achievement language is vivid, everyday and easily pictured rather than abstract or numeric: named games, physical objects, robots, real-world tasks or artefacts a non-specialist could visualise; superlative milestone framings such as first to, human-level, beats a professional, solves; concrete scene-setting nouns. Count how many such phrasings appear and how prominently they are placed. 0 = achievements appear only as abstract numbers, deltas or technical quantities, with nothing picturable. 5 = one picturable or milestone phrase somewhere in the abstract. 10 = several vivid, easily visualised milestone phrasings, including at least one in the opening or closing sentence. You are explicitly instructed NOT to judge whether the vivid claim is true, important, verifiable, or well supported, and NOT to reward or penalise the underlying work; score only how much vivid plain-language milestone phrasing is on the page.
+
+[X11] Density of numeric performance claims and superlative comparisons
+Score 0-10 for the EXTENT to which the abstract packs explicit quantitative result claims and comparative superlatives into its text. Count: numerals attached to results (percentages, accuracy or AP or PPL values, 'x' speedup factors, counts of benchmarks or datasets beaten) and comparison phrases such as 'outperforms state-of-the-art', 'significantly outperforms', 'by a large margin', 'achieves the best'. 0 = no result numerals and no comparative superlatives; 5 = one or two numeric results, or one superlative claim; 10 = many numeric deltas plus repeated superlative comparison language. You must NOT verify, weigh, or judge whether the numbers are impressive, correct, or well earned, and must NOT treat their absence as a flaw; report only how much of this reporting style is present.
+
+[X12] Trendy Topic Jargon Density
+0-10, to what extent does the abstract feature a high density of highly popular, trendy terms (e.g., 'LLMs', 'GPT-4', 'NeRF', 'CLIP')? 0 means none; 10 means the abstract is overwhelmingly packed with trendy jargon. Do not judge the actual quality of the research.
+
+[X13] Raw textual volume in words and sentences
+Read only the abstract text and measure volume. Score 0-10 the raw amount of text present, by estimating the number of words and the number of sentences. 0 = extremely terse, roughly 1-3 sentences or under about 40 words. 3 = about 60-90 words. 5 = about 100-140 words. 7 = about 160-200 words. 10 = about 250 words or more, or many sentences across multiple paragraph-length stretches. Interpolate between these anchors. You are explicitly instructed NOT to judge whether the length is appropriate, whether the text is padded or efficient, or whether the underlying work is good; score only the extent of textual volume on the page.
+
+[X14] Theory–Algorithm Closure
+Score 10 when formal assumptions, guarantees or complexity bounds directly characterize the proposed algorithm and its use; score 0 when theory is absent or disconnected from the practical method.
+
+[X15] Cross-domain conceptual transfer
+Score 0-10 on whether the abstract explicitly imports a concept or technique from a distant field/application area into a new one, naming the source analogy. A 10: the abstract explicitly draws an analogy to a different domain's method and adapts it. A 0: the work stays entirely within its home domain's standard toolkit with no cross-domain framing.
+
+[X16] Share of the text carrying specific technical content
+Read only the abstract text. Score 0-10 the proportion of the writing that carries specific, checkable technical content - the problem setting, the mechanism of the method, what was set up or measured, the conditions, the scope or limits - as opposed to framing, motivation, importance claims, restatement and generic transitions. This is a density judgement, normalised by the words spent: you are explicitly instructed that longer is NOT higher and shorter is NOT lower, and that a long abstract stacking many low-content sentences must score low. 10 = nearly every clause adds a new specific about the problem, the mechanism, the setup or the scope, with essentially no filler; a three-sentence abstract can and should reach 10 if those three sentences do this. 0 = the text is almost entirely importance framing, restated motivation and generic claims, with the actual method and setup left unspecified, at any length.
+
+[X17] Resource Accounting for Practicality
+Score 10 when computational cost, memory, latency, data requirements, or deployment constraints are quantified alongside the claimed capability; score 0 when efficiency or practicality is asserted without resource accounting.
+
+[X18] Distinguishes what is new here from what was already known
+Score 0-10 for how clearly the abstract separates its own new contribution from prior knowledge it is building on. 10 = the new part is stated and delimited against what already existed; 0 = no distinction is drawn at all.
+
+[X19] Identification of Hidden Flaws in Paradigms
+Score 10 if the abstract explicitly diagnoses a subtle, previously unrecognized flaw, mathematical instability, or conceptual bottleneck in widely used standard methods. Score 0 if it simply builds on top of standard paradigms without questioning their foundations.
+
+[X20] Signalled scale of compute, data, and evaluation breadth
+Score 0-10 for how much the abstract advertises the SIZE of the resources behind it: parameter counts, corpus or dataset sizes, number of models or baselines evaluated, number of benchmarks or environments used, quantity of human annotation collected, scale of training runs. 0 = no scale of any kind stated; 5 = one dataset or benchmark named at modest scale; 10 = several explicit large magnitudes, for example hundreds of millions of items, dozens of models compared, or many benchmark suites at once. You must NOT judge whether the scale is appropriate, necessary, sufficient, or impressive, and must NOT treat small scale as a weakness; count only how much scale is stated in the text.
+
+[X21] Exact Mathematical Guarantees over Heuristics
+Score 10 if the method explicitly provides mathematically exact properties (e.g., 'exact invariance,' 'provably optimal,' 'guaranteed bounds'). Score 0 if the method relies entirely on heuristic approximations, empirical validations, and probabilistic guesses.
+
+[X22] Extent of British rather than American spelling
+Score 0-10 for how much the text uses British rather than American spelling (-ise/-isation, -our, -re endings, doubled consonants). 10 = British spelling throughout; 0 = American spelling throughout or no distinguishing words. Count the orthography only; this is not a judgement of writing quality.
+
+[X23] Problem-solution template cadence
+On a 0-10 scale, judge how strongly the abstract follows a stock sequence of problem, limitations, proposed method, and experimental confirmation; assess rhetorical structure only, never whether the argument or method is good.
+
+[X24] Proportion of sentences written in the passive voice
+Score 0-10 for what fraction of the sentences are in the passive voice. 10 = essentially every sentence is passive; 0 = every sentence is active. Count the grammatical construction only; do not judge whether passive voice is good or bad here.
+
+[X25] Contribution by subtraction or simplification
+Score whether the work advances by removing, fixing, or simplifying machinery while preserving capability, as opposed to adding stages. 10 = the paper shows a widely used component is unnecessary, replaces a complex procedure with a markedly simpler or cheaper one, or reduces a multi-stage pipeline to fewer stages, and is explicit that the simpler version matches or nearly matches what it replaces. 5 = a method of ordinary complexity with a genuine efficiency argument. 0 = the contribution is strictly additive -- new modules, extra training phases, extra preference categories, extra generation steps -- with no accounting of what could have been dropped.
+
+[X26] Confound Isolation
+Score 10 when comparisons, controls or ablations separate competing explanations for the observed effect; score 0 when several factors change together and the claimed cause cannot be isolated from the abstract.
+
+[X27] Artifact-availability boilerplate: code, data, project-page announcements
+Score 0-10 for the EXTENT of explicit release and availability announcements in the abstract: a code URL, a GitHub or project-page or website link, phrases such as 'code is available', 'our data and code will be available', 'code has been released', or the naming of released checkpoints, benchmarks, annotations or datasets as deliverables. 0 = no availability statement of any kind; 3 = a bare promise of future release with no link; 6 = one concrete link or one clearly named released artifact; 10 = several artifacts announced together (for example code plus data plus model weights plus a project page). You must NOT assess whether releasing is good practice, whether the link looks credible or maintained, or whether the artifact is valuable; count only how prominently availability is announced.
+
+[X28] Names a live unsolved difficulty and its specific departure
+Read only the abstract text. Score 0-10 how precisely the abstract (a) identifies a specific technical difficulty or failure mode that current approaches do not handle, and (b) states concretely what this work does differently in response to that difficulty - a named mechanism, assumption dropped, constraint relaxed, resource removed, or setting extended. Judge the substance in context. You are explicitly instructed NOT to reward fashionable vocabulary, named paradigms, or the apparent popularity of the topic: a term-dense abstract earns nothing here unless the difficulty and the departure are actually stated. 10 = the abstract pins down the exact obstacle (what breaks, under what conditions, for which prior approach) and the exact change made, in enough detail that a reader could restate both in one sentence; this must be reachable by a short, plainly written abstract on an unfashionable subject with no trendy terms at all. 0 = the abstract gestures at an area, a paradigm or a general 'challenge' without ever naming a concrete obstacle or a concrete departure, however current-sounding the vocabulary.
+
+[X29] Mechanistic explanation of why, not just what
+Score 0-10 on how much the abstract explains the underlying causal mechanism or reason WHY an observed phenomenon or result occurs, rather than merely stating what was done and what improved. A 10: the abstract states a specific causal hypothesis or mechanism (e.g., a distributional mismatch, an uncertainty gap) and explains how it produces the observed effect. A 0: the abstract lists a technique and a resulting number/improvement with no explanation of why it works.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"verdicts": [
+  {"id": "<the id shown>", "label": "quality_relevant" or "incidental",
+    "mixed": true or false, "confidence": "high"/"medium"/"low",
+    "justification": "<one sentence>"},
+  ... one entry per criterion, same ids ...
+]}

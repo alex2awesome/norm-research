@@ -1,0 +1,191 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/rej_a378608fb93e.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "rej_a378608fb93e.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 6,
+  "chunk_chars": 39127,
+  "model": "gpt-5-mini",
+  "elapsed_s": 65.18353904201649,
+  "input_tokens": 10990,
+  "output_tokens": 4644,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "policy researchers, econometricians, patent scholars, and USPTO analysts",
+    "subtask_short": "matched_case-control patent analysis",
+    "subtask_description": "Designing and estimating matched case-control statistical models to compare patents that were litigated or petitioned for IPR with similar unlitigated/unpetitioned patents, using USPTO and external data sources. The methods cover data sources, exact matching constraints, two nearest-neighbor matching algorithms, and the explanatory variables included in logistic regression models.",
+    "subtask_keywords": [
+      "patents",
+      "matched_case_control",
+      "litigation",
+      "ipr",
+      "statistical_methods",
+      "usp_to"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of 'litigated patent'",
+        "description": "A 'litigated patent' means a patent that was asserted in an infringement complaint, regardless of whether or not the case settled prior to trial.",
+        "guidance": "Use assertion in an infringement complaint as the inclusion criterion; do not exclude patents that settled before trial."
+      },
+      {
+        "name": "Definition of 'IPR-petitioned patent'",
+        "description": "An IPR proceeding begins with a petition by a third party who must show a reasonable likelihood that at least one claim is anticipated by or obvious over one or more prior art patents or printed publications; PTAB provided a list of all completed petitions.",
+        "guidance": "Count patents that were the subject of completed IPR petitions (as provided by PTAB) as IPR-petitioned; use PTAB's instituted-claims info where relevant."
+      },
+      {
+        "name": "Primary data sources to identify subject patents",
+        "description": "Litigated patents: GAO data (Lex Machina random sample of 100 filings per year 2007\u20132011, total 500 filings). IPR petitions: PTAB list of all completed petitions filed up to mid-July 2014.",
+        "guidance": "Prefer vetted external lists (e.g., Lex Machina via GAO) when building samples; note coverage and sampling frame (e.g., GAO sample \u22484% of Lex Machina filings for period)."
+      },
+      {
+        "name": "Use of PALM as primary USPTO data source",
+        "description": "PALM contains all communications during prosecution, docketing, application type (utility/design/plant), workgroup assignment, office actions and applicant responses, related applications, applicant info, RCEs/CPAs, and issuance/final disposition.",
+        "guidance": "Use PALM to create prosecution-related variables; be aware PALM records specific action types and can undercount some items (e.g., interviews appended to other documents)."
+      },
+      {
+        "name": "Supplemental USPTO data sources",
+        "description": "Forward citations from TAF (PTMT); claims information (number of independent claims, words per independent claim) from Patent Grant Red Book XML files (Reed Tech); examiner pay grade from internal USPTO HR data.",
+        "guidance": "Merge these sources to augment PALM; ensure consistent merge keys (patent number, examiner ID, allowance date)."
+      },
+      {
+        "name": "Merging procedure for examiner pay grade",
+        "description": "PALM lists examiners and assignment dates; HR data contains each examiner's GS-level and the date range for that GS-level. Merge on examiner ID and allowance date to determine GS-level at allowance.",
+        "guidance": "Be careful: the 'examiner' is the docketed examiner at Notice of Allowance, who may lack independent signatory authority; merge using examiner ID and allowance date range in HR data."
+      },
+      {
+        "name": "Matched case-control study design",
+        "description": "One-to-one matched case-control study: for each subject patent (litigated or IPR-petitioned), select one control patent similar on specified matching dimensions but for which no litigation or IPR petition was observed.",
+        "guidance": "Decide matching variables upfront because any characteristic used for matching cannot be used as an explanatory variable in the subsequent statistical analysis."
+      },
+      {
+        "name": "Prohibition on using matching characteristics as explanatory variables",
+        "description": "Any characteristic used for matching cannot be used in the statistical analysis (e.g., matching on maintenance history means no variance in maintenance histories across groups).",
+        "guidance": "Select matching variables to isolate the examination-related variables of interest; be explicit which variables are used only for matching."
+      },
+      {
+        "name": "Step 1 \u2014 Define potential matches via exact matching dimensions",
+        "description": "Create a comparison group of unlitigated patents that are identical to the subject patents across three dimensions: (1) year of patent grant, (2) workgroup assigned on date of allowance, and (3) maintenance fee history.",
+        "guidance": "This generates a large pool of potential matches for each subject; exact-matching dimensions are used to control for confounders like patent value and examination assignment."
+      },
+      {
+        "name": "Step 2 \u2014 Choose one control using nearest-neighbor algorithms",
+        "description": "From the set of potential matches choose one control patent per subject using a nearest-neighbor criterion; two algorithms are used leading to two control groups for robustness checks.",
+        "guidance": "Ensure unique matching and specify tie-breaking rules (random choice in event of tie)."
+      },
+      {
+        "name": "Citation nearest-neighbor match algorithm",
+        "description": "Match each subject patent to the potential match with the closest number of forward citations received within the first three years of issue (3-year forward citation count). Ties broken randomly.",
+        "guidance": "Use 3-year forward citations as proxy for patent value to control for value-based confounding; choice of 3-year window motivated by sample features and unknown litigation timing."
+      },
+      {
+        "name": "Rationale for matching on 3-year forward citations",
+        "description": "3-year forward citation count is used because, although matching on year of grant, information on when each patent was first litigated is incomplete and most litigations occurred more than three years after issuance.",
+        "guidance": "Choose citation window consistent with available data and study aims; document reasoning for window selection."
+      },
+      {
+        "name": "Propensity score matching algorithm",
+        "description": "Estimate a logistic classification model on combined set of litigated/petitioned patents and potential matches using patent characteristics to predict probability of being in the treated sample; compute propensity scores and match each subject to the nearest neighbor in propensity score.",
+        "guidance": "Use propensity score matching to balance on multiple observables and focus subsequent analysis on examination-related differences."
+      },
+      {
+        "name": "Predictors used in propensity score model",
+        "description": "Predictors include continuation history, small entity status, claims of foreign priority, claimed parent type (relationship to earlier U.S. app), number of all claims at filing, number of 3-year forward citations, year of issue, interactions between year and 3-year citations, and technology categories (Hall, Jaffe, Trachtenberg).",
+        "guidance": "These characteristics are mostly known at filing and are chosen to control for pre-examination correlates of litigation; include interaction terms to allow citation impact to vary by grant year."
+      },
+      {
+        "name": "Use of two separate control groups for robustness",
+        "description": "Generate two control groups (citation-matched and propensity-score-matched) as a way to check robustness of results across different matching methods.",
+        "guidance": "Compare distributions of matching factors and model estimates across control groups; report exact-match rates and distributional closeness."
+      },
+      {
+        "name": "Assessment of matching quality",
+        "description": "Evaluate matching by comparing distributions (percentiles, means, st. dev.) of 3-year forward citations and propensity scores between subject and control groups, and report rates of exact matches and small-difference matches.",
+        "guidance": "Report exact-match counts (e.g., 938/975 exact matches) and quantify small mismatches; examine tails of propensity score distribution for outliers."
+      },
+      {
+        "name": "Inclusion of matched-pair indicator variables in model",
+        "description": "The basic logistic model includes indicator variables for each matched pair in addition to explanatory variables.",
+        "guidance": "Use matched-pair indicators to control for pair-level fixed effects introduced by matching."
+      },
+      {
+        "name": "Selection rationale for explanatory variables",
+        "description": "Choose explanatory variables that can be created for all patents without hand coding and that represent important aspects of the patent examination process.",
+        "guidance": "Prioritize scalable, automatable measures available in PALM, TAF, Red Book, and HR data."
+      },
+      {
+        "name": "Application filing year indicators",
+        "description": "Include indicator variables identifying applications filed during time bands (1981\u20131990, 1991\u20131995, 1996\u20132000, 2001\u20132005, after 2005) as controls.",
+        "guidance": "Control for cohort effects in filing year when estimating event likelihood."
+      },
+      {
+        "name": "Small entity status indicator",
+        "description": "Indicator variable equal to one if filer was granted small entity status, zero otherwise, used to control for differences in litigation rates by ownership type.",
+        "guidance": "Include small entity because individually owned patents may be more likely to be litigated; control for potential access-to-settlement differences."
+      },
+      {
+        "name": "Number of parent applications",
+        "description": "Count of regular U.S. parent applications in the chain of continuations from the progenitor application to the subject patent.",
+        "guidance": "Use as a measure of continuation history and complexity; parent applications may or may not have issued as separate patents."
+      },
+      {
+        "name": "Pendency measure",
+        "description": "Pendency measured in years from application date of the earliest parent (progenitor) application to the docketing date of the issued application; for no-parents, pendency is from application date to docketing.",
+        "guidance": "Use pendency to capture length of prosecution and negotiation rounds prior to allowance."
+      },
+      {
+        "name": "Foreign origin proxies",
+        "description": "Two indicators: (1) whether the application claims priority under 35 U.S.C. \u00a7 119 to a foreign application, and (2) whether it is a U.S. national stage filing under 35 U.S.C. \u00a7 371 (PCT).",
+        "guidance": "Include both proxies since foreign-origin patents have been found less likely to be litigated in previous studies."
+      },
+      {
+        "name": "IDS filings count",
+        "description": "Simple count of the number of instances an IDS is recorded in PALM (count of IDS forms, not documents cited).",
+        "guidance": "Interpret IDS count as a signal of applicant 'effort' or investment, possibly correlated with patent value."
+      },
+      {
+        "name": "Number of interviews count",
+        "description": "Simple count of the number of examiner interviews recorded in PALM (noting PALM may undercount interviews appended to other documents).",
+        "guidance": "Use as another potential signal of applicant engagement and investment; document known undercounting limitations."
+      },
+      {
+        "name": "Examination pendency (docketing to allowance)",
+        "description": "Measure of time in years between docketing and allowance for the application that issued as the patent.",
+        "guidance": "Longer pendency may indicate more rounds of negotiation and thus potentially higher value; account for continuations by using pendency from earliest parent where appropriate."
+      },
+      {
+        "name": "RCE count (and continued-prosecution types)",
+        "description": "Count of RCEs (or RCE-type continuations, including CPAs) filed during examination; RCEs reopen examination after Final Rejection and have associated fees.",
+        "guidance": "Treat CPAs together with RCEs for this study; note fees and lack of formal limit on RCEs."
+      },
+      {
+        "name": "Appeals indicator",
+        "description": "Indicator equal to one if there was at least one appeal that ended with a PTAB (or BPAI predecessor) decision; distinguishes completed appeals from appeals later withdrawn (which may be used as delay tactics).",
+        "guidance": "Use this to capture cases that fully traversed the appeal route rather than merely filing an appeal."
+      },
+      {
+        "name": "First-action allowance indicator",
+        "description": "Indicator equal to one if the application was allowed on the first action (no rejections issued); continuations (CONs/CIPs) and DIVs are treated identically to new applications for this measure.",
+        "guidance": "Interpret first-action allowance as minimal negotiation; recognize that allowed claims may still have some changes from filing claims but typically not substantial."
+      },
+      {
+        "name": "Examiner seniority (GS-level) categories and missing indicator",
+        "description": "Four indicators related to pay grade of the allowing examiner at time of allowance: GS-12 or below (non-signatory), GS-13 (partial signatory/transition), GS-14 or above (full signatory/primary examiners), and an indicator for missing pay-grade data (~5% of sample).",
+        "guidance": "Account for signatory authority differences: non-signatory examiners' work is signed by supervisors; GS-levels correlate with experience and time allotted per case."
+      },
+      {
+        "name": "Number of independent claims",
+        "description": "Count of allowed independent claims; expected to be positively correlated with litigation as a proxy for patent scope or value.",
+        "guidance": "Be cautious: additional independent claims can be narrow or overlapping; interpret in context (e.g., multiple claims may cover different aspects or embodiments)."
+      },
+      {
+        "name": "Words per independent claim (claim length)",
+        "description": "Average number of words per independent claim; hypothesized to be negatively correlated with litigation because longer claims may better define boundaries and reduce disputes.",
+        "guidance": "Use words-per-claim as a proxy for claim clarity/definitional precision; interpret alongside number of claims and scope proxies."
+      }
+    ]
+  }
+}

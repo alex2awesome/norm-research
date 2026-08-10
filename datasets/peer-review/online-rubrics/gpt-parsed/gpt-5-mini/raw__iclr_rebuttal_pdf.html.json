@@ -1,0 +1,159 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/iclr_rebuttal_pdf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17191,
+  "output_tokens": 4845,
+  "elapsed_s": 727.3548134160228,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, conference organizers, and authors interested in peer review and rebuttal dynamics (particularly in machine learning/ICLR)",
+    "subtask_short": "ICLR peer_review_rebuttal_analysis",
+    "subtask_description": "Empirical and LLM-assisted analysis of the ICLR 2024\u20132025 peer review and rebuttal process, extracting factors that predict score changes, taxonomies of strengths/weaknesses and rebuttal strategies, and operational guidance for authors and organizers.",
+    "subtask_keywords": [
+      "peer_review",
+      "rebuttal",
+      "iclr",
+      "conference_peer_review",
+      "review_analysis"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Overall rating (ICLR scale)",
+        "description": "The overall rating for ICLR 2024 and 2025 is a discrete number in {1, 3, 5, 6, 8, 10}. (ICLR 2026 maps to {0,2,4,6,8,10}.)",
+        "guidance": "Used as the primary numeric summary of reviewer assessment; many analyses (score-change, ranking displacement, class labels) use this discrete overall rating."
+      },
+      {
+        "name": "Review score fields (soundness, presentation, contribution, confidence, overall rating)",
+        "description": "Reviews provide structured numerical scores for soundness, presentation, contribution, confidence, and an overall rating.",
+        "guidance": "Analyses and prediction models use these separate fields as features and outcomes; changes are often concentrated in the overall rating while other fields remain unchanged."
+      },
+      {
+        "name": "Review text sections (summary, strengths, weaknesses, questions)",
+        "description": "The review format includes a summary of the paper, identified strengths and weaknesses, and questions for the authors.",
+        "guidance": "Word counts in these sections are predictive (e.g., longer strengths correlate positively with higher ratings; longer weaknesses correlate negatively). Models use per-section word counts as features."
+      },
+      {
+        "name": "Strengths & weaknesses taxonomy",
+        "description": "A structured taxonomy of high-level categories and subcategories to label reviewer strengths and weaknesses: Novelty & Contribution, Motivation, Methodology & Technical Soundness, Experiments & Evaluation, Results, Data, Writing & Presentation, Broader Impact & Ethics, Related Work, Venue Fit, etc.",
+        "guidance": "Use this taxonomy (with specified subcategories such as 'insufficient baselines', 'missing ablations', 'unclear wording') for consistent LLM-based labeling and feature extraction; the paper reports category frequencies by rating group and uses them as predictors."
+      },
+      {
+        "name": "Rebuttal strategy taxonomy (coverage / stance / strategy)",
+        "description": "A three-field taxonomy for author responses: coverage (Answered / Not Answered), stance (Agree/Disagree with subcategories like reject_validity, evasion, completion_claim, future_work, etc.), and strategy (evidence_backed_clarification vs generic_defense_vague with subcategories such as method_details, new_experiments, repetition, broad_assertion, bare_agreement).",
+        "guidance": "Annotate each reviewer point with these fields; evidence-backed strategies (method details, new analyses/experiments, citations) are more associated with score increases, while generic/vague defenses often result in score keep."
+      },
+      {
+        "name": "Evidence-backed clarification (rebuttal strategy)",
+        "description": "Rebuttal responses that provide concrete technical clarifications, new experiments, new tables/figures, deeper analysis, or citations.",
+        "guidance": "Associated with higher probability of positive score changes; considered an effective author strategy. Subcategories: method_details, new_experiments, new_table_figures, analysis, experiments_in_paper, citation."
+      },
+      {
+        "name": "Generic/vague defense (rebuttal anti-pattern)",
+        "description": "Rebuttal responses that repeat claims, assert broad statements without support, evade the concern, promise vague future work, or only symbolically agree/disagree.",
+        "guidance": "Tends to lead to no change ('keep') rather than improvements. Subcategories include repetition, broad_assertion, evasion, future_promise, bare_agreement_or_disagreement."
+      },
+      {
+        "name": "Bare agreement/disagreement (limited rebuttal tactic)",
+        "description": "Author replies that only state agreement or disagreement without justification or evidence.",
+        "guidance": "Often insufficient to change a reviewer\u2019s score; less persuasive than evidence-backed clarifications."
+      },
+      {
+        "name": "Coverage (Answered vs Not Answered)",
+        "description": "Whether the author explicitly answered a specific reviewer weakness/question.",
+        "guidance": "If Not Answered, other stance/strategy fields are left empty in annotation; coverage is a prerequisite for effective rebuttal strategies."
+      },
+      {
+        "name": "Stance subcategories (reject_validity, evasion, reject_request, contradict_statement, completion_claim, concede_point, Promise a change by camera-ready, future_work)",
+        "description": "Labels for the author\u2019s positioning relative to the reviewer point (agreement or disagreement with fine-grained subtypes).",
+        "guidance": "Different stances carry different implications: concessions or completion_claims (claiming the task is done) paired with evidence-backed clarification are more constructive; evasion or rejecting valid concerns is less effective."
+      },
+      {
+        "name": "Co-reviewer influence / reviewer convergence metric",
+        "description": "Measure reviewer influence as average pairwise disagreement |si \u2212 sj| across reviewers on a paper, and compute normalized change (after \u2212 before)/9 (9 = score range).",
+        "guidance": "Decreases indicate reviewer convergence (peer influence/consensus). Rebuttals reduce disagreement by ~9\u201310% overall, more so for high-quality papers (oral/spotlight)."
+      },
+      {
+        "name": "Temporal dynamics of review/rebuttal submissions",
+        "description": "Timing patterns of reviewer and author activity across review and rebuttal windows (daily activity peaks near deadlines).",
+        "guidance": "Observations: reviewer activity concentrates near review deadline; author/reviewer interaction peaks mid-to-late rebuttal; rebuttals submitted in the middle of the rebuttal period are most associated with score increases; very early or last-minute rebuttals are less effective."
+      },
+      {
+        "name": "Reviewer submission ordering bias (last-submitter generosity)",
+        "description": "The reviewer who submits last (displayed first) tends to give higher scores; in 4-review papers Reviewers 4,3,2,1 (in timestamp order) show increasing generosity.",
+        "guidance": "Awareness of ordering/timestamp effects matters in interpreting displayed review lists; ordering is not random and correlates with score distributions."
+      },
+      {
+        "name": "Reviewer engagement measures (participation %, conversation turns, number of notes)",
+        "description": "Quantities capturing reviewer-author interaction: author/reviewer participation percentage, conversation turns (ConvTurn), and reviewer note counts.",
+        "guidance": "Higher engagement (more conversation turns, higher participation) correlates with increased likelihood of score increases; however, active discussions can also correlate with score decreases \u2014 engagement is necessary but not sufficient and outcome depends on content/stance."
+      },
+      {
+        "name": "Ranking displacement as rebuttal impact metric",
+        "description": "Measure the percentage of papers displaced from top-x ranked positions before vs after rebuttal-induced score changes (a proxy for acceptance impact).",
+        "guidance": "Used to assess whether rebuttals change relative ordering; results show substantial displacement among top-ranked papers (e.g., >40% of top 5% displaced), indicating small score shifts can matter greatly when acceptance is competitive."
+      },
+      {
+        "name": "Score-change distribution / typical transitions",
+        "description": "Observed frequent score updates concentrate in mid-range (5\u21926, 6\u21928, 3\u21925) and most review scores remain unchanged (2024: 81%, 2025: 75%).",
+        "guidance": "Rebuttal impact is concentrated on borderline papers; authors should focus effort where small changes can change outcome."
+      },
+      {
+        "name": "Word count features as predictive signals",
+        "description": "Word counts of review sections (strengths, weaknesses, summary, questions) correlate with scores: overall rating positively correlates with strengths-word-count and negatively with weaknesses-word-count.",
+        "guidance": "In modeling reviewer decisions, include per-section word counts; reviewers with higher confidence write longer weaknesses and tend to give lower overall ratings."
+      },
+      {
+        "name": "Top predictive features for rating classification",
+        "description": "Important features for predicting pre-rebuttal overall rating include: Novelty & Contribution (weakness/strength), Experiments & Evaluation, Word Count, Writing & Presentation, Methodology & Technical Soundness, Motivation, Results.",
+        "guidance": "Interpretability-focused models (e.g., multinomial logistic regression) allow ranking feature importances; use combined textual category labels and word counts for better performance than word counts alone."
+      },
+      {
+        "name": "Data collection requirement for tracking score changes",
+        "description": "OpenReview displays only final versions and overwrites preliminary reviews; therefore, to measure score changes, data must be archived both immediately after initial reviews and again after rebuttal.",
+        "guidance": "Operational requirement for reproducible analysis: capture snapshots at both times; failing to do so will miss before-rebuttal scores."
+      },
+      {
+        "name": "Rebuttal outcome predictors (initial score and co-reviewers' scores)",
+        "description": "Initial overall rating and the mean of other reviewers' scores are among the strongest predictors of whether a reviewer will change their score after rebuttal.",
+        "guidance": "These are hard-to-change, pre-existing factors; authors can influence outcomes primarily via targeted, evidence-backed rebuttals, but baseline scores and peer reviewer influence dominate."
+      },
+      {
+        "name": "Rebuttal strategy feature coefficients (what shifts decisions)",
+        "description": "Model coefficients indicate which strategies/features are associated with DEC (decrease), INC (increase), or KEEP: e.g., high initial rating predicts decrease; mean other reviewers' rating predicts increase or decrease depending on direction; generic/vague defense contributes to KEEP; evidence-backed clarification contributes to INC.",
+        "guidance": "Use coefficients to prioritize rebuttal content: emphasize evidence-backed clarifications and method details when attempting to increase scores; avoid generic defenses."
+      },
+      {
+        "name": "Category-dependent rebuttal / convergence effect",
+        "description": "Rebuttal-induced reviewer convergence varies by submission category: largest reductions in disagreement for spotlight/oral, moderate for posters, and minimal for rejected/withdrawn.",
+        "guidance": "Expect stronger co-reviewer influence on higher-quality submissions; rebuttal utility varies by submission outcome stratum."
+      },
+      {
+        "name": "Most changes are in overall rating (scope limitation)",
+        "description": "Most reviews (71% of cases) reflect changes only in the overall score and do not update other aspects (e.g., soundness).",
+        "guidance": "When modeling rebuttal effects focus primarily on overall rating changes but be aware other fields rarely change; targeted rebuttals addressing specific fields are less often used to update those fields."
+      },
+      {
+        "name": "Practical author guidance derived from analyses",
+        "description": "Empirically grounded suggestions: focus rebuttal effort on borderline/mid-range papers (where small changes matter), submit rebuttals in mid-rebuttal window, prioritize evidence-backed clarifications addressing reviewers' concrete concerns, and engage where reviewers show willingness to interact.",
+        "guidance": "Avoid last-minute or rushed rebuttals; do not rely on vague promises or bare agreement; explicitly address reviewer points with concrete data, method details, or new analyses if possible."
+      },
+      {
+        "name": "Annotation protocol constraints for human/LLM labeling",
+        "description": "Weakness/strength annotation prompts require mapping each paragraph to predefined categories/subcategories (avoid using 'Other' unless impossible), extracting exact text spans, and annotating multiple items per paragraph where present.",
+        "guidance": "Strict annotation rules improve label consistency (the paper reports ~81\u201384% pairwise human agreement with chosen prompts); replicate these constraints when building datasets for supervised models."
+      },
+      {
+        "name": "Temporal immediate-effect observation (rapid early updates)",
+        "description": "Many reviewer score changes (mostly increases) occur within the first hour after review release (i.e., influence can take effect immediately).",
+        "guidance": "Be aware that some score adjustments happen quickly after reviews are public\u2014models of influence should consider very short timescales."
+      },
+      {
+        "name": "Acceptance is not guaranteed by score increase (limit of rebuttal)",
+        "description": "A substantial fraction of papers with increased reviewer scores were still not accepted (42% in 2024, 44% in 2025).",
+        "guidance": "Score improvements help but do not ensure acceptance; meta-reviews and chair-level decisions depend on additional factors (topic interest, overall review quality, ranking)."
+      }
+    ]
+  }
+}

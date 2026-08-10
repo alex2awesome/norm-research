@@ -47,11 +47,13 @@ def evaluate_mcq_state_tables_v14(
     store: EvidenceCellStore, template: str = DEFAULT_MCQ_TEMPLATE,
     max_chars: int = 600, n_reconstruction_draws: int = 8,
     query_batch_size: int = 512,
+    state_indices_by_panel: Sequence[Sequence[int]] | None = None,
 ) -> dict:
     panels = list(design_manifest["panels"])
     panel_size = int(design_manifest["panel_size"])
-    if panel_size != 8:
-        raise ValueError("v14 MCQ channel is frozen at k=8")
+    if panel_size not in {6, 8}:
+        raise ValueError("v14 MCQ supports the frozen k=6 fan-out and k=8 sentinel designs")
+    n_states = 1 << panel_size
     if int(n_reconstruction_draws) < 2:
         raise ValueError("MCQ needs a counterbalanced permutation block")
     option_descriptions = [str(target_description)] + [
@@ -71,27 +73,34 @@ def evaluate_mcq_state_tables_v14(
         "permutation_sha256": permutation_sha,
     })
     blind = store.get(blind_key)
-    raw_lift = np.empty((len(panels), 256), dtype=float)
-    clipped = np.empty_like(raw_lift)
-    normalized_lift = np.empty_like(raw_lift)
-    main_probability = np.empty_like(raw_lift)
-    shuffled_probability = np.empty_like(raw_lift)
-    annotation_accuracy = np.empty_like(raw_lift)
+    raw_lift = np.full((len(panels), n_states), np.nan, dtype=float)
+    clipped = np.full_like(raw_lift, np.nan)
+    normalized_lift = np.full_like(raw_lift, np.nan)
+    main_probability = np.full_like(raw_lift, np.nan)
+    shuffled_probability = np.full_like(raw_lift, np.nan)
+    annotation_accuracy = np.full_like(raw_lift, np.nan)
     hits = misses = 0
     state_bits = enumerate_states(panel_size)
     for panel_position, panel in enumerate(panels):
+        requested_states = (
+            list(range(n_states)) if state_indices_by_panel is None
+            else sorted(set(map(int, state_indices_by_panel[panel_position])))
+        )
+        if not requested_states or requested_states[0] < 0 or requested_states[-1] >= n_states:
+            raise ValueError("MCQ requested state lies outside the frozen panel code space")
         panel_indices = np.asarray(panel["indices"], dtype=int)
-        keys = [
+        keys = {
+            state:
             _cell_key(
                 constructor_revision=constructor_revision, template_sha256=template_sha,
                 menu_sha256=menu_sha, panel_sha256=str(panel["panel_sha256"]),
                 state=state, permutation_sha256=permutation_sha,
             )
-            for state in range(256)
-        ]
-        payloads = [store.get(key) for key in keys]
-        missing = [state for state, payload in enumerate(payloads) if payload is None]
-        hits += 256 - len(missing)
+            for state in requested_states
+        }
+        payloads = {state: store.get(keys[state]) for state in requested_states}
+        missing = [state for state in requested_states if payloads[state] is None]
+        hits += len(requested_states) - len(missing)
         misses += len(missing)
         if missing:
             rows = np.zeros((len(missing), len(probe_texts)), dtype=float)
@@ -99,7 +108,9 @@ def evaluate_mcq_state_tables_v14(
             details = mcq_logit_values_from_precomputed_behaviors(
                 reconstructor,
                 noun=str(noun),
-                candidate_prompt_texts=[f"v14 finite state {state:08b}" for state in missing],
+                candidate_prompt_texts=[
+                    f"v14 finite state {state:0{panel_size}b}" for state in missing
+                ],
                 target_metric_id=str(target_metric_id),
                 target_description=str(target_description),
                 target_score_rows=rows,
@@ -143,7 +154,8 @@ def evaluate_mcq_state_tables_v14(
                     "annotation_accuracy": float(identification["identification_acc"]),
                     "blind_target_probability": q0,
                 })
-        for state, payload in enumerate(payloads):
+        for state in requested_states:
+            payload = payloads[state]
             if payload is None:
                 raise RuntimeError("MCQ state cache is incomplete")
             raw_lift[panel_position, state] = float(payload["raw_lift"])
@@ -152,8 +164,9 @@ def evaluate_mcq_state_tables_v14(
             main_probability[panel_position, state] = float(payload["raw_target_probability"])
             shuffled_probability[panel_position, state] = float(payload["shuffled_target_probability"])
             annotation_accuracy[panel_position, state] = float(payload["annotation_accuracy"])
-    if blind is None or np.any(~np.isfinite(raw_lift)):
-        raise RuntimeError("MCQ state evaluation did not produce finite complete evidence")
+    observed_mask = np.isfinite(raw_lift)
+    if blind is None or not np.any(observed_mask) or np.any(~np.isfinite(raw_lift[observed_mask])):
+        raise RuntimeError("MCQ state evaluation did not produce finite requested evidence")
     canonical_accuracy = [
         annotation_accuracy[position, int("".join(
             map(str, np.asarray(panel.get("target_state_bits", []), dtype=int).tolist())
@@ -175,6 +188,8 @@ def evaluate_mcq_state_tables_v14(
         "raw_target_probability": main_probability,
         "shuffled_target_probability": shuffled_probability,
         "annotation_accuracy": annotation_accuracy,
+        "observed_state_mask": observed_mask,
+        "state_scope": "exhaustive" if state_indices_by_panel is None else "observed_only",
         "blind": blind,
         "best_explanation_rate": (
             float(np.mean(canonical_accuracy)) if canonical_accuracy else None

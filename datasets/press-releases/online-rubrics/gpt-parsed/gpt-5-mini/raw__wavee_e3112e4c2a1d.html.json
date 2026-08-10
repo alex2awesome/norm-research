@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_e3112e4c2a1d.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16656,
+  "output_tokens": 2909,
+  "elapsed_s": 1529.3375477921218,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners studying COVID-19 misinformation (computational social scientists, data scientists, public health communicators, platform policy analysts)",
+    "subtask_short": "analysis of COVID-19 misinformation dataset",
+    "subtask_description": "A data-driven study framework for analyzing motives, narratives, and sources in a COVID-19 misinformation dataset (conspiracy theories, fake remedies, false reports), including preprocessing, counting, normalization, and visualization steps. Intended for producing quantitative and qualitative insights to inform detection, policy, and communication strategies.",
+    "subtask_keywords": [
+      "misinformation",
+      "covid19",
+      "dataset_analysis",
+      "motive_analysis",
+      "narrative_analysis",
+      "source_tracking"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Required dataset attributes and structure",
+        "description": "Each record must represent a single instance of COVID-19-related misinformation and include URL/point of reference ('Reported_On'), 'Title', 'Publication_Date', 'Primary_Language', 'Misinfo_Type', 'Main_Narrative', 'Narrative_Description', 'Motive', and 'Source'. The example dataset used contains 5,614 posts from 427 online sources across 193 countries and 49 languages.",
+        "guidance": "The dataset should allow linking content to metadata (date, language, URL) and include structured categorical fields for misinfo type, narrative, motive, and source to enable aggregated analysis by those dimensions."
+      },
+      {
+        "name": "Classification scheme for misinformation types",
+        "description": "Group misinformation into three broad categories: conspiracy theories, fake remedies, and false reports (Misinfo_Type attribute).",
+        "guidance": "Use these canonical labels (or clearly mapped equivalents) when splitting and filtering records; records may list multiple types separated by commas."
+      },
+      {
+        "name": "Data preprocessing: standardization and missing-value handling",
+        "description": "Standardize crucial text-based columns ('Motive', 'Misinfo_Type', 'Main_Narrative', 'Source') and drop rows with missing values in these fields prior to analysis.",
+        "guidance": "Ensure consistent casing/formatting and remove or impute missing data; the authors dropped rows with missing values for the key columns."
+      },
+      {
+        "name": "Handling multi-valued Misinfo_Type entries",
+        "description": "If 'Misinfo_Type' contains comma-separated values, split into a list and treat each listed misinformation type as a separate association for counting purposes.",
+        "guidance": "When iterating rows, split typesList \u2190 split row['Misinfo_Type'] by comma and increment counts for each misType; this yields motive/narrative counts that reflect multi-type records."
+      },
+      {
+        "name": "Motive analysis (relationship between Motive and Misinfo_Type)",
+        "description": "Analyze the relationship between 'Motive' and 'Misinfo_Type' by aggregating raw counts of motives within each misinformation type and computing percentages to show relative weights.",
+        "guidance": "Compute motiveCounts as a mapping misinfoType \u2192 (motive \u2192 count). Present both raw counts and normalized percentages (per misinfo type) to interpret which motives occur most frequently within each type (e.g., fear, political, false hope, profit, help)."
+      },
+      {
+        "name": "Narrative analysis (Main_Narrative by Misinfo_Type)",
+        "description": "Identify and count prominent 'Main_Narrative' themes for each misinformation type (e.g., weaponized virus, false cures, emergency responses) to infer which storylines drive each category.",
+        "guidance": "Aggregate narrativeCounts as misinfoType \u2192 (narrative \u2192 count), compute totals and percentages per misinfo type, and highlight dominant narratives (e.g., fake remedies dominated by false cures at ~93% in the example)."
+      },
+      {
+        "name": "Source analysis: top sources per misinformation type",
+        "description": "For each misinfo type, filter rows where 'Misinfo_Type' contains that type, compute value_counts() on 'Source', pick the largest 10, and report counts and percentage share for those top sources.",
+        "guidance": "GetTopSources(filteredData) should return the top 10 sources along with (count, percentageVal) where percentageVal = (countValue / totalCount_of_top_series) \u00d7 100. Note: percentage is computed relative to the sum of the top-10 counts as implemented."
+      },
+      {
+        "name": "Normalization totals for motives and narratives",
+        "description": "Compute motiveTotals and narrativeTotals as the sum of all counts for each misinfo type to permit normalization of counts into proportions per type.",
+        "guidance": "Use these totals when converting counts into percentages so comparisons are made on a per-misinformation-type basis (CalculateNormalizationTotals function)."
+      },
+      {
+        "name": "Implementation algorithmic steps (three-step program)",
+        "description": "Follow a three-step program: (1) AnalyzeMotives to get motiveCounts, (2) AnalyzeNarratives to get narrativeCounts, (3) AnalyzeSources to get topSources for each misinfo type.",
+        "guidance": "Implement with an O(NK) pass per counting step where N is rows and K is average number of misinfo types per row; keep each step modular and test intermediate aggregations."
+      },
+      {
+        "name": "Computational complexity and scalability considerations",
+        "description": "Expect motive/narrative analysis to run in O(NK) time (N rows, K avg types per row), per-type filtering O(N) each, and plotting sorting cost O(M log M) where M is number of unique elements; approximate total as O(N + M log M). Space use dominated by O(NM) for dataset storage plus dictionaries O(MT).",
+        "guidance": "Plan memory and runtime budgets accordingly; T (number of misinfo types) and K are usually small constants, so dataset size (N) and unique categories (M) drive performance."
+      },
+      {
+        "name": "Visualization and output artifacts",
+        "description": "Generate three figures: aggregated motive distributions across misinformation types, aggregated narrative distributions across misinformation types, and aggregated top sources across misinformation types; save each figure as .jpg in an images directory.",
+        "guidance": "Ensure imagesDir exists (create if not), use consistent labeling and color schemes, and store artifact files (e.g., .jpg) for reproducibility and reporting."
+      },
+      {
+        "name": "Selection and labeling of misinfo types for filtering",
+        "description": "Use a predefined misinfoTypesList for filtering and analysis, e.g., ['conspiracy', 'fake remedy', 'false reporting'] as canonical filter terms.",
+        "guidance": "Normalize Misinfo_Type text to match the filter tokens (case-insensitive contains) to avoid missed matches; document any mapping from dataset labels to canonical tokens."
+      },
+      {
+        "name": "Top-sources percentage calculation choice",
+        "description": "When reporting percentages for top sources, compute percentageVal relative to the total of the selected top-source counts (totalCount \u2190 sum of all counts in sourceCountSeries), not necessarily relative to the entire filtered dataset.",
+        "guidance": "Be explicit in reports about the denominator used for percentages (top-10 sum vs. all rows) because it changes interpretation of relative influence."
+      },
+      {
+        "name": "Interpretation guidance and suggested applications",
+        "description": "Use quantitative breakdowns of motives, narratives, and sources to inform public health communication (tailor messaging where fear dominates), policy oversight (target politicized conspiracy channels), platform moderation (flag emerging narrative frames), and fact-checking prioritization.",
+        "guidance": "Link observed distributions to concrete interventions: empathy/transparent messaging for fear-driven content, oversight for politicized content, early-warning systems for recurring narrative frames (e.g., miracle cures)."
+      },
+      {
+        "name": "Limitations disclosure for dataset-driven analyses",
+        "description": "Acknowledge that results depend on the dataset used: it may not cover all languages/regions, labels assigned to sources may be unverified, and trends can change rapidly as misinformation evolves.",
+        "guidance": "Report these limitations explicitly in any downstream use of the analysis; suggest extensions (longitudinal tracking, expanding languages, verification of labels, network analysis) to improve robustness."
+      }
+    ]
+  }
+}

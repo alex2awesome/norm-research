@@ -1,0 +1,180 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 32,
+  "n_chunks": 37,
+  "chunk_chars": 39926,
+  "model": "gpt-5-mini",
+  "elapsed_s": 340.3349336659958,
+  "input_tokens": 15503,
+  "output_tokens": 5360,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "authors and macro-writers using plain TeX / people typesetting with plain TeX (readers of The TeXbook)",
+    "subtask_short": "plain_tex macro/font guidelines",
+    "subtask_description": "Guidance for writing and using plain TeX macros and fonts: how to format displays and verbatim material, collect exercises/answers, mark index entries, and conventions/requirements for font layouts and font parameters in plain TeX.",
+    "subtask_keywords": [
+      "plain_tex",
+      "macros",
+      "fonts",
+      "typesetting",
+      "texbook"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Display formatting convention",
+        "description": "Displays in this book are usually indented rather than centered; displays usually involve text rather than mathematics.",
+        "guidance": "Use the manmac pair \\begindisplay ... \\enddisplay for such displays. \\begindisplay supports multiline displays (use \\cr after each line) and allows local definitions immediately after \\begindisplay."
+      },
+      {
+        "name": "Verbatim typewriter displays (\\begintt/\\endtt)",
+        "description": "\\begintt ... \\endtt is for displays that are entirely in typewriter type and are copied verbatim from the manuscript file without interpreting symbols like \\ or $.",
+        "guidance": "Within paragraph verbatim text can be obtained by using vertical lines as brackets. \\begintt places the verbatim lines into a vbox so they cannot be broken between pages (suitable for comparatively small amounts of verbatim text). Inside \\begintt...\\endtt the '|' character is temporarily an escape character to permit leaving verbatim mode."
+      },
+      {
+        "name": "Multiline display details for \\begindisplay",
+        "description": "\\begindisplay allows multiline displays, with \\cr following each line, and allows local definitions to be specified immediately after \\begindisplay.",
+        "guidance": "Example usage shows text lines separated by \\cr; the macro implementation sets catcodes and alignment machinery so the display behaves as intended."
+      },
+      {
+        "name": "Use \\beginlines / \\endlines for quoted format-file material",
+        "description": "\\beginlines ... \\endlines delimits material quoted from a format file and permits commands (like \\smallbreak) to help with spacing and page breaking; they also insert rules before and after the block.",
+        "guidance": "\\beginlines sets \\parindent=0pt, inserts a rule and sets \\obeylines and \\everypar{\\strut}. \\endlines inserts a closing rule and ends the group. Use these for longer verbatim-like blocks that must be breakable across pages."
+      },
+      {
+        "name": "\\begintt is unbreakable; choose quoting macros accordingly",
+        "description": "The \\begintt macro assumes a comparatively small amount of text and puts the verbatim lines into a vbox, so they cannot be broken between pages.",
+        "guidance": "If long verbatim text that must break across pages is needed, prefer \\beginlines/\\endlines or other breakable constructs rather than \\begintt."
+      },
+      {
+        "name": "Exercise and answer collection mechanism",
+        "description": "Exercises are specified by an \\exercise macro; the \\answer macro copies answers into a file called answers.tex so answers can be typeset later.",
+        "guidance": "\\exercise increments an exercise counter and prints an EXERCISE heading. \\answer writes a marker and the answer text to answers.tex using \\immediate\\write\\ans; each individual answer ends with a blank line, so \\par must be used between paragraphs. Dangerous exercises use \\dangerexercise or \\ddangerexercise which alter formatting."
+      },
+      {
+        "name": "Verbatim copying setup for \\answer (use of \\dospecials)",
+        "description": "The \\answer macro uses verbatim copying machinery and relies on \\dospecials to set up category codes for correct verbatim transfer to the answers file.",
+        "guidance": "Macros like \\copytoblankline and \\copyans implement writing lines until a blank line is seen; the implementation uses category-code changes and \\obeylines."
+      },
+      {
+        "name": "Indexing markup using ^ notation",
+        "description": "When a paragraph contains a word or group of words that deserve to be indexed, the manuscript indicates this by inserting ^{...}; ^^{...} stands for a \u201csilent\u201d index entry whose text does not appear on the page.",
+        "guidance": "An index entry written as ^{word} will result in an entry in index.tex like 'word !0 <page>.' The silent form ^^{word} ignores spaces after the closing brace. Use ^ to mark indexing clues while keeping the visible text unchanged (unless using the single-^ form)."
+      },
+      {
+        "name": "Index entry encoding (four kinds / codes 0\u20133)",
+        "description": "The indexing macros produce entries of four kinds assigned to codes 0,1,2,3 depending on how the argument is delimited:",
+        "guidance": "Code 0: braces '^{word}'; code 1: vertical lines with no backslash '^|plus|'; code 2: vertical lines with backslash '^|\\par|'; code 3: angle brackets '^\\<stuff>'. The index file stores entries as 'text !<code> <page>.' so typesetting can later reinstate formatting like typewriter font or backslashes via the code."
+      },
+      {
+        "name": "Active ^ and interaction with math mode",
+        "description": "The manmac format can make ^ an active character to produce index entries while retaining its use for superscripts in math formulas by testing \\ifmmode.",
+        "guidance": "Implementation uses \\ifmmode to choose whether ^ should act as a superscript or begin an index entry (via \\specialhat and related macros). Note that making ^ active affects other notations like ^^M; avoid conflicts when redefining catcodes for macro definitions."
+      },
+      {
+        "name": "Indexing suppressed in final runs (proofmode switch)",
+        "description": "Indexing is suppressed unless the proofmode switch is set to true, since material is gathered for the index only during trial runs\u2014not on the final camera-ready copy.",
+        "guidance": "Set \\proofmodetrue during proof runs to collect index reminders; set \\proofmode false (\\proofmodefalse) when making camera-ready copy to suppress margin inserts and index writes. The \\makexref macro checks \\ifproofmode to decide whether to insert margin notes and write to index.tex."
+      },
+      {
+        "name": "Prefer symbolic math names to numeric font positions",
+        "description": "Plain TeX defines control sequences for more than 200 math symbols so you can refer to symbols by name rather than by numerical positions in font layouts.",
+        "guidance": "Calling a symbol by name makes manuscripts portable across fonts and more readable. Example: use \\alpha, \\sum, \\Gamma rather than trying to use specific character codes."
+      },
+      {
+        "name": "Font family conventions (0\u20133)",
+        "description": "Plain TeX assumes family 0 contains normal roman fonts and families 1, 2, and 3 contain math italic, math symbol, and math extension fonts respectively.",
+        "guidance": "Follow these family assignments so math-classificiation and macros behave correctly; \\mathchardef codes reference family numbers to locate symbols."
+      },
+      {
+        "name": "Text font layout and ASCII conventions",
+        "description": "There are exactly 128 different characters in each of the Computer Modern text fonts (though TeX can handle 256); visible ASCII characters appear in their ASCII positions, but some ASCII symbols (\", <, >, \\\\ , _, {, |, }) are not included because they don't occur in normal printer's fonts.",
+        "guidance": "If you type characters not present, TeX substitutes appropriate alternatives (e.g., a straight quote becomes typographic quotes). Ten digits all have width 0.5em in the described text fonts."
+      },
+      {
+        "name": "Typewriter font (cmtt10) properties",
+        "description": "The typewriter font cmtt10 includes all visible ASCII characters in correct positions; every character has the same width (0.5em); spaces between words also have 0.5em and will not stretch or shrink.",
+        "guidance": "TeX inserts two spaces at the end of each sentence when typesetting with a typewriter font. To change this behavior assign nonzero values to \\spaceskip and \\xspaceskip or change \\fontdimen parameters for the font."
+      },
+      {
+        "name": "Math italic font (cmmi10) characteristics",
+        "description": "Math italic (cmmi10) differs from text italic: it contains lowercase and uppercase Greek, has altered proportions/spacing for letters intended for math, and contains special unslanted characters in certain positions.",
+        "guidance": "Plain TeX takes comma, period, and slash from cmmi10 in math mode for correct kerning. For correct positioning of math accents with this font, set its \\skewchar to octal 177 (decimal 127)."
+      },
+      {
+        "name": "Math symbol font (cmsy10) and skewchar",
+        "description": "Math symbol font cmsy10 contains math symbol glyphs (including calligraphic capitals) and its \\skewchar should be set to octal 060 so math accents position properly over calligraphic capitals.",
+        "guidance": "Follow the skewchar convention when defining fonts used for math symbols and calligraphic letters to ensure accent placement is correct."
+      },
+      {
+        "name": "Font metric loading behavior (tfm-only)",
+        "description": "When TeX 'loads' a font it uses only the font metric information (TFM): heights, widths, depths, italic corrections, ligature and kerning info. TeX does not look at actual glyph shapes.",
+        "guidance": "Metric files can specify series of linked characters (e.g., linked delimiter sizes) and other structural relationships. Use appropriate TFM files that encode sizes and extensible pieces for delimiters and large symbols."
+      },
+      {
+        "name": "Extensible symbol construction via linked positions",
+        "description": "Large delimiters and extensible symbols are constructed by a linked sequence of character positions (e.g., left parentheses are linked in order of increasing size and an extensible middle piece is repeated as needed).",
+        "guidance": "Metric information specifies sequences like \u00b4060 + [\u00b4102]n + \u00b4100 for an extensible left parenthesis. TeX chooses sizes for math delimiters, operators, and accents using these linkages (see Appendix G)."
+      },
+      {
+        "name": "Meaning and use of \\fontdimen parameters",
+        "description": "Each font has fontdimen parameters controlling slant, interword space, interword stretch/shrink, x-height, quad (em) width, extra space at sentence end, etc.",
+        "guidance": "Typical values for cmr10 and other fonts are given. The slant parameter is used to position accents; parameters 2\u20134 define interword spacing; 5 and 6 define 1ex and 1em metrics; parameter 7 is extra space added at sentence end when \\spacefactor >=2000 and \\xspaceskip is zero. When a font is magnified (via 'at' or 'scaled'), all parameters except slant are magnified at load time."
+      },
+      {
+        "name": "Math fonts must supply extra \\fontdimen parameters",
+        "description": "Math symbol fonts (family 2) are required to have at least 22 \\fontdimen parameters instead of the usual seven; math extension fonts must have at least 13.",
+        "guidance": "If you need to increase the number of parameters past those in a font's metric file, assign new \\fontdimen values immediately after the font is loaded; intervening parameters will be zero. You can also set extra parameters on \\nullfont before any fonts are loaded."
+      },
+      {
+        "name": "Zero-spacing fonts and italic correction rule",
+        "description": "Fonts intended only for mathematical typesetting (e.g., cmmi10) typically have zero interword spacing.",
+        "guidance": "When a font has zero spacing, TeX's rules (see Appendix G) add the italic correction between adjacent characters from such fonts; this is the intended mechanism for math-only fonts."
+      },
+      {
+        "name": "Distinguish large operators from binary operations",
+        "description": "Large operator symbols (\\sum, \\prod, \\coprod, \\int, ...) come in two sizes and usually occur at the beginning of a formula or subformula and are usually subscripted; binary operations occur between two symbols or subformulas and are rarely subscripted.",
+        "guidance": "Use \\sum / \\prod for large operator usage and \\Sigma / \\Pi (or small variants) for symbol-sized forms; remember the semantic/spacing differences (e.g., subscripts on large operators are usually placed as limits)."
+      },
+      {
+        "name": "Negation semantics: \\not vs special negated symbols",
+        "description": "Prefixing a relation with \\not overlays a zero-width 'not' symbol over the relation; the positioning can be imperfect for some relations.",
+        "guidance": "Where better cancellation is needed use special negated symbols provided by plain TeX (e.g., \\notin) rather than \\not\\in so the slash/cancellation looks correct."
+      },
+      {
+        "name": "Use dotless i/j when accenting",
+        "description": "Use \\imath and \\jmath (dotless letters) when i or j are to be accented (e.g., \\hat\\imath yields accented dotless i).",
+        "guidance": "This prevents the dot of i/j from colliding with accents."
+      },
+      {
+        "name": "Putting symbols over relations (\\buildrel)",
+        "description": "To put symbols over left/right arrows or relations use \\buildrel<superscript>\\over<relation> which places the superscript atop the relation like limits over large operators.",
+        "guidance": "Example: \\buildrel\\alpha\\beta\\over\\longrightarrow places \\alpha\\beta above \\longrightarrow. Note: in this construction \\over does not define a fraction but arranges the placement."
+      },
+      {
+        "name": "Punctuation spacing in math",
+        "description": "TeX inserts a thin space after commas and semicolons in math formulas and treats a colon as a relation unless you use the punctuation version \\colon.",
+        "guidance": "Use \\colon when you want punctuation spacing for colons (e.g., function types f\\colon A\\to B). Plain TeX defines \\ldotp and \\cdotp for '.' and '\u00b7' with comma-like spacing; these are used in definitions of \\ldots and \\cdots."
+      },
+      {
+        "name": "Delimiters grow with size commands",
+        "description": "Left and right delimiters (e.g., ( [ \\langle \\lfloor \\lceil) will grow if prefixed by \\bigl, \\Bigl, \\biggl, \\Biggl, or by \\left / \\right.",
+        "guidance": "Chapter 17 and the font extension linkages explain how to obtain larger sizes; additional composite delimiter sequences (e.g., \\lbrack\\!\\lbrack) are suggested when more delimiter symbols are needed."
+      },
+      {
+        "name": "Alternate control-sequence names and aliasing",
+        "description": "If you prefer different names for symbols you can create aliases (e.g., \\let\\cupcap=\\asymp) so you can use alternate mnemonics; plain TeX also provides some commonly used alternate names (e.g., \\ne and \\neq).",
+        "guidance": "Defining aliases increases readability for your personal use; plain TeX predefines many equivalents (list includes \\ne/\\neq, \\le/\\leq, \\ge/\\geq, \\to/\\rightarrow, etc.)."
+      },
+      {
+        "name": "Calligraphic capitals via \\cal",
+        "description": "Calligraphic capitals A...Z are obtained by typing ${\\cal A}\\ldots{\\cal Z}$ (these are provided by the math symbol font).",
+        "guidance": "Other alphabets (Fraktur, script, blackboard bold) are not part of plain TeX but are provided by formats such as AMS-TeX."
+      }
+    ]
+  }
+}

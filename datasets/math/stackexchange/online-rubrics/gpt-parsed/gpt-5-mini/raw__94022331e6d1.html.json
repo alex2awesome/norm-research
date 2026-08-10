@@ -1,0 +1,144 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/94022331e6d1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8956,
+  "output_tokens": 4002,
+  "elapsed_s": 1982.099780500168,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "software developers contributing Python (and Cython) code to the SageMath project",
+    "subtask_short": "coding_python_for_sage",
+    "subtask_description": "Guidance and standards for writing Python (and Cython-adjacent) code to be included in the Sage library, covering language/versioning, API design, special methods, importing, typing, deprecation, testing, and packaging.",
+    "subtask_keywords": [
+      "sagemath",
+      "python",
+      "library_development",
+      "style_guide",
+      "cython"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Python language standard / minimum supported versions",
+        "description": "Sage follows the time window-based support policy SPEC 0 \u2014 Minimum Supported Dependencies for Python versions. The current minimum supported Python version can be found in pyproject.toml. Accordingly, only language and library features available in this version can be used.",
+        "guidance": "If a feature is deprecated in a newer supported version, ensure deprecation warnings do not cause doctest failures. Use only features available in the declared minimum supported version."
+      },
+      {
+        "name": "__future__ import annotations for type annotations",
+        "description": "All Sage library code that uses type annotations should include from __future__ import annotations and follow PEP 563 (Postponed evaluation of annotations).",
+        "guidance": "This modernizes type annotations per PEP 563 and is required for code using annotations."
+      },
+      {
+        "name": "Use typing_extensions to backport typing features",
+        "description": "The typing_extensions package is used to backport features from newer versions of the typing module; the Sage library declares this package as a dependency.",
+        "guidance": "When using typing features not present in the minimum supported Python typing module, import them from typing_extensions."
+      },
+      {
+        "name": "Design: fit code into Sage's object/class hierarchy",
+        "description": "Think about what your program will do and how that fits into the structure of Sage. Much of Sage is object-oriented with a hierarchy of classes organizing code and functionality.",
+        "guidance": "If you implement elements of a ring, derive from sage.structure.element.RingElement rather than starting from scratch. Try to figure out how your code should fit with other Sage code and design accordingly."
+      },
+      {
+        "name": "Derive from SageObject or existing Sage classes",
+        "description": "All objects in Sage should derive from the Cython extension class SageObject or from some other already existing Sage class (e.g., Parent).",
+        "guidance": "Example: class MyClass(SageObject, ...): ... or class MyFavoriteAlgebra(Parent): ... This ensures consistency of behavior across Sage."
+      },
+      {
+        "name": "Implement _latex_ method for LaTeX rendering",
+        "description": "Every object x in Sage should support latex(x) by defining a method _latex_(self) that returns a LaTeX representation of the object (something typeset correctly within math mode).",
+        "guidance": "Do not include opening/closing $ characters. For components, call latex(component) rather than component._latex_() so the helper can handle objects without _latex_. Include a docstring and an example illustrating LaTeX generation. You may use macros from amsmath, amssymb, amsfonts, or sage.misc.latex_macros."
+      },
+      {
+        "name": "Implement _repr_ method for textual printing",
+        "description": "For objects deriving from SageObject, define _repr_(self) instead of __repr__(self). This allows printing to vary by context and lets users rename objects for custom printing.",
+        "guidance": "Provide both _repr_ (preferred) and, if necessary for Python interoperability, __repr__. Example given: class Pi with _repr_ returning 'pi' and _latex_ returning '\\\\pi'."
+      },
+      {
+        "name": "Provide _matrix_ method for matrix coercion",
+        "description": "Provide a _matrix_ method for an object that can be coerced to a matrix over a ring R so that the Sage function matrix will work for this object.",
+        "guidance": "Example: def _matrix_(self, R=None): if R is None: return self.am() else: return self.am().change_ring(R)"
+      },
+      {
+        "name": "Provide _vector_ method for vector coercion",
+        "description": "Similarly, provide a _vector_ method for objects that can be coerced to a vector over a ring R so that the Sage function vector will work for the object.",
+        "guidance": "Example from FreeModuleElement: def _vector_(self, R): return self.change_ring(R)"
+      },
+      {
+        "name": "Sage preparsing / interactive syntax differences",
+        "description": "Sage applies preparsing tweaks to interactive input (commandline or notebook) via a preparser that rewrites certain syntactic sugar (not applied to library Python code).",
+        "guidance": "Documented replacements include R.<x,y>=QQ[] syntax expansion, raw literals (suffix r/R) that are not preparsed, and generation of .sage.py preparsed files when loading .sage files. Consult preparser.py for details."
+      },
+      {
+        "name": "Coercion model goal",
+        "description": "The primary goal of coercion is to transparently do arithmetic, comparisons, etc. between elements of distinct sets while being strict enough to avoid ambiguity or nonsense.",
+        "guidance": "Design coercion so natural inclusions (like integers into rationals) behave as users expect; consult the Coercion section of the Sage Reference Manual for details and examples."
+      },
+      {
+        "name": "Mutability: parent structures should be immutable and globally unique",
+        "description": "Parent structures (e.g., rings, fields, matrix spaces) should be immutable and globally unique whenever possible; immutability ensures properties like generator labels and default coercion precision cannot be changed.",
+        "guidance": "Implement global uniqueness efficiently using Python's weakref module, a factory function, and module-scope variable. Some objects (e.g., matrices) may be mutable initially and become immutable later; see mutability.py."
+      },
+      {
+        "name": "__hash__ special method guidance",
+        "description": "hash() should return an integer; objects that compare equal should have the same hash value is the Python requirement, but Sage cannot always satisfy 'a == b implies hash(a) == hash(b)'.",
+        "guidance": "If a class does not define __eq__ it should not define __hash__; if it defines mutable objects and implements __eq__, it should not implement __hash__. Aim for a fast hash that reasonably respects natural inclusions/coercions. Examples and consequences are provided (e.g., Mod(2,7)). See Python data model docs for more."
+      },
+      {
+        "name": "Exceptions: avoid bare except and catch specific exceptions",
+        "description": "Avoid catch-all code like 'except:' which catches everything (including ctrl-C); list specific exceptions in except clauses.",
+        "guidance": "Use syntax 'except (AttributeError, OtherExceptions) as msg:' for specific catches. Prefer to list the exceptions to be caught as a tuple. This avoids hiding real errors and preserves interrupts."
+      },
+      {
+        "name": "Raise appropriate exception types",
+        "description": "Choose from the most relevant exceptions to Sage: TypeError, ValueError, ArithmeticError, ZeroDivisionError, NotImplementedError, RuntimeError, etc., with informative messages.",
+        "guidance": "Raise TypeError for unsupported input classes, ValueError for unsupported input values, ArithmeticError for inappropriate arithmetic operations (ZeroDivisionError derived from ArithmeticError for zero division), NotImplementedError for features not yet implemented, RuntimeError if no specific error fits. Include descriptive strings in exceptions."
+      },
+      {
+        "name": "Integer return values: prefer Sage Integer class",
+        "description": "Many functions/methods in Sage should return integer values as Sage integers (class Integer) rather than Python ints so users can use number-theoretic methods.",
+        "guidance": "Exceptions when Python ints are preferable include performance or compatibility (e.g., __hash__, __len__, __int__). To return Python int as Sage Integer: from sage.rings.integer import Integer; return Integer(i). To return a Sage Integer as Python int: return int(i)."
+      },
+      {
+        "name": "Importing: avoid circular imports and expensive top-level imports",
+        "description": "Avoid circular imports; don't import large third-party modules at module top-level that take long to initialize (e.g., matplotlib).",
+        "guidance": "If circular imports occur, move imports into functions/methods where needed (example: import inside basis method). Use lazy imports (sage.misc.lazy_import) to delay imports until first use, and use cached_function decorator to avoid heavy initialization at module import time for precomputed data. Aim to keep 'from sage.all import *' fast."
+      },
+      {
+        "name": "Static typing and type stubs for Cython modules",
+        "description": "Sage uses pyright for typechecking. Cython's static types are not visible to static checkers, so create type stub (.pyi) files for Cython modules and place them next to .pyx/.pxd files; typestub files can also be placed in SAGE_ROOT/src/typings for libraries without typing.",
+        "guidance": "Prefer upstreaming typestub files to the projects that maintain the libraries. Contributing to tooling for automatic stub generation for Cython has more impact than manually writing many stubs. When augmenting third-party libs, create SAGE_ROOT/src/typings/<package>.pyi or package/__init__.pyi; consider contributing to typeshed as a fallback."
+      },
+      {
+        "name": "Deprecation policy and tools",
+        "description": "Any class, function, method, or attribute defined under SAGE_ROOT/src/sage is subject to the deprecation policy (except internal names starting with an underscore). A deprecated item can only be removed one year after the first stable release in which it appeared.",
+        "guidance": "When deprecating, display a message indicating how code should be updated; deprecation warnings include the GitHub PR number. Tools and patterns: rename_keyword decorator, deprecated_function_alias for renaming functions, lazy_import(..., deprecation=PR) for moving objects, call deprecation(PR, message) for arbitrary cases. For Cython files, use deprecation_cython(). When renaming/removing classes, provide aliases or comments and record the change in the 'Deprecations' section of the release notes of the next stable release."
+      },
+      {
+        "name": "Experimental/unstable code policy",
+        "description": "Newly created code can be marked experimental/unstable so no deprecation warning is required when changing its functionality or interface; this lets code be added early and changed during maturation.",
+        "guidance": "Mark experimental functions/methods with @experimental(PR), experimental classes by decorating __init__ with @experimental(PR), or call experimental_warning(PR, message). When code is stable for some time (suggested ~one year), remove the experimental marker. All code must be fully doctested and go through the review process."
+      },
+      {
+        "name": "Using optional packages: fail gracefully and help users install",
+        "description": "If a function requires an optional package, it should fail gracefully when the package is not available and give a hint about how to install it (e.g., suggest running 'sage -optional').",
+        "guidance": "Use try-except to detect missing optional packages and provide informative messages. The command optional_packages() within Sage returns a list of optional packages to guide the user."
+      },
+      {
+        "name": "Doctesting and review requirement",
+        "description": "All code (including experimental code) has to be fully doctested and go through the reviewing process before being accepted into the Sage library.",
+        "guidance": "Include doctest examples in docstrings (examples illustrating behaviors like latex()) and ensure deprecation/experimental helpers interact properly with the doctest framework. Review by project maintainers is required for contributions."
+      },
+      {
+        "name": "Deprecation: internal names starting with underscore are exempt",
+        "description": "If an object's name starts with an underscore, it is considered internal and exempt from the deprecation policy.",
+        "guidance": "Experts may also agree something is internal if unlikely to be imported by user code; otherwise treat it as public and subject to deprecation procedures."
+      },
+      {
+        "name": "Removing or renaming classes: provide aliases/comments and annotate releases",
+        "description": "When renaming a class, add an alias OldClass = NewClass and mark OldClass as deprecated (reference PR). When removing a class, add a comment that it is deprecated and include it in the release notes.",
+        "guidance": "Because classes are imported rather than run by user code, follow the alias/comment patterns and ensure changes are documented in the 'Deprecations' section of the next stable release notes."
+      }
+    ]
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_89abab590132.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12948,
+  "output_tokens": 4111,
+  "elapsed_s": 1576.462398875039,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / data-science researchers and practitioners working on online-news trustworthiness, computational-journalism researchers, and ML engineers building article-level classifiers",
+    "subtask_short": "news publisher trustworthiness detection",
+    "subtask_description": "Developing and evaluating text classifiers that predict a news publisher's trustworthiness level from individual article text; includes dataset construction (source & article selection), label inheritance from source-level ratings, model training, cross-validation, and performance evaluation.",
+    "subtask_keywords": [
+      "online_news",
+      "trustworthiness",
+      "article_classification",
+      "newsguard",
+      "nlp",
+      "dataset"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Trustworthiness levels (NewsGuard bins)",
+        "description": "Five trustworthiness levels defined by NewsGuard based on a 0-100 score: 100 (High Credibility); 75-99 (Generally Credible); 60-74 (Credible with Exceptions); 40-59 (Proceed with Caution); 0-39 (Proceed with Maximum Caution).",
+        "guidance": "These bins are used as the target classes for article-level classification; the article inherits the trustworthiness level of its source. The authors reference Table 1 which maps numeric score ranges to the five textual labels."
+      },
+      {
+        "name": "Use of NewsGuard's nine journalistic criteria",
+        "description": "Each source is analyzed according to nine accepted journalistic criteria by NewsGuard to compute the source-level trustworthiness score.",
+        "guidance": "The paper relies on NewsGuard's labels as ground truth (licensed to the authors) and treats those judgments as reliable because they are produced by qualified journalists using the nine criteria. (The nine criteria are referenced but not enumerated in the paper.)"
+      },
+      {
+        "name": "Formal problem definition: Trustworthiness Level Detection",
+        "description": "Given a set of articles A and a set of newspapers N with associated trustworthiness levels L, develop a text classifier C_trust that assigns each article a trust_a \u2208 L based on its text.",
+        "guidance": "Assumes each article originates from one newspaper and inherits that newspaper's trust level. The formalization includes sets A (articles), N (newspapers), and L (trust levels) and specifies that each article has text_a and newspaper_a attributes."
+      },
+      {
+        "name": "Formal problem definition: Topic Detection",
+        "description": "Given sets A, N and a set of topics T, develop a text classifier C_topic that assigns each article a topic \u2208 T based on its text, where each newspaper n_i has a primary topic topic_n_i provided by NewsGuard.",
+        "guidance": "Topic detection is used to validate the quality of NewsGuard topic labels; the paper uses four primary topics (Political, Conspiracy, Sports, Health)."
+      },
+      {
+        "name": "Source selection: single-topic assignment",
+        "description": "Select sources that are associated with one and only one topic in NewsGuard.",
+        "guidance": "This restriction ensures clearer topic labels for articles inherited from sources. The authors started from the NewsGuard dataset and kept sources linked to a single primary topic."
+      },
+      {
+        "name": "Source selection: exclude paywalled and non-English sources",
+        "description": "Exclude sources that require a paywall and sources that are not in English.",
+        "guidance": "This criterion was applied to obtain a usable, accessible English-language dataset for model training and evaluation."
+      },
+      {
+        "name": "Targeted topical coverage (four topics)",
+        "description": "Focus on four topics: Political news or commentary; Conspiracy theories or hoaxes; Sports and athletics; Health or medical information.",
+        "guidance": "These topics (set T) were chosen for analysis and to stratify sampling across themes that vary in trustworthiness distribution and real-world importance (e.g., health during pandemics)."
+      },
+      {
+        "name": "Stratified sampling of sources by trustworthiness per topic",
+        "description": "For each topic, select a fixed number of sources (aim: 10 per topic) while preserving the distribution of NewsGuard trust scores observed in the original dataset via stratified sampling.",
+        "guidance": "Example: for Sports, if 30% of sources have score 100, 50% in 75-99, 20% in 60-74, then randomly sample sources to match those proportions (e.g., 3,5,2 respectively). Purpose is to mirror the original NewsGuard distribution across topics."
+      },
+      {
+        "name": "Per-source article sampling quotas",
+        "description": "Collect at least 40 articles per news outlet, with a maximum cap (observed max 294); discard articles shorter than 200 words.",
+        "guidance": "From homepages / news-history pages gather recent articles until quotas are met; final dataset contains at least 40 articles per outlet when available and excludes very short articles (<200 words)."
+      },
+      {
+        "name": "Article collection procedure (automation + storage)",
+        "description": "Use Selenium to scroll news-history pages and collect article URLs, use GNU Wget to retrieve HTML pages and save them as WARC-format archives, then extract article text via custom XPATH-based extractors per source.",
+        "guidance": "Steps: (1) identify news-history page for a source, (2) iterate page numbers to collect article URLs, (3) fetch HTML and archive, (4) build source-specific XPATH extractors to extract embedded article text. This pipeline supports reproducible offline processing."
+      },
+      {
+        "name": "Text extraction: custom XPATH per source",
+        "description": "Use custom XPATH-based extractors tailored to each news source to extract embedded article text from the saved HTML.",
+        "guidance": "Because sites organize content differently, per-site extractors are employed to reliably extract article body text rather than generic heuristics."
+      },
+      {
+        "name": "Data cleaning: remove extraneous fragments",
+        "description": "Clean extracted text by removing repetitive phrases (thank-you messages, signatures, slogans) and miscellaneous linguistic elements (dates, etc.).",
+        "guidance": "Use SpaCy (en_core_web_lg) and manual verification to detect and remove such extraneous content. The cleaning improves text quality for model training."
+      },
+      {
+        "name": "Label inheritance: article labels derived from source labels",
+        "description": "Each article's trustworthiness and topic labels are inherited from its source (newspaper) as provided by NewsGuard.",
+        "guidance": "The paper relies on source-level annotation; this avoids manual annotation of individual articles but assumes the source-level label applies sufficiently to its articles."
+      },
+      {
+        "name": "Model architecture & library choice",
+        "description": "Use BERT (BertForSequenceClassification) from the transformers library and fine-tune it for both topic and trustworthiness classification tasks.",
+        "guidance": "Authors chose BERT as a state-of-the-art pre-trained language model and used huggingface transformers for fine-tuning. They mention the possibility of exploring models other than BERT as future work."
+      },
+      {
+        "name": "Cross-validation protocol: 10-fold stratified CV",
+        "description": "Evaluate models via 10-fold stratified cross-validation implemented with scikit-learn, using 10% of data as test and 90% as training in each fold, ensuring even distribution of target classes across folds.",
+        "guidance": "Stratification guarantees each fold has a representative class distribution for robust evaluation; report averages and min/max across folds."
+      },
+      {
+        "name": "Primary evaluation metrics: F1-micro and F1-macro",
+        "description": "Use F1 Micro and F1 Macro as primary performance metrics; F1 Micro aggregates over all predictions, F1 Macro computes the average of per-class F1 scores.",
+        "guidance": "Equations provided in the paper (standard definitions). The authors also report accuracy, precision, recall and show confusion matrices for deeper analysis."
+      },
+      {
+        "name": "Report per-fold variability and confusion matrices",
+        "description": "Report average, min, and max scores across folds and present confusion matrices (best and worst-fold) to analyze error patterns.",
+        "guidance": "The authors present per-fold F1 distributions and confusion matrices to inspect misclassification patterns (e.g., adjacent vs distant class errors). Reporting variability gives insight into stability."
+      },
+      {
+        "name": "Error taxonomy: adjacent vs distant class errors",
+        "description": "Classify mispredictions into errors assigned to neighboring/adjacent classes (close in trust score) versus distant classes (far in trust score).",
+        "guidance": "Adjacent-class errors (e.g., 1 bin off) are less severe and may be acceptable depending on application; distant-class errors are more problematic. Quantify counts of each type (authors report numbers in confusion matrix analysis)."
+      },
+      {
+        "name": "Optional coarser thresholds for practical use",
+        "description": "Redefine NewsGuard thresholds to coarser groupings (e.g., binary: 0\u201359 vs 60\u2013100) to produce coarser trusted / untrusted labels and improve model performance for some use cases.",
+        "guidance": "Depending on application requirements, coarser classes can boost practical utility and reduce severe misclassification impact."
+      },
+      {
+        "name": "Application-level guidance: three use cases for classifiers",
+        "description": "Proposed applications: (1) user-level red-flag alert shown while reading an article; (2) organizational initial assessment of unfamiliar media outlets by processing a selection of articles; (3) selecting a balanced sample of articles for manual journalistic assessment rather than relying on most-shared articles.",
+        "guidance": "Advice: do not rely solely on most-shared articles to select samples (sampling bias); instead use classifier to build more balanced samples across trustworthiness levels and topics for manual review."
+      },
+      {
+        "name": "Dataset statistics and constraints to report",
+        "description": "Report number of sources, number of articles per trustworthiness level and topic, time window of collection, and final sample sizes (e.g., 40 sources, 4033 articles collected during May 4\u201315, 2023).",
+        "guidance": "Provide breakdown tables / figures (the paper includes Tables 2 and 3 and Figures 1,2,4,6,7). Also note that NewsGuard topic and trust tags are proprietary and were licensed for the study."
+      },
+      {
+        "name": "Storage & reproducibility: archive raw HTML",
+        "description": "Save retrieved HTML pages in WARC-format archives to provide offline copies facilitating reproducible extraction and analysis.",
+        "guidance": "Archiving pages allows future re-extraction and auditing; authors explicitly used WARC archives created with GNU Wget."
+      },
+      {
+        "name": "Data quality validation via complementary task (topic detection)",
+        "description": "Validate the dataset labeling by performing a topic detection task and ensuring high topic-classification performance as sanity check for label quality.",
+        "guidance": "Authors performed topic detection (achieved F1-macro ~0.925) to confirm that article texts match NewsGuard topic labels, improving confidence in using NewsGuard labels for trustworthiness detection."
+      },
+      {
+        "name": "Data-collection anti-pattern: sampling only most-shared articles",
+        "description": "Selecting only the most-shared articles on social media can produce unrepresentative samples (e.g., only straight news stories) and bias assessment of a publisher's trustworthiness.",
+        "guidance": "Authors warn against this sampling method and argue for model-assisted sampling to obtain balanced coverage across topics and trustworthiness levels."
+      },
+      {
+        "name": "Data enrichment & future work recommendations",
+        "description": "Recommendations to extend dataset: include more sources, non-English sources, more articles per source; explore models other than BERT; integrate XAI techniques to interpret textual differences across trustworthiness levels.",
+        "guidance": "Authors present these as principled next steps to improve generalizability and explainability of classifiers."
+      }
+    ]
+  }
+}

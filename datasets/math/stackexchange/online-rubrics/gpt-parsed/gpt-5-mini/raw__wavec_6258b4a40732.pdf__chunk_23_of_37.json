@@ -1,0 +1,90 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 23,
+  "n_chunks": 37,
+  "chunk_chars": 39743,
+  "model": "gpt-5-mini",
+  "elapsed_s": 203.67472741600068,
+  "input_tokens": 13379,
+  "output_tokens": 4913,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, macro writers, and typesetters debugging TeX documents",
+    "subtask_short": "TeX error recovery and diagnostics",
+    "subtask_description": "Guidance and diagnostic criteria for detecting, understanding, and fixing TeX memory/capacity and box/alignment/layout problems, plus best practices for large manuscripts and interactive debugging. Focused on TeX internals (tracing, save stack, box diagnostics) rather than high-level LaTeX package use.",
+    "subtask_keywords": [
+      "tex",
+      "debugging",
+      "tracing",
+      "memory_limits",
+      "typesetting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Responding to TeX capacity exceeded",
+        "description": "All of the above-listed components of the capacity can be increased, provided that your computer is large enough; in fact, the space necessary to increase one component can usually be obtained by decreasing some other component, without increasing the total size of TeX. If you have an especially important application, you may be able to convince your local system people to provide you with a special TeX whose capacities have been hand-tailored to your needs. But before taking such a drastic step, be sure that you are using TeX properly.",
+        "guidance": "First check usage: avoid gigantic paragraphs or gigantic alignments that span more than one page (TeX must read to the end before completing line-breaking/alignment); make macros more compact and load only the macros you need (see Appendices B and D). Requesting a custom-built TeX from system administrators should be a last resort."
+      },
+      {
+        "name": "Display TeX memory usage with \\tracingstats",
+        "description": "If you set \\tracingstats equal to 2 or more, TeX will show its current memory usage whenever it does a \\shipout command. Such statistics are broken into two parts; \u2018490&5950\u2019 means, for example, that 490 words are being used for 'large' things like boxes, glue, and breakpoints, while 5950 words are being used for 'small' things like tokens and characters.",
+        "guidance": "Use \\tracingstats>=2 to get per-shipout memory diagnostics; interpret the two-part display (large & small resource counts) to identify which resource is close to capacity."
+      },
+      {
+        "name": "Infinite recursion will overflow any finite stack",
+        "description": "Some erroneous TeX programs will overflow any finite memory capacity. For example, after '\\def\\recurse{(\\recurse)}', the use of \\recurse will immediately bomb out with 'TeX capacity exceeded, sorry [input stack size=80]'. The same sort of error will obviously occur no matter how much you increase TeX's input stack size.",
+        "guidance": "Recognize patterns (self-referential macro definitions) that cannot be cured by enlarging stack sizes; instead rewrite macros to eliminate unbounded recursion."
+      },
+      {
+        "name": "Save size and save stack growth: be consistent with global/local assignments",
+        "description": "The 'save size' capacity can be troublesome; TeX generally uses up two words of save size whenever it performs a non-global assignment to some quantity whose previous value was not assigned at the same level of grouping. It's possible to make save stack usage grow without limit if you make both local and global assignments to the same variable.",
+        "guidance": "Use \\tracingrestores=1 to see what TeX removes from the save stack at group ends (log shows '{restoring ...}' and '{retaining ...}'). If TeX is 'retaining' many values, you likely have macros that mix local and global assignments; make assignments either always global or always local to avoid runaway save-stack usage."
+      },
+      {
+        "name": "Use tracing primitives to diagnose behaviour",
+        "description": "TeX provides several kinds of tracing: \\tracingcommands, \\tracingparagraphs, \\tracingpages, \\tracingmacros, \\tracinglostchars, \\tracingoutput, etc., each producing diagnostic output about different phases of processing.",
+        "guidance": "Pick the appropriate tracing parameter for the problem: \\tracinglostchars (if positive) records dropped characters; \\tracingoutput (if positive) displays in symbolic form the contents of every box shipped to the DVI file so you can see whether an anomaly is from TeX or from post-processing. Consult chapters referenced for details."
+      },
+      {
+        "name": "Control displayed box diagnostics with \\showboxbreadth and \\showboxdepth",
+        "description": "When TeX displays a box as diagnostic output, the amount of data is controlled by \\showboxbreadth (maximum number of items shown per level; plain TeX sets it to 5) and \\showboxdepth (deepest level shown; plain TeX sets it to 3). Abbreviation markers like '[]' and 'etc.' indicate truncated data.",
+        "guidance": "Lower these values (e.g., to 1 or 0) to get abbreviated or top-level-only displays; increase them for full dumps. \\tracingall sets them to extremely high values if you need entire box contents."
+      },
+      {
+        "name": "Criteria for overfull / tight / loose / underfull boxes",
+        "description": "A nonempty hbox is 'overfull' if its glue cannot shrink to achieve the specified size, provided that \\hbadness < 100 or the excess width (after shrinking by the maximum amount) is more than \\hfuzz. It is 'tight' if its glue shrinks and the badness exceeds \\hbadness; 'loose' if its glue stretches and badness exceeds \\hbadness but is \u2264 100; 'underfull' if its glue stretches and the badness is greater than \\hbadness and greater than 100. Similar remarks apply to nonempty vboxes. Empty boxes are never considered anomalous.",
+        "guidance": "TeX prints a warning and displays the offending box whenever such anomalies are discovered; use \\hbadness and \\hfuzz to tune which situations produce warnings."
+      },
+      {
+        "name": "Alignment anomaly reporting uses a single prototype row/column",
+        "description": "When an alignment is 'overfull'/'tight'/'loose'/'underfull' you do not get a warning for every aligned line; you get only one message and TeX displays a prototype row (or, with \\valign, a prototype column). Prototype rows show unset boxes and column widths; 'overfull rules' are never appended to the lines of overfull alignments.",
+        "guidance": "Inspect the prototype row output (tabskip glue and unsetbox entries) to deduce why the alignment is under/overfull; adjust tabskip, column widths, or alignment content accordingly."
+      },
+      {
+        "name": "Tracing output destinations and \\tracingall convenience macro",
+        "description": "The \\tracing... commands put all of their output into your log file, unless the \\tracingonline parameter is positive; in that case diagnostic information goes to the terminal as well as the log file. Plain TeX's \\tracingall macro turns on the maximum amount of tracing of all kinds, sets \\tracingonline=1, and sets \\showboxbreadth and \\showboxdepth to extremely high values so entire box contents will be displayed.",
+        "guidance": "Set \\tracingonline to get diagnostics on the terminal during runs; use \\tracingall to enable broad, verbose debugging, but be prepared for very large log output."
+      },
+      {
+        "name": "Some production TeX builds omit tracing for speed",
+        "description": "Some production versions of TeX have been streamlined for speed and do not look at parameters like \\tracingparagraphs, \\tracingpages, \\tracingstats, and \\tracingrestores because TeX runs faster when it doesn't maintain statistics or keep tabs on tracing requirements.",
+        "guidance": "If you need TeX's full diagnostic tools, ensure you are using a TeX build that supports these tracing parameters (use the right version)."
+      },
+      {
+        "name": "Interactive editing during input with \\pausing=1",
+        "description": "If you set \\pausing=1, TeX will give you a chance to edit each line of input as it is read from the file, allowing temporary patches (e.g., insert \\show... commands) without changing the file contents.",
+        "guidance": "Use \\pausing when troubleshooting to insert diagnostics on the fly and keep TeX running at human speed."
+      },
+      {
+        "name": "Galley/book workflow for long manuscripts",
+        "description": "When working on a long manuscript, it's best to prepare only a few pages at a time. Set up a 'galley' file and a 'book' file, and enter your text on the galley file. After the galleys come out looking right, append them to the book file; then run the book file through TeX occasionally to see how the pages really fit together.",
+        "guidance": "Prepare chapters or subchapters in galleys, test formatting, then append to the master book file and run periodically to check pagination and overall layout. This reduces memory usage and isolates layout problems."
+      }
+    ]
+  }
+}

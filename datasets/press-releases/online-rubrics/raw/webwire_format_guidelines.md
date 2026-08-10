@@ -1,0 +1,190 @@
+<!-- URL: https://www.webwire.com/FormatGuidelines.asp -->
+<!-- HTTP: 200 SIZE:    13035 -->
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+<title>Press Release Format Guidelines | WebWire</title>
+<meta name="Description" content=" " />
+<meta name="Keywords" content=" " />
+
+
+
+<link rel="stylesheet" href="/css/webwire-main.css?201503" type="text/css" />
+<link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css" type="text/css" />
+
+
+<link rel="stylesheet" href="/css/webwire-section.css" type="text/css" />
+<link rel="stylesheet" href="/css/webwire-products.css" type="text/css" />
+<link rel="stylesheet" href="/css/webwire-product-coverage.css" type="text/css" />
+
+
+</head>
+
+<body id="section">
+
+<!-- Start #header -->
+<div id="header-outter">
+	<div id="header-inner-top">
+		<div id="ww-logo">
+		<a href="/"><img src="/imgs/webwire-logo-header.png" alt="WebWire - Press Release Distribution Services" title="Press Release Distribution Services Provided By WebWire" width="187" height="40" border="0" /></a>
+		<h6>News and Press Release Distribution, Since 1995</h6>
+		</div>
+		<div id="tagline"><h3>Deliver Your News to the World</h3></div>
+		<div id="header-buttons">
+			
+				<a href="LoginNoPR.asp" class="button btn-login">Sign In</a>
+				<a href="PRRegistration.asp" class="button btn-register">Create a Free Account</a>
+			
+		</div>
+	</div>
+
+	<div id="header-inner-bottom">
+		<ul id="top-nav-menu">
+			<li id="m-home"><a href="/">Home</a></li>
+			<li id="m-news"><a href="/recent-headlines.asp">News</a></li>
+			<li id="m-how"><a href="/how-we-work.asp">How We Work</a></li>
+			<li id="m-services"><a href="/OurServices.asp">Compare Services</a></li>
+			<li id="m-faq"><a href="/faq.asp">FAQ</a></li>
+
+			<li id="m-search">
+				<div id="search-bar">
+				<form id="searchForm" method="post" action="/SearchResults.asp" onsubmit="return topSearch_TextField_Validator(this)">
+					<input name="txtSearch" type="text" id="searchbox" maxlength="50" placeholder="Search Our News&hellip;"/>
+				</form>
+				</div>
+				<img src="/imgs/icons/search-ico.png" width="35" height="35" id="s-ico" />
+			</li>
+
+		</ul>
+	</div>
+
+	<div id="services-bar">
+		<ul id="top-services-menu">
+			<li id="m-all"><a href="/ourservices.asp">All</a></li>
+			<li id="m-wp"><a href="/ourservices-prod1.asp">WebPost</a></li>
+			<li id="m-wr"><a href="/ourservices-prod3.asp">WebRelease</a></li>
+			<li id="m-tm"><a href="/ourservices-prod4.asp">Targeted Media</a></li>
+			<li id="m-ws"><a href="/ourservices-prod5.asp">Wire Service</a></li>
+		</ul>
+	</div>
+
+
+
+
+</div>
+
+<!-- End #header -->
+
+
+
+<!-- Start #wrap -->
+<div id="wrap"> 
+
+<h1>Press Release Format Guidelines</h1>
+
+
+<!-- Start #content -->
+<div id="content">
+<h2>WebWire Defines:</h2>
+<p> <strong>News Releases</strong> as distribution of properly formatted articles primarily to online news readers, generally bypassing the media.  The goal is to drive traffic to the submitter&rsquo;s Website by engaging readers receptive to your content, and secondarily making your content searchable online.</p>
+<p><strong>Press Releases</strong> as distribution that primarily delivers your news to targeted media (reporters, registered media and trade publications) and media-only wire services (similar to the Associated Press and accessed by leading print, broadcast and online publications) powered by our unique partnership with PR Newswire.  Getting the media to respond to your message affords the highest degree of credibility.</p>
+
+<h2>The Basics</h2>
+<p>A news or press release is a written communication that purports to report on an event, circumstance or occurrence by a third party, and is provided to a news reader, or the media, for the purpose of promotion.</p>
+<p>Media originated news articles differ from news and press releases in that news articles are a compilation of facts and contentions developed by journalists, then published as authored content within a given media outlet.</p>
+<h2> Be A Reporter, Not An Advertiser</h2>
+<p>News and Press Releases purport to report on an event, circumstance or occurrence by an independent reporter (a <a href="http://en.wikipedia.org/wiki/Narration#Third-person" target="_blank">third person</a>). When writing a news or press release, <strong><u>be that reporter</u></strong> and bring your content to the attention of readers as if you had no marketing agenda.</p>
+<p> <strong>Third Person Example</strong>: &ldquo;According to <span style="color:green">John Doe</span>, the next version of Webster&rsquo;s Dictionary will include two new slang terms that were identified in <span style="color:green">his</span> research as being part of &hellip;&rdquo;</p>
+<p> <strong>Inappropriate Example</strong>: &ldquo;<span style="color:red">I, John Doe</span>, was informed that the next version of Webster&rsquo;s Dictionary will include two new slang terms that <span style="color:red">I</span> identified in <span style="color:red">my</span> research as being part of&hellip;&rdquo;</p>
+<p>Press releases are most effective when they are under 500 words, generally <u>two to three paragraphs</u>, preceded by a clear and attention-grabbing headline.</p>
+<p>Remember, this content may be used by the media in their reporting, so be accurate and reasonably detailed and make sure your contact data is accurate.  Also, all inclusive links must lead to information, not advertising.</p>
+<h2>Headline</h2>
+<p> Be creative and keep it to one sentence. Capitalize the first letter of all words but do not use all upper case letters. Exclamation marks (&ldquo;!&rdquo;) conveys that your release is advertising, not news, and it&rsquo;s the credibility of news that generates the good publicity.</p>
+<h2> First Paragraph</h2>
+<p> Physical location (country, state, city) (month, date and year) - Begin with a strong introductory paragraph that captures the reader&rsquo;s attention and contains the information most relevant to your message such as the &ldquo;Five W's&rdquo; of (W)ho, (W)hat, (W)hen, (W)here, and (W)hy, when applicable. This paragraph should summarize the News Release such that if it was the only part seen by a reader, it would tell your entire message, and it should include a hook to get your audience interested in reading more.</p>
+<h2> The Body Of The Release</h2>
+<p> These paragraphs should contain more detailed important information, and make up the body of the release. Pick up with the information provided in your first paragraph, including quotes from key staff, customers or subject matter experts. Make sure you use correct grammar so as not to affect your credibility negatively.</p>
+<p> As for content, make sure to keep in mind that you are writing a press release to grab the attention of readers of the media. It is very important to maintain factual accuracy, make sure you are cleared to use quotes or information about businesses, and most importantly have an angle that will appeal to readers and journalists (often by connecting your release to current events or issues). Effective releases usually utilize a strategy known as the <a href="http://en.wikipedia.org/wiki/Inverted_pyramid" target="_blank">inverted pyramid</a>, which is written with the most important information and quotes first.</p>
+<p> Remember: succinct and to the point works best.</p>
+<p> The body of your release should be more than one paragraph. The final paragraph should restate and summarize the key points of your release.</p>
+<h2> Additional</h2>
+<p> Provide avenues for the reader to obtain additional information, demos, samples, etc., and it is important to include Internet links. WebWire provides special data submission fields for company/agency name, contact, telephone, email address, website location, etc. and other online connections (links).</p>
+<p> Include trademark acknowledgments, product or event timelines, availability, logistics, etc. in paragraph form and also provide background information about the persons or organizations featured in the release, as well as any applicable disclaimers.</p>
+<p>With a WebWire submission, include contact information about the release (name, title, email, telephone, etc.) within the appropriate online form. Make sure it is the person who can answer questions about the release.</p>
+
+<h2>A Sample Press Release</h2>
+
+	<div class="highlightedContent">
+		
+		<h3 style="font-size:18px; font-weight:bold; color:#000000;">Rockwell Collins Helmet Mounted Display Selected For AVCATT</h3>
+		
+			<p>CEDAR RAPIDS, Iowa (month, day, year) - The U.S. Army, through the Program Executive Office of Simulation Training and Instrumentation, has awarded Rockwell Collins a $23.8 million contract for the Aviation Combined Arms Tactical Trainer (AVCATT) Helmet Mounted Display (HMD) modification and upgrade program.</p>
+			<p> &quot;This is a great example of how Rockwell Collins integrates multiple disciplines to provide the best solutions for our customers,&quot; said Ron Hornish, vice president and general manager, Sensor Systems for Government Systems at Rockwell Collins. &quot;In this case, our expertise in helmet mounted displays and simulation and training made us the right choice for the AVCATT program.&quot;</p>
+			<p>
+			AVCATT is a mobile, transportable, virtual simulation training system designed to provide Army aviation with the capability to conduct realistic, high intensity training exercises and mission rehearsals. The system allows pilots to train and rehearse through networked simulation in a collective and combined arms simulated battlefield environment.</p>
+			<p> The contract calls for Rockwell Collins to provide the SimEye SR100A HMD, a more compact, lightweight, high-resolution upgrade for its already proven SimEye XL100A, which is presently used in AVCATT.</p>
+			<p> Developed based on feedback from the warfighter, enhancements include higher resolution, upgraded head tracker technology and reductions in head-borne weight and overall size. The SimEye SR100A HMD allows pilots to feel as if they are part of an environment as opposed to simply viewing a scene during training.</p>
+			<p> Rockwell Collins will be integrating its HMD -- incorporating an integral IS-900 head tracker -- with its EPX-50 image generator. By optimizing overall system performance of the HMD technology, Rockwell Collins will ensure the success of the visual displays for the AVCATT trainer.</p>
+			<p> The work for the AVCATT program, which was awarded under the Rockwell Collins' Simulation, Training and Instrumentation Command (STRICOM) Omnibus Contract, will be completed in the company's Carlsbad, Calif. and Orlando, Fla. locations.</p>
+			<p> Rockwell Collins (NYSE: COL) is a pioneer in the development and deployment of innovative communication and aviation electronics solutions for both commercial and government applications. Our expertise in flight deck avionics, cabin electronics, mission communications, information management and simulation and training is delivered by 19,000 employees, and a global service and support network that crosses 27 countries. To find out more, please visit www.rockwellcollins.com.</p>
+			
+			<p>Contact:<br />
+			Jane Doe, Media Relations<br />
+			janedoe@xyzPR.com<br />
+			(212) 555-1212</p>
+			
+			<p> # # # </p>
+	</div> 
+
+<p><br/ ><strong>A FINAL NOTE:</strong> WebWire is a highly trafficked Website and is part of what is commonly known as the “Four Ps of Marketing” (P)roduct, (P)rice, (P)lace and (P)romotion. WebWire&acute;s news and press release distribution service is part of the Public Relations component of (P)romotion.  This one part of the marketing mix does not guarantee that your release will be widely read or get utilized by the media. Press release submissions are part of a process, and as such, should be viewed as a complement to other marketing efforts.</p>
+
+</div>
+<!-- End #content -->
+
+
+</div>
+<!-- End #wrap -->
+
+
+<!-- <br />  To fix IE DIVs clearing -->
+<!-- Start #footer -->
+<div id="footer">
+	<ul>
+		<li id="copyRight">WebWire&reg; 1995 - 2026</li>
+		<li><a href="/AboutUs.asp" rel="nofollow">About Us</a></li>
+		<li><a href="/ServTerms.asp" rel="nofollow">Terms of Service</a></li>
+		<li><a href="/PrivacyStatement.asp" rel="nofollow">Privacy Statement</a></li>
+		<li><a href="/ContactUs.asp" rel="nofollow">Contact Us</a></li>
+	</ul>
+</div>
+<!-- End #footer -->
+
+
+<!-- ### Start footer scripts ### -->
+
+<!-- Add jQuery library -->
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+<script type="text/javascript" language="JavaScript" >
+$('#s-ico').click(function(){
+	$('#searchForm').submit();
+});
+</script>
+
+<script src="jQuery/accordion-menu/jquery.accordion.js"></script>
+
+<script type="text/javascript" language="JavaScript" src="includes/JScripts.js"></script>
+<script type="text/javascript" language="JavaScript" src="includes/webwire-gui.js"></script>
+
+<!-- ### End footer scripts ### -->
+
+
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+
+
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="https://www.ams.org/images/content/bubbles.png" type="image/x-icon">
+<link rel="icon" href="https://www.ams.org/images/content/bubbles.png" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/amsuser3.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/assign.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/clickmenu.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/impromptu.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/jquery.fileupload.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/twbs-2.3.2.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/mresubs_home3.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/font-awesome-css.min.css">
+<link rel="stylesheet" type="text/css" href="/mathscinet/css/mresubs_footer.css">
+
+<script type="text/javascript" src="/mathscinet/javascript/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.clickmenu.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery.cookie.js"></script>
+<script type="text/javascript" src="/mathscinet/javascript/jquery-impromptu.3.1.min.js"></script>
+<script src="https://use.fontawesome.com/7da0d8a943.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript">
+
+function infoChange(type)
+{
+   document.getElementById(type).value = 1;
+};
+
+jQuery(document).ready(function()
+{
+   $('#admin').clickMenu();
+   $('div[class="cmDiv"]').css('border-width', '0px');
+   $('div[class="cmDiv"]').css('float', 'middle');
+   $('div[class="cmDiv"]').css('background-color', '#98A4AE');
+   $('li[class~="main"]').css('background-color', '#98A4AE');
+   $('li[class~="main"]').css('left', '70%');
+   $('#menubox').css('width', '300');
+   $('#menubox').css('height', '100');
+
+   // Focus on change reviewer code input, if it exists
+   if ($('#rcode').length)
+   {   
+      $('#rcode').trigger('focus');
+   };
+
+   errStr = "";
+   if (errStr.length)
+   {
+      alert(errStr);
+   }
+
+   // Stop double click on review submission form
+   $('#reviewSubmit').one(function()
+   {
+      $(this).attr("disabled","disabled");
+      $("#mresubSubmit").click();
+   });
+   
+   // Handle reviewer code input on index.html
+   $('#addRcode').submit(function()
+   {
+      revc = $('#rcinput').val();
+      var patt = /^\d+$/;
+      if (patt.test(revc))
+      {
+         return(true);
+      }
+      else
+      {   
+         alert('Reviewer code: ' + revc + ' must be a number');
+         return(false);
+      }
+   });
+
+   // cno.html for checking
+   $('#cnoform').submit(function()
+   {
+      cno = $('#cno').val();
+      rc = $('#rc').val();
+      nonblank = /\S/m;
+      valid = 1;
+
+      if (cno == null || cno == "" || ! cno.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter an MR number.");
+      }
+      else if (rc == null || rc == "" || ! rc.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter a reviewer number.");
+      }
+
+      if (valid)
+      {
+         return(true);
+      }
+      else
+      {
+         return(false);
+      }
+   });
+
+   // Reviewer info change handling
+   $('#rinfochg').submit(function()
+   {
+      var nonblank = /\S/m;
+
+      // Name processing
+      fname = $('#firstName').val().trim();
+      lname = $('#lastName').val().trim();
+      mname = $('#middleName').val().trim();
+      sname = $('#suffix').val().trim();
+      rname = lname;
+
+      // non blank last name plus non blank first or middle, add a comma after last name
+      if ((fname.match(nonblank) || mname.match(nonblank)) && lname.match(nonblank))
+      {
+         rname = rname+',';
+      }
+
+      // Add first name
+      if (fname.match(nonblank))
+      {
+         rname = rname+' '+fname;
+      }
+
+      // Add middle name
+      if (mname.match(nonblank))
+      {
+         rname = rname+' '+mname;
+      }
+
+      // Add suffix
+      if (sname.match(nonblank))
+      {
+         // non blank first or middle, add a comma, otherwise add a space
+         if (fname.match(nonblank) || mname.match(nonblank))
+         {
+            rname = rname+',';
+         }
+         else
+         {
+            rname = rname+' ';
+         }
+
+         // Add suffix
+         rname = rname+sname;
+      }
+      $('#revName').val(rname);
+
+      addr = $('#addr').val();
+      email = $('#email').val();
+      plang = $('#pLang').val();
+      rclass = $('#class').val();
+      interest = $('#interest').val();
+      var valid = 1;
+
+      if (addr == null || addr == "" || ! addr.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter a mailing address.");
+         $('#addr').trigger('focus');
+         $('#addr').trigger('select');
+      }
+      else if (email == null || email == "" || ! email.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter an email address.");
+         $('#email').trigger('focus');
+         $('#email').trigger('select');
+      }
+      else if (rname == null || rname == "" || ! rname.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your name.");
+         $('#revName').trigger('focus');
+         $('#revName').trigger('select');
+      }
+      else if (plang == null || plang == "" || ! plang.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your primary language.");
+         $('#pLang').trigger('focus');
+         $('#pLang').trigger('select');
+      }
+      else if (rclass == null || rclass == "" || ! rclass.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter at least one MSC2010 class.");
+         $('#class').trigger('focus');
+         $('#class').trigger('select');
+      }
+      else if (interest == null || interest == "" || ! interest.match(nonblank))
+      {
+         valid = 0;
+         alert ("Please enter your area of interest.");
+         $('#interest').trigger('focus');
+         $('#interest').trigger('select');
+      }
+      else
+      {
+         if ($('#emailchange').val() == 1)
+         {
+            // Make sure we have at least a minimally valid email address
+            var atsign = /@/;
+            emails = email.split(" ");
+            for(i = 0; i < emails.length; i++)
+            {
+               if (! emails[i].match(atsign))
+               {
+                  valid = 0;
+                  alert(emails[i] + " is not a valid email address.");
+                  $('#email').trigger('focus');
+                  $('#email').trigger('select');
+               }
+            }
+         }
+      }
+
+      if (valid)
+      {
+         return(true);
+      }
+      else
+      {
+         return(false);
+      }
+   });
+			   
+   function promptback(v,m,f) 
+   { 
+      if (v)
+      {
+         if (f.passw == 'AMY')
+	 {
+            $.get("./moveToAssigned.html",
+            {
+               paperId: paperId,
+               rcode: $("#rc").val()
+            },
+            function() {window.location.reload();});
+         }
+         else
+         {
+            alert("Password incorrect.");
+         }
+      }
+   };
+
+   $(".delSub").click(function()
+   {
+      paperId = $(this).attr('id');
+      $.prompt('Please enter the password<br><input type="text" name="passw"><br>Delete '+paperId+' from the submitted list?',{ buttons: { YES: 1, no: 0 }, focus: 1, callback: promptback });
+   });
+      			   
+   // This deletes a language <tr> when the button is clicked
+   // and also removes the language from the hidden textarea
+   $(".langbutton").click(function()
+   {
+      delval = $(this).closest("td").attr("id");
+      $(this).closest("tr").remove();
+      langval = $("#pLang").val();
+      lregex = new RegExp(delval, "g");
+      $("#pLang").val(langval.replace(lregex,""));
+   });
+
+   $(function () 
+   {
+       $('#fileupload').fileupload(
+       {
+          url: './upload',
+          dataType: 'json',
+          done: function (e, data) 
+          {
+	      $("#review").val(data.result.files[0].contents);
+          }
+       });
+   });
+});
+
+// Populate lang text area and display buttons from pulldown menu
+function langSelect()
+{
+   langsel = $('#langlist option:selected').val();
+   currlang = $('#pLang').val().trim();
+   if (currlang.toLowerCase().indexOf(langsel.toLowerCase()) == -1)
+   {
+      $('#langtbl').append('<tr><td id="'+langsel+'">'+langsel+'<input type="button" class="langbutton" value="X" /></td></tr>');
+      langsel = ' '+langsel;
+      $('#pLang').val(currlang+langsel);
+
+      $(".langbutton").click(function()
+      {
+         delval = $(this).closest("td").attr("id");
+         $(this).closest("tr").remove();
+         langval = $("#pLang").val();
+         lregex = new RegExp(delval, "g");
+         $("#pLang").val(langval.replace(lregex,""));
+      });
+   }
+};
+
+function changeDate()
+{
+   var newDt=document.getElementById('date').value;
+   location.href="webLog.html?date="+newDt;
+}
+
+function searchStr()
+{
+   var search=document.getElementById('search').value;
+   location.href="webLog.html?search="+search;
+}   
+
+
+</SCRIPT>
+
+<TITLE>Mathematical Reviews Reviewer Home</TITLE>
+</head>
+<body>
+<div id="topDiv" align="center">
+<a href="https://www.ams.org"><img src="/mathscinet/images/ams-logo-header.png" align="center"/></a>
+</div> 
+<form>
+<input type="hidden" name="host" value="HOST=chicago.ams.org">
+</form>
+<div id="outerDiv" align="center">
+     <TABLE width="960" cellspacing="0" cellpadding="0" border="0" align="center">
+     <tbody>
+     <tr style="display:none">
+     <td align="left" id="importantUpdate" nowrap="nowrap">IMPORTANT NOTICE</td>
+     <td align="left" id="importantMessage">The AMS website will be down for maintenance on Tuesday April 25, 2017 between 5:00 PM - 8:00 PM EDT.</a><br>
+     </td>
+     </tr>
+     <tr><td>&nbsp;</td></tr>
+     <TR> 
+     <TD valign="top">
+     </TD>
+     <td id="timestamp">
+     2026-05-10 10:32 UTC
+     </td>  
+     </TR>
+     </tbody>
+     </TABLE>
+
+
+     <table id="mrbar" width="960" cellspacing="0" cellpadding="0" border="0">
+     <tbody>
+     <tr>
+
+           <td>
+           
+<A href="/mresubs/signin.html?caller=/mresubs/revr.html"
+ class="mrbarlink nounderline">
+           Log In</A>
+           </td>
+
+
+
+
+        <td>
+        <A href="/mresubs/guide-reviewers.html" class="mrbarlink nounderline">
+         Guide for Reviewers</A> 
+        </td>
+
+
+        <td>
+        <A href="/mresubs/help_mresubs.html" class="mrbarlink nounderline">
+         Help</A>
+        </td>
+
+
+     <td>
+     <A href="/cdn-cgi/l/email-protection#bfd2decbd7cddac9ffded2cc91d0cdd8" class="mrbarlink nounderline">
+      Contact MR</A>
+     </td>
+     </tr>
+     </tbody>
+     </table>
+
+<div id="splash" class="white">
+<br><br><br>
+<h2>Mathematical Reviews<BR>Reviewer Home</h2>
+</div>
+
+<div class="homediv" align="left">
+<div class="homedivcontent"> 
+<br><b>
+<A href="/mresubs/signin.html?caller=/mresubs/revr.html"
+>Log In</a></b><span class="signin"> to connect to your Mathematical Reviews Reviewer Profile, where you can submit reviews, and examine and update your reviewer profile information.</span><br><br>
+<span class="emphasis">New users:</span><br><span class="signin">Create an <b><a href="https://ebus.ams.org/ebus/Register.aspx">AMS Web Account</a></><br><br>
+<span class="signin">If you have an</span> <span class="emphasis">AMS Web Account</span> <span class="signin">but have not yet added your reviewer number to your AMS Profile, contact <a href="/cdn-cgi/l/email-protection#15766066613866706763557478663b7a6772"><span class="__cf_email__" data-cfemail="8be8fef8ffa6f8eef9fdcbeae6f8a5e4f9ec">[email&#160;protected]</span></a>.</span><br><br>
+<P>
+</P>
+
+<!--#include virtual="/html_library/footers/copyright.html"-->
+</div>
+</div>
+</div>
+<footer>
+<div id="footerlinediv">
+<a href="https://www.ams.org">
+<img id="footerline" src="/mathscinet/images/footer-line.png" style="width:1200px;"/>
+</a>
+</div>
+<div id="footerDiv">
+<a class="AMSLink AMSLinkBorder" href="https://www.ams.org/notices">Notices of the AMS</a> 
+<a class="AMSLink AMSLinkBorder" href="https://blogs.ams.org/">AMS Blogs</a>
+<a class="AMSLink AMSLinkBorder" href="https://www.ams.org/bull">Bulletin of the AMS</a>
+<br>
+<br>
+<a href="https://www.facebook.com/pages/American-Mathematical-Society/216331555216" title="Facebook"><i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://twitter.com/amermathsoc" title="Twitter"><i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://www.linkedin.com/companies/american-mathematical-society?trk=fc_badge" title="LinkedIn"><i class="fa fa-linkedin-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://plus.google.com/111299122922781685506" title="Google+"><i class="fa fa-google-plus-square fa-2x" aria-hidden="true"></i></a> 
+<a href="https://instagram.com/amermathsoc" title="Instagram"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a> 
+<a href="https://www.youtube.com/amermathsoc" title="YouTube"><i class="fa fa-youtube-square fa-2x" aria-hidden="true"></i></a>
+<div class="clearfix">&nbsp;</div>  
+
+<div id="AMSfooter">
+American Mathematical Society &middot; 
+<a class="AMSLink" href="https://goo.gl/maps/ZvJdkQEC79p" title="Google map 201 Charles Street Providence, Rhode Island">201 Charles Street Providence, Rhode Island 02904-2213</a> &middot; 
+<a class="AMSLink" href="tel:401-455-4077">401-455-4000</a> or <a class="AMSLink" href="tel:800-321-4267">800-321-4267</a>
+<br><br>&copy; <a class="AMSLink" href="https://www.ams.org/copyright">Copyright</a>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+   var now = new Date();
+   document.write(now.getFullYear());
+</script>, American Mathematical Society &middot; <a class="AMSLink" href="https://www.ams.org/privacy">Privacy Statement</a>
+</div>
+</div>
+</footer>
+
+
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9847f829d51a0f',t:'MTc3ODQwOTE1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+
+
+
+
+
+
+

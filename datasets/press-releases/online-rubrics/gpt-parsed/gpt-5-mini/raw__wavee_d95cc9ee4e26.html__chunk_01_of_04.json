@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_d95cc9ee4e26.html",
+  "task": "press-releases",
+  "source_dir": "raw",
+  "source_file": "wavee_d95cc9ee4e26.html",
+  "chunk_idx": 1,
+  "n_chunks": 4,
+  "chunk_chars": 39845,
+  "model": "gpt-5-mini",
+  "elapsed_s": 28.671189917004085,
+  "input_tokens": 11841,
+  "output_tokens": 2975,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational linguists and NLP researchers/developers building or evaluating semantic-role-labeling (FrameNet-style) systems",
+    "subtask_short": "automatic semantic role labeling",
+    "subtask_description": "Designing, training, and evaluating a statistical system to identify frame elements (semantic roles) and their boundaries for target predicates using parse-based and lexical features and combined probability distributions.",
+    "subtask_keywords": [
+      "nlp",
+      "semantic_role_labeling",
+      "frame_semantics",
+      "statistical_models",
+      "parse-based_features"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Path feature (parse-tree path)",
+        "description": "The path includes, as the first element of the string, the part of speech of the target word and, as the last element, the phrase type or syntactic category of the sentence constituent marked as a frame element. Example values: VB\u2191VP\u2193NP (object), VB\u2191VP\u2191S\u2193NP (subject).",
+        "guidance": "Captures rich syntactic relation information and is useful for finding frame elements by navigating the parse tree, but is more susceptible to parser errors and data sparseness (2,978\u20134,086 distinct values observed). Use Treebank-style annotations; interpret \u2191 as upward and \u2193 as downward movements. Table 2 lists most frequent path values and interpretations."
+      },
+      {
+        "name": "Governing-category (gov) feature",
+        "description": "A simpler syntactic feature defined only for NPs with two values (S for subjects and VP for objects).",
+        "guidance": "Less granular than path and less sparse; often a function of the path feature when the path contains S or VP. Useful as a compact estimate of grammatical function for NPs and performs roughly equivalently to path for role identification in experiments."
+      },
+      {
+        "name": "Position feature (relative position)",
+        "description": "Binary feature indicating whether the constituent to be labeled occurs before or after the predicate (target word).",
+        "guidance": "Simple, parser-independent proxy for grammatical function; expected to be highly correlated with subject/object distinction; performed about as well as gov and path in experiments and is robust to parser errors."
+      },
+      {
+        "name": "Voice feature (active vs. passive)",
+        "description": "Classification of verbs as active or passive using passive-identifying patterns requiring a passive auxiliary and a past participle.",
+        "guidance": "Approximately 5% of examples were identified as passive. Voice helps especially when tied to grammatical-function features (i.e., used jointly with gov/path/position); by itself it provides limited benefit."
+      },
+      {
+        "name": "Head-word lexical feature",
+        "description": "The head word of the constituent, as assigned by parser head rules (Collins 1999), used to express selectional preferences (e.g., Bill more likely Speaker, proposal more likely Topic).",
+        "guidance": "Extremely informative when observed (P(r | h, pt, t) highest accuracy ~87.4%) but very sparse because of large vocabulary. Prepositions and complementizers are treated as heads for PP/CP. Pronoun coreference was not resolved."
+      },
+      {
+        "name": "Use of multiple conditional probability distributions",
+        "description": "Estimate role probabilities using a variety of distributions conditioned on different subsets of features, e.g., P(r|t), P(r|pt,t), P(r|pt,gov,t), P(r|pt,position,voice,t), P(r|h), P(r|h,t), P(r|h,pt,t).",
+        "guidance": "Trade-off: more specific distributions have higher accuracy but lower coverage; less specific distributions have higher coverage but lower accuracy. Table 3 shows coverage, accuracy, and 'performance' (=coverage*accuracy) for each distribution. Combine distributions rather than relying on a single conditioning set to handle sparsity."
+      },
+      {
+        "name": "Evaluation metrics: coverage, accuracy, performance",
+        "description": "Coverage: % of test cases for which a conditioning event was seen in training. Accuracy: proportion of covered cases where the correct role is assigned highest probability. Performance: product of coverage and accuracy (overall % of test cases where correct role is predicted).",
+        "guidance": "Use these to assess individual conditional distributions; note ties are resolved at random. Performance is similar to recall; accuracy is similar to precision in being computed over decided cases."
+      },
+      {
+        "name": "Combining probability estimates (interpolation and alternatives)",
+        "description": "Methods to merge multiple conditional distributions into a final estimate: equal linear interpolation, EM-trained linear interpolation, geometric mean (log-domain averaging), and backoff lattice selection (choose most-specific available distributions).",
+        "guidance": "Equal-weight linear interpolation and geometric mean gave strong results; EM-trained weights did not always improve and may optimize different objectives. Backoff lattice (select most specific distributions with data) and interpolation over that cut were effective; final system achieved ~80.4% accuracy versus baseline 40.9%."
+      },
+      {
+        "name": "Feature-lattice design and backoff strategy",
+        "description": "Organize possible conditional distributions in a lattice from more-specific to less-specific conditioning events and select a cut (set of distributions) representing the most-specific available for a test case.",
+        "guidance": "Design decisions: which features to tie together (e.g., position and voice interact so often used together), which features to treat independently (e.g., head word and phrase type). There are combinatorially many possible lattices; choose subsets according to expected interactions. Backoff differs from n-gram smoothing: zero probability is acceptable if feature combination unseen, because only highest-probability role matters."
+      },
+      {
+        "name": "Minimal/simple lattice baseline",
+        "description": "A reduced system using only P(r|h,pt,t), P(r|pt,path,t), and P(r|t) (a two-distribution lattice plus prior), assuming head word and grammatical function independence and no voice feature.",
+        "guidance": "Gives competitive performance (e.g., 76.3% accuracy) \u2014 roughly nine-tenths of full system \u2014 and is recommended when simplicity or cross-domain robustness is desired."
+      },
+      {
+        "name": "Identification of frame element boundaries (FE detection)",
+        "description": "Binary classification of whether a parse constituent is a frame element using distributions such as P(fe|path), P(fe|path,t), and P(fe|h,t); use interpolation P(fe|p,h,t) = \u03bb1P(fe|p)+\u03bb2P(fe|p,t)+\u03bb3P(fe|h,t) and vary threshold to plot precision/recall.",
+        "guidance": "Can only identify FEs that correspond to parse constituents; parser errors reduce recall (13% of FEs had no matching parse constituent). Use precision/recall curves to choose threshold; interpolation improves over single distributions despite lexical sparsity."
+      },
+      {
+        "name": "Evaluation of FE boundary matches including partial overlap",
+        "description": "When parse constituents don't exactly match annotated FE spans, count partial matches: identified constituent entirely within true FE, true FE entirely within identified constituent, both partially overlapping, or no overlap.",
+        "guidance": "Report percentages for exact matches and each partial-overlap type (e.g., Table 9 shows 66% exact matching boundaries, 8% identified within true FE, 7% true FE within identified, 0% both partial, 13% no overlap for a given threshold). Analyze parser errors causing fragmentation (example illustrated in Figure 11)."
+      },
+      {
+        "name": "Handling parser error and parse-representation considerations",
+        "description": "Parser inaccuracies cause missing or mis-labeled constituents; Treebank-2 annotation choices (e.g., S nodes, empty categories, co-indexing) affect path/gov computations. Approximately 13% of FEs had no matching parse constituent, and Collins (1997) reports ~88% labeled precision/recall on Penn Treebank constituents.",
+        "guidance": "Design features that are robust to parser errors (e.g., position) and be aware that representation changes (Treebank versions) influence path values. When path lacks expected S/VP ancestor, gov feature may be spurious."
+      },
+      {
+        "name": "Generalizing lexical (head-word) statistics via clustering",
+        "description": "Use automatic soft clustering of nouns (learned from large parsed corpora of verb\u2013object co-occurrence) to map head words to cluster distributions P(c|h) and then estimate P(r|c,pt,t) to smooth sparse head-word statistics by marginalizing over clusters: P(r|h,pt,t)=sum_c P(r|c,pt,t)P(c|h).",
+        "guidance": "Train clustering (e.g., EM probabilistic clustering, latent cluster variable c with P(n|c), P(v|c)) on large data (millions of verb-object pairs); use deterministic annealing and cross-validation. Clustering increases coverage while preserving much of head-word predictive power (see Table 10: clustering improved performance of head-word\u2013based estimates)."
+      },
+      {
+        "name": "Statistical significance guideline for reported differences",
+        "description": "With 8,167 observations, the threshold for statistical significance at p < .05 is a 1.0% absolute difference in performance.",
+        "guidance": "Use this as a rough guideline when comparing system variants on similarly sized development/test sets; small percent differences may not be significant."
+      }
+    ]
+  }
+}

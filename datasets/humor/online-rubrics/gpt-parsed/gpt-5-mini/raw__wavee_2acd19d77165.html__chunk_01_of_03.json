@@ -1,0 +1,96 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_2acd19d77165.html",
+  "task": "humor",
+  "source_dir": "raw",
+  "source_file": "wavee_2acd19d77165.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39667,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.65038525000273,
+  "input_tokens": 14267,
+  "output_tokens": 2613,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / multimodal affective computing researchers working on sarcasm and humor classification in code-mixed conversational data",
+    "subtask_short": "multimodal sarcasm and humor classification",
+    "subtask_description": "Designing and evaluating models to classify utterances as sarcastic and/or humorous in Hindi-English code-mixed conversational dialogs using textual, acoustic, and (optionally) visual modalities with attention-based fusion mechanisms.",
+    "subtask_keywords": [
+      "multimodal",
+      "sarcasm_detection",
+      "humor_classification",
+      "code_mixed",
+      "conversation",
+      "attention_models"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Evaluation metrics",
+        "description": "Use precision, recall, F1-score, and accuracy to evaluate sarcasm detection and humor classification.",
+        "guidance": "Report class-wise precision/recall/F1 and overall accuracy; provide confusion matrices and per-dialog example analyses to explain errors and trade-offs (e.g., precision/recall values shown for sample dialog and aggregated sets)."
+      },
+      {
+        "name": "Multimodal feature usage",
+        "description": "Leverage textual, acoustic, and visual modalities for utterance classification; evaluate uni-modal, bi-modal, and tri-modal variants.",
+        "guidance": "Compare models trained on each modality separately and in combination; note that visual features may be ineffective if video frames are low quality (paper: 'results using only visual features are far from satisfactory' due to low quality frames)."
+      },
+      {
+        "name": "Acoustic feature role and limitations",
+        "description": "Acoustic features mainly capture intensity, excitation mode, pitch, etc., and lack semantic entities; alone they yield low F1 despite reasonable accuracy.",
+        "guidance": "Acoustic-only models (LSTM(A)) achieved accuracies of 73.8% and 52.3% but F1-scores of only 21.6% and 21.5%; combine acoustics with textual features intelligently (filtering/gating) to exploit complementary signals rather than treating them as noise."
+      },
+      {
+        "name": "Textual utterance embedding: hierarchical attention vs mean vector",
+        "description": "Hierarchical utterance-level attention (H-ATNU) extracts richer textual features than a mean of constituent word embeddings (Tavg).",
+        "guidance": "Models using hierarchical attention produce substantially higher F1 (examples: 68.8% and 71.7% vs 56.3% and 67.8% for sarcasm and humor respectively); prefer attention-based textual embeddings for stronger semantic representation."
+      },
+      {
+        "name": "Utterance-level hierarchical attention for acoustic (H-ATNA) vs raw acoustic (A)",
+        "description": "Applying utterance-level hierarchical attention over acoustic modality (H-ATNA) decreased performance relative to using raw acoustic features (A).",
+        "guidance": "The authors observed a performance decrease of ~7 and ~10 F1 points for sarcasm and humor respectively when using H-ATNA instead of A; therefore, prefer raw acoustic representation (A) in this setup unless further tuning justifies attention over acoustics."
+      },
+      {
+        "name": "Dialog-level contextual attention (C-ATND)",
+        "description": "A dialog-level modality-specific contextual attention mechanism learns relevant context to capture below-the-surface semantics for the target utterance.",
+        "guidance": "Incorporating C-ATND improved F1 (e.g., \u223c8 and \u223c26 point improvements in F1 for sarcasm and humor when added to LSTM(A)); it reduces false negatives by attending to underrepresented sarcastic/humorous classes. Use it to exploit nearby contextual utterances."
+      },
+      {
+        "name": "Context attention width selection (AtnWidthD and AtnWidthU)",
+        "description": "The number of contextual utterances considered in attention computation affects performance: AtnWidthU (utterance-level) in [2,5] with optimal AtnWidthU=3; AtnWidthD (dialog-level) optimal = 5.",
+        "guidance": "Increasing AtnWidthD beyond five degrades performance because sarcasm/humor context typically resides in close proximity; smaller widths may not provide sufficient context. Choose AtnWidthD=5 and AtnWidthU=3 as starting points and validate on dev set."
+      },
+      {
+        "name": "Bi-modal/tri-modal fusion and gating/filtering mechanism",
+        "description": "Combine modality-specific LSTMs and fuse representations using dialog-level contextual attention modules and a gating/filtering mechanism to extract complementary features.",
+        "guidance": "Simple addition of acoustic information can treat modalities as noise; including a filtering mechanism improved final F1 to 71.1% (sarcasm) and 82.0% (humor) in the proposed model \u2014 ~4% and ~2% gains compared to the model without filtering. Design fusion to filter noisy modality signals and amplify complementary cues."
+      },
+      {
+        "name": "Joint-learning vs separate learning trade-offs",
+        "description": "Joint-learning of sarcasm and humor (shared base architecture with task-specific output branches) can reduce parameter count and complexity but may slightly lower classification performance.",
+        "guidance": "Joint model yielded F1-scores of 68.6% and 81.4% (sarcasm, humor) vs separate-learning slightly higher; joint learning required ~50% fewer parameters. Consider joint learning when parameter/complexity reduction is important, but validate performance drop."
+      },
+      {
+        "name": "Context window choice for baseline/contextual comparative systems",
+        "description": "When evaluating or adapting existing contextual systems (MUStARD, Ghosh et al.), define a consistent context window (authors used previous five utterances).",
+        "guidance": "Set a pre-defined context (e.g., previous five utterances) to ensure fair comparative evaluation and to match the contextual modeling assumptions of baseline systems."
+      },
+      {
+        "name": "Effect of code-mixing (English word fraction)",
+        "description": "Model performance correlates with the level of English words in code-mixed utterances: more English words generally improve performance.",
+        "guidance": "Authors sampled two test sets (\u223c18 English words/utterance vs \u223c1 English word/utterance) and observed markedly better precision/recall/F1 for the high-English set. Account for code-mixing distribution in dataset design and evaluation; consider multilingual embeddings for future work."
+      },
+      {
+        "name": "Attention interpretability and heatmap analysis",
+        "description": "Analyze attention heatmaps (textual, acoustic, cross-modal) to interpret which contextual utterances and modalities the model attends to for each target utterance.",
+        "guidance": "High attention weights should correlate with contextual/multimodal semantics (examples in Figures 3 and 4 show such correlation); use heatmaps for qualitative error analysis and to justify model decisions."
+      },
+      {
+        "name": "Dataset and annotation standards (MaSaC)",
+        "description": "MaSaC is a qualitative multi-modal dataset for sarcasm detection and humor classification in Hindi-English code-mixed conversational dialogs: >15,000 utterances across 1,190 dialogs from an Indian television comedy show, collected, cleaned, and annotated.",
+        "guidance": "When creating or using such datasets, ensure cleaning and annotation quality, document modality quality (e.g., low-quality video frames affect visual feature usefulness), and provide dataset splits and benchmarks for reproducibility."
+      }
+    ]
+  }
+}

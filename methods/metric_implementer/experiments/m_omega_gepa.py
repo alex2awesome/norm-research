@@ -1,4 +1,5 @@
-"""GEPA-M_ω: optimize the metric prompt for discriminative M_ω (2026-06-25).
+"""GEPA-M_ω: optimize the metric prompt for discriminative M_ω (2026-06-25;
+official-GEPA migration 2026-07-19).
 
 Problem: M_ω = the executor X's verdict on the metric prompt. Currently we score the raw R2
 `merged_description`, which is often skewed or near-constant (capitalization → 93% YES; PRISMA →
@@ -8,19 +9,29 @@ Solution: Use GEPA to GENERATE a discriminative M_ω — optimize the metric pro
 verdict actually varies across items (balanced base-rate ≈ 0.5, high std). This is the proof's
 `OPT = sup_p R(p)` search over prompts, with transmission/discrimination as the objective.
 
-Algorithm:
-  1. Seed prompt = seed_body (the R2 merged_description).
-  2. GEPA loop per round:
-     - Reviser (GLM) proposes n_mutations variant prompts (paraphrases / sharpenings /
-       scope-narrowings — keep it the SAME underlying criterion, just worded so X discriminates).
+Algorithm (OFFICIAL github `gepa` since 2026-07-19 — the hand-rolled rounds/mutations loop is
+archived VERBATIM in `archive/inhouse_m_omega_gepa_deprecated.py`; user directive D1 in
+notes/2026-07-19__gepa-consolidation-and-momega-upgrade-plan.md):
+  1. Seed candidate = seed_body (the R2 merged_description).
+  2. `gepa.optimize` drives the search through a `GEPAAdapter`:
      - Executor (X) scores each candidate's M_ω on items via SAMPLED YES/NO (generate "YES"/"NO",
-       parse — mirror recon_channel._sampled_binary).
-     - Objective = discrimination: score by balance+spread, e.g. std(pyes) - 0.5*abs(mean(pyes)-0.5)
-       (high std, base-rate near 0.5).
-     - Keep best; feed failures (items where it's still near-0.5 / ambiguous) back to reviser.
-  3. Return optimized prompt, M_ω (pyes vector), mean, std, base_rate, per-round trajectory.
+       parse — mirror recon_channel._sampled_binary). Unchanged primitive `_score_binary_sampled`.
+     - Per-instance search signal = the mean-absolute-deviation decomposition of the pool objective
+       (`_per_instance_discrimination`), which is RANK-EQUIVALENT to `_discrimination_score` for
+       binary verdicts — GEPA needs per-instance scores for its Pareto frontier.
+     - Reflection LM (the `reviser` backend) proposes rewritten criteria from feedback built out of
+       the same near-0.5 failure items (`_select_failures`) + `_mutation_prompt` intent as before.
+  3. Objective (REPORTED, unchanged) = discrimination: std(pyes) - 0.5*abs(mean(pyes)-0.5)
+     (high std, base-rate near 0.5), computed post-hoc over the full pool for the seed and every
+     distinct candidate.
+  4. Return optimized prompt, M_ω (pyes vector), mean, std, base_rate, trajectory.
 
 Test harness: Compare raw merged_description M_ω vs GEPA-optimized M_ω on creative-writing metrics.
+
+CAVEAT (memory `project_a_bank_degeneracy_audit`): "variance-revival != information-revival". A
+discrimination-maximizing objective can produce high-variance but UNINFORMATIVE criteria (mined
+banks ran 54-68% degenerate). This module preserves that pre-existing objective across the
+optimizer migration; it does NOT endorse it as a recovery or certification target.
 """
 from __future__ import annotations
 
@@ -29,6 +40,7 @@ import gzip
 import json
 import os
 import sys
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional
@@ -121,25 +133,37 @@ Propose ONE reworded criterion. Reply with ONLY the criterion text (no preamble,
 no explanation)."""
 
 
-def _fewshot_block(yes_examples, no_examples, max_chars: int = 400) -> str:
-    """A labeled-examples block APPENDED to a reworded criterion (the few-shot operator). Concrete
-    YES/NO anchors often calibrate a weak executor's base-rate and sharpen discrimination — an
-    orthogonal lever to rewording. Code-appended (not model-generated) so the A/B isolates the effect:
-    same rewording ± this block. `yes_examples`/`no_examples` are item-text lists (HELD OUT from the
-    scored set, so they don't inflate discrimination by memorization).
+def _per_instance_discrimination(pyes: np.ndarray) -> List[float]:
+    """PER-INSTANCE search signal for the official-GEPA adapter (Pareto selection needs one score
+    per instance, but `_discrimination_score` is a POOL-level statistic).
 
-    FEW-SHOT SELECTION DESIGN (locked 2026-06-25, the A+B+C hybrid the user specified — NOT yet wired;
-    currently the caller passes code-selected top/bottom-P(YES) items):
-      A. CODE surfaces candidates — top-k + bottom-k P(YES) items (executor-confident extremes).
-      B. LLM PICKS by DIVERSITY — the reviser chooses the most prototypical/diverse YES & NO from A
-         (not just the extremes — clarifies the criterion rather than reinforcing executor bias).
-      C. LLM SYNTHESIZES/CONDENSES if needed — merge or fabricate a compact epitome when A/B are weak.
-    CAVEAT (A/B 2026-06-25): few-shot with A-only (code extremes) HURT discrimination (0.448→0.292) —
-    it reinforced the executor's skew. So few-shot is ALLOWED (mutation_mode fewshot/mixed) but NOT
-    forced (default reword); when used, it should go through A+B+C, not A alone."""
-    yes_blk = "\n".join(f"- YES (satisfies): {t[:max_chars]}" for t in (yes_examples or []))
-    no_blk = "\n".join(f"- NO (does not satisfy): {t[:max_chars]}" for t in (no_examples or []))
-    return ("Examples — judge each NEW excerpt the SAME way as these:\n" + yes_blk + "\n" + no_blk).strip()
+    Mean-absolute-deviation decomposition of the pool objective:
+
+        s_i = |p_i - p_bar| - 0.5 * |p_bar - 0.5|,   p_bar = mean over VALID verdicts in the batch
+
+    so that  mean_i(s_i) = MAD(p) - 0.5*|p_bar - 0.5|,  versus the canonical
+             D(p)        = std(p) - 0.5*|p_bar - 0.5|.
+
+    WHY THIS IS FAITHFUL (rank-equivalence, exact for binary verdicts): `_score_binary_sampled`
+    emits p_i in {0, 1}, so with u = p_bar*(1 - p_bar),
+
+        MAD = p_bar*(1 - p_bar) + (1 - p_bar)*p_bar = 2u        std = sqrt(u)
+
+    Both are strictly increasing in u, and u = 0.25 - d^2 where d = |p_bar - 0.5|. Hence
+    mean_i(s_i) = 0.5 - 2d^2 - 0.5d and D = sqrt(0.25 - d^2) - 0.5d are BOTH strictly decreasing
+    functions of the same scalar d, so they induce the SAME ordering over candidate prompts. The
+    search signal is therefore rank-equivalent to `_discrimination_score`, and GEPA's full-valset
+    aggregate selects exactly the candidate the canonical objective would select.
+
+    NaN verdicts (parse failures) score -1.0 and are excluded from p_bar.
+    """
+    arr = np.asarray(pyes, dtype=float)
+    valid = arr[~np.isnan(arr)]
+    if valid.size == 0:
+        return [-1.0] * len(arr)
+    p_bar = float(np.mean(valid))
+    penalty = 0.5 * abs(p_bar - 0.5)
+    return [-1.0 if np.isnan(p) else float(abs(float(p) - p_bar) - penalty) for p in arr]
 
 
 def _select_failures(texts: List[str], pyes: np.ndarray, k: int = 10,
@@ -170,117 +194,454 @@ def _select_failures(texts: List[str], pyes: np.ndarray, k: int = 10,
     return "\n\n".join(examples) if examples else "(no failure examples)"
 
 
+# Output constraint appended to every reflective-feedback string. The in-house loop enforced this
+# inside its mutation request ("Reply with ONLY the criterion text"); official GEPA's reflection LM
+# writes the component itself, so the constraint has to travel in the feedback it reads.
+_M_OMEGA_CONSTRAINT = (
+    "HARD CONSTRAINTS for the rewritten criterion: it must remain ONE self-contained evaluation "
+    "criterion that a fresh evaluator can apply to a single excerpt and answer YES or NO; do NOT "
+    "copy in examples, exemplars, or excerpt text; do NOT add meta-commentary, preamble, rationale, "
+    "or headings — emit the criterion text only."
+)
+
+
+def _reflective_feedback(noun: str, prompt: str, texts: List[str], pyes: np.ndarray,
+                         depth: int, max_chars: int = 600) -> str:
+    """Feedback string handed to GEPA's reflection LM.
+
+    Reuses the in-house loop's ingredients: `_select_failures` (the items whose verdict sits nearest
+    0.5 — where M_ω is least decisive) and `_mutation_prompt`'s framing (reword / sharpen / narrow so
+    verdicts VARY while the underlying property stays the same). Adds the measured base-rate/std of
+    the current criterion and the explicit output constraint.
+    """
+    arr = np.asarray(pyes, dtype=float)
+    stats = _compute_stats(arr, prompt)
+    failures = _select_failures(texts, arr, k=10, max_chars=max_chars)
+    measured = (
+        f"Measured on this batch: base_rate={stats.base_rate:.3f} (target 0.5), "
+        f"std={stats.std:.3f} (higher is better), discrimination={stats.discrimination:.3f}."
+    )
+    return (f"{_mutation_prompt(noun, prompt, depth, failures)}\n\n"
+            f"{measured}\n\n{_M_OMEGA_CONSTRAINT}")
+
+
 def gepa_discriminative_m_omega(executor: LLMBackend, reviser: LLMBackend,
                                 seed_body: str, texts: List[str], noun: str,
                                 *, rounds: int = 3, n_mutations: int = 4,
                                 max_chars: int = 600,
                                 mutation_mode: str = "reword",
-                                fewshot_examples=None) -> dict:
-    """GEPA loop to find a discriminative M_ω prompt.
+                                fewshot_examples=None,
+                                max_metric_calls: Optional[int] = None) -> dict:
+    """Official-GEPA search for a discriminative M_ω prompt.
+
+    DEPRECATION NOTE (2026-07-19, user directive D1): the hand-rolled rounds/mutations loop that used
+    to live here is archived VERBATIM in `archive/inhouse_m_omega_gepa_deprecated.py`. Official
+    github `gepa` is the only sanctioned optimizer for reconstruction experiments. The SIGNATURE and
+    the RETURN CONTRACT are unchanged, so `run_r2_recovery.py --gepa-m-omega` needs no edit.
+
+    THE ESTIMAND IS UNCHANGED. The executor primitive is still `_score_binary_sampled` (sampled
+    YES/NO), and the REPORTED objective is still the canonical pool-level `_discrimination_score`
+    = std(pyes) - 0.5*|mean(pyes) - 0.5|.
+
+    SEARCH SIGNAL vs REPORTED STATISTIC. GEPA requires PER-INSTANCE scores for its Pareto frontier,
+    but the native objective is pool-level. The adapter therefore scores instances with
+    `_per_instance_discrimination` (the mean-absolute-deviation decomposition), which is
+    RANK-EQUIVALENT to `_discrimination_score` for binary verdicts — proof in that function's
+    docstring. Because the valset is the whole pool, GEPA's aggregate selection therefore picks the
+    same candidate the canonical objective would, PROVIDED parse-failure rates are equal across
+    candidates: NaN verdicts score -1.0 in the search signal but are EXCLUDED from the canonical
+    statistic, so the search actually maximizes (discrimination among valid verdicts) minus (a
+    parse-failure penalty). A criterion that discriminates well among the items it parses but fails
+    to parse often can rank below a weaker-but-cleaner one. The seed is candidate #0 in GEPA's own
+    evaluation, so the returned prompt is never worse than the seed on the search signal. The
+    canonical statistic is then recomputed POST-HOC over the full pool for the seed, the winner, and
+    every distinct candidate (same discipline as `run_v14_value_campaign.run_decoder_tuning`).
+
+    BUDGET MAPPING. The legacy `rounds`/`n_mutations` knobs (CLI flags `--gepa-rounds`,
+    `--gepa-mutations` in run_r2_recovery.py) no longer name loop structure — official GEPA schedules
+    its own iterations — so they are mapped to a metric-call budget:
+
+        max_metric_calls = rounds * n_mutations * len(texts)
+
+    i.e. the same number of item-level executor evaluations the old loop would have spent on its
+    mutations. Pass `max_metric_calls` to override directly.
+
+    INERT KWARGS. `mutation_mode` / `fewshot_examples` drove the in-house code-appended few-shot
+    mutation operator, which has no equivalent under GEPA's reflective proposer (GEPA writes the
+    candidate itself). They are still ACCEPTED for signature compatibility but ignored, with a
+    warning if a caller asks for a non-default value. Note the operator was not recommended anyway:
+    the 2026-06-25 A/B found code-selected few-shot HURT discrimination (0.448 -> 0.292).
+
+    CAVEAT (memory `project_a_bank_degeneracy_audit`): "variance-revival != information-revival" — a
+    discrimination-maximizing objective can produce high-variance but UNINFORMATIVE criteria. This
+    migration preserves the pre-existing objective and does not endorse it.
 
     Args:
         executor: LLMBackend for scoring (X, e.g., glm-4.7)
-        reviser: LLMBackend for prompt mutations (e.g., glm-5.2)
-        seed_body: Initial prompt (R2 merged_description)
+        reviser: LLMBackend used as GEPA's reflection LM (e.g., glm-5.2)
+        seed_body: Initial prompt (R2 merged_description) = GEPA's seed candidate
         texts: List of item texts to score
         noun: Item noun (e.g., "story", "paper")
-        rounds: Number of GEPA rounds (default 3)
-        n_mutations: Number of mutations per round (default 4)
+        rounds: Legacy knob; folded into the metric-call budget (default 3)
+        n_mutations: Legacy knob; folded into the metric-call budget (default 4)
         max_chars: Max chars per text (default 600)
+        mutation_mode: Accepted for compatibility, ignored (see INERT KWARGS)
+        fewshot_examples: Accepted for compatibility, ignored (see INERT KWARGS)
+        max_metric_calls: Optional direct budget override
 
     Returns:
-        dict with:
+        dict with (IDENTICAL to the in-house loop):
             - 'optimized_prompt': best prompt found
             - 'pyes': binary verdict vector (n_items)
             - 'mean': mean of pyes
             - 'std': std of pyes
             - 'base_rate': mean of pyes
             - 'discrimination': discrimination score
-            - 'trajectory': list of (round, best_prompt, best_std, best_base_rate,
-              best_discrimination)
+            - 'trajectory': list of (index, prompt, std, base_rate, discrimination). Index 0 is the
+              seed and the LAST row is the prompt actually returned, as before; the rows between are
+              now every DISTINCT candidate GEPA evaluated (the in-house loop logged the running best
+              once per round, which GEPA has no analogue for).
     """
     n_items = len(texts)
-    trajectory = []
-
-    # Score seed prompt
-    print(f"Round 0: Scoring seed prompt...")
-    seed_pyes = _score_binary_sampled(executor, seed_body, texts, max_chars)
-    seed_stats = _compute_stats(seed_pyes, seed_body)
-    trajectory.append((0, seed_body, seed_stats.std, seed_stats.base_rate,
-                      seed_stats.discrimination))
-    print(f"  Seed: std={seed_stats.std:.3f}, base_rate={seed_stats.base_rate:.3f}, "
-          f"discrimination={seed_stats.discrimination:.3f}")
-
-    best_prompt = seed_body
-    best_pyes = seed_pyes
-    best_stats = seed_stats
-
-    # GEPA rounds
-    for r in range(1, rounds + 1):
-        print(f"\nRound {r}: Generating {n_mutations} mutations...")
-
-        # Generate mutation prompts
-        failures = _select_failures(texts, best_pyes, k=10, max_chars=max_chars)
-        mutation_request = _mutation_prompt(noun, best_prompt, r, failures)
-
-        mutation_prompts = reviser.generate_batch(
-            [mutation_request] * n_mutations,
-            system=None,
-            max_tokens=200,
-            temperature=0.9,
-            seed=r  # vary seed per round for diversity
+    if n_items == 0:
+        raise ValueError("gepa_discriminative_m_omega requires a non-empty text pool")
+    if mutation_mode != "reword" or fewshot_examples:
+        warnings.warn(
+            "m_omega_gepa: mutation_mode/fewshot_examples are inert under official GEPA "
+            "(the code-appended few-shot mutation operator was archived 2026-07-19 in "
+            "archive/inhouse_m_omega_gepa_deprecated.py); proceeding with reflective rewording.",
+            RuntimeWarning, stacklevel=2,
         )
 
-        # few-shot operator: append a labeled-examples block to (some) rewordings (isolates the effect)
-        fs_block = None
-        if mutation_mode in ("fewshot", "mixed") and fewshot_examples:
-            ys, ns = fewshot_examples
-            if ys or ns:
-                fs_block = _fewshot_block(ys, ns, max_chars)
+    import gepa
+    from gepa.core.adapter import EvaluationBatch, GEPAAdapter
 
-        # Score each mutation
-        candidates = []
-        for i, mut_prompt in enumerate(mutation_prompts):
-            if not mut_prompt or len(mut_prompt.strip()) < 10:
-                continue  # skip empty/too-short
-            p = mut_prompt.strip()
-            # fewshot: append to ALL; mixed: append to every other (A/B within one round)
-            if fs_block and (mutation_mode == "fewshot" or (mutation_mode == "mixed" and i % 2 == 1)):
-                p = p + "\n\n" + fs_block
-            pyes = _score_binary_sampled(executor, p, texts, max_chars)
-            stats = _compute_stats(pyes, p)
-            candidates.append(stats)
+    budget = (int(max_metric_calls) if max_metric_calls is not None
+              else int(rounds) * int(n_mutations) * n_items)
+    budget = max(budget, n_items)  # at least one full-pool pass (the seed candidate)
+    component = "m_omega_criterion"
+    seed_prompt = str(seed_body)
+    instances = [{"index": index, "text": texts[index]} for index in range(n_items)]
 
-            if i == 0 or (i + 1) % 5 == 0:
-                print(f"  Mutation {i+1}/{n_mutations}: "
-                      f"std={stats.std:.3f}, base_rate={stats.base_rate:.3f}, "
-                      f"disc={stats.discrimination:.3f}")
+    # (prompt -> {item index -> verdict}). One cache for the whole search, so a candidate GEPA
+    # evaluated on the full valset costs nothing to re-report post-hoc, and a candidate seen only on
+    # a reflection minibatch is merely topped up. `_score_binary_sampled` stays the sole primitive.
+    # Each (prompt, item) is therefore drawn ONCE and the same draw backs both the search score and
+    # the reported statistic — deliberate: it is cheaper than rescoring and it guarantees the report
+    # describes the verdicts the search actually saw.
+    verdicts: dict = {}
+    proposals: List[str] = [seed_prompt]
 
-        # Find best mutation
-        round_best = max(candidates, key=lambda s: s.discrimination) if candidates else best_stats
+    def _cached_verdicts(prompt: str, indices) -> np.ndarray:
+        cache = verdicts.setdefault(prompt, {})
+        todo = [index for index in indices if index not in cache]
+        if todo:
+            scored = _score_binary_sampled(executor, prompt, [texts[i] for i in todo], max_chars)
+            for slot, index in enumerate(todo):
+                cache[index] = float(scored[slot])
+        return np.asarray([cache[index] for index in indices], dtype=float)
 
-        # Update global best
-        if round_best.discrimination > best_stats.discrimination:
-            best_prompt = round_best.prompt
-            best_pyes = round_best.pyes
-            best_stats = round_best
-            print(f"  *** NEW BEST: std={best_stats.std:.3f}, "
-                  f"base_rate={best_stats.base_rate:.3f}, "
-                  f"disc={best_stats.discrimination:.3f}")
-        else:
-            print(f"  No improvement (best disc={best_stats.discrimination:.3f})")
+    def _pool_stats(prompt: str) -> GEPAStats:
+        return _compute_stats(_cached_verdicts(prompt, list(range(n_items))), prompt)
 
-        trajectory.append((r, best_prompt, best_stats.std, best_stats.base_rate,
-                          best_stats.discrimination))
+    class MOmegaAdapter(GEPAAdapter):
+        def evaluate(self, batch, candidate, capture_traces=False):
+            prompt = str(next(iter(candidate.values()))).strip()
+            if len(prompt) < 10:
+                # Mirrors the in-house loop's "skip empty/too-short mutations", but as a scored
+                # rejection so GEPA learns the constraint instead of silently losing the iteration.
+                trajs = ([{"data": item, "full_assistant_response": "",
+                           "feedback": "REJECTED before scoring: the criterion was empty or under "
+                                       f"10 characters. {_M_OMEGA_CONSTRAINT}"}
+                          for item in batch] if capture_traces else None)
+                return EvaluationBatch(outputs=[{}] * len(batch), scores=[-1.0] * len(batch),
+                                       trajectories=trajs)
+            if prompt not in proposals:
+                proposals.append(prompt)
+            indices = [int(item["index"]) for item in batch]
+            pyes = _cached_verdicts(prompt, indices)
+            trajs = None
+            if capture_traces:
+                feedback = _reflective_feedback(noun, prompt, [texts[i] for i in indices], pyes,
+                                                depth=len(proposals), max_chars=max_chars)
+                trajs = [{"data": item, "full_assistant_response": "", "feedback": feedback}
+                         for item in batch]
+            return EvaluationBatch(outputs=[{}] * len(batch),
+                                   scores=_per_instance_discrimination(pyes), trajectories=trajs)
+
+        def make_reflective_dataset(self, candidate, eval_batch, components_to_update):
+            target = components_to_update[0]
+            items = [{
+                "Inputs": f"one {noun} excerpt from the design pool (withheld — the criterion must "
+                          "stay a general rule, not a description of these items)",
+                "Generated Outputs": "(sampled YES/NO verdict from the executor)",
+                "Feedback": trajectory["feedback"],
+            } for trajectory in (eval_batch.trajectories or [])]
+            return {target: items}
+
+    def reflection_lm(prompt):
+        text = prompt if isinstance(prompt, str) else json.dumps(prompt)
+        return str(reviser.generate_batch(
+            [text], system=None, max_tokens=1200, temperature=0.9,
+        )[0])
+
+    print(f"[gepa_discriminative_m_omega] official-gepa n_items={n_items} budget={budget} "
+          f"(rounds={rounds} x n_mutations={n_mutations})", flush=True)
+    result = gepa.optimize(
+        seed_candidate={component: seed_prompt},
+        trainset=instances, valset=instances,
+        adapter=MOmegaAdapter(), reflection_lm=reflection_lm,
+        max_metric_calls=budget, run_dir=None, seed=0,
+        display_progress_bar=False, raise_on_exception=False,
+    )
+    best_candidate = dict(getattr(result, "best_candidate", None) or {})
+    winner = str(next(iter(best_candidate.values()))).strip() if best_candidate else seed_prompt
+    if len(winner) < 10:  # degenerate/empty winner — fall back to the seed rather than ship it
+        winner = seed_prompt
+    if len(proposals) <= 1 and winner == seed_prompt:
+        # raise_on_exception=False means a down executor/reflection backend degrades to "return
+        # the seed" with no error; make that failure mode loud instead of silent.
+        warnings.warn(
+            "m_omega_gepa: official GEPA returned the seed with no other candidate evaluated — "
+            "the search may have silently failed (backend errors are swallowed by "
+            "raise_on_exception=False). Check executor/reviser health before trusting this run.",
+            RuntimeWarning, stacklevel=2,
+        )
+
+    # POST-HOC canonical report: per-instance signal drove the SEARCH, the canonical pool-level
+    # `_discrimination_score` drives the REPORT, for the seed and every distinct candidate.
+    reported = list(proposals)
+    if winner not in reported:
+        reported.append(winner)
+    trajectory = []
+    for index, prompt in enumerate(reported):
+        stats = _pool_stats(prompt)
+        trajectory.append((index, prompt, stats.std, stats.base_rate, stats.discrimination))
+        label = "seed" if index == 0 else f"candidate {index}"
+        print(f"  {label}: std={stats.std:.3f}, base_rate={stats.base_rate:.3f}, "
+              f"disc={stats.discrimination:.3f}")
+
+    best_stats = _pool_stats(winner)
+    # Last row = the prompt actually returned (preserves the in-house trajectory[-1] contract).
+    trajectory.append((len(reported), winner, best_stats.std, best_stats.base_rate,
+                       best_stats.discrimination))
+    print(f"  *** WINNER: std={best_stats.std:.3f}, base_rate={best_stats.base_rate:.3f}, "
+          f"disc={best_stats.discrimination:.3f}")
 
     return {
-        "optimized_prompt": best_prompt,
-        "pyes": best_pyes,
+        "optimized_prompt": winner,
+        "pyes": best_stats.pyes,
         "mean": best_stats.mean,
         "std": best_stats.std,
         "base_rate": best_stats.base_rate,
         "discrimination": best_stats.discrimination,
         "trajectory": trajectory
+    }
+
+
+# --------------------------------------------------------------------------------------------
+# M_ω v2 — unit recombination on top of official GEPA (D2 reconstruction side, 2026-07-20)
+# --------------------------------------------------------------------------------------------
+_UNIT_SPLIT_RE = r"(?<=[.!?])\s+|\n+|^[-*•]\s*"
+
+
+def _clause_units(prompts: List[str], lo: int = 25, hi: int = 400) -> List[str]:
+    """Split prompts into candidate instruction clauses (mirrors the benchmark-side miner)."""
+    import re as _re
+    units, seen = [], set()
+    for text in prompts:
+        for clause in _re.split(_UNIT_SPLIT_RE, str(text)):
+            c = clause.strip().strip("-*• ").rstrip()
+            key = " ".join(c.lower().split())
+            if lo <= len(c) <= hi and key not in seen:
+                seen.add(key)
+                units.append(c)
+    return units
+
+
+def _suggest_units_llm(reviser: LLMBackend, noun: str, init_prompt: str, ambiguous: str,
+                       n: int) -> List[str]:
+    """D2 unit source (c): novel clauses proposed by the reviser from near-ambiguous items."""
+    ask = (
+        f"An evaluation criterion for {noun} excerpts is being refined by adding short, "
+        f"standalone facet clauses.\n\nCURRENT CRITERION:\n{init_prompt}\n\nEXCERPTS WHERE ITS "
+        f"VERDICT IS LEAST DECISIVE:\n{ambiguous}\n\nPropose {n} DISTINCT candidate facet "
+        "clauses. Each must be one or two self-contained sentences a fresh evaluator could "
+        "apply to a single excerpt, must sharpen what counts as YES vs NO, and must never "
+        "reference the excerpts above. Reply with ONLY a JSON array of strings."
+    )
+    try:
+        raw = str(reviser.generate_batch([ask], system=None, max_tokens=1200,
+                                         temperature=1.0)[0])
+        arr = json.loads(raw[raw.index("["): raw.rindex("]") + 1])
+        return [str(x).strip() for x in arr if 25 <= len(str(x).strip()) <= 400][:n]
+    except Exception as exc:  # noqa: BLE001 — degraded pool, not a fatal error
+        warnings.warn(f"unit_recombination_m_omega: LLM unit suggestion failed ({exc}); "
+                      "continuing with trajectory+children units only", RuntimeWarning)
+        return []
+
+
+def _compile_units(init: str, units: List[str]) -> str:
+    if not units:
+        return init
+    return (init + "\n\nWhen judging, also apply these refinements to the same criterion:\n"
+            + "\n".join(f"- {u}" for u in units))
+
+
+def unit_recombination_m_omega(executor: LLMBackend, reviser: LLMBackend, seed_body,
+                               texts: List[str], noun: str, *,
+                               children: Optional[List[str]] = None,
+                               rounds: int = 3, n_mutations: int = 4, max_chars: int = 600,
+                               max_metric_calls: Optional[int] = None,
+                               top_k: int = 8, n_llm_units: int = 8, max_units: int = 40,
+                               confirm_frac: float = 0.25, seed: int = 0) -> dict:
+    """M_ω v2 (D2, reconstruction side): official-GEPA best candidate + greedy unit recombination.
+
+    GEOMETRY (the UNIT_BOTTLENECK_DIAGNOSIS-supported design, ported from the benchmark side):
+      1. Split the design texts into SELECT and CONFIRM slices (deterministic, seeded).
+      2. Run official GEPA (`gepa_discriminative_m_omega`) on the SELECT slice -> init prompt.
+         The compile INITIALIZES FROM GEPA's winner, so M_ω starts as a superset of GEPA's answer.
+      3. Unit pool = (a) clauses mined from GEPA's own trajectory candidates, (b) THE CHILDREN
+         METRICS — certified R1 child criteria when judging an R2 (the D2 source with no
+         benchmark analog), (c) reviser-suggested novel clauses from near-ambiguous items.
+      4. Paired marginal pass: every unit appended alone to init, scored on the SAME select
+         slice; rank by canonical-discrimination delta. NO cheap screen.
+      5. Cumulative-prefix sweep over the top-k positives + a drop-one pass.
+      6. NO-REGRET GUARD on the disjoint confirm slice: ship init unless the compile beats it
+         there. So M_ω >= GEPA-winner by construction, up to confirmation noise.
+
+    ESTIMAND UNCHANGED: selection signal and report are the canonical `_discrimination_score`
+    over `_score_binary_sampled` verdicts. The D6 caveat applies to this objective exactly as it
+    does to `gepa_discriminative_m_omega` (a capacity objective; revisiting it is open decision
+    3 and needs sign-off — this function deliberately does NOT change the objective).
+
+    RETURN: the same 7-key contract as `gepa_discriminative_m_omega` (drop-in), plus a "units"
+    dict (pool sizes per source, marginals, compiled units, guard outcome). Trajectory keeps the
+    5-tuple rows; row 0 = seed, last row = the prompt actually shipped; unit-phase probes are
+    appended between GEPA's rows and the final row. All final stats are over the FULL design
+    pool passed in (select + confirm), like the wrapped function.
+    """
+    n_items = len(texts)
+    if n_items == 0:
+        raise ValueError("unit_recombination_m_omega requires a non-empty text pool")
+    order = np.random.default_rng(seed).permutation(n_items)
+    n_confirm = max(1, int(round(confirm_frac * n_items))) if n_items >= 8 else 0
+    confirm_idx = [int(i) for i in order[:n_confirm]]
+    select_idx = [int(i) for i in order[n_confirm:]]
+    select_texts = [texts[i] for i in select_idx]
+    confirm_texts = [texts[i] for i in confirm_idx]
+
+    # ---- 1-2. official GEPA on the select slice only (confirm slice never seen by the search)
+    g = gepa_discriminative_m_omega(executor, reviser, seed_body, select_texts, noun,
+                                    rounds=rounds, n_mutations=n_mutations, max_chars=max_chars,
+                                    max_metric_calls=max_metric_calls)
+    init = str(g["optimized_prompt"])
+
+    # ---- verdict cache for the unit phase (same one-draw-per-(prompt,item) discipline)
+    verdicts: dict = {}
+
+    def _verdicts(prompt: str, idx_list: List[int]) -> np.ndarray:
+        cache = verdicts.setdefault(prompt, {})
+        todo = [i for i in idx_list if i not in cache]
+        if todo:
+            scored = _score_binary_sampled(executor, prompt, [texts[i] for i in todo], max_chars)
+            for slot, i in enumerate(todo):
+                cache[i] = float(scored[slot])
+        return np.asarray([cache[i] for i in idx_list], dtype=float)
+
+    def _disc(prompt: str, idx_list: List[int]) -> float:
+        return _discrimination_score(_verdicts(prompt, idx_list))
+
+    init_disc = _disc(init, select_idx)
+
+    # ---- 3. unit pool: trajectory clauses + children metrics + LLM suggestions
+    traj_prompts = [row[1] for row in (g.get("trajectory") or [])]
+    traj_units = _clause_units(traj_prompts)
+    child_units = [c.strip() for c in (children or []) if c and len(c.strip()) > 4]
+    ambiguous = _select_failures(select_texts, _verdicts(init, select_idx), k=6,
+                                 max_chars=max_chars)
+    llm_units = _suggest_units_llm(reviser, noun, init, ambiguous, n_llm_units)
+    pool, seen = [], set()
+    for u in child_units + llm_units + traj_units:   # children first: the D2-novel source
+        key = " ".join(u.lower().split())
+        if key not in seen:
+            seen.add(key)
+            pool.append(u)
+    pool = pool[:max_units]
+    print(f"[unit_recombination_m_omega] units: {len(child_units)} children + {len(llm_units)} "
+          f"LLM + {len(traj_units)} trajectory -> {len(pool)} used | select={len(select_idx)} "
+          f"confirm={len(confirm_idx)} | init disc={init_disc:.3f}", flush=True)
+
+    # ---- 4. paired marginal pass on the select slice
+    marginals = []
+    for u in pool:
+        cand = _compile_units(init, [u])
+        marginals.append({"unit": u, "delta": _disc(cand, select_idx) - init_disc,
+                          "source": ("children" if u in child_units else
+                                     "llm" if u in llm_units else "trajectory")})
+    marginals.sort(key=lambda r: -r["delta"])
+
+    # ---- 5. cumulative prefix + drop-one
+    ordered = [r["unit"] for r in marginals if r["delta"] > 0][:top_k]
+    best_set: List[str] = []
+    best_disc = init_disc
+    probe_rows = []
+    cum: List[str] = []
+    for u in ordered:
+        cum = cum + [u]
+        cand = _compile_units(init, cum)
+        d = _disc(cand, select_idx)
+        stats = _compute_stats(_verdicts(cand, select_idx), cand)
+        probe_rows.append((cand, stats))
+        if d > best_disc:
+            best_set, best_disc = list(cum), d
+    for u in list(best_set):
+        trial = [x for x in best_set if x != u]
+        cand = _compile_units(init, trial)
+        d = _disc(cand, select_idx)
+        if d >= best_disc:
+            best_set, best_disc = trial, d
+
+    compiled = _compile_units(init, best_set)
+
+    # ---- 6. no-regret guard on the disjoint confirm slice
+    fell_back = False
+    if best_set and confirm_idx:
+        if _disc(compiled, confirm_idx) < _disc(init, confirm_idx):
+            compiled, fell_back = init, True
+    print(f"[unit_recombination_m_omega] compiled {len(best_set)} units "
+          f"(select disc {init_disc:.3f} -> {best_disc:.3f})"
+          + ("; NO-REGRET GUARD fired -> shipping GEPA winner" if fell_back else ""), flush=True)
+
+    # ---- report: canonical stats over the FULL design pool
+    full_idx = list(range(n_items))
+    final_stats = _compute_stats(_verdicts(compiled, full_idx), compiled)
+    trajectory = [(row[0], row[1], row[2], row[3], row[4]) for row in (g.get("trajectory") or [])]
+    base_len = len(trajectory)
+    for offset, (cand, stats) in enumerate(probe_rows):
+        trajectory.append((base_len + offset, cand, stats.std, stats.base_rate,
+                           stats.discrimination))
+    trajectory.append((len(trajectory), compiled, final_stats.std, final_stats.base_rate,
+                       final_stats.discrimination))
+
+    return {
+        "optimized_prompt": compiled,
+        "pyes": final_stats.pyes,
+        "mean": final_stats.mean,
+        "std": final_stats.std,
+        "base_rate": final_stats.base_rate,
+        "discrimination": final_stats.discrimination,
+        "trajectory": trajectory,
+        "units": {
+            "n_children": len(child_units), "n_llm": len(llm_units),
+            "n_trajectory": len(traj_units), "n_pool_used": len(pool),
+            "n_compiled": len(best_set), "compiled_units": list(best_set),
+            "marginals_top10": marginals[:10],
+            "init_is_gepa_winner": True, "init_select_discrimination": float(init_disc),
+            "compiled_select_discrimination": float(best_disc),
+            "fell_back_to_init": bool(fell_back),
+            "n_select": len(select_idx), "n_confirm": len(confirm_idx),
+        },
     }
 
 

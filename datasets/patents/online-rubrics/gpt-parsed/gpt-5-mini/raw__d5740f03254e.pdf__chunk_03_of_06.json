@@ -1,0 +1,80 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/d5740f03254e.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "d5740f03254e.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 6,
+  "chunk_chars": 39970,
+  "model": "gpt-5-mini",
+  "elapsed_s": 43.16658483399078,
+  "input_tokens": 14343,
+  "output_tokens": 4104,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "researchers, analysts and policy statisticians constructing patent/citation-based indicators using PATSTAT and the OECD citation database",
+    "subtask_short": "constructing OECD patent indicators",
+    "subtask_description": "Methods and algorithmic specifications for computing patent-level indicators (forward citations, breakthrough patents, generality, originality, radicalness) using PATSTAT and the OECD Citation database; includes T-SQL scripts, aggregation rules and robustness notes. Targeted at building reproducible, cohort-based patent metrics for country/technology analyses.",
+    "subtask_keywords": [
+      "patent",
+      "patstat",
+      "citation_analysis",
+      "oecd",
+      "indicator_construction"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Fwd_Cits5 (5-year forward citation count)",
+        "description": "Number of distinct forward citations received by a patent within a 5-year (60 month) window after publication. Implemented as COUNT(distinct Citing_appln_id) with DATEDIFF(month, c.Citing_pub_date, reference_pub_date) <= 60 and consolidation of EPO patents and equivalents.",
+        "guidance": "T-SQL implementation uses unions across OECD citation tables (EP citations, EP equivalents, WO citations consolidated to EP equivalents, etc.) and counts distinct citing application IDs. Appln_id refers to PATSTAT surrogate keys. This indicator is time-sensitive: a 5 (or alternatively 7) year window must be allowed after publication to capture citations. The OECD scripts show how to include EP and WO consolidations and how to restrict by cited application authority (e.g. Cited_App_auth = 'EP')."
+      },
+      {
+        "name": "Breakthrough inventions (top 1% cited patents)",
+        "description": "Breakthrough inventions are identified as the top 1% most highly cited patents within a filing-year and technology-field cohort (using the 5-year forward citation count).",
+        "guidance": "Implemented by selecting TOP 1 PERCENT ordered by Fwd_Cits5 DESC for the cohort defined by Filing_year = @Filing and WIPO_Tech = @Field and Fwd_Cits5 > 0, then marking those Appln_id records as Breakthrough = 1. OECD notes that breakthrough counts are aggregated at country and technological field level using fractional counts. Timeliness: allow a 5 (or 7) year citation window to identify top cited patents. Alternative identification: restrict forward citations to types coded X, I and Y to define breakthrough inventions on more strictly relevant citations."
+      },
+      {
+        "name": "Generality index",
+        "description": "A modified Hirschman-Herfindahl Index (HHI)-based measure of the range of technology fields citing a patent; defined as 1 - sum of squared shares of IPC class contributions among citing patents (index ranges 0\u20131). Uses forward citations and accounts for all IPC n-digit classes contained in citing patents.",
+        "guidance": "OECD implementation computes 1 - SUM(Sq_Cited) where Sq_Cited = SQUARE(sum(Citing.IPC_Share)/e.Fwd_Cits5). IPC_Share is computed from PATSTAT_APPLN_IPC (LEFT(Class_Symbol,4) or n-digit) and shares are based on distinct class symbols; forward citations restricted to a 5-year window. The measure is high when citations are spread across many fields and low when concentrated. Caveats: sensitivity to the patent classification granularity (finer levels increase the measure) and potential small-number bias when few citing patents exist\u2014OECD accounts for all IPC n-digit classes to reduce bias. Uses PATSTAT and OECD citation DB consolidations (scripts provided)."
+      },
+      {
+        "name": "Originality index",
+        "description": "Measure of the breadth/diversification of technology fields on which a patent relies (based on backward citations); operationalised as 1 - sum of squared shares of cited IPC classes (computed at 4- or 7-digit, OECD computes at an 8-digit level here), normalized relative to the maximum value in the same technology-year cohort.",
+        "guidance": "OECD constructs originality using backward citations consolidated across datasets (including PCT patents entering EPO regional phase). The T-SQL computes 1 - SUM(SQUARE(t1.IPC_Count/t2.IPC_Total)) where IPC_Count and IPC_Total are derived from PATSTAT_APPLN_IPC counts for cited patents. Robustness: indicator values increase at less aggregated IPC levels (4-digit vs 7-digit); pairwise correlations show high stability over time. OECD normalises originality index values with respect to the maximum within the patent's technology-year cohort. Scripts and data consolidation steps are provided."
+      },
+      {
+        "name": "Radicalness index (Shane-based)",
+        "description": "An index capturing the extent to which a patent cites technologies (IPC classes) that are different from those of the focal patent: the weighted proportion of IPC classes appearing in cited patents but not allocated to the focal patent, normalised to range 0\u20131.",
+        "guidance": "OECD adapts Shane (2001) by weighting 4-digit classes in cited patents and normalising by the total number of backward-citation classes counted at the most disaggregated available level. T-SQL computes SUM(t1.IPC_Count)/t2.IPC_Total for each citing_appln_id. Limitations: Shane's measure is backward-looking and does not capture contemporaneous uniqueness or future impact; OECD mentions Dahlin & Behrens (2005) and ongoing work to develop a continuous radicalness measure that accounts for previous, contemporaneous and future developments. Scripts and robustness analyses (correlations with originality) are provided."
+      },
+      {
+        "name": "Citation window / timeliness requirement",
+        "description": "Indicators built on forward citations require allowing a citation accumulation window (typically 5 years, sometimes 7) after publication to identify top-cited patents and compute citation-based indices reliably.",
+        "guidance": "OECD repeatedly emphasises the timeliness issue: a 5 (or 7) year period after publication needs to be allowed to identify top-cited patents in a cohort. Robustness tests (5 vs 7 years) showed almost no difference for some indices, but analysts should choose and report the window and be aware of resulting coverage/timeliness trade-offs."
+      },
+      {
+        "name": "Aggregation and fractional counting",
+        "description": "When producing country- or technology-level statistics, counts of breakthrough inventions and other patent-level indicators are aggregated using fractional counts across patent owners / jurisdictions / technology allocations.",
+        "guidance": "OECD aggregates breakthrough counts by country and technological field using fractional counts (i.e., fractional attribution when patents have multiple country/technology ties). Analysts should apply consistent fractional counting rules and report thresholds (e.g., minimum observations per economy when reporting averages)."
+      },
+      {
+        "name": "Restricting citation types (X, I, Y) as alternative",
+        "description": "For some indicators (e.g., breakthrough inventions) identification may be restricted to citations coded as X, I and Y to focus on technically relevant or core citations.",
+        "guidance": "OECD notes that breakthrough inventions may be identified by restricting the type of citations considered to those coded as X, I and Y. This is an alternative specification affecting sensitivity and may change counts; analysts should report whether they use all citations or only X/I/Y-coded citations."
+      },
+      {
+        "name": "Data sources and consolidation (PATSTAT + OECD Citation DB + patent equivalents)",
+        "description": "All indicator computations rely on PATSTAT (EPO) variables and the OECD Citation database; patent equivalents (EP/WO consolidations) are used to consolidate citations across family members.",
+        "guidance": "OECD T-SQL scripts explicitly join PATSTAT_APPLN_IPC and various OECD citation tables (OECD_CIT_EP_Citations, OECD_CIT_EP_Equiv, OECD_CIT_WO_Citations, OECD_CIT_EP_WO, OECD_CIT_EP_Cit_Counts). Appln_id are PATSTAT surrogate keys. Implementations must perform equivalents consolidation (EP/WO) and use consistent publication dates for DATEDIFF operations. The OECD scripts are provided as a reproducible reference and must be acknowledged if used."
+      },
+      {
+        "name": "Sensitivity to IPC classification granularity",
+        "description": "Generality, originality and related indices depend strongly on the level of IPC aggregation used (4-digit vs 7-digit vs n-digit); finer classification raises index values and can introduce scale-related biases.",
+        "guidance": "OECD documents robustness tests showing differences between 4- and 7-year windows and between 4- and 7-digit IPC aggregation for originality and generality. Analysts must choose an IPC aggregation level, test robustness to alternative granularities, and interpret cross-field comparisons with caution because fields differ in classification practices and typical IPC scope."
+      }
+    ]
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_3542aa8d0cb0.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17895,
+  "output_tokens": 3977,
+  "elapsed_s": 2140.257151833037,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in multimodal vision-language modeling, dataset creators, and ML/NLP researchers working on satire/humor detection and evaluation",
+    "subtask_short": "satirical_image_comprehension_benchmark",
+    "subtask_description": "Designing, annotating, and evaluating a multimodal dataset (YesBut) and benchmark tasks to measure Vision-Language models' ability to detect, understand, and complete satirical images. Includes annotation guidelines, data augmentation with generative models, and automated + human evaluation protocols.",
+    "subtask_keywords": [
+      "satire",
+      "multimodal",
+      "vision_language",
+      "dataset",
+      "benchmark",
+      "image_comprehension"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Satirical Image Detection",
+        "description": "Given an image, classify the image as being satirical or not.",
+        "guidance": "Task is a binary classification carried out on all 2,547 images. Use Zero-Shot and Zero-Shot Chain-of-Thought (CoT) setups for inference. Evaluation metrics: Accuracy and F1-Score. Prompt used (detailed in Appendix E.2) instructs model to output one character exactly: either \"Y\" (EXTREMELY funny / satirical) or \"N\" (otherwise). The authors intentionally avoid In-Context Learning to keep tasks challenging."
+      },
+      {
+        "name": "Satirical Image Understanding",
+        "description": "Given a satirical image, describe in natural language why the image is satirical (generate the reason/punchline).",
+        "guidance": "Two-step prompting: (1) prompt the model to generate a textual description of each sub-image using \"Describe the image\"; (2) prompt the model with WHYFUNNY_PROMPT: \"Why is this image funny/satirical?\" Evaluation uses automated lexical-overlap metrics (BLEU, ROUGE-L, METEOR) and a semantic metric (BERTScore), plus the image-based Polos metric. Additionally, a human evaluation is performed on a random sample of 30 images, with binary criteria (Correctness, Appropriate Length, Visual Completeness, Faithfulness) and majority vote across 3 student annotators. Zero-Shot inference is used for this task."
+      },
+      {
+        "name": "Satirical Image Completion",
+        "description": "Given either the left or right sub-image (one half of the 2-sub-image sample), select the remaining sub-image from two options so that the completed image is satirical/meaningful.",
+        "guidance": "Curated 150 samples where one sub-image is given and the two candidate options (A/B) are from the dataset (one 2D and one 3D stick-figure style when the known half is a colorized sketch). Prompt (Appendix E.2) instructs model to output exactly one character: \"A\" or \"B\". Use Zero-Shot and Zero-Shot CoT inference. Evaluation metric: Accuracy. Options are curated based on existing satirical and non-satirical images in YesBut."
+      },
+      {
+        "name": "Per-image annotation fields (Stage 2)",
+        "description": "For every satirical image, the annotators collected: (1) Textual Description of the Left Sub-Image, (2) Textual Description of the Right Sub-Image, (3) Overall Textual Description which contains the punchline, (4) Binary: whether the Left sub-Image contains any text, (5) Binary: whether the Right sub-Image contains any text, (6) Binary: whether the sub-images can be created by dividing a larger image using a vertical line as a separator, (7) Categorical: annotation difficulty.",
+        "guidance": "Annotator qualification: 5 annotators who were undergraduate sophomore students or above, enrolled in English-medium colleges. Annotation difficulty has three values with explicit definitions: 'EASY' (no internet needed), 'MEDIUM' (needs internet to understand the overall description), 'HARD' (additional help from the internet is needed to write all three textual descriptions). These fields were provided as annotator instructions and used downstream for analysis and augmentation."
+      },
+      {
+        "name": "Annotation difficulty labels and interpretation",
+        "description": "Categorical difficulty label for each satirical image: EASY, MEDIUM, HARD.",
+        "guidance": "Definitions: 'EASY' when the annotator does not need any additional help from the internet; 'MEDIUM' when the annotator needs additional help from the internet to understand the overall description; 'HARD' when additional help from the internet is needed to write all three textual descriptions. The authors analyze model performance stratified by these difficulty labels (see Table 7 and discussion)."
+      },
+      {
+        "name": "Manual labeling protocol for generated images (Stages 3 & 4)",
+        "description": "Each combined/generated image (after DALL\u00b7E 3 generation and combining sub-images) must be manually labeled as satirical or non-satirical.",
+        "guidance": "Manual labeling of generated combinations is carried out by a graduate student in the lab. That annotator was given 10 satirical and 10 non-satirical images prior to labeling to provide assistance for labelling (calibration). Generated satirical images are assigned the same textual descriptions as the original image."
+      },
+      {
+        "name": "Data augmentation generation prompts and combination rules",
+        "description": "Procedures and prompts used to generate synthetic sub-images from textual sub-image descriptions using DALL\u00b7E 3.",
+        "guidance": "Stage 3 (2D stick images) prompt: \"Draw using stick figures (black silhouette against a white background) - <SUB-IMAGE DESCRIPTION>\". For each original sample create 3 new combinations: [original left, generated right 2D], [generated left 2D, original right], [generated left 2D, generated right 2D]. Stage 4 (3D stick images) prompt: \"Draw using 3D black silhouettes against a white background - <SUB-IMAGE DESCRIPTION>\" and create 5 new combinations (listed in paper). After generation, manually label each combined image satirical/non-satirical. Generated satirical images inherit original textual descriptions. These augmentation rules increase diversity across three artistic styles (colorized sketch, 2D stick, 3D stick)."
+      },
+      {
+        "name": "Dataset composition and diversity requirements",
+        "description": "YesBut dataset composition and the properties that make it challenging.",
+        "guidance": "YesBut contains 2,547 images: 1,084 satirical and 1,463 non-satirical, spanning three artistic styles (colorized sketch, 2D stick figure, 3D stick figure). Key challenging properties emphasized: majority of images have no text, many images have non-connected sub-images (requiring cross-sub-image reasoning), and presence of multiple artistic styles across sub-images. An additional set of 119 real satirical photographs is released for further research."
+      },
+      {
+        "name": "Choice of evaluation settings (zero-shot focus)",
+        "description": "Evaluation should focus on Zero-Shot and Zero-Shot Chain-of-Thought (CoT) setups rather than In-Context Learning.",
+        "guidance": "Rationale: to observe how well VL models can decipher satire without support from additional training or in-context examples; authors note CoT sometimes improves performance (varies by model and task) but they avoid in-context examples to keep tasks challenging and comparable across models."
+      },
+      {
+        "name": "Automated metrics for Satirical Image Understanding",
+        "description": "Metrics chosen to automatically evaluate generated textual explanations for why an image is satirical.",
+        "guidance": "Use lexical-overlap metrics BLEU, ROUGE-L, METEOR, and semantic-similarity metric BERTScore; additionally evaluate with image-based metric Polos. Authors report averaged/normalized metric values and analyze performance by stage, difficulty, and presence/absence of text."
+      },
+      {
+        "name": "Human evaluation criteria for image understanding outputs",
+        "description": "Binary criteria used by human annotators to judge whether a model-generated overall image description correctly captures the satire.",
+        "guidance": "Four binary questions adopted (and slightly modified) from prior work: (1) Correctness: Does the image description correctly convey the satire the image wanted to convey? (2) Appropriate Length: Is the image description length appropriate for conveying the meaning (not too verbose)? (3) Visual Completeness: Does the image description describe all important elements in the image? (4) Faithfulness: Are all elements of the image description supported by visual or text elements (no made-up elements)? Human annotation carried out by 3 students in the lab; majority vote used to aggregate."
+      },
+      {
+        "name": "Human evaluation sampling and aggregation protocol",
+        "description": "Procedure for which images are human-evaluated and how judgments are aggregated.",
+        "guidance": "Randomly sample 30 images (10 from each of Stage 2, Stage 3, Stage 4). For each image compare model-generated and human-written overall descriptions. Three student annotators independently answer the four binary criteria; majority vote across annotators is taken per image/criterion to compute reported accuracies. Note: the annotators who annotated YesBut were not part of the human evaluation."
+      },
+      {
+        "name": "Prompt/output formatting constraints for model evaluation",
+        "description": "Exact output formatting required by detection and completion prompts to ensure consistent automatic evaluation.",
+        "guidance": "Satirical Image Detection prompt instructs: output one character, exactly either \"Y\" or \"N\". Satirical Image Completion prompt instructs: output one character, exactly either \"A\" or \"B\". Detection prompt frames the image as two halves labeled 'yes' and 'but' and asks the model to choose Y if EXTREMELY funny or N otherwise. Completion prompt describes a 2x2 table with labels 'yes','but','A','B' and instructs to replace a question mark with A or B to make a funny/satirical pair."
+      },
+      {
+        "name": "Annotator qualification and role separation",
+        "description": "Qualifications and role distinctions for annotators involved in dataset creation vs. human evaluation.",
+        "guidance": "Initial satirical-image annotation (Stage 2) used 5 annotators who were undergraduate sophomore students or above enrolled in English-medium colleges. Manual labeling of generated combinations was performed by a graduate student (with calibration examples). Human evaluation of model outputs was performed by 3 students in the lab who were not the original annotators. Majority votes used for aggregation."
+      },
+      {
+        "name": "Sampling and analysis stratifications",
+        "description": "Analyses and performance reporting are stratified by image properties and annotation stages/difficulty.",
+        "guidance": "Report and compare model performance across: annotation stage (original Stage 2 vs generated Stage 3 & 4), presence/absence of text in images, annotation difficulty (EASY/MEDIUM/HARD), and across artistic styles. Use topic modeling and UMAP visualizations to analyze dataset diversity; report these stratified results in tables and figures (e.g., Table 6, Table 7, Table 8)."
+      }
+    ]
+  }
+}

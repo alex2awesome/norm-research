@@ -1,0 +1,374 @@
+You are an expert regulatory policy analyst responding to public comments on a federal rule.
+
+# Your task
+
+You will read one Response to Comments section and extract every quality judgment the agency makes about the public comments and the proposed/final regulation, then tag each judgment against a fixed list of canonical regulatory norms.
+
+# Two levels of structure
+
+LEVEL 1 — PASSAGE: a paragraph or multi-sentence span where the agency is making a quality judgment. Each Response to Comments section usually contains 3-10 passages.
+
+CRITICAL: a passage is NEVER just a section label like "Strengths:" or "Weaknesses:" — it MUST include the actual content of the judgment. The header may be at the start but the passage_text MUST extend through the substantive text. A passage_text of less than 50 characters is almost always wrong.
+
+LEVEL 2 — SIGNAL: a specific phrase INSIDE the passage that EVIDENCES a regulatory norm (without necessarily BEING the regulatory norm). For example, the phrase "commenter failed to consider the statutory MSY requirement" is a complaint that evidences an 'evidentiary rigor' norm; the phrase "we balance worker safety against compliance burden" is an observation that evidences a 'benefit-cost balancing' norm; the phrase "§ 304(e) requires us to set the harvest level at or below the MSY estimate, regardless of cost" is an observation that evidences a 'statutory mandate primacy' norm.
+
+Each signal has:
+- signal_text: an exact substring of THE PASSAGE (not the full Response to Comments section), 10-200 chars
+- signal_type: exactly one of `complaint`, `praise`, `observation`, `suggestion`
+- polarity: exactly one of `positive`, `negative`, `neutral`
+- rubric_matches: a list of 0-3 integer ids from the vocabulary below. Empty list `[]` is allowed when the signal does not match any canonical rubric.
+
+# Norm vocabulary
+
+Each item below has the format `[id] name — short description`. Multi-label tagging: a signal can match 0-3 rubrics. Be strict — only tag a rubric if the signal genuinely instantiates that rubric. Do not match by surface keyword alone.
+
+[1] Alternatives analysis rigor (options, instruments, and baseline) — Identify and evaluate a manageable but meaningful set of reasonable alternatives—including non‑regulatory instruments and design variants—against a well‑defined
+[2] Actionable alternatives and drafting in public comments — Comments propose specific, feasible in‑scope alternatives or ready‑to‑adopt regulatory text (including mitigations), with clear, concrete asks that staff can im
+[3] Propose and justify alternatives with trade‑off analysis — Comments present feasible alternatives and explain their reasonableness (e.g., statutory fit), analyzing expected benefits, costs, and other impacts or trade‑of
+[4] Benefit‑cost analysis quality and methodological rigor — Analyses use clear baselines; quantify and qualitatively assess benefits and costs for main alternatives; make assumptions transparent; include non‑quantified e
+[5] Engagement with RIA and economic analysis — Comments directly engage the agency’s RIA/economic analysis—citing methods and assumptions, challenging baselines and estimates, and, where useful, offering tra
+[6] Direct engagement with the proposal and analytic record — Comments address specific questions and regulatory text, cite the notice and support analyses, and raise issues requiring a substantive agency response.
+[7] Evidentiary rigor and sourcing in comments — Arguments are grounded in specific, credible evidence with clear sourcing and documentation; methods are appropriate; uncertainty is acknowledged; avoid uncited
+[8] Provide concrete, decision‑relevant data and examples — Supply on‑the‑ground data, concrete examples, and operational evidence tied to claims, with enough fields to enable agency analysis.
+[9] Provide quantitative impact and compliance‑cost estimates — Provide quantified impact and cost estimates with transparent, verifiable assumptions and underlying calculations.
+[10] Analyze distribution of costs and benefits — Identify who bears costs and who receives benefits and treat distributional impacts as decision‑relevant.
+[11] Equity and distributional analysis of impacts — Make distributional consequences explicit, assess equity and fairness across subgroups (including EJ/accessibility where relevant), use representative data, and
+[12] Disaggregate and segment impacts by affected populations and stakeholders — Identify impacted groups and geographies and provide disaggregated, quantitative impact estimates by relevant segments.
+[13] Implementation feasibility, practicality, and timelines — Address operational feasibility, compliance burdens and costs, realistic transition timing/phasing, and resource constraints; propose workable approaches.
+[14] Outcome‑focused performance objectives and metrics — Define objectives in terms of ultimate outcomes; select outcome‑oriented indicators; and use multiple complementary metrics with stated limitations.
+[15] Prefer performance‑based, flexible regulatory approaches — Favor outcome‑based, non‑prescriptive designs that give entities flexibility in how to comply while maintaining effectiveness.
+[16] Least‑burden, proportionate regulatory design — Tailor requirements to minimize burdens consistent with achieving objectives, avoiding disproportionate impacts.
+[17] Competition impacts and antitrust safeguards — Evaluate potential anticompetitive effects and discriminatory impacts and adopt safeguards to preserve competition.
+[18] Environmental impact scope and territorial context — Identify direct, indirect, offsite, and regional/territorial environmental effects, including cumulative or sector‑wide impacts and EJ dimensions.
+[19] Comprehensive impact assessment scope — Cover economic, social, environmental, safety, and distributional effects (including unintended consequences), using qualitative assessment when quantification 
+[20] Best‑available evidence, science, and methodological transparency — Base analyses and decisions on the best reasonably obtainable scientific and technical information, with transparent models, data, and appropriate peer review.
+[21] Reasoned, record‑supported justification — Decisions provide a reasoned explanation grounded in the rulemaking record and credible evidence, including why alternatives were rejected.
+[22] Clear, plain‑language executive summaries and overviews — Provide concise, accessible explanations of what is proposed, why, and anticipated impacts to enable meaningful public input.
+[23] Substantive, non‑duplicative comments (not vote‑counting) — Avoid form letters and bare support/opposition; provide self‑contained, substantive input responsive to the proposal.
+[24] Identify overlooked or uncounted impacts and cost drivers — Show where the agency missed important aspects or failed to count indirect/hidden costs or benefits, and document additional cost drivers.
+[25] Tailor and mitigate burdens for small entities — Assess and reduce disproportionate burdens on SMEs and small jurisdictions by scaling or tailoring requirements.
+[26] Regulatory coordination and consistency — Coordinate and harmonize across agencies and jurisdictions (including internationally) to reduce duplication and burdens while preserving flexibility and cohere
+[27] Parking and commute access fee policy design — Design and evaluate parking/access fee policies to recover space costs, reduce hidden subsidies, set fair rates, ensure reliability and nondiscrimination, provi
+[28] Progress on R&D of advanced ADP systems — Report and assess progress on research and development of advanced automatic data processing (ADP) systems.
+[29] Chemicals regulation submissions and OEL consultations — Prepare robust chemical submissions (e.g., SNUNs) with exposure/hazard data and engage in Occupational Exposure Limit consultations by providing relevant eviden
+[30] Originality and distinctiveness of submissions — Comments are authentically written and substantively distinct (not form letters), with an original voice, unique data or analysis, and personalized substance; a
+[31] Campaign authenticity, coalition transparency, and mass‑comment signals — Disclose funding/coalitions, avoid astroturfing, design mass campaigns to add investigatory value (pairing volume with a substantive umbrella submission), and i
+[32] Evidentiary support and argumentation quality — Present clear, structured claims backed by credible, peer‑reviewed or empirical evidence; use citations and concrete examples; maintain high signal‑to‑noise; an
+[33] Sourcing, citations, and evidentiary reliability — Provide complete, verifiable citations; corroborate important or doubtful points; ensure underlying data and sources are reliable and personally reviewed where 
+[34] Submission accuracy and evidence‑based claims — Keep submissions on‑point and jurisdictionally appropriate; verify facts; rebut inaccurate claims; and prioritize evidence‑based assertions (including for AI‑as
+[35] Adds new, material information to the record — Introduce new, relevant facts, evidence, analysis, or perspectives the agency has not already addressed, expanding the scope and value of the administrative rec
+[36] Comment specificity, relevance, and targeting — Stay within scope, use a professional tone, focus on decision points, be concise, and target specific provisions/questions rather than offering generic or irrel
+[37] Concrete, context‑specific, domain‑aware impact evidence — Provide detailed, real‑world examples and technical specifics; localize who/where is affected; include sector‑specific data and practitioner insights to show co
+[38] Section‑specific engagement and preservation for review — Cite exact sections/pages, state requested changes with reasons and evidence, and frame issues precisely to preserve them for agency consideration and potential
+[39] Clear stance and specific, actionable recommendations — State a clear position early; make concrete, text‑level recommendations (with timing where relevant); structure claims–evidence–reasoning–remedy; and conclude w
+[40] Engagement with agency rationale, record, and significant issues — Demonstrate understanding of the proposal, address the agency’s stated rationale, mandate, and questions, and analyze significant issues the agency must resolve
+[41] Legal effectiveness and record‑building posture — Use precise, legally salient arguments that engage the agency’s reasoning, surface logical‑outgrowth or notice issues, pinpoint required decision points, and pr
+[42] Comment organization, clarity, and usability — Make comments easy to use: clear structure and flow (executive summary, section‑by‑section analysis), concise plain language, audience‑appropriate presentation 
+[43] Plain‑language clarity and user‑centered regulatory communications — Draft rules, guidance, and supporting materials in plain language with clear organization and formatting; ensure usability and accessibility for diverse users, 
+[44] Fair notice, precision, and clarity of legal obligations and guidance — Ensure rules and guidance give persons of ordinary intelligence fair notice of duties, use precise terms that constrain discretion, and provide timely statement
+[45] Adequacy and clarity of rulemaking notices and disclosures — Notices clearly describe the action, subjects/issues/terms, intended effects, and any information to be collected (with purposes), enabling meaningful, informed
+[46] Transparency and disclosure of regulatory actions and performance — Adopt high standards for timely, accurate, and substantive public disclosures (e.g., plans, fees, supervisory processes, periodic/material reports, incident tra
+[47] Cross‑jurisdictional consistency, cooperation, and interagency coordination — Align methods and assumptions, avoid duplication, clarify legal interactions, and institutionalize interagency collaboration, information sharing, and recogniti
+[48] Administrative and respondent burden minimization and efficiency — Reduce unnecessary administrative, reporting, and procurement burdens; document concrete efficiency gains; tailor compliance (e.g., small entities); and use tec
+[49] Management planning, performance measurement, and M&E transparency — Set strategic/management goals, plan for evidence collection and use, track/report measurable results, and make monitoring information publicly available (with 
+[50] Clarity and sufficiency of consultation materials — Provide plain‑language, concise consultation materials that clearly state the questions being asked and include only the information needed for informed respons
+[51] Consultation purpose, scope, mechanisms, and accessibility — Clearly define consultation purpose/scope, specify the feedback sought and its use, and provide accessible materials/mechanisms (including for LEP and diverse p
+[52] Clarity on consultation scope and objectives — Explicitly state what issues are open for comment and the consultation’s objectives within the notice/RIS.
+[53] Algorithmic and data‑system safeguards, privacy, and human oversight — Require human alternatives/fallback and review; ensure explainability/contestability; embed privacy/data‑protection (minimization, purpose limits, user control,
+[54] Responsible AI principles: safety, fairness, accountability, and transparency — Adopt operational standards for AI that ensure safety/effectiveness, prevent discrimination, and require transparency/explainability, accountability, and approp
+[55] Public alerting systems: reliability, resilience, and user controls — Design alerting architectures for resilience/redundancy and reliability; balance guaranteed vs. best‑effort delivery; and provide appropriate user customization
+[56] Predictability, uniformity, and reduced uncertainty in compliance — Promote predictable, uniform application/enforcement and, where suitable, national standards and structures that reduce compliance uncertainty.
+[57] Acquisition planning, methods, and post‑award controls — Formulate acquisition strategies, select appropriate contracting methods/options, plan for controllable cost drivers and risks, monitor costs, and maintain effe
+[58] Outsourcing suitability, workforce protections, and capability retention — Assess when to outsource, protect workforce rights/procedures, manage security risks, and retain essential organic capabilities within government.
+[59] OGP action‑plan co‑creation, commitments, and learning — Ensure genuine co‑creation/outreach, include specific/time‑bound/measurable commitments with full problem–solution–results descriptions, and scale ambition with
+[60] Inclusive participation access and targeted outreach — Ensure broad, unbiased access (ADA/LEP supports), prioritize outreach to affected and most‑impacted groups, clarify participant roles/rights, address barriers t
+[61] Participation process quality, authenticity, transparency, and capacity — Design participation to be timely, meaningful, and well‑resourced; avoid tokenism; use transparent e‑rulemaking/records; disclose how input informs policy; buil
+[62] Environmental justice analysis and equitable program design — Assess and mitigate disproportionate environmental impacts on underserved communities, gather local data via engagement, and embed EJ in permitting/program desi
+[63] Directly respond to the agency’s specific questions and prompts — The comment explicitly answers the notice’s questions and requested topics, provides responsive data/evidence, and clarifies if requests are inapplicable or imm
+[64] Plain, accessible language — Use clear, plain English; avoid jargon and unexplained acronyms; define necessary technical terms so non‑experts can follow.
+[65] Concision and focus — Keep the submission succinct, tightly focused on the rule, and easy for staff to excerpt and address.
+[66] Comment structure, organization, and summaries — Provide a clear introduction stating identity/relevance; an upfront summary of key points; organized sections with headings/bullets and logical flow; and a brie
+[67] Commenter identity, stake, and qualifications — Clearly identify who the commenter is, whom they represent, why they’re affected, and relevant expertise or lived experience; indicate breadth of support or rep
+[68] Coalition affiliation and breadth in sign‑on letters — Disclose coalition/joint‑letter participation and demonstrate breadth and diversity of co‑signers across stakeholder types and levels.
+[69] Coalition strategy, credibility, and record‑building — Coordinate positions with allies, cite each organization’s distinct expertise, and use iterative engagement to build a coherent administrative record.
+[70] Evidence‑supported, verifiable claims — Make specific, checkable assertions supported with credible evidence and clear citations to sources (preferably independent/scientific where relevant).
+[71] Use specific personal or community impact stories — Include first‑hand, practitioner, or community narratives with concrete, verifiable details (e.g., dates, places, examples) to document human impacts.
+[72] Authorship and identity authenticity and provenance — Ensure content is genuinely authored with proper attribution, the commenter’s identity is authentic/verifiable, and funding/sponsorship or coordination is trans
+[73] Personalization and substance in mass‑comment campaigns — Avoid duplicative form letters and easily detectable templating; enable and submit unique, substantive, human‑authored comments (AI assistance is acceptable whe
+[74] Accessible participation formats and barrier reduction — Offer diverse participation modes (written, roundtables, in‑person) in accessible venues and identify/mitigate institutional, technical, procedural, and social 
+[75] Open‑government principles with inclusive stakeholder engagement — Advance transparency, participation, and accountability tailored to context, moving beyond data publication to genuine inclusion of stakeholders (including subn
+[76] Transparency and public information for participation and oversight — Provide timely, affordable, and accessible information and public justifications (including appropriate meeting/interaction disclosures) so the public can parti
+[77] Employee parking and commuting policy design — Design parking/pricing and car/vanpool policies to recover costs, incentivize pooling and conservation, minimize administrative burden, respect mission/security
+[78] Tribal sovereignty and meaningful consultation — Honor the government‑to‑government relationship and trust responsibility through respectful, high‑quality consultation when tribal rights or interests are impli
+[79] Privacy, confidentiality, and public‑posting guidance — Warn that comments become public records; avoid PII or proprietary/sensitive content; handle contact information per notices; and protect confidential sources/m
+[80] Professional, civil tone and appropriate content — Maintain a respectful, professional tone; avoid personal attacks, threats, or indecent/obscene material.
+[81] User fees: transparency, reasonableness, and non‑discrimination — Disclose and justify fees; design cost allocations that are reasonable and equitable among beneficiaries/users; ensure any differentials are reasonable and not 
+[82] Climate‑risk and emissions disclosure transparency — Ensure clear, consistent disclosure of climate‑related risks, targets, methodologies, progress, and emissions to support accountability and prudent risk managem
+[83] Workforce transition, reskilling, and quality jobs — Mitigate displacement from technological/green transitions, promote creation of quality jobs, support reskilling, and ensure equitable participation and labor p
+[84] Open‑network user rights and information — Ensure users can access content, run applications, attach devices, and receive meaningful service‑plan information, subject to lawful constraints.
+[85] Term length and rotation for accountability — Use short terms, frequent elections, or rotation to maintain officials’ dependence on and responsiveness to the people.
+[86] Pluralism as a safeguard against faction and majority tyranny — Liberty is protected by a multiplicity of interests and associations in a large republic that checks domination by factions.
+[87] Limits on legitimate coercion by state and society — Interference with individual liberty is justified only on defined grounds (e.g., preventing harm to others); reject arbitrary power and guard against political 
+[88] Civic education and engagement capacity — Build relevant, engaging civic knowledge and deliberative skills (including propaganda/error detection), strengthen feedback loops, and support meaningful publi
+[89] Transparency, reproducibility, and documentation of data, models, and methods — Disclose and document data sources, models, assumptions (including inclusions/exclusions), analytic methods, and compute environments in sufficient detail to me
+[90] Discounting choices, presentation, and NPV computation — Present undiscounted streams and annualized values; apply and justify appropriate real/nominal discount rates (including ranges, long‑horizon approaches, and SP
+[91] Distributional analysis and reporting — Disaggregate benefits, costs, and transfers across relevant groups (e.g., income, EJ/disadvantaged communities, industries/regions, state/local/Tribal), present
+[92] Quality and effectiveness of public comments and engagement with agency analyses — Comments are specific and timely, identify the decision at issue, engage substantively with the agency’s analytical documents (RIA/RFA/EIS), cite governing stan
+[93] Compliance with cross‑cutting analytic and statutory review requirements — Correctly identify, address, and document applicability and compliance with cross‑cutting review and analysis requirements (e.g., EO 12866 significance, RIA/RFA
+[94] Regulatory Impact Analysis process, content, and consultation quality — Provide complete, well‑planned RIAs/impact analyses that clearly state the problem/need and legal basis, develop and compare viable policy options, include requ
+[95] Choice and application of BCA vs CEA frameworks — Select and apply the appropriate framework—BCA when monetization is feasible, CEA when comparing options with common outcomes—and, when both are relevant, balan
+[96] Inflation assumptions in multi‑year analyses — Incorporate and document appropriate inflation assumptions for recurring and multi‑year costs and benefits over the analysis period using recommended sources an
+[97] Regulatory definitions: clarity, scope, and alignment — Adopt clear, consistent, and up‑to‑date definitions that align across programs/agencies as appropriate and specify applicability parameters for regulated entiti
+[98] PRA burden estimation and reporting quality and transparency — Information‑collection notices/forms report respondents, time per response, total burden hours, and annual costs; instruments are available for review; estimate
+[99] SEC disclosure item compliance and structured data formatting — Ensure compliance with required SEC disclosure items across forms/regulations (e.g., risk factors, business/property, Reg AB, industry guides) and required stru
+[100] Environmental justice analysis and tools — Identify and assess disproportionately high and adverse impacts on EJ populations, use appropriate EJ tools (e.g., EJSCREEN), and reflect court‑directed or poli
+[101] Use incremental comparisons and sound decision rules — Compare adjacent options using incremental net benefits or incremental cost‑effectiveness, apply NPV rules (ignore sunk costs), and avoid misleading average rat
+[102] GHS/CLP hazard classification and communication compliance — Evaluate compliance with GHS/CLP hazard classification and labeling: correct mixture classification (tiered/bridging/ingredient methods), acceptance/justificati
+[103] NEPA process elements, terminology, and definitions — Correct use and application of core NEPA concepts and definitions (e.g., purpose and need, scoping, EAs/EISs, categorical exclusions, human environment, no‑acti
+[104] NEPA EIS scope, content, and compliance documentation — Adequacy of NEPA EIS documentation and process: scope and alternatives (including statutory limits), definitions of effects, categorical exclusions and programm
+[105] RFA/SBREFA small‑entity analysis, alternatives, and process compliance — Compliance with RFA/SBREFA: prepare IRFA/FRFA or valid certification when rules may significantly affect a substantial number of small entities; assess dispropo
+[106] SEC climate‑related disclosure compliance (Items 1500–1508) — Compliance with SEC climate disclosure framework: governance (Item 1501), risk management and strategy, targets/goals and scenario analysis, GHG inventory (Scop
+[107] Exchange/SRO fee filings—transparency, definitions, parity, cost justification, and escalation — Quality of exchange/SRO fee filings: precise service definitions and functional changes; full fee schedules with effective‑date/pro‑ration mechanics; transparen
+[108] PRA ICR burden estimation—need, breakdown, and methodology — Paperwork Reduction Act compliance for ICRs: state need and intended use; identify all collections; provide standard burden breakdowns (respondent types/forms, 
+[109] PRA information collections—scope definition, renewals, and OMB clearance for program data — Define Generic ICR scopes and current‑action renewals/extensions; design and clear program‑specific collections (administrative data, surveys/interviews/observa
+[110] SDWA monitoring—approved analytical methods and sampling compliance — Use approved drinking water analytical methods and comply with sampling requirements (collection/preservation/containers/holding times, special monitoring progr
+[111] APA scope and distinctions—guidance vs. legislative rules, exemptions, and compliance limits — Accurate characterization of the APA: what constitutes a rule/rulemaking; distinctions among legislative rules, interpretive rules, and policy statements; scope
+[112] Use and documentation of interim final/direct final rules and special notices — Proper use and documentation of IFRs/DFRs and emergency/reopened comment notices: good‑cause findings, effective dates and withdrawal triggers, scope limits of 
+[113] Regulatory planning and agenda documentation and metadata — Quality and completeness of Unified Agenda/Regulatory Plan entries and tracker metadata, including required content, classifications (e.g., Long‑Term Actions), 
+[114] Survey design, instrument standards, and sample representativeness — Sound survey planning/design and administration: written methodological plans; valid, clear response scales and coding/transformations; appropriate modes; sampl
+[115] SEC disclosure item and form compliance (Reg S‑K, Reg AB, Reg M‑A, industry‑specific) — Ensure registrants satisfy applicable itemized SEC disclosure requirements across affected forms and regulations (Reg S‑K, Reg AB, Reg M‑A, and industry‑specifi
+[116] OIRA/OMB review engagement—planning, transparency, and post‑review disclosures — Clarity and transparency around OIRA/OMB oversight: identify review stage as a distinct engagement point, disclose communications and changes made at OMB sugges
+[117] Use of technical standards and incorporation by reference (NTTAA/OFR) — Policies and mechanics for adopting/referencing technical standards: preference for voluntary consensus standards (NTTAA), incorporation by reference compliance
+[118] ACA premium adjustment percentage—methodology and parameter updates — Maintain, update, and publish the annual premium adjustment percentage under §156.130(e), including methodology choices (e.g., premium growth measures) and appl
+[119] Tribal consultation—scope, planning, and documentation — Plan and conduct government‑to‑government consultation, map operational areas affecting Tribal treaty or reserved rights, and document Tribal impacts and consul
+[120] A‑76 cost comparison—complete and accurate cost‑element treatment — Completeness and correctness of A‑76 cost comparisons: include base and administration costs; one‑time conversion/transition and other incremental costs; accura
+[121] Consultation/public participation planning, transparency, and records — Plan and execute public consultation with clear scope and outreach/notification methods; provide read‑ahead materials; maintain consultation records and public 
+[122] Public comment process—notice practices, scope/reopeners, and integrity safeguards — Agency practices for comment periods and participation: timely notices; topic‑limited solicitations and supplemental reopeners with clear scope; integrity prote
+[123] RCRA/CCR compliance—applicability, planning, corrective action, and permitting — CCR regulatory compliance under RCRA: determine applicability (including legacy impoundments), develop required plans (e.g., Inflow Design Flood control systems
+[124] A-76 competitive sourcing cost comparison rigor and documentation — Evaluate make-or-buy decisions with complete, auditable A-76 cost comparisons: establish MEOs, benchmark in-house vs. contractor performance, include all releva
+[125] OMB Circular A‑76 scope and compliance policies — Assess applicability and enforcement of A‑76 to commercial activities (and exclusions), restrictions on workarounds, required approvals for new in‑house starts,
+[126] Commercial cost figures based on firm, solicited bids — Establish valid commercial cost estimates from firm bids or proposals solicited under procurement rules, informing offerors that an in‑house estimate is being d
+[127] Internal ADP/IT management planning and reporting — Annual planning/reporting on ADP/IT: identify new/revised systems and R&D projects, resource/cost tracking, productivity improvement plans and accomplishments, 
+[128] SEC item‑specific disclosure compliance (Reg S‑K/AB/M‑A) — Filings meet itemized disclosure requirements across applicable SEC regulations (e.g., Regulation S‑K item disclosures, Regulation AB content, and Regulation M‑
+[129] APA notice‑and‑comment adequacy and reasoned decisionmaking — Rulemakings satisfy APA/agency procedures: timely/proper NPRM, logical outgrowth, disclosure of data/methods, reasoned explanation for changes and reliance inte
+[130] NPRM/Federal Register notice content and publication compliance — Notices/preambles comply with APA and FR requirements: required identifiers (agency, RIN/docket, CFR parts), authority citations, concise summaries/metadata, st
+[131] Executive Order and OIRA review applicability/compliance — Determine EO applicability and conformance (e.g., EO 12866/13563/14192 planning and review, transparency about OMB/OIRA review status) and address EO‑based cons
+[132] PRA ICR identification and burden estimation quality — Identify each PRA‑covered information collection and provide objective, transparent burden estimates (respondent counts, frequency, hours per response, total ho
+[133] PRA notices—required elements and comment solicitation — PRA notices include all required elements (e.g., affected public, legal authority, burden estimates, change descriptions) and properly solicit public comment on
+[134] PRA compliance and burden minimization — Identify PRA‑covered collections, issue required notices inviting comment on necessity, burden, and ways to reduce it (including automation/IT), and demonstrate
+[135] Title IX scope, authority, and participation protections — Clarify Title IX coverage and authority; define sex discrimination (including harassment/assault) and govern access to sex‑segregated programs/facilities, inclu
+[136] Airspace rulemaking—justification and post‑proposal adjustments — Provide criteria/justifications for Class D/E airspace changes (e.g., tied to NAVAID changes), distinguish temporary vs. recurring actions, and document any pos
+[137] ETP market integrity: regulated market size and surveillance — Demonstrate a regulated market of significant size and strong correlation/surveillance linkages sufficient to detect/deter manipulation in related spot markets,
+[138] Enforceable emission limits with MRR requirements — Ensure permits/rules have clear applicability triggers and enforceable emission/work practice limits (no unbounded discretion), require monitoring/recordkeeping
+[139] Statutory authority, best‑reading interpretation, and judicial‑doctrine limits — Actions stay within specific delegations and adopt the statute’s single best reading (post‑Loper Bright), address major‑questions and other judicial‑doctrine co
+[140] CAA SIP content, stringency, and approvability standards — SIPs/attainment and planning submissions include required components (e.g., RACT, emission statements, contingency measures), maintain not‑less‑stringent/equiva
+[141] Workplace heat illness prevention program elements — Employers implement written heat‑hazard programs with triggers, observation/response procedures, feasible controls, and training—aligned with recommended standa
+[142] Comment quality: specificity, evidence, and actionable recommendations — Effective comments target specific proposed text, follow instructions/format, provide factual data and authorities, make concrete change requests, engage legal 
+[143] Comment targeting and clear identification — Comments clearly identify the proceeding (docket/title), cite specific sections addressed, engage the issues the agency requested, and provide reasons for recom
+[144] Comment legal grounding and precise citations — Comments identify governing legal standards and violations and cite controlling statutes/regulations with accurate CFR/USC section numbers when proposing or obj
+[145] NEPA EIS process and documentation requirements — Comply with NEPA EIS procedures: timely NOI/scoping, preparation of draft/final/supplemental EISs with impacts/alternatives, robust public participation, and is
+[146] Proper use of guidance and required non‑binding disclaimers — Policies in preambles/guidance do not create binding obligations; comply with OMB Good Guidance Bulletin; include clear non‑binding disclaimers and avoid substi
+[147] Public comment authenticity, consent, and sensitive‑information controls — Govern public submissions to prevent deception and unauthorized attributions, require verification/consent for third‑party submissions, prohibit inclusion of se
+[148] Public comment campaign transparency and evidence integrity — Mass‑comment campaigns disclose advocacy sponsors/clients, document design and participation, address scope/abuse (e.g., fake comments), and transparently state
+[149] Regulation Z (TILA) coverage, disclosures, and advertising — Apply Truth in Lending/Reg Z rules across open‑ and closed‑end credit: coverage/exemptions, account‑opening and periodic disclosures, special mortgage and priva
+[150] Comment precision: pinpoint citations and verifiable sourcing — High‑quality comments identify the exact provision(s) at issue (section/paragraph or pinpoint FR pagination) and support points with verifiable, accessible cita
+[151] Public comment submission formatting, identity, and content restrictions — Comments include required identifiers and contact details, correct docket references and organization by section, comply with formatting rules, and exclude conf
+[152] Federal Register document structure, authority citations, and metadata completeness — Rulemaking/notice documents include all required FR elements and metadata (agency, action, summary, dates, addresses, supplementary information, subject heading
+[153] Paperwork Reduction Act (PRA) compliance and ICR documentation — Demonstrates PRA compliance: valid OMB control numbers and displays, complete ICR packages and supporting statements, accurate burden estimates and respondent d
+[154] OSHA Heat Illness Prevention Standard — scope, triggers, program elements, and controls — Covers applicability, evidence‑based environmental/physiological heat triggers, required protections at baseline and high‑heat thresholds (water, shade, rest, a
+[155] FACA — establishment, applicability, and committee governance — Determines when FACA applies; requirements and limits for establishing advisory committees; advisory‑only scope absent specific authority; charter contents (mis
+[156] In‑house vs. contract‑out alternatives: benchmarking and cost comparison — Explicitly present in‑house and contract‑out alternatives with side‑by‑side benchmarking/metrics and a documented cost‑comparison framework to inform sourcing d
+[157] Competitive sourcing policy and inherently governmental functions — Government‑wide sourcing policies defining inherently governmental vs. commercial activities, limits or prohibitions on A‑76 in specified contexts, and policy u
+[158] Broadband regulation: classification, net neutrality, and consumer protections — Regulatory framework for broadband/BIAS: Title II classification and forbearance choices, transparency/labeling and consumer privacy (Section 222) obligations, 
+[159] Exchange listing standards for Commodity‑Based Trust Shares and crypto‑asset trusts — Initial/continued listing criteria for commodity‑based trust shares (including crypto trusts), surveillance‑sharing with a regulated market of significant size,
+[160] SEC registration and issuer disclosure requirements — Content/instruction requirements under the Securities Act/Exchange Act and related forms/items (e.g., Reg S‑K/S‑X items such as 202, 902, 1301; Form S‑1; SPAC‑s
+[161] Publication and public access to legal materials and significant instruments — Agency obligations to publish and index organizational/procedural/substantive rules and legal materials (APA/FOIA), ensure precedential use only when properly p
+[162] Consumer billing and fee transparency protections — Ensure truthful, complete pre‑billing disclosures; accurately represent fee nature/purpose/amount/refundability; follow billing‑error resolution procedures; com
+[163] APA NPRM notice: content and publication requirements — NPRMs must be published and include time, place, and nature of the proceeding, the legal authority, and a description of the substance/issues, together with cus
+[164] Petitions for rulemaking and related relief — eligibility, content, and procedures — Who may petition; petition categories (rulemaking, declaratory rulings, reconsideration/stays, test‑procedure petitions); prescribed form/content (complete fact
+[165] QHP network adequacy/ECP standards and related ICRs — Substantive provider access and Essential Community Provider requirements for QHP certification and associated information collection burdens for demonstrating 
+[166] EO 13175 Tribal consultation — implications, preemption limits, and trust responsibilities — Agency duties for rules with tribal implications: robust consultation and implementation plans, effective citation to trust responsibilities/statutes, avoidance
+[167] Lobbying transparency and registration — Scope/triggers for lobbyist registration, content of registration (including conviction disclosures), and public registers across jurisdictions.
+[168] Clean Air Act SIP planning — content and area program obligations — SIP submissions must address §110(a)(2) elements and applicable nonattainment/attainment and regional programs (e.g., §185 fee programs, regional haze demonstra
+[169] GHS/HCS hazard classification criteria (selected classes) — Apply GHS/CLP/HCS definitions and decision criteria for specific hazard classes (e.g., explosives, aerosols, chemicals under pressure; respiratory/skin sensitiz
+[170] GDPR controller–processor contracts and duties (DPA requirements) — Assess whether controller–processor arrangements meet GDPR: required DPA terms (parties, subject matter, duration, data types/categories), processor duties (pro
+[171] Title IX — definition and scope of sex discrimination/harassment — Defines covered conduct and contexts under Title IX, including sex‑based harassment, applicability to off‑campus conduct in a recipient’s program or activity, a
+[172] Title IX grievance procedures — procedural safeguards and compliance — Institutional Title IX procedures meet due‑process and equity standards: knowledge/response standards; hearing/cross‑examination where required; training; discl
+[173] Title IX — pregnancy and related conditions protections — Protections for students and employees based on pregnancy, childbirth, and related conditions, including reasonable modifications, leave, lactation accommodatio
+[174] Title IX athletics — sex segregation and transgender participation — Policies governing sex‑segregated teams, limits on categorical bans, try‑out requirements where only one‑sex teams exist, and treatment of transgender students’
+[175] Authority citation specificity in rulemaking documents — Rulemaking documents clearly cite the specific statutory and regulatory authorities and relevant executive orders under which the action is proposed or adopted.
+[176] Comment specificity — pinpoint the exact provisions and docket — Comments identify the precise provisions addressed (e.g., FR page/column/paragraph or CFR section/line), state the docket/rule, include the docket ID, and ancho
+[177] Public comment content restrictions and privacy protections — Submissions avoid prohibited content (e.g., classified or discriminatory content) and do not include sensitive personal information or unredacted PHI; identitie
+[178] Airworthiness directives — inspections/checks and corrective actions — ADs requiring specified inspections, functional/general visual checks, mappings, and on‑condition or terminating corrective actions for affected aircraft/parts.
+[179] Congressional Review Act — effects of disapproval and reissuance bar — Tracks CRA disapprovals and explains legal consequences: nullification of the rule, requirement for new authorization to reissue a substantially similar rule, a
+[180] Petitions for rulemaking — right to petition, content, and filing — Public right to petition for issuance/amendment/repeal of rules and required petition contents/filing (identity/interest, action requested, grounds/facts, certi
+[181] Petition/application filings — content, format, and sufficiency — Procedural and content requirements for petitions/applications/pleadings (addresses, full statement of requested action and grounds with evidence, separate plea
+[182] Single Audit Act — applicability and compliance responsibilities — Organization‑wide audit coverage for all federal funds/program types; recipient/subrecipient responsibilities under the Single Audit Act/OMB guidance, reliance 
+[183] FCC IoT Cybersecurity Labeling — definitions, authorization, and usage limits — Program definitions (e.g., IoT device, Cyber Trust Mark), authorization to display the label, ongoing compliance responsibilities, and limits on use/marketing o
+[184] Regulation F/FDCPA — communications, channel restrictions, and furnishing safeguards — Debt collector compliance with communication rules (media/channel limits, opt‑out mechanisms, abusive/profane language prohibitions, delivery expectations and s
+[185] ORR UC care provider standards — facility types, placement, services, protections — Minimum standards for ORR UC care providers: facility types, restrictive placement criteria, specialized services/treatment needs, transportation/language/disab
+[186] Public charge — covered benefits, history, and relief mechanisms — Defines which public benefits are considered (including non‑monetizable benefits), summarizes the doctrine’s history and statutory context, and identifies exemp
+[187] Federal Register rulemaking notices — required content, formatting, and drafting — Core FR notice construction and formatting: required headings/sections, change/hearing notice elements, authority/signature blocks, DATES language for withdrawa
+[188] Tobacco advertising/marketing and retail access restrictions — Compliance with tobacco advertising/marketing limits (media/format, sponsorships, brand extensions, indicia on non‑tobacco items), sampling/incentive restrictio
+[189] MoCRA implementation — product listing, testing, and recall authority — Cosmetic compliance under MoCRA: standardized testing methods (e.g., asbestos for talc products), annual product/ingredient listings, and FDA mandatory recall a
+[190] FTC non‑compete rule — scope, definitions, and legal basis — Defines non‑compete clauses, scope and exclusions (e.g., distinctions from no‑hire agreements), treatment of existing agreements (including senior executives), 
+[191] Comments — cite and engage governing statutory authority — Each requested change or objection is tied to the precise governing statute(s)/sections (and, as relevant, Executive Orders), directly engaging the agency’s cit
+[192] Statutory authorization and textual fidelity for agency action — Agency actions must rest on an explicit empowering provision and align with the best reading of the governing statute; identify when policies rely on mere inter
+[193] Telemarketing Sales Rule — prohibited practices, payment methods, and facilitation liability — Compliance with TSR core prohibitions: Do‑Not‑Call Registry obligations and abusive calling patterns, bans on prohibited payment mechanisms and credit card laun
+[194] GDPR processor contractual obligations (Art. 28/32/33) — Controller–processor contract compliance: sub‑processor authorization/objection and downstream liability; duty to inform the controller of unlawful instructions
+[195] Title IX grievance procedures and institutional duties — Institutional compliance with Title IX grievance requirements: complaint definition and intake; notice of allegations; consolidation; supportive measures; evide
+[196] Authority citations and codification in rule documents — Rules and notices clearly cite governing statutory/regulatory authority using proper authority‑citation conventions and accurately reflect the Federal Register’
+[197] H‑1B petition eligibility, filings, registrations, extensions, and LCA attestations — Compliance with H‑1B petition prerequisites and procedures: valid electronic registration and supporting passport/travel documentation; Form I‑129 and LCA filin
+[198] Federal Vacancies Reform Act — acting service rules and timing — FVRA compliance on when and how acting service is authorized, permissible acting officials, time limits and calculations (including effects of rejected/withdraw
+
+# Worked examples
+
+## Example 1 (epa_sip_substantive_defense)
+
+INPUT (unit_id=EPA-R06-OAR-2020-0343-0007):
+Response to Comments
+
+ Comment: Commenters assert that the proposed rule relies on the 
+provisions of the Texas Administrative Code which require new or 
+modified major sources of ozone precursors in ozone nonattainment areas 
+to procure emission offsets for their emission increases through the 
+state's Emission Credit Banking and Trading program. According to the 
+Commenters, these provisions authorize inter-precursor trading (IPT) of 
+NOx and VOC emissions which was vacated by the United States Court of 
+Appeals for the District of Columbia Circuit on January 29, 2021. The 
+commenters also argued that EPA's approval of an inter-precursor trade 
+is presumed unless the EPA disapproves the trade during its comment 
+period, according to TCEQ guidance memorandum.
+ Response: The commenter correctly points out that the D.C. Circuit 
+(the court) vacated the portion of the EPA's NNSR regulation at 40 CFR 
+51.165 that allows IPT to meet the offset requirements for ozone. 
+Following the court's decision, the EPA notified the TCEQ in a letter 
+dated June 17, 2021, that the EPA would no longer approve any IPT 
+trades under the previously approved Texas SIP rules based on the court 
+decision. In a response to the EPA dated June 25, 2021, the TCEQ 
+confirmed that its NNSR IPT provisions cannot function without the 
+EPA's prior approval of each trade, and that the TCEQ has not approved 
+any IPT request in the past without prior approval from the EPA. The TCEQ also confirmed that without th... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "EPA-R06-OAR-2020-0343-0007", "passages": [{"passage_text": "Response: The commenter correctly points out that the D.C. Circuit \n(the court) vacated the portion of the EPA's NNSR regulation at 40 CFR \n51.165 that allows IPT to meet the offset requirements for ozone. \nFollowing the court's decision, the EPA notified the TCEQ in a letter \ndated June 17, 2021, that the EPA would no longer approve any IPT \ntrades under the previously approved Texas SIP rules based on the court \ndecision. In a response to the EPA dated June 25, 2021, the TCEQ \nconfirmed that its NNSR IPT provisions cannot function without the \nEPA's prior approval of each trade, and that the TCEQ has not approved \nany IPT request in the past without prior approval from the EPA.", "passage_polarity": "positive", "signals": [{"signal_text": "The commenter correctly points out that the D.C. Circuit \n(the court) vacated the portion of the EPA's NNSR regulation at 40 CFR \n51.165 that allows IPT to meet the offset requirements for ozone", "signal_type": "observation", "polarity": "positive", "rubric_matches": [139, 192]}, {"signal_text": "the EPA notified the TCEQ in a letter \ndated June 17, 2021, that the EPA would no longer approve any IPT \ntrades under the previously approved Texas SIP rules based on the court \ndecision", "signal_type": "observation", "polarity": "positive", "rubric_matches": [47, 21]}, {"signal_text": "the TCEQ \nconfirmed that its NNSR IPT provisions cannot function without the \nEPA's prior approval of each trade", "signal_type": "observation", "polarity": "positive", "rubric_matches": [47, 21]}]}, {"passage_text": "EPA agrees that, without the IPT provisions, the Texas SIP \nregulations meet the CAA's NNSR requirements. The EPA-approved Texas \nSIP already includes 30 TAC Section 116.12 (Nonattainment and \nPrevention of Significant Deterioration Review Definitions) and 30 TAC \nSection 116.150 (New Major Source or Major Modification in Ozone \nNonattainment Area). Based on EPA's review of Texas SIP regulations for \nthe NNSR program requirements for serious ozone nonattainment areas, we \nare approving this portion of the SIP revision.", "passage_polarity": "positive", "signals": [{"signal_text": "without the IPT provisions, the Texas SIP \nregulations meet the CAA's NNSR requirements", "signal_type": "observation", "polarity": "positive", "rubric_matches": [140, 168]}, {"signal_text": "Based on EPA's review of Texas SIP regulations for \nthe NNSR program requirements for serious ozone nonattainment areas, we \nare approving this portion of the SIP revision", "signal_type": "observation", "polarity": "positive", "rubric_matches": [21, 140]}]}, {"passage_text": "The EPA does not agree with the commenters that the EPA's approval \nof an IPT can be presumed under the Texas SIP unless the EPA \ndisapproved the trade during the comment period. Texas has not \nsubmitted, and the EPA has not approved the State's guidance document, \ndescribed by the commenters, as part of the Texas SIP. Nothing in the \npreviously approved Texas regulations establishes a presumption of the \nEPA's approval of an IPT if the EPA does not communicate its \ndisapproval during a relevant public notice and comment period.", "passage_polarity": "negative", "signals": [{"signal_text": "The EPA does not agree with the commenters that the EPA's approval \nof an IPT can be presumed under the Texas SIP unless the EPA \ndisapproved the trade during the comment period", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [191, 144]}, {"signal_text": "Texas has not \nsubmitted, and the EPA has not approved the State's guidance document, \ndescribed by the commenters, as part of the Texas SIP", "signal_type": "observation", "polarity": "negative", "rubric_matches": [146, 140]}, {"signal_text": "Nothing in the \npreviously approved Texas regulations establishes a presumption of the \nEPA's approval of an IPT if the EPA does not communicate its \ndisapproval during a relevant public notice and comment period", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [192, 129]}]}, {"passage_text": "In addition, the EPA's commitment that it will not approve IPT for \nozone because of the court's decision is sufficient to render the Texas \nIPT provisions inoperative for ozone. Texas has confirmed that IPT is \nnot permitted under its regulation without prior EPA approval of a \ntrade. Finally, we would work with Texas to get the inoperative IPT \nprovisions removed in future SIP revisions.", "passage_polarity": "positive", "signals": [{"signal_text": "the EPA's commitment that it will not approve IPT for \nozone because of the court's decision is sufficient to render the Texas \nIPT provisions inoperative for ozone", "signal_type": "observation", "polarity": "positive", "rubric_matches": [21, 56]}, {"signal_text": "we would work with Texas to get the inoperative IPT \nprovisions removed in future SIP revisions", "signal_type": "suggestion", "polarity": "positive", "rubric_matches": [47, 26]}]}]}
+
+## Example 2 (noaa_shrimp_quantitative_defense)
+
+INPUT (unit_id=NOAA-NMFS-2019-0045-0599):
+response to Comment 2, an SEFSC analysis concluded 
+that the maximum possible increase in shrimp effort permitted under 
+this rule would not impact red snapper rebuilding. Potential impacts to 
+sea turtles have been addressed in an Endangered Species Act (ESA) 
+formal consultation. The reduction in the effort threshold implemented 
+through this final rule will not change the amount of sea turtle take 
+authorized under the ESA. The fishery's impact on sea turtles is 
+monitored by turtle excluder device (TED) compliance levels and through 
+an effort metric separate from that addressed in this final rule.
+ Comment 2: Allowing an increase in shrimp trawl effort will delay 
+recovery of the Gulf red snapper stock and result in future lower 
+recreational catch limits.
+ Response: NMFS disagrees that the moderate increase in shrimp trawl 
+effort possible through this final rule will alter the Gulf red snapper 
+rebuilding plan time period. The SEFSC analysis contained in Amendment 
+18 concluded that the maximum possible increase in shrimp effort 
+permitted under this rule would not impact red snapper rebuilding. This 
+analysis noted that red snapper mortality due to discards during the 
+closed red snapper recreational season is much greater than was 
+predicted at the time the initial shrimp effort reduction threshold was 
+put in place in 2008. In addition, recent research shows that natural 
+mortality of juvenile red snapper is greater than previously indicated, 
+which means that morta... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "NOAA-NMFS-2019-0045-0599", "passages": [{"passage_text": "response to Comment 2, an SEFSC analysis concluded \nthat the maximum possible increase in shrimp effort permitted under \nthis rule would not impact red snapper rebuilding. Potential impacts to \nsea turtles have been addressed in an Endangered Species Act (ESA) \nformal consultation. The reduction in the effort threshold implemented \nthrough this final rule will not change the amount of sea turtle take \nauthorized under the ESA.", "passage_polarity": "positive", "signals": [{"signal_text": "an SEFSC analysis concluded \nthat the maximum possible increase in shrimp effort permitted under \nthis rule would not impact red snapper rebuilding", "signal_type": "observation", "polarity": "positive", "rubric_matches": [20, 70, 9]}, {"signal_text": "Potential impacts to \nsea turtles have been addressed in an Endangered Species Act (ESA) \nformal consultation", "signal_type": "observation", "polarity": "positive", "rubric_matches": [19, 93]}]}, {"passage_text": "Response: NMFS disagrees that the moderate increase in shrimp trawl \neffort possible through this final rule will alter the Gulf red snapper \nrebuilding plan time period. The SEFSC analysis contained in Amendment \n18 concluded that the maximum possible increase in shrimp effort \npermitted under this rule would not impact red snapper rebuilding. This \nanalysis noted that red snapper mortality due to discards during the \nclosed red snapper recreational season is much greater than was \npredicted at the time the initial shrimp effort reduction threshold was \nput in place in 2008. In addition, recent research shows that natural \nmortality of juvenile red snapper is greater than previously indicated, \nwhich means that mortality due to shrimp trawl bycatch has a smaller \ninfluence on the red snapper population than previously thought.", "passage_polarity": "negative", "signals": [{"signal_text": "NMFS disagrees that the moderate increase in shrimp trawl \neffort possible through this final rule will alter the Gulf red snapper \nrebuilding plan time period", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [7, 70]}, {"signal_text": "The SEFSC analysis contained in Amendment \n18 concluded that the maximum possible increase in shrimp effort \npermitted under this rule would not impact red snapper rebuilding", "signal_type": "observation", "polarity": "positive", "rubric_matches": [20, 70, 89]}, {"signal_text": "recent research shows that natural \nmortality of juvenile red snapper is greater than previously indicated", "signal_type": "observation", "polarity": "positive", "rubric_matches": [20, 70]}]}, {"passage_text": "With respect to red snapper catch limits, NMFS agrees that a \nreduction in total red snapper allowable catch is predicted over the \nremainder of the rebuilding time period if the maximum possible \nincrease in shrimp effort occurs. However, shrimp effort has not \nexceeded the current allowable level in more than 10 years. Further, \nthe reduction of the total allowable catch is predicted to be only \n100,000 lb (45,359 kg), annually over the next 3 years, or 0.66 percent \nof the overall quota. For the recreational private angling component, \nthe greatest possible reduction in the catch level would be \napproximately 28,273 lb (12,824 kg), annually, or less than 1 percent \nof the Gulf-wide private-angling component quota.", "passage_polarity": "positive", "signals": [{"signal_text": "shrimp effort has not \nexceeded the current allowable level in more than 10 years", "signal_type": "observation", "polarity": "positive", "rubric_matches": [8, 70]}, {"signal_text": "the reduction of the total allowable catch is predicted to be only \n100,000 lb (45,359 kg), annually over the next 3 years, or 0.66 percent \nof the overall quota", "signal_type": "observation", "polarity": "positive", "rubric_matches": [9, 91, 8]}, {"signal_text": "the greatest possible reduction in the catch level would be \napproximately 28,273 lb (12,824 kg), annually, or less than 1 percent \nof the Gulf-wide private-angling component quota", "signal_type": "observation", "polarity": "positive", "rubric_matches": [9, 12, 91]}]}, {"passage_text": "Response: The Council initially considered an alternative that \nwould have phased-in the implementation of the target reduction. \nHowever, the Council removed this alternative from further \nconsideration because Amendment 18 also modifies the framework procedure to allow a more streamlined approach to modify any \nfuture effort reduction goals. This will allow the Council to more \ntimely address any new information that indicates the threshold should \nbe changed. The Council also considered an alternative that would have \nreduced the threshold to 63 percent rather then to 60 percent, but the \nSEFSC analysis concluded that there would be negligible changes in red \nsnapper catch levels under any of the reduction targets alternatives \n(63, 60, and 56 percent) considered in Amendment 18. Therefore, the \nCouncil determined, and NMFS agrees, that is appropriate to reduce the \nthreshold directly to 60 percent through this final rule.", "passage_polarity": "positive", "signals": [{"signal_text": "The Council initially considered an alternative that \nwould have phased-in the implementation of the target reduction", "signal_type": "observation", "polarity": "positive", "rubric_matches": [1, 3]}, {"signal_text": "the Council removed this alternative from further \nconsideration because Amendment 18 also modifies the framework procedure to allow a more streamlined approach to modify any \nfuture effort reduction goals", "signal_type": "observation", "polarity": "positive", "rubric_matches": [21, 15, 13]}, {"signal_text": "the SEFSC analysis concluded that there would be negligible changes in red \nsnapper catch levels under any of the reduction targets alternatives \n(63, 60, and 56 percent) considered in Amendment 18", "signal_type": "observation", "polarity": "positive", "rubric_matches": [1, 20, 70]}]}]}
+
+# Hard constraints (failures we have seen)
+
+1. **passage_text MUST be at least 50 chars** and MUST include the actual quality-judgment content, not just a section label. If a passage starts with "Strengths:", "Weaknesses:", "Pros:", "Cons:", etc., extend it to include the body text.
+
+2. **signal_text MUST be an exact substring of passage_text** — copy character-by-character, including punctuation, whitespace, and quotes. Do NOT paraphrase. If you can't find an exact span, skip that signal.
+
+3. **passage_text MUST be an exact substring of the Response to Comments section text** — copy character-by-character.
+
+   - Do NOT add or remove whitespace anywhere — preserve ALL spacing, newlines, and tabs exactly as they appear in the source.
+   - Do NOT add spaces between CJK characters (Chinese / Japanese / Korean) and adjacent Latin characters. If the source is `这个group`, your passage_text contains `这个group`, NOT `这个 group`.
+   - Do NOT collapse markdown separators like `---` or `===` or `***`. If the source contains `---` between two paragraphs, the separator MUST appear inside your passage_text verbatim.
+   - When in doubt, copy a slightly longer span — the snap-to-source post-processor handles minor cases but cannot recover from character substitutions.
+
+4. **JSON escaping (CRITICAL — this is the #1 cause of broken output)**: the text often contains LaTeX commands like `\bullet`, `\mathcal`, `\theta`, `\alpha`. Inside a JSON string, a single backslash `\` followed by certain letters IS A CONTROL CHARACTER, not a literal backslash. So:
+
+   - Source has: `\bullet` (literal) → JSON string MUST contain `\\bullet` (escaped). Writing `\bullet` will produce a backspace character (0x08) in the output, NOT the LaTeX command.
+   - Source has: `\mathcal{O}` → JSON MUST be `\\mathcal{O}`.
+   - Source has: `\theta_0` → JSON MUST be `\\theta_0`.
+   - Source has: `\n` (literal backslash + n) → JSON MUST be `\\n`. Don't use `\n` because that produces an actual newline.
+
+   Every literal backslash in the source MUST be doubled in your JSON output. There are NO exceptions. If you are unsure, double the backslash — over-escaping is fine, under-escaping breaks parsing.
+
+5. **HIGH RECALL on signals**: aim 3-10 per passage. Don't miss quality judgments.
+
+6. **Capture both criticism and praise.** Agency responses tilt heavily toward substantive defense of the regulation (responses argue WHY the rule is what it is). A smaller subset (~15-25%) explicitly critiques comment quality ('the commenter failed to consider X'). Capture both: norms invoked in agency reasoning AND norms applied to evaluate commenter arguments.
+
+7. **Empty rubric_matches `[]` is fine** — that signals a taxonomy gap, which is useful to surface.
+
+# Output format
+
+Output STRICT JSON on a SINGLE LINE. No markdown fences. No prose before or after. Schema:
+
+```
+{"unit_id": "<from input>", "passages": [
+  {"passage_text": "<exact substring of input, >=50 chars>",
+    "passage_polarity": "positive|negative|mixed",
+    "signals": [
+      {"signal_text": "<exact substring of passage_text>",
+        "signal_type": "complaint|praise|observation|suggestion",
+        "polarity": "positive|negative|neutral",
+        "rubric_matches": [<int>, ...]}
+    ]}
+]}
+```
+
+# Now process this Response to Comments section
+
+unit_id: EPA-R10-OAR-2023-0348-0090
+
+text:
+Comments and EPA Responses 
+III. Final Action 
+IV. Incorporation by Reference 
+V. Statutory and Executive Order Reviews 
+ 
+I. Background 
+In 1977, Congress established the national goal of preventing any future and remedying 
+any existing impairment of visibility in mandatory Class I Federal areas that results from 
+manmade (anthropogenic) air pollution.1 The Regional Haze Rule lays out the steps for States to 
+develop and implement plans to address this national visibility goal.2 States work in coordination 
+with the EPA, the Federal Land Managers, and other interested parties, through an iterative 
+process and series of implementation periods. 
+On July 25, 2022, the Alaska Department of Environmental Conservation (DEC) 
+submitted a regional haze State Implementation Plan revision (2022 regional haze SIP 
+ 
+1 Clean Air Act section 169A(a)(1). 
+2 40 CFR 51.308.
+
+<<PAGE 3>>
+PRE-PUBLICATION NOTICE. The EPA Region 10 Acting Regional Administrator, Daniel Opalski, signed the following final rule on 
+February 17, 2026, and the EPA is submitting it for publication in the Federal Register (FR). The EPA is providing this document solely for the 
+convenience of interested parties. This document is not disseminated for purposes of the EPA’s Information Quality Guidelines and does not 
+represent an Agency determination or policy. While we have taken steps to ensure the accuracy of this pre-publication version of the rule, it is not 
+the official version of the final rule for purposes of compliance or effectiveness. Please refer to the official version in a forthcoming FR 
+publication, which will appear on the Government Printing Office’s website at https://www.govinfo.gov/app/collection/fr and on the 
+Regulations.gov website at https://www.regulations.gov under Docket No. EPA-R10-OAR-2023-0348. Notwithstanding the fact that the EPA is 
+posting a pre-publication version, the final rule will not be promulgated until published in the Federal Register. 
+ 
+ 
+ 
+3 
+submission) to add
+
+Output rules:
+- Do NOT think aloud. Do NOT explain your reasoning.
+- Do NOT preface with "Let me", "The user", "First I'll", "The paper concerns", or any meta-text.
+- Do NOT summarize the input Response to Comments section. Skip the introduction. Go DIRECTLY to identifying quality-judgment passages.
+- Begin your response with the character `{` and end with `}`.
+- Output exactly ONE JSON object on ONE line. Nothing else before or after.

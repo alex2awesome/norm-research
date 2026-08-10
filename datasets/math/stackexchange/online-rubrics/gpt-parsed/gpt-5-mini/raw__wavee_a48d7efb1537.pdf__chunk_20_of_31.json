@@ -1,0 +1,161 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a48d7efb1537.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_a48d7efb1537.pdf",
+  "chunk_idx": 20,
+  "n_chunks": 31,
+  "chunk_chars": 39765,
+  "model": "gpt-5-mini",
+  "elapsed_s": 98.77224825000303,
+  "input_tokens": 13674,
+  "output_tokens": 4886,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Advanced LaTeX/PGF/TikZ users and package authors who need to use or extend the pgf mathematical engine and basic layer",
+    "subtask_short": "pgfmath engine usage and extension",
+    "subtask_description": "Documentation and design principles for using, extending, and interfacing with the pgf mathematical engine and the pgf basic layer (commands, naming conventions, parsing behavior, performance tips, and implementation-replacement guidance). Intended for developers writing pgf/TikZ code or reimplementing math operations.",
+    "subtask_keywords": [
+      "pgf",
+      "pgfmath",
+      "tikz",
+      "latex",
+      "math_engine",
+      "package_development"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Mathematical engine purpose",
+        "description": "pgf's mathematical engine supports mathematical operations like addition, subtraction, multiplication and division, using both integers and non-integers, but also functions such as square-roots, sine, cosine, and generate pseudo-random numbers.",
+        "guidance": "Mostly used indirectly (e.g., in coordinates such as (5cm*3,6cm/4)), but can be used independently of pgf/TikZ by loading the pgfmath package. It provides a parsing mechanism similar to the calc package and can be extended and enhanced."
+      },
+      {
+        "name": "Loading the mathematical engine",
+        "description": "If you want the mathematical engine but not pgf itself, load the package via \\usepackage{pgfmath} (LaTeX), \\input pgfmath.tex (plain TeX), or \\usemodule[pgfmath] (ConTeXt).",
+        "guidance": "This defines commands like \\pgfmathparse without loading the rest of pgf."
+      },
+      {
+        "name": "Engine layering: top/calculation/implementation",
+        "description": "The mathematical engine is structured into layers: (1) top layer (\\pgfmathparse and wrappers), (2) calculation layer (macros performing specific computations), and (3) implementation layer (actual implementations that can be replaced).",
+        "guidance": "You typically use the top layer. The implementation layer can be changed to improve accuracy/efficiency without affecting higher layers."
+      },
+      {
+        "name": "Accuracy, efficiency trade-off and + prefix to bypass parsing",
+        "description": "There is a trade-off between accuracy and efficiency because pgf's algorithms are implemented in TeX. When no mathematical operations are required, an expression can be preceded by + to bypass parsing and be much faster.",
+        "guidance": "This feature only works with the macros for setting registers (e.g., \\pgfmathsetlength). Example: \\pgfmathsetlength\\mydimen{1cm} (parsed, slower) vs \\pgfmathsetlength\\mydimen{+1cm} (not parsed, much faster)."
+      },
+      {
+        "name": "Range limits of calculations",
+        "description": "All calculations must not exceed \u00b116383.99999 at any point because the underlying algorithms rely on TeX dimensions.",
+        "guidance": "This imposes limitations on accuracy and range; some algorithms are therefore approximate and may be slow. If insufficient, replace algorithms in the implementation layer."
+      },
+      {
+        "name": "\\pgfmathparse result format and units handling",
+        "description": "\\pgfmathparse{expression} parses expression and returns the result without units in the macro \\pgfmathresult. Any units specified in the expression are converted to points first.",
+        "guidance": "The stored result is a decimal without units regardless of units in the expression. Use \\ifpgfmathunitsdeclared after a call to detect if any unit was encountered (true iff some unit was encountered)."
+      },
+      {
+        "name": "Scaling of unitless expressions by \\pgfmathresultunitscale",
+        "description": "If no units are specified anywhere in the parsed expression, the result is multiplied by the value in \\pgfmathresultunitscale (a number or a dimension converted to points). By default it is 1.",
+        "guidance": "Set with \\pgfmathsetresultunitscale. The result is still a number without units. This affects \\pgfmathsetlength and friends, but not when the expression starts with + (parsing switched off)."
+      },
+      {
+        "name": "Parser accepts registers and TEX token forms",
+        "description": "The parser can cope with TeX registers (including those preceded by \\the) and numbers with or without units regardless of the operation.",
+        "guidance": "Examples show using \\pgf@x and \\c@pgf@counta inside expressions. TeX dimension registers can be multiplied without * by preceding them with a number or a count register (e.g., .5\\pgf@x - \\c@pgf@counta\\pgf@x)."
+      },
+      {
+        "name": "Parentheses, functions, and scientific notation support",
+        "description": "Parentheses can be used to group operations; functions are recognized; scientific notation of the form 1.234e+4 is recognized (E or e).",
+        "guidance": "Most functions accept any expression as argument (e.g., sin(.5*pi r)*60). Scientific notation obeys the same \u00b116383.99999 range restriction."
+      },
+      {
+        "name": "Use \\pgfmathqparse for faster restricted parsing",
+        "description": "\\pgfmathqparse{expression} is like \\pgfmathparse but does not parse functions or scientific notation and numbers must specify a TeX unit (except e.g., 0.5\\pgf@x).",
+        "guidance": "Because of these restrictions, \\pgfmathqparse is about twice as fast as \\pgfmathparse. The result is still a number without units."
+      },
+      {
+        "name": "Wrapper commands for setting registers and + prefix behavior",
+        "description": "Wrapper commands (similar to calc) exist: \\pgfmathsetlength, \\pgfmathaddtolength, \\pgfmathsetcount, \\pgfmathaddtocount, \\pgfmathsetcounter, \\pgfmathaddtocounter, \\pgfmathsetmacro, \\pgfmathaddtocounter, etc.; if the expression starts with +, no parsing is done and a simple assignment/increment occurs using normal TeX operations.",
+        "guidance": "Using + is orders of magnitude faster than calling the parser. \\pgfmathsetmacro defines a macro as the value (decimal without units). \\pgfmathsetcount and related commands truncate values to integer when setting counts/counters."
+      },
+      {
+        "name": "Supported operators and functions",
+        "description": "The parser recognizes matlab-like infix operators and many functions: +, -, *, /, ^, comparisons (==, >, <), mod, max, min, abs, round, floor, ceil, exp, pow, sqrt, veclen, constants and trig functions (pi, r, rad, deg, sin, cos, tan, asin, acos, atan), rnd, rand, etc.",
+        "guidance": "Examples and numerical results provided. Note special semantics for r (convert radians to degrees when placed after expression), rad/deg conversions, and that ^/pow expect integer exponent (but can be negative)."
+      },
+      {
+        "name": "Equality/inequality evaluation semantics",
+        "description": "Equalities (and inequalities) are evaluated left to right and are only evaluated when another equality/inequality operator is scanned or the end of the current group/parse is reached.",
+        "guidance": "Example: 5+4==3+2==9 results in 0 because 5+4 != 3+2, producing zero, and then 0==9 is false."
+      },
+      {
+        "name": "Function nesting restrictions (mod/max/min/veclen)",
+        "description": "The functions mod, max, min and veclen cannot be nested inside themselves or inside each other in certain combinations (e.g., mod cannot be nested inside itself or the functions max, min or veclen).",
+        "guidance": "This limitation affects how complex expressions using these functions must be structured; avoid nested calls of these specific functions."
+      },
+      {
+        "name": "Rounding behavior (asymmetric half-up)",
+        "description": "round(x) uses 'asymmetric half-up' rounding: 1.5 -> 2, -1.5 -> -2 (not 0).",
+        "guidance": "Use round/floor/ceil according to the desired rounding semantics; examples provided."
+      },
+      {
+        "name": "Power operator exponent requirement",
+        "description": "For x^y and pow(x,y) the exponent y should be an integer, but it can be negative.",
+        "guidance": "Non-integer exponents are not expected; use pow with integer y for correct behavior."
+      },
+      {
+        "name": "Single-operation macros set \\pgfmathresult",
+        "description": "Macros like \\pgfmathadd, \\pgfmathsubtract, \\pgfmathmultiply, \\pgfmathdivide, \\pgfmathgreaterthan, \\pgfmathlessthan, \\pgfmathequalto, \\pgfmathround, \\pgfmathfloor, \\pgfmathceil, \\pgfmathpow, \\pgfmathmod, \\pgfmathmax, \\pgfmathmin, \\pgfmathabs, \\pgfmathreciprocal, \\pgfmathexp, \\pgfmathsqrt, \\pgfmathveclen define \\pgfmathresult as the numeric result of the single computation.",
+        "guidance": "These macros perform one specific computation and set \\pgfmathresult; they mirror the parser's operations and can be used directly when parsing overhead is undesirable."
+      },
+      {
+        "name": "Trigonometric single-operation macros and constants",
+        "description": "There are single-operation versions for trig functions (\\pgfmathpi, \\pgfmathdeg, \\pgfmathrad, \\pgfmathsin, \\pgfmathcos, \\pgfmathtan, \\pgfmathasin, \\pgfmathacos, \\pgfmathatan) which define \\pgfmathresult appropriately.",
+        "guidance": "\\pgfmathpi defines \\pgfmathresult as 3.14159; deg/rad convert between radians and degrees; trig results follow the parser's conventions (arcsin/arccos/arctan return degrees)."
+      },
+      {
+        "name": "Pseudo-random number facilities and seeding",
+        "description": "Random functions: \\pgfmathgeneratepseudorandomnumber (integer between 1 and 2^31-1), \\pgfmathrnd (0.0..1.0), \\pgfmathrand (-1.0..1.0), \\pgfmathrandominteger{\\macro}{max}{min} to define a random integer in inclusive range, \\pgfmathdeclarerandomlist and \\pgfmathrandomitem to select from named random lists; \\pgfmathsetseed{integer} to explicitly set the seed.",
+        "guidance": "The integer generator uses a linear congruency generator. Default seed is \\time\u00d7\\year. Examples show creating randomly placed circles and choosing colors from declared lists."
+      },
+      {
+        "name": "Conversion between bases: limitations and macros",
+        "description": "Base conversion supports positive integers 0..2^31\u22121 and bases 2..36. Alphabetic digits for >9 may be upper or lower case in input; several macros perform conversions: \\pgfmathbasetodec, \\pgfmathdectobase, \\pgfmathdectoBase, \\pgfmathbasetobase, \\pgfmathbasetoBase.",
+        "guidance": "Output alphabetic digits are lowercase or uppercase depending on the macro (e.g., \\pgfmathdectobase outputs lower case, \\pgfmathdectoBase upper case). Use \\pgfmathsetbasenumberlength to pad with leading zeros to a fixed digit length."
+      },
+      {
+        "name": "Implementation-replacement guidance for computations",
+        "description": "Operations/functions are implemented as: public interface \\pgfmath<function name> (arguments evaluated via \\pgfmathparse) and a non-public implementation \\pgfmath<function name>@ (expects numbers without units). To replace implementations, redefine the \\pgfmath<function name>@ macro to set \\pgfmathresult to the correct value and have no other side effects.",
+        "guidance": "Implementations should operate inside a TeX group and use \\pgfmath@returnone<macro> to return the result via \\aftergroup magic. Use the provided pgfmath registers (\\pgfmath@x, \\pgfmath@y, \\c@pgfmath@counta, etc.) for consistency and avoid changing global state."
+      },
+      {
+        "name": "Basic layer design principles (core + optional packages)",
+        "description": "The basic layer is structured into a core package pgfcore and several optional packages (pgfbaseshade, pgfbaseplot, pgfbaseshapes, pgfbasepatterns, pgfbaseimage, pgfbaselayers, pgfbasematrix, pgfbasesnakes, etc.).",
+        "guidance": "If you \\usepackage{pgf} or \\input pgf.tex all optional packages are loaded. For LaTeX users, graphicx is usually preferred over pgfbaseimage for including external images (use \\includegraphics normally unless masking or plain TeX is needed)."
+      },
+      {
+        "name": "Naming conventions in the basic layer",
+        "description": "Conventions: all commands/environments start with pgf; point-specifying commands start with \\pgfpoint; path-extending commands start with \\pgfpath; setting/changing graphics parameters start with \\pgfset; using declared objects starts with \\pgfuse; coordinate transformations start with \\pgftransform; arrow tip commands start with \\pgfarrows; quick path commands use \\pgfpathq or \\pgfusepathq; matrix commands start with \\pgfmatrix.",
+        "guidance": "Use these consistent prefixes when communicating with the basic layer via macros inside a {pgfpicture} environment. \\tikzpicture opens {pgfpicture} internally so mixing is allowed."
+      },
+      {
+        "name": "Path-centered approach to graphics",
+        "description": "In pgf the most important entity is the path: paths are constructed via \\pgfpath... commands and then used with \\pgfusepath to stroke, fill, shade, or clip.",
+        "guidance": "Paths can be closed or open, self-intersecting or composed of unconnected parts. Construct first, then use. \\pgfusepath takes parameters to decide stroke/fill/clip behavior."
+      },
+      {
+        "name": "Coordinate vs canvas transformations",
+        "description": "pgf provides two transformation systems: pgf's coordinate transformation matrix and the driver's canvas transformation matrix. Coordinate transformations scale coordinates but not line widths or text; canvas transformations scale everything including line widths and text.",
+        "guidance": "By default transformations apply to the coordinate system. Use \\pgflowlevel to apply a transformation to the canvas. Coordinate transformations are often preferable since canvas transforms can cause inconsistent text/line thickness and viewer differences."
+      },
+      {
+        "name": "Scoping and hierarchical structuring of graphics",
+        "description": "Graphics are structured hierarchically using environments and scopes: the outermost scope is {pgfpicture} (all state changes are local to that picture), and {pgfscope} provides local graphic-state changes inside a picture.",
+        "guidance": "You cannot generally set graphic parameters globally outside {pgfpicture}. Changes inside scopes are local; be aware that some scope mechanisms may interact or be in conflict, and scope effects may not always align with TeX groups."
+      }
+    ]
+  }
+}

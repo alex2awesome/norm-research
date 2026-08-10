@@ -1,0 +1,357 @@
+The user wants exactly 15 NEW quality-relevant criteria for abstracts of machine-learning conference papers.
+These criteria should help explain the disagreement between a DENSE model and a SCORECARD model on a slice of 60 abstracts.
+The constraints are:
+1. Don't ask for the scorecard bank. Propose what actually matters from the evidence.
+2. Label-blind (no acceptance, rejection, etc.).
+3. Scorable 0-10 with clear high/ low ends.
+4. Composite/interaction criteria allowed.
+5. Cite at least two row ids for each criterion.
+6. 15 distinct criteria.
+7. Output exactly one JSON object with `{"criteria": [{"id": "C01", "name": "...", "instruction": "...", "rationale": "..."}, ...]}`.
+
+Let's analyze the abstracts to see what makes some "dense_high_card_low" vs "dense_low_card_high".
+Dense high means dense sees high quality. Card low means scorecard sees low quality.
+Dense low means dense sees low quality. Card high means scorecard sees high quality.
+
+Let's look at some `dense_high_card_low` examples (R01, R03, R05, R06, R07, R09, R11, R15, R16, R17, R18, R20, R21, R22, R27, R30, R31, R35, R39, R40, R41, R42, R44, R45, R48, R49, R50, R51, R54, R60).
+Characteristics of dense_high_card_low:
+- R01: Abstractly frames a general prediction system, develops a framework, shows results across different datasets. (Conceptual depth, theoretical framework, general framework).
+- R03: Alternatives to stagewise training, proposes RAPTR, empirical focus, better pre-training loss, theoretical basis. (Addresses specific known limitations, provides theory + empirical results).
+- R05: Injecting knowledge into pre-trained models, K-Adapter, empirical + probing experiments. (Solves a specific problem well).
+- R07: LLaVA-Plus, training approach for multimodal agents, empirical results.
+- R09: Restless multi-armed bandits (RMAB) with preference signals. DOPL algorithm, sublinear regret, first algorithm. (Novel formulation of a theoretical problem with guarantees).
+- R15: Random masking of past tokens in LLMs, boosts performance without adding cost. (Simple, elegant insight).
+- R17: Value iteration networks for robot motion planning (SVIN). Early training results on Mars rover. (Real-world application, conceptual clarity).
+- R18: Visual learning in people (infants), proposes cluster-based metrics. (Interdisciplinary insight, novel evaluation).
+- R20: LODO, online meta-learning optimizer. Approximates inverse Hessian. Theory + experiments. (Theoretical grounding for a practical tool).
+- R21: Pre-trained models and real-world knowledge, zero-shot fact completion. (Clear insight, specific downstream tasks).
+- R30: Efficient neural architecture search, hierarchical genetic representation. (Strong engineering, algorithmic formulation).
+- R35: Comprehensive evaluation of LLMs, probabilistic evaluation framework. (Identifies a flaw in current evaluation, proposes a formal solution).
+- R39: Norm-bounding constraints, graph-based method to globally solve optimization. First algorithm for this class. (Strong theoretical contribution).
+- R42: Cryo-EM foundation model. Generative model for structural biology. (Impactful domain application).
+- R44: Multi-fidelity active learning with GFlowNets. (Clear problem formulation in a specialized domain).
+- R48: Multi-agent dual learning framework. New records. (Strong empirical results on standard tasks).
+- R49: Automated program repair, variable-misuse bugs, multi-headed pointer networks. (Focused problem, elegant solution).
+- R50: Neural interactive proofs, prover-verifier games. Unifying framework, theory + experiments. (Deep conceptual novelty).
+- R51: Self- and mutually-exciting point processes, neural network-based non-stationary influence kernel. (Theoretical guarantees + novel model).
+- R54: Speech tokens paralinguistic content, variational approach. (Identifies a clear gap, proposes a clean solution).
+- R60: Sparse benchmark for LLMs (metabench). Identifies underlying factors, very low RMSE. (Clear methodological contribution).
+
+Now let's look at some `dense_low_card_high` examples (R02, R04, R08, R10, R12, R13, R14, R19, R23, R24, R25, R26, R28, R29, R32, R33, R34, R36, R37, R38, R43, R46, R47, R52, R53, R55, R56, R57, R58, R59).
+Characteristics of dense_low_card_high:
+- R02: Face-Human-Bench. Collecting images, making a benchmark. (Dataset/benchmark paper, maybe lacks novel algorithmic insight).
+- R04: Numerical interpolation, NIERT. A bit dense writing, partial self-attention. (Maybe overcomplicated, focuses on specific metric improvements).
+- R08: Flat Hilbert Bayesian Inference (FHBI). VTAB-1K benchmark. Lots of buzzwords.
+- R10: Spectral clustering, SpectralNet. Old concept (VC dimension theory).
+- R12: HIVEX, environment suite for ecological challenges. (Dataset/environment paper).
+- R13: Evaluating open-ended text generation. PERSE, personalized story evaluation model. (Benchmark/dataset + minor model).
+- R14: Semantic Membership Inference Attack (SMIA). Incremental improvement in AUC.
+- R19: Node perturbation (NP) vs backpropagation. Directional derivatives. (Slow, biological inspiration but maybe not practically impactful).
+- R23: Referring Medical Image Sequence Segmentation. TPP baseline model. (Task definition + baseline).
+- R24: Generative model without an encoder. (Somewhat obscure motivation).
+- R25: Binder, training-free neural-symbolic framework. Relies heavily on GPT-3 Codex. (Maybe just clever prompting rather than a novel architecture).
+- R26: Range-Net for SVD. (Niche engineering).
+- R28: DP-SGD with public data. (Incremental algorithmic tweak).
+- R29: Goal-Conditioned Reinforced Supervised Learning. (Jargon-heavy).
+- R32: LIME (Less Is More for MLLM Evaluation). Benchmark refinement.
+- R33: MONeT, automatic framework for memory footprint. (Systems paper, incremental).
+- R34: System-level evaluation of object-hiding attacks in AD. (Evaluation/measurement study).
+- R36: SSPINNpose, self-supervised physics-informed neural network. (Domain application).
+- R37: Reverse alignment for LLMs. (Study of vulnerabilities, might be seen as a "whistleblower" paper rather than deep ML).
+- R38: PAR-AdvGAN. (Incremental attack method).
+- R43: GenSE, language model-based speech enhancement. (Combining existing things).
+- R46: Implicit Knowledge Learning (IKL) in long-tailed recognition. (Standard long-tailed paper).
+- R47: Random forests bootstrap rate > 1. (Very narrow empirical study on an old algorithm).
+- R52: GenNet, mobile network simulator. (Environment tool).
+- R53: Adversarial robustness for categorical input. (Niche theoretical paper).
+- R55: LoraHub. (Framework for combining LoRAs).
+- R56: CoPS (Cross-Task Experience Sharing). (Memory-based agent stuff).
+- R57: SAFARI, Semantic Field Subspace. (Heavy jargon, clustering embeddings).
+- R58: LLMs for theorem proving, subgoal-based demonstration learning + diffusion models. (Combining buzzwords).
+- R59: Brain signal to speech synthesis (CerebroVoice). (Dataset paper).
+
+What does the dense model like?
+1. Conceptual Unification or Abstraction: R01 (general prediction system), R50 (prover-verifier unifying framework).
+2. Theoretical guarantees linked to practical algorithms: R09 (sublinear regret), R20 (inverse Hessian), R39 (global optimal), R51 (performance guarantees).
+3. Elegance/Simplicity yielding high gains: R15 (random masking), R49 (joint localization and repair).
+4. Identification of a fundamental flaw in current evaluation paradigms: R35 (probabilistic eval), R60 (redundant benchmarks).
+5. Interdisciplinary transfer of principles: R18 (infant visual learning), R42 (structural biology foundation model).
+
+What does the dense model dislike (scorecard over-credits)?
+1. Benchmark/Environment/Dataset creation without profound algorithmic novelty: R02, R12, R13, R32, R34, R52, R59.
+2. Applying existing models to new domains as the primary contribution: R36, R43.
+3. Incremental tweaks wrapped in heavy jargon: R29, R38, R46, R56, R57, R58.
+4. Exploring narrow empirical variations of established methods: R47 (random forest bootstrap rate).
+5. Tool-building or wrappers around existing LLMs (R25 Binder with Codex, R55 LoraHub).
+
+Let's formalize these into 15 criteria:
+
+Criterion 1: Algorithmic Novelty vs. Data Provision
+Scorecard seems to reward benchmark/dataset papers (R02, R12, R32, R59) while dense penalizes them if they lack algorithmic innovation.
+Name: Novelty of Core Algorithm vs. Data
+Instruction: 10 = Introduces a fundamentally new algorithm, architectural component, or optimization method. 0 = Presents only a new dataset, benchmark, or wrapper tool without any novel mathematical or algorithmic formulation. (Score based purely on the algorithmic contribution described).
+Rationale: The dense model heavily penalizes abstracts that primarily introduce datasets or benchmarks (R02, R12, R59) while rewarding those that introduce new algorithmic paradigms (R01, R40). The scorecard seems to over-credit the mere existence of a new dataset.
+
+Criterion 2: Mathematical or Theoretical Grounding
+Dense likes theory + practice (R20, R39, R51), dislikes purely empirical heuristics (R46, R47).
+Name: Explicit Theoretical Guarantee or Insight
+Instruction: 10 = Provides formal mathematical proofs, theoretical bounds (e.g., regret bounds), or deep theoretical analysis supporting the method. 0 = Entirely empirical with no mention of underlying theoretical properties or mathematical guarantees.
+Rationale: Abstracts with explicit theoretical contributions (R09, R39) receive high dense scores, while purely empirical or narrow studies (R47, R56) receive low dense scores despite high scorecard ratings.
+
+Criterion 3: Conceptual Unification
+R01, R50
+Name: Conceptual Framework Unification
+Instruction: 10 = Proposes a highly generalizable conceptual framework that unifies previously distinct tasks or methods under a single mathematical/algorithmic philosophy. 0 = Addresses a very narrow, specific task with a bespoke solution lacking generalizable insight.
+Rationale: Dense highly values papers that introduce unifying perspectives (R01, R50), whereas the scorecard seems unable to perceive this abstract level of quality.
+
+Criterion 4: Identification of Fundamental Flaws in Existing Paradigms
+R35, R60
+Name: Paradigm-Limitation Identification
+Instruction: 10 = Clearly identifies a deep, previously unrecognized flaw in standard evaluation, training, or methodology, and proposes a principled solution. 0 = Makes standard incremental improvements without challenging the existing paradigm.
+Rationale: The dense model favors papers that rethink how we evaluate models or understand losses (R35, R60). The scorecard might miss the depth of this meta-level critique and over-credit standard setups.
+
+Criterion 5: Real-World/Scientific Domain Impact
+R42 (cryo-EM), R44 (drug discovery). (Wait, R36, R59 are domain papers but dense dislikes them. Why? Because R42/R44 introduce a general foundation model or active learning framework for the domain, while R36/R59 just apply existing nets or provide a dataset).
+Name: Domain-Integrated Methodological Innovation
+Instruction: 10 = Introduces a novel ML methodology specifically designed to solve a high-impact scientific problem where ML was previously lacking. 0 = Simply applies existing standard ML architectures to a domain dataset without methodological adaptation.
+Rationale: Dense rewards methodological innovations tailored to scientific domains (R42, R44), but penalizes domain papers that lack ML innovation (R36, R59). Scorecard seems to over-credit the domain itself.
+
+Criterion 6: Elegance and Simplicity
+R15 (random masking), R49 (joint model).
+Name: Parsimonious Methodological Elegance
+Instruction: 10 = Solves a complex problem using a surprisingly simple, elegant, and lightweight method (e.g., a simple training trick) that yields significant improvements. 0 = Relies on heavily complex, multi-stage architectures or excessive hyperparameter tuning to achieve results.
+Rationale: Dense values elegant, simple solutions (R15, R49), while the scorecard might over-credit complexity, as seen in dense_low_card_high abstracts like R58 and R57 which stack multiple complex concepts (diffusion models, semantic subspaces) with less elegance.
+
+Criterion 7: Over-Credit of Wrappers and Tool Assembly
+R25 (Binder/GPT-3), R55 (LoraHub)
+Name: Reliance on Pre-existing Closed Models
+Instruction: 10 = Develops and trains new models from scratch or fine-tunes them with fundamental architectural changes. 0 = Relies entirely on prompting or wrapping existing, pre-trained closed-source models (like GPT-4) without altering their fundamental architecture.
+Rationale: The dense model seems to penalize abstracts that primarily act as wrappers or prompt-based frameworks around existing LLMs (R25, R55), whereas the scorecard may over-credit the resulting task performance.
+
+Criterion 8: Clear Quantitative Baselines and State-of-the-Art (SOTA)
+R48 (sets new records), R49 (outperforms enumerative).
+Name: Definitive Quantitative Superiority
+Instruction: 10 = Demonstrates definitive, quantified superiority (e.g., setting new state-of-the-art records) over well-established baselines. 0 = Lacks quantitative comparisons, uses weak baselines, or shows only marginal, within-margin improvements.
+Rationale: The dense model favors abstracts that unambiguously establish state-of-the-art performance with clear numbers (R48, R21), whereas the scorecard seems to give high scores to abstracts lacking strong baselines (R52, R12).
+
+Criterion 9: Over-reliance on Jargon over Clarity
+R57 (Semantic Field Subspace), R58, R29.
+Name: Lexical Obfuscation vs. Clarity
+Instruction: 10 = Uses clear, standard terminology and explains novel concepts intuitively. 0 = Relies heavily on dense, proprietary jargon, or excessively complex phrasing that obscures the actual mechanism.
+Rationale: Dense low score abstracts often stack buzzwords or complex phrasing (e.g., "Semantic Field Subspace" R57, "pessimism-based strategy" R56) which the scorecard might misinterpret as sophistication, while dense rewards clarity (R15, R49).
+
+Criterion 10: Interdisciplinary Cognitive/Biological Plausibility
+R18 (infant learning), R19 (node perturbation/biological learning - wait, R19 is dense_low. But R18 is dense_high. R19 is dense_low because it's just testing node perturbation and approaching BP, not a deep novel framework).
+Name: Cognitive/Scientific Principle Extraction
+Instruction: 10 = Extracts a general ML principle from a deep interdisciplinary analogy (e.g., cognitive science, physics) that yields a novel algorithm. 0 = Uses biological or physical inspiration merely as a superficial buzzword without a rigorous mapping to the algorithm.
+Rationale: Dense values deep interdisciplinary transfer, such as taking inspiration from infant visual learning to propose new metrics (R18), but penalizes biological analogies that fail to lead to superior practical ML (R19).
+
+Criterion 11: Over-crediting of Environment/System Engineering
+R33 (MONeT), R52 (GenNet simulator).
+Name: Framework vs. Systems Engineering
+Instruction: 10 = Proposes a new learning algorithm, theoretical framework, or mathematical model. 0 = Focuses primarily on systems engineering, software libraries, checkpointing schedules, or simulation environments without new learning algorithms.
+Rationale: Dense heavily penalizes pure systems engineering or environment creation (R33, R52, R12) which the scorecard seems to rate highly due to surface-level utility or thoroughness.
+
+Criterion 12: Generalizability of the Proposed Technique
+R03 (RAPTR applies to BERT and UL2), R40 (MQL for standard continuous-control).
+Name: Cross-Domain Generalizability of Method
+Instruction: 10 = The proposed method is explicitly shown to generalize across fundamentally different domains, architectures, or task types. 0 = The method is hyper-specific to a single narrow dataset or architecture.
+Rationale: Dense favors methods that prove their utility across multiple distinct domains or models (R03, R05), while scorecard seems to miss the value of this cross-domain validation, rewarding narrow or isolated setups (R47, R59).
+
+Criterion 13: Focus on Representation Learning vs. Task-Specific Hacks
+R54 (variational approach for paralinguistic features), R45 (feature merging strategy).
+Name: Fundamental Representation Learning
+Instruction: 10 = Improves the core underlying representation learning mechanism of a model (e.g., latent space structuring, embedding quality). 0 = Uses task-specific architectural hacks or post-processing steps that do not improve the fundamental representation.
+Rationale: Dense highly rates abstracts that improve how models represent data fundamentally (R54, R45), while dense_low_card_high papers often rely on task-specific engineering (R46, R53) which the scorecard over-credits.
+
+Criterion 14: Over-crediting of Incremental Empirical Tweaks
+R47 (bootstrap rate in Random Forests), R38 (PAR-AdvGAN).
+Name: Algorithmic Step-Change vs. Incremental Tuning
+Instruction: 10 = Represents a significant step-change in methodology (e.g., a new paradigm, a 10x speedup, or a completely new objective function). 0 = Represents incremental hyperparameter tuning or minor modifications to existing architectures.
+Rationale: Dense penalizes papers that make very narrow empirical adjustments, such as changing the bootstrap rate in random forests (R47) or adding auto-regression to GANs (R38), whereas the scorecard seems to over-credit these as valid contributions.
+
+Criterion 15: Novel Problem Formulation
+R09 (RMAB with preference signals), R50 (neural interactive proofs).
+Name: Novel Formal Problem Formulation
+Instruction: 10 = Mathematically formulates a completely new problem or reformulates an existing problem in a transformative way. 0 = Addresses an already heavily studied, standard problem using standard formulations.
+Rationale: The dense model places high value on the formal introduction of new problems or objective functions (R09, R50), a property the scorecard seems to miss, favoring instead papers that apply standard formulations to new data (R02, R13).
+
+Let's review the required format and constraints:
+- Exactly 15 NEW quality-relevant criteria.
+- Label-blind (No acceptance/rejection/scores).
+- Scorable 0-10 with high/low ends.
+- Composite allowed.
+- Cite >= 2 row ids in rationale.
+- Distinct ideas.
+- JSON format.
+
+Let's refine the criteria to make the instructions very clear and the 0-10 scoring explicit.
+
+C01: Algorithmic Novelty vs. Data Provision
+Instruction: Score 10 if the abstract introduces a fundamentally new algorithm, mathematical formulation, or model architecture. Score 0 if it only provides a new dataset, benchmark, or empirical study without algorithmic innovation.
+Rationale: The dense model rewards algorithmic breakthroughs (R01, R40) but penalizes pure dataset/benchmark creation (R02, R12) which the scorecard seems to over-credit.
+
+C02: Explicit Theoretical Guarantees
+Instruction: Score 10 if the paper provides formal mathematical proofs, regret bounds, or theoretical guarantees. Score 0 if it is purely empirical with zero theoretical grounding.
+Rationale: Dense favors theory-backed methods (R09, R39), while scorecard gives high scores to purely heuristic or empirical tweaks (R47, R56) that lack such guarantees.
+
+C03: Conceptual Framework Unification
+Instruction: Score 10 if the work unifies previously disjoint tasks or methodologies into a single, elegant conceptual framework. Score 0 if it addresses a hyper-specific problem with a bespoke, non-generalizable solution.
+Rationale: Abstracts that introduce unifying perspectives score highly under the dense model (R01, R50), a property the scorecard misses.
+
+C04: Paradigm-Limitation Identification
+Instruction: Score 10 if the abstract identifies a fundamental flaw in standard ML evaluation or methodology and proposes a principled fix. Score 0 if it applies standard paradigms without meta-level critique.
+Rationale: Dense highly values papers that rethink how we evaluate models (R35, R60), whereas the scorecard fails to perceive this depth of contribution.
+
+C05: Domain-Integrated Methodological Innovation
+Instruction: Score 10 if a novel ML algorithm is explicitly designed to solve a high-impact scientific problem where standard ML fails. Score 0 if existing standard ML architectures are simply applied to a new domain dataset.
+Rationale: Dense rewards methodological innovations tailored to scientific domains (R42, R44) but penalizes papers that just apply standard nets to new data (R36, R59); the scorecard over-credits the domain itself.
+
+C06: Parsimonious Methodological Elegance
+Instruction: Score 10 if a complex problem is solved with a surprisingly simple, lightweight modification (e.g., a training trick) yielding strong results. Score 0 if results rely heavily on overly complex, multi-stage architectures or brute-force tuning.
+Rationale: The dense model values elegant solutions (R15, R49), while the scorecard over-credits unnecessary complexity and jargon-heavy multi-model stacking (R57, R58).
+
+C07: Reliance on Pre-existing Closed Models
+Instruction: Score 10 if the paper develops and trains new models from scratch or via fundamental architectural changes. Score 0 if it relies entirely on prompting or wrapping pre-existing closed-source models.
+Rationale: Dense penalizes abstracts that primarily act as wrappers around existing LLMs (R25, R55), whereas the scorecard may over-credit the downstream task performance.
+
+C08: Definitive Quantitative Superiority
+Instruction: Score 10 if the abstract reports definitive, large-margin improvements or sets new state-of-the-art records. Score 0 if it shows only marginal, within-margin improvements or lacks proper baselines.
+Rationale: Dense favors unambiguous quantitative superiority (R48, R21), while the scorecard gives high scores to abstracts lacking strong baselines or clear improvements (R52, R12).
+
+C09: Lexical Obfuscation vs. Clarity
+Instruction: Score 10 if standard terminology is used and novel concepts are explained intuitively. Score 0 if the text relies on excessive proprietary jargon or convoluted phrasing that obscures the mechanism.
+Rationale: Dense rewards clarity (R15, R49), whereas abstracts stacking buzzwords (e.g., "Semantic Field Subspace" R57, "pessimism-based strategy" R56) seem to trick the scorecard into assigning high scores.
+
+C10: Cognitive/Scientific Principle Extraction
+Instruction: Score 10 if a general ML principle is extracted from a deep interdisciplinary analogy (e.g., cognitive science). Score 0 if biological or physical inspiration is used merely as a superficial buzzword.
+Rationale: Dense values deep interdisciplinary transfer, like taking inspiration from infant learning to propose new metrics (R18), but penalizes biological analogies that fail to yield practical ML advances (R19).
+
+C11: Framework vs. Systems Engineering
+Instruction: Score 10 if the core contribution is a new learning algorithm, theoretical framework, or mathematical model. Score 0 if the focus is primarily on systems engineering, software libraries, or simulation environments.
+Rationale: Dense heavily penalizes pure systems engineering or environment creation (R33, R52), which the scorecard rates highly due to surface-level thoroughness.
+
+C12: Cross-Domain Generalizability of Method
+Instruction: Score 10 if the proposed method is explicitly shown to generalize across fundamentally different domains, architectures, or datasets. Score 0 if the method is hyper-specific to a single narrow task.
+Rationale: Dense favors methods proving utility across multiple distinct domains (R03, R05), while the scorecard misses this value, rewarding narrow setups (R47, R59).
+
+C13: Fundamental Representation Learning vs. Task-Specific Hacks
+Instruction: Score 10 if the method improves the core underlying representation learning mechanism (e.g., latent space structuring). Score 0 if it relies on task-specific architectural hacks or post-processing.
+Rationale: Dense rates abstracts that fundamentally improve data representation highly (R54, R45), while dense_low_card_high papers rely on task-specific engineering (R46, R53) that the scorecard over-credits.
+
+C14: Algorithmic Step-Change vs. Incremental Tuning
+Instruction: Score 10 if the contribution represents a significant step-change in methodology. Score 0 if it represents incremental hyperparameter tuning or minor modifications to existing algorithms.
+Rationale: Dense penalizes papers making very narrow empirical adjustments (R47, R38), whereas the scorecard seems to over-credit them as valid contributions.
+
+C15: Novel Formal Problem Formulation
+Instruction: Score 10 if the paper mathematically formulates a completely new problem or reformulates an existing problem in a transformative way. Score 0 if it addresses a heavily studied, standard problem.
+Rationale: Dense highly values the formal introduction of new problems (R09, R50), a property the scorecard misses, favoring instead papers that apply standard formulations to new data (R02, R13).
+
+Let's double check if all are distinct.
+C01: Novelty vs Data Provision
+C02: Theory
+C03: Unification
+C04: Meta-evaluation / Paradigm shift
+C05: Domain impact (with algorithmic novelty constraint)
+C06: Simplicity / Elegance
+C07: Wrappers vs from-scratch
+C08: Quantitative superiority (SOTA)
+C09: Jargon / Clarity
+C10: Interdisciplinary transfer
+C11: Systems engineering vs Algorithmic
+C12: Cross-domain generalization
+C13: Rep learning vs task hacks
+C14: Step-change vs incremental
+C15: Problem formulation
+
+These are definitely 15 distinct criteria, all focused on research quality as perceived from abstract text. They address the gap between the scorecard (which misses deep conceptual things and rewards surface features) and the dense model (which likes theory, novelty, elegance, clear problem formulation, and dislikes incremental tweaks, datasets, wrappers, and systems engineering).
+
+Let's check row IDs.
+C01: R01, R40 / R02, R12
+C02: R09, R39 / R47, R56
+C03: R01, R50 (Wait, what is dense_low for C03? Scorecard over-credits... I just need to cite 2 row ids that motivate the criterion. I don't necessarily need 1 high and 1 low, but contrasting them makes sense. "Dense rewards X (R01, R40) but scorecard over-credits Y (R02, R12)." This cites >= 2 row ids.)
+C04: R35, R60
+C05: R42, R44 / R36, R59
+C06: R15, R49 / R57, R58
+C07: R25, R55
+C08: R48, R21 / R52, R12
+C09: R15, R49 / R57, R56
+C10: R18 / R19
+C11: R33, R52
+C12: R03, R05 / R47, R59
+C13: R54, R45 / R46, R53
+C14: R47, R38
+C15: R09, R50 / R02, R13
+
+Wait, C03 doesn't explicitly list the dense_low ones in the rationale, let's add them for clarity: "The dense model heavily rewards abstracts that introduce unifying perspectives (R01, R50) but the scorecard misses this, instead over-crediting narrow, bespoke solutions (R10, R38)." That's fine.
+
+Let's check C08: Dense favors unambiguous quantitative superiority (R48, R21), while scorecard seems to over-credit abstracts lacking strong baselines (R52, R12).
+
+Let's check C14: Dense heavily penalizes papers making very narrow empirical adjustments (R47, R38), whereas the scorecard over-credits them as valid contributions.
+
+Make sure instructions are clear on 0 vs 10.
+C01: "Score 10 if the abstract introduces a fundamentally new algorithm... Score 0 if it only provides a new dataset..."
+C02: "Score 10 if the paper provides formal mathematical proofs... Score 0 if it is purely empirical..."
+All instructions specify the 10 and 0.
+
+Make sure there are no references to venue, acceptance, reviewer scores, etc. in criteria. None. Just properties of the abstract.
+
+Output MUST be a single JSON object.
+Keys: id, name, instruction, rationale.
+
+```json
+{
+  "criteria": [
+    {
+      "id": "C01",
+      "name": "Algorithmic Novelty vs. Data Provision",
+      "instruction": "Score 10 if the abstract introduces a fundamentally new algorithm, mathematical formulation, or model architecture as its primary contribution. Score 0 if it only provides a new dataset, benchmark, or empirical study without algorithmic innovation.",
+      "rationale": "The dense model rewards algorithmic breakthroughs (R01, R40) but penalizes pure dataset/benchmark creation (R02, R12) which the scorecard seems to over-credit."
+    },
+    ...
+  ]
+}
+```
+
+Ensure no markdown outside the JSON. The prompt says "Emit exactly one JSON object and nothing else: {"criteria": [ ... ]}". So I will just output the JSON string.
+
+Check exactly 15 entries.
+1. Algorithmic Novelty vs. Data Provision
+2. Explicit Theoretical Guarantees
+3. Conceptual Framework Unification
+4. Paradigm-Limitation Identification
+5. Domain-Integrated Methodological Innovation
+6. Parsimonious Methodological Elegance
+7. Reliance on Pre-existing Closed Models
+8. Definitive Quantitative Superiority
+9. Lexical Obfuscation vs. Clarity
+10. Cognitive/Scientific Principle Extraction
+11. Framework vs. Systems Engineering
+12. Cross-Domain Generalizability
+13. Fundamental Representation Learning
+14. Algorithmic Step-Change vs. Incremental Tuning
+15. Novel Formal Problem Formulation
+
+Looks solid. I'll construct the JSON exactly as required.
+
+Names are <= 12 words:
+1. Algorithmic Novelty vs. Data Provision (5 words)
+2. Explicit Theoretical Guarantees (3 words)
+3. Conceptual Framework Unification (3 words)
+4. Paradigm-Limitation Identification (2 words)
+5. Domain-Integrated Methodological Innovation (3 words)
+6. Parsimonious Methodological Elegance (3 words)
+7. Reliance on Pre-existing Closed Models (5 words)
+8. Definitive Quantitative Superiority (3 words)
+9. Lexical Obfuscation vs. Clarity (4 words)
+10. Cognitive/Scientific Principle Extraction (3 words)
+11. Framework vs. Systems Engineering (4 words)
+12. Cross-Domain Generalizability of Method (4 words)
+13. Fundamental Representation Learning (3 words)
+14. Algorithmic Step-Change vs. Incremental Tuning (5 words)
+15. Novel Formal Problem Formulation (4 words)
+
+Instructions clearly define a 0 and a 10.
+Rationale has >= 2 row ids.
+
+Everything looks ready.

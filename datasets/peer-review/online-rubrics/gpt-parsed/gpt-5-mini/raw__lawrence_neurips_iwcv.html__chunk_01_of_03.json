@@ -1,0 +1,151 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/lawrence_neurips_iwcv.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "lawrence_neurips_iwcv.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39985,
+  "model": "gpt-5-mini",
+  "elapsed_s": 44.85634495799968,
+  "input_tokens": 12684,
+  "output_tokens": 4353,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference organizers/program chairs, researchers studying peer review, and reviewers interested in calibration (NeurIPS community)",
+    "subtask_short": "conference_review_calibration",
+    "subtask_description": "Analysis and practical methods for modelling, calibrating, and evaluating conference peer review (NeurIPS-style). Includes Bayesian Dirichlet analysis of decision outcomes, a reviewer calibration GP model, Monte Carlo simulations, and diagnostics for reviewing pipelines.",
+    "subtask_keywords": [
+      "peer_review",
+      "conference",
+      "calibration",
+      "bayesian",
+      "neurips2014",
+      "review_bias"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Posterior probabilities of decision outcomes (consistent accept / inconsistent / consistent reject)",
+        "description": "Compute the posterior over the three outcome categories using a Dirichlet posterior: p | k, alpha ~ Dir(alpha + k). The posterior mean per outcome is (alpha_i + k_i) / sum_j(alpha_j + k_j) and variance formula is provided.",
+        "guidance": "Use Dirichlet posterior with chosen prior alpha (uninformative prior used in the note). Report means and variances (e.g. display as m[i] +/- 2*sqrt(v[i])). Compare to a random-committee baseline (e.g. random selection probabilities)."
+      },
+      {
+        "name": "Accept precision (AP)",
+        "description": "Accept precision computed from posterior samples as ap = 2*k[:,0] / (2*k[:,0] + k[:,1]) where k[:,0] is consistent accept and k[:,1] inconsistent decisions.",
+        "guidance": "Sample from posterior (Monte Carlo from Dirichlet(alpha + k)) and compute mean and variance; include error bars (\u00b12*std). Note the factor of 2 because inconsistent decisions are accounted for across both committees."
+      },
+      {
+        "name": "Reject precision (RP)",
+        "description": "Reject precision computed from posterior samples as rp = 2*k[:,2] / (k[:,1] + 2*k[:,2]) where k[:,2] is consistent reject and k[:,1] inconsistent.",
+        "guidance": "Estimate via Monte Carlo sampling from Dirichlet; report mean \u00b12*std. Compare to random-committee expectation (e.g. 3/4 for reject precision in random baseline)."
+      },
+      {
+        "name": "Agreed accept rate (agreed accept fraction)",
+        "description": "Agreed accept rate computed from samples as aa = k[:,0] / (k[:,0] + k[:,2]) (fraction of accepted-vs-rejected outcomes that are accepted consistently).",
+        "guidance": "Estimate with Monte Carlo sampling; report mean \u00b12*std. Optionally compute medians and percentiles; histogram results to check symmetry of densities."
+      },
+      {
+        "name": "Use of uninformative Dirichlet prior and sensitivity to prior",
+        "description": "The analysis uses an uninformative prior (alpha = ones) for the Dirichlet posterior, but acknowledges that different priors could reflect process knowledge (e.g. expectation of more rejects).",
+        "guidance": "Perform sensitivity analysis on prior choices if modeling process-specific structure; if modeling the decision process rather than just sampling uncertainty, incorporate additional information into the prior."
+      },
+      {
+        "name": "Monte Carlo estimation and histogram checks",
+        "description": "Use Monte Carlo sampling from the posterior distribution to estimate derived statistics (accept/reject precisions, agreed accept rate) and produce histograms to ensure error bars reflect underlying densities.",
+        "guidance": "Draw many samples (e.g. 10k), compute statistics for each sample, and produce histograms with lines for random-committee reference values; if densities are symmetric medians/percentiles will be similar to means."
+      },
+      {
+        "name": "Reviewer calibration model (y_ij = f_i + b_j + \u03b5_ij)",
+        "description": "Model each review score as y_{i,j} = f_i + b_j + \u03b5_{i,j}, where f_i is paper objective quality, b_j is reviewer offset, and \u03b5_{i,j} is subjective noise.",
+        "guidance": "Assume f_i, b_j, and \u03b5_{i,j} are random variables with specified normal priors to reduce parameter count; use this decomposition to estimate bias-corrected paper scores and reviewer biases."
+      },
+      {
+        "name": "Assume subjective noise \u03b5_{i,j} ~ N(0, \u03c3^2)",
+        "description": "Model reviewer-specific subjective residuals as independent normal noise with variance \u03c3^2 to reduce parameter dimensionality.",
+        "guidance": "This reduces free parameters and leads to a Gaussian marginal model for stacked scores; \u03c3^2 is a key hyperparameter to be estimated (or grid-searched)."
+      },
+      {
+        "name": "Assume paper qualities f_i ~ N(\u03bc, \u03b1_f)",
+        "description": "Model underlying objective qualities as Normal with mean \u03bc and variance \u03b1_f.",
+        "guidance": "Set \u03bc to the mean of all scores (maximum-likelihood solution) and treat \u03b1_f as a scale parameter to be optimized (closed-form update provided)."
+      },
+      {
+        "name": "Assume reviewer offsets b_j ~ N(0, \u03b1_b)",
+        "description": "Model reviewer offsets as zero-mean Normal with variance \u03b1_b, reducing parameters and enabling pooling across reviewers.",
+        "guidance": "Reparameterize in terms of ratios hat{\u03b1}_b = \u03b1_b / \u03b1_f and hat{\u03c3}^2 = \u03c3^2 / \u03b1_f; explore these two ratios on a grid and optimize \u03b1_f for each choice."
+      },
+      {
+        "name": "Reparameterization and optimization strategy (optimize \u03b1_f, grid over ratios)",
+        "description": "Reparameterize covariance k(i,j;k,l) = \u03b1_f(\u03b4_{i,k} + \u03b4_{j,l} * hat{\u03b1}_b + \u03b4_{i,k}\u03b4_{j,l} * hat{\u03c3}^2) so that \u03b1_f can be optimized directly and the remaining uncertainty is in two ratios.",
+        "guidance": "For each grid point of hat{\u03b1}_b and hat{\u03c3}^2 optimize \u03b1_f via \u03b1_f = (1/|y|) y^T hat{K}^{-1} y; evaluate likelihood on the grid to choose parameters."
+      },
+      {
+        "name": "Practical model fitting using GPy (GP regression)",
+        "description": "Construct covariance matrices K_f (paper-linear kernel) and K_b (reviewer-linear kernel) and fit a GP regression model with GPy to find maximum likelihood parameter values (sum.K_f.variances, sum.K_b.variances, Gaussian_noise.variance).",
+        "guidance": "Use tokenized PaperID and Email to create X1 and X2 one-hot matrices, join them into X, build kernels, and call model.optimize(). Inspect model parameters and log-likelihood; you can also construct K explicitly without GPy and compute K^{-1}, logdet, etc."
+      },
+      {
+        "name": "Compute bias-corrected paper scores and covariances",
+        "description": "Compute s (mean bias-corrected quality scores) and covs (posterior covariance of scores) using K_s = K_f + \u03c3^2 I and standard GP posterior formulas: s = K_s * alpha + \u03bc, covs = \u03b1_f * (K_s - K_s K^{-1} K_s).",
+        "guidance": "Use these to predict corrected scores for papers and to sample jointly from the posterior distribution of paper qualities for downstream Monte Carlo acceptance simulations."
+      },
+      {
+        "name": "Monte Carlo simulation for acceptance probabilities",
+        "description": "Sample joint bias-adjusted scores from multivariate normal (mean s, cov covs) multiple times, rank sampled scores, accept top-N (e.g. top 420), and compute the empirical probability each paper is accepted.",
+        "guidance": "Run many samples (e.g. 1,000) to estimate AcceptProbability for each paper; use results to define grey-area papers and to compute expected number accepted."
+      },
+      {
+        "name": "Define grey-area by probabilistic thresholds",
+        "description": "Define a 'grey area' of papers whose accept-probability lies between lower and upper thresholds (example lower = 0.1, upper = 0.9) representing papers debated most during teleconferences.",
+        "guidance": "Count number of papers in grey area and use this set to focus discussion between program chairs and area chairs; choose thresholds based on operational preferences."
+      },
+      {
+        "name": "Laplace smoothing of accept probabilities before merging",
+        "description": "Apply a small smoothing adjustment to empirical accept probabilities (e.g. (prob_accept + 0.0002)/1.001) to avoid exact zeros or ones before joining with other data.",
+        "guidance": "Prevents degenerate 0/1 probabilities in downstream analyses (e.g., joins, logs)."
+      },
+      {
+        "name": "Sanity checks and diagnostic plots",
+        "description": "Produce histograms and scatter plots such as calibrated reviewer scores histogram, raw score vs log-odds of accept, calibrated vs original scores scatter, and review bias histograms to validate model behavior.",
+        "guidance": "Use visual diagnostics to ensure no unexpected artifacts (e.g., check calibrated scores distribution, reviewer bias magnitudes). Save figures for reporting and sanity checking."
+      },
+      {
+        "name": "Compute reviewer bias posterior and export adjustments",
+        "description": "Compute posterior mean and standard deviation of reviewer offsets b and aggregate per-reviewer bias scores (ReviewerBiasMean and ReviewerBiasStd); optionally export to CMT-compatible CSV format for use.",
+        "guidance": "Use K_b and covb formulas to compute b and covb; map back to reviewer emails and export. Include Impact Score and Confidence columns if required by downstream workflow."
+      },
+      {
+        "name": "Simulate conference with subjective/objective decomposition",
+        "description": "Simulate many papers with an objective score component and subjective reviewer noise component (e.g. subjectivity_portion=0.5) to study how accept rate and number of reviewers affect consistent acceptance.",
+        "guidance": "Vary number_of_reviewers and accept_rate, draw samples for objective and subjective parts, compute consistent_accept fraction across two independent committees; use large samples (e.g. 100k) for stable estimates."
+      },
+      {
+        "name": "Measure correlations for duplicate papers across committees",
+        "description": "For duplicate submissions evaluated by two independent committees, compute correlation coefficients for quality, calibrated quality, impact, and confidence (e.g., quality_cor = corrcoef(quality.T)[0,1]).",
+        "guidance": "Report correlation values and visualize with jittered scatter plots to understand inter-committee agreement and the effect of calibration on correlations."
+      },
+      {
+        "name": "Track final fate of rejected papers (outlet mapping)",
+        "description": "Search for rejected papers (e.g., via Semantic Scholar) to determine later publication venues and produce Sankey diagrams showing flow from NeurIPS submission to eventual publication.",
+        "guidance": "Be aware of temporal/deadline biases (venues with deadlines soon after NeurIPS decisions will be overrepresented). Use mapping files to normalize outlet names and report counts per venue."
+      },
+      {
+        "name": "Correlation between quality/impact/confidence and long-term citations",
+        "description": "Compute bootstrap estimates of correlations between average_quality, average_impact, average_confidence and log10(1+citations) for accepted and rejected papers separately; add differential privacy noise to plots while computing correlations on raw data.",
+        "guidance": "Bootstrap (e.g., 1000 resamples) to estimate mean correlation and \u00b12*std; separate accepted and rejected groups to avoid selection bias (conference acceptance may itself increase citations)."
+      },
+      {
+        "name": "Distinguish sensitivity analysis from full process modeling",
+        "description": "Be explicit whether the exercise is a sensitivity analysis (minimal modeling choices, e.g. uninformative priors) or a full model of decision-making (which should leverage more information about the process).",
+        "guidance": "If modeling the full decision process, incorporate relevant structural information (e.g., accept rates, expected asymmetry between accepts/rejects, possible collusion) rather than relying solely on uninformative priors."
+      },
+      {
+        "name": "Compute log-likelihood and negative log-likelihood diagnostics",
+        "description": "Compute negative log-likelihood of the multivariate Gaussian model with covariance K and mean zero after removing data mean; use expressions involving logdet and quadratic form y^T K^{-1} y to evaluate model fit.",
+        "guidance": "Use these values to compare parameter choices on the grid; report numerical optimization outputs (e.g., GPy Objective and Parameters) to support reproducibility."
+      }
+    ]
+  }
+}

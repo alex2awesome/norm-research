@@ -1,0 +1,111 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 19,
+  "n_chunks": 42,
+  "chunk_chars": 39621,
+  "model": "gpt-5-mini",
+  "elapsed_s": 119.8560451250014,
+  "input_tokens": 15442,
+  "output_tokens": 4134,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "plain TeX users / typesetters learning table and alignment techniques",
+    "subtask_short": "typesetting tables and alignment in TeX",
+    "subtask_description": "Guidance and rules for producing tabbed and templated alignments (\\settabs/\\+ and \\halign) in plain TeX, including spacing, templates, tabskip glue, and pitfalls with macro expansion and large tables.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "tables",
+      "alignment",
+      "halign",
+      "settabs"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "\\special usage and portability",
+        "description": "The (token list) in a \\special command should consist of a key-word followed if necessary by a space and appropriate arguments; TeX simply copies the list to the output and does not check its semantics.",
+        "guidance": "Keep the token list short (avoid overflowing TeX's string memory). \\special operations should never change the current position because DVI-to-output programs should be able to fail gracefully when they don't recognize the special keywords. Expect that \\special functions are extensions and therefore nonportable across output devices; anticipate standards may emerge but don't rely on them."
+      },
+      {
+        "name": "Check box badness",
+        "description": "TeX reports the badness of glue setting in a box via the numeric quantity \\badness after making a box.",
+        "guidance": "Badness ranges from 0 to 10000; overfull boxes set \\badness=1000000. Use \\ifnum\\badness>\u3008threshold\u3009 ... \\fi to detect poor line/box setting and take corrective action (example given: replace one line by another if badness > 250)."
+      },
+      {
+        "name": "Using \\settabs and \\+ to create equal columns",
+        "description": "After \\settabs n \\columns, plain TeX divides each \\+ line into n equal-size columns; each line uses \\+ ... & ... \\cr, with the first entry starting at the left margin.",
+        "guidance": "Understand that '&' acts like a tab: it backs up to the beginning of the current column before advancing to the next, so the number of &'s tells you which column you reach. Spaces after '&' are ignored; spaces after \\+ are ignored as well. Each alignment entry is implicitly enclosed in braces, so local changes (e.g., \\it) affect only that entry. Tabs remain set until reset; enclosing \\settabs in a group confines them locally; \\global\\settabs is not permitted."
+      },
+      {
+        "name": "Setting tabs with a sample line",
+        "description": "You can supply a sample line immediately after \\settabs by writing \\+{sample line}\\cr; tabs are placed at the &'s in the sample and the sample line does not appear in the output.",
+        "guidance": "Construct the sample line from the widest entries in each column (omit the last column); include extra space between columns so they won't touch. A sample line may end with '&' if desired."
+      },
+      {
+        "name": "Right-justifying and centering in tabbed columns (\\hfill / \\hss)",
+        "description": "To put something flush right in its column type \\hfill before it and '&' after it; to center put \\hfill before and \\hfill& after it. The \\+ macro puts each entry into an \\hbox to (column width){(text)\\hss}.",
+        "guidance": "\\hss causes normal left alignment with shrinkability; \\hfill stretches more than \\hss and is used to right-justify or center. \\hfill does not shrink while \\hss does: if text doesn't fit, it will stick out at the right unless you add \\hfilneg to cancel shrinkability and force overfull boxes. The last column (followed by \\cr) is treated by taking the entry at its natural width."
+      },
+      {
+        "name": "Behavior and limits of the \\+ (settabs) macro",
+        "description": "The \\+ macro is intended for simple tabbing applications; it remembers tab positions until reset and can be used inside vertical boxes.",
+        "guidance": "Do not use a \\+ line inside another \\+ line. If you type '&' to the right of all existing tabs a new tab is set there and the just-completed column has its natural width. Use \\cleartabs to reset all tab positions to the right of the current column. For very large tables that fill pages, define custom macros per line instead of relying on \\+ due to memory/time concerns."
+      },
+      {
+        "name": "Use \\halign (templates) for more powerful tables",
+        "description": "\\halign uses a preamble of templates (each containing a single #) to define the environment for each column; TeX reads the entire \\halign to determine maximum natural widths and then puts entries into boxes sized to those maxima.",
+        "guidance": "Include \\hfil in templates to allow entries to stretch to the column width. Advantages over tabs: automatic calculation of maximum column widths, templates are versatile and concise; halign takes less computer time than the macro-based \\+. Disadvantages: halign reads the whole table so it is unsuitable for huge tables spanning many pages unless you use special techniques or custom macros."
+      },
+      {
+        "name": "Templates vs tabs: when to prefer which",
+        "description": "Templates (\\halign) are more versatile and can save typing; tabs (\\settabs/\\+) are better when tab positions vary from line to line or when memory is limited.",
+        "guidance": "Use \\halign for tables with regular column templates and predictable column widths; use \\settabs/\\+ for tables where tab positions change continuously (e.g., source code indentation)."
+      },
+      {
+        "name": "Using \\omit to override a template for an entry",
+        "description": "If the very first token of an alignment entry is \\omit (after macro expansion), the template of the preamble is omitted for that entry and the trivial template '#' is used instead.",
+        "guidance": "\\omit must come first in the entry. Use \\omit to supply special formatting for specific entries (example: to omit the colon supplied by the template for the first 'B.C.' entry)."
+      },
+      {
+        "name": "Inserting vertical material with \\noalign",
+        "description": "You can say \\noalign{(vertical mode material)} just after any \\cr in an \\halign; TeX will copy the vertical material without subjecting it to alignment.",
+        "guidance": "Use \\noalign to insert extra vertical space (e.g., \\noalign{\\smallskip}), penalties affecting page breaking, or lines of text between rows. Definitions inside the braces of \\noalign{...} are local to that group."
+      },
+      {
+        "name": "Control inter-column spacing with \\tabskip and \\halign to/spread",
+        "description": "TeX puts \\tabskip glue before the first column, after the last column, and between columns. You can set \\tabskip=(glue) to change it; \\halign to{dimen} or \\halign spread{dimen} governs the final box width but not glue inside entries.",
+        "guidance": "Specify a nonzero \\tabskip (e.g., \\tabskip=1em plus2em minus.5em) and use \\halign to\\hsize to have lines put into boxes of width \\hsize. If \\tabskip has no stretch/shrink then \\halign to\\hsize does nothing except report underfull/overfull boxes (a prototype row is shown in the warning). \\tabskip assignments encountered while TeX reads the preamble are used for the corresponding inter-column spaces; such \\tabskip assignments inside a preamble are local to that \\halign (unless \\globaldefs is positive)."
+      },
+      {
+        "name": "Varying tabskip glue within a preamble",
+        "description": "You can place \\tabskip assignments inside the preamble; the tabskip glue that is in force when TeX reads tokens is copied with the corresponding template and used between the respective columns.",
+        "guidance": "TeX copies preamble tokens without macro expansion except that it recognizes \\cr, &, #, \\span, and \\tabskip; the glue following \\tabskip is scanned normally (with macro expansion) and the corresponding tokens are not included in the template. Beware that spaces after the glue token disappear and that \\tabskip inside an extra level of braces is not made local by those braces because TeX doesn't 'see' those braces when copying preamble tokens."
+      },
+      {
+        "name": "Cyclic (repeating) preambles for many columns",
+        "description": "If a preamble has a periodic structure you can mark a template so the preamble is considered an infinite sequence restarting at that template when the \\cr is reached.",
+        "guidance": "Insert an extra & just before the template at which repetition should restart. This allows building preambles for very many columns without listing all templates explicitly (useful for long numeric tables)."
+      },
+      {
+        "name": "Be cautious about macro expansion timing in alignments",
+        "description": "Macros are not expanded when the preamble is being read (except for specific tokens), but once TeX sees the \\cr ending the preamble it looks ahead for \\noalign or \\omit and expands macros until the next non-space token is found; macros that expand to conditionals (\\if...) at the start of an entry can be dangerous.",
+        "guidance": "Do not begin an alignment entry with a macro whose replacement text begins with \\if..., because TeX may evaluate that condition before reading the template, leading to incorrect mode or expansion. To avoid this, define such macros to start with \\relax before the conditional (e.g., \\relax\\ifmmode...) or otherwise ensure safe expansion behavior."
+      },
+      {
+        "name": "Techniques for aligning decimal points in numeric tables",
+        "description": "Common practice is to line up decimal points. Options: treat the column as two subcolumns (put the decimal at the start of the second half-column) or use an active character expanded to a blank of digit width so numbers occupy equal widths.",
+        "guidance": "One method: measure digit width via \\setbox0=\\hbox{\\rm0} and \\digitwidth=\\wd0, make an active character (e.g., '?') that does \\kern\\digitwidth, and use those active characters to pad numbers so decimals line up. Keep such definitions local (e.g., inside a group or \\vbox) so normal behavior resumes afterward."
+      },
+      {
+        "name": "Memory/time considerations for huge tables",
+        "description": "\\halign reads an entire table into memory to compute maximum column widths; \\+ is implemented as macros and also may stress memory if used for huge tables.",
+        "guidance": "For very large/multi-page tables, avoid letting a single \\halign or \\+ try to hold the whole thing. Instead define special-purpose macros (e.g., one macro per line) or otherwise break the work into smaller pieces to reduce TeX's memory demands."
+      }
+    ]
+  }
+}

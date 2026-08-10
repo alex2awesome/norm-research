@@ -1,0 +1,162 @@
+[
+{
+"review_id": "iclr_8NLta1E_BPR_r0",
+"paper_id": "iclr_8NLta1E_BPR",
+"review_text": "This paper proposes an approach for adapting a base model (in their case, a VQA model) given a task descriptor. The authors propose to perform such adaptation via a hypernetwork layer, and learn a latent representation through which one can control the modulation of the base model by training a VAE on said layer\u2019s weights. This manipulation is achieved by either 1) using a task descriptor learned through joint embedding of task description-parameter pairs for classifier-like guidance in the hypernetwork latent space or 2), fitting a generative model on task descriptor-parameter pairs and using classifier-free guidance on the hypernetwork latent. They demonstrate that these techniques allow them to condition the base model on in-distribution test task descriptions so as to achieve a multi-task learning effect. While the methods considered are somewhat novel and interesting, their merit is not clearly demonstrated experimentally, as it does not clearly outperform the straight-forward yet strong baseline of conditional multi-task learning. Moreover, the setting considered in experiments may not exactly require meta-learning, since the task inference problem is not present at test-time (task description is given), so that the problem reduces to conventional multi-task learning.\n\n\n**summary_of_the_review:**\nWhile the methods proposed are fairly original, such approaches contribute considerable added complexity without demonstrating clear advantages to the straight-forward baseline of conditional multi-task learning. Perhaps more importantly, a key issue of clarity is the positioning of the work as pertaining to meta-learning -- which involves both task inference and subsequent adaptation -- since the task inference problem is not present in their train and test settings. "
+},
+{
+"review_id": "iclr_8NLta1E_BPR_r1",
+"paper_id": "iclr_8NLta1E_BPR",
+"review_text": "- This paper proposes generative models that predicts (or generates) high-performing task-specific weights conditioned on text description of the task.\n- Specifically, three \"Hyper\"-components are proposed: \n1) Hyper-\"decoder\": a decoder of VAE trained with (unconditional) auto-encoding of weight vector,\n2) Hyper-\"CLIP\": task and text encoders trained to maximize cosine similarity of positive pair,\n3) (optional) Hyper-\"LDM\": diffusion model for the latent space of 1) Hyper-\"decoder\".\n- After training the above three components, we can sample task-specific weights through:\n $t \\xrightarrow{\\text{HyperCLIP}} e \\xrightarrow{\\text{HyperLDM}} z \\xrightarrow{\\text{HyperDecoder}} w$.\n- The experimental results show that the proposed method performs better than the relevant baselines.\n\n\n\n\n**summary_of_the_review:**\nThis paper proposes multi-modal generative models learn to generate ``neural network weights'' conditioned on text description on new tasks, and provides a kind benchmark to this research direction. Some of details can be improved."
+},
+{
+"review_id": "iclr_8NLta1E_BPR_r2",
+"paper_id": "iclr_8NLta1E_BPR",
+"review_text": "This work presents two new approaches to zero-shot learning via building generative models of classifier weights. Contrastive learning is used to build a CLIP-style model which matches task description with network weights. In one approach, this CLIP-style model is used at test time to maximize match between provided task description and the network weight. Here, the search space for network weights is constrained to the latent space of the generative model. \nIn the other approach, a DM is trained on the latent space of the generative model, conditioned on the CLIP embedding of the task. Classifier-free guidance is used at sampling time to improve quality. A new dataset Meta-VQA is also proposed for evaluating zero-shot classification methods.\n\n**summary_of_the_review:**\nGiven the above concerns, I think this work is not suitable for publication in its current state, and hence I suggest rejection."
+},
+{
+"review_id": "iclr_8NLta1E_BPR_r3",
+"paper_id": "iclr_8NLta1E_BPR",
+"review_text": "This paper introduces a hypernetwork that generates the adapted weights for each task and runs the experiment on a adapted dataset called \u201cmeta VQA\u201d for testing zero-shot and few-shot performance. The results suggest that the added benefit of the proposed module is tiny.\n\n**summary_of_the_review:**\nIn summary, the experimental results show that it is probably unnecessary to introduce so many model complications. The newly introduced dataset is a highlight, but the paper could have been evaluated on existing few-shot / zero-shot datasets too. Therefore, I think it is definitely below the bar of acceptance.\n\n---\nI acknowledge that I have read the rebuttal. I thank the authors for providing additional results and raise my score from 1 to 3. Overall, the paper lacks a great amount of clarity in terms of model design and dataset evaluation, and the model design seems intimidating while the added benefits are small."
+},
+{
+"review_id": "iclr_mjHlitXvReu_r0",
+"paper_id": "iclr_mjHlitXvReu",
+"review_text": "This paper proposes to directly learn from large-scale image-text pair data for open-vocabulary object detection. \nIt formulates object-language alignment as a set matching problem.\nThe benefit of such approach is to allowing training on image-text pairs without the help of grounding information.\nThe author conducts experiments on COCO and LVIS to demonstrate its performance on novel categories.\n\n**summary_of_the_review:**\nOverall, I feel solving object language alignment without grounding information is the correct way. However, this paper doesn't prove the effectiveness of using bipartite matching nor well explain the details. \n\nAfter reading the rebuttal, I still don't get enough details on the correctness of the proposed method. Meanwhile, it also raised me another concern on its ability of handling dense detection. Hence, I would not recommend to accpet this paper."
+},
+{
+"review_id": "iclr_mjHlitXvReu_r1",
+"paper_id": "iclr_mjHlitXvReu",
+"review_text": "This paper introduces a set-matching approach for open-vocabulary object detection by jointly training on detection and image caption dataset. The approach achieves good results on the existing COCO and LVIS open-vocabulary detection benchmark.\n\n**summary_of_the_review:**\nThe paper proposes an interesting approach to tackle open-vocabulary detection by set matching loss on caption data. There are some weaknesses in the paper but I think the merits outweigh the downsides and am leaning positive for the paper."
+},
+{
+"review_id": "iclr_mjHlitXvReu_r2",
+"paper_id": "iclr_mjHlitXvReu",
+"review_text": "This work proposes a novel method for open-vocabulary object detection (OVOD), where a model is trained from two datasets, one containing bounding box annotations for a set of base categories, and another one containing only free-form text descriptions (captions) of imagesf. While prior work typically uses grounded annotations (words in captions are associated with bounding boxes) or distills information from image-level pre-trained vision and language models, this work proposes a loss function to directly leverage image-text pairs (without grounding supervision). The architecture of the detector is similar to existing ones, with the only exception that text embeddings are predicted instead of a fixed-size probability distribution over a known label space. The model trains from both detection data and image-text pairs. The losses are the same as in standard detectors when training from detection data. For image-text pairs, a similarity is computed between each noun in the caption and each predicted region (region proposals). Bipartite matching is then applied on the similarity matrix to find a matching between regions and nouns, which then serves as ground truth for a standard binary cross-entropy loss. Experiments on the open-vocabulary setting for both COCO and LVIS datasets show improvement over prior baselines, specifically for novel categories.\n\n**summary_of_the_review:**\nOverall, I think this a high-quality paper with clear impact to the research community on open-vocabulary object detection."
+},
+{
+"review_id": "iclr_mjHlitXvReu_r3",
+"paper_id": "iclr_mjHlitXvReu",
+"review_text": "This paper proposes a method to use weak supervision (image-caption pairs) for open-vocabulary object detection (OVOD). This is in fact a problem of weakly-supervised object detection (WSOD). In stead of using the max-score or max-region matching in the literature, this paper proposes to formulate the problem of object-noun matching as a problem of bipartite matching problem, which can be solved by Hungarian algorithm. The experiments on COCO and LVIS have shown that this simple method can have big improvements. \n\n**summary_of_the_review:**\nThe idea is simple and easy to understand, and it gives some big improvements. But the technical novelty is small, no results comparing with the state-of-the-art, and I am concerned about the reproducibility. "
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "iclr_HnLFY8F9uS_r0",
+"paper_id": "iclr_HnLFY8F9uS",
+"review_text": "This paper introduces a new algorithm RPO which builds on top of PPO. The algorithm takes the mean output of a Gaussian distribution, adds a uniform perturbation to the mean, then samples actions from the resulting Gaussian distribution with the perturbed mean. The proposed method is shown to be effective on a variety of high dimensional continuous control tasks.\n\n**summary_of_the_review:**\nOverall, while the introduced method does appear to be novel and shows evidence of empirical improvements on a set of benchmarks, I don\u2019t believe the paper in its current state advances our understanding of the field as a whole and therefore I cannot recommend the paper for acceptance at this time.\n"
+},
+{
+"review_id": "iclr_HnLFY8F9uS_r1",
+"paper_id": "iclr_HnLFY8F9uS",
+"review_text": "In this work the authors proposed a new robust policy optimization method in which the main approach is to randomly perturb the mean of the Gaussian policy to improve exploration. The main motivation is that stochastic policies that have high entropy tend to produce better RL performance, and so the authors propose to constantly perturb this policy during training. Empirically they showed that this new policy outperforms standard RL methods including the ones with data augmentation schemes (e.g., PPO, RAD, DRAC).\n\n\n**summary_of_the_review:**\nAuthors propose a new randomization scheme for RL policy training in order to improve exploration, and thus the performance of RL (PPO).\nWhile this method may show some empirical benefits in some small domain, there has not been much theoretical backing of this approach justified in the paper. Furthermore, it is unclear whether this method will also work with other setting in which a non-Gaussian policy is used. Finally, the experiments are not fully convincing (for example in some cases the proposed method does not strongly beat the baseline, and more SOTA baselines are needed to really showcase the potential superiority of the proposed method).\n\n"
+},
+{
+"review_id": "iclr_HnLFY8F9uS_r2",
+"paper_id": "iclr_HnLFY8F9uS",
+"review_text": "The authors propose a Robust Policy Optimization (RPO) method, a simple extension of the popular Proximal Policy Optimization (PPO) method, by adding a uniform random number to the action mean, sampled from a normal distribution. It is argued that std. normal distribution used to parameterize continuous action is not suitable if more exploration is expected from the agent. Authors modify the gaussian to have more support than the std. gaussian r.v. \n\nEmpirical results on std. RL benchmarks demonstrate that the proposed method has higher exploration throughout the training. \n\n**summary_of_the_review:**\n- Authors propose a modification of the existing PPO method for continuous actions cases, by increasing the support of the policy parameterization distribution. \n- They add a uniform random number to the mean of the gaussian distribution used to parameterize the policy, thereby increasing its support. \n- There is no theoretical justification for using the particular distribution; related works on using std. exploration ($\\eps$-greedy etc) is not discussed. \n- Other distributions with wider support around the mean are also not discussed in the paper. "
+},
+{
+"review_id": "iclr_HnLFY8F9uS_r3",
+"paper_id": "iclr_HnLFY8F9uS",
+"review_text": "This paper argues for stochastic policies that maintain high entropy for high RL performance. In particular, the authors propose to randomly perturb the mean of the output Gaussian distribution to produce more diverse actions. In the experimental evaluation, this perturbation scheme is compared to PPO (with and without entropy regularization) and data augmentation techniques including RAD and DRAC.\n\n**summary_of_the_review:**\nOverall, the novelty of the work is not clear to me. The experimental evaluation also lacks relevant baselines, and some details of their evaluation are currently unclear. Therefore, I am recommending a reject."
+},
+{
+"review_id": "iclr_wtr-9AKxCI5_r0",
+"paper_id": "iclr_wtr-9AKxCI5",
+"review_text": "This paper attempts to resolve the scaling issues of MobileViTv1-blocks which hinder the learning. Specifically, the authors propose MobileViTv3-block which has a more simplified architecture. The proposed blocks have been added to both MobileViTv1 (with transformer blocks) and MobileViTv2 (with linear transformer blocks) models and experiments on various tasks such as classification (ImageNet), detection(COCO) and segmentation (ADE20K) demonstrate improved results. \n\n**summary_of_the_review:**\nThis work presents new MobileViT blocks that make the architecture more efficient and purportedly more accurate in different tasks (e.g. classification, segmentation, detection, etc.). Despite the great engineering effort behind this work, the novelty and contribution are very limited and as a results don't merit acceptance. "
+},
+{
+"review_id": "iclr_wtr-9AKxCI5_r1",
+"paper_id": "iclr_wtr-9AKxCI5",
+"review_text": "The paper propsed mobilevit v3 which did modification based on mobilevit by reducing conv3x3 to conv1x1, adjusting the routing from input and pre-conv embedding [local feature as named in the paper] layers for feature fusion.\n\nIt produces a better efficiency especially at low-parameter cases. \n\n**summary_of_the_review:**\ngood performance against SoTA baselines, while the modification and pruning of network follows prior arts with limited novelty. "
+},
+{
+"review_id": "iclr_wtr-9AKxCI5_r2",
+"paper_id": "iclr_wtr-9AKxCI5",
+"review_text": "This paper introduces a light-weight model for mobile vision tasks, namely MobileViT-v3. The proposed model is based on the previous MobileVit v1 and v2. Specifically, several modifications have been conducted to improve the previous architectures, including replacing 3x3 conv with 1x1 conv, fusing local and global features, adding a residual connection between the input feature and the fusion feature, and replacing normal 3x3 conv with depthwise 3x3 conv. The above changes result in more efficient and effective mobile backbones. Experiments have been performed on the MobileViT families to validate the effectiveness.\n\n**summary_of_the_review:**\nOverall, the paper provides extensive experiments to verify its effectiveness. The motivation is clear. I admire the authors\u2019 efforts in engineering exploration. However, the technical novelty is limited since the previous works have investigated the core components (i.e., 1x1 conv, depthwise 3x3 conv, and residual connection). Besides, the paper lacks in-depth analysis. I will give my first rating as `reject`."
+},
+{
+"review_id": "iclr_wtr-9AKxCI5_r3",
+"paper_id": "iclr_wtr-9AKxCI5",
+"review_text": "This work proposes a series of modifications to the MobileViT V1 and V2 architectures. It introduces a few tweaks to the original model architecture, including replacing regular conv by depthwise conv to reduce latency, using 1x1 conv instead of 3x3 conv to reduce number of parameters, and adding residual connection in the proposed MobileViT V3 block. Such modifications brings in additional quality gain compared to original MobileViT V1 and V2, while being more efficient in terms of FLOPs and number of parameters in some cases. Experiments on downstreaming tasks such as detection and semantic segmentation also show that the proposed modifications can benefit dense prediction tasks as well.\n\n**summary_of_the_review:**\nIn summary, this work tries to study a good problem and propose valid modifications to improve existing models. However, it falls short regarding technical details, latency benchmark and comparison with recent works. \n\nI would like authors to address my comments, especially regarding lack of latency benchmark and comparison with more recent models. "
+},
+{
+"review_id": "iclr_3ZHX6_Mydd7_r0",
+"paper_id": "iclr_3ZHX6_Mydd7",
+"review_text": "The paper proposes a new method to defend against backdoor attacks. The proposed method is basically a new aggregation rule. Edge-case backdoor attacks are considered, and multiple simple baselines are evaluated. \n\n**summary_of_the_review:**\nThe paper has limited novelty, and experiments are also limited. "
+},
+{
+"review_id": "iclr_3ZHX6_Mydd7_r1",
+"paper_id": "iclr_3ZHX6_Mydd7",
+"review_text": "This paper proposed a method to mitigate backdoor attacks in federated learning by focusing on invariant directions of gradients and avoiding selecting directions that favor malicious clients.\n\n**summary_of_the_review:**\nThis paper is marginally below the acceptance threshold since although the authors proposed a simple yet effective approach to mitigate backdoor attacks in FL, we can not determine whether this is a general method or only suitable for some special cases."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "iclr_3ZHX6_Mydd7_r2",
+"paper_id": "iclr_3ZHX6_Mydd7",
+"review_text": "This paper aims to defend backdoor attacks in federated learning. Particularly, it proposes to combine existing two techniques, AND-mask and trimmed-mean estimator, to remove suspicious gradient dimensions. This is based on the assumption that the gradients from benign clients have the same sign while those from malicious clients are different from benign ones. This paper also provides theoretical analysis on the gradient sign consistency and how the combination of the two existing techniques defends backdoor attacks. The evaluation is conducted on three datasets and one backdoor attack. Compared to a few baseline methods, the proposed approach has a better defense performance.\n\n**summary_of_the_review:**\nThis paper addresses an import problem but lacks novelty and comprehensive empirical results.\n"
+},
+{
+"review_id": "iclr_3ZHX6_Mydd7_r3",
+"paper_id": "iclr_3ZHX6_Mydd7",
+"review_text": "The paper studies defenses against federated learning backdoor attacks. The paper proposes to force the model optimization trajectory to focus on the invariant directions that are generally useful for utility and avoid selecting directions that favor malicious clients. Particularly, the authors consider the consistency of the client model update as an estimation of the invariance, where the AND-mask and Trimmed mean are used together to measure the sign consistency. The proposed robust aggregator is evaluated on several datasets to defend against backdoor attacks, and show a promising utility-robustness tradeoff.  \n\n\n**summary_of_the_review:**\nDetailed comments:\n\nI do not quite understand Figure 1(a): When using the AND-mask, does the result show negative signs, which returns the accurate sign of the benign dimensions?\n\nWhat does expectation ratio indicate in Theorem 4? What is the rough error bound in Equation (5)? Is it too large? Similarly, what is the rough probability in Theorem 5? \n\nTheorem 4 & 5 only relate to a single feature dimension? Can the result be generalized to the feature vector? What is the error bound? \n\nTheorem 8 is for the simple linear model. I am not sure whether the theoretical results can be applicable to general nonlinear model. \n\nI am also curious about the attack scenario that can break both the AND-mask and trimmed-mean. \n\nCan the proposed solution be generalized to defend against model poisoning attacks? \n\n\nWhich features are filtered by AND-mask and which filtered by the Trimmed mean? I would like to see whether they are complementary or have a large overlap.  \n\nWhy no attacks in Table 1 has non-zero backdoor accuracy? \n\n"
+},
+{
+"review_id": "iclr_N9Pk5iSCzAn_r0",
+"paper_id": "iclr_N9Pk5iSCzAn",
+"review_text": "The paper focuses on learning GNNs on open temporal graph where new nodes with novel classes are also added to the graph. The proposed method solves two major issues that existing temporal GNN methods have under this setting: learning with added heterophily and catastrophic forgetting. To solve the catastrophic forgetting, a data selection process motivated by the fluence function is considered which is defined to maximize the representativeness of the selections. The author proposes an information bottleneck based loss function to encourage the model to learn the class agnostic representations. Experimentations on real-world benchmark suggests this algorithm works with state of art temporal GNN and performs favorably.\n\n**summary_of_the_review:**\nThis paper provides a neat and novel solution to the open temporal graph, a setting is of great practical value but not actively researched. The algorithm's correctness is proved both theoretically and empirically. "
+},
+{
+"review_id": "iclr_N9Pk5iSCzAn_r1",
+"paper_id": "iclr_N9Pk5iSCzAn",
+"review_text": "This paper focusing on continuous open temporal graph where new nodes and new target node labels will join with time going on. This field is lack of study, and this paper proposes OTGNet which is far better than similar works.\n\n**summary_of_the_review:**\nThis paper focues on continuous open temporal graph task which is lack of study, and make a concrete contribution to the field with OTGNet which is empirically far better than similar baselines."
+},
+{
+"review_id": "iclr_N9Pk5iSCzAn_r2",
+"paper_id": "iclr_N9Pk5iSCzAn",
+"review_text": "This paper proposed a new task in temporal networks and with new methods. The proposed problem is related to the new class appearing at different times. \n\nThe authors claimed there are two challenges for the current temporal network: 1) How to dynamically propagate appropriate information in an open temporal graph, where new class nodes are often linked to old class nodes. This indicates that temporal graphs are usually homophily. 2) How to avoid catastrophic knowledge forgetting over old classes when learning new classes occurred in temporal graphs. No previous temporal network model includes a class-incremental learning setting.\n\nTo handle these two challenges, the authors proposed an information bottleneck-based message-passing framework, assuming that the information of a node can be disentangled into a class-relevant and class-agnostic one.\n\n**summary_of_the_review:**\nOverall, I think this paper is borderline paper. This paper proposed a novel task. It focused more on the class-incremental learning problem. The tasks and proposed methods all focused on this topic. The temporal network setting is more like a specific task. The paper also proposed some new techniques to solve this problem but these techniques are mostly from papers from other domains. The performance is not solid enough, with only 2 baselines that are only focused on the temporal network (can't solve either class incremental problems or heterophilic graph problems). "
+},
+{
+"review_id": "iclr_N9Pk5iSCzAn_r3",
+"paper_id": "iclr_N9Pk5iSCzAn",
+"review_text": "This paper proposes OTGNet to tackle the problem of continual learning/class-incremental learning on graphs. OTGNet consists of two components. The first component is an open/close triad selection and replay method to avoid catastrophic forgetting of existing knowledge. The second component is an information bottleneck module to decouple class-related knowledge from class-agnostic knowledge, and use the class-agnostic knowledge for propagation between nodes from new classes and existing classes. It is designed to avoid over-smoothing between existing classes and new classes. The authors perform experiments on real-world class-incremental settings. The proposed OTGNet outperforms various baselines of continual learning on graphs. \n\n**summary_of_the_review:**\nOverall, I think this paper proposes a novel and insightful solution to an important problem, with solid experimental evaluations. I recommend accepting the paper. "
+},
+{
+"review_id": "iclr_6BHlZgyPOZY_r0",
+"paper_id": "iclr_6BHlZgyPOZY",
+"review_text": "This paper proposes and integrates the usage of Quality-Diversity methods for skill discovery in RL. While prior methods largely rely on maximum-information (MI) RL, this paper makes a case for QD as an alternative approach when used with fast environment simulators. The authors provide a large number of experiments which show that QD-based methods are competitive with the MI RL approach and should be researched in more dept as future work.\n\n**summary_of_the_review:**\nInteresting work that combines QD and skill discovery in RL. Extensive experiments and thorough analysis of prior work are included in the manuscript. I have raised several questions and some concerns that I\u2019d like to be answered by the authors during the rebuttal. "
+},
+{
+"review_id": "iclr_6BHlZgyPOZY_r1",
+"paper_id": "iclr_6BHlZgyPOZY",
+"review_text": "This paper provides a comparison and benchmark of Evolutionary strategies and rl based skill discovery approaches. The authors provide a thorough literature review on the most recent approach in both lines of research and compare them in light of different metrics, how they generalise to changing environments (adaptive gravity, motor failure and different target locations), and how they can be use in hierarchical planning.\n\n**summary_of_the_review:**\nI recommend this paper to be accepted since it provides a comparison of approaches in MI RL and quality diversity approaches for skill discovery. They empirically analyse how different methods on each side fare in terms of metrics for diversity and in terms of few shot generalisation."
+},
+{
+"review_id": "iclr_6BHlZgyPOZY_r2",
+"paper_id": "iclr_6BHlZgyPOZY",
+"review_text": "This paper compares RL methods with information theory inspired diversity rewards and quality diversity methods for skill discovery on a large set of environments implemented in jax/brax (and thus able to take advantage of accelerators). It compares methods in terms of diversity metrics, performance on adaptation tasks and usefulness for hierarchical planning and finds that QD methods are competitive and sometimes perform better and potentially less sensitive to hyperparameters. \n\n**summary_of_the_review:**\nNice paper presenting an empirical comparison between RL-based skill discovery methods and QD methods. I think the paper can be improved in some ways but presents interesting empirical results. "
+},
+{
+"review_id": "iclr_6BHlZgyPOZY_r3",
+"paper_id": "iclr_6BHlZgyPOZY",
+"review_text": "At a high level, this paper is an empirical study of a collection of RL algorithms over a collection of environments.\nThe algorithms are reimplemented versions of:\n* Multiple Quality Diversity (QD) methods, which are evolutionary and do not use exact backpropagation.\n* Information Theory-Augmented RL methods, which involve adding additional mutual information terms + latent vectors inside a gradient-based RL pipeline.\n\nThe environments consist of:\n* Unidirectional (Single task) \n* Omnidirectional (Multi-task)\n* Adaptation\n* Additional Exploration (Trap/Maze/etc)\n\nall of which are based on Continuous Control. \n\n\n\n**summary_of_the_review:**\nI currently lean reject, because of the lack of a compelling purpose or analysis. Currently as written, from a devil's advocate point of view, the paper can easily appear to be a collection of somewhat random algorithms applied on a collection of random benchmarks - the paper needs to have stronger analysis and focus on a compelling purpose for providing these experimental results.\n\nEDIT: I have raised my score to a 5 in light of the authors' rebuttals. I think the writing currently is still not convincing enough to a non-expert such as myself, and I urge the authors to improve on this front."
+},
+{
+"review_id": "iclr_DT7btGps59z_r0",
+"paper_id": "iclr_DT7btGps59z",
+"review_text": "This paper proposes a simple extension to current message passing based GNN, inspired from recent subgraph GNNs. Although being less powerful than subgraph GNNs, the proposed method is efficient with limited computation overhead comparing with message passing GNNs. The author demonstrates its improvements over many real-world datasets.\n\n**summary_of_the_review:**\nThe author proposes a simple add-on to the current message passing based GNN with the same intuition mentioned in [Zhao et al. 2021] but more much efficient implementation (with being less powerful), however this efficient implementation is also covered by a recent paper [Feng et al. 2022] . Given all these existing works, I can hardly find enough contribution in this paper. (If this paper is designed 1-year eariler it's possible to be novel, however currently I really cannot find novelty.)\n\n\n\n\n[Zhao et al. 2021] From stars to subgraphs: Uplifting any GNN with local structure awareness.   \n[Feng et al. 2022] How Powerful are K-hop Message Passing Graph Neural Networks\n"
+},
+{
+"review_id": "iclr_DT7btGps59z_r1",
+"paper_id": "iclr_DT7btGps59z",
+"review_text": "This paper tackles the challenging goal: developing a general GNN framework with provably expressive power while maintaining the scalability of the message-passing scheme. The authors first model the edges among neighbors as a multiset of multisets and formulate the NC-1-WL graph isomorphism. They show that the expressiveness of NC-1-WL in distinguishing non-isomorphic graphs is strictly above 1-WL and below 3-WL. But based on NC-1-WL, they can propose a differentiable version called NC-GNN, which is intrinsically more scalable than the algorithms that mimic the WL graph isomorphism test. Experimental results on not only graph classification but also node classification tasks show that NC-GNN can consistently outperform GIN by significant margins on various tasks and achieve competitive performance as existing expressive GNNs while being much more efficient.\n\n**summary_of_the_review:**\nOverall for the current manuscript, I recommend weak rejection. I like the idea of the proposed NC-1-WL test and the corresponding NC-GNN algorithm. However, since recently there have been many papers on provably powerful while scalable GNNs, the current insufficient experimental comparison to those work, including subgraph-based GNNs, on larger graphs, and in terms of efficiency, cannot support the claimed contributions of NC-GNN well."
+}
+]

@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 20,
+  "n_chunks": 160,
+  "chunk_chars": 39971,
+  "model": "gpt-5-mini",
+  "elapsed_s": 124.7973735419946,
+  "input_tokens": 16089,
+  "output_tokens": 5528,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users/developers of SINGULAR/PLURAL computer-algebra system working with non-commutative Groebner bases and related algorithms (mathematicians, computer-algebra researchers)",
+    "subtask_short": "non-commutative library reference",
+    "subtask_description": "Reference/manual chapter describing non-commutative extension libraries (Letterplace, bimodules, bfun, central) for SINGULAR/PLURAL, listing procedures, usage, assumptions, returns, examples and implementation notes for computing two-sided Groebner bases, b-functions, centralizers, and auxiliary routines.",
+    "subtask_keywords": [
+      "singular",
+      "plural",
+      "non_commutative",
+      "library_reference",
+      "groebner_bases"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Letterplace: compute two-sided Groebner bases up to degree bound",
+        "description": "With the Letterplace functionality it is possible to compute two-sided Groebner basis of a graded two-sided ideal in a free associative algebra up to a given degree (assumes each variable has degree 1).",
+        "guidance": "Restrictions: stable implementation only for homogeneous input (quasi-homogeneous and general inhomogeneous computations under development; no automatic checks). Because free algebra is not Noetherian, an explicit degree bound must be defined; makeLetterplaceRing stores that bound in the ring structure so letplaceGBasis in such a ring need not be given the bound. Required options: option(redSB); option(redTail); must always be activated. Recommended to run with option(prot); option(mem) to see activity journal and memory usage. Conversion routines available in freegb_lib; freeGBasis can be used to avoid conversion tools."
+      },
+      {
+        "name": "letplaceGBasis / freegb system equivalence and conversions",
+        "description": "Procedure letplaceGBasis computes Groebner bases in the letterplace encoding; alternatively system('freegb',I,d,n) does the same (n = number of variables of original commutative ring).",
+        "guidance": "Output is in letterplace encoding. To convert letterplace presentation to strings use lp2lstr and lst2str from freegb lib. Alternatively use freeGBasis (Section 7.7.9) to use a different encoding for polynomials in free algebra so no conversion needed. Example in text shows defining a letterplace ring with makeLetterplaceRing(d), running letplaceGBasis(I), then lp2lstr(J,r); setring r; lst2str(@LN,1) to show string presentation."
+      },
+      {
+        "name": "bistd (two-sided Groebner basis via bimodules/enveloping algebra)",
+        "description": "bistd(M) computes the two-sided Groebner basis of an ideal/module M by using the enveloping algebra of the base ring, as an alternative to twostd().",
+        "guidance": "Usage: bistd(M); Return: ideal or module (same type as argument). Purpose: compute two-sided Groebner basis of an ideal/module using enveloping algebra approach. Example provided showing load of bimodules.lib, creation of nc algebra and module, and computing M2 = bistd(L). See references for algorithmic origin. Related libraries: ncalg.lib, nctools.lib."
+      },
+      {
+        "name": "bitrinity (coefficient matrix + bisyzygies for two-sided Groebner bases)",
+        "description": "bitrinity(M) returns the enveloping algebra of the base ring and exports a list L = Coeff, BiSyz where Coeff is a coefficient matrix (first row corresponds to images of Groebner basis) and BiSyz is a bisyzygy matrix.",
+        "guidance": "Usage: bitrinity(M); Return: ring (enveloping algebra) and list L = Coeff, BiSyz. Purpose: provides coefficients that produce the two-sided Groebner basis from original generators and computes bisyzygies of M as left-module over the enveloping algebra. Example shows how to setring G and inspect L[1] (Coeff) and L[2] (BiSyz) and how psi_s maps rows to actual Groebner basis elements. Note: to extract L do def G = bitrinity(); setring G; L;."
+      },
+      {
+        "name": "liftenvelope (compute left-syzygy Groebner basis and coefficient vector for representing g)",
+        "description": "liftenvelope(M,g) given a two-sided ideal/module M and polynomial g returns the enveloping algebra of the base ring and exports a list l = C, B where B is left Groebner basis of left-syzygies of M \u2297 1 and C is a vector of coefficients in the enveloping algebra such that psi_s(C^T * (f1 ... fn)) = g.",
+        "guidance": "Usage: liftenvelope(M,g); Return: ring (enveloping algebra) and list l = C, B. Purpose: used for computing total divisors; l defines an affine set A = C + sum ai bi such that psi_s(a^T*(f1...fn)) = g for all a in A. If pure tensors are found in A, liftenvelope helps to decide whether f is a total divisor of g. Note: second component has to be an element of first component. Example shows extracting l via setring J; print(l[1]); print(l[2]);."
+      },
+      {
+        "name": "CompDecomp (decompose polynomial in enveloping algebra by right-side tensor factors)",
+        "description": "CompDecomp(p) (only works when base ring is enveloping algebra A^{env}) returns an ideal I in A^{env} where sum of terms with same right side are grouped as generators, enabling check whether p is a pure tensor and decomposition by right-side.",
+        "guidance": "Usage: CompDecomp(p); Return: ideal I. Purpose: decompose polynomial into summands grouped by right-side tensor factors. Example: shows how f decomposes to (x2+5x+1)*SX + x2*S and how CompDecomp yields corresponding ideal generators. Warning: argument polynomial must be in A^{env}."
+      },
+      {
+        "name": "isPureTensor (test and produce decomposition if pure tensor)",
+        "description": "isPureTensor(g) returns 0 if g is not a pure tensor; if g is a pure tensor it returns a vector v with v = a*gen(1) + b*gen(2) = (a,b)^T with a (X) b = g (works only if basering is enveloping algebra).",
+        "guidance": "Usage: isPureTensor(g). Return: 0 or vector v representing decomposition. Purpose: check whether polynomial in A^{env} is a pure tensor; auxiliary for total divisibility testing. Examples show outputs for various polynomials, illustrating when 0 is returned and when a decomposition vector is returned. Note: basering must be A^{env}."
+      },
+      {
+        "name": "isTwoSidedGB (check whether ideal generators are two-sided)",
+        "description": "isTwoSidedGB(I) returns 1 if the generators of given ideal I are two-sided, 0 otherwise. Intended for non-commutative rings (in commutative rings every element is two-sided).",
+        "guidance": "Usage: isTwoSidedGB(I); Return: int 0/1. Purpose: auxiliary procedure for diagonal forms to check Rp = pR. Examples: shows cases returning 1 and 0. Note: should only be used for non-commutative rings."
+      },
+      {
+        "name": "bfct (compute roots and multiplicities of Bernstein-Sato polynomial b(s))",
+        "description": "bfct(f [,s,t,v]) computes the roots of the Bernstein-Sato polynomial b(s) for hypersurface defined by f; returns list containing ideal of roots and intvec of multiplicities.",
+        "guidance": "Usage: bfct(f[,s,t,v]); Return: list of ideal (roots) and intvec (multiplicities). Assume: basering commutative of characteristic 0. Background: computes initial Malgrange ideal per Noro's algorithm and solves linear system by linear reductions. Options: if s<>0 std used for GB, else slimgb; if t<>0 matrix ordering used for GB else block ordering; v positive weight vector used for homogenization. Display controlled by printlevel. Examples provided."
+      },
+      {
+        "name": "bfctSyz (compute b(s) roots via syzygies)",
+        "description": "bfctSyz(f [,r,s,t,u,v]) computes roots of Bernstein-Sato polynomial using syzygy computations (initial Malgrange ideal then solve linear system by computing syzygies).",
+        "guidance": "Usage: bfctSyz(f[,r,s,t,u,v]); Return: list of ideal (roots) and intvec (multiplicities). Assume: basering commutative, char 0. Options: r,t,u control using std vs slimgb in char 0 or >0; s controls matrix vs block ordering; v positive weight vector for homogenization. Display controlled by printlevel. Examples given."
+      },
+      {
+        "name": "bfctAnn (compute b(s) roots via Ann(f^s) computation)",
+        "description": "bfctAnn(f [,a,b,c]) computes roots of Bernstein-Sato polynomial by computing Ann(f^s) and solving linear equations.",
+        "guidance": "Usage: bfctAnn(f[,a,b,c]); Return: list ideal and intvec. Assume: basering commutative, char 0. Notes: if a<>0 only f appended to Ann(f^s), else f and all partial derivatives appended. b and c control choice of GB engine (std vs slimgb) and behavior for computing ideals <I+J>. Display controlled by printlevel. Examples provided (including Reiffen curve)."
+      },
+      {
+        "name": "bfctOneGB (compute b(s) roots using single Groebner basis computation)",
+        "description": "bfctOneGB(f [,s,t]) computes roots of Bernstein-Sato polynomial using only one Groebner-basis computation by combining Noro's method with an elimination ordering.",
+        "guidance": "Usage: bfctOneGB(f[,s,t]); Return: list ideal and intvec. Assume: basering commutative, char 0. Notes: s,t control GB engine and ordering (std/slimgb, matrix/block). Display controlled by printlevel. Example shows typical outputs."
+      },
+      {
+        "name": "bfctIdeal (global b-function of a holonomic ideal w.r.t. weight)",
+        "description": "bfctIdeal(I,w[,s,t]) computes roots of global b-function of holonomic ideal I in Weyl algebra with respect to weight (-w,w). Returns L[1] ideal of rational roots, L[2] intvec of multiplicities, optional L[3] part without rational roots.",
+        "guidance": "Usage: bfctIdeal(I,w[,s,t]); Return: list L as described. Assume: basering is n-th Weyl algebra in char 0, variables ordered x(1..n),D(1..n) with standard commutation, I holonomic. Notes: If b-function degree 0 encoded specially (L[1][1]=0,L[2]=0,L[3]=1 or 0). s,t control GB engines and orderings. If input ideal not holonomic, warnings appear and degree bound may be set. Display controlled by printlevel. Examples show behavior on holonomic and non-holonomic examples."
+      },
+      {
+        "name": "pIntersect (intersection of ideal with subalgebra K[f])",
+        "description": "pIntersect(f,I[,s]) computes the intersection of ideal I with subalgebra K[f] and returns coefficient vector of monic polynomial generator (if any).",
+        "guidance": "Usage: pIntersect(f,I[,s]); Return: vector (coefficient vector of monic polynomial). Assume: I given as Groebner basis, basering not a qring. Note: if intersection is zero, proc might not terminate. If s>0 searches only up to degree s; otherwise no bound. Display controlled by printlevel. Example shows pIntersect(t*Dt,inF) returning gen(4)-1/36*gen(2)."
+      },
+      {
+        "name": "pIntersectSyz (intersection via syzygies and optional modular step)",
+        "description": "pIntersectSyz(f,I[,p,s,t]) computes intersection of ideal I with K[f] using syzygies; if p (prime) provided computes generator mod p first and then lifts.",
+        "guidance": "Usage: pIntersectSyz(f,I[,p,s,t]); Return: vector (coefficient vector). Assume: I given as Groebner basis. Notes: If p>0 computes in char p first then searches in basering for that degree; otherwise computes syzygies searching all degrees. s,t control choice of GB engine (std/slimgb) in different char settings. Display controlled by printlevel. Examples provided showing working with a specific prime and returning same generator."
+      },
+      {
+        "name": "linReduce (linear reduction of polynomial by ideal elements)",
+        "description": "linReduce(f,I[,s,t,u]) reduces polynomial f only by linear reductions (no monomial multiplications); can return reduced polynomial and coefficient vector of used reductions.",
+        "guidance": "Usage: linReduce(f,I[,s,t,u]); Return: poly or list (reduced polynomial and optional coe\ufb03cient vector). Notes: s<>0 returns list with reduced poly and coe\ufb03cient vector; t<>0 (default) reduces all monomials if possible, else only leading monomials; u<>0 (default) uses linearly pre-reduced ideal via linReduceIdeal; if u=0 and ideal differs from linReduceIdeal result, outcome may be unexpected. Display controlled by printlevel. Examples show various reduction modes and verification that f - (l[1] - (M*l[2])[1,1]) = 0."
+      },
+      {
+        "name": "linReduceIdeal (linear pre-reduction of an ideal)",
+        "description": "linReduceIdeal(I[,s,t,u]) performs linear reductions on list of polynomials in I (no monomial multiplications) and returns reduced ideal or list including coefficient vectors.",
+        "guidance": "Usage: linReduceIdeal(I[,s,t,u]); Return: ideal or list (reduced ideal and optionally coefficient module). Notes: s<>0 returns list with reduced ideal and coefficient vectors; t<>0 default reduces tails also; u<>0 default sorts ideal in increasing order before reduction (if u=0 and ideal not sorted as expected, result may differ). Display controlled by printlevel. Examples illustrate tail reductions and verification of module relations."
+      },
+      {
+        "name": "linSyzSolve (compute linear syzygy among ideal elements)",
+        "description": "linSyzSolve(I[,s]) computes a linear dependency between elements of ideal I if one exists and returns the coefficient vector.",
+        "guidance": "Usage: linSyzSolve(I[,s]); Return: vector (coefficient vector of linear combination equalling 0). Notes: s<>0 toggles std vs slimgb for Groebner computations (default slimgb in char 0, std in char >0). Examples show gen(2)-2*gen(1) for I = (x,2x) and 0 for independent generators."
+      },
+      {
+        "name": "allPositive (check positivity of intvec components)",
+        "description": "allPositive(v) returns 1 if all components of intvec v are positive, otherwise 0.",
+        "guidance": "Usage: allPositive(v); Return: int 0/1. Purpose: simple helper to check positivity. Examples: v = 1,2,3 returns 1; w = 1,-2,3 returns 0."
+      },
+      {
+        "name": "scalarProd (scalar product of two intvecs)",
+        "description": "scalarProd(v,w) returns standard scalar product of intvecs v and w; assumes same length.",
+        "guidance": "Usage: scalarProd(v,w); Return: int (scalar product). Assume: arguments same size. Example: scalarProd(1,2,3 ; 4,5,6) returns 32."
+      },
+      {
+        "name": "vec2poly (construct univariate polynomial from vector coefficients)",
+        "description": "vec2poly(v[,i]) constructs an univariate polynomial in variable var(i) whose coefficients are given by vector v; default i=1.",
+        "guidance": "Usage: vec2poly(v[,i]); Return: poly in K[var(i)]. Purpose: construct polynomial such that coefficient at var(i)^{j-1} is v[j]. Examples: vec2poly(intvec 3,2,1) -> x^2+2x+3; vec2poly with vector of ring elements constructs polynomial with those coefficients."
+      },
+      {
+        "name": "centralizeSet (compute centralizer basis in vector space spanned by V)",
+        "description": "centralizeSet(F,V) computes a vector space basis of the centralizer of set F in the vector space generated by V over the ground field; returns ideal generated by computed elements.",
+        "guidance": "Usage: centralizeSet(F,V); Return: ideal of computed centralizing elements. Purpose: find centralizer basis within span(V). Example demonstrates computing PBW_maxMonom to generate V, calling centralizeSet and verifying with inCenter(C). See related procedures centralizer, centralizerVS, inCentralizer."
+      },
+      {
+        "name": "centralizerVS (compute centralizer up to degree D)",
+        "description": "centralizerVS(F,D) computes vector space basis of centralizer(F) up to degree D (D non-negative) and returns ideal of generators found.",
+        "guidance": "Usage: centralizerVS(F,D); Return: ideal of computed elements. Purpose: compute centralizer truncated by degree bound. Note: D must be non-negative. Example finds elements commuting with x and y up to degree 4 and verifies with inCentralizer."
+      },
+      {
+        "name": "centralizerRed (compute subalgebra generators of centralizer up to termination criteria)",
+        "description": "centralizerRed(F,D[,N]) computes subalgebra generators of centralizer(F) up to degree D or stops when at least N elements are found (if D positive or D negative combined with N determines termination). Current ordering must be degree-compatible well-ordering.",
+        "guidance": "Usage: centralizerRed(F,D[,N]); Return: ideal of computed subalgebra generators. Purpose: compute subalgebra generators of centralizer(F) with termination conditions since centralizer(F) may be infinite. Notes/warnings: If D positive only elements up to degree D computed; if D negative termination determined by N. If N larger than actual number of generators, procedure may not terminate. Example provided computing generators for U(sl_2)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_f950f6722be6.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 19062,
+  "output_tokens": 4500,
+  "elapsed_s": 1427.362133541843,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on AI-assisted formal verification, theorem proving, and LLM-based proof synthesis (Dafny/auto-active verifiers)",
+    "subtask_short": "dafny llm-guided theorem proving",
+    "subtask_description": "Translate and solve mathematical lemma statements in Dafny by producing proof bodies that verify under Dafny's SMT-backed automation; evaluate LLMs on generating proof hints and iterative error-correction to reach verification. The task covers benchmarking, validator rules, and model prompting for auto-active theorem proving.",
+    "subtask_keywords": [
+      "dafny",
+      "auto_active_verification",
+      "theorem_proving",
+      "miniF2F",
+      "benchmark",
+      "llm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Preserve lemma signature and requires clauses",
+        "description": "You MUST preserve the exact lemma signature and all 'requires' clauses. Do NOT add, remove, or modify any 'requires' clauses.",
+        "guidance": "Only the proof body should be modified. The validator will reject solutions that modify or remove original requires clauses. This is emphasized in the system prompt and reinforced during error-correction iterations."
+      },
+      {
+        "name": "Preserve ensures clauses (but may add)",
+        "description": "All original 'ensures' clauses MUST be preserved; you MAY add additional 'ensures' clauses.",
+        "guidance": "Adding postconditions is permitted because a strengthened lemma still implies the original statement. However, weakening or removing original ensures clauses triggers rejection."
+      },
+      {
+        "name": "No assume statements or {:axiom} attributes in problem solutions",
+        "description": "You may NOT use the 'assume' statement or the '{:axiom}' attribute anywhere in your solution.",
+        "guidance": "The validator scans for ':axiom' attributes and 'assume' statements; their presence causes rejection. The benchmark allows axiomatization only in the included library/definitions files, not in generated problem files."
+      },
+      {
+        "name": "Complete implementation requirement",
+        "description": "Provide a complete proof body replacing the empty '{}', sufficient for Dafny to verify the lemma.",
+        "guidance": "Allowed proof constructs: assertions, calc statements, helper lemmas, loop invariants, case analysis, induction, contradiction. The proof must be self-contained (helper lemmas must include proofs unless already available in library.dfy)."
+      },
+      {
+        "name": "Use available resources (definitions.dfy and library.dfy)",
+        "description": "Leverage functions and lemmas from definitions.dfy and library.dfy without redefining them; they are pre-included.",
+        "guidance": "Do not redundantly re-axiomatize items already present. The system prompt includes the file contents so models should reference those instead of inventing axioms for standard facts."
+      },
+      {
+        "name": "Define helper lemmas only if necessary and prove them",
+        "description": "If helper lemmas or functions are needed that are not in the provided files, define them within your solution and provide complete proofs.",
+        "guidance": "Helper lemmas must not use 'assume' or '{:axiom}'. They should follow the same preservation rules for requires/ensures if they affect the problem statement. Use helper lemmas to structure complex proofs (examples in appendix)."
+      },
+      {
+        "name": "Prove all invoked mathematical results",
+        "description": "If you reference mathematical results not present in definitions.dfy or library.dfy, you MUST prove them within your solution.",
+        "guidance": "Do not rely on unstated 'classical results' (e.g., Cauchy-Schwarz, AM-GM) without giving full formal proofs in Dafny. The initial prompt explicitly enforces this to test proof synthesis rather than library lookup."
+      },
+      {
+        "name": "Explicit quantifier triggers required",
+        "description": "Add explicit triggers to all quantifiers (forall/exists) where they are not automatically synthesized by Dafny using the '{:trigger}' attribute.",
+        "guidance": "This helps guide the solver's quantifier instantiation. The prompt requires explicit triggers to avoid nondeterministic or failing solver behavior."
+      },
+      {
+        "name": "No weakening of problem postconditions",
+        "description": "Solutions must not weaken or remove original 'ensures' clauses; doing so is considered invalid.",
+        "guidance": "The validator enforces that ensures clauses must be a superset of the original. Any weakening triggers rejection and structured feedback for correction."
+      },
+      {
+        "name": "No unsound shortcuts in solutions",
+        "description": "Solutions must not bypass verification by introducing unsound constructs (assume/:axiom) or by modifying the problem's specification.",
+        "guidance": "The validator specifically rejects solutions that add axioms, use assume statements, or otherwise introduce unsound facts. Models are instructed to avoid such anti-patterns."
+      },
+      {
+        "name": "Verification success = no errors or warnings in problem file",
+        "description": "A generated solution is accepted only if Dafny verification yields no errors or warnings originating from the problem file itself.",
+        "guidance": "Warnings from included library files (definitions.dfy, library.dfy) that contain :axiom attributes are allowed, but any warnings/errors from the problem file trigger rejection. The validator parses Dafny's JSON output to determine source-file diagnostics."
+      },
+      {
+        "name": "Validator two-stage pipeline",
+        "description": "Validation operates in two stages: (1) invoke the Dafny verifier and parse its JSON output to detect verification failures; (2) parse the problem lemma signature, preconditions, and postconditions and compare against the generated solution.",
+        "guidance": "The validator produces structured feedback indicating which clauses were modified or which unsound constructs were used to enable iterative correction by models."
+      },
+      {
+        "name": "Specification matching rules in validation",
+        "description": "Requires clauses must match exactly between original and generated files; ensures clauses in the generated file must be a superset of the original ensures.",
+        "guidance": "This rule enforces that models do not strengthen preconditions or weaken postconditions. The validator also checks for addition of :axiom and assume statements and rejects accordingly."
+      },
+      {
+        "name": "Rejection triggers and feedback",
+        "description": "When validation fails, return structured feedback indicating which clauses were modified or which unsound constructs were used, to enable model self-correction.",
+        "guidance": "Error-correction prompts include Dafny error traces plus the original lemma to guide iterative refinement. Up to E=3 error-correction iterations are allowed in the evaluation protocol."
+      },
+      {
+        "name": "Empty-proof baseline measurement protocol",
+        "description": "Measure how many problems Dafny's automation verifies with empty proofs by running verification on each problem for 4 attempts with a 30-second timeout using Dafny version 4.11.0.",
+        "guidance": "This defines the baseline: count problems that verify without any manual intervention (empty proof bodies). Report results as counts and percentages (e.g., 95 of 244 => 38.9%)."
+      },
+      {
+        "name": "LLM evaluation protocol (attempts, error-correction, sampling)",
+        "description": "Each problem receives up to N=4 independent attempt trajectories with E=3 error-correction iterations after the initial attempt; model temperature T=0.5 and 8192 token limit per response. Conversations begin with a system prompt and use Dafny error traces for corrections.",
+        "guidance": "Evaluate models with pass@k metrics (pass@1, pass@2, pass@4). Use consistent infrastructure (Bedrock API in the paper) and report pass@k on the test/validation splits. Some models may be evaluated on subsets due to capacity constraints."
+      },
+      {
+        "name": "Pass criteria and scoring metrics",
+        "description": "Report model performance using pass@k metrics and per-split success rates (e.g., pass@4, and overall percentage of verified problems).",
+        "guidance": "Compare to baselines such as Dafny empty-proof baseline and Lean grind tactic; present both absolute counts and percentages for interpretability. Use multiple independent attempts per problem to compute pass@k."
+      },
+      {
+        "name": "Allowed Dafny proof constructs",
+        "description": "Use Dafny idioms: calc statements for chained algebraic reasoning, assert P as cut points, lemma calls, ghost code, explicit loop invariants, case splits, and induction where needed.",
+        "guidance": "Calc statements and assertions are highlighted as particularly useful for algebraic and equational arguments. Use ghost code (erased at compilation) to guide verification; be mindful that Z3 is sensitive to syntactic arrangement (verification brittleness)."
+      },
+      {
+        "name": "Error-correction iterative method",
+        "description": "On verification failures, extract Dafny error traces and append them to the error-correction prompt along with previous conversation history to iteratively refine the model's output.",
+        "guidance": "This iterative loop is constrained by E (number of correction iterations). The error-correction prompt reminds the model to preserve signatures, forbids assume/:axiom, and asks for fixes in the exact Dafny file format."
+      },
+      {
+        "name": "Axiomatization policy for benchmark/library",
+        "description": "The benchmark intentionally axiomatizes a compact set of mathematical definitions and 174 lemmas in definitions.dfy and library.dfy (using '{:axiom}' for definitions and selected lemmas) to focus evaluation on proof synthesis with SMT automation.",
+        "guidance": "The files provide minimal numeric domains and common facts; while axiomatization expedites experimentation, it carries usual soundness caveats. The authors validated soundness empirically on a random subset (14 problems) to increase confidence."
+      },
+      {
+        "name": "Library-scope design principle",
+        "description": "Keep the background theory compact (minimal library) to isolate SMT reasoning from retrieval; provide enough axioms/lemmas to express problems but not the entire Mathlib.",
+        "guidance": "This design tests whether AI systems can develop proofs from first principles combined with SMT automation rather than relying heavily on massive libraries. The library is intentionally small (938 lines vs Mathlib's millions)."
+      },
+      {
+        "name": "File-level diagnostic allowance",
+        "description": "Allow warnings originating from library/definitions files (which may contain '{:axiom}'), but require the problem file itself to have zero warnings/errors.",
+        "guidance": "This distinction ensures that axiomatization in library files doesn't penalize solutions, while preventing solutions from introducing unsound artifacts in problem files."
+      },
+      {
+        "name": "Validation: detection of unsound modifications",
+        "description": "Validator rejects solutions that strengthen preconditions, weaken postconditions, add ':axiom' attributes or use 'assume' statements, or otherwise change problem semantics.",
+        "guidance": "The validator parses the problem lemma into its signature and clauses and compares them to the original. Structured feedback identifies exact mismatches to assist automated correction."
+      },
+      {
+        "name": "Reproducibility details for evaluation",
+        "description": "Document tool versions, timeout settings, and attempt counts used to compute baselines: Dafny v4.11.0, four attempts per problem, 30-second timeout per attempt.",
+        "guidance": "Include these details when reporting baseline automation results so comparisons are fair and reproducible."
+      },
+      {
+        "name": "Benchmark composition and split constraints",
+        "description": "MINIF2F-DAFNY contains 488 problems (244 test, 244 validation) translated from miniF2F; each split contains specific problem distributions (e.g., 45 AMC, 15 AIME, 20 IMO problems).",
+        "guidance": "The diversity of domains (algebra, number theory, inequalities, combinatorics, analysis) is intended to test both high-level proof strategies and low-level algebraic manipulations. Use the given splits for evaluation consistency."
+      },
+      {
+        "name": "Acceptable proof strategies (recommended)",
+        "description": "Consider direct proofs (assertions/calc), case analysis, induction, contradiction, decomposition into helper lemmas, and adding verifier hints (assert as cut points).",
+        "guidance": "The prompt explicitly lists these strategies. Calc blocks are especially useful for algebraic manipulations; assertions can act as solver guidance. Be mindful that solver heuristics can be sensitive to assertion ordering (verification brittleness)."
+      },
+      {
+        "name": "Error categories for analysis (diagnostic rubric)",
+        "description": "Unverified problems typically fall into: verification brittleness (syntactic ordering), limited Dafny training data (language idioms), or missing mathematical theory (library insufficient).",
+        "guidance": "Use these categories to triage failures: reorder assertions/calc steps to address brittleness, provide Dafny-specific idiom training or prompts to address model familiarity, and expand the library or synthesize lemmas for missing theory."
+      }
+    ]
+  }
+}

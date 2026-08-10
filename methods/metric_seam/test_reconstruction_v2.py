@@ -17,6 +17,7 @@ try:
         claim_permissions,
         classify,
         decomposition_readout,
+        validate_record,
     )
 except ImportError:  # direct-file execution
     from reconstruction_v2 import (  # type: ignore[no-redef]
@@ -33,6 +34,7 @@ except ImportError:  # direct-file execution
         claim_permissions,
         classify,
         decomposition_readout,
+        validate_record,
     )
 
 
@@ -82,10 +84,38 @@ class ClassificationTests(unittest.TestCase):
         evidence = ev(
             verifiability=AxisEvidence(Status.PASS),
             reference_isomorphism=AxisEvidence(Status.FAIL),
+            input_fidelity=AxisEvidence(Status.PASS),
+            program_fidelity=AxisEvidence(Status.PASS),
+            reference_instrument_fidelity=AxisEvidence(Status.PASS),
             verified_reference_disagreement=True,
             verifier_certificate="reports/sympy_replay.json",
         )
         self.assertEqual(classify(evidence), Outcome.CONSTRUCTIVE_EXTENSION)
+
+    def test_constructive_extension_requires_real_same_instrument_disagreement(self):
+        required = {
+            "input_fidelity": AxisEvidence(Status.PASS),
+            "program_fidelity": AxisEvidence(Status.PASS),
+            "reference_instrument_fidelity": AxisEvidence(Status.PASS),
+        }
+        with self.assertRaisesRegex(ValueError, "reference reconstruction FAIL"):
+            ev(
+                verifiability=AxisEvidence(Status.PASS),
+                verified_reference_disagreement=True,
+                verifier_certificate="reports/sympy_replay.json",
+                **required,
+            )
+        for missing in required:
+            axes = dict(required)
+            axes[missing] = AxisEvidence(Status.UNAVAILABLE)
+            with self.assertRaisesRegex(ValueError, missing.replace("_", "-")):
+                ev(
+                    verifiability=AxisEvidence(Status.PASS),
+                    reference_isomorphism=AxisEvidence(Status.FAIL),
+                    verified_reference_disagreement=True,
+                    verifier_certificate="reports/sympy_replay.json",
+                    **axes,
+                )
 
     def test_reference_agreement_cannot_rescue_bad_proxy(self):
         evidence = ev(
@@ -136,6 +166,54 @@ class ClassificationTests(unittest.TestCase):
             reference_isomorphism=AxisEvidence(Status.UNAVAILABLE),
         )
         self.assertEqual(classify(both), Outcome.DUAL_IMPLEMENTATION)
+
+    def test_reconstruction_agreement_does_not_alone_license_isomorphism(self):
+        evidence = ev(
+            articulability=AxisEvidence(Status.PASS),
+            reference_isomorphism=AxisEvidence(Status.PASS),
+        )
+        permissions = claim_permissions(evidence)
+        self.assertTrue(permissions["may_claim_reconstruction_agreement"])
+        self.assertFalse(permissions["may_claim_isomorphism"])
+        self.assertFalse(permissions["may_claim_isomorphic_reconstruction"])
+        self.assertFalse(evidence.isomorphism_established)
+
+        complete = ev(
+            articulability=AxisEvidence(Status.PASS),
+            reference_isomorphism=AxisEvidence(Status.PASS),
+            input_fidelity=AxisEvidence(Status.PASS),
+            program_fidelity=AxisEvidence(Status.PASS),
+            reference_instrument_fidelity=AxisEvidence(Status.PASS),
+        )
+        complete_permissions = claim_permissions(complete)
+        self.assertTrue(complete_permissions["may_claim_reconstruction_agreement"])
+        self.assertTrue(complete_permissions["may_claim_isomorphism"])
+        self.assertTrue(complete.isomorphism_established)
+
+    def test_record_parser_accepts_canonical_reconstruction_name(self):
+        record = ev().as_dict()
+        self.assertIn("reference_reconstruction", record)
+        self.assertNotIn("reference_isomorphism", record)
+        parsed = validate_record(record)
+        self.assertEqual(parsed.reference_reconstruction.status, Status.PASS)
+        self.assertFalse(parsed.isomorphism_established)
+
+    def test_nested_serialization_uses_canonical_reconstruction_name(self):
+        row = SubrelationEvidence(
+            evidence=ev(relation_id="presence"),
+            construct_relation="whether a witness is present",
+            program_relation="typed AST witness enumeration",
+            relation_match=RelationMatchVerdict.CODE_NATIVE,
+        )
+        row_record = row.as_dict()
+        self.assertIn("reference_reconstruction", row_record["evidence"])
+        self.assertNotIn("reference_isomorphism", row_record["evidence"])
+
+        decomposition = build_decomposition("math__a144", [row])
+        decomposition_record = decomposition.as_dict()
+        nested = decomposition_record["subrelations"][0]["evidence"]
+        self.assertIn("reference_reconstruction", nested)
+        self.assertNotIn("reference_isomorphism", nested)
 
     def test_subrelations_do_not_silently_collapse_to_parent(self):
         presence = SubrelationEvidence(

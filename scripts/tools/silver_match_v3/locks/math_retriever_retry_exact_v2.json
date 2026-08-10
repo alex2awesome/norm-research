@@ -1,0 +1,76 @@
+{
+  "schema_version": "silver-match-v3-math-retriever-retry-predeclaration-v2",
+  "status": "FROZEN_BEFORE_NESTED_ASSIGNMENT_MATERIALIZATION_OR_TRAINING",
+  "frozen_at": "2026-07-13T00:53:10-07:00",
+  "task": "math-stackexchange",
+  "supersedes_failed_predeclaration_sha256": "927fee73e6153f383b244ef27d827ff4b1d65696b16329d0ed67b32371315c8a",
+  "failure_class": "SPLIT_FEASIBILITY_ONLY_NO_MODEL_RESULT_OBSERVED",
+  "inputs": {
+    "canonical_manifest_sha256": "b614e345a07123f9fe79d9521351886107476d34cf2b09daa50efce71dc1356f",
+    "relocated_manifest_sha256": "9687911088b55742ce5f161cb8528638796ba9d090b7367a35cbc750665b2e7c",
+    "bank_source_sha256": "600c00cafb28a32f44518a35e2e598abf92e526ec024cc4df43224d8626726c2",
+    "teacher_train_sha256": "4449d1fbeeb78ff70514f15061d3948c271d89e2a2bd563d8e82c6ce3ba58f0a",
+    "teacher_rows": 230,
+    "teacher_source_groups": 230,
+    "external_dev_test_labels_sha256": "dd55345fdcc9befb1b67a7b78e055a4b2e4f168b6f2de5b00e8b8907249867a3",
+    "teacher_external_source_group_overlap": 0
+  },
+  "split_policy": {
+    "upstream_role_seed": 73129,
+    "upstream_role_of_all_eligible_groups": "train",
+    "nested_internal_seed": 2457857651,
+    "nested_internal_seed_derivation": "base16(first_8_hex(sha256(math_retriever_retry_exact_v1.json)))",
+    "seed_search_performed": false,
+    "train_percent": 80,
+    "dev_percent": 10,
+    "test_percent": 10,
+    "partition_scope": "Only the 230 exact upstream-train/source-disjoint teacher groups.",
+    "feasibility_gate": "Proceed only if this single predeclared seed yields nonempty train, dev, and test partitions; otherwise fail closed.",
+    "external_dev_test_role": "Sealed promotion evidence only; never an internal split and never gradient input."
+  },
+  "base_model": {
+    "name": "nvidia/llama-embed-nemotron-8b",
+    "snapshot_revision": "aa3b43a495a9b280d1bdb716da37c54bb495d630",
+    "content_inventory_sha256": "629023c4f3aaf30a29d6de547628d246fc34bd290ea7523d7b4f3052b4e3e172"
+  },
+  "trainer": {
+    "implementation": "scripts/tools/silver_match_v3/train_nemotron_lora.py",
+    "sha256": "1d5885b1367377f1b901998231e95a343e6b473e764dc098bef62bc14f904d5d"
+  },
+  "variant": {
+    "name": "math-exact-nested-r2-lr5e5-e5-seed1729",
+    "epochs": 5,
+    "batch_size": 8,
+    "gradient_accumulation_steps": 4,
+    "eval_batch_size": 32,
+    "max_seq_length": 512,
+    "learning_rate": 0.00005,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "margin": 0.15,
+    "hard_negative_pool": 32,
+    "negatives_per_positive": 6,
+    "lora_rank": 32,
+    "lora_alpha": 64,
+    "lora_dropout": 0.05,
+    "seed": 1729,
+    "split_seed": 2457857651,
+    "selection_k": 50,
+    "epoch_selection_policy": "depth_lexicographic"
+  },
+  "promotion": {
+    "internal_selection": "Epoch 0 exact base baseline; nested internal dev selects depth-lexicographically.",
+    "external_selection_split": "dev_only_after_internal_adapter_freeze",
+    "minimum_exact_recall_at_50_gain": 0.03,
+    "exact_recall_at_80_may_decrease": false,
+    "failed_or_tied_gate_action": "retain frozen unadapted Nemotron and its dev-selected fusion",
+    "external_test_may_be_opened_before_selection_is_frozen": false
+  },
+  "prohibitions": {
+    "weak_or_forced_labels_as_positive": false,
+    "nonmatch_labels_as_positive_retriever_targets": false,
+    "external_dev_or_test_rows_in_gradient": false,
+    "mi_or_outcome_fields": false,
+    "post_result_hyperparameter_or_seed_changes": false
+  }
+}

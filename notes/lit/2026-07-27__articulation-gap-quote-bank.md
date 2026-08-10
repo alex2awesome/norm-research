@@ -319,11 +319,74 @@ recovers a confabulation that performs worse than a dumb model. Both outcomes ar
 
 ---
 
+---
+
+# Wave 3 (2026-07-28) — patents filled, Schön closed
+
+Bib now **183 entries**. Two of the three relaunched agents landed; the third
+(Lamont/Hutcheson/Breed retrieval) was still running when this was written.
+
+## Patents — the domain that was empty is now the cleanest case in the set
+
+This task has a property none of the other ten share: the criteria **are** written down —
+statute, MPEP, the Graham factors — and still fail to determine outcomes. That makes it the
+purest "explicit criteria underdetermine expert judgment" instance we have.
+
+- `harries1950airking` — Learned Hand, *Harries v. Air King Products*, 183 F.2d 158, 162
+  (2d Cir. 1950), fetched via CourtListener: patentable invention "is as fugitive, impalpable,
+  wayward, and vague a phantom as exists in the whole paraphernalia of legal concepts."
+- `ksr2007teleflex` — *KSR v. Teleflex*, 550 U.S. 398, 415, 421 (2007). A unanimous Supreme
+  Court discards the Federal Circuit's explicit TSM test as "rigid" in favour of an "expansive
+  and flexible approach" and "common sense." A court replacing a demonstrably inadequate
+  explicit rule with an avowedly inarticulable standard, on the record.
+- `mandel2007patently` — **the experiment that ties it together.** Mock jurors shifted from 42%
+  to 71% "obvious" verdicts under hindsight framing (49%→85% with a suggestion to combine),
+  and explicitly instructing them on the TSM test produced **no significant correction**. The
+  written rule does not bind the cognitive process it was written to discipline.
+- `mandel2008nonobvious` — the doctrinal companion: the nonobviousness threshold itself was
+  never defined across 50+ years of doctrine, and judging from PHOSITA's perspective is
+  "epistemically impractical" because of the curse of knowledge.
+- Examiner fixed effects, the quantitative core: `cockburn2002examiners` (examiner effects
+  explain 8–12% of variance across 298K patents; a 1-SD generosity shift moves validity
+  probability 14 points; source of "there may be as many patent offices as there are patent
+  examiners"); `lemley2012examiner` (experienced examiners grant 11 points more often, and of
+  US applications the EPO **rejected**, 60% were still patented by the USPTO);
+  `frakes2014time` (the *same* examiner's grant rate rises 9–19 points purely from having less
+  time per case). Identical written criteria, different outcomes, with numbers.
+
+## Schön — the framing's weakest link, closed
+
+`schon1983reflective` now carries page-cited primary quotes via a Leeds Beckett eprint that
+page-cites both books. The one to use is the Meno-paradox passage from *Educating the
+Reflective Practitioner* p.83: "the student seeks to learn things whose meaning and importance
+she cannot grasp ahead of time... The instructor is caught up in the same paradox: **he cannot
+tell his student what she needs to know, even if he has words for it, because the student would
+not at that point understand him.**" That is the strongest statement anywhere in the corpus of
+why articulation can fail even when the expert *has* the words — a distinct failure mode from
+inarticulacy, and one our decompression rungs should distinguish.
+
+`schon1984architectural` is recovered (the Quist/Petra protocol, ~8 of 9 pages), including
+Schön's gloss that Quist "has not applied to the particular situation before him the general
+rules drawn from his past experience," and student testimony: "You don't know where you are and
+have no basis for evaluation. You hang onto the inflection of the tone of voice in your crit to
+discover if something is really wrong."
+
+`cross2007designerly` overturns a prior "closed access" finding — Unpaywall missed Cross's own
+institutional self-archive. Direct hit: "What designers know about their own problem-solving
+processes remains largely tacit knowledge... They find it difficult to externalise their
+knowledge." `lawson2006designersthink` is a partial win (real page pins, but the quotes are
+about irreducible subjectivity rather than inarticulacy — flagged as such).
+
+`anthony1991juries` stays a LEAD. Full-text mirrors exist on piracy-adjacent hosts and the
+agent **declined to bulk-extract from them**, which was the right call; this needs ILL.
+
+---
+
 ## What to do next
 
 | Priority | Item | Why |
 |---|---|---|
-| 1 | Library pull: `lamont2009how`, `hutcheson1929judgment`, `breed1955social`, `schon1983reflective`/`schon1987educating`, `anthony1991juries`, `braude2012intuition` | All load-bearing, all stuck below VERIFIED. Schön especially — we cite him only secondhand, which is a real weakness given how central knowing-in-action is to the framing. Most are behind controlled-digital-lending, so a library card fixes them, not more agents |
+| 1 | Library/ILL pull: `lamont2009how`, `hutcheson1929judgment`, `breed1955social`, `anthony1991juries`, `braude2012intuition` | All load-bearing, all stuck below VERIFIED behind controlled-digital-lending or paywalls. A library card fixes these; more agents will not |
 | 2 | Verify before camera copy | `singh2017evaluating` 16% figure; `lewis2008compromised` 80/12 figures; `frank1930law` once-removed quote; Berenson "my stomach" anecdote is flagged DO NOT USE |
 | 3 | Decide bib wiring | Papers 2, 3, 4 have no `\bibliography` command; paper-1's `refs.bib` is untracked in git |
 | 4 | Patents | The wave-1 patents sweep never returned. Relaunch scoped down: KSR's "common sense," Learned Hand on invention as a "fugitive, impalpable, wayward, and vague phantom," and the examiner-variation literature (Cockburn/Kortum/Stern, Lemley/Sampat) |

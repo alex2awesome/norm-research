@@ -1,0 +1,31 @@
+{
+  "cell": "mathlib_verdict (task D7 job 1)",
+  "status": "GATE_FAIL -- collapsed run, DIAGNOSTIC ONLY, see mathlib_dense_classweighted_followup for the corrected number",
+  "population": "n=7956, matches mathlib_verdict_layer1.json to float precision (pos_rate=0.9428104575163399, n_groups=31=area)",
+  "split": "AREA-GROUPED stable-hash 80/10/10 (train 6229/28 areas, eval 932/1 area=Analysis, test 795/2 areas=CategoryTheory+Control)",
+  "text": "diff_noauth (author-stripped diff, no title) -- matches the cell's own canonical C definition",
+  "recipe": "Llama-3.1-8B LoRA r16/a32 dense-standard, 3 seeds (42,1,2), NO class weighting (frozen recipe default)",
+  "seed_eval_auc": {
+    "seed42": 0.6365,
+    "seed1": 0.5818,
+    "seed2": 0.521
+  },
+  "eval_mean": 0.5798,
+  "eval_spread": 0.1155,
+  "seed_test_auc": {
+    "seed42": 0.4479,
+    "seed1": 0.475,
+    "seed2": 0.4971
+  },
+  "test_mean": 0.4733,
+  "test_spread": 0.0492,
+  "comparison": {
+    "VA_lin": 0.6826666666666666,
+    "VA_nl": 0.6720981165133596,
+    "T_eval_mean": 0.5798,
+    "delta_T_minus_VA_nl": -0.09229811651335962
+  },
+  "gate_call": "FAIL -- this run is a degenerate/collapsed model, NOT a genuine ceiling estimate. Evidence: (1) every validation checkpoint across all 3 seeds shows Recall .977-1.000 / Precision .944 -- exactly the eval-split base rate (.9442) -- indicating near-constant majority-class prediction, not learned discrimination; (2) an independent class-weighted linear TF-IDF LogisticRegression fit on the IDENTICAL train/eval/test split (same rows, same text) scores eval=0.6774 / test=0.7856 -- far above the collapsed LoRA's 0.580/0.473 mean -- proving the population and split are sound and the failure is specific to the unweighted-loss dense-standard recipe on this 94.3%-positive population, not a data problem. Root cause: the frozen dense-standard recipe deliberately omits class weighting; this is fine for balanced/near-balanced cells but collapses on mathlib's extreme imbalance.",
+  "followup_action": "corrected rerun launched 2026-08-08 with --class_weight_auto (train_reward_model.py's own BCEWithLogitsLoss pos_weight flag, already used elsewhere e.g. code-review dense_standard_v3), same population/split/seeds otherwise. In progress at time of this report; see mathlib_dense_classweighted_followup section / GPU ledger claim 2026-08-08T08:37:33Z GPU=3 agent=claude-scaleupA-dense.",
+  "verdict_headline": "DO NOT quote T=.580(eval)/.473(test) as mathlib's dense ceiling -- collapsed model, diagnostic only. Corrected class-weighted rerun pending."
+}

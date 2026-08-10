@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_6bfc74d05ed8.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_6bfc74d05ed8.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39864,
+  "model": "gpt-5-mini",
+  "elapsed_s": 65.76228424999863,
+  "input_tokens": 12129,
+  "output_tokens": 4318,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in formal verification, theorem-prover developers, and mathematicians working on machine-checked proofs (HOL Light / Isabelle/HOL)",
+    "subtask_short": "formalizing Kepler conjecture in HOL Light",
+    "subtask_description": "Formal development and machine-checked verification of the Kepler conjecture, including strategies for verifying multivariate nonlinear inequalities, linear-program relaxations, enumeration of tame graphs, inter-system imports (Isabelle/HOL \u2194 HOL Light), and auditing a distributed formal proof.",
+    "subtask_keywords": [
+      "formal_proof",
+      "hol_light",
+      "isabelle_hol",
+      "nonlinear_inequalities",
+      "linear_programs"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Taylor interval approximation for univariate functions",
+        "description": "Construct a second-order Taylor interval approximation G_Taylor([a,b]) = [l,u] by choosing center y in [a,b], bounding remainder using a chosen w near max{y-a,b-y}, using interval extensions G, G1, G2 of g, g', g'' and computing e so that g(x) \u2208 [gl - e, gu + e] for all x \u2208 [a,b].",
+        "guidance": "Choose y close to midpoint (a+b)/2 to minimize w; compute G([y,y]) = [gl,gu], G1([y,y]) and G2([a,b]) and set e \u2265 iabs(G1([y,y]))*w + (w^2/2)*iabs(G2([a,b])); evaluating expensive interval extensions (e.g., arctan) only once reduces cost; Taylor approximations typically require fewer subdivisions than natural interval extensions; multivariate analogue via multivariate Taylor theorem."
+      },
+      {
+        "name": "Use Taylor interval approximations to prove monotonicity",
+        "description": "Expand g'(x) in a Taylor series to obtain a Taylor interval approximation G'_Taylor([a,b]). If 0 is not in this interval, then g' has fixed sign on [a,b] and g is monotonic.",
+        "guidance": "When derivative interval excludes 0, the maximum/minimum occurs at an endpoint; in multivariate case, a partial derivative of fixed sign can reduce verification on a k-dimensional rectangle to an abutting (k-1)-dimensional rectangle."
+      },
+      {
+        "name": "Subdivision strategy when using interval methods",
+        "description": "Subdivision of domains is required in many verifications; Taylor interval approximations reduce but do not eliminate the need for subdivision.",
+        "guidance": "Taylor methods usually lead to fewer subdivisions than natural interval extensions, but in general one must subdivide the original interval into subintervals and possibly use Taylor approximations on each."
+      },
+      {
+        "name": "Proving sharp inequalities at domain corners",
+        "description": "For inequalities f \u2264 0 where equality holds at some corner x0 of domain D, prove: (1) f(x0)=0 by exact arithmetic; (2) f<0 on complement of a small neighborhood U of x0; (3) every partial derivative of f on U has the appropriate sign so maximum on U occurs at x0.",
+        "guidance": "Carry out steps (2) and (3) using standard Taylor interval tools; x0 typically lies at a corner; use exact arithmetic for the equality check."
+      },
+      {
+        "name": "Two-part verification architecture (informal search + formal verification)",
+        "description": "Verification procedure consists of an informal search that finds a suitable subdivision and meta-information (e.g., whether to apply monotonicity, which disjunct to verify) and a formal verification that consumes that search output and produces a final HOL Light theorem.",
+        "guidance": "Informal search is semi-automatic and tries to find minimal precision necessary; formal verifier runs inside HOL Light and yields machine-checked theorems."
+      },
+      {
+        "name": "All formal numerical computations inside proof assistant using formalized finite-precision",
+        "description": "Perform numerical computations with special finite-precision floating-point numbers formalized in HOL Light; at the lowest level use natural numbers in HOL Light rather than native hardware floats.",
+        "guidance": "This approach avoids relying on native floating-point operations (so results are fully formal theorems) but is substantially slower than informal/native implementations; natural numerals can be represented over arbitrary bases to improve efficiency."
+      },
+      {
+        "name": "Represent numerals over arbitrary base for efficiency",
+        "description": "Improve HOL Light procedures for natural numbers by representing natural numerals over an arbitrary base (instead of standard base 2) and provide arithmetic procedures for those numerals.",
+        "guidance": "Changing base can speed up formal arithmetic; computation precision can be changed dynamically and the informal search tries to minimize precision necessary for formal verification."
+      },
+      {
+        "name": "Combining parallel HOL Light sessions via canonicalization and hashes",
+        "description": "To combine theorems proved in separate HOL Light sessions, transform each theorem and its entire history of constants, types, and axioms to canonical form, serialize to a large string, compute an MD5 hash, and allow import only if the same MD5 is found.",
+        "guidance": "Import permitted only when histories (definitions, types, axioms) match exactly; the specially modified HOL Light is used only for assembling parallel-session results into one master theorem and not for other proofs."
+      },
+      {
+        "name": "Faithful translation between proof assistants (Isabelle/HOL \u2194 HOL Light)",
+        "description": "When leaving part of the formalization in Isabelle/HOL (e.g., tame graph classification), ensure that the Isabelle statement is faithfully translated into HOL Light definitions and types (lists to lists, naturals to naturals, etc.) or else treat the Isabelle theorem as an explicit assumption in HOL Light.",
+        "guidance": "Hand translations were used for definitions and types; auditors should check that the Isabelle theorem and the HOL Light translation refer to identical archives and that no substantive differences (e.g., undeclared cases) affect the proof; computational reflection present in Isabelle complicates automatic import."
+      },
+      {
+        "name": "Executable formulation and enumeration of plane/tame graphs",
+        "description": "Define plane graphs (and tame graphs) via executable algorithms: next_plane maps a graph to successor graphs by subdividing nonfinal faces; next_tame is a restricted version that prunes non-tame branches. The set PlaneGraphs / TameEnum is the set of final graphs reachable from seeds.",
+        "guidance": "Use HOL/Isabelle execution (code generation to ML) to enumerate large finite sets rather than producing them by pure proof; make pruning approximate so no tame graphs are removed (may generate nontame graphs that are eliminated later)."
+      },
+      {
+        "name": "Tameness constraints for graphs",
+        "description": "Tameness requires that faces be triangles up to hexagons and that the admissible weight of a tame graph is bounded above, implying finitely many tame plane graphs up to isomorphism.",
+        "guidance": "Formalize tameness as an executable predicate (tame); pruning removes graphs that cannot lead to tame ones, balancing ease of formal justification against enumeration performance."
+      },
+      {
+        "name": "Completeness of archive via two-step proof",
+        "description": "Prove completeness by (1) every tame plane graph is in TameEnum (interactive Isabelle/HOL proof), and (2) every graph in TameEnum is isomorphic to some graph in the archive (automatically by evaluation/execution).",
+        "guidance": "Rely on Isabelle/HOL's ability to execute closed formulas by translating to ML and running them; the archive is a machine-generated text file shared between systems."
+      },
+      {
+        "name": "Generation of linear programs from nonlinear inequalities",
+        "description": "Generate linear relaxations of systems of nonlinear inequalities by introducing new variables for nonlinear expressions (e.g., y = x^2) and reformulating inequalities linearly, ignoring nonlinear dependency to obtain a relaxation.",
+        "guidance": "Many inequalities are derived automatically; some require manual formal proofs. Linear relaxations produce linear programs whose infeasibility implies inconsistency of the original nonlinear system."
+      },
+      {
+        "name": "Relaxation/approximation of irrational coefficients",
+        "description": "Replace irrational coefficients by rational approximations (e.g., decimals) and produce integer-coefficient inequalities by multiplying by a sufficiently large power of 10; this relaxation is done automatically.",
+        "guidance": "Example: replace \u03c0 and \u221a2 by decimal approximations to derive rational inequalities; ensure scaling yields integer coefficients for formal integer arithmetic verification."
+      },
+      {
+        "name": "Instantiation of LP variables from hypermap data and case splitting",
+        "description": "Instantiate free variables in linear inequalities with special values computed from an associated tame planar hypermap; when LP relaxations are insufficiently precise, automatically case-split on alternatives of the form x \u2264 a \u2228 a \u2264 x to produce more precise relaxations.",
+        "guidance": "Case splitting is generated by a special informal procedure and then each case is formally verified; about half of the tame planar hypermaps require case splitting."
+      },
+      {
+        "name": "Formal verification of linear programs via modified dual solutions",
+        "description": "Construct a primal LP with slack variables and obtain a dual solution (from an external solver). Modify the imprecise external dual to a carefully constructed high-precision 'modified dual solution' such that weighted summation of constraints yields an explicit contradiction (objective positive).",
+        "guidance": "Use external tools (GLPK, C# program) to find initial duals; then modify and scale to integer coefficients by multiplying by a power of 10. Formal verification reduces to summing inequalities weighted by the integer dual coefficients and checking the final inconsistency. Key feature: coefficients of primal variables in the weighted sum must be exactly zero."
+      },
+      {
+        "name": "All LP variables must be nonnegative and bounded",
+        "description": "Require that every variable in each verified linear program is nonnegative and has explicit bounds.",
+        "guidance": "This assumption underlies the construction of the primal LP with slack variables and the dual-based infeasibility proof; bounds are instantiated from hypermap data or other domain constraints."
+      },
+      {
+        "name": "Performance and reproducibility constraints",
+        "description": "Manage large-scale verification by parallelization (many cores / multiple machines), compiled HOL Light, and saving externally computed artifacts (e.g., modified dual solutions) to avoid recomputation.",
+        "guidance": "Example resource usage: verification of nonlinear inequalities consumed ~5000 processor-hours on Azure (parallelized across 32 cores), later rechecked on 60 hyperthreading CPUs; 43,078 linear programs verified in ~15 hours on a 2.4 GHz machine (excluding time to compute duals)."
+      },
+      {
+        "name": "Auditing checklist for distributed formal proofs",
+        "description": "Auditor should (1) execute proof scripts to reproduce claimed theorems; (2) examine definitions to confirm the formalized theorem matches the intended informal theorem; (3) check that no unapproved axioms were added; (4) audit proof system internals for subtle issues; (5) assume malicious intent in reviews; (6) check faithful translation of results imported from other systems and identical archives/lists.",
+        "guidance": "Pay special attention to hand translations (Isabelle\u2192HOL Light), the list of tame graphs used in both systems, and the design of any special modifications to the proof assistant (e.g., import-by-hash machinery)."
+      },
+      {
+        "name": "Treat Isabelle/HOL computational reflection with care",
+        "description": "Because Isabelle proofs may use computational reflection and HOL Light kernel does not permit reflection, re\ufb02ected portions must be modified for import or left as assumptions; this complicates automatic import.",
+        "guidance": "A tool exists for automating import but may be unmaintained; when importing, ensure reflected parts are either reworked or correctly assumed in the target system."
+      },
+      {
+        "name": "Design pruning criteria balancing formalizability and performance",
+        "description": "When formalizing enumeration code (from Java), simplify sophisticated pruning criteria to ones easier to justify formally even if weaker; guarantee that no tame graph is removed but accept possible production of nontame graphs.",
+        "guidance": "Weak pruning criteria are easier to justify but cause runtime blowup; sophisticated pruning saves time but is hard to prove correct inside the proof assistant; choose a balance appropriate for formalization goals."
+      },
+      {
+        "name": "Ensure canonical, shared master data for cross-system artifacts",
+        "description": "Use the same master ML/file to generate archives (e.g., list of tame graphs) across proof assistants to ensure identical content.",
+        "guidance": "Auditors should verify identicalness of generated archives; hand translations of definitions/types should preserve semantics so that machine-generated artifacts match."
+      },
+      {
+        "name": "Formal definitions and basic lemmas included for auditability",
+        "description": "Provide explicit formal statements of core definitions and elementary theorems (e.g., definitions of abs, pow, sqrt properties, finite sums, packing predicate) so auditors can check that standard notions are used.",
+        "guidance": "Including such formalized basic facts in the development helps auditors confirm that the formalized theorem corresponds to the conventional mathematical statement."
+      }
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/3a785e5ca60b.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13784,
+  "output_tokens": 5926,
+  "elapsed_s": 1969.4826679590624,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "users/programmers of PARI/GP (number theorists and mathematicians writing GP scripts)",
+    "subtask_short": "GP/PARI control statements",
+    "subtask_description": "Reference documentation of GP/PARI control statements: semantics, edge-cases, debugging helpers, and loop-construct variants for writing scripts in the GP language (targeted at number-theory computations).",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "control_statements",
+      "number_theory",
+      "scripting"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Lexical scoping of loop indices (caveat)",
+        "description": "In constructs like for (X = a,b, seq) the variable X is lexically scoped to the loop, leading to possibly unexpected behavior.",
+        "guidance": "Example: n = 5; for (n = 1, 10, if (something_nice(), break)); \\ at this point n is 5 ! If the sequence seq modifies the loop index, then the loop is modified accordingly: for (n = 1, 10, n += 2; print(n)) prints 3,6,9,12. Be aware that loop indices are local to the loop scope; modifying outer variables with same name does not change them after the loop."
+      },
+      {
+        "name": "break({n = 1})",
+        "description": "Interrupts execution of current seq, and immediately exits from the n innermost enclosing loops, within the current function call (or the top level loop); the integer n must be positive.",
+        "guidance": "If n is greater than the number of enclosing loops, all enclosing loops are exited."
+      },
+      {
+        "name": "breakpoint()",
+        "description": "Interrupt the program and enter the breakloop. The program continues when the breakloop is exited.",
+        "guidance": "Useful for interactive debugging. Example shows entering break loop and evaluating variables at the breakpoint. Use breakloop commands (dbg_up, dbg_down, etc.) while stopped."
+      },
+      {
+        "name": "dbg_down({n = 1})",
+        "description": "(In the break loop) go down n frames. This allows to cancel a previous call to dbg_up.",
+        "guidance": "Used inside the break loop to navigate to child frames; helpful to inspect deeper frames after dbg_up was used. Example interactive session demonstrates frame navigation and inspecting variable values at different frames. Note: GP frames are attached to variable scopes and control-flow constructs."
+      },
+      {
+        "name": "dbg_err()",
+        "description": "In the break loop, return the error data of the current error, if any.",
+        "guidance": "See iferr for details about error data. Example: iferr(1/(Mod(2,12019)^(6!)-1),E,Vec(E)) returns error-type vector; Vec(dbg_err()) shows the same error data in the break loop."
+      },
+      {
+        "name": "dbg_up({n = 1})",
+        "description": "(In the break loop) go up n frames, which allows to inspect data of the parent function. To cancel a dbg_up call, use dbg_down.",
+        "guidance": "Interactive example shows moving up frames and querying variables at different frame levels. Reinforces that GP frames are finer than usual call stacks (frames attached to variable scopes and control-flow)."
+      },
+      {
+        "name": "dbg x (A, {n})",
+        "description": "Print the inner structure of A, complete if n is omitted, up to level n otherwise. Similar to \\x but does not require A to be a history entry; can be used in the break loop.",
+        "guidance": "Useful debugging function to inspect internal representation of GEN objects with optional depth limit."
+      },
+      {
+        "name": "for(X = a, b, seq)",
+        "description": "Evaluates seq, where the formal variable X goes from a to b, where a and b must be in \u211d. Nothing is done if a > b. If b is +oo, the loop will not stop; it is expected that the caller will break out of the loop itself at some point, using break or return.",
+        "guidance": "If seq modifies the loop index, the loop is modified accordingly (see caveat about lexical scoping). Common pattern for finite iteration; beware of infinite loops when upper bound is +oo."
+      },
+      {
+        "name": "forcomposite(n = a, {b}, seq)",
+        "description": "Evaluates seq, where the formal variable n ranges over the composite numbers between the nonnegative real numbers a to b, including a and b if they are composite. Nothing is done if a > b.",
+        "guidance": "Omitting b runs through all composites \u2265 a (infinite loop expected to be broken by user). The value of n cannot be modified within seq (attempts yield an error: index read-only). Example printed composites between 0 and 10."
+      },
+      {
+        "name": "fordiv(n, X, seq)",
+        "description": "Evaluates seq, where the formal variable X ranges through the divisors of n. It is assumed that factor can handle n, without negative exponents. Instead of n, input may be a factorization matrix (output of factor(n)). Divisors are sorted by increasing size for integer n.",
+        "guidance": "To avoid storing all divisors (memory heavy), an alternative slower routine loops using essentially constant space (example FORDIV implementation). Timing comparisons show fordiv is faster and uses sorting, whereas custom constant-space loops are slower but use less memory."
+      },
+      {
+        "name": "fordivfactored(n, X, seq)",
+        "description": "Evaluates seq, where the formal variable X ranges through [d, factor(d)] for d divisors of n. Accepts such pairs as arguments to multiplicative functions. Assumes factor can handle n; input can be factorization matrix.",
+        "guidance": "Useful when n is hard to factor and you must evaluate multiplicative functions on its divisors: avoids refactoring each divisor. Provides performance improvements vs fordiv when factoring cost is significant. Examples compare timings and show fordivfactored and forfactored can avoid repeated factorizations and yield speedups."
+      },
+      {
+        "name": "foreach(V, X, seq)",
+        "description": "Evaluates seq, where the formal variable X ranges through the components of V (t_VEC, t_COL, t_LIST or t_MAT). A matrix argument is interpreted as a vector containing column vectors, as in Vec(V).",
+        "guidance": "Straightforward iteration over container components; use when you want to iterate elements rather than indices."
+      },
+      {
+        "name": "forell(E, a, b, seq, {flag = 0})",
+        "description": "Evaluates seq, where the formal variable E = [name, M, G] ranges through all elliptic curves of conductors from a to b. name is Cremona curve name, M minimal model, G a Z-basis of free part of Mordell-Weil group. If flag != 0 select only first curve in each isogeny class.",
+        "guidance": "Requires elldata database to be installed for specified conductors. Example shows counting curves and isogeny classes. Library syntax and C-level signature provided. Use flag to restrict to first curve in isogeny class."
+      },
+      {
+        "name": "forfactored(N = a, b, seq)",
+        "description": "Evaluates seq, where the formal variable N is [n, factor(n)] and n goes from a to b; a and b must be integers. Uses a sieve and runs in time O(sqrt{|b|} + b-a). Implemented only for |a|,|b|<2^64 (2^32 on 32-bit machines).",
+        "guidance": "Should be >3x faster than regular factorization when interval length b-a \u226b sqrt{|b|}. Performance depends on primelimit; examples show timings for various B. All PARI multiplicative functions accept [n,fan] argument natively, yielding faster loops than factoring each n inside a regular for loop."
+      },
+      {
+        "name": "forpart(X = k, seq, {a = k}, {n = k})",
+        "description": "Evaluate seq over partitions X = [x1,...,xn] of integer k; partitions given as t_VECSMALL with parts sorted nondecreasingly. By default parts are positive (zeros not included). Partitions are listed by increasing size and lexicographic order within same size.",
+        "guidance": "Optional parameters: a = amax or [amin,amax] restricts part sizes; n = nmax or [nmin,nmax] restricts number of nonzero parts. Examples show how to restrict to at most 3 nonzero parts, etc. Behavior unspecified if X is modified inside loop."
+      },
+      {
+        "name": "forperm(a, p, seq)",
+        "description": "Evaluates seq where p goes through permutations given by a t_VECSMALL. If a is positive integer, p iterates permutations of {1..a} in lexicographic order. If a is a small vector, p iterates multipermutations lexicographically >= a.",
+        "guidance": "When a is a t_VECSMALL or t_VEC then p iterates through multipermutations. Examples show permutation enumeration."
+      },
+      {
+        "name": "forprime(p = a, {b}, seq)",
+        "description": "Evaluates seq where p ranges over primes between real numbers a and b, including a and b if prime. p is incremented to nextprime(p+1) at each iteration. Nothing is done if a > b.",
+        "guidance": "Setting b to +oo creates an infinite loop (caller expected to break using break or return). The value of p cannot be modified within seq (attempt to modify yields 'prime index read-only' error)."
+      },
+      {
+        "name": "forprimestep(p = a, b, q, seq)",
+        "description": "Evaluates seq where p ranges over primes in an arithmetic progression in [a,b]: q is integer (p=a (mod q)) or an intmod Mod(c,N) restricting to that congruence class. Nothing is done if a > b.",
+        "guidance": "Setting b to +oo starts an infinite loop (expected to break). The value of p cannot be modified within seq (attempt yields read-only error). Examples show use with Mod(c,N) or integer step and printed primes in progression."
+      },
+      {
+        "name": "forsquarefree(N = a, b, seq)",
+        "description": "Evaluates seq where formal variable N is [n,factor(n)] and n goes through squarefree integers from a to b; a and b must be integers. Nothing is done if a > b.",
+        "guidance": "Implemented for |a|,|b|<2^64; uses a sieve and runs in time O(sqrt{|b|} + b-a). Should be ~\u03b6(2)=\u03c0^2/6 times faster than forfactored due to relative density of squarefree integers. Performance depends on primelimit. Examples compare timings; can iterate negative fundamental discriminants analogously."
+      },
+      {
+        "name": "forstep(X = a, b, s, seq)",
+        "description": "Evaluates seq where X goes from a to b in increments of s. Nothing is done if s>0 and a>b or s<0 and a<b.",
+        "guidance": "s can be: a positive real (preferably integer), an intmod Mod(c,N) to restrict to progression, or a vector of steps [s1,...,sn] applied cyclically. Setting b to +oo starts infinite loop (caller should break). Examples demonstrate integer step, Mod step, and vector-of-steps behavior."
+      },
+      {
+        "name": "forsubgroup(H = G, {bound}, seq)",
+        "description": "Evaluates seq for each subgroup H of the abelian group G (given in SNF form or vector of elementary divisors). If bound present and positive integer, restrict to subgroups of index < bound; if bound is vector containing B, restrict to index exactly B.",
+        "guidance": "Subgroups are not ordered in any obvious way unless G is a p-group (then decreasing index via Birkhoff). A subgroup is given as a matrix of generators (columns). Intended to treat huge groups when subgrouplist is impractical. For maximal speed subgroups left as produced by algorithm; mathnf(concat(G,H)) used to canonicalize output in examples. Library C signature provided."
+      },
+      {
+        "name": "forsubset(nk, s, seq)",
+        "description": "If nk is integer n, evaluates seq where s goes through all subsets of {1..n}; if nk is [n,k], s goes through subsets of size k. In both cases subsets enumerated lexicographically among same-size subsets with smaller subsets first.",
+        "guidance": "Running time proportional to number of subsets (2^n or binomial(n,k)). Negative n or k supported in corner cases: when n \u2264 0 iterate subsets of empty set; when k < 0 no subset exists and nothing happens. Examples show enumeration and timing for binomial(40,35)."
+      },
+      {
+        "name": "forvec(X = v, seq, {flag = 0})",
+        "description": "Let v be an n-component vector of two-component vectors [ai,bi]. X varies over the n-dimensional box with unit steps: X[i] runs ai, ai+1, ... stopping at first value > bi. Values ordered lexicographically. Type of X same as type of v (t_VEC or t_COL).",
+        "guidance": "flag=1 generate only nondecreasing vectors X; flag=2 generate only strictly increasing X. Shortcut: v = [c1,...,cn] abbreviates [[0,c1-1],...]; flag ignored in that case. If v is vector of nonnegative integers ci, loop runs over representatives of Z^n / v Z^n and flag ignored. Zero entries in v span infinite lattice (ordered lexicographically by increasing L1 norm on free components). Examples include iterating over characters, finite abelian group representatives, and use of break to stop infinite traversal."
+      },
+      {
+        "name": "if(a, {seq1}, {seq2})",
+        "description": "Evaluates seq1 if a is nonzero, otherwise evaluates seq2. seq1 or seq2 may be empty. if (a,, seq) evaluates seq if a is equal to zero. The value of an if statement is the value of the branch that gets evaluated.",
+        "guidance": "Successive 'else' blocks can be abbreviated in single compound if: if (test1, seq1, test2, seq2, ..., seqdefault) equivalent to nested ifs; useful to implement switch/case constructs. Remark: boolean operators && and || are short-circuit evaluated: evaluation of arguments stops as soon as final truth value determined (safe to use expressions like if (x != 0 && f(1/x), ...)). Note: break and next operate on loops (forxxx, while, until); if is not a loop."
+      },
+      {
+        "name": "iferr(seq1, E, seq2, {pred})",
+        "description": "Evaluates seq1. If an error occurs, set formal parameter E to the error data. If pred absent or true, catch the error and evaluate seq2. Both pred and seq2 can reference E. The return value is value of seq2 if an error occurs, and value of seq1 otherwise.",
+        "guidance": "seq2 should check whether the error is the one expected; otherwise rethrow via error(E) to be caught by outer iferr. Example implements ECM factoring: iferr(ellmul(...), E, return(gcd(lift(component(E,2)),N)), errname(E)=='e_INV' && type(component(E,2)) == 't_INTMOD'). The documentation then lists valid error types and attached error data (components of E) in detail; see guidance entry for taxonomy."
+      },
+      {
+        "name": "Error taxonomy and error data (used by iferr and dbg_err)",
+        "description": "Comprehensive list of valid error types and attached error data E; for each error type the documentation lists in order the components of E, accessed via component(E,i). Categories: Internal/'system' errors, Syntax/type errors, Overflows, Errors triggered intentionally, Mathematical errors.",
+        "guidance": "Examples of entries (component descriptions as documented): Internal: 'e_ARCH' (E: missing feature name), 'e_BUG' (function name); Syntax/type: 'e_DIM' (function name, arg x, arg y), 'e_TYPE' (function name, offending argument), 'e_OP' (operator name, arg1, arg2), etc.; Overflows: 'e_MEM' (no component), 'e_OVERFLOW' (function name); Intentional: 'e_ALARM' (message), 'e_USER' (vector of arguments); Mathematical: 'e_INV' (function name, noninvertible x \u2014 useful for factoring when Mod(a,b) has nontrivial gcd), 'e_PRIME', 'e_IRREDPOL', etc. The documentation lists many specific codes (e_ARCH, e_BUG, e_FILE, e_IMPL, e_PACKAGE, e_DIM, e_FLAG, e_NOTFUNC, e_OP, e_TYPE, e_TYPE2, e_PRIORITY, e_VAR, e_COMPONENT, e_DOMAIN, e_MAXPRIME, e_MEM, e_OVERFLOW, e_PREC, e_STACK, e_ALARM, e_USER, e_CONSTPOL, e_COPRIME, e_INV, e_IRREDPOL, e_MISC, e_MODULUS, e_PRIME, e_ROOTS0, e_SQRTN). Use errname(E) and component(E,i) to inspect and discriminate errors inside iferr handlers."
+      },
+      {
+        "name": "next({n = 1})",
+        "description": "Interrupts execution of current seq, resume the next iteration of the innermost enclosing loop, within the current function call (or top level loop). If n specified, resume at the n-th enclosing loop. If n bigger than number of enclosing loops, all enclosing loops are exited.",
+        "guidance": "Use to skip remainder of current loop body and continue at next iteration; similar to 'continue' in other languages but supports unwinding multiple nested loops."
+      },
+      {
+        "name": "return({x = 0})",
+        "description": "Returns from current subroutine, with result x. If x omitted, return the (void) value (return no result, like print).",
+        "guidance": "Use to exit functions early with a specified result or to return void."
+      },
+      {
+        "name": "setdebug({D}, {n})",
+        "description": "Sets debug level for domain D to n (0 \u2264 n \u2264 20). D is a character string describing a Pari feature or code module (e.g., 'bnf', 'qflll', 'polgalois'). If n omitted returns current level for D. If D omitted returns two-column matrix listing available domains with their levels. 'debug' default resets all debug levels.",
+        "guidance": "Example: setdebug()[,1] lists domains. \\g 1 sets all debug levels to 1. setdebug('bnf',0) disables messages related to bnfinit and bnfisrincipal. Useful for selective diagnostic verbosity."
+      },
+      {
+        "name": "until(a, seq)",
+        "description": "Evaluates seq until a is not equal to 0 (i.e., until a is true). If a is initially not equal to 0, seq is evaluated once (condition tested after execution of seq, not before as in while).",
+        "guidance": "Post-tested loop. Use when loop body should execute at least once."
+      },
+      {
+        "name": "while(a, seq)",
+        "description": "While a is nonzero, evaluates the expression sequence seq. The test is made before evaluating seq, hence if a is initially equal to zero the seq will not be evaluated at all.",
+        "guidance": "Pre-tested loop. Use when body should run only if condition initially true."
+      }
+    ]
+  }
+}

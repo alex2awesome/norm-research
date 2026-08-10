@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/waveh5_nber_priorities.pdf",
+  "task": "grant-funding",
+  "source_dir": "raw",
+  "source_file": "waveh5_nber_priorities.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 5,
+  "chunk_chars": 39520,
+  "model": "gpt-5-mini",
+  "elapsed_s": 51.35244074999355,
+  "input_tokens": 12416,
+  "output_tokens": 4945,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "empirical researchers / economists building firm\u2013patent\u2013publication datasets and performing econometric analysis of firm use of science",
+    "subtask_short": "constructing firm-publication-patent dataset",
+    "subtask_description": "Procedures and measurement rules for assembling a matched firm-level dataset linking Compustat firms to Web of Science publications and patent data, constructing citation- and proximity-measures, and building instruments for econometric analysis over 1980\u20132006.",
+    "subtask_keywords": [
+      "empirical_economics",
+      "patent_matching",
+      "publications",
+      "compustat",
+      "web_of_science"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Sample inclusion criteria (firm panel)",
+        "description": "Final estimation sample is an unbalanced panel of publicly traded US-headquartered companies over 1980\u20132006 that have at least one year of positive R&D expenditures and at least one patent; final sample: 4,736 firms and 57,765 firm-year observations.",
+        "guidance": "Exclude non-patenting firms and firms not headquartered in the United States (based on Compustat current records). Condition some analyses on publishing firms (those with publication stock)."
+      },
+      {
+        "name": "Handling multiple Compustat identifiers and parent-subsidiary merging",
+        "description": "Account for multiple Compustat records / ids (CUSIPs, GVKEYs) for the same economic company and for parent/subsidiary relationships and joint ventures.",
+        "guidance": "Rely on NBER 2006 patent data project to identify multiple Compustat records; merge parent and related subsidiaries using the 'CGS Associated Issuers' database and online sources; manually modify NBER data to aggregate subsidiaries under parent UO company when appropriate (examples: ARMSTRONG HOLDINGS / ARMSTRONG WORLD INDUSTRIES; DOW CORNING under both parents)."
+      },
+      {
+        "name": "Unique company identifiers (UO-COMPANY and PDPCO)",
+        "description": "Assign each parent company a unique 9-digit CUSIP (UO-COMPANY) and up to five associated CUSIPs for related firms; also assign each company a unique NBER 'PDPCO' code to enable dynamic matching.",
+        "guidance": "Use these identifiers to dynamically match dataset with Compustat accounting data and NBER patent data."
+      },
+      {
+        "name": "Publications inclusion scope (WoS selection)",
+        "description": "Publications are obtained from Web of Science; include articles from journals covered in the 'Science Citation Index' and 'Conference Proceedings Citation Index - Science', excluding social sciences, arts and humanities articles.",
+        "guidance": "Focus on science/engineering literature relevant to corporate R&D; total found ~300k corporate articles from 1980\u20132006."
+      },
+      {
+        "name": "Parsing and using the affiliation field for firm matches",
+        "description": "Use the publication 'affiliation' field (which can contain multiple institute/company listings and addresses) to match publications to firms (allowing many-to-many matches to reflect collaborations).",
+        "guidance": "Affiliation strings may be long/unstructured (example shown); allow multiple firms matched per publication to capture collaborative work."
+      },
+      {
+        "name": "Company name standardization for matching",
+        "description": "Standardize company names by cleaning non-alphabetic characters, removing Compustat indicators, converting to uppercase, and omitting common legal entity endings (INC, CORP, LTD, PLC, THE, LAB, PHARMACEUTICAL) when possible.",
+        "guidance": "Preserve legal entity or original name when omission would produce ambiguous matches (short/generic names). Add alternate historical names and common abbreviations (e.g., IBM, GE). Use external sources (Bloomberg, Opencorporates, Crunchbase, older Compustat) and SDC Platinum to recover former names and subsidiaries."
+      },
+      {
+        "name": "Adding alternate names and abbreviations to improve matches",
+        "description": "Where omission of legal entity or standardization would cause mismatch, include additional relevant names/variants (e.g., include 'MERCK RESEARCH LAB' for 'MERCK & CO', include common abbreviations such as 'IBM').",
+        "guidance": "Obtain list of most frequent company-name variants from the publisher affiliation strings and adjust company name list accordingly; perform manual checks against addresses."
+      },
+      {
+        "name": "Abbreviation mapping and normalization",
+        "description": "Compile and apply a targeted list (over 80 entries) mapping common abbreviations/variants of words in affiliation strings to standardized short forms (example: multiple variants of 'laboratory' \u2192 'LAB').",
+        "guidance": "The list is built from frequent abbreviated words in the affiliation Address field and is tailored to the sample to improve automated matching."
+      },
+      {
+        "name": "Automated many-to-many matching using regex / fuzzy-string methods",
+        "description": "Apply many-to-many matching between standardized company names (~5.5K names) and publication affiliation fields (~14 million publications) using STATA's 'regexm' command to detect whether the affiliation field contains each company name.",
+        "guidance": "Allow more than one firm to be matched to each publication to capture collaborations; supplement automated matching with extensive manual checks and address comparisons to reduce mismatches."
+      },
+      {
+        "name": "Address-based disambiguation checks",
+        "description": "When company names may be ambiguous (e.g., multiple locations), verify matches by comparing the address listed in Compustat to the address in the publication affiliation field.",
+        "guidance": "Example: distinguish 'THERATECH INC / UTAH' vs 'THERATECH INC' by checking city (Salt Lake City). Use address information to resolve similarly-named institutions."
+      },
+      {
+        "name": "Patent-to-firm dynamic matching (NBER method)",
+        "description": "Perform dynamic matching of patents to Compustat firms following the NBER 2006 patent data project approach, accounting for changes in Compustat ids and M&A reassignment.",
+        "guidance": "Make manual adjustments to NBER data when aggregating under parent UO firms (example: merge BOEING CAPITAL CORP patents into BOEING CO); when a patent has several assignees, match to several firms and assign fractional ownership (1 / number of assignees)."
+      },
+      {
+        "name": "Matching Non-Patent Literature (NPL) citations to Web of Science",
+        "description": "Match front-page patent NPL citations (from PatStat) to Web of Science publications using a many-to-many fuzzy matching algorithm that constructs a score capturing textual overlap between title, journal, authors and publication year.",
+        "guidance": "The algorithm accounts for misspellings, unstructured text, incomplete references, and variations in citation structure; extensive manual checks are performed to confirm matches. Final output is unique ids for the citation, citing patent, and cited publication."
+      },
+      {
+        "name": "Title matching using fuzzy string distance",
+        "description": "Match publication title to the title portion of the citation string using fuzzy string methods: standardize/clean fields, compute length-difference and Levenshtein distance (STATA 'strdist'), and use the difference between length-diff and distance as a proximity measure; supplement with exact match on the first part of the title.",
+        "guidance": "Handle cases where the title is missing from the citation by relying more on other features (authors, journal, year)."
+      },
+      {
+        "name": "Author matching rules for citation matching",
+        "description": "Match authors between publication records and citation strings while handling variations: last name only vs full names, initials vs names, presence/absence of 'et al.', and order changes.",
+        "guidance": "Count number of authors in publication record; if 'et al.' appears in the citation, allow reduced author matching; if 'et al.' is absent and multiple authors exist, perform one-to-many matches and require at least 80% of authors matched to determine a match. If only one author matches and 'et al.' is absent, rely more on other features."
+      },
+      {
+        "name": "Journal-information matching",
+        "description": "Match standardized journal name, year, page numbers and volume between NPL citation strings and publication metadata while accounting for typos, abbreviations, and format differences.",
+        "guidance": "Examples: 'INTERNATIONAL ELECTRONICS' vs 'ELECTRONICS'; 'VOL. 53, NO. 3' vs '54 (3)'. Use journal matching as one feature in weighted combined score."
+      },
+      {
+        "name": "Combining multi-feature match scores and manual validation",
+        "description": "Combine match results for title, authors and journal information using weights according to their relative importance to determine final matches; perform extensive manual checks to confirm matches.",
+        "guidance": "Use the combined weighted score to select final publication\u2013citation matches and verify edge cases manually."
+      },
+      {
+        "name": "SEGMENT proximity measure",
+        "description": "Compute SEGMENT proximity as the absolute un-centered correlation between two firms' vectors of sales-share distribution across Compustat operating segments (60 segments used for citing/cited firms).",
+        "guidance": "Generate a vector for each UO firm based on sales share in each of the 60 segments over the sample period (1980\u20132006); SEGMENT proximity ranges from 0 (least correlated) to 1 (fully correlated). When multiple assignee firms are matched to a cited patent, compute the average distance between the different firms."
+      },
+      {
+        "name": "TECH proximity measure",
+        "description": "Compute TECH proximity as the absolute un-centered correlation between two firms' vectors of patent-share distribution across 3-digit IPC technology fields.",
+        "guidance": "Generate a vector for each UO firm based on granted-patent share in each 3-digit IPC field over 1980\u20132006; TECH proximity ranges from 0 to 1 and is computed analogously to SEGMENT."
+      },
+      {
+        "name": "Inventor\u2013author overlap measure",
+        "description": "Measure inventor-author overlap as the share of patents per firm-year whose inventor list includes at least one inventor who is also an author of a corporate publication by the same firm published no later than 3 years before the patent's grant year.",
+        "guidance": "Standardize names for inventors (HBS Patent Inventor Database: first and last name fields) and publication authors (last name followed by initials) to the format 'LASTNAME F' (last name + first initial, uppercase). Perform many-to-many matching between inventor-standardized names and author-standardized names for publications published up to 3 years prior to the patent's grant year; compute firm-grant-year share of non-collaborative patents with at least one inventor-author overlap."
+      },
+      {
+        "name": "Instrument: firm-level profit shock from exchange rate fluctuations (dit)",
+        "description": "Construct a firm-year weighted change in foreign exchange rates relative to USD (dit) as an instrument for internal use, using two sets of weights: (i) firm-specific share of subsidiaries in each country (Sic) and (ii) industry-level export share from the US to each foreign country in the firm's industry (Export_jct).",
+        "guidance": "Include only manufacturing firms (SIC 20\u201339); data for years 1990\u20132006; use annual averages of monthly official exchange rates from World Bank WDI; set dtc to zero in year of Euro adoption; compute dit as the weighted sum across countries and industries. Use a dummy for devaluation (dit>0), lagged by two periods, as an instrument for one-period lagged internal use."
+      },
+      {
+        "name": "Assumptions and identification strategy for exchange-rate instrument",
+        "description": "Identification assumes (i) future profits depend on realized exchange rates so that, conditional on current exchange rates, the long-run value of research is unaffected for a given level of internal use, and (ii) shocks to exchange rates lead to changes in internal use (exploration vs exploitation).",
+        "guidance": "Interpret negative exchange-rate shocks as reducing profitability and shifting downstream innovation toward exploitation (less use of science); use first-stage tests (Kleibergen\u2013Paap F) and overidentification tests (Hansen) to assess instrument strength and validity."
+      },
+      {
+        "name": "Definition and measurement of internal/external citation variables",
+        "description": "Internal patent citations to own publications: average number of citations per patent from firm patents to the firm's own publications; various measures include average internal citations per patent, share of internal citations of total citations received by own publications, and share of internal citations of total citations made to corporate publications.",
+        "guidance": "Citations include patent citations up to year t-1 to publications published up to the same year; self-citation is defined as average number of patent citations to own patents per firm-year. Use ln(1+variable) transformations in regressions when appropriate; include firm fixed effects, industry dummies, year dummies and controls such as ln(R&D stock)t-1, ln(1+Patent stock)t-1, ln(Sales)t-1."
+      },
+      {
+        "name": "Construction and use of devaluation instrument in regressions",
+        "description": "Use the devaluation dummy (dit>0) as an instrument in first-stage regressions for internal use; report first-stage effect on internal citations and test for weak instruments (Kleibergen\u2013Paap F).",
+        "guidance": "Example results: devaluation associated with an 8.1% decrease in average internal use (decrease of 0.65 internal cites); reject weak instruments with Kleibergen\u2013Paap F = 59. Use two instruments jointly (IDD and devaluation) and report Hansen J overidentification p-value to assess validity."
+      },
+      {
+        "name": "Heterogeneous-effect classifications (publication/patent types)",
+        "description": "For heterogeneous analyses, classify citations/publications/patents along dimensions such as Basic vs Applied publications (JIF/CHI), New vs Old science, High vs Low quality publications, Core vs Non-Core technology, and High vs Low quality patents.",
+        "guidance": "Construct separate internal-citation variables by these categories (e.g., ln(1+Internal citation to publications, NEW)t-1 vs OLD) and include them in regression specifications to test differential effects on publication output."
+      }
+    ]
+  }
+}

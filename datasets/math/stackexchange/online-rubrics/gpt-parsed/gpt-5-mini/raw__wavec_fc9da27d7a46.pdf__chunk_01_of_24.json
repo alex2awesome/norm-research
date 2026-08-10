@@ -1,0 +1,199 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 24,
+  "chunk_chars": 39991,
+  "model": "gpt-5-mini",
+  "elapsed_s": 91.20573558400065,
+  "input_tokens": 13671,
+  "output_tokens": 7009,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "Users of PARI/GP (mathematicians and programmers writing PARI/GP code)",
+    "subtask_short": "PARI/GP programming usage",
+    "subtask_description": "Guidelines and usage rules for writing correct and efficient PARI/GP code: syntax, data types, operators, variable semantics, and performance caveats. Includes examples, warnings, and recommended idioms.",
+    "subtask_keywords": [
+      "pari_gp",
+      "programming",
+      "symbolic_computation",
+      "math_software"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Braces and line-break rules",
+        "description": "Braces do not nest; inside an open brace-close brace pair, all input lines are concatenated, suppressing any newlines. Newlines should occur only after a semicolon (;), a comma (,) or an operator. Never split an identifier over two lines.",
+        "guidance": "If you place a newline inside braces without a terminating separator, lines are concatenated and can produce unintended identifiers or assignments. Example anti-pattern: {\n\na = b\nb = c\n\n} is interpreted as a=bb=c. Correct form: {\n\na = b;\nb = c;\n\n}. Always terminate statements appropriately inside braces."
+      },
+      {
+        "name": "Types provided for convenience (not for speed)",
+        "description": "Types t_INTMOD, t_FRAC, t_PADIC, t_QUAD, t_POLMOD, t_RFRAC are provided for convenience but are not optimized for speed because they perform reductions after each basic operation.",
+        "guidance": "Avoid relying on these types for heavy computations where performance matters. For performance-sensitive code prefer working with integers, using libpari (C-level) routines, homomorphic imaging schemes, or modular computations to delay reductions. Example: using Mod(1/i,p) can be orders of magnitude faster than computing with rationals mod p via t_FRAC."
+      },
+      {
+        "name": "Integer input (t_INT)",
+        "description": "Integers are typed with an optional leading + or -, followed by decimal digits. No decimal point is allowed.",
+        "guidance": "Typing '1.' creates a t_REAL, not an integer. Use plain digits (e.g., 1234567 or -3) for integers."
+      },
+      {
+        "name": "Real numbers (t_REAL) input and precision rules",
+        "description": "Real numbers require a decimal point (or scientific notation) and are represented with an internal accuracy/precision. Trailing zeros matter: they affect internal precision; default precision and input digits determine stored precision.",
+        "guidance": "You may use scientific notation with E/e; en is \u00d710^n. Examples: 6.02E23 or 1e-5 are fine. 0.E n returns a real 0 of exponent n; 0. returns a real 0 of default precision. When integer part is not known because exponent > internal precision, the number is printed in e format. Be aware of behavior of inexact zeros and machine-epsilon effects."
+      },
+      {
+        "name": "Intmods (t_INTMOD) usage",
+        "description": "To create an element of Z/bZ use Mod(a,b), not a%b. Internally representatives are in [0, b-1].",
+        "guidance": "Each elementary operation involves reduction modulo b, so t_INTMOD is convenient but not necessarily fastest. A t_INTMOD x has member function x.mod returning the modulus b. Prefer t_INTMOD for modular-only computations instead of carrying rationals."
+      },
+      {
+        "name": "Rational numbers (t_FRAC) are auto-reduced; performance cost",
+        "description": "Fractions are automatically reduced to lowest terms on every operation; floating point division is not performed.",
+        "guidance": "Because each elementary operation computes a gcd, t_FRAC operations can be slow. When possible cancel denominators and work with integers, or use modular methods/homomorphic imaging. Example timings show Pol^2 with t_FRAC is slower than equivalent integer-based computation."
+      },
+      {
+        "name": "Finite field elements (t_FFELT) construction",
+        "description": "Create finite fields using ffinit(p, n) and generators using ffgen(T, 'name). The optional second parameter labels the generator for display.",
+        "guidance": "Use the generator class to build field elements; member functions available: g.pol (polynomial representation), g.p (characteristic), g.f (dimension), g.mod (minimal polynomial). Example: T = ffinit(2,8); y = ffgen(T,'y); y^8 prints in terms of y."
+      },
+      {
+        "name": "Complex numbers (t_COMPLEX) input",
+        "description": "Enter complex numbers as x + I*y where I (uppercase) denotes sqrt(-1). Real and imaginary parts can be of types t_INT, t_REAL, t_INTMOD, t_FRAC, or t_PADIC.",
+        "guidance": "Don't use lowercase i for imaginary unit (i may be a valid variable). Use capital I in PARI/GP."
+      },
+      {
+        "name": "p-adic numbers (t_PADIC) notation and caveats",
+        "description": "Typing O(p^k) yields a p-adic 0 of accuracy k; to input a non-zero p-adic give a rational/integer approximation plus O(p^k). p is not checked for primality; results are undefined if p is composite.",
+        "guidance": "O(25) is not the same as O(5^2) \u2014 prefer O(p^k) form. Member functions: a.mod returns modulus p^k, a.p returns p. t_PADIC operations update pk and reduce mod pk, so additions are slow; t_INTMOD often outperforms t_PADIC for many tasks. Example timings compare p-adic and modular loops."
+      },
+      {
+        "name": "Quadratic numbers (t_QUAD) quadgen(d)",
+        "description": "quadgen(d) assigns the canonical quadratic generator w for the quadratic order of discriminant d, printed as w regardless of variable name.",
+        "guidance": "Be aware two t_QUADs with different discriminants may be printed the same and not be equal; gp refuses invalid operations between incompatible t_QUADs. Use expressions x + y*w with integer or t_FRAC coefficients; retrieve discriminant with z.disc and components with real(z)/imag(z)."
+      },
+      {
+        "name": "Polmods (t_POLMOD) Mod(x,y) and variable consistency",
+        "description": "Enter polynomial classes Mod(x,y). Each elementary operation reduces modulo y. Internally polmods are represented by polynomial representatives in a chosen variable.",
+        "guidance": "Always use Mod(x,y) (not x%y). Polmods must use the same variable in internal operations to avoid inconsistencies; mixing variables may lead to unexpected behavior (e.g., Mod(x,x^2+1) vs Mod(y,y^2+1)). If main variables match, mixing t_POL and t_POLMOD is allowed and yields expected results. See discussion of variable 'priority' in multivariate contexts."
+      },
+      {
+        "name": "Polynomials (t_POL) input best practices",
+        "description": "Type polynomials naturally, remembering to put a '*' between coefficients and variables. Using 'x produces a free variable irrespective of assignments to x.",
+        "guidance": "Avoid assigning values to polynomial variables; prefer using 'x to guarantee a free variable. Pol([coeffs]) and Polrev([coeffs]) are efficient constructors (linear time) compared to naive summation (quadratic). Polynomials are printed as univariate in the main variable with monomials sorted by decreasing degree."
+      },
+      {
+        "name": "Power series (t_SER) O(X^k) and precision caveats",
+        "description": "Typing O(X^k) yields an X-adic 0 of accuracy k. To input a series, type a polynomial or rational function and add O(X^k).",
+        "guidance": "Power series with inexact coefficients can behave non-intuitively: an inexact zero may be counted as significant. Inverting a series with 0 leading coefficient normalizes/discards it and issues a warning rather than raising an exception. If series precision is insufficient you may get division-by-zero or normalization warnings\u2014plan global precision carefully."
+      },
+      {
+        "name": "Rational functions (t_RFRAC) auto-reduction",
+        "description": "Rational functions are automatically reduced to lowest terms like fractions.",
+        "guidance": "All performance caveats for t_FRAC apply similarly to t_RFRAC."
+      },
+      {
+        "name": "Binary quadratic forms (t_QFR and t_QFI) input and accessors",
+        "description": "Binary quadratic forms are created with Qfb(a,b,c). Imaginary forms use t_QFI; positive-definite forms are implemented.",
+        "guidance": "Retrieve discriminant with poldisc or q.disc; components via Vec(q) or component(q,i). For positive discriminant forms (t_QFR) an optional fourth component may be provided; qfbprimeform constructs a prime form of given discriminant."
+      },
+      {
+        "name": "Row and column vectors (t_VEC and t_COL) syntax and indexing",
+        "description": "Row vectors: [a,b,c]; to make a column vector transpose a row with '~'. Access: v[m] is m-th entry (assignable); v[i..j] slice; v[^i] returns vector with i-th entry removed. Negative indices count from end (-1 is last).",
+        "guidance": "You cannot assign to slices v[i..j] or v[^i]. Constructors: vector(n,i,expr) and vectorv for columns. Vec/Col convert objects; Vecrev/Colrev revert indexing. Example: vector(10,i,i^2+1)."
+      },
+      {
+        "name": "Vector comprehension shortcuts",
+        "description": "Comprehension forms [g(x) | x <- v, f(x)] etc. are available as shortcuts for apply/select operations on vectors.",
+        "guidance": "They map to apply(g, select(f, Vec(v))) or select(f, Vec(v)). Useful for concise constructors, e.g., [ p | p <- primes(10), isprime(p+2) ] returns twin primes among first 10 primes."
+      },
+      {
+        "name": "Matrices (t_MAT) syntax, indexing and slices",
+        "description": "Matrices entered as [row1; row2; ...], components separated by commas and rows by semicolons. Access M[i,j], M[i,], M[,j], submatrices M[i..j,k..l], removals M[^k,], etc. M[i] is invalid.",
+        "guidance": "Slicing returns matrices or t_VEC/t_COL as appropriate (e.g., M[i..j,k] returns a t_COL). All slicing is recursive so M[1,1][,3][4] = 1 is valid if types align. You may not assign to ranges like M[i..j,k..l] directly except where documented."
+      },
+      {
+        "name": "Matrix internal representation and empty-matrix behavior",
+        "description": "Matrices are internally vectors of columns. All matrices with 0 columns share the same internal object; matrices with zero columns but positive rows cannot be distinguished. The empty matrix [;] is handled as having an arbitrary number of rows as needed.",
+        "guidance": "Multiplications with empty matrices behave per this representation (e.g., [1,2,3;4,5,6]*[;] yields [;]). A row vector of column vectors is not the same as a matrix: use Vec/Mat to convert between representations."
+      },
+      {
+        "name": "Lists (t_LIST) creation and mutation",
+        "description": "Lists can be created with List([items]) or by creating an empty List() and appending with listput.",
+        "guidance": "Prefer List() + listput when building lists incrementally. Elements are accessed similarly to vectors."
+      },
+      {
+        "name": "Strings (t_STR) input",
+        "description": "Strings are enclosed in double quotes: \"this is a string\".",
+        "guidance": "Use Str() to convert other objects to strings."
+      },
+      {
+        "name": "Small vectors (t_VECSMALL) internal use",
+        "description": "t_VECSMALL is an internal type optimized for vectors of small integers (e.g., permutations).",
+        "guidance": "Most gp functions will refuse to operate on these objects; treat them as internal and avoid depending on them for general code."
+      },
+      {
+        "name": "Functions / closures (t_CLOSURE) creation forms",
+        "description": "Functions can be assigned to variables and created as f = (x,y) -> expr or f(x,y) = expr.",
+        "guidance": "Closures behave as first-class objects and can be passed/returned from functions; longer discussion in Section 2.7 of the manual."
+      },
+      {
+        "name": "Error contexts (t_ERROR) and trapping exceptions",
+        "description": "Errors create t_ERROR objects and typically abort computation and enter a break loop. Exception handling can use iferr to trap and recover or inspect error contexts.",
+        "guidance": "Use iferr(expr, E, handler) to capture exceptions, print or extract information via component(E,i), or rethrow with error(E). Example: i = Mod(6,12); iferr(1/i, E, print(E)); 1+1 prints the error and continues."
+      },
+      {
+        "name": "GP operators: fixed priorities and associativity",
+        "description": "Operators have fixed priorities; by default operators at same priority are left-associative except assignments which are right-associative. Parentheses override priority. Unary operators can be prefix or postfix.",
+        "guidance": "Be explicit with parentheses when in doubt. Example associativity: a + b + c -> (a + b) + c (left-assoc); a = b = c -> a = (b = c) (right-assoc). The manual lists operators by priority (14 down to 1) with semantics for each priority level."
+      },
+      {
+        "name": "Specific operator behaviors (++, --, selection, derivative, transpose, factorial, logical not, #, ^, shifts, exact division)",
+        "description": "Details: ++/-- are unary postfix and return the new value (like C prefix ++); selection operator [ ] extracts components and can be lvalue when followed by assignment; ' (postfix) is derivative with respect to main variable and can create numerical derivative closures; ~ is transpose; ! is factorial (postfix) and logical not (prefix); # returns cardinality; ^ is powering and right-associative; << and >> are binary shifts with priorities different from C; / is exact division (3/2 yields 3/2).",
+        "guidance": "Careful: behaviour differs slightly from C in some cases (e.g., ++ returns new value). Use parentheses to avoid ambiguity, and be aware of lvalue semantics for selections and postfixed operators."
+      },
+      {
+        "name": "Equality and identity operators (== vs === vs <>/!=)",
+        "description": "== tests exact equality (coercing some different zero-like objects equal); === tests identity component-wise (stricter). <> or != tests exact inequality.",
+        "guidance": "Use === when you need component-wise identical objects; note that different zero-like representations (0 integer, 0 polynomial, empty vector) may compare equal under == but are not identical under ===."
+      },
+      {
+        "name": "Logical short-circuiting with && and ||",
+        "description": "Logical and/or are evaluated left-to-right with short-circuiting: evaluation stops as soon as the final truth-value is known.",
+        "guidance": "Use this feature to avoid errors in conditional expressions, e.g., x == 0 || test(1/x) will not evaluate test(1/x) if x == 0. Similarly use type checks to avoid invalid calls."
+      },
+      {
+        "name": "Assignment operator = and compound assignments op=",
+        "description": "Assignment = is right-associative and requires an lvalue on the left. Compound assignment lvalue op= expr assigns (lvalue op expr) to lvalue and returns the new value (not an lvalue).",
+        "guidance": "The left-hand side must be an lvalue; expressions like 1 + x = 1 raise a parse error. Prefer op= (e.g., v[i+j-1]++) for legibility and slight efficiency gains; op= are right-associative and cannot be used where an lvalue is expected in the result."
+      },
+      {
+        "name": "Use op=, ++, and shifts for legibility and performance",
+        "description": "Compound assignment operators and ++/-- and shift-assignments are slightly more efficient and make complex assignments clearer.",
+        "guidance": "Examples: use v[i+j-1]++ instead of v[i+j-1] = v[i+j-1] + 1; prefer <<= or >>= to multiply/divide by powers of two. Timing examples show measurable speedups in loops."
+      },
+      {
+        "name": "Variable name rules and limits",
+        "description": "Valid names start with a letter followed by keyword or alphanumeric characters. Built-in function names and certain reserved names (Pi, Euler, Catalan, I, O, etc.) cannot be used. Names are case-sensitive.",
+        "guidance": "You can use up to 16383 variable names (65535 on 64-bit machines). If you need many named entities consider using vectors X[1], X[2], ... instead of X1, X2, ..."
+      },
+      {
+        "name": "Variables and polynomials: free variables have default values; prefer quoting",
+        "description": "A valid identifier used before assignment registers a free variable and evaluates to a monomial. PARI/GP does not have unbound variables; free variables have default values. Use 't to refer to the free monomial independent of assignments.",
+        "guidance": "Prefer not to assign to polynomial variables; use 'x to construct polynomials safely. When you need to update previous expressions after changing a variable's value, use eval or prefer subst and its variants rather than relying on eval. Example pitfalls: p = t^2 + 1; subst(p, t, 2) works if t is free; assigning t = 2 later changes semantics and causes errors unless you used 't originally."
+      },
+      {
+        "name": "Variable priorities and multivariate objects",
+        "description": "When new identifiers are introduced they are registered with priorities; multivariate polynomials are stored as univariate polynomials whose coefficients are polynomials in lower-priority variables. The ordering of variables affects division and other operations.",
+        "guidance": "Use variable() to see current ordering. To enforce a consistent order across sessions, declare variables at startup (e.g., variables.gp containing x;y;z;...). Be cautious: implicit variable ordering affects operations like % and / on polynomials and functions like numerator/denominator/content. Examples illustrate surprising results like denominator(x/y) != denominator(y/x) due to implicit variable ordering. Prefer explicit divrem(x,y,var) when behavior must be unambiguous."
+      },
+      {
+        "name": "Multivariate power series: single-variable assumption and substitution caveats",
+        "description": "Power series are fundamentally single-variable objects with an implicit main variable determined by priority; PARI cannot handle multivariate error terms like O(x^i y^j). Substituting expressions involving higher-priority variables into lower-priority variables can lead to spurious terms.",
+        "guidance": "Avoid substituting expressions with high-priority variables for lower-priority ones. Examples: operations like subst(z*A, z, B) and B*A may give different results because implicit constants in O(xi) depend on other variables. The implementation favors continuing with approximate computations (issuing warnings) rather than raising exceptions."
+      }
+    ]
+  }
+}

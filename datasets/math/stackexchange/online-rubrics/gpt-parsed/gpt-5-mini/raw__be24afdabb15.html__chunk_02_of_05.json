@@ -1,0 +1,101 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/be24afdabb15.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "be24afdabb15.html",
+  "chunk_idx": 2,
+  "n_chunks": 5,
+  "chunk_chars": 39987,
+  "model": "gpt-5-mini",
+  "elapsed_s": 73.99930275000224,
+  "input_tokens": 12609,
+  "output_tokens": 3992,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of the Metamath system; mathematicians and students writing/formalizing proofs in Metamath (set.mm) and people interested in formal predicate calculus axiomatizations.",
+    "subtask_short": "metamath_scheme_substitution_and_d_variables",
+    "subtask_description": "Rules and conventions for substitution, distinct-variable conditions, and definitions in the Metamath language (as used in the set.mm database). Explains how Metamath treats schemes vs actual theorems, how $d statements work, and how to ensure sound definitions.",
+    "subtask_keywords": [
+      "metamath",
+      "formal_logic",
+      "distinct_variables",
+      "substitution",
+      "definitions",
+      "set.mm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Direct substitution rule (Metamath)",
+        "description": "By default (when no distinct variable conditions are present) there are no restrictions on substitutions that may be made into a scheme, provided we honor the metavariable types (wff variable or setvar variable). This is called direct substitution.",
+        "guidance": "Direct substitution contrasts with traditional \"proper substitution\". In Metamath, connectives like \u2203 are treated as plain n-place operators (e.g., \u2203 is a 2-place prefix connective taking a setvar and a wff) and there is no built-in notion of bound or free variables. Substitution always creates a new scheme from an old one. Example: ax-6 abbreviated as \"\u2203 x x = y\" allows substituting the same variable for x and y unless a distinct variable condition forbids it. Anti-pattern: trying to apply textbook 'free/bound' proper-substitution rules as a primitive in Metamath."
+      },
+      {
+        "name": "Distinct variable conditions (purpose and meaning)",
+        "description": "Sometimes restrictions on substitutions are necessary to ensure soundness; these are imposed as distinct variable conditions on scheme/theorem statements.",
+        "guidance": "Distinct variable groups (e.g., \"x, y  x, \u03c6  x, A\") are metalogical provisos that mean: where x and y may not be substituted with the same setvar; where whatever setvar is substituted for x may not appear in the wff substituted for \u03c6; where whatever setvar is substituted for x may not appear in the class substituted for A. Officially a distinct variable pair means the two expressions substituted for the two variables must not have any variables in common (a disjoint variable pair). If a group has more than two variables it abbreviates all pairwise conditions. Constants (like class constant V) are considered distinct from all variables and never appear in a distinct variable group."
+      },
+      {
+        "name": "Distinct variable conditions are inherited/propagated",
+        "description": "Distinct variable conditions on axioms propagate into theorems that use those axioms; substitutions in proof steps transform and produce new distinct-variable requirements that the proof must satisfy.",
+        "guidance": "When referencing an axiom/theorem with $d conditions in a proof step, the substituted expressions convert the original $d constraints into specific disjoint pairs for that step; these must be present (explicit $d statements) for the verifier to accept the proof. Example: applying ax-5 with substitution yields new pairs z,x and z,y that must accompany the step. The Metamath verifier will flag a missing $d (disjoint variable) violation; mmj2 can compute necessary $d's automatically. Anti-pattern: omitting $d statements because variables 'look' different \u2014 distinctness is semantic (disjointness of substituted expressions), not just different names."
+      },
+      {
+        "name": "Explicit $d statements required in set.mm (specifier vs verifier tradeoff)",
+        "description": "In the Metamath language, distinct variable conditions are specified with $d statements placed before an assertion in the same scope; each theorem must include the $d statements needed to satisfy all distinct variable conditions implicitly attached to the proof steps.",
+        "guidance": "Although theoretically redundant (they could be inferred from axioms), explicit $d statements are required by the Metamath spec to speed up verification and allow verifying proofs in isolation. Some tools (Metamath Solitaire, mmj2) can infer them for development, but the set.mm file follows explicit $d statements. Optional $d omissions for dummy variables are a matter of convention in some verifiers but violate the spec."
+      },
+      {
+        "name": "Metamath operates only with schemes (no actual object-language theorems)",
+        "description": "Metamath's substitution rule always creates a new scheme from an old one; Metamath works only with schemes and never with actual axioms or theorems (object-language statements).",
+        "guidance": "Metamath cannot express specific actual theorems like \"(v1 = v2 -> v1 = v2)\" inside its language; such actual theorems are outside the system. The distinction matters: Metamath formalizes metalogic (schemes and substitution) so that no techniques outside the axiom system are needed to derive theorem schemes. Example: schemes like (\u03c6 -> \u03c6) yield substitution instances such as (x = y -> x = y) which are themselves schemes in Metamath."
+      },
+      {
+        "name": "Metamath substitution vs traditional proper substitution",
+        "description": "The proper substitution rule of traditional predicate calculus is a by-product of their chosen axiom schemes; Metamath uses different (often more numerous) schemes so that proper substitution need not be a primitive notion.",
+        "guidance": "Metamath's approach avoids alpha-conversion and scope-aware substitution by using distinct-variable provisos and direct substitution. Tradeoff: more axiom schemes but simpler metalogic. Textbooks' 'free' and 'bound' built-ins are emulated via schemes and hypotheses rather than language primitives."
+      },
+      {
+        "name": "Emulation of 'not free in' and 'free for' notions",
+        "description": "Metamath lacks language-level notions 'not free in' or 'free for'; these are emulated by logical properties/hypotheses rather than syntactic structure.",
+        "guidance": "To say 'x is effectively not free in \u03c6' use hypothesis \u03c6 \u2192 \u2200x \u03c6. The special connective \u2132 x \u03c6 is defined to stand for \u2203x \u03c6 \u2192 \u2200x \u03c6 (see df-nf and Theorem nf5). 'Free for' is emulated via the definition of proper substitution (df-sb) and appropriate theorems (e.g., approximate equivalent to stdpc4). These emulations may accept a few extra cases (thus 'effectively' not free)."
+      },
+      {
+        "name": "Allowed substitution hints (interpretation rules)",
+        "description": "Web pages may show an 'Allowed substitution hints' list to indicate which setvar variables may appear in expressions substituted for wff or class metavariables; this is a convenience, not part of the Metamath language, and must be interpreted carefully.",
+        "guidance": "Six points clarify interpretation: (1) If no distinct variable groups, any substitution honoring variable types is permissible. (2) If hints omit a wff/class variable, that means certain setvar variables may not appear in a substitution for it. (3) If theorem has distinct groups but no hints, then none of the setvar variables in theorem/hypotheses may appear in substitutions for wff/class variables (dummy variables excepted). (4) The parenthesized list after a variable shows which of the theorem's setvars may appear in the substitution for that metavariable; setvars not in the theorem are still allowable. (5) The list says nothing about mutual distinctness; only $d statements do. (6) Hypotheses can further constrain allowed appearances (e.g., \u2132 x \u03c6 hypothesis restricts occurrences). Use 'Allowed substitution hints' as informal convenience only."
+      },
+      {
+        "name": "Dummy variable conventions",
+        "description": "Dummy/new variables used inside proofs that do not appear in the theorem are omitted from the web page 'Distinct variable groups' list; by convention dummy variables are assumed mutually distinct and distinct from all other variables.",
+        "guidance": "This assumption simplifies the displayed lists; actual $d statements in set.mm may include explicit $d statements for some dummy pairs (optional). Omitting those explicit $d's in the source is possible but makes proof verification or reuse (e.g., breaking into lemmas) brittle. Some verifiers allow optional $d's for dummies, but this deviates from spec."
+      },
+      {
+        "name": "Unnecessary distinct variable groups weaken theorems but are allowed",
+        "description": "Introducing unnecessary distinct variable groups in a theorem is always allowed and doesn't affect its proof, but it weakens the theorem so later theorems may also need to be weaker to use it.",
+        "guidance": "Use of extra $d statements is conservative but can make derived theorems less generally usable. Example: ax6v is a weakening of ax-6 with extra distinct-variable provisos; such weakenings are sometimes used intentionally."
+      },
+      {
+        "name": "Distinct variables are metalogical (not object-language), and Metamath has no bound/free notion",
+        "description": "Distinct variable conditions are metalogical conditions imposed on axiom/theorem schemes; Metamath has no built-in concept of bound vs free variables or quantifier 'scope'.",
+        "guidance": "Therefore substitution treats a variable after a quantifier the same as the same symbol anywhere else; the only checks are syntax type and $d conditions. This is different from textbook proper substitution and requires explicit $d statements where textbooks may implicitly assume distinctness."
+      },
+      {
+        "name": "Finite axiomatization in a strong sense",
+        "description": "Metamath's axiom system is finitely axiomatized in the sense that at any point in a proof there are only finitely many axiom schemes in the system from which the next step can be chosen, and whenever the choice is valid/unifiable there is a unique most general theorem that results.",
+        "guidance": "This contrasts with traditional predicate calculus where one must choose from an infinite number of substitution possibilities. Consequence: proof tools like Metamath Solitaire can present exactly the allowed unifiable choices and the unique most-general resulting theorem. This property also lets Replacement Scheme of ZFC be expressed as a single scheme under Metamath."
+      },
+      {
+        "name": "Definitions are axioms; soundness must be established externally",
+        "description": "The Metamath language has no separate mechanism enforcing definition soundness; the only way to add a definition is to introduce it as a new axiom, so definitions must be verified sound outside the verifier.",
+        "guidance": "A definition is sound if (1) it is eliminable (any theorem containing the defined symbol can be converted to an equivalent wff without it) and (2) it is conservative (theorem remains provable from original axioms after elimination). Unsound definitions can introduce inconsistency (example: changing df-2 to '2 = (1 + 2)' yields 0 = 1). The mmj2 program has a definition checker that can verify the soundness of most definitions in set.mm (with listed exclusions); remaining excluded defs need metalogical justification outside mmj2. Treat definitions as axioms and justify them by meta-arguments or separate tooling."
+      },
+      {
+        "name": "Equivalence of Metamath and traditional axiom systems (same actual theorems)",
+        "description": "Although Metamath's schemes look different from traditional textbook axiom systems (which use 'free'/'bound' and proper substitution), the two systems generate precisely the same set of actual theorems.",
+        "guidance": "Every Metamath axiom scheme ax-4 through ax-13 can be proved as a theorem scheme of the traditional system, and conversely every instance of traditional axiom schemes is an instance of a theorem scheme provable from Metamath's axiom schemes (Theorem 5 of Tarski, p.78). This justifies Metamath's different metalogical choices: they are an alternative formulation, not a weaker/stronger logic."
+      }
+    ]
+  }
+}

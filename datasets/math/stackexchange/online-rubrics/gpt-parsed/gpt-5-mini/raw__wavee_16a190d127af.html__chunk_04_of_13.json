@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_16a190d127af.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_16a190d127af.html",
+  "chunk_idx": 4,
+  "n_chunks": 13,
+  "chunk_chars": 39755,
+  "model": "gpt-5-mini",
+  "elapsed_s": 49.90509133299929,
+  "input_tokens": 10351,
+  "output_tokens": 4337,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in federated learning, privacy-preserving machine learning, and applied cryptography",
+    "subtask_short": "federated_learning_privacy_mechanisms",
+    "subtask_description": "Guidance and evaluation criteria for privacy-preserving technologies (DP, MPC, HE, TEEs, ZKPs, PIR, secure aggregation/shuffling) applied to federated learning systems, including trade-offs, threat models, and implementation requirements.",
+    "subtask_keywords": [
+      "federated_learning",
+      "differential_privacy",
+      "secure_computation",
+      "trusted_hardware",
+      "zero_knowledge_proofs"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Homomorphic encryption (HE) suitability",
+        "description": "Homomorphic encryption schemes allow certain mathematical operations to be performed directly on ciphertexts, without prior decryption. Different flavours exist (FHE, leveled HE, partially homomorphic schemes such as ElGamal and Paillier).",
+        "guidance": "Consider type (FHE vs leveled vs partially homomorphic), efficiency (computational/communication costs), supported operations (additive, multiplicative), available implementations/libraries, and key management (who holds secret keys). In FL consider key renewal frequency (susceptibility to chosen-ciphertext attacks) and the need for distributed/threshold encryption when no trusted keyholder exists."
+      },
+      {
+        "name": "Trusted execution environments (TEEs) properties",
+        "description": "TEEs provide confidentiality, integrity, and measurement/attestation: code execution state remains secret unless published, execution cannot be affected except by inputs, and the TEE can prove what binary is executing and its starting state.",
+        "guidance": "Evaluate TEE instantiation (SGX, TrustZone, Sanctum), limitations (restricted memory, limited access to GPUs/ML accelerators), side-channel risks, need for data-oblivious code to avoid leaking via access/runtime patterns, and requirement for reproducible builds/open-source to prove privacy properties. Consider how to partition FL functionality between TEEs, cloud, and clients."
+      },
+      {
+        "name": "Secure aggregation functionality",
+        "description": "Secure aggregation enables n clients to submit values so the server learns only an aggregate (typically the sum) and nothing more about individual contributions.",
+        "guidance": "Assess implementation choices (additive masking, threshold HE, generic MPC) and operating setting (single-server vs multiple non-colluding servers). In distributed DP designs, use secure aggregation plus local perturbation so the aggregated noise equals central DP noise. Consider communication and robustness to dropout."
+      },
+      {
+        "name": "Secure shuffling functionality",
+        "description": "Secure shuffling allows clients to submit messages so the server learns only an unordered collection (multiset) of messages and cannot link messages to senders beyond message contents.",
+        "guidance": "Compare with secure aggregation: shuffling is like multiset-sum but often has different best-performing implementations. Implementations include mix networks, TEE-based shufflers, or cryptographic primitives. Consider unlinkability guarantees and performance in typical operating regimes."
+      },
+      {
+        "name": "Private information retrieval (PIR) correctness and trade-offs",
+        "description": "PIR enables a client to download a database entry such that the server gains zero information about which entry was requested. Approaches: computational PIR (cPIR) and information-theoretic PIR (itPIR).",
+        "guidance": "Consider computational vs communication costs: cPIR can be computationally expensive, itPIR requires multiple non-colluding servers. Recent lattice-based work reduces computation; trade-offs can be shifted between computation and communication. Variants (PIR-with-Default, PIR on coded data, sublinear online time via offline/online models) offer additional design choices."
+      },
+      {
+        "name": "Differential privacy formal definition and parameters",
+        "description": "(\u03b5, \u03b4)-differential privacy: A randomized algorithm A is (\u03b5, \u03b4)-DP if for all measurable S and adjacent datasets D and D', P(A(D)\u2208S) \u2264 e^\u03b5 P(A(D')\u2208S) + \u03b4. In FL, adjacency is typically user-level (datasets differ by all records of one client).",
+        "guidance": "Interpret smaller (\u03b5, \u03b4) as stronger privacy. Ensure the notion of adjacency matches threat model (user-level vs record-level). Use appropriate accounting methods (advanced composition, moments accountant) to track cumulative privacy loss across rounds."
+      },
+      {
+        "name": "Local differential privacy (LDP) utility vs trust trade-off",
+        "description": "LDP obtains DP guarantees without a trusted server by having each client apply a DP mechanism locally; guarantees hold per user's local dataset.",
+        "guidance": "LDP deployments (Google, Apple, Microsoft, Snap) require large numbers of clients/reports to maintain utility. Evaluate whether LDP utility is acceptable for the application or if hybrid/distributed approaches are preferable."
+      },
+      {
+        "name": "Distributed differential privacy and hybrid trust models",
+        "description": "Distributed DP seeks to recover central DP utility without a trusted curator by having clients encode focused reports and a secure computation function produce outputs that already satisfy DP. Hybrid DP partitions users by trust preference (some central DP opt-in, others local), enabling improved utility.",
+        "guidance": "Consider which secure computation backend is used (MPC, TEE, or combination) and the stronger assumptions they entail. Hybrid models can outperform uniform application of a single trust model; design should match user opt-in behavior and expected utility/privacy trade-offs."
+      },
+      {
+        "name": "Encode-Shuffle-Analyze (ESA) / shuffling model specifics",
+        "description": "ESA: each client runs an LDP protocol, sends output to a secure shuffler which permutes reports and forwards them to the server for analysis. Multi-message shuffling allows more than one message per user; shuffler can be trusted or implemented via cryptographic primitives.",
+        "guidance": "Shuffling can yield much smaller error than pure LDP while relying on weaker trust than central DP. Consider adaptive selection of local randomizers, multi-message protocols, and practical implementations (e.g., Prochlo)."
+      },
+      {
+        "name": "Verifiability objectives in FL",
+        "description": "Verifiability enables one party to prove to another that it executed desired behavior on data faithfully, without revealing secrets. In FL, goals include proving the server performed aggregation/shuffling/noise addition correctly and clients proving their inputs/conformance to protocol.",
+        "guidance": "Use ZKPs, TEEs/remote attestation, or combinations. Choose techniques based on desired formal guarantees vs hardware assumptions; design proofs and attestations so they match the threat model and efficiency constraints."
+      },
+      {
+        "name": "Zero-knowledge proofs (ZKP) properties and selection criteria",
+        "description": "A ZKP has completeness, soundness, and zero-knowledge. Constructions vary by supported statement language, setup requirements (trusted CRS), prover/verifier efficiency, interactivity, succinctness, and underlying hardness assumptions.",
+        "guidance": "Evaluate trusted setup needs (CRS) and whether that is acceptable; consider non-interactive vs interactive forms and conversions (random oracle). Important efficiency metrics: proof size, prover complexity, verifier complexity. SNARKs offer constant-size proofs and efficient verification but often require trusted setup and impose prover overhead; other constructions trade succinctness for standard assumptions and no trusted setup."
+      },
+      {
+        "name": "ZKP efficiency metrics to consider",
+        "description": "Efficiency considerations include proof length, prover computation complexity, and verifier computation complexity. Ideal prover complexity is linear in the evaluated functionality execution time; verifier complexity should be at least linear in input size.",
+        "guidance": "In FL server-proof settings, input sizes can be large; pick constructions (e.g., SNARKs, Libra) with acceptable prover/verifier trade-offs. Be aware many succinct systems require superlinear prover work; newer systems may reduce prover cost at the expense of larger proofs or slower verification."
+      },
+      {
+        "name": "Trusted setup and interaction trade-offs in ZK systems",
+        "description": "Some ZKPs require a trusted setup (CRS) which, if compromised, breaks soundness; non-interactive proofs remove interactivity but often rely on stronger assumptions (random oracle) or trusted setup.",
+        "guidance": "Account for practical deployment concerns: whether a trusted ceremony is feasible, whether non-interactive proofs are required, and how stronger assumptions affect threat models."
+      },
+      {
+        "name": "Remote attestation requirements for TEEs",
+        "description": "Remote attestation allows a verifier to measure internal state of a remote hardware platform to establish static/dynamic roots of trust; TEEs enable hardware-based attestations, but software-based and hybrid attestations also exist.",
+        "guidance": "For FL, clients must know/trust the exact binary expected to run in the enclave; attestations can help verify absence of leaks, immutability, and uninterruptability. Consider trade-offs between hardware requirements and verifiability guarantees."
+      },
+      {
+        "name": "Auditing model susceptibility to attacks",
+        "description": "Quantify a model's susceptibility by simulating attacks on a proxy dataset similar to expected data, or seek worst-case upper bounds theoretically. Auditing helps understand what can be learned from intermediate iterates and the final model.",
+        "guidance": "Use proxy/simulated attacks to estimate expected susceptibility, and where possible develop worst-case bounds. Recognize empirical auditing may be intractable for some attack types; investigate theoretical conditions under which simulated attack failure implies no stronger attacks exist."
+      },
+      {
+        "name": "Central DP training mechanism and accounting",
+        "description": "User-level central DP in FL: server clips the L2 norm of individual updates, aggregates clipped updates, and adds Gaussian noise to the aggregate. Track privacy budget across rounds using advanced composition or moments accountant (analytical moments accountant works well with uniformly subsampled Gaussian mechanism).",
+        "guidance": "Be aware of privacy-utility trade-offs (noise can degrade accuracy especially with moderate budgets and small datasets). Mitigations include more data, privacy-friendly architectures, or leveraging domain priors. Implement clipping carefully (adaptively if users have variable numbers of examples)."
+      },
+      {
+        "name": "Distinction between malicious clients vs malicious analysts",
+        "description": "Malicious clients (who participate in rounds) may see intermediate iterates and have more information than malicious analysts who only see the final model; privacy guarantees can differ between these threat models.",
+        "guidance": "Design theoretical analyses and mechanisms to provide appropriately stronger guarantees against analysts, and consider privacy-amplification-via-iteration results; be cautious about carrying convex results to non-convex settings."
+      },
+      {
+        "name": "Constraints for privacy amplification under non-uniform device sampling",
+        "description": "To provide formal (\u03b5, \u03b4) guarantees in cross-device FL, protocols should: (1) be robust to user availability and dropout, (2) be self-accounting so the server can compute a tight (\u03b5, \u03b4) from protocol-visible info, (3) rely on local participation decisions (server doesn't assume knowledge of which users are online), and (4) achieve good privacy-utility trade-offs.",
+        "guidance": "Design protocols meeting these constraints to be deployable in production FL systems; recent work suggests feasibility but end-to-end production protocols remain an open problem."
+      },
+      {
+        "name": "Sources of randomness and computational DP considerations",
+        "description": "Devices have limited true entropy sources; it's standard to seed a cryptographically secure PRNG and use its outputs. Implementations of DP usually satisfy computational variants of DP because PRNG outputs are indistinguishable from true entropy only against computationally-bounded distinguishers.",
+        "guidance": "Ensure critical randomness (device sampling procedure, additive Gaussian noise) is drawn from a cryptographically secure PRNG. Understand the distinction: DP as defined is information-theoretic, but practical implementations provide computational DP; consider whether that is acceptable under the threat model."
+      },
+      {
+        "name": "Key management and threshold/distributed encryption requirements",
+        "description": "In HE and related encryption-based approaches, a central question is who holds the secret key; naive client encryption with a server that can decrypt is problematic. Distributed (threshold) encryption distributes the secret key among parties to avoid reliance on a trusted non-colluding party.",
+        "guidance": "When designing FL protocols with HE, account for key renewal frequency, susceptibility to chosen-ciphertext attacks, and practical constructions for threshold schemes (e.g., for summation in cross-device settings)."
+      }
+    ]
+  }
+}

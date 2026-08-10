@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_05e5ca4af66f.html",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "wavee_05e5ca4af66f.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39988,
+  "model": "gpt-5-mini",
+  "elapsed_s": 54.16988979099551,
+  "input_tokens": 13026,
+  "output_tokens": 5294,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and engineers developing or evaluating patent text embedding models",
+    "subtask_short": "patent_text_embedding_evaluation",
+    "subtask_description": "Designing, training, and evaluating neural embeddings for patent texts (retrieval, paraphrase, classification, clustering) using a multi-task benchmark and reproducible evaluation protocols.",
+    "subtask_keywords": [
+      "patent",
+      "embedding",
+      "benchmark",
+      "nlp",
+      "evaluation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Multiple Negatives Ranking Loss (InfoNCE)",
+        "description": "Used for all eight retrieval tasks (three symmetric: retrieval_IN, retrieval_OUT, retrieval_MIXED; five asymmetric: title2full, problem2full, effect2full, effect2substance, problem2solution). Given anchor-positive pairs in a batch, treats other positives in the batch as negatives and uses cosine similarity with temperature \u03c4 = 0.05.",
+        "guidance": "Formula: LMNR(ai, pi) = - log ( e^{sim(u_ai,u_pi)/\u03c4} / sum_j e^{sim(u_ai,u_pj)/\u03c4} ). Applies to symmetric retrieval tasks and fragment-to-full asymmetric retrieval tasks. Efficient in-batch negative sampling; recommended for retrieval-type supervision."
+      },
+      {
+        "name": "Online Contrastive Loss for paraphrase",
+        "description": "Used for paraphrase tasks (para_problem, para_solution). Loss uses explicit positive-negative supervision with binary label y \u2208 {0,1} and margin \u03b5 = 0.5.",
+        "guidance": "Formula: L_contr(x1,x2,y) = y\u00b7(1 - sim(u1,u2))^2 + (1 - y)\u00b7max(0, sim(u1,u2) - \u03b5)^2. Positive pairs are penalized for dissimilarity; negatives are penalized for similarity above margin. Use when explicit positive/negative labels are available."
+      },
+      {
+        "name": "Batch-Hard Soft-Margin Triplet Loss for classification",
+        "description": "Adapted triplet loss for single-document classification tasks (class_text2ipc3 with 109 classes, class_bloom with 3 classes). Uses batch-hard variant selecting hardest positive and hardest negative per anchor.",
+        "guidance": "Formula: L_triplet(a) = log(1 + e^{sim(u_a,u_n*) - sim(u_a,u_p*)}), where p* = arg min_p sim(u_a,u_p) (hardest positive) and n* = arg max_n sim(u_a,u_n) (hardest negative). Soft-margin avoids explicit margin hyperparameters; suitable for multi-class metric-learning."
+      },
+      {
+        "name": "Cross-Entropy Loss for pairwise classification",
+        "description": "Used for pairwise classification task (class_nli_oldnew). Embeddings are concatenated ([u1;u2]) and a linear classifier with softmax is applied.",
+        "guidance": "Formula: L_CE(x1,x2,y) = - log( e^{w_y^T[u1;u2]} / sum_k e^{w_k^T[u1;u2]} ). Use standard cross-entropy over concatenated embeddings for pairwise binary classification."
+      },
+      {
+        "name": "Global training objective: uniform multi-task loss",
+        "description": "Combine all task-specific losses into a single global objective L = sum_{t \u2208 T} L_t with uniform weighting (\u03bb_t = 1). The 13 training tasks are included; two clustering tasks are evaluation-only.",
+        "guidance": "Uniform weighting treats all tasks equally regardless of dataset size. Authors note exhaustive tuning of per-task weights is expensive; uniform weights are chosen for simplicity and balanced performance. Future work could explore automated weight adaptation."
+      },
+      {
+        "name": "Distillation pipeline (teacher\u2192student via PCA + MSE)",
+        "description": "Three-stage distillation: (1) encode all unique training texts with teacher and cache embeddings, (2) fit incremental PCA projection matrices W_d using sampled teacher embeddings, (3) train students to minimize MSE between student embeddings and PCA-projected teacher embeddings.",
+        "guidance": "Student architectures are created by regular-stride subsampling of teacher layers; vocabulary and hidden size preserved; students project to lower dimensionalities (128\u2013768) via learned linear projections initialized with incremental PCA. Loss: L_MSE = (1/N) sum_i || u_student(x_i) - W_d \u00b7 u_teacher(x_i) ||^2. Use large teacher encoding offline to decouple cost from student training."
+      },
+      {
+        "name": "Prompt design and input processing (INSTRUCTOR approach)",
+        "description": "Use concise, role-specific prompt prefixes to help the model learn task-specific representations; each task uses distinct prompts for query and target fields to disambiguate objectives (e.g., IN vs OUT retrieval).",
+        "guidance": "Task-specific prepended prompts used during training; appendix contains full specifications. For evaluation, models trained with prompts are evaluated with those prompts, while baselines not trained with prompts are evaluated without prompts. Prompting helps with tasks that have contradictory objectives and yields measurable prompt sensitivity, particularly for asymmetric retrieval."
+      },
+      {
+        "name": "Optimization and reproducible training hyperparameters",
+        "description": "Recommended training recipe: paged AdamW 8-bit optimizer, cosine learning rate decay, 10% warmup, gradient norm clipping at 1.0, mixed precision (FP16/BF16 optional), single epoch over aggregated multi-task dataset.",
+        "guidance": "Learning rates vary by initialization: 1e-5 for bert-for-patents init, 5e-5 for gte-modernbert-base init, 1e-4 for distilled variants. Per-device batch size 32 with gradient accumulation 4 (effective 128). Max sequence length default 512, long variants up to 4096. Mean pooling used. Record seeds, dataloader workers, evaluation/logging frequency for reproducibility."
+      },
+      {
+        "name": "Overall Score (aggregate evaluation metric)",
+        "description": "An unweighted mean of each model's performance on all 15 tasks: Overall Score = (1/15) sum_{t \u2208 T} m_t, where m_t is the primary metric for task t.",
+        "guidance": "Treats all tasks equally to reflect balanced performance across retrieval, paraphrase, classification, and clustering. Throughout the paper 'Overall Score' specifically refers to this mean of the 15 primary metrics."
+      },
+      {
+        "name": "Primary metric: NDCG@k for retrieval",
+        "description": "Normalized Discounted Cumulative Gain at depth k (NDCG@k) measures ranking quality by discounting relevance scores by logarithmic position. rel_i is binary (1 if document at position i is relevant).",
+        "guidance": "DCG@k = sum_{i=1..k} rel_i / log2(i+1). IDCG@k is the ideal DCG (sum_{i=1..min(k,|R_q|)} 1 / log2(i+1)). NDCG@k = DCG@k / IDCG@k. Use cosine similarity between query and document embeddings to rank documents. Authors use NDCG@10 for PatenTEB retrieval tasks (NDCG@100 for some external benchmarks)."
+      },
+      {
+        "name": "Primary metric: Pearson correlation for paraphrase",
+        "description": "Compute Pearson's r between predicted cosine similarities {s_i} and binary ground-truth labels {y_i} (1=paraphrase, 0=non-paraphrase).",
+        "guidance": "Formula provided in paper. Use predicted cosine similarities as continuous scores and compute Pearson r for evaluation of paraphrase detection tasks."
+      },
+      {
+        "name": "Primary metric: Macro-F1 for classification",
+        "description": "Compute per-class F1 scores and average them: Macro-F1 = (1/C) sum_{c=1..C} F1_c, where F1_c = 2\u00b7Precision_c\u00b7Recall_c / (Precision_c + Recall_c).",
+        "guidance": "At evaluation time, perform stratified train-test splitting with a fixed seed and extract exactly 20% of training examples (preserving class distribution). Train a LogisticRegression classifier on embeddings and compute Macro-F1 to handle label imbalance."
+      },
+      {
+        "name": "Primary metric: V-measure for clustering",
+        "description": "V-measure is the harmonic mean of homogeneity (h) and completeness (c): V = 2hc/(h+c), where h = 1 - H(C|K)/H(C) and c = 1 - H(K|C)/H(K) (H = entropy).",
+        "guidance": "For clustering evaluation, apply MiniBatchKMeans with n_clusters set to ground-truth cluster counts and batch_size=16,384. Use V-measure (range [0,1]) to summarize clustering quality relative to ground-truth classes."
+      },
+      {
+        "name": "Evaluation prompt handling protocol",
+        "description": "Match evaluation conditions to training regime: models trained with task-specific prompts are evaluated using those prompts; baseline models not designed for prompts are evaluated without prompts.",
+        "guidance": "For external validation, conduct both prompted and unprompted evaluations for all models and report both results in separate columns to assess instruction-following capability and prompt sensitivity."
+      },
+      {
+        "name": "Evaluation implementation and reproducibility practices",
+        "description": "Use standard libraries (scikit-learn for classification/clustering, Sentence-Transformers evaluators for retrieval/similarity, HuggingFace Datasets for data loading), fixed random seeds, deterministic inference, and document all evaluation hyperparameters for reproducibility.",
+        "guidance": "Inference config: batch size 64, max sequence length capped at 8192 tokens. Preprocess texts by combining title, abstract, and first claim and filter to not exceed token cap. Report single-run deterministic scores on fixed test sets and use external validation, ablations, and robustness analyses to assess generalization."
+      },
+      {
+        "name": "Retrieval evaluation implementation (cosine ranking)",
+        "description": "Compute cosine similarity between query and document embeddings, rank documents by similarity, and calculate NDCG@10 (or appropriate k) as retrieval metric.",
+        "guidance": "Use Information Retrieval evaluator components from Sentence-Transformers or equivalent; ensure hard negatives are handled consistently and document negative sampling strategy."
+      },
+      {
+        "name": "Classification evaluation specifics (20% training subset)",
+        "description": "Perform stratified train-test splitting with fixed seed to extract exactly 20% of training examples for classifier training, preserving class distribution.",
+        "guidance": "Train a LogisticRegression classifier on embeddings at evaluation time. Compute Macro-F1 by averaging per-class F1 scores. This protocol ensures a standardized, comparable classification evaluation across models."
+      },
+      {
+        "name": "Clustering evaluation specifics (MiniBatchKMeans with ground-truth k)",
+        "description": "Apply MiniBatchKMeans clustering with n_clusters set to the ground-truth cluster counts and batch_size=16,384 for memory efficiency; compute V-measure as primary clustering metric.",
+        "guidance": "Use fixed seeds for deterministic clustering; set n_clusters to the true number of clusters to isolate embedding quality rather than model selection for k."
+      },
+      {
+        "name": "Efficiency and deployment evaluation (accuracy\u2013speed trade-offs)",
+        "description": "Evaluate computational efficiency in addition to accuracy: measure inference time per query and embedding storage. Compare accuracy vs inference time to trace Pareto frontiers across models.",
+        "guidance": "Report inference time under consistent hardware/configuration. Use marker sizes (parameter counts) to contextualize trade-offs. Example findings: Qwen3-Embedding-0.6B achieved similar score to another model but required ~9\u00d7 more inference time."
+      },
+      {
+        "name": "Embedding truncation as deployment knob",
+        "description": "Reduce embedding dimensionality at inference/storage time by truncating the final embedding vector (e.g., using first D dimensions out of 1024) to trade accuracy for storage/speed.",
+        "guidance": "Quantified trade-offs: D=256 retained ~96.5% of full Overall Score with 4\u00d7 storage reduction; D=128 retained ~93.4% (8\u00d7 reduction). Extremely low dims (32,64) substantially hurt performance. Use truncation to balance storage and performance depending on deployment constraints."
+      },
+      {
+        "name": "Layer pruning (inference-time layer truncation) guidance",
+        "description": "At inference, using only the first L transformer layers (pruning last layers) can speed up models but may degrade performance. Performance is highly sensitive to retaining later layers.",
+        "guidance": "Authors' results: keeping up to L=16 is catastrophic (~43% retention); L=20 recovers ~83% retention; L=23 recovers ~98.4% retention. Layers 17\u201320 are critical for patent semantics in their 24-layer model. Measure speedup vs accuracy loss and choose L accordingly."
+      },
+      {
+        "name": "Structural robustness tests (input-format robustness)",
+        "description": "Evaluate robustness to missing document components (abstract or claims), removal of separator tokens, and title-only inputs to assess practical deployment resilience.",
+        "guidance": "Findings: removing separator tokens (noSEP) has negligible effect (~99.8% retention); removing one section (abstract or claims) causes minor degradation (~98.8% retention); title-only input causes substantial drop (~88.5% retention). Use these tests to understand how input formatting impacts embedding quality."
+      },
+      {
+        "name": "Supervision ablation protocol and generalization trade-offs",
+        "description": "Ablate supervision sources (remove classification tasks, remove paraphrase tasks, remove prompts) to evaluate internal benchmark performance vs external generalization (BigPatent, DAPFAM).",
+        "guidance": "Findings: removing classification/paraphrase gave slightly higher internal scores but degraded external performance; full multi-task training gave better external generalization. Removing prompts during training degraded retrieval heavily. Use ablations to choose training objectives that generalize well beyond the benchmark."
+      },
+      {
+        "name": "Distillation data-scaling protocol",
+        "description": "Evaluate student distillation performance as a function of distillation data volume using proportional sampling notation (spXXk = XX thousand max samples per task).",
+        "guidance": "Performance improves monotonically with diminishing returns; sweet spot observed around 54.6% of data (~1.27M texts) achieving ~98% of full performance for patembed-nano. For compact models, distilling on roughly half the data may suffice with minimal loss."
+      },
+      {
+        "name": "Reproducibility and deterministic evaluation protocol",
+        "description": "Use fixed random seeds, deterministic inference, single-run scores on fixed test sets, document evaluation hyperparameters, and validate externally and via ablations for robustness.",
+        "guidance": "Software stack: scikit-learn, Sentence-Transformers, HuggingFace Datasets. Document inference batch size, max sequence length, preprocessing steps, evaluation frequency, logging frequency, and hardware used to enable reproduction of reported results."
+      }
+    ]
+  }
+}

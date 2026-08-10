@@ -1,0 +1,88 @@
+You are an expert {role}.
+
+# Your task
+
+You will read one {input_unit} and extract every quality judgment {speaker_possessive} makes about {target}, then tag each judgment against a fixed list of canonical {norm_term_plural}.
+
+# Two levels of structure
+
+LEVEL 1 — PASSAGE: a paragraph or multi-sentence span where {speaker_subject} is making a quality judgment. Each {input_unit} usually contains 3-10 passages.
+
+CRITICAL: a passage is NEVER just a section label like "Strengths:" or "Weaknesses:" — it MUST include the actual content of the judgment. The header may be at the start but the passage_text MUST extend through the substantive text. A passage_text of less than 50 characters is almost always wrong.
+
+LEVEL 2 — SIGNAL: a specific phrase INSIDE the passage that EVIDENCES a {norm_term} (without necessarily BEING the {norm_term}). For example, {inline_evidence_example}.
+
+Each signal has:
+- signal_text: an exact substring of THE PASSAGE (not the full {input_unit}), 10-200 chars
+- signal_type: exactly one of `complaint`, `praise`, `observation`, `suggestion`
+- polarity: exactly one of `positive`, `negative`, `neutral`
+- rubric_matches: a list of 0-3 integer ids from the vocabulary below. Empty list `[]` is allowed when the signal does not match any canonical rubric.
+
+# Norm vocabulary
+
+Each item below has the format `[id] name — short description`. Multi-label tagging: a signal can match 0-3 rubrics. Be strict — only tag a rubric if the signal genuinely instantiates that rubric. Do not match by surface keyword alone.
+
+{rubric_block}
+
+# Worked examples
+
+{worked_examples}
+
+# Hard constraints (failures we have seen)
+
+1. **passage_text MUST be at least 50 chars** and MUST include the actual quality-judgment content, not just a section label. If a passage starts with "Strengths:", "Weaknesses:", "Pros:", "Cons:", etc., extend it to include the body text.
+
+2. **signal_text MUST be an exact substring of passage_text** — copy character-by-character, including punctuation, whitespace, and quotes. Do NOT paraphrase. If you can't find an exact span, skip that signal.
+
+3. **passage_text MUST be an exact substring of the {input_unit} text** — copy character-by-character.
+
+   - Do NOT add or remove whitespace anywhere — preserve ALL spacing, newlines, and tabs exactly as they appear in the source.
+   - Do NOT add spaces between CJK characters (Chinese / Japanese / Korean) and adjacent Latin characters. If the source is `这个group`, your passage_text contains `这个group`, NOT `这个 group`.
+   - Do NOT collapse markdown separators like `---` or `===` or `***`. If the source contains `---` between two paragraphs, the separator MUST appear inside your passage_text verbatim.
+   - When in doubt, copy a slightly longer span — the snap-to-source post-processor handles minor cases but cannot recover from character substitutions.
+
+4. **JSON escaping (CRITICAL — this is the #1 cause of broken output)**: the text often contains LaTeX commands like `\bullet`, `\mathcal`, `\theta`, `\alpha`. Inside a JSON string, a single backslash `\` followed by certain letters IS A CONTROL CHARACTER, not a literal backslash. So:
+
+   - Source has: `\bullet` (literal) → JSON string MUST contain `\\bullet` (escaped). Writing `\bullet` will produce a backspace character (0x08) in the output, NOT the LaTeX command.
+   - Source has: `\mathcal{{O}}` → JSON MUST be `\\mathcal{{O}}`.
+   - Source has: `\theta_0` → JSON MUST be `\\theta_0`.
+   - Source has: `\n` (literal backslash + n) → JSON MUST be `\\n`. Don't use `\n` because that produces an actual newline.
+
+   Every literal backslash in the source MUST be doubled in your JSON output. There are NO exceptions. If you are unsure, double the backslash — over-escaping is fine, under-escaping breaks parsing.
+
+5. **HIGH RECALL on signals**: aim 3-10 per passage. Don't miss quality judgments.
+
+6. **Capture both criticism and praise.** {polarity_hint}
+
+7. **Empty rubric_matches `[]` is fine** — that signals a taxonomy gap, which is useful to surface.
+
+# Output format
+
+Output STRICT JSON on a SINGLE LINE. No markdown fences. No prose before or after. Schema:
+
+```
+{{"unit_id": "<from input>", "passages": [
+  {{"passage_text": "<exact substring of input, >=50 chars>",
+    "passage_polarity": "positive|negative|mixed",
+    "signals": [
+      {{"signal_text": "<exact substring of passage_text>",
+        "signal_type": "complaint|praise|observation|suggestion",
+        "polarity": "positive|negative|neutral",
+        "rubric_matches": [<int>, ...]}}
+    ]}}
+]}}
+```
+
+# Now process this {input_unit}
+
+unit_id: {unit_id}
+
+text:
+{input_text}
+
+Output rules:
+- Do NOT think aloud. Do NOT explain your reasoning.
+- Do NOT preface with "Let me", "The user", "First I'll", "The paper concerns", or any meta-text.
+- Do NOT summarize the input {input_unit}. Skip the introduction. Go DIRECTLY to identifying quality-judgment passages.
+- Begin your response with the character `{{` and end with `}}`.
+- Output exactly ONE JSON object on ONE line. Nothing else before or after.

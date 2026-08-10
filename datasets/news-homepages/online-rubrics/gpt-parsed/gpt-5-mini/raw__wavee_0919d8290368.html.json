@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_0919d8290368.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17177,
+  "output_tokens": 4630,
+  "elapsed_s": 1550.0329098750371,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational journalism and NLP researchers; newsroom technologists building lead-generation/newsworthiness tools",
+    "subtask_short": "newsworthiness prediction for local policy",
+    "subtask_description": "Link local government policy items to news articles and predict whether a novel policy proposal will be covered by the press (newsworthiness prediction), using probabilistic relational modeling, meeting audio transcripts, and learned classifiers. Focus is on San Francisco Board of Supervisors (SFBOS) and the San Francisco Chronicle but methods are positioned as generalizable.",
+    "subtask_keywords": [
+      "newsworthiness",
+      "local_policy",
+      "link_prediction",
+      "probabilistic_relational_modeling",
+      "computational_journalism"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Probabilistic Relational Modeling (PRM) chain for linking articles to policies",
+        "description": "Model the likelihood a link l exists between an article a and a policy item p as P(l|a,p) by introducing auxiliary conditional attributes h1...ht and marginalizing: P(l|a,p) = sum over h of p(l|a,p,h1...ht) * p(h1|a,p) * ...",
+        "guidance": "Break the linking problem into a chain of easier-to-supervise subproblems (each hi is learned separately). Apply the PRM chain left-to-right (conditioning on progressively refined attributes). Use supervised models for each attribute and marginalize. Example chain: 'article covers SFBOS' \u2192 'article covers votes/policy' \u2192 'article covers recent policy from SFBOS' \u2192 match article to policy. Choose a score threshold (\u03bb) on p(l|a,p) to decide matches."
+      },
+      {
+        "name": "h1: 'a covers SFBOS' classifier",
+        "description": "First PRM attribute: whether an article covers the San Francisco Board of Supervisors (SFBOS).",
+        "guidance": "Initial candidate selection using keyword t = 'Board of Supervisors' (delete t from candidates to avoid leakage), sample negatives, bootstrap a classifier, and annotate (authors labeled 100 examples) to train p(h1|a)."
+      },
+      {
+        "name": "h2: 'a covers votes/policy' classifier",
+        "description": "Second PRM attribute: from h1 articles, determine whether an article mentions votes and policy.",
+        "guidance": "Annotate additional examples (authors labeled 100) and train p(h2|h1,a). This conditions the link model to articles that actually concern votes or policy rather than just politics broadly."
+      },
+      {
+        "name": "h3: 'a covers recent policy from SFBOS' (temporal / entity verification)",
+        "description": "Third PRM attribute: determine whether the article mentions votes occurring less than a month prior and confirms the government body is SFBOS (not other councils).",
+        "guidance": "Authors used GPT-3.5 with a 10-shot prompt; use model logits for 'yes'/'no' as p(h3|h2,h1,a). This attribute captures recency and disambiguation of government body."
+      },
+      {
+        "name": "l: matching articles to specific policy p (final matching step)",
+        "description": "Final step in PRM: match articles to specific city-council meeting minutes / policy text to decide p(l|a,p).",
+        "guidance": "Authors used cosine similarity over vector space / TF-IDF to match articles to policy text. Many-to-many mapping; choose threshold \u03bb using a labeled gold set (Sgold,train) and evaluate on Sgold,test."
+      },
+      {
+        "name": "Linking evaluation with gold-labeled pairs (Sgold) and threshold selection",
+        "description": "To choose decision threshold \u03bb and evaluate linking performance, annotate a gold set of true (a,p) pairs, split into train/test (authors used 100 true pairs split 50/50 into Sgold,train and Sgold,test).",
+        "guidance": "Tune \u03bb on Sgold,train and report F1 (and other metrics) on Sgold,test. Authors report ablation where removing hi-conditioning drops F1 from 68% to 16%."
+      },
+      {
+        "name": "Prefer TF-IDF/lexical retrieval for this linking task unless large supervised data is available",
+        "description": "Empirical finding/guideline: PRM with TF-IDF outperforms SBERT or OpenAI embeddings on this dataset; supervised retrieval architectures (e.g., DPR) may help but require 100\u20131000x more data.",
+        "guidance": "Reason: specific technical phrases matter; unsupervised embeddings might ignore these. Beware: lexical-overlap bias means links with no lexical overlap will be missed."
+      },
+      {
+        "name": "Corpus collection and preprocessing requirements",
+        "description": "Collect full HTML of news site (authors: SFChron 2013\u20132023 via Common Crawl), parse article text, deduplicate based on text; scrape public meeting calendar and collect proposal text for policy items.",
+        "guidance": "Use robust parsers (e.g., Newspaper package). Release URLs and scripts for replication. Track and note missing items (e.g., policies present on calendar but not in video agendas)."
+      },
+      {
+        "name": "Definition of the newsworthiness prediction label Y(p)",
+        "description": "Label a policy p as newsworthy (Y(p)=1) if it appears in the linked dataset {(a,p)} (i.e., at least one linked news article), otherwise Y(p)=0.",
+        "guidance": "This operationalizes 'will an article write about it?' based on prior coverage; note limitation that this defines newsworthiness relative to the chosen outlet (SFChron) and period."
+      },
+      {
+        "name": "Feature set for newsworthiness prediction (policy & meeting features)",
+        "description": "Features extracted per policy include: policy text; # prior meetings policy has been discussed; # prior news articles linked to the proposal; length of time proposal is discussed in meeting; transcribed text of council members' policy discussion; # public commenters discussing the policy; summary of public commentary.",
+        "guidance": "Use meeting transcripts (WhisperX) and diarization to derive meeting-derived features. Table 2 in paper lists these features. Authors found policy text most predictive, then meeting discussion, then public comment."
+      },
+      {
+        "name": "Association of articles/policies to meetings (temporal linking rule)",
+        "description": "Associate (a,p) with a specific meeting if (1) p is discussed in the meeting and (2) a was published within a month of the meeting.",
+        "guidance": "This heuristic constrains which meetings are relevant for a given article-policy pair; used when constructing training corpus for newsworthiness prediction."
+      },
+      {
+        "name": "Public commenter identification and joining heuristic",
+        "description": "Define 'public commenters' as diarized speakers who only speak during the 'Public Comment' section; associate them with policies using lexical overlap between their speech and policy text.",
+        "guidance": "Authors assume each public speaker addresses only one comment. Note: very few public commenters can be associated per policy (expected n=0.06 for newsworthy policies), so public comment has limited modeling impact in this dataset."
+      },
+      {
+        "name": "Prompt construction and truncation rules for LLM-based classifier",
+        "description": "Format features jointly as a prompt including (1) policy description, (2) meeting text (speakers and minutes), and (3) public commentary; truncate text fields to first 50 words (except full proposal text).",
+        "guidance": "Authors fine-tuned GPT3-Babbage on the 'full' prompt and used ablations to measure component importance. Truncation did not noticeably impact performance in early experiments."
+      },
+      {
+        "name": "Model evaluation metrics for newsworthiness prediction",
+        "description": "Use F1, ROC (ROC-AUC over logits), Recall@10 (surface top-10 most likely newsworthy items per meeting and count recall), and Mean Reciprocal Rank (MRR) per meeting.",
+        "guidance": "Report both balanced-sample metrics and natural/unbalanced test-set metrics. Authors present Table 5 with these metrics across models and ablations."
+      },
+      {
+        "name": "Temporal train/test splitting to evaluate generalization to future events",
+        "description": "Use a time-based split (e.g., train on data prior to 2021-01-01, test on later) rather than random splits to simulate predicting future newsworthiness and to avoid event leakage.",
+        "guidance": "Authors performed experiments varying training cutoff years to test whether models overfit to specific events (e.g., COVID-19) and found performance largely stable except when excluding key anomalous years."
+      },
+      {
+        "name": "Ablation studies to determine feature importance",
+        "description": "Systematically ablate components of input (policy text, meeting discussion, public comment) and measure changes in F1/ROC/R@10/MRR to identify which inputs are most predictive.",
+        "guidance": "Authors found policy text has the largest effect; removing policy text dramatically degrades performance; ablating public comment barely impacts performance."
+      },
+      {
+        "name": "Human evaluation with expert journalists",
+        "description": "Evaluate repeatability and usefulness by (1) asking journalists to identify newsworthy policies from balanced meeting samples and report Human F1 and Cohen's kappa against model/human judgments, and (2) present top-k recommendation lists (k=10) and measure preference (how often journalists prefer model lists over random) and identification accuracy of list origin.",
+        "guidance": "Authors used a balanced dataset with 33% Y(p)=1, 66% Y(p)=0 for human tests; reported journalists' F1 ~63.2, model F1 (on balanced sample) 58.9, preference 84% for model lists, and ID accuracy 74% for guessing list origin."
+      },
+      {
+        "name": "Annotation / labeling process and best practices",
+        "description": "Use professional journalists to annotate attributes h_i and gold (a,p) pairs; bootstrap classifiers from keyword heuristics and sample negatives; authors hired two journalists, labeled ~100 examples per attribute, and paid roughly $20/hour.",
+        "guidance": "Annotator experience (>5 years) matters; be aware annotator retrieval method can bias gold set (lexical-overlap bias). Record annotator demographics and IRB approval when relevant."
+      },
+      {
+        "name": "Transcription, diarization, and agenda-segmentation procedures",
+        "description": "Transcribe meeting audio using WhisperX (time-accurate transcription and diarization), align transcripts to agenda timestamps, detect transitional phrases to segment agenda items, and train a classifier to predict transitions.",
+        "guidance": "Authors trained a bag-of-words logistic regression to predict whether diarized segments are transitional (Y=1 if segment contains a hyperlink/timestamp) achieving F1=.86; use thresholds (e.g., peg unlabeled blocks to next likely transition or previous item if no segment above .8 likelihood). Recognize missing agenda hyperlinks and noisy segments."
+      },
+      {
+        "name": "Topic analysis to characterize newsworthy topics",
+        "description": "Apply topic modeling (LDA with k around 8\u201310) to policy text to find topics and rank them by likelihood of being newsworthy (e.g., COVID-19, Environment more likely; City Lawsuits less likely).",
+        "guidance": "Use topic assignments to analyze which thematic areas are associated with coverage; treat titles inferred manually and inspect top words per topic."
+      },
+      {
+        "name": "Ethics, limitations, and deployment risk checklist",
+        "description": "Account for limitations: lexical-overlap bias, dataset locality and English-only scope, potential non-generalization to other news outlets or languages, risk of learning misinformation/disinformation patterns, transparency concerns with proprietary models, and annotator/sample biases.",
+        "guidance": "When deploying, combine model outputs with other models for anomalous events (e.g., pandemics) and consider legal/copyright/licensing constraints (authors released SFBOS dataset but not SFChron articles). Document annotator consent, pay, and IRB approvals."
+      },
+      {
+        "name": "Recommendation-system evaluation (top-k surfacing per meeting)",
+        "description": "Evaluate model as a lead-generation system by surfacing top-k (k=10) policy recommendations per meeting and measuring Recall@10 and MRR, as well as human preference/utility.",
+        "guidance": "Authors used Recall@10 and MRR to quantify surfacing ability; also used human preference tests where journalists preferred model-surfaced lists 84% of the time."
+      }
+    ]
+  }
+}

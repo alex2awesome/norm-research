@@ -1,0 +1,158 @@
+{
+  "cell": "press_verdict",
+  "arm": "v3grid_press_verdict_rawmatched",
+  "role": "RAW-TEXT-ONLY DISPLACEMENT CONTROL for the V3 arm: identical rows, splits and recipe, no criterion block, document truncated to the budget the V3 block left it",
+  "max_length": 805,
+  "budget_derivation": {
+    "formula": "max_length = 1024 - manifest.truncation.block_tokens",
+    "source_max_len": 1024,
+    "block_tokens": 219,
+    "block_tokens_source": "v3grid_press_verdict/manifest.json truncation.block_tokens -- build_v3_cell.py measures it as len(tok(block, add_special_tokens=False)) on the FIRST TRAIN ROW's rendered block, so it is a per-cell scalar, not a per-row length",
+    "result": 805
+  },
+  "budget_equivalence": {
+    "claim": "a V3 row overruns 1024 iff 1+n_block+n_doc > 1024, i.e. n_doc > 1023-n_block; a raw-matched row overruns its budget iff 1+n_doc > 1024-n_block, the SAME condition. Equal truncation rates therefore certify equal document budgets.",
+    "v3_rate_over_max_len_with_block_at_1024": 0.4506089309878214,
+    "rawmatched_rate_over_max_len_at_budget": 0.45094722598105547,
+    "abs_delta": 0.000338,
+    "tolerance": 0.01,
+    "passed": true
+  },
+  "selection_split": "eval",
+  "group_column": "company",
+  "class_weight_auto": false,
+  "recipe": "IDENTICAL to the V3 arm (frozen 8B LoRA r16/a32, lr 5e-5, bs16, eval_bs 32, grad-accum 1, 2 epochs, gradient checkpointing, seed 42, the cell's own selection_split, NO --class_weight_auto) EXCEPT: no criterion block, and max_length 805 instead of 1024",
+  "only_difference_from_v3": [
+    "the k=20 'name: score' block is absent (text is the raw document)",
+    "--max_length 805 instead of 1024"
+  ],
+  "n_E": 605,
+  "n_eval": 288,
+  "n_test": 317,
+  "n_groups_E": 45,
+  "pos_rate_E": 0.5008264462809917,
+  "auc_E": 0.7526118505890325,
+  "auc_eval": 0.7407166280864197,
+  "auc_test": 0.769703845235252,
+  "matching_assertions": {
+    "rows_identical_to_v3": {
+      "attempted": true,
+      "passed": true,
+      "n_E_v3": 605,
+      "n_E_rawmatched": 605,
+      "checked": [
+        "n_E",
+        "did (ids and order)",
+        "split",
+        "judgement elementwise",
+        "group elementwise"
+      ],
+      "source_byte_assertions": [
+        "per split, n equals the V3 arm's and the original dense split's",
+        "judgement equal elementwise to the V3 arm's split rows",
+        "group equal elementwise to the V3 arm's split rows",
+        "did carried verbatim from the V3 arm's split rows, same order",
+        "every V3 text ENDS WITH '\\n' + this arm's text (suffix derivation)",
+        "dropping the block's k+1 leading lines from the V3 text reproduces this arm's text (independent line-strip derivation)",
+        "raw-matched truncation rate at the reduced budget reproduces the V3 arm's with-block rate at 1024 to <0.01"
+      ]
+    }
+  },
+  "v3_auc_E": 0.7714466810919502,
+  "boot_v3_minus_rawmatched": {
+    "estimate": 0.018834830502917788,
+    "ci95": [
+      -0.01615599421023107,
+      0.05313173445076576
+    ],
+    "p_gt_0": 0.861,
+    "n_boot_used": 2000,
+    "n_groups": 45,
+    "resampled_unit": "group"
+  },
+  "boot_v3_minus_rawmatched_note": "positive = the criterion block helps AT A MATCHED DOCUMENT BUDGET. Both arms read the same rows and the same amount of document, so this isolates the block's contribution from the displacement it causes.",
+  "T_gate": {
+    "attempted": true,
+    "slug": "press_verdict",
+    "source": "fusion/dense_joins/press_verdict_join.csv.gz, mean of dense_prob_seed42,dense_prob_seed1,dense_prob_seed2 (same vector and seed-ensemble as harvest_v3_grid_cell.t_vector)",
+    "n_seeds_ensembled": 3,
+    "observed_T_same_rows_at_E": 0.7744027714029681,
+    "published_T_same_rows_at_E": 0.7744027714029681,
+    "reproduction_delta": 0.0,
+    "tol": 1e-06,
+    "reproduced_published_T": true,
+    "passed": true
+  },
+  "T_source": "fusion/dense_joins/press_verdict_join.csv.gz, mean of dense_prob_seed42,dense_prob_seed1,dense_prob_seed2 (same vector and seed-ensemble as harvest_v3_grid_cell.t_vector)",
+  "T_same_rows_at_E": 0.7744027714029681,
+  "n_E_for_T": 605,
+  "boot_rawmatched_minus_T": {
+    "estimate": -0.021790920813935633,
+    "ci95": [
+      -0.0508689631870982,
+      0.002431037796891318
+    ],
+    "p_gt_0": 0.0315,
+    "n_boot_used": 2000,
+    "n_groups": 45,
+    "resampled_unit": "group"
+  },
+  "boot_rawmatched_minus_T_note": "T_original is the cell's full-budget dense arm (max_len 1024, raw text, IDENTICAL rows). NEGATIVE = the document text the block displaced was carrying signal; this prices the lost text on its own.",
+  "restated_from_v3_grid": {
+    "source": "/Users/spangher/Projects/stanford-research/norm-research/methods/taste_decomposition/results/v3_grid_press_verdict.json",
+    "v3_auc_E_published": 0.7714466810919502,
+    "n_E_published": 605,
+    "T_same_rows_at_E_published": 0.7744027714029681,
+    "VA_nl_oof_at_E_observed": 0.7442080300745306,
+    "boot_v3_minus_VA_nl": {
+      "estimate": 0.027238651017419624,
+      "ci95": [
+        -0.011359203407987625,
+        0.06501920527065184
+      ],
+      "p_gt_0": 0.927,
+      "n_boot_used": 2000,
+      "n_groups": 45,
+      "resampled_unit": "group"
+    },
+    "boot_v3_minus_VA_nl_reason": null,
+    "boot_v3_minus_T": {
+      "estimate": -0.002956090311017845,
+      "ci95": [
+        -0.03686429451833998,
+        0.04492502048929638
+      ],
+      "p_gt_0": 0.46,
+      "n_boot_used": 2000,
+      "n_groups": 45,
+      "resampled_unit": "group"
+    },
+    "v3_auc_reproduction_delta": 0.0,
+    "v3_auc_reproduces": true
+  },
+  "k_caveat": "k=20 is the V3 audit's production recipe but it FAILED its confirmation cell: cap_finalist k20 .6431 vs k10 .6707, delta -.0276 [-.058,+.003] P(>0)=.043 (2026-08-08). k in {10,20} is a wash with cell-specific sign. Do NOT read a V3-vs-bank gap smaller than ~.03 as real.",
+  "truncation": {
+    "max_len": 805,
+    "raw_text_at_budget": {
+      "n": 2956,
+      "rate_over_max_len": 0.45094722598105547,
+      "tok_median": 738,
+      "tok_p95": 1938,
+      "tok_max": 4080
+    },
+    "reference_v3_raw_text_only_at_1024": {
+      "n": 2956,
+      "rate_over_max_len": 0.3119079837618403,
+      "tok_median": 738,
+      "tok_p95": 1938,
+      "tok_max": 4080
+    },
+    "reference_v3_with_block_at_1024": {
+      "n": 2956,
+      "rate_over_max_len": 0.4506089309878214,
+      "tok_median": 956,
+      "tok_p95": 2159,
+      "tok_max": 4299
+    }
+  }
+}

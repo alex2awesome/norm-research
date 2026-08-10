@@ -26,7 +26,6 @@ from methods.metric_implementer.experiments.v14_mcq_channel import (
     evaluate_mcq_state_tables_v14,
 )
 from methods.metric_implementer.experiments.v14_decoder_tuning import (
-    template_sha256,
     tune_shared_template_batched,
 )
 from methods.metric_implementer.experiments.v14_preregistration import (
@@ -40,6 +39,14 @@ from methods.metric_implementer.experiments.v14_probe_extension import (
 from methods.metric_implementer.experiments.v14_roadmap_design import (
     build_exchangeable_c1_menus, build_nested_omega_design,
 )
+from methods.metric_implementer.experiments.v14_scoring_lanes import (
+    aggregate_fast_screening,
+    assert_release_rows_are_cert,
+    build_promotion_manifest,
+    fast_mcq_code_permutation_null,
+    load_promotion_metric_keys,
+    scoring_lane_policy,
+)
 from methods.metric_implementer.vllm_backend import FakeVLLM
 
 
@@ -52,6 +59,20 @@ def _one_panel_design(target):
         "panel_size": 8,
         "panels": [{
             "trial": 0, "indices": indices, "panel_sha256": "1" * 64,
+            "decoder_family": "qwen", "target_state_bits": bits,
+        }],
+    }
+
+
+def _one_k6_panel_design(target):
+    indices = list(range(6))
+    bits = np.asarray(target)[indices].astype(int).tolist()
+    return {
+        "design_sha256": "e" * 64,
+        "teaching_indices": list(range(6)),
+        "panel_size": 6,
+        "panels": [{
+            "trial": 0, "indices": indices, "panel_sha256": "2" * 64,
             "decoder_family": "qwen", "target_state_bits": bits,
         }],
     }
@@ -122,6 +143,30 @@ def test_behavioral_fake_backend_end_to_end_both_arms_and_cell_resume(tmp_path):
         )
 
 
+def test_behavioral_fast_k6_scores_observed_and_shuffled_control_states(tmp_path):
+    texts = [f"ordinary sample {index}" for index in range(30)]
+    target = np.asarray([(index % 2) for index in range(30)], dtype=int)
+    target_by_text = dict(zip(texts, target.tolist()))
+    design = _one_k6_panel_design(target)
+    canonical = int("".join(map(str, design["panels"][0]["target_state_bits"])), 2)
+    with EvidenceCellStore(tmp_path / "behavior-fast.sqlite") as store:
+        result = evaluate_behavioral_state_tables_v14(
+            _PlantedConstructor(target_by_text), _PlantedExecutor(target_by_text),
+            design_manifest=design, probe_texts=texts,
+            heldout_indices=list(range(6, 30)), heldout_target=target[6:], noun="item",
+            decoder_revision="fake-decoder", executor_revision="fake-executor",
+            readout_id="fake-readout", store=store,
+            state_indices_by_panel=[[canonical]],
+        )
+    assert result["state_scope"] == "observed_only"
+    for arm in BEHAVIORAL_ARMS:
+        row = result["arms"][arm]
+        assert row["raw_lift"].shape == (1, 64)
+        assert np.isfinite(row["raw_lift"][0, canonical])
+        assert row["observed_state_mask"].sum() >= 1
+        assert row["hard_predictions"].shape == (1, 64, 24)
+
+
 def test_mcq_fake_backend_end_to_end_and_non_disclosure(tmp_path):
     cfg = ImplementerConfig()
     cfg.vllm_fake = True
@@ -143,6 +188,76 @@ def test_mcq_fake_backend_end_to_end_and_non_disclosure(tmp_path):
     assert result["raw_lift"].shape == (1, 256)
     assert np.all(np.isfinite(result["clipped_value"]))
     assert result["non_disclosure"]["candidate_prompt_text_passed_to_query_builder"] is False
+
+
+def test_mcq_fast_k6_scores_only_requested_states(tmp_path):
+    cfg = ImplementerConfig()
+    cfg.vllm_fake = True
+    backend = FakeVLLM("fake", "judge", cfg, 0.0)
+    texts = [f"sample {index}" for index in range(12)]
+    target = np.asarray([(index % 2) for index in range(12)], dtype=float)
+    distractors = [{
+        "metric_id": "d0", "description": "distractor",
+        "scores": 1 - target, "body": "distractor",
+    }]
+    with EvidenceCellStore(tmp_path / "mcq-fast.sqlite") as store:
+        result = evaluate_mcq_state_tables_v14(
+            backend, design_manifest=_one_k6_panel_design(target), noun="item",
+            target_metric_id="target", target_description="target criterion",
+            distractors=distractors, probe_texts=texts, constructor_revision="fake",
+            store=store, n_reconstruction_draws=4, query_batch_size=128,
+            state_indices_by_panel=[[0, 21, 63]],
+        )
+    assert result["raw_lift"].shape == (1, 64)
+    assert result["observed_state_mask"].sum() == 3
+    assert np.isnan(result["raw_lift"][0, 1])
+    assert result["state_scope"] == "observed_only"
+
+
+def test_fast_lane_null_aggregation_and_release_quarantine():
+    rng = np.random.default_rng(4)
+    signatures = rng.integers(0, 2, size=(20, 6)).astype(float)
+    table = np.full((1, 64), np.nan)
+    codes = np.sum(
+        signatures.astype(int) * (1 << np.arange(5, -1, -1))[None, :], axis=1
+    )
+    for state in np.unique(codes):
+        table[0, state] = float(state) / 100.0
+    null = fast_mcq_code_permutation_null(
+        table, codes[:, None], n_permutations=200, seed=9,
+    )
+    result = aggregate_fast_screening(
+        raw_lift=table, clipped_value=table, prompt_signatures=signatures,
+        panels=[list(range(6))], prompt_ids=[f"p{i}" for i in range(20)],
+        target_entropy_cap=1.0, permutation_null=null, channel="mcq",
+    )
+    assert result["lane"] == "fast"
+    assert result["exact_structural_cap"] is None
+    assert np.isfinite(result["permutation_z_score"])
+    with pytest.raises(ValueError, match="cert rows only"):
+        assert_release_rows_are_cert(__import__("pandas").DataFrame([{"lane": "fast"}]))
+
+
+def test_fast_to_cert_promotion_is_identity_only_and_deterministic(tmp_path):
+    import pandas as pd
+    frame = pd.DataFrame([
+        {"lane": "fast", "task": task, "metric_key": f"{task}_{index}",
+         "permutation_z_score": float(index)}
+        for task in ("a", "b") for index in range(4)
+    ])
+    source = tmp_path / "screening.parquet"
+    frame.to_parquet(source, index=False)
+    destination = tmp_path / "promotion.json"
+    manifest = build_promotion_manifest(
+        source, out_path=destination, run_sha="freeze", top_k_per_task=2,
+        figure_metric_keys=["a_0"],
+    )
+    assert manifest["n_selected"] == 5
+    assert all("permutation_z_score" not in row for row in manifest["selected"])
+    assert load_promotion_metric_keys(destination) == [
+        "a_0", "a_2", "a_3", "b_2", "b_3",
+    ]
+    assert scoring_lane_policy("fast")["release_eligible"] is False
 
 
 def test_gpu_guard_and_no_verbatim_hard_reject():
@@ -299,29 +414,99 @@ def test_real_fixture_design_serializes_all_fifty_panels(tmp_path):
 
 
 def test_batched_gepa_is_hard_capped_at_four_rounds_and_eight_candidates():
-    batch_sizes = []
-
+    # DEPRECATED 2026-07-19: the in-house bounded GEPA loop was retired in favor of official
+    # gepa.optimize (verbatim copy in experiments/archive/inhouse_gepa_deprecated.py; live path
+    # is run_v14_value_campaign.run_decoder_tuning). The public name is now a shim that MUST
+    # raise RuntimeError so nothing silently reruns the deprecated in-house search.
     def propose(incumbent, _feedback, round_index, count):
         return [f"{incumbent} improve-{round_index}-{index}" for index in range(count)]
 
     def evaluate(candidates):
-        batch_sizes.append(len(candidates))
-        return {
-            template_sha256(candidate): {
-                "pooled_fitness": len(candidate) / 100.0,
-                "heldout_prompt_transfer_ok": True,
-                "far_near_transfer_ok": True,
-                "feedback": [],
-            }
-            for candidate in candidates
-        }
+        return {candidate: {"pooled_fitness": 0.0} for candidate in candidates}
 
-    result = tune_shared_template_batched(
-        propose, evaluate,
-        seed_template="Use {noun} {examples} {choices} {labels}",
-        channel="mcq", arm="mcq", forbidden_strings=[],
-        required_fields=("noun", "examples", "choices", "labels"),
-    )
-    assert batch_sizes == [1, 8, 8, 8, 8]
-    assert result["round_cap"] == 4
-    assert max(row["round"] for row in result["trace"]) == 4
+    with pytest.raises(RuntimeError, match="in-house GEPA loop deprecated"):
+        tune_shared_template_batched(
+            propose, evaluate,
+            seed_template="Use {noun} {examples} {choices} {labels}",
+            channel="mcq", arm="mcq", forbidden_strings=[],
+            required_fields=("noun", "examples", "choices", "labels"),
+        )
+
+
+class _RepairAwareConstructor:
+    """Lifts a rare demo token on first pass; fixes it only when the repair
+    prompt names the offending token (informative-repair contract)."""
+
+    def generate_batch(self, prompts, **_kwargs):
+        output = []
+        for prompt in prompts:
+            if "CANDIDATE:" in prompt:
+                assert "zyxwvut" in prompt, "repair prompt must name the lifted token"
+                output.append("Does the item meet the planted criterion?")
+            elif "No labeled examples" in prompt:
+                output.append("Does the item meet the general criterion?")
+            else:
+                output.append("Does the item mention zyxwvut anywhere?")
+        return output
+
+
+class _StubbornConstructor:
+    """Never repairs the no-verbatim violation, including on repair rounds."""
+
+    def generate_batch(self, prompts, **_kwargs):
+        output = []
+        for prompt in prompts:
+            if "No labeled examples" in prompt:
+                output.append("Does the item meet the general criterion?")
+            else:
+                output.append("Does the item mention zyxwvut anywhere?")
+        return output
+
+
+def _rare_token_setup():
+    texts = [f"ordinary sample {index}" for index in range(30)]
+    texts[0] = "ordinary sample zyxwvut zero"
+    target = np.asarray([(index % 2) for index in range(30)], dtype=int)
+    return texts, target
+
+
+def test_no_verbatim_informative_repair_recovers_and_records_attempts(tmp_path):
+    texts, target = _rare_token_setup()
+    target_by_text = dict(zip(texts, target.tolist()))
+    design = _one_k6_panel_design(target)
+    canonical = int("".join(map(str, design["panels"][0]["target_state_bits"])), 2)
+    with EvidenceCellStore(tmp_path / "repair.sqlite") as store:
+        result = evaluate_behavioral_state_tables_v14(
+            _RepairAwareConstructor(), _PlantedExecutor(target_by_text),
+            design_manifest=design, probe_texts=texts,
+            heldout_indices=list(range(6, 30)), heldout_target=target[6:], noun="item",
+            decoder_revision="fake-decoder", executor_revision="fake-executor",
+            readout_id="fake-readout", store=store,
+            state_indices_by_panel=[[canonical]],
+        )
+    arm = result["arms"]["no_verbatim_examples"]
+    assert arm["n_void_induction_cells"] == 0
+    assert bool(arm["observed_state_mask"][0, canonical])
+
+
+def test_no_verbatim_persistent_violation_voids_cell_not_stage(tmp_path):
+    texts, target = _rare_token_setup()
+    target_by_text = dict(zip(texts, target.tolist()))
+    design = _one_k6_panel_design(target)
+    canonical = int("".join(map(str, design["panels"][0]["target_state_bits"])), 2)
+    with EvidenceCellStore(tmp_path / "void.sqlite") as store:
+        result = evaluate_behavioral_state_tables_v14(
+            _StubbornConstructor(), _PlantedExecutor(target_by_text),
+            design_manifest=design, probe_texts=texts,
+            heldout_indices=list(range(6, 30)), heldout_target=target[6:], noun="item",
+            decoder_revision="fake-decoder", executor_revision="fake-executor",
+            readout_id="fake-readout", store=store,
+            state_indices_by_panel=[[canonical]],
+        )
+    voided_arm = result["arms"]["no_verbatim_examples"]
+    assert voided_arm["n_void_induction_cells"] > 0
+    assert not np.any(voided_arm["observed_state_mask"])
+    assert np.all(np.isnan(voided_arm["raw_lift"]))
+    clean_arm = result["arms"]["unconstrained"]
+    assert bool(clean_arm["observed_state_mask"][0, canonical])
+    assert np.isfinite(clean_arm["raw_lift"][0, canonical])

@@ -1,0 +1,94 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_dea9a49dcc3b.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11824,
+  "output_tokens": 3418,
+  "elapsed_s": 1410.567918417044,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML researchers and benchmark designers evaluating LLM mathematical reasoning",
+    "subtask_short": "benchmarking LLM olympiad math",
+    "subtask_description": "Designing and evaluating a static benchmark of IMO-level mathematical problems for LLMs, with a deterministic numeric-answer track and a decomposed proof track for stepwise automated grading.",
+    "subtask_keywords": [
+      "llm",
+      "math_benchmark",
+      "olympiad",
+      "evaluation",
+      "dataset_construction"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Preserve Olympiad difficulty while eliminating evaluation noise",
+        "description": "RIMO is designed to \"preserve peak Olympiad difficulty while eliminating this evaluation noise.\"",
+        "guidance": "The benchmark must keep genuine IMO-level hardness but remove sources of grading ambiguity and bias (e.g., heterogeneous answer formats or learned judges). RIMO unifies a noise-free integer track with a rigorously graded proof track to provide a high-resolution, reproducible yardstick."
+      },
+      {
+        "name": "RIMO-N: single unique integer answers (deterministic exact-match grading)",
+        "description": "\"RIMO-N consists of 335 problems, carefully remade to yield a single, unique integer answer. This allows for deterministic, O(1) string-match grading, removing any reliance on model-based judges.\"",
+        "guidance": "Design items so the canonical solution is a single integer; grading collapses to constant-time string comparison, eliminating need for symbolic normalization or learned judges. Track composition given (335 problems across algebra/geometry/number theory/combinatorics)."
+      },
+      {
+        "name": "RIMO-P: decomposed proof problems with expert-checked solutions",
+        "description": "\"RIMO-P contains 456 proof problems with expert-checked solutions, which are decomposed into a sequence of sub-problems to evaluate the step-by-step reasoning process via an automated grading system.\"",
+        "guidance": "Use official or expert-verified solutions to decompose proofs into 1\u20134 sub-problems (longer solutions \u2192 3\u20134 steps). The decomposition scaffolds evaluation of intermediate lemmas while preserving the original final goal in the last sub-problem."
+      },
+      {
+        "name": "Remaking principles for RIMO-N items (faithful but unambiguous rewrites)",
+        "description": "\"Remaking is never a cosmetic tweak to the last line: intermediate hypotheses are tightened when ambiguity appears, variables are renamed for coherence, and objectives are reframed, yet the logical core and difficulty of the source problem remain intact.\"",
+        "guidance": "When rewriting, preserve logical core and difficulty; tighten ambiguous hypotheses, rename variables for clarity, and reframe objectives so the item admits a unique integer. Examples: converting concurrency proofs into 'how many common points' or classification problems into 'compute value of a+b+c over every such triple.'"
+      },
+      {
+        "name": "Source verification and acceptance criteria for ground truth",
+        "description": "Problems are assembled from IMO contest papers and shortlist booklets, with solutions reconciled across multiple sources (official shortlist solutions, AoPS-Wiki, YouTube expositions, ParSe transcripts).",
+        "guidance": "Shortlist problems retain the jury's official integer. For contest problems without an official key, accept only when at least two of three independent community sources return exactly the same answer; any disagreement triggers manual adjudication and usually exclusion. Multi-source cross-checking ensures reliability of ground truth."
+      },
+      {
+        "name": "RIMO-P decomposition rule (1\u20134 sub-problems; final preserves original goal)",
+        "description": "\"The complexity of a reference proof determines its decomposition into one to four sub-problems, with longer solutions typically yielding a three or four-step logical pathway. ... the final sub-problem in every sequence preserves the original problem\u2019s main goal.\"",
+        "guidance": "Decompose official proofs into consecutive sub-steps that represent intermediate lemmas; ensure the final step corresponds to the original problem objective. This scaffolded design enables granular assessment of stepwise reasoning."
+      },
+      {
+        "name": "RIMO-P sequential grading protocol (consecutive sub-problems solved)",
+        "description": "\"We grade a proof by the number of consecutive sub-problems solved correctly.\" (Formalized as P = (1/N) \u03a3_i Si/Xi where Si is number of consecutively correct sub-solutions for problem i and Xi is total sub-problems.)",
+        "guidance": "Score each problem by the fraction of consecutively-correct sub-steps achieved; average over problems to get final performance P. This emphasizes contiguous correctness (an error breaks the chain for that problem)."
+      },
+      {
+        "name": "RIMO-P Judger rules: strict, local step evaluation",
+        "description": "Prompt instructs: \"Only approve if the solution is mathematically correct, logically sound, and free of gaps or unjustified steps.\" and \"Judge ONLY the candidate sub-solution at this step. Check correctness, logical validity, and consistency with the problem and official solution.\"",
+        "guidance": "Be strict: any error, gap, or unjustified claim \u21d2 mark incorrect. Do not grade future steps. Evaluator must respond in strict JSON with keys 'verdict' and 'reason' using only {\"verdict\":\"correct\"} or {\"verdict\":\"incorrect\"}; 'reason' must be a short sentence. Evaluate each sub-step only against problem + official complete solution + candidate sub-solution."
+      },
+      {
+        "name": "Deterministic evaluation protocol for model generations (reproducibility)",
+        "description": "All generations use a single greedy decode with zero temperature (T = 0) under the same prompt template and context window; this reproduces the protocol used by earlier benchmarks and removes prompt engineering confounding.",
+        "guidance": "Use greedy decoding (T=0) and fixed prompt/context to ensure reproducibility across runs; report Pass@1 accuracy (or analogous deterministic metrics) rather than sampling-based metrics that introduce variance."
+      },
+      {
+        "name": "Exact-match grading and avoidance of learned judges for numeric track",
+        "description": "RIMO-N\u2019s single-integer format allows for deterministic string-match grading, ensuring efficiency, reproducibility, and elimination of grading bias.",
+        "guidance": "Prefer exact-match rule-based graders for numeric outputs to avoid expression normalization, learned-judge noise, and stylistic penalties. When possible, rewrite problems to a uniform answer format to permit exact-match checking."
+      },
+      {
+        "name": "Identification and handling of binary (0/1) subset",
+        "description": "RIMO-N contains 96 problems whose ground-truth integer happens to be 0 or 1; roughly two-thirds are T/F formulations while the remainder ask for numeric extrema evaluating to 0 or 1.",
+        "guidance": "Track and optionally evaluate this binary subset separately: binary outputs reduce search space and inflate accuracy; report both full-set and binary-subset performance to diagnose how much difficulty comes from locating integers versus binary decisions."
+      },
+      {
+        "name": "Use of multi-source adjudication and manual review on disagreements",
+        "description": "\"Any disagreement triggers manual adjudication and usually leads to exclusion.\"",
+        "guidance": "When community sources disagree about a contest problem's answer, escalate to manual adjudication; if unresolved, exclude the item to maintain dataset reliability. Prefer retaining shortlist items with official keys where possible."
+      },
+      {
+        "name": "Omni-Math style LLM judge rubric (equivalence-focused, but binary strictness)",
+        "description": "Omni-Math judge prompt: judge whether the student's answer \"captures the same meaning as the reference answer\"; tasks include (A) identify mathematical or notational equivalence (pay attention to LaTeX), (B) provide a justification; \"Equivalence Judgement is only TRUE or FALSE. The answer is FALSE even if the student's final answer is almost correct with a minor mistake.\"",
+        "guidance": "When using an LLM-based equivalence judge: focus on mathematical/notational equivalence, extract boxed final answer, output a professional teaching-style report with explicit TRUE/FALSE equivalence and a justification. Be aware that this approach penalizes near-misses (treats almost-correct as incorrect) and can introduce stylistic/equivalence errors (as illustrated by GPT-4o failure)."
+      },
+      {
+        "name": "Performance reporting: Pass@1 for RIMO-N and average fraction-completed for RIMO-P",
+        "description": "RIMO-N results are reported as Pass@1 accuracy (%). RIMO-P final performance score P is computed as P = (1/N) \u03a3_i (Si/Xi).",
+        "guidance": "Report deterministic Pass@1 for integer-track items. For proof track, report average proportion of consecutively-completed sub-steps (P) to reflect stepwise reasoning capability rather than binary final correctness alone."
+      }
+    ]
+  }
+}

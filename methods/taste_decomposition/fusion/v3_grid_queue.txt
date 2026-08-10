@@ -1,0 +1,57 @@
+# V3 FULL-GRID work queue (owner: claude-vat-fullgrid)
+# Two GPU chain agents pull from this queue. Cells are listed in the builder's
+# priority order. A cell is RUNNABLE once
+#   methods/taste_decomposition/fusion/dense_data/v3grid_<slug>/manifest.json exists.
+#
+# CLAIM PROTOCOL (append-only, no locking needed at this stakes level):
+#   1. append a line:  CLAIM <slug> gpu=<N> agent=<yourname> <UTC ISO8601>
+#   2. re-read the file; if an EARLIER CLAIM line for the same <slug> exists from
+#      the other agent, yield it and take the next unclaimed runnable cell.
+#   3. on finish append:  DONE <slug> gpu=<N> auc_E=<x> <UTC ISO8601>
+#      on failure append: FAIL <slug> gpu=<N> reason=<short> <UTC ISO8601>
+# Never claim a cell that already has a DONE line. Never remove lines.
+#
+# GPUs: 0 and 2 ONLY (both ledger-claimed by agent=claude-vat-fullgrid). Do not
+# touch any other card; do not kill any process you did not start.
+#
+# PRIORITY ORDER
+# 1  nc_agree
+# 2  peer_curation
+# 3  hashtagwars_verdict
+# 4  nc_outcome
+# 5  jokes_community
+# 6  mathse_accepted_verdict
+# 7  mathse_vote_score
+# 8  aops_curation
+# 9  press_verdict
+# 10 peer_verdict
+# 11 nc_responded
+# 12 peer_revealed
+# 13 code_v3
+# 14 hashtagwars_verdict_k10   (k-sensitivity probe; run only after 1-9 are claimed)
+# 15 jokes_community_k10       (k-sensitivity probe; run only after 1-9 are claimed)
+#
+# --- claim log below this line ---
+CLAIM hashtagwars_verdict gpu=2 agent=v3chain-gpu2 2026-08-08T09:22:06Z
+CLAIM hashtagwars_verdict gpu=0 agent=v3chain-gpu0 2026-08-08T09:22:59Z
+YIELD hashtagwars_verdict gpu=0 agent=v3chain-gpu0 reason=earlier-claim-by-v3chain-gpu2 2026-08-08T09:23:11Z
+CLAIM press_verdict gpu=0 agent=v3chain-gpu0 2026-08-08T09:23:11Z
+CLAIM peer_curation gpu=2 agent=v3chain-gpu2 2026-08-08T09:26:04Z
+CLAIM peer_curation gpu=0 agent=v3chain-gpu0 2026-08-08T09:27:07Z
+YIELD peer_curation gpu=0 agent=v3chain-gpu0 reason=earlier-claim-by-v3chain-gpu2 2026-08-08T09:27:22Z
+CLAIM jokes_community gpu=0 agent=v3chain-gpu0 2026-08-08T09:27:22Z
+CLAIM nc_agree gpu=2 agent=v3chain-gpu2 2026-08-08T09:31:53Z
+CLAIM mathse_accepted_verdict gpu=2 agent=v3chain-gpu2 2026-08-08T09:31:53Z
+CLAIM mathse_vote_score gpu=2 agent=v3chain-gpu2 2026-08-08T09:34:28Z
+CLAIM peer_verdict gpu=0 agent=v3chain-gpu0 2026-08-08T09:35:32Z
+DONE press_verdict gpu=0 auc_E=0.7714 2026-08-08T09:48:55Z
+CLAIM nc_outcome gpu=0 agent=v3chain-gpu0 2026-08-08T09:50:26Z
+DONE hashtagwars_verdict gpu=2 auc_E=0.7063 2026-08-08T10:00:30Z
+CLAIM hashtagwars_verdict_k10 gpu=2 agent=v3chain-gpu2 2026-08-08T10:00:55Z (cells 1-9 all claimed or blocked: aops+code_v3 BLOCKED by builder)
+CLAIM peer_revealed gpu=0 agent=v3chain-gpu0 2026-08-08T10:17:13Z
+DONE peer_verdict gpu=0 auc_E=0.7544 2026-08-08T10:48:32Z
+DONE peer_curation gpu=2 auc_E=0.6386 2026-08-08T10:55:25Z
+DONE nc_agree gpu=2 auc_E=0.5929 2026-08-08T10:55:25Z
+DONE jokes_community gpu=0 auc_E=0.7411 2026-08-08T16:49:56Z
+DONE nc_outcome gpu=0 auc_E=0.6196 2026-08-08T17:16:35Z
+DONE peer_revealed gpu=0 auc_E=0.8882 2026-08-08T17:16:35Z

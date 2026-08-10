@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_793fb81e9144.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17161,
+  "output_tokens": 5300,
+  "elapsed_s": 3148.75742899999,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "patent AI / NLP researchers, dataset builders, and practitioners interested in automatic examination of patent claim definiteness",
+    "subtask_short": "patent definiteness examination dataset",
+    "subtask_description": "Creation, annotation, and evaluation of an automatic patent-claim definiteness (35 U.S.C. \u00a7112(b)) dataset and baseline systems, including dataset construction rules, LLM-based parsing/examination prompts, and evaluation metrics for binary, multi-label, and free-form reasoning tasks.",
+    "subtask_keywords": [
+      "patent",
+      "definiteness",
+      "dataset",
+      "nlp",
+      "evaluation_metrics",
+      "us_law"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Indefiniteness categories (Table 1)",
+        "description": "A set of fine-grained indefiniteness categories used to classify reasons for rejection under 35 U.S.C. \u00a7112(b) and corresponding MPEP sections.",
+        "guidance": "Categories (with brief descriptions / MPEP sections):\n- Antecedent Basis (2173.05(e)): Claim contains a term referencing an element lacking a clear prior introduction, creating ambiguity what it references.\n- Undefined Term (2173.05(a)): A term lacks a clear, accepted and/or unambiguous meaning to a POSITA, making the claim\u2019s scope uncertain.\n- Relative Term (2173.05(b)): A relative term (e.g., 'thin,' 'substantial') is used without providing a clear point of comparison, rendering the claim\u2019s scope indefinite.\n- Exemplary Phrasing (2173.05(d)): Claim uses 'such as' or similar phrasing, making it unclear whether the listed items are exhaustive or merely examples.\n- Functional Claiming (2173.05(g)): Claim recites 'means for' or 'step for' without disclosing adequate corresponding structure, material, or acts in the specification (35 U.S.C. 112(f)/pre-AIA second paragraph).\n- Contradicting Limitations (2173): Claim includes an element that contradicts or is inconsistent with other claim limitations.\n- Omission of Essential Elements or Steps (2172.01): Claim fails to recite an element, step, or cooperative relationship between elements/steps that is essential to the invention as disclosed.\n- Dependence (Other): Claim depends on an indefinite claim.\n- Other (-): Catch-all for indefiniteness reasons not covered above.\nNote: Some reasons were used only during parsing and filtered out for the final dataset (paper notes greyed-out reasons)."
+      },
+      {
+        "name": "Statutory and normative definiteness requirement (35 U.S.C. \u00a7112(b) / Nautilus standard)",
+        "description": "Definiteness requires that every claim is sufficiently clear and unambiguous to enable a person skilled in the art to understand the scope of the invention. Post-Nautilus (2014) standard: claims must inform, 'with reasonable certainty, those skilled in the art about the scope of the invention.'",
+        "guidance": "Treat 35 U.S.C. \u00a7112(b) rejections as the target rejection class. The MPEP provides examiner guidance referenced throughout. Exclude pre-2014 applications to avoid differing legal standards (Nautilus change)."
+      },
+      {
+        "name": "Dataset seed selection (domain & timeframe)",
+        "description": "Seed patent applications selected by CPC class 'G06F40' ('Handling natural language data') and filed after 2014.",
+        "guidance": "Pipeline is agnostic to domain but the released PEDANTIC dataset focuses on NLP-related applications (G06F40). Applications prior to 2014 are filtered out because definiteness interpretation changed after Nautilus v. Biosig."
+      },
+      {
+        "name": "Consider only first office action",
+        "description": "Use only the first office action for each application as it generally establishes the core grounds for rejection.",
+        "guidance": "Download the first office action and select the latest claim and specification documents preceding that action to avoid introducing issues that appear only in later prosecution rounds."
+      },
+      {
+        "name": "Document download & parsing",
+        "description": "Download claims, specification, and office action documents from the USPTO Open Data Portal (ODP) in XML and parse to Markdown/JSON for further processing.",
+        "guidance": "Use the ODP File Wrapper API; parse XML into machine-readable JSON/Markdown to feed LLM parsers and downstream modules."
+      },
+      {
+        "name": "Office action parsing procedure (LLM extraction)",
+        "description": "Select office action sections containing '112' and prompt an LLM (e.g., Gemma 3 27B) to extract 112(b) rejections into a fixed JSON schema.",
+        "guidance": "For each rejection, extract: the verbatim text snippet arguing indefiniteness ('reasonText'), a category from Table 1 ('reasonCategory'), and a list of recited phrases ('claimRecitations'). Instruct the LLM to copy verbatim and not paraphrase, extend, or explain. Use fuzzy matching to find occurrences of recited phrases in the claim text."
+      },
+      {
+        "name": "Office action extraction rules (verbatim, granularity, scope)",
+        "description": "Strict extraction rules for 35 U.S.C. 112(b) rejections (Appendix A): extract verbatim, do not paraphrase, do not mix multiple reasons into one entry; if unsure use 'other'; if none leave 'rejectionReasons' empty.",
+        "guidance": "Follow the JSON schema exactly. Include every single recitation substring (even repeats/overlaps). Focus solely on 35 U.S.C. 112(b) rejections; ignore 112(a), 102, 103, etc. Prefer inclusive ranges when listing claim numbers. Do not include interpretation statements and do not fix spelling/grammar. Extract fine-grained reasons as separate entries."
+      },
+      {
+        "name": "Sampling of definite claims (balancing)",
+        "description": "To obtain definite claims, sample claims from applications whose office actions do not contain the term '112(b)'; balance the dataset between definite and indefinite claims.",
+        "guidance": "Compute average number of indefinite claims per application, then iterate definite applications in random order and sample the same number of claims per application until class balance is achieved, rounding up/down to match per-application counts."
+      },
+      {
+        "name": "Dataset split (application-level)",
+        "description": "Randomly split applications into train (60%), test (30%), and validation (10%) partitions.",
+        "guidance": "Perform the split at the application-level (not claim-level) to avoid data leakage; ensure distributional parity (definite/indefinite fractions, independent/dependent claim distribution, category distribution) across splits where possible."
+      },
+      {
+        "name": "Human validation study protocol",
+        "description": "Manual inspection of a random sample to validate automatic annotations.",
+        "guidance": "Inspect 50 randomly sampled claims (both definite and indefinite), compare the office action against extracted binary labels, extracted free-form reasoning texts, and assigned categories to estimate annotation accuracy and noise. Use findings to quantify reliability (paper: binary labels all correct; some category noise observed)."
+      },
+      {
+        "name": "Primary evaluation tasks",
+        "description": "Evaluate models on three complementary tasks: (1) binary definite/indefinite classification, (2) multi-label classification of indefiniteness categories, and (3) generation of free-form reasoning for indefiniteness reasons evaluated by an LLM-as-Judge.",
+        "guidance": "Design systems and metrics to capture not only whether a claim is indefinite, but why \u2014 enabling actionable feedback for drafters/examiners."
+      },
+      {
+        "name": "Binary classification metrics & thresholding",
+        "description": "Use standard binary classification metrics: Precision, Recall, F1-score, AUROC, Accuracy.",
+        "guidance": "For evaluation, determine a prediction confidence threshold that balances predictions (the paper chooses the threshold such that half of validation claims are predicted as indefinite). Report metrics at that threshold and report AUROC to capture performance across thresholds."
+      },
+      {
+        "name": "LLM-as-Judge pairwise reasoning evaluation",
+        "description": "Evaluate model-generated free-form reasons by comparing every examiner-cited reason with every model-cited reason using an LLM judge (grade 1-5), normalize scores to [0,100], and compute precision/recall/F1 on the resulting similarity matrix.",
+        "guidance": "Prompt the judge to first list similarities/differences then provide a numeric grade (1-5). Convert judge grade distribution to a probability-weighted mean: norm(s) = 100 * ( (sum(i * p_i) / sum(p_i) - 1) / 4 ). Compute similarity matrix S (n_examiners x m_models). Two variants: thresholded (consider a model reason correct if max similarity >=75; compute P>=75, R>=75, F1>=75 with macro and micro averages) and soft (P = (1/m) sum_j max_i S_ij; R = (1/n) sum_i max_j S_ij; F1 = harmonic mean). The threshold 75 corresponds to 'The reasons are closely related and largely address the same issue.'"
+      },
+      {
+        "name": "Multi-label classification metrics & calibration",
+        "description": "Treat each indefiniteness category as a binary label and report category-wise F1, with micro and macro averages.",
+        "guidance": "Balance predictions using per-category confidence thresholds chosen so the fraction of positive predictions matches the validation set distribution. Note that macro F1 can be low if performance varies across (rare) categories; micro F1 emphasizes common categories."
+      },
+      {
+        "name": "LLM agent design & prompting for examination",
+        "description": "Zero-shot LLM agent prompt for claim examination (Appendix B): instruct the model to dissect the claim, list all potential indefiniteness issues, estimate likelihood using verbalized expressions, and use tools to retrieve related claims and description paragraphs.",
+        "guidance": "Provide the claim, the set of indefiniteness categories, and two tools: get_claim (retrieve claim by number) and search_description (TF-IDF retrieval of description paragraphs). Allow unlimited interleaved tool calls. Instruct the agent to output JSON matching the office-action-extraction schema, including per-reason confidence, free-form reasoning, a category (Table 1), and claim recitations. Encourage step-by-step reasoning and exhaustive issue listing; ignore novelty/non-obviousness."
+      },
+      {
+        "name": "Confidence elicitation scheme for LLM agents",
+        "description": "Ask LLMs to express likelihoods using verbalized probability expressions mapped to numeric probabilities based on human perception studies (Fagen-Ulmschneider mapping).",
+        "guidance": "Verbalized expressions are converted to numerical probabilities according to empirically-determined human perception of probability words (reference provided). Use these probabilities for binary decision thresholds and calibration."
+      },
+      {
+        "name": "Feature sets for interpretable logistic regression baseline",
+        "description": "Hand-crafted linguistic and document features used by logistic regression: TF-IDF features plus claim- and description-level linguistic features.",
+        "guidance": "Example features include: claim length (#words, #characters), claim length relative to description, #claims in application, #syllables, #unique_word_stems, type-token ratio, stopword counts, IOU (overlap) between claim and description, readability metrics (Flesch, Flesch-Kincaid Grade, Gunning Fog, SMOG, Dale-Chall, Automated Readability Index, Coleman-Liau, LiauIndex), trigger-word flags (contains 'means for', 'step for', 'device for', 'system for', 'module for', 'component for', 'apparatus for', 'machine for', 'member for', etc.), is_independent_claim flag, mean/max/min #claims features. Empirical finding: linguistic handcrafted features substantially help; TF-IDF alone performs worse."
+      },
+      {
+        "name": "Calibration & threshold selection guidance",
+        "description": "Practical calibration and decision-threshold strategies for models.",
+        "guidance": "Choose thresholds to match desired prediction rates (paper balances thresholds to match validation distribution). Note that LLMs in experiments showed poor claim-level calibration but moderately positive correlation between reason-level confidence and judge score, so calibrating claim-level confidences or using reason-level confidences may improve downstream decisions."
+      },
+      {
+        "name": "Ensembling recommendations",
+        "description": "Combine complementary models by averaging predicted probabilities.",
+        "guidance": "An ensemble averaging Qwen 2.5 72B and the logistic regression predicted probabilities yielded moderate improvements, indicating complementary strengths between simple interpretable models and LLM agents."
+      },
+      {
+        "name": "Office action parsing prompt constraints (operational rules)",
+        "description": "Operational constraints embedded in the parsing prompt (Appendix A) to ensure consistent and auditable extractions.",
+        "guidance": "Strict JSON-only output; use single quotes; ignore newlines; include 'rejectedClaims' as claim integers or ranges; include 'rejectionReasons' as separate fine-grained entries; include 'reasonText', 'reasonContext' (if referring to another reason), 'claims', 'reasonCategory' (from provided set only), and 'claimRecitations'. If no 112(b) rejections present, return empty 'rejectionReasons'."
+      }
+    ]
+  }
+}

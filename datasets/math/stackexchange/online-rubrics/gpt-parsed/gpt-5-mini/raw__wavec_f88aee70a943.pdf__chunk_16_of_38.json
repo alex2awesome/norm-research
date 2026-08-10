@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 16,
+  "n_chunks": 38,
+  "chunk_chars": 39934,
+  "model": "gpt-5-mini",
+  "elapsed_s": 209.97292587500124,
+  "input_tokens": 14963,
+  "output_tokens": 5498,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of the PARI/GP system (mathematicians and programmers using the PARI library)",
+    "subtask_short": "PARI/GP function reference usage",
+    "subtask_description": "Reference-documentation guidance for correct, efficient and numerically-safe use of PARI/GP vector operations and transcendental library functions. Covers argument types, edge cases, precision rules, performance suggestions and special-case semantics.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "library",
+      "math_software",
+      "reference_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "vecextract component specifier formats",
+        "description": "The second argument y to vecextract can be an integer (mask), a vector of integer indices, or a string describing a single index, a range \"a..b\" (with optional omission of a or b), or '^' prefix to indicate complement.",
+        "guidance": "Integer mask: binary bits of y read right-to-left correspond to components left-to-right (e.g. y=13=(1101)2 -> components 1,3,4). Vector y: entries are component numbers extracted in that order. String y: single index (negative counts from end), range \"a..b\" extracts interval [a,b] (reverse if b<a); omitted a or b default to 1 or -1. '^' at start takes complement of specified indices. Examples provided; library API: GEN extract0(GEN x, GEN y, GEN z = NULL)."
+      },
+      {
+        "name": "matrix indexing with two specifiers",
+        "description": "If a third argument z is present, x must be a matrix; then y is the row specifier and z the column specifier, each using the component-specifier semantics above.",
+        "guidance": "Same formats (integer mask, vector, string range/complement) apply independently to rows and columns. Example: vecextract(matid(3), \"2..\", \"..\") -> column/row extraction illustrated."
+      },
+      {
+        "name": "prefer range notation for common subset extraction",
+        "description": "The range notations v[i..j], v[^i] (for t_VEC/t_COL) and M[i..j,k..l] (for t_MAT) implement a simpler and faster subset extraction and should be preferred in typical situations.",
+        "guidance": "Range notation does NOT implement reverse order or omission of either endpoint in a..b; for those features use vecextract. Use range notation for speed and simplicity when its limitations are acceptable."
+      },
+      {
+        "name": "vecprod contract and empty-vector behavior",
+        "description": "vecprod(v) returns the product of components of vector v; for an empty vector returns 1.",
+        "guidance": "Simple contract: product over components. Examples: vecprod([1,2,3])=6, vecprod([])=1. Library: GEN vecprod(GEN v)."
+      },
+      {
+        "name": "vecsum contract and empty-vector behavior",
+        "description": "vecsum(v) returns the sum of components of vector v; for an empty vector returns 0.",
+        "guidance": "Simple contract and example: vecsum([1,2,3])=6, vecsum([])=0. Library: GEN vecsum(GEN v)."
+      },
+      {
+        "name": "vecsearch requires sorted input (unless cmpf provided); return semantics",
+        "description": "vecsearch(v,x,{cmpf}) determines whether x belongs to sorted vector/list v: returns positive index where found, or 0 if absent. If cmpf omitted, v must be sorted in increasing order under standard comparison lex (restricts element types). If cmpf present, v is assumed sorted according to it.",
+        "guidance": "If cmpf omitted, allowed element types: integers, fractions, reals, and vectors thereof; t_VECSMALL x allowed. Searching an unsorted vector yields undefined/incorrect result (example shows returning 0). If comparison is expensive, precompute keys and search on keys rather than using cmpf (performance guidance). Abusive notations: matrices seen as vectors of columns; t_VEC can be part of matrix if transpose matches a column. Library: long vecsearch(GEN v, GEN x, GEN cmpf = NULL)."
+      },
+      {
+        "name": "prefer precomputed keys over cmpf for expensive comparisons",
+        "description": "When sorting/searching with respect to an expensive-to-compute key, precompute keys, sort/search the key vector and use indirect permutation rather than using a comparison function directly.",
+        "guidance": "Key evaluated O(n) times versus comparison-based approach which can be O(n log n) evaluations of expensive key. Example: compute T = [abs(poldisc(x))| x<-v]; perm = vecsort(T,,1); vecextract(v, perm). Also provides T for later vecsearch calls; mapisdefined may be easier/faster than vecsearch in some cases."
+      },
+      {
+        "name": "vecsort stability and allowed cmpf kinds",
+        "description": "vecsort(x,{cmpf},{flag=0}) sorts x in ascending order using mergesort (stable). cmpf omitted uses standard lex ordering; cmpf may be an integer k, a vector of component indices (lexicographic by those components), a comparison function (t_CLOSURE taking x,y returning sign), or a key (t_CLOSURE taking x returning f(x)).",
+        "guidance": "Prefer using a key rather than embedding key computation in the comparison function because key is evaluated O(n) times vs O(n log n) for comparisons. Examples show named vs anonymous functions, using abs as key. Library: GEN vecsort0(GEN x, GEN cmpf = NULL, long flag)."
+      },
+      {
+        "name": "vecsort flag bits semantics",
+        "description": "The flag argument to vecsort is a bitset with defined meanings: bit 1 = indirect sort (return permutation), bit 4 = descending order, bit 8 = remove duplicates with respect to sorting function (keep first occurrence).",
+        "guidance": "Use flag=1 to obtain permutation perm such that vecextract(x,perm) sorts x. Example: vecsort([Pi,Mod(1,2),z], (x,y)->0, 8) removes duplicates (keeps first). Combine flags as needed."
+      },
+      {
+        "name": "vecsort stability implication",
+        "description": "Mergesort used by vecsort is stable: the initial order of items considered equal by the sorting criterion is preserved.",
+        "guidance": "If you rely on stable behavior for equal keys, vecsort preserves their relative order. This interacts with flag 8 (remove duplicates) which keeps the first-occurring entry."
+      },
+      {
+        "name": "vector/vectorsmall/vectorv per-element lexical scope",
+        "description": "vector(n,{X},{expr=0}) evaluates expr at integer points 1..n with X lexically scoped to each evaluation; changes to X inside expr do not affect subsequent element evaluations (per-element local scope). vectorsmall returns t_VECSMALL; vectorv returns a column vector t_COL.",
+        "guidance": "This per-element scoping differs from for-loop evaluation. Examples illustrate difference: vector(n, i, i=i-1; f(i)) vs using for-loop which mutates i outside per-element scope. If last arguments omitted, vector filled with zeros."
+      },
+      {
+        "name": "transcendental functions return inexact objects and follow precision rules by argument type",
+        "description": "Transcendental functions always return an inexact object (real, complex, p-adic, or power series) with finite precision. Behavior depends on argument type: inexact arguments computed at argument precision; exact integers/rationals/quadratics are converted to real/complex at current precision; polmods evaluated for each complex embedding; polynomials/power series converted to power series with seriesprecision; vectors/matrices cause componentwise evaluation.",
+        "guidance": "Precision controls: under gp, use defaults realprecision or realbitprecision (\\p, \\pb or default(...)) to change decimal or bit precision. In library mode, functions take a prec parameter (length in words, prec >= 3); polynomials/rationals to be used as power series should be explicitly converted in library mode via gtoser(x,gvar(x),seriesprec) to avoid relying on deprecated global precdl. p-adic behavior: only a few functions implemented for intmod/p-adic (sqrt, sqr, log, exp, powering, teichmuller, agm). For polmod arguments return a column vector with entries for each complex embedding. Componentwise evaluation: transcendental functions applied to vectors/matrices act elementwise; square-matrix transcendental functions currently have different names if implemented in future."
+      },
+      {
+        "name": "branch choices and principal branches for complex-valued transcendental functions",
+        "description": "Many transcendental functions implement principal branches and explicit branch cuts (e.g., acos principal branch yields values in [0,\u03c0], asin in [\u2212\u03c0/2,\u03c0/2], log principal branch imaginary part in (\u2212\u03c0,\u03c0], etc.).",
+        "guidance": "Check each function help for branch cut definitions and principal value conventions. Examples: acos(x) = \u03c0/2 \u2212 asin(x); log(x) principal branch with branch cut along negative real axis. Results may be complex even for real arguments outside domain (e.g. acos(2.0))."
+      },
+      {
+        "name": "expm1/log1p recommended for small arguments",
+        "description": "Use expm1(x) to compute exp(x)\u22121 and log1p(x) to compute log(1+x) for increased accuracy and sometimes speed when x is near 0; naive exp(x)-1 or log(1+x) suffer catastrophic cancellation.",
+        "guidance": "Examples demonstrate orders-of-magnitude better relative accuracy for small x and slight speed improvements. Use expm1/log1p when real part of x near 0. Library functions: GEN gexpm1, GEN glog1p."
+      },
+      {
+        "name": "sqr vs x * x: precision and efficiency differences",
+        "description": "sqr(x) computes the square of x with optimizations and precision semantics that differ from x*x: it is often more efficient (saves roughly half elementary multiplications) and can increase p-adic precision (e.g., (1+O(2^4))^2 -> 1+O(2^5) whereas x*x may keep O(2^4)).",
+        "guidance": "Use sqr when squaring a single object, especially in p-adic contexts where precision increase matters. Also sqr is called when multiplying two operands known to be identical (e.g., same variable) to exploit optimizations."
+      },
+      {
+        "name": "sqrtn and nth-root semantics with &z optional root-of-unity output",
+        "description": "sqrtn(x,n,{&z}) returns the principal nth root with argument in (\u2212\u03c0/n,\u03c0/n]; for intmod/p-adic arguments nth roots are allowed. If &z present, it is set to a root of unity enabling recovery of other roots; if no nth root exists return 0 when &z present (instead of error).",
+        "guidance": "Examples show Mod arithmetic and using &z to enumerate all roots. A provided helper sqrtnall computes vector of all nth-roots. Library: GEN gsqrtn(GEN x, GEN n, GEN *z = NULL, long prec)."
+      },
+      {
+        "name": "sqrt principal branch and intmod/p-adic conventions",
+        "description": "sqrt(x) returns principal branch with Arg(sqrt(x)) in (\u2212\u03c0/2,\u03c0/2]; if x real and negative result is complex with positive imaginary part. For t_INTMOD and t_PADIC, the returned root (if exists) is the one whose first p-adic digit lies in [0,p/2].",
+        "guidance": "If no square root exists for intmod/p-adic, behavior undocumented here (implied to be undefined/error). Library: GEN gsqrt(GEN x, long prec); Qp_sqrt for p-adics."
+      },
+      {
+        "name": "teichmuller character usage and tab precomputation tradeoffs",
+        "description": "teichmuller(x,{tab}) returns Teichm\u00fcller character of p-adic x; if x is [p,n], returns lifts to Z of i+O(p^n) for i=1..p\u22121; optional tab can be a precomputed table to speed up repeated computations.",
+        "guidance": "Precompute tab via teichmuller([p,n]) when computing many values: heuristic: if more than p/2*(log2(p)+hammingweight(p)) values are needed it is worthwhile to initialize (example shows huge speedup). Caveat: if tab accuracy (n) < precision of x, cached value used (no refinement) leading to lower accuracy; if tab accuracy > precision of x, x's precision used. Library functions: GEN teichmuller(GEN x, GEN tab = NULL), teichmullerinit(p,n)."
+      },
+      {
+        "name": "gammamellininvinit absolute-error guarantee (caveat)",
+        "description": "gammamellininvinit (and related gammamellininv) initialize and compute inverse Mellin transforms used for L-values; unlike PARI convention, these functions guarantee an absolute (not relative) error bound.",
+        "guidance": "Users relying on relative error must take care. Examples show using gammamellininvinit([0]) and numerical checks. Library: GEN gammamellininvinit(GEN A, long m, long bitprec) and GEN gammamellininv(GEN G, GEN t, long m, long bitprec)."
+      },
+      {
+        "name": "eint1 absolute error behavior for vectorized n",
+        "description": "eint1(x,{n}) returns the exponential integral; if n present returns the n-dimensional vector [eint1(x),...,eint1(n*x)] and the values are correct up to a bounded absolute error 10^{-n} (where n is precision(x) for t_REAL or defaults to realprecision).",
+        "guidance": "This absolute-error control is intentional for applications (L-functions approximate functional equations) where small absolute errors are more useful than small relative errors. Using n saves time vs repeated calls but is less precise. Library: GEN veceint1(GEN x, GEN n = NULL, long prec)."
+      },
+      {
+        "name": "incgam/incgamc relative-error/argument constraints",
+        "description": "incgam(s,x,{g}) computes incomplete gamma \u222b_x^\u221e t^{s-1} e^{-t} dt extended by analytic continuation; relative error is bounded in terms of precision of s (accuracy of x ignored for output precision). If g is given and equals \u0393(s) computation speeds small-|x| cases. incgamc(s,x) returns complementary incomplete gamma with constraints on |x|/(|s|+1) for convergence speed.",
+        "guidance": "Use provided g when available to speed small-x computations. Be aware of convergence/efficiency issues when |x|/(|s|+1) is large; library API: GEN incgam0(GEN s, GEN x, GEN g = NULL, long prec) and GEN incgamc(GEN s, GEN x, long prec)."
+      },
+      {
+        "name": "zeta computation methods and p-adic interpretation",
+        "description": "For complex s\u22601, \u03b6(s) is computed using Euler\u2013Maclaurin summation except when s is integer: use Bernoulli numbers for s\u22640 or s>0 even, and modular forms for s>0 odd. For p-adic s (s\u22601) returns Kubota\u2013Leopoldt p-adic zeta function (continuous on p-adic integers interpolating (1-p^{-k})\u03b6(k) at negative integers with congruence conditions). Power series allowed for complex case but not for p-adic case.",
+        "guidance": "Use appropriate precision; examples show zeta(2) and p-adic expansions. Library: GEN gzeta(GEN s, long prec)."
+      },
+      {
+        "name": "polylog flag variants and functional equation usage",
+        "description": "polylog(m,x,{flag=0}) computes variants of polylogarithms depending on flag: flag=0 mth polylog Li_m(x) analytic continuation; flags 1,2,3 compute modified functions \u02dcD_m, D_m, P_m using Zagier's notations involving combinations of Li_{m-k} and log|x| powers. Functional equation f_m(1/x) = (\u22121)^{m\u22121} f_m(x) holds for these functions.",
+        "guidance": "Implementation uses functional equation to restrict to |x|\u22641 then power series or log expansions depending on region. Library: GEN polylog0 and GEN gpolylog(m,x) for flag=0."
+      },
+      {
+        "name": "special-function principal-branch/argument and domain notes (examples: acos, acosh, asin, asinh, atan, atanh)",
+        "description": "Many named special functions specify principal-branch formulas, value ranges, and branch cuts; examples: acos principal branch gives values in [0,\u03c0] with branch cuts on ]\u2212\u221e,\u22121] and [1,\u221e); acosh principal branch with real part \u22650; asin in [\u2212\u03c0/2,\u03c0/2] etc.",
+        "guidance": "Users must consult per-function descriptions for branch cuts and principal-value definitions; expect complex results for real arguments outside principal ranges and identity relations between functions (e.g., acos(x)=\u03c0/2\u2212asin(x), atan(x)=\u2212i atan h(i x)). Library: per-function GEN names provided (gacos, gasin, gatan, etc.)."
+      },
+      {
+        "name": "eta/trueeta variants and q conventions",
+        "description": "eta(z,{flag=0}) returns variants of Dedekind's \u03b7 function. If flag=0 returns product form with q depending on x as: q=e^{2i\u03c0x} for complex x with Im>0, q=x for t_PADIC or power series; if flag non-zero, x converted to complex and true \u03b7 returned including q^{1/24} factor.",
+        "guidance": "Be aware of missing q^{1/24} factor when flag=0. Use trueeta for full complex \u03b7. Library: GEN eta0(GEN z, long flag, long prec) and GEN trueeta(GEN x, long prec)."
+      },
+      {
+        "name": "function-specific accuracy/performance notes (examples: besseljh inaccurate for small x, some p-adic limits)",
+        "description": "Several functions list domain-specific accuracy or performance caveats: e.g., besseljh(n,x) (half-integral index) is not very accurate when x is small in version 2.11.1; some p-adic functions only implemented for restricted set; some series expansions omit factors when \u03bd not integral (besseli/besselj).",
+        "guidance": "Check per-function remarks for special-case accuracy limitations and fallback behavior. Consider alternative approaches or higher precision for problematic parameter ranges."
+      }
+    ]
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 85,
+  "n_chunks": 92,
+  "chunk_chars": 39975,
+  "model": "gpt-5-mini",
+  "elapsed_s": 522.091818916997,
+  "input_tokens": 12056,
+  "output_tokens": 4931,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP developers and library/package authors implementing new objects, representations, and methods",
+    "subtask_short": "implementing GAP object operations",
+    "subtask_description": "Guidance and conventions for creating new GAP object types, representations, and installing methods/operations (arithmetic, comparison, printing, help integration) in the GAP library. Covers implementation details, performance considerations, file/layout conventions, and help-system handler requirements.",
+    "subtask_keywords": [
+      "gap",
+      "library_development",
+      "methods_and_operations",
+      "representations",
+      "package_authors"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Comparison compatibility for finite field elements",
+        "description": "The comparison < for finite field elements must be compatible with the predefined comparison of the existing finite field element implementation.",
+        "guidance": "If the manual/documentation lacks details, inspect GAP kernel source code to find the exact comparison behavior. For internally represented finite field elements the comparison is defined in Chapter 59; compatibility may force expensive implementations (e.g., using discrete logs) to match older behavior."
+      },
+      {
+        "name": "Simple comparison for ModulusRep nonprime Z/nZ elements",
+        "description": "For two elements in Z/nZ (ModulusRep, nonprime) a straightforward comparison can be used: compare their stored residue entries.",
+        "guidance": "Example implementation: function(x,y) return x![1] < y![1]; end; This is suitable where elements store the residue at position 1 and no compatibility with other representations is required."
+      },
+      {
+        "name": "Comparison for Z/pZ (ModulusRep) via discrete logarithm for compatibility",
+        "description": "To be compatible with internal finite field element ordering, comparison of Z/pZ (ModulusRep) elements may use discrete logarithms: compute Characteristic(p), get a primitive root r and compare LogMod(x,r,p) < LogMod(y,r,p).",
+        "guidance": "This produces an expensive comparison but ensures compatibility with existing internal FFE ordering. Consider alternative cheaper comparisons only when compatibility is not required."
+      },
+      {
+        "name": "Mixed-type comparisons with internal finite field elements",
+        "description": "When comparing an element in Z/pZ (ModulusRep) with an internal finite field element (FFE), define methods that convert or scale one side appropriately (e.g., multiply the ModulusRep value by One(y) before comparing).",
+        "guidance": "Examples: function(x,y) return x![1] * One(y) < y; end and symmetrically function(x,y) return x < y![1] * One(x); end."
+      },
+      {
+        "name": "Install same arithmetic methods across representations when compatible",
+        "description": "Install methods for +, ZeroOp, AdditiveInverseOp, -, *, OneOp, Int, and mod for your ModulusRep objects analogous to those for internal finite field elements when semantics coincide.",
+        "guidance": "Do not repeat them here if already present for internal types; ensure Int (conversion) is compatible. Be cautious with operations where representation matters (InverseOp, /, ^) and provide additional methods for mixed-representation arguments."
+      },
+      {
+        "name": "Provide methods for InverseOp, /, and ^ taking representation differences into account",
+        "description": "For operations whose result or algorithm depends on representation (InverseOp, /, ^), explicitly install methods for combinations of IsMyModulusRep and IsInternalRep to handle mixed-argument cases.",
+        "guidance": "Missing such methods can lead to incorrect behavior or errors. Provide methods for (ModulusRep, ModulusRep), (ModulusRep, internal), (internal, ModulusRep) as needed."
+      },
+      {
+        "name": "DegreeFFE implementation for Z/pZ objects",
+        "description": "Define DegreeFFE for objects in IsMyZmodpZObj; it need not require IsMyModulusRep since it does not access representation-dependent data.",
+        "guidance": "Example: InstallMethod(DegreeFFE, \"for element in Z/pZ\", [ IsMyZmodpZObj ], z -> 1 );"
+      },
+      {
+        "name": "Enumerator/Random/Size/Units semantics depend on whether the argument is whole family",
+        "description": "Methods like Enumerator, Random, Size, Units should assume their argument contains the whole family of elements; thus they make sense only for full-ring (whole-family) objects in nonprime cases.",
+        "guidance": "For prime cases there are existing field methods; for full rings implement Enumerator returning the list of elements (e.g., List([0..Size(R)-1], x -> MyZmodnZObj(F,x))). Units for full ring can be improved to return a group rather than a list."
+      },
+      {
+        "name": "Cache MyZmodnZ results to return canonical rings within a session",
+        "description": "Subsequent calls MyZmodnZ(n) should ideally return the same ring object for a given n to avoid incompatible rings whose elements cannot interoperate.",
+        "guidance": "Keep a global list of MyZmodnZ results in the GAP session and return stored values when possible; this also enables PrintObj methods that produce GAP-readable output."
+      },
+      {
+        "name": "Units should return a group where appropriate",
+        "description": "Units (56.5.2) for full rings should preferably return a group object (not merely a list of elements) so the result can be used in group-oriented computations (e.g., SylowSubgroup).",
+        "guidance": "Return a GroupByGenerators result rather than a raw list when possible; e.g., gens := GeneratorsPrimeResidues(Size(R)).generators; return GroupByGenerators(gens, One(R))."
+      },
+      {
+        "name": "Install arithmetic methods to avoid unnecessary intermediate construction",
+        "description": "To improve efficiency, install methods for -, /, and ^ to handle cases directly instead of relying on constructing additive/multiplicative inverses or intermediate powers.",
+        "guidance": "Examples of recommended method installations: InstallMethod(-, \"two elements in Z/nZ (ModulusRep)\", ...); and analogous methods for mixed argument types given in the text."
+      },
+      {
+        "name": "Do not use the type of an existing object as the first argument of Objectify",
+        "description": "It is not admissible to take the type of an existing object as first argument to Objectify, because the argument may have knowledge (properties) not correct for the result of an operation.",
+        "guidance": "Example: if both arguments satisfy IsOne, their sum may not; using an existing object's type can incorrectly propagate properties. Instead, create/remember an appropriate type for results (e.g., store the required type in the family)."
+      },
+      {
+        "name": "Differentiate small and large modulus categories for cheaper comparisons",
+        "description": "To avoid expensive comparisons for large prime moduli, introduce subcategories (e.g., IsMyZmodpZObjSmall and IsMyZmodpZObjLarge) and install different < methods for these categories.",
+        "guidance": "Install cheaper < implementations for IsMyZmodpZObjLarge when compatibility with internal FFE ordering is not required or internal FFE doesn't cover large sizes."
+      },
+      {
+        "name": "New arithmetic operations must be implemented by creating new objects (not by overloading existing ones)",
+        "description": "GAP does not support defining entirely new operations for existing objects (because * and + are already used for canonical meanings); instead create new object types and define the desired operations for those objects.",
+        "guidance": "Examples: construct LieObject for matrix Lie algebras or FreeMagmaRing for magma rings; use embedding maps to relate original elements to new-object elements."
+      },
+      {
+        "name": "Declare category (filter) and representation for new objects",
+        "description": "Create a new filter/category (DeclareCategory or NewCategory) that will return true for your new objects and declare representations (DeclareRepresentation) to describe how internal data are stored (positional/list or record).",
+        "guidance": "Example: DeclareCategory(\"IsMyObject\", IsObject); DeclareRepresentation(\"IsMyObjectListRep\", IsPositionalObjectRep, [1]); This allows writing methods matching [ IsMyObject and IsMyObjectListRep ]."
+      },
+      {
+        "name": "Create a new family and type for your objects using NewFamily and NewType",
+        "description": "Specify the family and type your objects belong to and create a constructor (Objectify) using NewType(NewFamily(...), <filters and representation>).",
+        "guidance": "Store the constructed type in a global variable (MyType := NewType(NewFamily(\"MyFamily\"), IsMyObject and IsMyObjectListRep))."
+      },
+      {
+        "name": "Store immutable copies of underlying data inside objects",
+        "description": "When creating objects that wrap underlying values, store Immutable(val) to prevent external mutation from changing the wrapped object's value.",
+        "guidance": "Example constructor: MyObject := val -> Objectify(MyType, [ Immutable(val) ]); prevents changes when the original (e.g., a matrix) is mutable."
+      },
+      {
+        "name": "Provide human-readable and GAP-readable printing via ViewObj and PrintObj",
+        "description": "Install ViewObj for concise human-readable displays (View) and PrintObj for GAP-readable constructions (Print) so both informal and reproducible outputs are available.",
+        "guidance": "Examples: InstallMethod(ViewObj, \"for object in 'IsMyObject'\", [IsMyObject and IsMyObjectListRep], function(obj) Print(\"<\", obj![1], \">\"); end ); and InstallMethod(PrintObj, ..., function(obj) Print(\"MyObject( \", obj![1], \" )\"); end )."
+      },
+      {
+        "name": "Ensure methods match operation declarations or install appropriate implications",
+        "description": "Operations are declared with expected filters (e.g., * declared for IsMultiplicativeElement). A method's argument filters must match the operation declaration; otherwise either use InstallOtherMethod or declare an implication (InstallTrueMethod) so your object's filter implies the operation's required filter.",
+        "guidance": "Prefer InstallTrueMethod(IsMultiplicativeElement, IsMyObject) to make your objects recognized as multiplicative elements and allow normal InstallMethod to succeed rather than bypassing checks with InstallOtherMethod."
+      },
+      {
+        "name": "Mark objects as having inverses when you implement inversion",
+        "description": "If you implement inverse/One behavior for your objects, install an implication such as InstallTrueMethod(IsMultiplicativeElementWithInverse, IsMyObject) so generic algorithms relying on invertibility become available.",
+        "guidance": "Also install OneOp and InverseOp (operations) rather than attribute methods if you only handle immutable objects; attributes expect an immutable-return protocol which may not match implementation style."
+      },
+      {
+        "name": "Distinguish between attributes and operations for One/Inverse implementations",
+        "description": "Attributes (One, Inverse) and their backing operations (OneOp, InverseOp) differ: attributes need to take an object, make it immutable, then return it. For many implementations it's simpler to install OneOp/InverseOp methods directly.",
+        "guidance": "The manual notes that for technical reasons operations OneOp and InverseOp were used instead of attributes in examples because objects are immutable in that design."
+      },
+      {
+        "name": "Install equality and ordering methods to enable domain formation and uniqueness checks",
+        "description": "Define = and < for your object type so GAP can form sets/domains and decide uniqueness of neutral and inverse elements.",
+        "guidance": "Example: InstallMethod(\\=, \"for two objects in 'IsMyObject'\", ..., function(a,b) return a![1] = b![1]; end); similarly install < using underlying comparison (a![1] < b![1])."
+      },
+      {
+        "name": "Declare additive-structure implications and install additive methods if needed",
+        "description": "If you also define addition for your objects, declare InstallTrueMethod(IsAdditiveElementWithInverse, IsMyObject) and install methods for +, ZeroOp, and AdditiveInverseOp consistent with your algebraic design.",
+        "guidance": "Example additive definitions: <a> + <b> = <a+b-1>; ZeroOp returns MyObject(One(a![1])) and AdditiveInverseOp returns MyObject(a![1]/(a![1]-One(a![1])))."
+      },
+      {
+        "name": "Be aware the mechanism is not suitable for many different multiplications on the same set",
+        "description": "Installing a new multiplication requires declaring at least one new filter and many methods; thus the design is not ideal if you need many different multiplications on the same underlying set.",
+        "guidance": "However, once implemented generically (parameterized over the coefficient field), the arithmetic is available for any field F without reimplementation."
+      },
+      {
+        "name": "GAP library file naming and purposes (.g, .gd, .gi)",
+        "description": "Library files use suffix conventions: .g for kernel inner workings, .gd for declaration files (categories, attributes, operations, with operation definitions in comments), and .gi for implementation files (method installations, representations).",
+        "guidance": "As a rule of thumb .gd files are read before .gi files, so .gi files may assume declarations exist; follow filename case and length conventions (directory names of packages must be lower case)."
+      },
+      {
+        "name": "Finding implementations in the library",
+        "description": "Use FilenameFunc and StartlineFunc to find the file and starting line of a function definition (with some restrictions), or use method tools to find a method installation. Grep is useful for locating functions and installation strings.",
+        "guidance": "If FilenameFunc does not work, raising the print level of the method-introspection routine (7.2.1) shows the installation string which can be searched in .gi files. Use Browse package tools: BrowseGapMethods and BrowseProfile to navigate implementations."
+      },
+      {
+        "name": "Undocumented variables are unstable\u2014avoid depending on them",
+        "description": "Global variables not documented in the help system are experimental or minor and may change or be removed; using them in code is risky.",
+        "guidance": "If you need stability, ask at support@gap-system.org for documentation; if the developers decide to document, it will be protected in the manual. Otherwise, include current values in your private code to avoid breakage."
+      },
+      {
+        "name": "Help-system manual.six format requirement",
+        "description": "A manual.six file must start with a line '#SIXFORMAT myownformat' to identify the format; otherwise it is assumed to be the default gapmacro.tex format.",
+        "guidance": "The ReadSix function for the format will then parse the remainder. If the identifying line is missing, HELP_BOOK_HANDLER.default.ReadSix will be used."
+      },
+      {
+        "name": "HELP_BOOK_HANDLER.myownformat.ReadSix return requirements",
+        "description": "ReadSix(stream) must return a record info containing at least bookname (short identifying name) and entries (a list with one entry per searchable string).",
+        "guidance": "Each entry of info.entries must be a list whose first element is a string printed by GAP when several matches are found. The info record may contain other components needed by other handler functions."
+      },
+      {
+        "name": "Required HELP_BOOK_HANDLER functions and SearchMatches contract",
+        "description": "A help-book handler record HELP_BOOK_HANDLER.myownformat must provide functions including ReadSix, ShowChapters, ShowSection, SearchMatches, MatchPrevChap, and MatchNextChap with specified behaviors.",
+        "guidance": "SearchMatches(info, topic, frombegin) must return [exact, match] where exact is indices of exact matches and match the remaining matches; if frombegin true then topic parts separated by spaces are considered word-beginnings, otherwise perform substring search. The topic is normalized (lowercase, whitespace normalized)."
+      }
+    ]
+  }
+}

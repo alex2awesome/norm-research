@@ -1,0 +1,94 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_d55d74f918d1.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 13310,
+  "output_tokens": 3825,
+  "elapsed_s": 2184.7675379170105,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and developers working on satire/humor detection, computational deception detection, and automated fake-news filtering",
+    "subtask_short": "detecting_satirical_news",
+    "subtask_description": "Identify whether a news-style article is satirical or legitimate by extracting linguistic, semantic, and discourse-level cues and applying machine-learning classification.",
+    "subtask_keywords": [
+      "satire",
+      "news",
+      "nlp",
+      "humor_detection",
+      "classification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Absurdity",
+        "description": "Defined by the unexpected introduction of new named entities (people, places, locations) within the final sentence of satirical news; the article is deemed absurd when the set of named entities present in the last line does not intersect with those appearing in the rest of the article.",
+        "guidance": "Implemented with NLTK POS tagging and Named Entity Recognition; treat Absurdity as a binary feature (0=non-absurd, 1=absurd). Example: final line introducing previously unseen entities (e.g., 'Christopher Hitchens Memorial University') signals absurdity; motivated by the semantic-validity notion from Burfoot & Baldwin (2009)."
+      },
+      {
+        "name": "Humor (punchline / opposing scripts)",
+        "description": "Captures the presence of a punchline/opposing scripts by measuring semantic relatedness between the lead (first) sentence and the final (last) sentence \u2014 satirical articles often have minimal relatedness between these two segments.",
+        "guidance": "Assign binary humor feature when relatedness(first_sentence, last_sentence) is minimal relative to other sentences. Compute relatedness via a knowledge-based word-to-word metric (Wu & Palmer 1994) aggregated over segments. Intended to operationalize punchline detection / incongruity resolution; example: final line that is semantically dissimilar from setup indicates humor."
+      },
+      {
+        "name": "Grammar (LIWC / parts-of-speech profile)",
+        "description": "Normalized term frequencies of grammatical categories (adjectives, adverbs, pronouns, conjunctions, prepositions) using LIWC dictionaries to capture syntactic and stylistic differences between satirical and legitimate news.",
+        "guidance": "Use LIWC2015 category counts or POS-tag-derived counts as a feature vector. Grammar feature also encodes sentence complexity tendencies (e.g., more dependent clauses in quotations). Guidance: normalize by article length."
+      },
+      {
+        "name": "Punctuation",
+        "description": "Normalized frequencies of punctuation marks (periods, commas, colon, semi-colon, question marks, exclamation points, quotes) as satirical articles tend to use more punctuation due to longer/clause-heavy sentences and comedic effect.",
+        "guidance": "Count punctuation occurrences and normalize by article length. High counts (especially more commas and clause punctuation) can be predictive of satire; this feature improved precision in experiments."
+      },
+      {
+        "name": "Negative Affect (polarity / emotional scenarios)",
+        "description": "Presence and normalized frequency of negative-affect terms (words conveying negative emotions) as measured by sentiment/dictionary resources (e.g., LIWC).",
+        "guidance": "Include as a normalized feature weight. The paper found that negative affect improved classification performance; positive polarity signals did not show similar improvement in their trials."
+      },
+      {
+        "name": "Baseline tf*idf topic vector",
+        "description": "Topic-based document representation using term frequency\u2013inverse document frequency weighting on tokenized unigrams and bigrams (with stopword removal and normalization by article length) as a baseline classifier feature set.",
+        "guidance": "Use tf*idf vectors (normalized by article length) with a linear SVM as baseline. In this study the tf*idf baseline achieved ~82% accuracy (F-score=82%)."
+      },
+      {
+        "name": "Word-level lexical cues (headlines, n-grams, counterfactual & temporal words, profanity/slang)",
+        "description": "Lexical and semantic word-level signals such as headline style, profanity/slang, counterfactual words (e.g., 'nevertheless', 'yet'), temporal-compression words ('now', 'abruptly'), and n-gram patterns that correlate with satire.",
+        "guidance": "Extract unigrams/bigrams and lexical markers; prior work shows tf*idf on bi-grams as a useful baseline; profanity/slang were important in some corpora but did not add predictive power in this dataset. Headlines themselves are especially relevant: satire often repeats or extends headline material in first line."
+      },
+      {
+        "name": "Semantic validity / named-entity co-occurrence (Burfoot & Baldwin-style)",
+        "description": "Measure of imbalances in co-occurring named entities \u2014 legitimate news tends to show consistent co-occurrence patterns of entities, while satire introduces semantically disparate or unlikely entity combinations.",
+        "guidance": "Compute entity co-occurrence statistics across a corpus and flag low-cooccurrence or semantically disparate entity combinations as indicators of absurdity; can be operationalized by comparing entity co-occurrence profiles or using semantic distance in a knowledge graph."
+      },
+      {
+        "name": "Sentence complexity / run-on sentences",
+        "description": "Syntactic complexity features such as sentence length, number of clauses, and density of dependent clauses, especially in quotations; satirical articles often pack more clauses for comedic effect.",
+        "guidance": "Measure clause counts, punctuation density, parse-based complexity metrics. Note: in this study simple words-per-sentence did not increase predictive accuracy, but clause-level complexity and punctuation did. Use grammatical parse or regex patterns to detect run-on or clause-heavy constructions."
+      },
+      {
+        "name": "Semantic relatedness metrics (WordNet / Wu & Palmer)",
+        "description": "Knowledge-based similarity measures (e.g., Wu & Palmer 1994 using WordNet) to compute word-to-word and segment-to-segment relatedness, used to detect incongruity between segments (setup vs. punchline).",
+        "guidance": "For two segments S1 and S2, for each word in S1 find most related word in S2 (and vice versa), weight/sum and normalize by lengths; average the two directions. Lower relatedness between lead and final sentence indicates possible satire."
+      },
+      {
+        "name": "Sarcasm / irony surface markers",
+        "description": "Surface-level markers associated with sarcasm and irony such as atypical punctuation, frequent specific words, title/metadata quirks, and explicit lexical cues that signal saying the opposite of the literal meaning.",
+        "guidance": "Use features like punctuation patterns, exclamation/question marks, hyperbolic phrasing, and lexical indicators; combine with context/world-knowledge heuristics where possible. Prior work found models using such features achieved reasonable precision/recall for sarcasm detection."
+      },
+      {
+        "name": "Headline and final-line salience (structural discourse cues)",
+        "description": "The headline and final line are especially informative: legitimate news typically reports new material in the first line (inverted pyramid), while satire often repeats the title in first line and uses the final line as a punchline/non-sequitur.",
+        "guidance": "Extract and compare headline \u2192 lead \u2192 final sentence relations (semantic overlap/distance); detect final-line non sequiturs or introduction of new entities/concepts. These structural cues were repeatedly observed and informed Absurdity/Humor features."
+      },
+      {
+        "name": "Dataset construction: matched satirical-legitimate article pairing",
+        "description": "Collect satirical and legitimate articles in matched pairs by country, topic, and domain (e.g., 2x2x4x3 design) to control topicality and provenance in experiments.",
+        "guidance": "For robust evaluation, match each satirical article with a legitimate article published in the same country and similar subject matter. Reserve portions of the combined dataset for training/testing and use cross-validation for reliability; e.g., 75% training / 25% holdout with 10-fold CV on training."
+      },
+      {
+        "name": "Processing & modeling hygiene (normalization, tokenization, feature weighting, SVM/CV)",
+        "description": "Operational requirements for building the classifier: stopword removal, tokenization into unigrams/bigrams, tf*idf weighting normalized by article length, use of linear SVM for binary classification, and evaluation via 10-fold cross-validation plus holdout testing.",
+        "guidance": "Follow pipeline: preprocess \u2192 tokenize \u2192 tf*idf (length-normalized) \u2192 feature augmentation (Abs, Hum, Gram, Neg, Pun) \u2192 train linear SVM \u2192 evaluate with cross-validation and held-out test set. This procedural rubric ensures reproducible and comparable performance reporting."
+      }
+    ]
+  }
+}

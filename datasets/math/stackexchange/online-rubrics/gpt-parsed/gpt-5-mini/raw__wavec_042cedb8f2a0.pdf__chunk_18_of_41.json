@@ -1,0 +1,156 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 18,
+  "n_chunks": 41,
+  "chunk_chars": 39695,
+  "model": "gpt-5-mini",
+  "elapsed_s": 178.01962195899978,
+  "input_tokens": 14088,
+  "output_tokens": 4218,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "users of the Magma computer algebra system working with univariate and multivariate polynomial computations (researchers, mathematicians, advanced students)",
+    "subtask_short": "magma polynomial factorization and roots",
+    "subtask_description": "Guidance and API-level rules for factoring and finding roots of univariate polynomials, performing Hensel lifting, and creating/manipulating multivariate polynomial rings and ideals (including Gr\u00f6bner basis computations) in Magma.",
+    "subtask_keywords": [
+      "magma",
+      "polynomial",
+      "factorization",
+      "roots",
+      "groebner",
+      "multivariate"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Factorization.Al parameter selection",
+        "description": "The Factorization function for univariate polynomials has one parameter, Al, which allows the user to specify the desired factorization algorithm. The parameter has 3 possible values: \"BerlekampSmall\", \"BerlekampLarge\", and \"CantorZassenhaus\".",
+        "guidance": "Default: Al = \"BerlekampSmall\" if q < 25, else \"BerlekampLarge\". Choice affects execution time strongly and depends on the finite field size q and properties of the polynomial; example timings show large differences (BerlekampLarge much faster than BerlekampSmall and Cantor-Zassenhaus in example)."
+      },
+      {
+        "name": "IsIrreducible usage",
+        "description": "The function IsIrreducible(f) returns true if the polynomial f is irreducible.",
+        "guidance": "Can be used to verify that each factor returned by Factorization is irreducible (e.g., forall{p:t in a | IsIrreducible(p) where p is t[1]} returns true)."
+      },
+      {
+        "name": "SquareFreeFactorization semantics",
+        "description": "SquareFreeFactorization(f) returns the squarefree factorization of the associate of f as a factorization sequence of (not necessarily irreducible) factors with their multiplicities.",
+        "guidance": "None of the returned factors will contain the square of any non-constant polynomial."
+      },
+      {
+        "name": "DistinctDegreeFactorization behavior",
+        "description": "DistinctDegreeFactorization(f) takes a square-free univariate polynomial over a finite field and returns a sequence of 2-tuples (degree d, product of degree-d irreducible factors of the associate of f).",
+        "guidance": "Optional parameter Degree := L restricts output to products of factors up to degree L. Example: output lists tuples <1, product>, <2, product>, etc., indicating degrees present and their combined product."
+      },
+      {
+        "name": "Resultant and Discriminant (univariate)",
+        "description": "For univariate polynomials over a domain (e.g., integers), use Resultant(f, g) and Discriminant(f) to compute the resultant and discriminant respectively.",
+        "guidance": "Examples: Resultant(x^10+1, x^5-2) over IntegerRing() returns integer 3125."
+      },
+      {
+        "name": "HenselLift preconditions and result",
+        "description": "HenselLift(f, s, R) lifts an integer polynomial factorization s modulo prime p to a factorization modulo p^k in the polynomial ring R over ZZ/p^kZZ.",
+        "guidance": "Requires a factorization s of f modulo p (sequence of polynomials over ZZ/pZZ). Returns sequence of factors over ZZ/p^kZZ which can correspond to integer factorization once k is large enough (criterion involving 2^n * sqrt(sum of squares of coefficients) given)."
+      },
+      {
+        "name": "SymmetricForm for residue-to-integer conversion",
+        "description": "When Magma coerces residue ring elements into integers it returns non-negative representatives; SymmetricForm(f, b) converts coefficients to symmetric representatives in the range {-(b div 2) .. +(b div 2)}.",
+        "guidance": "Use SymmetricForm on Hensel-lifted factors to obtain symmetric integer-coefficient polynomials and then test combinations/products to reconstruct integer factorization."
+      },
+      {
+        "name": "Roots(f) return format and default domain behavior",
+        "description": "Roots(f) returns roots of f in its coefficient ring R as a sequence of tuples <r_i, m_i> where r_i is a root and m_i its multiplicity. If f is over the free real field, returned roots may include complex roots.",
+        "guidance": "Example: Roots((x-3)^2*(x^2+9)*(x+7/2)) over RationalField() returns [<3,2>,<-7/2,1>]."
+      },
+      {
+        "name": "Roots(f, S) to find roots in extension rings",
+        "description": "Roots(f, S) finds roots of f lying in another ring S (if coefficients can be coerced into S).",
+        "guidance": "Example: for polynomial h over GF(7), Roots(h) returns roots in GF(7); using splitting field spl gives Roots(h, spl) including roots expressed in terms of field generator w."
+      },
+      {
+        "name": "Recommendation: use exact coefficients for free real/complex field",
+        "description": "If coefficient ring is the free real/complex field, it is recommended that coefficients be given as exact values (integers/rationals) where possible to minimize numerical issues.",
+        "guidance": "Exact coefficients increase the chance repeated roots are correctly identified; floating-point coefficients can split multiplicities due to roundoff (examples show (z-6/5)^4 vs (z-1.2)^4)."
+      },
+      {
+        "name": "Roots.Al algorithm selection and Digits parameter",
+        "description": "The Roots function accepts an Al parameter to choose algorithm: default \"Schonhage\" (Sch\u00f6nhage implementation), other options \"Laguerre\", \"NewtonRaphson\", and \"Combination\". Roots also accepts Digits to specify desired accuracy d.",
+        "guidance": "When Schonhage used, results are correct to within absolute error 10^{-d}. For other algorithms, Roots attempts accuracy of d significant figures but not guaranteed. Default Digits is current precision of the free real field."
+      },
+      {
+        "name": "RootsNonExact semantics and requirements",
+        "description": "RootsNonExact(f) is designed for polynomials with non-exact coefficients; it returns two sequences [v1,..,vn] and [e1,..,en] of approximations and error bounds (multiplicities not provided).",
+        "guidance": "Property: |f - a(z-v1)...(z-vn)| < 10^{-d}|f|; ei provide bounds so that any perturbed polynomial within 10^{-d}|f| has roots within ei of vi. If d too small, error sequence may not be returned. Non-exact coefficients must be provided with at least d decimal places for meaningful answers."
+      },
+      {
+        "name": "Monomial order specification for multivariate polynomial rings",
+        "description": "PolynomialRing(R, n, S) creates a multivariate polynomial ring with monomial order specified by string S. Important orders: \"lex\" (lexicographical) and \"grevlex\" (graded reverse lexicographical).",
+        "guidance": "Definitions provided: lex compares exponent tuples lexicographically (first variable greatest); grevlex compares total degree then reverse lex tie-break with negation. If order argument omitted, default is lex."
+      },
+      {
+        "name": "Distinction: multivariate rank-1 vs univariate polynomial ring",
+        "description": "A multivariate polynomial ring of rank 1 over R is not the same as the univariate polynomial ring over R; operations differ and many univariate-specific functions are unavailable in the rank-1 multivariate case.",
+        "guidance": "Recommendation: use the univariate polynomial ring when computing with univariate polynomials rather than a multivariate ring of rank 1."
+      },
+      {
+        "name": "Polynomial creation rule",
+        "description": "The only way to create a multivariate polynomial in Magma is to use an expression in the indeterminates, or to coerce an element of the coefficient ring into the polynomial ring to create a constant polynomial.",
+        "guidance": "Example creation and printing of polynomials shown."
+      },
+      {
+        "name": "Absolute vs recursive access to multivariate polynomials",
+        "description": "A multivariate polynomial can be accessed in two viewpoints: absolute (as parallel lists of coefficients and monomials) and recursive (as a univariate polynomial in variable v with polynomial coefficients). Magma provides distinct functions for each viewpoint (e.g., Coefficients(f) vs Coefficients(f,i)).",
+        "guidance": "Tables of access functions: Coefficients, LeadingCoefficient, Monomials, Terms, TotalDegree, and recursive counterparts Coefficients(f,i), Coefficient(f,i,k), Degree(f,i), etc. Variable may be specified by index or variable object."
+      },
+      {
+        "name": "Factorization in multivariate rings returns canonical associate and unit",
+        "description": "Factorization(f) factorizes multivariate polynomial f into powers of irreducible polynomials and returns the factorization of the canonical associate f and the unit u such that f = u * associate.",
+        "guidance": "For coefficient fields, associate is monic polynomial; for ZZ, associate has positive leading coefficient. Example shows Factorization returning factors and u."
+      },
+      {
+        "name": "IsIrreducible and SquareFreeFactorization (multivariate)",
+        "description": "IsIrreducible(f) returns whether f is irreducible. SquareFreeFactorization(f) returns square-free factorization (with unit) of the canonical associate of f as a sequence of square-free factors with multiplicities.",
+        "guidance": "None of the returned factors in square-free factorization contain square of non-constant polynomial. Factorization further refines to irreducibles."
+      },
+      {
+        "name": "Resultant and Discriminant for multivariate polynomials",
+        "description": "Resultant(f, g, i) (or Resultant(f,g,v)) returns the resultant of f and g with respect to variable i (or v). Discriminant(f,i) and Discriminant(f,v) compute discriminants w.r.t. an appropriate variable.",
+        "guidance": "Resultant can also be obtained by elimination ideal computations; examples show resultant of bivariate polynomials and elimination ideal basis equal to resultant."
+      },
+      {
+        "name": "Derivative and Integral functions",
+        "description": "Derivative(f,i) / Derivative(f,v) compute the formal derivative of f with respect to a variable; Integral(f,i) / Integral(f,v) compute formal integrals.",
+        "guidance": "Standard formal calculus operations available for multivariate polynomials by variable index or variable."
+      },
+      {
+        "name": "Ideal membership and normal form notion",
+        "description": "Given ideal I with basis B, a polynomial f is top-reducible w.r.t. B if a leading monomial of some g in B divides the leading monomial of f; repeated reduction yields a normal form fk which is either zero or not top-reducible. If a normal form of f w.r.t. B is zero then f \u2208 I, but converse may be false unless B is a Gr\u00f6bner basis.",
+        "guidance": "Provides example where f \u2208 I but normal form is non-zero because basis is not a Gr\u00f6bner basis."
+      },
+      {
+        "name": "Gr\u00f6bner basis characterization and construction",
+        "description": "A basis B of an ideal I is a Gr\u00f6bner basis iff for all f \u2208 P, f \u2208 I if and only if every normal form of f w.r.t. B is zero. The Buchberger Algorithm constructs a Gr\u00f6bner basis from an arbitrary basis.",
+        "guidance": "Magma automatically computes Gr\u00f6bner bases when needed; Groebner(I) forces explicit computation. Gr\u00f6bner bases can be put into a unique reduced form (minimalized, reduced and sorted)."
+      },
+      {
+        "name": "Use of Gr\u00f6bner Walk to change monomial order",
+        "description": "Magma implements the Gr\u00f6bner Walk algorithm to convert a Gr\u00f6bner basis of an ideal from one monomial order to another (typically compute basis under easy order like grevlex then walk to final order).",
+        "guidance": "Method often faster than plain Buchberger for final order and is automatically employed when appropriate. ChangeOrder manually applies Gr\u00f6bner Walk. The Groebner procedure accepts parameter Walk := false to disable Gr\u00f6bner Walk and force direct Buchberger in final order."
+      },
+      {
+        "name": "Verbose controls for Gr\u00f6bner and Gr\u00f6bnerWalk",
+        "description": "SetVerbose(\"Groebner\", 1) (or higher) produces verbose output for Buchberger; SetVerbose(\"GroebnerWalk\", 1) enables verbose output for Gr\u00f6bner Walk. Within Gr\u00f6bnerWalk the Buchberger verbose is turned off unless verbose level is 2.",
+        "guidance": "Verbose output indicates steps followed by algorithms and is useful for debugging/monitoring."
+      },
+      {
+        "name": "Ideal arithmetic and access functions",
+        "description": "Magma provides many ideal operations: I+J, I*J, I^k, ColonIdeal(I,J) or ColonIdeal(I,f), I meet J, &meet S, Generic(I), I eq J, I subset J, IsProper(I), IsZero(I), f in I, IsInRadical(f,I), NormalForm(f,I), SPolynomial(f,g), etc.",
+        "guidance": "NormalForm(f,I) returns normal form of polynomial f with respect to ideal I. Example demonstrates meet, subset tests, product equality, radical membership and that (x+y) not in I but (x+y)^2 in I for given I."
+      }
+    ]
+  }
+}

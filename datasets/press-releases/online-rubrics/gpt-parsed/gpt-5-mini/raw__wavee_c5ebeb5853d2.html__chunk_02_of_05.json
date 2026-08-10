@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_c5ebeb5853d2.html",
+  "task": "press-releases",
+  "source_dir": "raw",
+  "source_file": "wavee_c5ebeb5853d2.html",
+  "chunk_idx": 2,
+  "n_chunks": 5,
+  "chunk_chars": 39330,
+  "model": "gpt-5-mini",
+  "elapsed_s": 39.0438714169868,
+  "input_tokens": 10340,
+  "output_tokens": 4036,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners developing ML and network-based systems for health misinformation detection and fact-checking",
+    "subtask_short": "medical fake news detection",
+    "subtask_description": "Standards and evaluation dimensions for designing, feature-engineering, modeling, annotating, and benchmarking systems that detect health-related misinformation on social media and the web. Covers propagation- and source-based methods, graph models, dataset construction and annotation, and fact-checking tools/labels.",
+    "subtask_keywords": [
+      "health_misinformation",
+      "fake_news_detection",
+      "graph_models",
+      "datasets",
+      "source_credibility"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Propagation-based structural features",
+        "description": "Use of propagation-tree structural features (e.g., total number of nodes, maximum or average degree) combined with kernel/SVM classifiers for early detection of false rumors.",
+        "guidance": "Structural propagation features (size and shape of propagation trees) can be combined with graph kernels and RBF kernels in hybrid SVMs; such features have achieved significantly better classification accuracy for early detection of false rumors."
+      },
+      {
+        "name": "Use of heterogeneous graphs (Hetero-SCAN style)",
+        "description": "Build a heterogeneous graph with node types for publishers, users, and news and edge types (citation, publish, tweet, friendship) to learn enriched news-node representations.",
+        "guidance": "Construct initial embeddings for each node type using text and graph embedding methods and enrich news representations via meta-path instances (e.g., news\u2192publishers\u2192news, news\u2192users\u2192news). Use KG-based embeddings (e.g., TransE) refined for the task to capture publisher/user authenticity."
+      },
+      {
+        "name": "Social interaction + publisher statistics fusion (SOMPS-Net)",
+        "description": "Combine a social interaction graph component (SIG) that models users/tweets/retweets and a publisher/news statistics component (PNS) including counts and publisher features to classify news veracity.",
+        "guidance": "Generate textual embeddings (e.g., GloVe) for articles and tweets; construct user feature vectors from profile/history (e.g., tweet counts, friend counts); build user graphs (tweeters and re-tweeters) with edges weighted by common followers/followees; apply GCN/GNN layers and cross-attention between news and graph embeddings; fuse PNS statistical features (e.g., total number of tweets, publisher features) with SIG output for final prediction."
+      },
+      {
+        "name": "Decomposed heterogeneous graph processing with adversarial topic generalization (PSIN)",
+        "description": "Formulate fake-news detection as binary graph classification by building a per-item heterogeneous directed graph of posts and users, decomposed into post propagation tree, user social graph, and post-user interaction graph.",
+        "guidance": "Use textual and meta features (e.g., number of likes) for node representations; process each subgraph with appropriate GAT/GNN models; concatenate/ pool representations into a veracity classifier and include an adversarial topic discriminator to improve generalization to emerging topics."
+      },
+      {
+        "name": "Meta-graph (cascade-level) modeling",
+        "description": "Construct a meta-graph whose nodes are retweet cascades (each cascade = root tweet + embedded URLs/media) and edges connect cascades sharing users; use node and edge features encoding cascade structure and similarity.",
+        "guidance": "Node features: graph embeddings of individual cascades, textual topic/sentiment, user profile and relational info. Edge features: structural similarity, number of common users, content similarity. Two problem formulations: (1) graph classification per cascade, (2) node classification on the meta-graph \u2014 the meta-graph node classification may slightly outperform per-cascade graph classification."
+      },
+      {
+        "name": "Misinformation Knowledge Graph (MKG) and link-prediction for known misconceptions",
+        "description": "Build an MKG whose nodes are tweets labeled with misinformation targets (MisTs); for each MisT create a fully-connected graph (FCG) spanning tweets that refer to that MisT; detect whether an unconnected tweet contains misinformation by predicting links to the FCG.",
+        "guidance": "Learn tweet/MisT representations using KG embedding models and contextual language models (e.g., COVID-Twitter-BERT-v2) projected into the MKG embedding space; use link-ranking functions from KG models for prediction."
+      },
+      {
+        "name": "Stance/signed networks and credibility propagation",
+        "description": "Exploit signed networks (positive edges = agreement, negative edges = disagreement) among items (tweets/news/users) and propagate initial credibility values by solving a graph optimization problem under the assumption that similar viewpoints should have similar credibility, opposing viewpoints opposite credibility.",
+        "guidance": "Assign initial credibility to seed tweets; formulate propagation as optimization and compute numeric credibility values in [-1,1] where positive = valid and negative = fake."
+      },
+      {
+        "name": "Source-based methods: publisher vs user focus",
+        "description": "Assess credibility of sources, distinguishing methods that focus on publishers (web domains/news outlets) and methods focused on social media users (including bots and trolls).",
+        "guidance": "Publisher-focused methods use content analysis and link/graph features of web domains; user-focused methods use user profile, behavior, network and temporal features. Both provide ancillary signals complementary to content-based approaches."
+      },
+      {
+        "name": "Content-based domain/publisher credibility features",
+        "description": "Extract textual and site-level features from website articles, associated Twitter accounts, Wikipedia pages, and web-traffic metrics to assess domain credibility.",
+        "guidance": "Examples include markup, readability, morphological features, presence of advanced HTML tags (associated with real news), and stylistic cues (italic fonts, underscore associated with fake news). In some studies, features from the Twitter account were most impactful."
+      },
+      {
+        "name": "Graph-based domain credibility features",
+        "description": "Analyze the web-page link graph and content-sharing networks (e.g., domains linked by copied articles) to detect patterns of interconnection that indicate fake-web communities.",
+        "guidance": "Follow PageRank-like score propagation, detect highly connected communities of sites exchanging links/content, and use community membership to infer credibility; e.g., connect domains whose sets of tweeting users have high Jaccard similarity and classify using markup/readability/morphology."
+      },
+      {
+        "name": "Community-structure inference for publisher credibility",
+        "description": "Use community detection (e.g., modularity maximization) on content-sharing networks to study publisher credibility and label sources using external fact-checking tools combined into a credibility score.",
+        "guidance": "Combine outcomes from News Guard, Media Fact Check, Allsides, BuzzFeed to generate a continuous score (e.g., -1 to 1) and label sources by thresholds (e.g., < -0.6 non-credible, > 0.6 credible). Analyze behaviors like echo chambers, context mixing, competing narratives, and counter-narratives."
+      },
+      {
+        "name": "User-feature taxonomy for source credibility (Table 6 categories)",
+        "description": "Use a taxonomy of feature types for users: User, Content, Network, Behavioral, and Temporal features when assessing social media user credibility.",
+        "guidance": "User features: user type, gender, age, location, average number of posts, post frequency, repost frequency, account age, verification status. Content features: textual profile/posts (readability, number of adverbs/numbers, biomedical terms). Network features: number of followers/followees, followers' profile features, degree centrality. Behavioral: discussion initiation, interaction engagement, influential scope, relational mediation, informational independence. Temporal: interval entropy between user's posts."
+      },
+      {
+        "name": "User-credibility heuristics and feature examples",
+        "description": "Specific user-level signals found discriminative in experiments include number of characters and URLs in description, existence of official URL, follower counts, days since latest tweet, account verification, readability and use of adverbs/numbers, and interval entropy.",
+        "guidance": "Empirical evaluations show user features can be effective for determining credibility of news a user spreads; content- and temporal-features (e.g., interval entropy) often complement user metadata."
+      },
+      {
+        "name": "Troll detection feature groups and effective signals",
+        "description": "Detect trolls via features grouped as sentiment analysis, time/frequency of actions, text content/style, user behaviors, community interactions, and advertisement of external content; community/advertising features can be most predictive.",
+        "guidance": "Examples: number of submissions, account age, fraction of submissions with same title as known troll submissions, fraction of comments replying to a troll account. Tools like TrollPacifier use six groups of features and find community/advertisement features outperform others."
+      },
+      {
+        "name": "Social bot detection signals",
+        "description": "Detect social bots using profile metadata (account age, username), user activity counts (tweets, retweets, replies), temporal posting patterns (short inter-tweet intervals), and network patterns (friend/follower connections, hashtag usage).",
+        "guidance": "Combine activity measures (sum of tweets/retweets/replies), visibility (retweets/replies received), and client/software indicators; modern bots can be similar to humans, so detection is increasingly difficult."
+      },
+      {
+        "name": "Dataset annotation methodologies",
+        "description": "Annotated datasets use manual (experts, crowd-sourcing, moderated subreddits, authors using fact-checkers) or automatic approaches (inference from trained models, distant supervision, DL retrieval-assisted partial manual annotation).",
+        "guidance": "Manual annotation can be expensive/time-consuming but higher quality. Automatic annotation methods include using existing models to label or distant supervision from databases/knowledge graphs; some approaches manually annotate only most relevant subsets identified by retrieval models."
+      },
+      {
+        "name": "Dataset quality dimensions and benchmarking needs",
+        "description": "Intrinsic dataset properties (sources, size, labeling methodology, task type) strongly affect model performance; there is a need for benchmark datasets for consistent evaluation in medical fake-news detection.",
+        "guidance": "Reported F1 scores vary widely (33%\u201399%) across datasets; desirable dataset characteristics include diversity (multiple countries/languages), longitudinal coverage, multi-linguality, location-tagging, source variety (news, tweets, Reddit), and inclusion of engagement/contextual metadata."
+      },
+      {
+        "name": "Dataset characteristics exemplified (good practices)",
+        "description": "Datasets may include: claims with evidence documents and sentences, labeled tweets paired with misconceptions (MisTs) and stances, news articles with related user engagements, and multi-modal annotations.",
+        "guidance": "Examples from listed datasets: COVID-Fact with claims + evidence sentences; CoAID with news + user engagements; CoVaxNet multi-feature repository; Mega-COV multi-lingual longitudinal dataset. Access and annotation protocols vary (manual, crowd, automatic)."
+      },
+      {
+        "name": "Fact-checking tool rating scales and coverage",
+        "description": "Fact-checking services use discrete rating scales and thematic coverage to assess credibility (e.g., Snopes: True, Mostly True, Mixture, Mostly False, Unproven).",
+        "guidance": "Tools vary in themes covered (politics, health, social issues). Media Bias/Fact Check assesses bias across political spectrum and includes categories like Conspiracy/PseudoScience; these external tool labels can be combined to score publisher credibility."
+      }
+    ]
+  }
+}

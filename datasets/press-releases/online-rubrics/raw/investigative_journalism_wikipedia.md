@@ -1,0 +1,1234 @@
+<!-- URL: https://en.wikipedia.org/wiki/Investigative_journalism -->
+<!-- HTTP: 200 SIZE:   208861 -->
+<!DOCTYPE html>
+<html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Investigative journalism - Wikipedia</title>
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )enwikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"3a747024-77a5-4cd0-ae7c-356fd5da7d2f","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Investigative_journalism","wgTitle":"Investigative journalism","wgCurRevisionId":1351812415,"wgRevisionId":1351812415,"wgArticleId":309754,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Articles with short description","Short description matches Wikidata","Use dmy dates from December 2020","All articles with unsourced statements","Articles with unsourced statements from August 2025","Wikipedia articles in need of updating from March 2024","All Wikipedia articles in need of updating","Commons category link from Wikidata","Articles with hAudio microformats","Spoken articles","Articles with excerpts","Investigative journalism","Types of journalism"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Investigative_journalism","wgRelevantArticleId":309754,"wgTempUserName":null,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgNoticeProject":"wikipedia","wgFlaggedRevsParams":{"tags":{"status":{"levels":1}}},"wgConfirmEditCaptchaNeededForGenericEdit":"hcaptcha","wgConfirmEditForceShowCaptcha":false,"wgConfirmEditHCaptchaVisualEditorOnLoadIntegrationEnabled":false,"wgConfirmEditHCaptchaSiteKey":"5d0c670e-a5f4-4258-ad16-1f42792c9c62","wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true,"wgPopupsFlags":0,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en"},"wgMFDisplayWikibaseDescriptions":{"search":true,"watchlist":true,"tagline":false,"nearby":true},"wgWMESchemaEditAttemptStepOversample":false,"wgWMEPageLength":20000,"wgTestKitchenUserExperiments":{"overrides":[],"enrolled":[],"assigned":[],"subject_ids":[]},"wgEditSubmitButtonLabelPublish":true,"wgVisualEditorPageIsDisambiguation":false,"wgULSPosition":"interlanguage","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false,"wgWikibaseItemId":"Q1127717","wgCheckUserClientHintsHeadersJsApi":["brands","architecture","bitness","fullVersionList","mobile","model","platform","platformVersion"],"GEHomepageSuggestedEditsEnableTopics":true,"wgGESuggestedEditsTaskTypes":{"taskTypes":["copyedit","link-recommendation"],"unavailableTaskTypes":[]},"wgGETopicsMatchModeEnabled":false,"wgGELevelingUpEnabledForUser":false,"wgPersonalDashboardMenuVisible":false};
+RLSTATE={"ext.globalCssJs.user.styles":"ready","site.styles":"ready","user.styles":"ready","ext.globalCssJs.user":"ready","user":"ready","user.options":"loading","ext.wikimediamessages.styles":"ready","ext.cite.styles":"ready","ext.tmh.player.styles":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","jquery.makeCollapsible.styles":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","ext.uls.interlanguage":"ready","wikibase.client.init":"ready"};RLPAGEMODULES=["ext.parsermigration.survey","ext.cite.ux-enhancements","ext.tmh.player","site","mediawiki.page.ready","jquery.makeCollapsible","mediawiki.toc","skins.vector.js","ext.centralNotice.geoIP","ext.centralNotice.startUp","ext.gadget.ReferenceTooltips","ext.gadget.switcher","ext.urlShortener.toolbar","ext.centralauth.centralautologin","ext.testKitchen","mmv.bootstrap","ext.popups","ext.visualEditor.desktopArticleTarget.init","ext.echo.centralauth","ext.eventLogging","ext.wikimediaEvents","ext.navigationTiming","ext.uls.interface","ext.cx.eventlogging.campaigns","ext.cx.uls.quick.actions","wikibase.client.vector-2022","wikibase.databox.fromWikidata","ext.checkUser.clientHints","ext.quicksurveys.init","ext.growthExperiments.SuggestedEditSession"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=ext.cite.styles%7Cext.tmh.player.styles%7Cext.uls.interlanguage%7Cext.visualEditor.desktopArticleTarget.noscript%7Cext.wikimediamessages.styles%7Cjquery.makeCollapsible.styles%7Cskins.vector.icons%2Cstyles%7Cskins.vector.search.codex.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector-2022">
+<script async="" src="/w/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=vector-2022"></script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector-2022">
+<meta name="generator" content="MediaWiki 1.47.0-wmf.1">
+<meta name="referrer" content="origin">
+<meta name="referrer" content="origin-when-cross-origin">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=1120">
+<meta property="og:title" content="Investigative journalism - Wikipedia">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="//upload.wikimedia.org">
+<link rel="alternate" type="application/x-wiki" title="Edit this page" href="/w/index.php?title=Investigative_journalism&amp;action=edit">
+<link rel="apple-touch-icon" href="/static/apple-touch/wikipedia.png">
+<link rel="icon" href="/static/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="/w/rest.php/v1/search" title="Wikipedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="//en.wikipedia.org/w/api.php?action=rsd">
+<link rel="canonical" href="https://en.wikipedia.org/wiki/Investigative_journalism">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">
+<link rel="alternate" type="application/atom+xml" title="Wikipedia Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="dns-prefetch" href="//meta.wikimedia.org" />
+<link rel="dns-prefetch" href="auth.wikimedia.org">
+</head>
+<body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Investigative_journalism rootpage-Investigative_journalism skin-vector-2022 action-view">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
+<div class="vector-header-container">
+	<header class="vector-header mw-header no-font-mode-scale">
+		<div class="vector-header-start">
+			<nav class="vector-main-menu-landmark" aria-label="Site">
+				
+<div id="vector-main-menu-dropdown" class="vector-dropdown vector-main-menu-dropdown vector-button-flush-left vector-button-flush-right"  title="Main menu" >
+	<input type="checkbox" id="vector-main-menu-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-main-menu-dropdown" class="vector-dropdown-checkbox "  aria-label="Main menu"  >
+	<label id="vector-main-menu-dropdown-label" for="vector-main-menu-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-menu mw-ui-icon-wikimedia-menu"></span>
+
+<span class="vector-dropdown-label-text">Main menu</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+				<div id="vector-main-menu-unpinned-container" class="vector-unpinned-container">
+		
+<div id="vector-main-menu" class="vector-main-menu vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-main-menu-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="main-menu-pinned"
+	data-pinnable-element-id="vector-main-menu"
+	data-pinned-container-id="vector-main-menu-pinned-container"
+	data-unpinned-container-id="vector-main-menu-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Main menu</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-main-menu.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-main-menu.unpin">hide</button>
+</div>
+
+	
+<div id="p-navigation" class="vector-menu mw-portlet mw-portlet-navigation"  >
+	<div class="vector-menu-heading">
+		Navigation
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-mainpage-description" class="mw-list-item"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z"><span>Main page</span></a></li><li id="n-contents" class="mw-list-item"><a href="/wiki/Wikipedia:Contents" title="Guides to browsing Wikipedia"><span>Contents</span></a></li><li id="n-currentevents" class="mw-list-item"><a href="/wiki/Portal:Current_events" title="Articles related to current events"><span>Current events</span></a></li><li id="n-randompage" class="mw-list-item"><a href="/wiki/Special:Random" title="Visit a randomly selected article [x]" accesskey="x"><span>Random article</span></a></li><li id="n-aboutsite" class="mw-list-item"><a href="/wiki/Wikipedia:About" title="Learn about Wikipedia and how it works"><span>About Wikipedia</span></a></li><li id="n-contactpage" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us" title="How to contact Wikipedia"><span>Contact us</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-interaction" class="vector-menu mw-portlet mw-portlet-interaction"  >
+	<div class="vector-menu-heading">
+		Contribute
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-help" class="mw-list-item"><a href="/wiki/Help:Contents" title="Guidance on how to use and edit Wikipedia"><span>Help</span></a></li><li id="n-introduction" class="mw-list-item"><a href="/wiki/Help:Introduction" title="Learn how to edit Wikipedia"><span>Learn to edit</span></a></li><li id="n-portal" class="mw-list-item"><a href="/wiki/Wikipedia:Community_portal" title="The hub for editors"><span>Community portal</span></a></li><li id="n-recentchanges" class="mw-list-item"><a href="/wiki/Special:RecentChanges" title="A list of recent changes to Wikipedia [r]" accesskey="r"><span>Recent changes</span></a></li><li id="n-upload" class="mw-list-item"><a href="/wiki/Wikipedia:File_upload_wizard" title="Add images or other media for use on Wikipedia"><span>Upload file</span></a></li><li id="n-specialpages" class="mw-list-item"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q"><span>Special pages</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+				</div>
+
+	</div>
+</div>
+
+		</nav>
+			
+<a href="/wiki/Main_Page" class="mw-logo">
+	<img class="mw-logo-icon" src="/static/images/icons/enwiki-25.svg" alt="" aria-hidden="true" height="50" width="50">
+	<span class="mw-logo-container skin-invert">
+		<img class="mw-logo-wordmark" alt="Wikipedia" src="/static/images/mobile/copyright/wikipedia-wordmark-en-25.svg" style="width: 8.75em; height: 1.375em;">
+		<img class="mw-logo-tagline" alt="The Free Encyclopedia" src="/static/images/mobile/copyright/wikipedia-tagline-en-25.svg" width="140" height="11" style="width: 8.75em; height: 0.6875em;">
+	</span>
+</a>
+
+		</div>
+		<div class="vector-header-end">
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-collapses vector-search-box-show-thumbnail vector-search-box-auto-expand-width vector-search-box">
+	<a href="/wiki/Special:Search" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only search-toggle" title="Search Wikipedia [f]" accesskey="f"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+	</a>
+	<div class="vector-typeahead-search-container">
+		<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail cdx-typeahead-search--auto-expand-width">
+			<form action="/w/index.php" id="searchform" class="cdx-search-input cdx-search-input--has-end-button">
+				<div id="simpleSearch" class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+					<div class="cdx-text-input cdx-text-input--has-start-icon">
+						<input
+							class="cdx-text-input__input mw-searchInput" autocomplete="off"
+							 type="search" name="search" placeholder="Search Wikipedia" aria-label="Search Wikipedia" autocapitalize="none" spellcheck="false" title="Search Wikipedia [f]" accesskey="f" id="searchInput"
+							>
+						<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+					</div>
+					<input type="hidden" name="title" value="Special:Search">
+				</div>
+				<button class="cdx-button cdx-search-input__end-button">Search</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+			<nav class="vector-user-links vector-user-links-wide" aria-label="Personal tools">
+	<div class="vector-user-links-main">
+	
+<div id="p-vector-user-menu-preferences" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-userpage" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	<nav class="vector-appearance-landmark" aria-label="Appearance">
+		
+<div id="vector-appearance-dropdown" class="vector-dropdown "  title="Change the appearance of the page&#039;s font size, width, and color" >
+	<input type="checkbox" id="vector-appearance-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-appearance-dropdown" class="vector-dropdown-checkbox "  aria-label="Appearance"  >
+	<label id="vector-appearance-dropdown-label" for="vector-appearance-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-appearance mw-ui-icon-wikimedia-appearance"></span>
+
+<span class="vector-dropdown-label-text">Appearance</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+			<div id="vector-appearance-unpinned-container" class="vector-unpinned-container">
+				
+			</div>
+		
+	</div>
+</div>
+
+	</nav>
+	
+<div id="p-vector-user-menu-notifications" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-overflow" class="vector-menu mw-portlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=" cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=Investigative+journalism" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span>Create account</span></a>
+</li>
+<li id="pt-login-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=Investigative+journalism" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	</div>
+	
+<div id="vector-user-links-dropdown" class="vector-dropdown vector-user-menu vector-button-flush-right vector-user-menu-logged-out user-links-collapsible-item"  title="Log in and more options" >
+	<input type="checkbox" id="vector-user-links-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-user-links-dropdown" class="vector-dropdown-checkbox "  aria-label="Personal tools"  >
+	<label id="vector-user-links-dropdown-label" for="vector-user-links-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-ellipsis mw-ui-icon-wikimedia-ellipsis"></span>
+
+<span class="vector-dropdown-label-text">Personal tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+		
+<div id="p-personal" class="vector-menu mw-portlet mw-portlet-personal user-links-collapsible-item"  title="User menu" >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=""><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=Investigative+journalism" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span class="vector-icon mw-ui-icon-userAdd mw-ui-icon-wikimedia-userAdd"></span>
+
+<span>Create account</span></a>
+</li>
+<li id="pt-login" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=Investigative+journalism" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span class="vector-icon mw-ui-icon-logIn mw-ui-icon-wikimedia-logIn"></span>
+
+<span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+</nav>
+
+		</div>
+	</header>
+</div>
+<div class="mw-page-container">
+	<div class="mw-page-container-inner">
+		<div class="vector-sitenotice-container">
+			<div id="siteNotice"><!-- CentralNotice --></div>
+		</div>
+		<div class="vector-column-start">
+			<div class="vector-main-menu-container">
+		<div id="mw-navigation">
+			<nav id="mw-panel" class="vector-main-menu-landmark" aria-label="Site">
+				<div id="vector-main-menu-pinned-container" class="vector-pinned-container">
+				
+				</div>
+		</nav>
+		</div>
+	</div>
+	<div class="vector-sticky-pinned-container">
+				<nav id="mw-panel-toc" aria-label="Contents" data-event-name="ui.sidebar-toc" class="mw-table-of-contents-container vector-toc-landmark">
+					<div id="vector-toc-pinned-container" class="vector-pinned-container">
+					<div id="vector-toc" class="vector-toc vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-toc-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="toc-pinned"
+	data-pinnable-element-id="vector-toc"
+	data-pinned-container-id="vector-toc-pinned-container"
+	data-unpinned-container-id="vector-toc-unpinned-container"
+>
+	<h2 class="vector-pinnable-header-label">Contents</h2>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-toc.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-toc.unpin">hide</button>
+</div>
+
+
+	<ul class="vector-toc-contents" id="mw-panel-toc-list">
+		<li id="toc-mw-content-text"
+			class="vector-toc-list-item vector-toc-level-1">
+			<a href="#" class="vector-toc-link">
+				<div class="vector-toc-text">(Top)</div>
+			</a>
+		</li>
+		<li id="toc-Definitions"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Definitions">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">1</span>
+				<span>Definitions</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Definitions-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-History"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#History">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">2</span>
+				<span>History</span>
+			</div>
+		</a>
+		
+		<ul id="toc-History-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Tools"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Tools">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>Tools</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Tools-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Examples"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Examples">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>Examples</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Examples-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-See_also"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#See_also">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>See also</span>
+			</div>
+		</a>
+		
+		<ul id="toc-See_also-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-References"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#References">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">6</span>
+				<span>References</span>
+			</div>
+		</a>
+		
+		<ul id="toc-References-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Further_reading"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Further_reading">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">7</span>
+				<span>Further reading</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Further_reading-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-External_links"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#External_links">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">8</span>
+				<span>External links</span>
+			</div>
+		</a>
+		
+		<ul id="toc-External_links-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+</ul>
+</div>
+
+					</div>
+		</nav>
+			</div>
+		</div>
+		<div class="mw-content-container">
+			<main id="content" class="mw-body">
+				<header class="mw-body-header vector-page-titlebar no-font-mode-scale">
+					<nav aria-label="Contents" class="vector-toc-landmark">
+						
+<div id="vector-page-titlebar-toc" class="vector-dropdown vector-page-titlebar-toc vector-button-flush-left"  title="Table of Contents" >
+	<input type="checkbox" id="vector-page-titlebar-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-titlebar-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+	<label id="vector-page-titlebar-toc-label" for="vector-page-titlebar-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+							<div id="vector-page-titlebar-toc-unpinned-container" class="vector-unpinned-container">
+			</div>
+		
+	</div>
+</div>
+
+					</nav>
+					<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">Investigative journalism</span></span></h1>
+							
+<div id="p-lang-btn" class="vector-dropdown mw-portlet mw-portlet-lang"  >
+	<input type="checkbox" id="p-lang-btn-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-p-lang-btn" class="vector-dropdown-checkbox mw-interlanguage-selector" aria-label="Go to an article in another language. Available in 39 languages"   >
+	<label id="p-lang-btn-label" for="p-lang-btn-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive mw-portlet-lang-heading-39" aria-hidden="true"  ><span class="vector-icon mw-ui-icon-language-progressive mw-ui-icon-wikimedia-language-progressive"></span>
+
+<span class="vector-dropdown-label-text">39 languages</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+		<div class="vector-menu-content">
+			
+			<ul class="vector-menu-content-list">
+				
+				<li class="interlanguage-link interwiki-ar mw-list-item"><a href="https://ar.wikipedia.org/wiki/%D8%B5%D8%AD%D8%A7%D9%81%D8%A9_%D8%A7%D8%B3%D8%AA%D9%82%D8%B5%D8%A7%D8%A6%D9%8A%D8%A9" title="صحافة استقصائية – Arabic" lang="ar" hreflang="ar" data-title="صحافة استقصائية" data-language-autonym="العربية" data-language-local-name="Arabic" class="interlanguage-link-target"><span>العربية</span></a></li><li class="interlanguage-link interwiki-az mw-list-item"><a href="https://az.wikipedia.org/wiki/Ara%C5%9Fd%C4%B1rma%C3%A7%C4%B1_jurnalistika" title="Araşdırmaçı jurnalistika – Azerbaijani" lang="az" hreflang="az" data-title="Araşdırmaçı jurnalistika" data-language-autonym="Azərbaycanca" data-language-local-name="Azerbaijani" class="interlanguage-link-target"><span>Azərbaycanca</span></a></li><li class="interlanguage-link interwiki-bg mw-list-item"><a href="https://bg.wikipedia.org/wiki/%D0%A0%D0%B0%D0%B7%D1%81%D0%BB%D0%B5%D0%B4%D0%B2%D0%B0%D1%89%D0%B0_%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B0" title="Разследваща журналистика – Bulgarian" lang="bg" hreflang="bg" data-title="Разследваща журналистика" data-language-autonym="Български" data-language-local-name="Bulgarian" class="interlanguage-link-target"><span>Български</span></a></li><li class="interlanguage-link interwiki-bn mw-list-item"><a href="https://bn.wikipedia.org/wiki/%E0%A6%85%E0%A6%A8%E0%A7%81%E0%A6%B8%E0%A6%A8%E0%A7%8D%E0%A6%A7%E0%A6%BE%E0%A6%A8%E0%A7%80_%E0%A6%B8%E0%A6%BE%E0%A6%82%E0%A6%AC%E0%A6%BE%E0%A6%A6%E0%A6%BF%E0%A6%95%E0%A6%A4%E0%A6%BE" title="অনুসন্ধানী সাংবাদিকতা – Bangla" lang="bn" hreflang="bn" data-title="অনুসন্ধানী সাংবাদিকতা" data-language-autonym="বাংলা" data-language-local-name="Bangla" class="interlanguage-link-target"><span>বাংলা</span></a></li><li class="interlanguage-link interwiki-ca mw-list-item"><a href="https://ca.wikipedia.org/wiki/Periodisme_d%27investigaci%C3%B3" title="Periodisme d&#039;investigació – Catalan" lang="ca" hreflang="ca" data-title="Periodisme d&#039;investigació" data-language-autonym="Català" data-language-local-name="Catalan" class="interlanguage-link-target"><span>Català</span></a></li><li class="interlanguage-link interwiki-cs mw-list-item"><a href="https://cs.wikipedia.org/wiki/Investigativn%C3%AD_%C5%BEurnalistika" title="Investigativní žurnalistika – Czech" lang="cs" hreflang="cs" data-title="Investigativní žurnalistika" data-language-autonym="Čeština" data-language-local-name="Czech" class="interlanguage-link-target"><span>Čeština</span></a></li><li class="interlanguage-link interwiki-de mw-list-item"><a href="https://de.wikipedia.org/wiki/Investigativer_Journalismus" title="Investigativer Journalismus – German" lang="de" hreflang="de" data-title="Investigativer Journalismus" data-language-autonym="Deutsch" data-language-local-name="German" class="interlanguage-link-target"><span>Deutsch</span></a></li><li class="interlanguage-link interwiki-el mw-list-item"><a href="https://el.wikipedia.org/wiki/%CE%95%CF%81%CE%B5%CF%85%CE%BD%CE%B7%CF%84%CE%B9%CE%BA%CE%AE_%CE%B4%CE%B7%CE%BC%CE%BF%CF%83%CE%B9%CE%BF%CE%B3%CF%81%CE%B1%CF%86%CE%AF%CE%B1" title="Ερευνητική δημοσιογραφία – Greek" lang="el" hreflang="el" data-title="Ερευνητική δημοσιογραφία" data-language-autonym="Ελληνικά" data-language-local-name="Greek" class="interlanguage-link-target"><span>Ελληνικά</span></a></li><li class="interlanguage-link interwiki-eo mw-list-item"><a href="https://eo.wikipedia.org/wiki/Esplor%C4%B5urnalismo" title="Esplorĵurnalismo – Esperanto" lang="eo" hreflang="eo" data-title="Esplorĵurnalismo" data-language-autonym="Esperanto" data-language-local-name="Esperanto" class="interlanguage-link-target"><span>Esperanto</span></a></li><li class="interlanguage-link interwiki-es mw-list-item"><a href="https://es.wikipedia.org/wiki/Periodismo_de_investigaci%C3%B3n" title="Periodismo de investigación – Spanish" lang="es" hreflang="es" data-title="Periodismo de investigación" data-language-autonym="Español" data-language-local-name="Spanish" class="interlanguage-link-target"><span>Español</span></a></li><li class="interlanguage-link interwiki-et mw-list-item"><a href="https://et.wikipedia.org/wiki/Uuriv_ajakirjandus" title="Uuriv ajakirjandus – Estonian" lang="et" hreflang="et" data-title="Uuriv ajakirjandus" data-language-autonym="Eesti" data-language-local-name="Estonian" class="interlanguage-link-target"><span>Eesti</span></a></li><li class="interlanguage-link interwiki-eu mw-list-item"><a href="https://eu.wikipedia.org/wiki/Ikerketa_kazetaritza" title="Ikerketa kazetaritza – Basque" lang="eu" hreflang="eu" data-title="Ikerketa kazetaritza" data-language-autonym="Euskara" data-language-local-name="Basque" class="interlanguage-link-target"><span>Euskara</span></a></li><li class="interlanguage-link interwiki-fa mw-list-item"><a href="https://fa.wikipedia.org/wiki/%D8%B1%D9%88%D8%B2%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D9%86%DA%AF%D8%A7%D8%B1%DB%8C_%D8%AA%D8%AD%D9%82%DB%8C%D9%82%DB%8C" title="روزنامه‌نگاری تحقیقی – Persian" lang="fa" hreflang="fa" data-title="روزنامه‌نگاری تحقیقی" data-language-autonym="فارسی" data-language-local-name="Persian" class="interlanguage-link-target"><span>فارسی</span></a></li><li class="interlanguage-link interwiki-fi mw-list-item"><a href="https://fi.wikipedia.org/wiki/Tutkiva_journalismi" title="Tutkiva journalismi – Finnish" lang="fi" hreflang="fi" data-title="Tutkiva journalismi" data-language-autonym="Suomi" data-language-local-name="Finnish" class="interlanguage-link-target"><span>Suomi</span></a></li><li class="interlanguage-link interwiki-fr mw-list-item"><a href="https://fr.wikipedia.org/wiki/Journalisme_d%27enqu%C3%AAte" title="Journalisme d&#039;enquête – French" lang="fr" hreflang="fr" data-title="Journalisme d&#039;enquête" data-language-autonym="Français" data-language-local-name="French" class="interlanguage-link-target"><span>Français</span></a></li><li class="interlanguage-link interwiki-he mw-list-item"><a href="https://he.wikipedia.org/wiki/%D7%AA%D7%97%D7%A7%D7%99%D7%A8_%D7%A2%D7%99%D7%AA%D7%95%D7%A0%D7%90%D7%99" title="תחקיר עיתונאי – Hebrew" lang="he" hreflang="he" data-title="תחקיר עיתונאי" data-language-autonym="עברית" data-language-local-name="Hebrew" class="interlanguage-link-target"><span>עברית</span></a></li><li class="interlanguage-link interwiki-hi mw-list-item"><a href="https://hi.wikipedia.org/wiki/%E0%A4%96%E0%A5%8B%E0%A4%9C%E0%A5%80_%E0%A4%AA%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A4%95%E0%A4%BE%E0%A4%B0%E0%A4%BF%E0%A4%A4%E0%A4%BE" title="खोजी पत्रकारिता – Hindi" lang="hi" hreflang="hi" data-title="खोजी पत्रकारिता" data-language-autonym="हिन्दी" data-language-local-name="Hindi" class="interlanguage-link-target"><span>हिन्दी</span></a></li><li class="interlanguage-link interwiki-hr mw-list-item"><a href="https://hr.wikipedia.org/wiki/Istra%C5%BEiva%C4%8Dko_novinarstvo" title="Istraživačko novinarstvo – Croatian" lang="hr" hreflang="hr" data-title="Istraživačko novinarstvo" data-language-autonym="Hrvatski" data-language-local-name="Croatian" class="interlanguage-link-target"><span>Hrvatski</span></a></li><li class="interlanguage-link interwiki-hy mw-list-item"><a href="https://hy.wikipedia.org/wiki/%D5%80%D5%A5%D5%BF%D5%A1%D6%84%D5%B6%D5%B6%D5%A1%D5%AF%D5%A1%D5%B6_%D5%AC%D6%80%D5%A1%D5%A3%D6%80%D5%B8%D6%82%D5%A9%D5%B5%D5%B8%D6%82%D5%B6" title="Հետաքննական լրագրություն – Armenian" lang="hy" hreflang="hy" data-title="Հետաքննական լրագրություն" data-language-autonym="Հայերեն" data-language-local-name="Armenian" class="interlanguage-link-target"><span>Հայերեն</span></a></li><li class="interlanguage-link interwiki-id mw-list-item"><a href="https://id.wikipedia.org/wiki/Jurnalisme_investigasi" title="Jurnalisme investigasi – Indonesian" lang="id" hreflang="id" data-title="Jurnalisme investigasi" data-language-autonym="Bahasa Indonesia" data-language-local-name="Indonesian" class="interlanguage-link-target"><span>Bahasa Indonesia</span></a></li><li class="interlanguage-link interwiki-it mw-list-item"><a href="https://it.wikipedia.org/wiki/Giornalismo_investigativo" title="Giornalismo investigativo – Italian" lang="it" hreflang="it" data-title="Giornalismo investigativo" data-language-autonym="Italiano" data-language-local-name="Italian" class="interlanguage-link-target"><span>Italiano</span></a></li><li class="interlanguage-link interwiki-ja mw-list-item"><a href="https://ja.wikipedia.org/wiki/%E8%AA%BF%E6%9F%BB%E5%A0%B1%E9%81%93" title="調査報道 – Japanese" lang="ja" hreflang="ja" data-title="調査報道" data-language-autonym="日本語" data-language-local-name="Japanese" class="interlanguage-link-target"><span>日本語</span></a></li><li class="interlanguage-link interwiki-ko mw-list-item"><a href="https://ko.wikipedia.org/wiki/%ED%83%90%EC%82%AC%EB%B3%B4%EB%8F%84" title="탐사보도 – Korean" lang="ko" hreflang="ko" data-title="탐사보도" data-language-autonym="한국어" data-language-local-name="Korean" class="interlanguage-link-target"><span>한국어</span></a></li><li class="interlanguage-link interwiki-mn mw-list-item"><a href="https://mn.wikipedia.org/wiki/%D0%AD%D1%80%D1%8D%D0%BD_%D1%81%D1%83%D1%80%D0%B2%D0%B0%D0%BB%D0%B6%D0%BB%D0%B0%D1%85_%D1%81%D1%8D%D1%82%D0%B3%D2%AF%D2%AF%D0%BB_%D0%B7%D2%AF%D0%B9" title="Эрэн сурвалжлах сэтгүүл зүй – Mongolian" lang="mn" hreflang="mn" data-title="Эрэн сурвалжлах сэтгүүл зүй" data-language-autonym="Монгол" data-language-local-name="Mongolian" class="interlanguage-link-target"><span>Монгол</span></a></li><li class="interlanguage-link interwiki-nl mw-list-item"><a href="https://nl.wikipedia.org/wiki/Onderzoeksjournalistiek" title="Onderzoeksjournalistiek – Dutch" lang="nl" hreflang="nl" data-title="Onderzoeksjournalistiek" data-language-autonym="Nederlands" data-language-local-name="Dutch" class="interlanguage-link-target"><span>Nederlands</span></a></li><li class="interlanguage-link interwiki-pl mw-list-item"><a href="https://pl.wikipedia.org/wiki/Dziennikarstwo_%C5%9Bledcze" title="Dziennikarstwo śledcze – Polish" lang="pl" hreflang="pl" data-title="Dziennikarstwo śledcze" data-language-autonym="Polski" data-language-local-name="Polish" class="interlanguage-link-target"><span>Polski</span></a></li><li class="interlanguage-link interwiki-ps mw-list-item"><a href="https://ps.wikipedia.org/wiki/%DA%85%DB%90%DA%93%D9%86%D9%8A%D8%B2%D9%87_%D8%AE%D8%A8%D8%B1%D9%8A%D8%A7%D9%84%D9%8A" title="څېړنيزه خبريالي – Pashto" lang="ps" hreflang="ps" data-title="څېړنيزه خبريالي" data-language-autonym="پښتو" data-language-local-name="Pashto" class="interlanguage-link-target"><span>پښتو</span></a></li><li class="interlanguage-link interwiki-pt mw-list-item"><a href="https://pt.wikipedia.org/wiki/Jornalismo_investigativo" title="Jornalismo investigativo – Portuguese" lang="pt" hreflang="pt" data-title="Jornalismo investigativo" data-language-autonym="Português" data-language-local-name="Portuguese" class="interlanguage-link-target"><span>Português</span></a></li><li class="interlanguage-link interwiki-ro mw-list-item"><a href="https://ro.wikipedia.org/wiki/Jurnalism_investigativ" title="Jurnalism investigativ – Romanian" lang="ro" hreflang="ro" data-title="Jurnalism investigativ" data-language-autonym="Română" data-language-local-name="Romanian" class="interlanguage-link-target"><span>Română</span></a></li><li class="interlanguage-link interwiki-ru mw-list-item"><a href="https://ru.wikipedia.org/wiki/%D0%96%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D1%81%D0%BA%D0%B8%D0%B5_%D1%80%D0%B0%D1%81%D1%81%D0%BB%D0%B5%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F" title="Журналистские расследования – Russian" lang="ru" hreflang="ru" data-title="Журналистские расследования" data-language-autonym="Русский" data-language-local-name="Russian" class="interlanguage-link-target"><span>Русский</span></a></li><li class="interlanguage-link interwiki-sh mw-list-item"><a href="https://sh.wikipedia.org/wiki/Istra%C5%BEiva%C4%8Dko_novinarstvo" title="Istraživačko novinarstvo – Serbo-Croatian" lang="sh" hreflang="sh" data-title="Istraživačko novinarstvo" data-language-autonym="Srpskohrvatski / српскохрватски" data-language-local-name="Serbo-Croatian" class="interlanguage-link-target"><span>Srpskohrvatski / српскохрватски</span></a></li><li class="interlanguage-link interwiki-simple mw-list-item"><a href="https://simple.wikipedia.org/wiki/Investigative_journalism" title="Investigative journalism – Simple English" lang="en-simple" hreflang="en-simple" data-title="Investigative journalism" data-language-autonym="Simple English" data-language-local-name="Simple English" class="interlanguage-link-target"><span>Simple English</span></a></li><li class="interlanguage-link interwiki-sq mw-list-item"><a href="https://sq.wikipedia.org/wiki/Gazetaria_hetuese" title="Gazetaria hetuese – Albanian" lang="sq" hreflang="sq" data-title="Gazetaria hetuese" data-language-autonym="Shqip" data-language-local-name="Albanian" class="interlanguage-link-target"><span>Shqip</span></a></li><li class="interlanguage-link interwiki-sr mw-list-item"><a href="https://sr.wikipedia.org/wiki/%D0%98%D1%81%D1%82%D1%80%D0%B0%D0%B6%D0%B8%D0%B2%D0%B0%D1%87%D0%BA%D0%BE_%D0%BD%D0%BE%D0%B2%D0%B8%D0%BD%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%BE" title="Истраживачко новинарство – Serbian" lang="sr" hreflang="sr" data-title="Истраживачко новинарство" data-language-autonym="Српски / srpski" data-language-local-name="Serbian" class="interlanguage-link-target"><span>Српски / srpski</span></a></li><li class="interlanguage-link interwiki-sv mw-list-item"><a href="https://sv.wikipedia.org/wiki/Gr%C3%A4vande_journalistik" title="Grävande journalistik – Swedish" lang="sv" hreflang="sv" data-title="Grävande journalistik" data-language-autonym="Svenska" data-language-local-name="Swedish" class="interlanguage-link-target"><span>Svenska</span></a></li><li class="interlanguage-link interwiki-tr mw-list-item"><a href="https://tr.wikipedia.org/wiki/Ara%C5%9Ft%C4%B1rmac%C4%B1_gazetecilik" title="Araştırmacı gazetecilik – Turkish" lang="tr" hreflang="tr" data-title="Araştırmacı gazetecilik" data-language-autonym="Türkçe" data-language-local-name="Turkish" class="interlanguage-link-target"><span>Türkçe</span></a></li><li class="interlanguage-link interwiki-uk mw-list-item"><a href="https://uk.wikipedia.org/wiki/%D0%96%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D1%96%D1%81%D1%82%D1%81%D1%8C%D0%BA%D0%B5_%D1%80%D0%BE%D0%B7%D1%81%D0%BB%D1%96%D0%B4%D1%83%D0%B2%D0%B0%D0%BD%D0%BD%D1%8F" title="Журналістське розслідування – Ukrainian" lang="uk" hreflang="uk" data-title="Журналістське розслідування" data-language-autonym="Українська" data-language-local-name="Ukrainian" class="interlanguage-link-target"><span>Українська</span></a></li><li class="interlanguage-link interwiki-vi mw-list-item"><a href="https://vi.wikipedia.org/wiki/B%C3%A1o_ch%C3%AD_%C4%91i%E1%BB%81u_tra" title="Báo chí điều tra – Vietnamese" lang="vi" hreflang="vi" data-title="Báo chí điều tra" data-language-autonym="Tiếng Việt" data-language-local-name="Vietnamese" class="interlanguage-link-target"><span>Tiếng Việt</span></a></li><li class="interlanguage-link interwiki-zh mw-list-item"><a href="https://zh.wikipedia.org/wiki/%E8%B0%83%E6%9F%A5%E6%8A%A5%E5%AF%BC" title="调查报导 – Chinese" lang="zh" hreflang="zh" data-title="调查报导" data-language-autonym="中文" data-language-local-name="Chinese" class="interlanguage-link-target"><span>中文</span></a></li>
+			</ul>
+			<div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1127717#sitelinks-wikipedia" title="Edit interlanguage links" class="wbc-editpage">Edit links</a></span></div>
+		</div>
+
+	</div>
+</div>
+</header>
+				<div class="vector-page-toolbar vector-feature-custom-font-size-clientpref--excluded">
+					<div class="vector-page-toolbar-container">
+						<div id="left-navigation">
+							<nav aria-label="Namespaces">
+								
+<div id="p-associated-pages" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-associated-pages"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/Investigative_journalism" title="View the content page [c]" accesskey="c"><span>Article</span></a></li><li id="ca-talk" class="vector-tab-noicon mw-list-item"><a href="/wiki/Talk:Investigative_journalism" rel="discussion" title="Discuss improvements to the content page [t]" accesskey="t"><span>Talk</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+								
+<div id="vector-variants-dropdown" class="vector-dropdown emptyPortlet"  >
+	<input type="checkbox" id="vector-variants-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-variants-dropdown" class="vector-dropdown-checkbox " aria-label="Change language variant"   >
+	<label id="vector-variants-dropdown-label" for="vector-variants-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">English</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+					
+<div id="p-variants" class="vector-menu mw-portlet mw-portlet-variants emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+						<div id="right-navigation" class="vector-collapsible">
+							<nav aria-label="Views">
+								
+<div id="p-views" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-views"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/Investigative_journalism"><span>Read</span></a></li><li id="ca-edit" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-history" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;action=history" title="Past revisions of this page [h]" accesskey="h"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+							</nav>
+				
+							<nav class="vector-page-tools-landmark" aria-label="Page tools">
+								
+<div id="vector-page-tools-dropdown" class="vector-dropdown vector-page-tools-dropdown"  >
+	<input type="checkbox" id="vector-page-tools-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-tools-dropdown" class="vector-dropdown-checkbox "  aria-label="Tools"  >
+	<label id="vector-page-tools-dropdown-label" for="vector-page-tools-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">Tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+									<div id="vector-page-tools-unpinned-container" class="vector-unpinned-container">
+						
+<div id="vector-page-tools" class="vector-page-tools vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-page-tools-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="page-tools-pinned"
+	data-pinnable-element-id="vector-page-tools"
+	data-pinned-container-id="vector-page-tools-pinned-container"
+	data-unpinned-container-id="vector-page-tools-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Tools</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-page-tools.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-page-tools.unpin">hide</button>
+</div>
+
+	
+<div id="p-cactions" class="vector-menu mw-portlet mw-portlet-cactions emptyPortlet vector-has-collapsible-items"  title="More options" >
+	<div class="vector-menu-heading">
+		Actions
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-more-view" class="selected vector-more-collapsible-item mw-list-item"><a href="/wiki/Investigative_journalism"><span>Read</span></a></li><li id="ca-more-edit" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-more-history" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;action=history"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-tb" class="vector-menu mw-portlet mw-portlet-tb"  >
+	<div class="vector-menu-heading">
+		General
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-whatlinkshere" class="mw-list-item"><a href="/wiki/Special:WhatLinksHere/Investigative_journalism" title="List of all English Wikipedia pages containing links to this page [j]" accesskey="j"><span>What links here</span></a></li><li id="t-recentchangeslinked" class="mw-list-item"><a href="/wiki/Special:RecentChangesLinked/Investigative_journalism" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k"><span>Related changes</span></a></li><li id="t-upload" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [u]" accesskey="u"><span>Upload file</span></a></li><li id="t-permalink" class="mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;oldid=1351812415" title="Permanent link to this revision of this page"><span>Permanent link</span></a></li><li id="t-info" class="mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;action=info" title="More information about this page"><span>Page information</span></a></li><li id="t-cite" class="mw-list-item"><a href="/w/index.php?title=Special:CiteThisPage&amp;page=Investigative_journalism&amp;id=1351812415&amp;wpFormIdentifier=titleform" title="Information on how to cite this page"><span>Cite this page</span></a></li><li id="t-urlshortener" class="mw-list-item"><a href="/w/index.php?title=Special:UrlShortener&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FInvestigative_journalism"><span>Get shortened URL</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-coll-print_export" class="vector-menu mw-portlet mw-portlet-coll-print_export"  >
+	<div class="vector-menu-heading">
+		Print/export
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="coll-download-as-rl" class="mw-list-item"><a href="/w/index.php?title=Special:DownloadAsPdf&amp;page=Investigative_journalism&amp;action=show-download-screen" title="Download this page as a PDF file"><span>Download as PDF</span></a></li><li id="t-print" class="mw-list-item"><a href="/w/index.php?title=Investigative_journalism&amp;printable=yes" title="Printable version of this page [p]" accesskey="p"><span>Printable version</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-wikibase-otherprojects" class="vector-menu mw-portlet mw-portlet-wikibase-otherprojects"  >
+	<div class="vector-menu-heading">
+		In other projects
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li class="wb-otherproject-link wb-otherproject-commons mw-list-item"><a href="https://commons.wikimedia.org/wiki/Category:Investigative_journalism" hreflang="en"><span>Wikimedia Commons</span></a></li><li class="wb-otherproject-link wb-otherproject-wikiquote mw-list-item"><a href="https://en.wikiquote.org/wiki/Investigative_journalism" hreflang="en"><span>Wikiquote</span></a></li><li id="t-wikibase" class="wb-otherproject-link wb-otherproject-wikibase-dataitem mw-list-item"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1127717" title="Structured data on this page hosted by Wikidata [g]" accesskey="g"><span>Wikidata item</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+									</div>
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="vector-column-end no-font-mode-scale">
+					<div class="vector-sticky-pinned-container">
+						<div class="wp25eastereggs-vector-sitenotice-landmark"></div>
+						<nav class="vector-page-tools-landmark" aria-label="Page tools">
+							<div id="vector-page-tools-pinned-container" class="vector-pinned-container">
+				
+							</div>
+		</nav>
+						<nav class="vector-appearance-landmark" aria-label="Appearance">
+							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
+
+							</div>
+		</nav>
+					</div>
+				</div>
+				<div id="bodyContent" class="vector-body" aria-labelledby="firstHeading" data-mw-ve-target-container>
+					<div class="vector-body-before-content">
+							<div class="mw-indicators">
+		<div id="mw-indicator-spoken-icon" class="mw-indicator"><div class="mw-parser-output"><span typeof="mw:File"><a href="/wiki/File:En-investigativejournalism.ogg" title="Listen to this article"><img alt="Listen to this article" src="//upload.wikimedia.org/wikipedia/commons/thumb/8/87/Gnome-mime-sound-openclipart.svg/20px-Gnome-mime-sound-openclipart.svg.png" decoding="async" width="20" height="20" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/87/Gnome-mime-sound-openclipart.svg/40px-Gnome-mime-sound-openclipart.svg.png 2x" data-file-width="160" data-file-height="160" /></a></span></div></div>
+		</div>
+
+						<div id="siteSub" class="noprint">From Wikipedia, the free encyclopedia</div>
+					</div>
+					<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+					
+					
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-subjectpageheader">
+</div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="shortdescription nomobile noexcerpt noprint searchaux" style="display:none">Form of journalism in which reporters deeply investigate a single topic</div>
+<style data-mw-deduplicate="TemplateStyles:r1320445320">.mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{padding-left:1.6em;margin-bottom:0.5em}.mw-parser-output .hatnote i{font-style:normal}.mw-parser-output .hatnote+link+.hatnote{margin-top:-0.5em}@media print{body.ns-0 .mw-parser-output .hatnote{display:none!important}}</style><div role="note" class="hatnote navigation-not-searchable">For other uses, see <a href="/wiki/Investigative_Journalism_(disambiguation)" class="mw-redirect mw-disambig" title="Investigative Journalism (disambiguation)">Investigative Journalism (disambiguation)</a>.</div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1320445320" /><div role="note" class="hatnote navigation-not-searchable">For broader coverage of this topic, see <a href="/wiki/Watchdog_journalism" title="Watchdog journalism">Watchdog journalism</a>.</div>
+<p class="mw-empty-elt">
+</p>
+<style data-mw-deduplicate="TemplateStyles:r1333133064">.mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist ul{margin:0;padding:0}.mw-parser-output .hlist dd,.mw-parser-output .hlist dt,.mw-parser-output .hlist li{margin:0;display:inline}.mw-parser-output .hlist.inline,.mw-parser-output .hlist.inline dl,.mw-parser-output .hlist.inline ol,.mw-parser-output .hlist.inline ul,.mw-parser-output .hlist dl dl,.mw-parser-output .hlist dl ol,.mw-parser-output .hlist dl ul,.mw-parser-output .hlist ol dl,.mw-parser-output .hlist ol ol,.mw-parser-output .hlist ol ul,.mw-parser-output .hlist ul dl,.mw-parser-output .hlist ul ol,.mw-parser-output .hlist ul ul{display:inline}.mw-parser-output .hlist .mw-empty-li{display:none}.mw-parser-output .hlist dt::after{content:": "}.mw-parser-output .hlist dd::after,.mw-parser-output .hlist li::after{content:"\a0 · ";font-weight:bold}.mw-parser-output .hlist dd:last-child::after,.mw-parser-output .hlist dt:last-child::after,.mw-parser-output .hlist li:last-child::after{content:none}.mw-parser-output .hlist dd dd:first-child::before,.mw-parser-output .hlist dd dt:first-child::before,.mw-parser-output .hlist dd li:first-child::before,.mw-parser-output .hlist dt dd:first-child::before,.mw-parser-output .hlist dt dt:first-child::before,.mw-parser-output .hlist dt li:first-child::before,.mw-parser-output .hlist li dd:first-child::before,.mw-parser-output .hlist li dt:first-child::before,.mw-parser-output .hlist li li:first-child::before{content:" (";font-weight:normal}.mw-parser-output .hlist dd dd:last-child::after,.mw-parser-output .hlist dd dt:last-child::after,.mw-parser-output .hlist dd li:last-child::after,.mw-parser-output .hlist dt dd:last-child::after,.mw-parser-output .hlist dt dt:last-child::after,.mw-parser-output .hlist dt li:last-child::after,.mw-parser-output .hlist li dd:last-child::after,.mw-parser-output .hlist li dt:last-child::after,.mw-parser-output .hlist li li:last-child::after{content:")";font-weight:normal}.mw-parser-output .hlist ol{counter-reset:listitem}.mw-parser-output .hlist ol>li{counter-increment:listitem}.mw-parser-output .hlist ol>li::before{content:" "counter(listitem)"\a0 "}.mw-parser-output .hlist dd ol>li:first-child::before,.mw-parser-output .hlist dt ol>li:first-child::before,.mw-parser-output .hlist li ol>li:first-child::before{content:" ("counter(listitem)"\a0 "}</style><style data-mw-deduplicate="TemplateStyles:r1126788409">.mw-parser-output .plainlist ol,.mw-parser-output .plainlist ul{line-height:inherit;list-style:none;margin:0;padding:0}.mw-parser-output .plainlist ol li,.mw-parser-output .plainlist ul li{margin-bottom:0}</style><style data-mw-deduplicate="TemplateStyles:r1246091330">.mw-parser-output .sidebar{width:22em;float:right;clear:right;margin:0.5em 0 1em 1em;background:var(--background-color-neutral-subtle,#f8f9fa);border:1px solid var(--border-color-base,#a2a9b1);padding:0.2em;text-align:center;line-height:1.4em;font-size:88%;border-collapse:collapse;display:table}body.skin-minerva .mw-parser-output .sidebar{display:table!important;float:right!important;margin:0.5em 0 1em 1em!important}.mw-parser-output .sidebar-subgroup{width:100%;margin:0;border-spacing:0}.mw-parser-output .sidebar-left{float:left;clear:left;margin:0.5em 1em 1em 0}.mw-parser-output .sidebar-none{float:none;clear:both;margin:0.5em 1em 1em 0}.mw-parser-output .sidebar-outer-title{padding:0 0.4em 0.2em;font-size:125%;line-height:1.2em;font-weight:bold}.mw-parser-output .sidebar-top-image{padding:0.4em}.mw-parser-output .sidebar-top-caption,.mw-parser-output .sidebar-pretitle-with-top-image,.mw-parser-output .sidebar-caption{padding:0.2em 0.4em 0;line-height:1.2em}.mw-parser-output .sidebar-pretitle{padding:0.4em 0.4em 0;line-height:1.2em}.mw-parser-output .sidebar-title,.mw-parser-output .sidebar-title-with-pretitle{padding:0.2em 0.8em;font-size:145%;line-height:1.2em}.mw-parser-output .sidebar-title-with-pretitle{padding:0.1em 0.4em}.mw-parser-output .sidebar-image{padding:0.2em 0.4em 0.4em}.mw-parser-output .sidebar-heading{padding:0.1em 0.4em}.mw-parser-output .sidebar-content{padding:0 0.5em 0.4em}.mw-parser-output .sidebar-content-with-subgroup{padding:0.1em 0.4em 0.2em}.mw-parser-output .sidebar-above,.mw-parser-output .sidebar-below{padding:0.3em 0.8em;font-weight:bold}.mw-parser-output .sidebar-collapse .sidebar-above,.mw-parser-output .sidebar-collapse .sidebar-below{border-top:1px solid #aaa;border-bottom:1px solid #aaa}.mw-parser-output .sidebar-navbar{text-align:right;font-size:115%;padding:0 0.4em 0.4em}.mw-parser-output .sidebar-list-title{padding:0 0.4em;text-align:left;font-weight:bold;line-height:1.6em;font-size:105%}.mw-parser-output .sidebar-list-title-c{padding:0 0.4em;text-align:center;margin:0 3.3em}@media(max-width:640px){body.mediawiki .mw-parser-output .sidebar{width:100%!important;clear:both;float:none!important;margin-left:0!important;margin-right:0!important}}body.skin--responsive .mw-parser-output .sidebar a>img{max-width:none!important}@media screen{html.skin-theme-clientpref-night .mw-parser-output .sidebar:not(.notheme) .sidebar-list-title,html.skin-theme-clientpref-night .mw-parser-output .sidebar:not(.notheme) .sidebar-title-with-pretitle{background:transparent!important}html.skin-theme-clientpref-night .mw-parser-output .sidebar:not(.notheme) .sidebar-title-with-pretitle a{color:var(--color-progressive)!important}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .sidebar:not(.notheme) .sidebar-list-title,html.skin-theme-clientpref-os .mw-parser-output .sidebar:not(.notheme) .sidebar-title-with-pretitle{background:transparent!important}html.skin-theme-clientpref-os .mw-parser-output .sidebar:not(.notheme) .sidebar-title-with-pretitle a{color:var(--color-progressive)!important}}@media print{body.ns-0 .mw-parser-output .sidebar{display:none!important}}</style><table class="sidebar nomobile nowraplinks" role="navigation"><tbody><tr><th class="sidebar-title" style="background:#efefef;padding:0.4em;"><a href="/wiki/Journalism" title="Journalism">Journalism</a></th></tr><tr><td class="sidebar-image"><span class="notpageimage" typeof="mw:File"><a href="/wiki/File:Radio._CBC_Offices_BAnQ_P48S1P23108_(cropped).jpg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Radio._CBC_Offices_BAnQ_P48S1P23108_%28cropped%29.jpg/250px-Radio._CBC_Offices_BAnQ_P48S1P23108_%28cropped%29.jpg" decoding="async" width="250" height="143" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Radio._CBC_Offices_BAnQ_P48S1P23108_%28cropped%29.jpg/500px-Radio._CBC_Offices_BAnQ_P48S1P23108_%28cropped%29.jpg 2x" data-file-width="766" data-file-height="438" /></a></span></td></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/News" title="News">News</a></li>
+<li><a href="/wiki/Article_(publishing)" title="Article (publishing)">Article</a> (<a href="/wiki/Headline" title="Headline">Headline</a> · <a href="/wiki/Byline" title="Byline">Byline</a> · <a href="/wiki/Dateline" title="Dateline">Dateline</a> · <a href="/wiki/Report" title="Report">Report</a> · <a href="/wiki/Breaking_news" title="Breaking news">Special report</a> · <a href="/wiki/Scoop_(news)" title="Scoop (news)">Exclusive</a> · <a href="/wiki/Interview_(journalism)" title="Interview (journalism)">Interview</a> · <a href="/wiki/Column_(periodical)" title="Column (periodical)">Column</a> · <a href="/wiki/Editorial" title="Editorial">Editorial</a> · <a href="/wiki/Op-ed" title="Op-ed">Op-ed</a>)</li>
+<li><a href="/wiki/News_style" title="News style">Writing style</a> (<a href="/wiki/Five_Ws" title="Five Ws">Five Ws</a> · <a href="/wiki/Inverted_pyramid_(journalism)" title="Inverted pyramid (journalism)">Inverted pyramid</a>)</li></ul>
+<ul><li><a href="/wiki/Index_of_journalism_articles" title="Index of journalism articles">Index of journalism articles</a></li></ul></td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+<a href="/wiki/Beat_reporting" title="Beat reporting">Beats</a></th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Arts_journalism" title="Arts journalism">Arts</a></li>
+<li><a href="/wiki/Business_journalism" title="Business journalism">Business</a></li>
+<li><a href="/wiki/Data_journalism" title="Data journalism">Data</a></li>
+<li><a href="/wiki/Entertainment_journalism" title="Entertainment journalism">Entertainment</a></li>
+<li><a href="/wiki/Environmental_journalism" title="Environmental journalism">Environment</a></li>
+<li><a href="/wiki/Fashion_journalism" title="Fashion journalism">Fashion</a></li>
+<li><a href="/wiki/Local_news" title="Local news">Local</a></li>
+<li><a href="/wiki/Medical_journalism" title="Medical journalism">Medicine</a></li>
+<li><a href="/wiki/Music_journalism" title="Music journalism">Music</a></li>
+<li><a href="/wiki/Political_journalism" title="Political journalism">Politics</a></li>
+<li><a href="/wiki/Science_journalism" title="Science journalism">Science</a></li>
+<li><a href="/wiki/Sports_journalism" title="Sports journalism">Sports</a></li>
+<li><a href="/wiki/Technology_journalism" title="Technology journalism">Technology</a></li>
+<li><a href="/wiki/Traffic_reporting" title="Traffic reporting">Traffic</a></li>
+<li><a href="/wiki/Video_game_journalism" title="Video game journalism">Video games</a></li>
+<li><a href="/wiki/War_correspondent" title="War correspondent">War</a></li>
+<li><a href="/wiki/Weather_forecasting" title="Weather forecasting">Weather</a></li>
+<li><a href="/wiki/World_news" title="World news">World</a></li></ul>
+</td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+<a href="/wiki/Journalism_genres" title="Journalism genres">Genres</a></th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Adversarial_journalism" title="Adversarial journalism">Adversarial</a></li>
+<li><a href="/wiki/Advocacy_journalism" title="Advocacy journalism">Advocacy</a> (<a href="/wiki/Journalistic_interventionism" title="Journalistic interventionism">Interventionism</a>)</li>
+<li><a href="/wiki/Analytic_journalism" title="Analytic journalism">Analytic</a></li>
+<li><a href="/wiki/Blog" title="Blog">Blogging</a></li>
+<li><a href="/wiki/Citizen_journalism" title="Citizen journalism">Citizen</a></li>
+<li><a href="/wiki/Civic_journalism" title="Civic journalism">Civic</a></li>
+<li><a href="/wiki/Collaborative_journalism" title="Collaborative journalism">Collaborative</a></li>
+<li><a href="/wiki/Comics_journalism" title="Comics journalism">Comics-based</a></li>
+<li><a href="/wiki/Community_journalism" title="Community journalism">Community</a></li>
+<li><a href="/wiki/Database_journalism" title="Database journalism">Database</a></li>
+<li><a href="/wiki/Enterprise_journalism" title="Enterprise journalism">Enterprise</a></li>
+<li><a href="/wiki/Explanatory_journalism" title="Explanatory journalism">Explanatory</a></li>
+<li><a href="/wiki/Feature_story" title="Feature story">Feature story</a></li>
+<li><a href="/wiki/Gonzo_journalism" title="Gonzo journalism">Gonzo</a></li>
+<li><a href="/wiki/Human-interest_story" title="Human-interest story">Human-interest</a></li>
+<li><a href="/wiki/Immersion_journalism" title="Immersion journalism">Immersion</a></li>
+<li><a href="/wiki/Infotainment" title="Infotainment">Infotainment</a>/<a href="/wiki/Soft_media" title="Soft media">Soft media</a></li>
+<li><a href="/wiki/Interpretive_journalism" title="Interpretive journalism">Interpretive</a></li>
+<li><a class="mw-selflink selflink">Investigative</a></li>
+<li><a href="/wiki/Long-form_journalism" title="Long-form journalism">Long-form</a></li>
+<li><a href="/wiki/Narrative_journalism" title="Narrative journalism">Narrative</a></li>
+<li><a href="/wiki/New_Journalism" title="New Journalism">New Journalism</a></li>
+<li><a href="/wiki/Opinion_journalism" title="Opinion journalism">Opinion</a></li>
+<li><a href="/wiki/Peace_journalism" title="Peace journalism">Peace</a></li>
+<li><a href="/wiki/Sensor_journalism" title="Sensor journalism">Sensor</a></li>
+<li><a href="/wiki/Underground_press" title="Underground press">Underground</a></li>
+<li><a href="/wiki/Visual_journalism" title="Visual journalism">Visual</a></li>
+<li><a href="/wiki/Watchdog_journalism" title="Watchdog journalism">Watchdog</a></li></ul>
+</td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+<a href="/wiki/Journalism_ethics_and_standards" title="Journalism ethics and standards">Ethics and standards</a></th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Broadcast_Standards_and_Practices" title="Broadcast Standards and Practices">Broadcast</a></li>
+<li><a href="/wiki/Chequebook_journalism" title="Chequebook journalism">Chequebook</a></li>
+<li><a href="/wiki/Churnalism" title="Churnalism">Churnalism</a></li>
+<li><a href="/wiki/Code_of_ethics_in_media" title="Code of ethics in media">Codes of ethics</a></li>
+<li><a href="/wiki/Journalism_culture" title="Journalism culture">Culture</a></li>
+<li><a href="/wiki/Editing" title="Editing">Editing</a> (<a href="/wiki/Copy_editing" title="Copy editing">Copy editing</a> · <a href="/wiki/Correction_(newspaper)" title="Correction (newspaper)">Corrections</a> · <a href="/wiki/Fact-checking" title="Fact-checking">Fact-checking</a> · <a href="/wiki/Spike_(journalism)" title="Spike (journalism)">Spiking</a>)</li>
+<li><a href="/wiki/Fake_news" title="Fake news">Fake news</a> (<a href="/wiki/Fake_news_website" title="Fake news website">Websites</a>)</li>
+<li><a href="/wiki/Horse_race_journalism" title="Horse race journalism">Horse race</a></li>
+<li><a href="/wiki/Journalese" title="Journalese">Journalese</a></li>
+<li><a href="/wiki/Media_bias" title="Media bias">Media bias</a> (<a href="/wiki/False_balance" title="False balance">False balance</a>)</li>
+<li><a href="/wiki/News_values" title="News values">News values</a> (<a href="/wiki/Above_the_fold" title="Above the fold">Above the fold</a> · <a href="/wiki/Man_bites_dog" title="Man bites dog">Man bites dog</a>)</li>
+<li><a href="/wiki/Journalistic_objectivity" title="Journalistic objectivity">Objectivity</a></li>
+<li><a href="/wiki/Pink-slime_journalism" title="Pink-slime journalism">Pink-slime</a></li>
+<li><a href="/wiki/Journalistic_scandal" title="Journalistic scandal">Scandals</a></li>
+<li><a href="/wiki/Sensationalism" title="Sensationalism">Sensationalism</a></li>
+<li><a href="/wiki/Source_(journalism)" title="Source (journalism)">Sources</a></li>
+<li><a href="/wiki/Tabloid_journalism" title="Tabloid journalism">Tabloid</a> (<a href="/wiki/Tabloid_television" title="Tabloid television">Television</a>)</li>
+<li><a href="/wiki/Yellow_journalism" title="Yellow journalism">Yellow</a></li>
+<li><a href="/wiki/Journalism_school" title="Journalism school">Journalism school</a> (<a href="/wiki/Student_publication" title="Student publication">Student publication</a>)</li></ul>
+</td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+Challenges</th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Decline_of_newspapers" title="Decline of newspapers">Decline of newspapers</a> (<a href="/wiki/News_desert" title="News desert">News desert</a>)</li>
+<li><a href="/wiki/Fourth_Estate" title="Fourth Estate">Fourth Estate</a></li>
+<li><a href="/wiki/Fifth_Estate" title="Fifth Estate">Fifth Estate</a></li>
+<li><a href="/wiki/Editorial_independence" title="Editorial independence">Editorial independence</a> (<a href="/wiki/Independent_media" title="Independent media">Independent</a> · <a href="/wiki/State_media" title="State media">State</a>)</li>
+<li><a href="/wiki/Media_capture" title="Media capture">Media capture</a> · <a href="/wiki/Media_plurality" class="mw-redirect" title="Media plurality">Media plurality</a></li>
+<li><a href="/wiki/Freedom_of_information" title="Freedom of information">Freedom of information</a></li>
+<li><a href="/wiki/Freedom_of_the_press" title="Freedom of the press">Freedom of the press</a> (<a href="/wiki/Defamation" title="Defamation">Defamation</a> · <a href="/wiki/Safety_of_journalists" title="Safety of journalists">Safety</a>)</li>
+<li><a href="/wiki/Source_protection" title="Source protection">Source protection</a></li></ul>
+</td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+<a href="/wiki/Public_relations" title="Public relations">Public relations</a></th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Media_manipulation" title="Media manipulation">Media manipulation</a></li>
+<li><a href="/wiki/Media_relations" title="Media relations">Media relations</a></li>
+<li><a href="/wiki/News_embargo" title="News embargo">News embargo</a></li>
+<li><a href="/wiki/News_leak" title="News leak">News leak</a></li>
+<li><a href="/wiki/News_propaganda" title="News propaganda">News propaganda</a> (<a href="/wiki/Propaganda_model" title="Propaganda model">Model</a>)</li>
+<li><a href="/wiki/Press_conference" title="Press conference">Press conference</a> (<a href="/wiki/Media_scrum" title="Media scrum">Media scrum</a>)</li>
+<li><a href="/wiki/Press_gallery" title="Press gallery">Press gallery</a></li>
+<li><a href="/wiki/Press_line" title="Press line">Press line</a></li>
+<li><a href="/wiki/Press_pass" title="Press pass">Press pass</a></li>
+<li><a href="/wiki/Press_pool" title="Press pool">Press pool</a></li>
+<li><a href="/wiki/Press_release" title="Press release">Press release</a></li>
+<li><a href="/wiki/Sound_bite" title="Sound bite">Sound bite</a></li>
+<li><a href="/wiki/Spin_(propaganda)" title="Spin (propaganda)">Spin</a></li>
+<li><a href="/wiki/Spin_room" title="Spin room">Spin room</a></li></ul>
+</td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+<a href="/wiki/News_media" title="News media">News media</a></th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Newspaper" title="Newspaper">Newspapers</a> (<a href="/wiki/Newspaper_of_record" title="Newspaper of record">Newspaper of record</a> · <a href="/wiki/Middle-market_newspaper" title="Middle-market newspaper">Middle-market</a> · <a href="/wiki/Newspaper_format" title="Newspaper format">Newspaper formats</a> · <a href="/wiki/Broadsheet" title="Broadsheet">Broadsheet</a> · <a href="/wiki/Tabloid_(newspaper_format)" title="Tabloid (newspaper format)">Tabloid</a> · <a href="/wiki/Online_newspaper" title="Online newspaper">Online</a> · <a href="/wiki/Newspaper_extra" title="Newspaper extra">Extra edition</a>)</li>
+<li><a href="/wiki/Magazine" title="Magazine">Magazines</a></li>
+<li><a href="/wiki/Broadcast_journalism" title="Broadcast journalism">Broadcast</a> (<a href="/wiki/News_broadcasting" class="mw-redirect" title="News broadcasting">TV and radio</a>)</li>
+<li><a href="/wiki/Digital_journalism" title="Digital journalism">Digital</a></li>
+<li><a href="/wiki/Multimedia_journalism" title="Multimedia journalism">Multimedia</a> (<a href="/wiki/Video_journalism" title="Video journalism">Video</a>)</li>
+<li><a href="/wiki/Documentary_film" title="Documentary film">Documentary film</a>/<a href="/wiki/Television_documentary" title="Television documentary">television</a></li>
+<li><a href="/wiki/News_agency" title="News agency">News agencies</a></li>
+<li><a href="/wiki/Alternative_media" title="Alternative media">Alternative media</a></li>
+<li><a href="/wiki/Nonprofit_journalism" title="Nonprofit journalism">Nonprofit</a>
+<ul><li><a href="/wiki/Public_service_journalism" title="Public service journalism">Public service</a></li></ul></li>
+<li><a href="/wiki/Public_broadcasting" title="Public broadcasting">Public broadcasting</a></li></ul>
+</td>
+</tr><tr><th class="sidebar-heading" style="background:#efefef;">
+<a href="/wiki/Newsroom" title="Newsroom">Newsroom</a></th></tr><tr><td class="sidebar-content hlist" style="padding-top:0.15em;padding-bottom:0.6em;">
+<ul><li><a href="/wiki/Journalist" title="Journalist">Journalist</a> (<a href="/wiki/Staff_writer" title="Staff writer">Staff writer</a> · <a href="/wiki/Correspondent" title="Correspondent">Correspondent</a> · <a href="/wiki/Photojournalism" title="Photojournalism">Photojournalist</a> · <a href="/wiki/News_presenter" title="News presenter">News presenter</a>)</li>
+<li><a href="/wiki/Columnist" title="Columnist">Columnist</a></li>
+<li>Editors (<a href="/wiki/Editor-in-chief" title="Editor-in-chief">Editor-in-chief</a> · <a href="/wiki/Managing_editor" title="Managing editor">Managing editor</a> · <a href="/wiki/Political_editor" title="Political editor">Political editor</a> · <a href="/wiki/Editorial_board" title="Editorial board">Editorial board</a> · <a href="/wiki/Assignment_editor" title="Assignment editor">Assignment editor</a> · <a href="/wiki/Duty_editor" title="Duty editor">Duty editor</a> · <a href="/wiki/Public_editor" title="Public editor">Public editor</a> · Editor-at-large · <a href="/wiki/Contributing_editor" title="Contributing editor">Contributing editor</a>)</li>
+<li><a href="/wiki/Weather_presenter" title="Weather presenter">Weather presenter</a></li>
+<li><a href="/wiki/News_bureau" title="News bureau">News bureau</a></li>
+<li><a href="/wiki/News_director" title="News director">News director</a></li>
+<li><a href="/wiki/Pundit" title="Pundit">Pundit</a></li>
+<li><a href="/wiki/Stringer_(journalism)" title="Stringer (journalism)">Stringer</a></li></ul>
+</td>
+</tr><tr><td class="sidebar-below plainlist" style="padding-top:0.1em;border-top:1px solid #aaa;border-bottom:1px solid #aaa;">
+<ul><li><span class="nowrap"><span class="noviewer" typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Newspaper_nicu_buculei_01.svg/20px-Newspaper_nicu_buculei_01.svg.png" decoding="async" width="15" height="15" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Newspaper_nicu_buculei_01.svg/40px-Newspaper_nicu_buculei_01.svg.png 2x" data-file-width="160" data-file-height="160" /></span></span> </span><a href="/wiki/Portal:Journalism" title="Portal:Journalism">Journalism&#32;portal</a></li>
+<li><a href="/wiki/Category:Journalism" title="Category:Journalism">Category:&#160;Journalism</a></li></ul></td></tr><tr><td class="sidebar-navbar"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><style data-mw-deduplicate="TemplateStyles:r1239400231">.mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-parser-output .navbar-collapse{float:left;text-align:left}.mw-parser-output .navbar-boxtext{word-spacing:0}.mw-parser-output .navbar ul{display:inline-block;white-space:nowrap;line-height:inherit}.mw-parser-output .navbar-brackets::before{margin-right:-0.125em;content:"[ "}.mw-parser-output .navbar-brackets::after{margin-left:-0.125em;content:" ]"}.mw-parser-output .navbar li{word-spacing:-0.125em}.mw-parser-output .navbar a>span,.mw-parser-output .navbar a>abbr{text-decoration:inherit}.mw-parser-output .navbar-mini abbr{font-variant:small-caps;border-bottom:none;text-decoration:none;cursor:inherit}.mw-parser-output .navbar-ct-full{font-size:114%;margin:0 7em}.mw-parser-output .navbar-ct-mini{font-size:114%;margin:0 4em}html.skin-theme-clientpref-night .mw-parser-output .navbar li a abbr{color:var(--color-base)!important}@media(prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .navbar li a abbr{color:var(--color-base)!important}}@media print{.mw-parser-output .navbar{display:none!important}}</style><div class="navbar plainlinks hlist navbar-mini"><ul><li class="nv-view"><a href="/wiki/Template:Journalism_sidebar" title="Template:Journalism sidebar"><abbr title="View this template">v</abbr></a></li><li class="nv-talk"><a href="/wiki/Template_talk:Journalism_sidebar" title="Template talk:Journalism sidebar"><abbr title="Discuss this template">t</abbr></a></li><li class="nv-edit"><a href="/wiki/Special:EditPage/Template:Journalism_sidebar" title="Special:EditPage/Template:Journalism sidebar"><abbr title="Edit this template">e</abbr></a></li></ul></div></td></tr></tbody></table>
+<p><b>Investigative journalism</b> is a genre of <a href="/wiki/Journalism" title="Journalism">journalism</a> in which reporters deeply investigate a single or few topics of interest, such as hidden problems and truths, serious crimes, education, <a href="/wiki/Racial_injustice" class="mw-redirect" title="Racial injustice">racial injustice</a>, <a href="/wiki/Corruption" title="Corruption">corruption</a> and <a href="/wiki/Abuse_of_power" title="Abuse of power">abuse of power</a>, social welfare, and corporate wrongdoing. An investigative journalist may spend months or years researching and preparing a report. Practitioners sometimes use the terms "watchdog reporting" or "accountability reporting".
+</p><p>Most investigative journalism has traditionally been conducted by newspapers, <a href="/wiki/News_agency" title="News agency">wire services</a>, and <a href="/wiki/Freelancer" title="Freelancer">freelance</a> journalists. With the decline in income through advertising, many traditional news services have struggled to fund investigative journalism, due to it being very time-consuming and expensive. Journalistic investigations are increasingly carried out by news organizations working together, even internationally (as in the case of the <a href="/wiki/Panama_Papers" title="Panama Papers">Panama Papers</a>, <a href="/wiki/Paradise_Papers" title="Paradise Papers">Paradise Papers</a> and <a href="/wiki/Pandora_Papers" title="Pandora Papers">Pandora Papers</a>), or by <a href="/wiki/Non-profit_journalism" class="mw-redirect" title="Non-profit journalism">nonprofit outlets</a> such as <a href="/wiki/ProPublica" title="ProPublica">ProPublica</a>, which rely on the support of the public and benefactors to fund their work.
+</p>
+<meta property="mw:PageProp/toc" />
+<div class="mw-heading mw-heading2"><h2 id="Definitions">Definitions</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=1" title="Edit section: Definitions"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p><a href="/wiki/University_of_Missouri" title="University of Missouri">University of Missouri</a> journalism professor Steve Weinberg defined investigative journalism as: "Reporting, through one's own initiative and work product, matters of importance to readers, viewers, or listeners."<sup id="cite&#95;ref-1" class="reference"><a href="#cite_note-1"><span class="cite-bracket">&#91;</span>1<span class="cite-bracket">&#93;</span></a></sup> In many cases, the subjects of the reporting wish the matters under scrutiny to remain undisclosed. There are currently university departments for teaching investigative journalism. Conferences are conducted presenting peer-reviewed research into investigative journalism.<sup id="cite&#95;ref-2" class="reference"><a href="#cite_note-2"><span class="cite-bracket">&#91;</span>2<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>British media theorist <a href="/wiki/Hugo_de_Burgh" title="Hugo de Burgh">Hugo de Burgh</a> (2000) states: "An investigative journalist is a man or woman whose profession is to discover the truth and to identify lapses from it in whatever media may be available. The act of doing this generally is called investigative journalism and is distinct from apparently similar work done by police, lawyers, auditors, and regulatory bodies in that it is not limited as to target, not legally founded and closely connected to publicity."<sup id="cite&#95;ref-3" class="reference"><a href="#cite_note-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="History">History</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=2" title="Edit section: History"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Early newspapers in British colonial America were often suppressed by the authorities for their investigative journalism. Examples include <i><a href="/wiki/Publick_Occurrences_Both_Forreign_and_Domestick" title="Publick Occurrences Both Forreign and Domestick">Publick Occurrences Both Forreign and Domestick</a></i> and Benjamin Franklin's <i><a href="/wiki/New_England_Courant" class="mw-redirect" title="New England Courant">New England Courant</a></i>. Journalists who reported on the doings of the British authorities would later contribute to revolutionary sentiment in the run-up to the <a href="/wiki/American_Revolution" title="American Revolution">American Revolution</a>; one prominent example was the <i><a href="/wiki/Boston_Gazette" title="Boston Gazette">Boston Gazette</a></i>, contributed to by <a href="/wiki/Samuel_Adams" title="Samuel Adams">Samuel Adams</a> among others.<sup id="cite&#95;ref-:0&#95;4-0" class="reference"><a href="#cite_note-:0-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>American journalism textbooks point out that <a href="/wiki/Muckraker" title="Muckraker">muckraking</a> standards promoted by <i><a href="/wiki/McClure%27s" title="McClure&#39;s">McClure's Magazine</a></i> around 1902,  "Have become integral to the character of modern investigative journalism."<sup id="cite&#95;ref-5" class="reference"><a href="#cite_note-5"><span class="cite-bracket">&#91;</span>5<span class="cite-bracket">&#93;</span></a></sup> Furthermore, the successes of the early muckrakers continued to inspire journalists.<sup id="cite&#95;ref-6" class="reference"><a href="#cite_note-6"><span class="cite-bracket">&#91;</span>6<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-7" class="reference"><a href="#cite_note-7"><span class="cite-bracket">&#91;</span>7<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The outlook for investigative journalism in the United States was improved by the 1960s with the <a href="/wiki/Freedom_of_Information_Act_(United_States)" title="Freedom of Information Act (United States)">Freedom of Information Act</a> and <i><a href="/wiki/New_York_Times_Co._v._Sullivan" title="New York Times Co. v. Sullivan">New York Times Co. v. Sullivan</a></i>. The invention of the <a href="/wiki/Photocopier" title="Photocopier">photocopier</a> also offered an assistive tool to <a href="/wiki/Whistleblowers" class="mw-redirect" title="Whistleblowers">whistleblowers</a>.<sup id="cite&#95;ref-:0&#95;4-1" class="reference"><a href="#cite_note-:0-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The growth of <a href="/wiki/Media_conglomerate" title="Media conglomerate">media conglomerates</a> in the U.S. since the 1980s has been accompanied by massive cuts in the budgets for investigative journalism. A 2002 study concluded "that investigative journalism has all but disappeared from the nation's commercial airwaves."<sup id="cite&#95;ref-8" class="reference"><a href="#cite_note-8"><span class="cite-bracket">&#91;</span>8<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Worker-owned<sup id="cite&#95;ref-9" class="reference"><a href="#cite_note-9"><span class="cite-bracket">&#91;</span>9<span class="cite-bracket">&#93;</span></a></sup> and <a href="/wiki/Nonprofit_journalism" title="Nonprofit journalism">nonprofit journalism</a> have worked to address the resulting need for in-depth investigations and reporting. One of the largest teams of investigative journalists is the Washington-based <a href="/wiki/International_Consortium_of_Investigative_Journalists" title="International Consortium of Investigative Journalists">International Consortium of Investigative Journalists</a> (ICIJ) launched in 1997 by the <a href="/wiki/Center_for_Public_Integrity" title="Center for Public Integrity">Center for Public Integrity</a><sup id="cite&#95;ref-nyt&#95;2016&#95;10-0" class="reference"><a href="#cite_note-nyt_2016-10"><span class="cite-bracket">&#91;</span>10<span class="cite-bracket">&#93;</span></a></sup> which includes 165 investigative reporters in over 65 countries<sup id="cite&#95;ref-icij&#95;about&#95;11-0" class="reference"><a href="#cite_note-icij_about-11"><span class="cite-bracket">&#91;</span>11<span class="cite-bracket">&#93;</span></a></sup> working collaboratively on crime, corruption, and abuse of power at a global level,<sup id="cite&#95;ref-icij&#95;about&#95;11-1" class="reference"><a href="#cite_note-icij_about-11"><span class="cite-bracket">&#91;</span>11<span class="cite-bracket">&#93;</span></a></sup> under <a href="/wiki/Gerard_Ryle" title="Gerard Ryle">Gerard Ryle</a> as Director.<sup id="cite&#95;ref-ryle&#95;12-0" class="reference"><a href="#cite_note-ryle-12"><span class="cite-bracket">&#91;</span>12<span class="cite-bracket">&#93;</span></a></sup> Working with major media outlets globally, they have exposed organised crime, international tobacco companies, private military cartels, asbestos companies, climate change lobbyists, details of Iraq and Afghanistan war contracts, and most recently the <a href="/wiki/Panama_Papers" title="Panama Papers">Panama Papers</a><sup id="cite&#95;ref-icij&#95;about&#95;11-2" class="reference"><a href="#cite_note-icij_about-11"><span class="cite-bracket">&#91;</span>11<span class="cite-bracket">&#93;</span></a></sup> and <a href="/wiki/Paradise_Papers" title="Paradise Papers">Paradise Papers</a>.<sup id="cite&#95;ref-ICIJ-20171105&#95;13-0" class="reference"><a href="#cite_note-ICIJ-20171105-13"><span class="cite-bracket">&#91;</span>13<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-14" class="reference"><a href="#cite_note-14"><span class="cite-bracket">&#91;</span>14<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-15" class="reference"><a href="#cite_note-15"><span class="cite-bracket">&#91;</span>15<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The Investigative Commons center opened in <a href="/wiki/Berlin" title="Berlin">Berlin</a>, Germany in 2021 and houses the <a href="/wiki/European_Center_for_Constitutional_and_Human_Rights" title="European Center for Constitutional and Human Rights">European Center for Constitutional and Human Rights</a>, <a href="/wiki/Forensic_Architecture" title="Forensic Architecture">Forensic Architecture</a>, and <a href="/wiki/Bellingcat" title="Bellingcat">Bellingcat</a>.<sup id="cite&#95;ref-oltermann-2021&#95;16-0" class="reference"><a href="#cite_note-oltermann-2021-16"><span class="cite-bracket">&#91;</span>16<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Other associations of investigative journalism outlets include the <a href="/wiki/Institute_for_Nonprofit_News" title="Institute for Nonprofit News">Institute for Nonprofit News</a>, and the 
+Association of Nonprofit News Organizations.<sup id="cite&#95;ref-17" class="reference"><a href="#cite_note-17"><span class="cite-bracket">&#91;</span>17<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Tools">Tools</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=3" title="Edit section: Tools"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>An investigative reporter may make use of one or more of these tools, among others, on a single story:
+</p>
+<ul><li>Analysis of documents, such as <a href="/wiki/Lawsuit" title="Lawsuit">lawsuits</a> and other <a href="/wiki/Legal_instrument" title="Legal instrument">legal documents</a>, tax records, government reports, regulatory reports, and corporate financial filings.<sup id="cite&#95;ref-18" class="reference"><a href="#cite_note-18"><span class="cite-bracket">&#91;</span>18<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>Databases of public records.<sup id="cite&#95;ref-19" class="reference"><a href="#cite_note-19"><span class="cite-bracket">&#91;</span>19<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-:0&#95;4-2" class="reference"><a href="#cite_note-:0-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>Investigation of technical issues, including scrutiny of government and business practices and their effects.</li>
+<li>Research into social and legal issues.</li>
+<li>Subscription research sources such as <a href="/wiki/LexisNexis" title="LexisNexis">LexisNexis</a>.<sup id="cite&#95;ref-20" class="reference"><a href="#cite_note-20"><span class="cite-bracket">&#91;</span>20<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>Numerous interviews with on-the-record sources as well as, in some instances, interviews with <a href="/wiki/Anonymous_source" class="mw-redirect" title="Anonymous source">anonymous sources</a> (for example whistleblowers).<sup id="cite&#95;ref-:0&#95;4-3" class="reference"><a href="#cite_note-:0-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>Federal or state <a href="/wiki/Freedom_of_information_laws_by_country" title="Freedom of information laws by country">Freedom of Information Acts</a> to obtain documents and data from government agencies.</li>
+<li><a href="/wiki/OSINT" class="mw-redirect" title="OSINT">OSINT</a> (Open-Source Intelligence) databases and tools that contain free and open resources that anybody can use.</li></ul>
+<div class="mw-heading mw-heading2"><h2 id="Examples">Examples</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=4" title="Edit section: Examples"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li class="mw-empty-elt"></li>
+<li><a href="/wiki/Ida_B._Wells-Barnett" class="mw-redirect" title="Ida B. Wells-Barnett">Ida B. Wells-Barnett</a>'s 1892 pamphlet <a rel="nofollow" class="external text" href="https://www.gutenberg.org/files/14975/14975-h/14975-h.htm"><i>Southern Horrors</i></a> documented lynching in the United States, exposing in the pages of black-owned newspapers as a campaign of oppression and intimidation against African Americans. A white mob destroyed her newspaper press and office in retaliation for her reporting.<sup id="cite&#95;ref-21" class="reference"><a href="#cite_note-21"><span class="cite-bracket">&#91;</span>21<span class="cite-bracket">&#93;</span></a></sup></li>
+<li><a href="/wiki/Ida_Tarbell" title="Ida Tarbell">Ida Tarbell</a>'s 1904 book, <i><a href="/wiki/The_History_of_the_Standard_Oil_Company" title="The History of the Standard Oil Company">The History of the Standard Oil Company</a></i>, exposed the nefarious practices and methods of the monopoly of the company, and led to its dismantling.<sup id="cite&#95;ref-22" class="reference"><a href="#cite_note-22"><span class="cite-bracket">&#91;</span>22<span class="cite-bracket">&#93;</span></a></sup></li>
+<li><a href="/wiki/Upton_Sinclair" title="Upton Sinclair">Upton Sinclair</a>'s 1905 book <i><a href="/wiki/The_Jungle" title="The Jungle">The Jungle</a></i> exposed unsanitary conditions in American meatpacking plants, and led to the creation of the <a href="/wiki/Food_and_Drug_Administration" title="Food and Drug Administration">Food and Drug Administration</a>.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (August 2025)">citation needed</span></a></i>&#93;</sup></li>
+<li><a href="/wiki/Nellie_Bly" title="Nellie Bly">Nellie Bly</a>, a pseudonym used by Elizabeth Cochrane Seaman in the late 19th century, famously feigned insanity as part of her 1887 <a href="/wiki/Undercover_journalism" title="Undercover journalism">undercover investigation</a> into and subsequent exposé regarding the inner-workings of the <a href="/wiki/The_Octagon_(Roosevelt_Island)" title="The Octagon (Roosevelt Island)">Women's Lunatic Asylum</a> in New York City. Published to wide acclaim as a series of articles in the <i><a href="/wiki/New_York_World" title="New York World">New York World</a></i> which were later compiled and further detailed in her book <i><a href="/wiki/Ten_Days_in_a_Mad-House" title="Ten Days in a Mad-House">Ten Days in a Mad-House</a></i>, Bly's revelations led to both a grand jury investigation of the asylum and increased funding for the Department of Public Charities and Corrections.<sup id="cite&#95;ref-23" class="reference"><a href="#cite_note-23"><span class="cite-bracket">&#91;</span>23<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>Between 1972 and 1974 Bob Woodward and Carl Bernstein uncovered and exposed a variety of incriminating information regarding President Richard Nixon's 1968–1972 presidential campaign. The information exposed, prompted Nixon's resignation in 1974 and was then on recognized as the <a href="/wiki/Watergate_scandal" title="Watergate scandal">Watergate scandal</a>.<sup id="cite&#95;ref-24" class="reference"><a href="#cite_note-24"><span class="cite-bracket">&#91;</span>24<span class="cite-bracket">&#93;</span></a></sup></li>
+<li><a href="/wiki/Bill_Dedman" title="Bill Dedman">Bill Dedman</a>'s 1988 investigation, <i>The Color of Money</i>,<sup id="cite&#95;ref-25" class="reference"><a href="#cite_note-25"><span class="cite-bracket">&#91;</span>25<span class="cite-bracket">&#93;</span></a></sup> for <i><a href="/wiki/The_Atlanta_Journal-Constitution" title="The Atlanta Journal-Constitution">The Atlanta Journal-Constitution</a></i> on <a href="/wiki/Racial_discrimination" title="Racial discrimination">racial discrimination</a> by <a href="/wiki/Mortgage_loan" class="mw-redirect" title="Mortgage loan">mortgage</a> lenders in middle-income neighborhoods, received the 1989 <a href="/wiki/Pulitzer_Prize_for_Investigative_Reporting" title="Pulitzer Prize for Investigative Reporting">Pulitzer Prize for Investigative Reporting</a> and was an influential early example of computer-assisted reporting or <a href="/wiki/Database_journalism" title="Database journalism">database journalism</a>.<sup id="cite&#95;ref-26" class="reference"><a href="#cite_note-26"><span class="cite-bracket">&#91;</span>26<span class="cite-bracket">&#93;</span></a></sup></li>
+<li><a href="/wiki/Brian_Deer" title="Brian Deer">Brian Deer</a>'s British press award-winning investigation for <i><a href="/wiki/The_Sunday_Times" title="The Sunday Times">The Sunday Times</a></i> of London into the worldwide <a href="/wiki/MMR_vaccine_controversy" class="mw-redirect" title="MMR vaccine controversy">MMR vaccine controversy</a> which revealed that research, published by <i><a href="/wiki/The_Lancet" title="The Lancet">The Lancet</a></i>, associating the children's vaccine with autism was fraudulent.<sup id="cite&#95;ref-27" class="reference"><a href="#cite_note-27"><span class="cite-bracket">&#91;</span>27<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-28" class="reference"><a href="#cite_note-28"><span class="cite-bracket">&#91;</span>28<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-29" class="reference"><a href="#cite_note-29"><span class="cite-bracket">&#91;</span>29<span class="cite-bracket">&#93;</span></a></sup></li>
+<li><a href="/wiki/John_M._Crewdson" title="John M. Crewdson">John M. Crewdson</a> of the <i><a href="/wiki/Chicago_Tribune" title="Chicago Tribune">Chicago Tribune</a></i> wrote a 1996 article<sup id="cite&#95;ref-30" class="reference"><a href="#cite_note-30"><span class="cite-bracket">&#91;</span>30<span class="cite-bracket">&#93;</span></a></sup> proposing the installment of <a href="/wiki/Defibrillation" title="Defibrillation">defibrillators</a> on American airliners. Crewdson argued that based on his research and analysis, "Medical kits and defibrillators would be economically justified if they saved just 3 lives each year." Soon after the article's publication, airlines began installing defibrillators on planes, and the devices began to show up in airports and other public spaces. Ten years after installing defibrillators, <a href="/wiki/American_Airlines" title="American Airlines">American Airlines</a> reported that 80 lives had been saved by the machines.<sup id="cite&#95;ref-31" class="reference"><a href="#cite_note-31"><span class="cite-bracket">&#91;</span>31<span class="cite-bracket">&#93;</span></a></sup></li>
+<li><a href="/wiki/Hopewell_Chin%27ono" title="Hopewell Chin&#39;ono">Hopewell Chin'ono</a>, the award-winning Zimbabwean journalist who investigated and exposed the Covid-gate scandal in Zimbabwe in June 2020. US$60 million was siphoned to a shadowy company called Drax that is linked to President <a href="/wiki/Emmerson_Mnangagwa" title="Emmerson Mnangagwa">Emmerson Mnangagwa</a>. The exposure resulted in the dismissal and arrest of Health Minister Obbidiah Moyo. Hopewell Chin'ono was arrested on flimsy charges in an apparent attempt to silence him.<sup id="cite&#95;ref-32" class="reference"><a href="#cite_note-32"><span class="cite-bracket">&#91;</span>32<span class="cite-bracket">&#93;</span></a></sup></li>
+<li>The <a href="/wiki/Boston_Globe" class="mw-redirect" title="Boston Globe">Boston Globe</a>'s Spotlight investigation into sexual abuse in the <a href="/wiki/Archdiocese_of_Boston" title="Archdiocese of Boston">Archdiocese of Boston</a>, which earned a <a href="/wiki/Pulitzer_Prize" title="Pulitzer Prize">Pulitzer Prize</a><sup id="cite&#95;ref-33" class="reference"><a href="#cite_note-33"><span class="cite-bracket">&#91;</span>33<span class="cite-bracket">&#93;</span></a></sup></li></ul>
+<div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=5" title="Edit section: See also"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li><a href="/w/index.php?title=List_of_years_in_investigative_journalism&amp;action=edit&amp;redlink=1" class="new" title="List of years in investigative journalism (page does not exist)">List of years in investigative journalism</a></li>
+<li><a href="/wiki/Glossary_of_journalism" title="Glossary of journalism">Glossary of journalism</a></li>
+<li><a href="/wiki/Preventive_journalism" title="Preventive journalism">Preventive journalism</a></li>
+<li><a href="/wiki/Strategic_lawsuit_against_public_participation" title="Strategic lawsuit against public participation">Strategic lawsuit against public participation</a></li></ul>
+<p><b>Organizations, Publications and People</b>
+</p>
+<ul><li><a href="/wiki/Global_Investigative_Journalism_Network" title="Global Investigative Journalism Network">Global Investigative Journalism Network</a></li>
+<li><a href="/wiki/List_of_American_journalism_awards#Investigative_journalism" title="List of American journalism awards">List of American journalism awards#Investigative journalism</a></li>
+<li><a href="/wiki/Rodolfo_Walsh" title="Rodolfo Walsh">Rodolfo Walsh</a></li>
+<li><i><a href="/wiki/The_Hidden_Is_More_Immense" title="The Hidden Is More Immense">The Hidden Is More Immense</a></i></li></ul>
+<div class="mw-heading mw-heading2"><h2 id="References">References</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=6" title="Edit section: References"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1327269900">.mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflist-columns-3{column-width:25em}body.skin-vector-2022 .mw-parser-output .reflist-columns-2{column-width:27em}body.skin-vector-2022 .mw-parser-output .reflist-columns-3{column-width:22.5em}.mw-parser-output .references[data-mw-group=upper-alpha]{list-style-type:upper-alpha}.mw-parser-output .references[data-mw-group=upper-roman]{list-style-type:upper-roman}.mw-parser-output .references[data-mw-group=lower-alpha]{list-style-type:lower-alpha}.mw-parser-output .references[data-mw-group=lower-greek]{list-style-type:lower-greek}.mw-parser-output .references[data-mw-group=lower-roman]{list-style-type:lower-roman}.mw-parser-output div.reflist-liststyle-upper-alpha .references{list-style-type:upper-alpha}.mw-parser-output div.reflist-liststyle-upper-roman .references{list-style-type:upper-roman}.mw-parser-output div.reflist-liststyle-lower-alpha .references{list-style-type:lower-alpha}.mw-parser-output div.reflist-liststyle-lower-greek .references{list-style-type:lower-greek}.mw-parser-output div.reflist-liststyle-lower-roman .references{list-style-type:lower-roman}</style><div>
+<div class="mw-references-wrap mw-references-columns"><ol class="references">
+<li id="cite&#95;note-1"><span class="mw-cite-backlink"><b><a href="#cite_ref-1">^</a></b></span> <span class="reference-text"><style data-mw-deduplicate="TemplateStyles:r1333433106">.mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-parser-output .citation q{quotes:"\"""\"""'""'"}.mw-parser-output .citation:target{background-color:rgba(0,127,255,0.133)}.mw-parser-output .id-lock-free.id-lock-free a{background:url("//upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-limited.id-lock-limited a,.mw-parser-output .id-lock-registration.id-lock-registration a{background:url("//upload.wikimedia.org/wikipedia/commons/d/d6/Lock-gray-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-subscription.id-lock-subscription a{background:url("//upload.wikimedia.org/wikipedia/commons/a/aa/Lock-red-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .cs1-ws-icon a{background:url("//upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg")right 0.1em center/12px no-repeat}body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-free a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-limited a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-registration a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-subscription a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .cs1-ws-icon a{background-size:contain;padding:0 1em 0 0}.mw-parser-output .cs1-code{color:inherit;background:inherit;border:none;padding:inherit}.mw-parser-output .cs1-hidden-error{display:none;color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-visible-error{color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-maint{display:none;color:#085;margin-left:0.3em}.mw-parser-output .cs1-kern-left{padding-left:0.2em}.mw-parser-output .cs1-kern-right{padding-right:0.2em}.mw-parser-output .citation .mw-selflink{font-weight:inherit}@media screen{.mw-parser-output .cs1-format{font-size:95%}html.skin-theme-clientpref-night .mw-parser-output .cs1-maint{color:#18911f}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .cs1-maint{color:#18911f}}</style><cite id="CITEREFWeinberg1996" class="citation book cs1">Weinberg, Steve (1996). <span class="id-lock-registration" title="Free registration required"><a rel="nofollow" class="external text" href="https://archive.org/details/reportershandboo0000wein"><i>The Reporter's Handbook: An Investigator's Guide To Documents and Techniques</i></a></span>. St. Martin's Press. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-312-13596-6" title="Special:BookSources/978-0-312-13596-6"><bdi>978-0-312-13596-6</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=The+Reporter%27s+Handbook%3A+An+Investigator%27s+Guide+To+Documents+and+Techniques&amp;rft.pub=St.+Martin%27s+Press&amp;rft.date=1996&amp;rft.isbn=978-0-312-13596-6&amp;rft.aulast=Weinberg&amp;rft.aufirst=Steve&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Freportershandboo0000wein&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-2"><span class="mw-cite-backlink"><b><a href="#cite_ref-2">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://www.unesco.org/en/articles/global-media-defence-fund-backs-largest-ever-investigative-journalism-conference">"The Global Media Defence Fund Backs the Largest-Ever Investigative Journalism Conference"</a>. <i>Unesco</i>. 29 September 2023.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Unesco&amp;rft.atitle=The+Global+Media+Defence+Fund+Backs+the+Largest-Ever+Investigative+Journalism+Conference&amp;rft.date=2023-09-29&amp;rft&#95;id=https%3A%2F%2Fwww.unesco.org%2Fen%2Farticles%2Fglobal-media-defence-fund-backs-largest-ever-investigative-journalism-conference&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-3"><span class="mw-cite-backlink"><b><a href="#cite_ref-3">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFde&#95;Burgh2000" class="citation book cs1">de Burgh, Hugo, ed. (2000). <i>Investigative Journalism: Context and Practice</i>. London and New York: Routledge. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-415-19054-1" title="Special:BookSources/978-0-415-19054-1"><bdi>978-0-415-19054-1</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Investigative+Journalism%3A+Context+and+Practice&amp;rft.place=London+and+New+York&amp;rft.pub=Routledge&amp;rft.date=2000&amp;rft.isbn=978-0-415-19054-1&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-:0-4"><span class="mw-cite-backlink">^ <a href="#cite_ref-:0_4-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-:0_4-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-:0_4-2"><sup><i><b>c</b></i></sup></a> <a href="#cite_ref-:0_4-3"><sup><i><b>d</b></i></sup></a></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSterling2009" class="citation book cs1"><a href="/wiki/Christopher_H._Sterling" title="Christopher H. Sterling">Sterling, Christopher H.</a>, ed. (2009). "Investigative Journalism". <a rel="nofollow" class="external text" href="https://archive.org/details/encyclopediaofjo0002unse"><i>Encyclopedia of Journalism</i></a>. Vol.&#160;2. SAGE Publications. pp.&#160;<span class="nowrap">788–</span>794. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-7619-2957-4" title="Special:BookSources/978-0-7619-2957-4"><bdi>978-0-7619-2957-4</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=bookitem&amp;rft.atitle=Investigative+Journalism&amp;rft.btitle=Encyclopedia+of+Journalism&amp;rft.pages=788-794&amp;rft.pub=SAGE+Publications&amp;rft.date=2009&amp;rft.isbn=978-0-7619-2957-4&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fencyclopediaofjo0002unse&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-5"><span class="mw-cite-backlink"><b><a href="#cite_ref-5">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSloanParcell2002" class="citation book cs1">Sloan, W. David; Parcell, Lisa Mullikin (2002). <a rel="nofollow" class="external text" href="https://books.google.com/books?id=JOItkXKZ-3EC&amp;pg=PA211"><i>American Journalism: History, Principles, Practices</i></a>. McFarland. pp.&#160;<span class="nowrap">211–</span>213. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-7864-1371-3" title="Special:BookSources/978-0-7864-1371-3"><bdi>978-0-7864-1371-3</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=American+Journalism%3A+History%2C+Principles%2C+Practices&amp;rft.pages=211-213&amp;rft.pub=McFarland&amp;rft.date=2002&amp;rft.isbn=978-0-7864-1371-3&amp;rft.aulast=Sloan&amp;rft.aufirst=W.+David&amp;rft.au=Parcell%2C+Lisa+Mullikin&amp;rft&#95;id=https%3A%2F%2Fbooks.google.com%2Fbooks%3Fid%3DJOItkXKZ-3EC%26pg%3DPA211&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-6"><span class="mw-cite-backlink"><b><a href="#cite_ref-6">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFTichi2013" class="citation book cs1">Tichi, Cecelia (2013). <i>Exposés and Excess: Muckraking in America, 1900 / 2000</i>. University of Pennsylvania Press. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-8122-0375-2" title="Special:BookSources/978-0-8122-0375-2"><bdi>978-0-8122-0375-2</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Expos%C3%A9s+and+Excess%3A+Muckraking+in+America%2C+1900+%2F+2000&amp;rft.pub=University+of+Pennsylvania+Press&amp;rft.date=2013&amp;rft.isbn=978-0-8122-0375-2&amp;rft.aulast=Tichi&amp;rft.aufirst=Cecelia&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-7"><span class="mw-cite-backlink"><b><a href="#cite_ref-7">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFHess2013" class="citation book cs1">Hess, Stephen (2013). <i>Whatever Happened to the Washington Reporters, 1978–2012</i>. Brookings Institution Press. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-8157-2540-4" title="Special:BookSources/978-0-8157-2540-4"><bdi>978-0-8157-2540-4</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Whatever+Happened+to+the+Washington+Reporters%2C+1978%E2%80%932012&amp;rft.pub=Brookings+Institution+Press&amp;rft.date=2013&amp;rft.isbn=978-0-8157-2540-4&amp;rft.aulast=Hess&amp;rft.aufirst=Stephen&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-8"><span class="mw-cite-backlink"><b><a href="#cite_ref-8">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMcChesney2004" class="citation book cs1"><a href="/wiki/Robert_W._McChesney" title="Robert W. McChesney">McChesney, Robert W.</a> (2004). <span class="id-lock-registration" title="Free registration required"><a rel="nofollow" class="external text" href="https://archive.org/details/problemofmediaus00mcch"><i>The Problem of the Media: U.S. Communication Politics in the 21st century</i></a></span>. Monthly Review Press. p.&#160;<a rel="nofollow" class="external text" href="https://archive.org/details/problemofmediaus00mcch/page/81">81</a>. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-1-58367-105-4" title="Special:BookSources/978-1-58367-105-4"><bdi>978-1-58367-105-4</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=The+Problem+of+the+Media%3A+U.S.+Communication+Politics+in+the+21st+century&amp;rft.pages=81&amp;rft.pub=Monthly+Review+Press&amp;rft.date=2004&amp;rft.isbn=978-1-58367-105-4&amp;rft.aulast=McChesney&amp;rft.aufirst=Robert+W.&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fproblemofmediaus00mcch&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span>, citing <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFJustLevineRegan2002" class="citation cs2">Just, Marion; Levine, Rosalind; Regan, Kathleen (November–December 2002), <a rel="nofollow" class="external text" href="https://web.archive.org/web/20120910095558/http://www.journalism.org/node/231">"Investigative Journalism Despite the Odds"</a>, <i>Columbia Journalism Review</i>: 103ff, archived from <a rel="nofollow" class="external text" data-mw-original-href="http://www.journalism.org/node/231" href="https://www.journalism.org/node/231">the original</a> on 10 September 2012<span class="reference-accessdate">, retrieved <span class="nowrap">22 April</span> 2012</span></cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Columbia+Journalism+Review&amp;rft.atitle=Investigative+Journalism+Despite+the+Odds&amp;rft.pages=103ff&amp;rft.date=2002-11%2F2002-12&amp;rft.aulast=Just&amp;rft.aufirst=Marion&amp;rft.au=Levine%2C+Rosalind&amp;rft.au=Regan%2C+Kathleen&amp;rft&#95;id=http%3A%2F%2Fwww.journalism.org%2Fnode%2F231&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-9"><span class="mw-cite-backlink"><b><a href="#cite_ref-9">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFAllen2025" class="citation web cs1">Allen, Brittany (8 July 2025). <a rel="nofollow" class="external text" href="https://lithub.com/fed-up-with-big-legacy-news-here-are-13-independent-worker-owned-outlets-to-support/">"Fed up with big legacy news? Here are 13 independent, worker-owned outlets to support"</a>. <i>Literary Hub</i><span class="reference-accessdate">. Retrieved <span class="nowrap">26 November</span> 2025</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Literary+Hub&amp;rft.atitle=Fed+up+with+big+legacy+news%3F+Here+are+13+independent%2C+worker-owned+outlets+to+support.&amp;rft.date=2025-07-08&amp;rft.aulast=Allen&amp;rft.aufirst=Brittany&amp;rft&#95;id=https%3A%2F%2Flithub.com%2Ffed-up-with-big-legacy-news-here-are-13-independent-worker-owned-outlets-to-support%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-nyt&#95;2016-10"><span class="mw-cite-backlink"><b><a href="#cite_ref-nyt_2016_10-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFVasilyevaAnderson2016" class="citation news cs1">Vasilyeva, Natalya; Anderson, Mae (3 April 2016). <a rel="nofollow" class="external text" href="https://www.nytimes.com/aponline/2016/04/03/world/europe/ap-panama-papers.html">"News Group Claims Huge Trove of Data on Offshore Accounts"</a>. <i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i>. <a href="/wiki/Associated_Press" title="Associated Press">Associated Press</a><span class="reference-accessdate">. Retrieved <span class="nowrap">4 April</span> 2016</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+New+York+Times&amp;rft.atitle=News+Group+Claims+Huge+Trove+of+Data+on+Offshore+Accounts&amp;rft.date=2016-04-03&amp;rft.aulast=Vasilyeva&amp;rft.aufirst=Natalya&amp;rft.au=Anderson%2C+Mae&amp;rft&#95;id=https%3A%2F%2Fwww.nytimes.com%2Faponline%2F2016%2F04%2F03%2Fworld%2Feurope%2Fap-panama-papers.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-icij&#95;about-11"><span class="mw-cite-backlink">^ <a href="#cite_ref-icij_about_11-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-icij_about_11-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-icij_about_11-2"><sup><i><b>c</b></i></sup></a></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="http://www.icij.org/about">"About the ICIJ"</a>. The Center for Public Integrity<span class="reference-accessdate">. Retrieved <span class="nowrap">10 February</span> 2015</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=About+the+ICIJ&amp;rft.pub=The+Center+for+Public+Integrity&amp;rft&#95;id=http%3A%2F%2Fwww.icij.org%2Fabout&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-ryle-12"><span class="mw-cite-backlink"><b><a href="#cite_ref-ryle_12-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation news cs1"><a rel="nofollow" class="external text" href="http://www.icij.org/journalists/gerard-ryle">"Gerard Ryle"</a>. Center for Public Integrity.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.atitle=Gerard+Ryle&amp;rft&#95;id=http%3A%2F%2Fwww.icij.org%2Fjournalists%2Fgerard-ryle&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-ICIJ-20171105-13"><span class="mw-cite-backlink"><b><a href="#cite_ref-ICIJ-20171105_13-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFFitzgibbon,&#95;Will2017" class="citation news cs1">Fitzgibbon, Will; et&#160;al. (5 November 2017). <a rel="nofollow" class="external text" href="https://www.icij.org/investigations/paradise-papers/paradise-papers-exposes-donald-trump-russia-links-and-piggy-banks-of-the-wealthiest-1-percent/">"The 1 Percent- Offshore Trove Exposes Trump-Russia Links And Piggy Banks of the Wealthiest 1 Percent – A new leak of confidential records reveals the financial hideaways of iconic brands and power brokers across the political spectrum"</a>. <i><a href="/wiki/International_Consortium_of_Investigative_Journalists" title="International Consortium of Investigative Journalists">International Consortium of Investigative Journalists</a></i><span class="reference-accessdate">. Retrieved <span class="nowrap">6 November</span> 2017</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=International+Consortium+of+Investigative+Journalists&amp;rft.atitle=The+1+Percent-+Offshore+Trove+Exposes+Trump-Russia+Links+And+Piggy+Banks+of+the+Wealthiest+1+Percent+%E2%80%93+A+new+leak+of+confidential+records+reveals+the+financial+hideaways+of+iconic+brands+and+power+brokers+across+the+political+spectrum.&amp;rft.date=2017-11-05&amp;rft.au=Fitzgibbon%2C+Will&amp;rft&#95;id=https%3A%2F%2Fwww.icij.org%2Finvestigations%2Fparadise-papers%2Fparadise-papers-exposes-donald-trump-russia-links-and-piggy-banks-of-the-wealthiest-1-percent%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-14"><span class="mw-cite-backlink"><b><a href="#cite_ref-14">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFGrandoni2017" class="citation news cs1">Grandoni, Dino (6 November 2017). <a rel="nofollow" class="external text" href="https://www.washingtonpost.com/news/powerpost/paloma/the-energy-202/2017/11/06/the-energy-202-what-you-need-to-know-about-wilbur-ross-and-the-paradise-papers/59ffcbb430fb0468e76540fb/">"Analysis | The Energy 202: What you need to know about Wilbur Ross and the Paradise Papers"</a>. <i>The Washington Post</i>. <a href="/wiki/ISSN_(identifier)" class="mw-redirect" title="ISSN (identifier)">ISSN</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/issn/0190-8286">0190-8286</a><span class="reference-accessdate">. Retrieved <span class="nowrap">6 November</span> 2017</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+Washington+Post&amp;rft.atitle=Analysis+%7C+The+Energy+202%3A+What+you+need+to+know+about+Wilbur+Ross+and+the+Paradise+Papers&amp;rft.date=2017-11-06&amp;rft.issn=0190-8286&amp;rft.aulast=Grandoni&amp;rft.aufirst=Dino&amp;rft&#95;id=https%3A%2F%2Fwww.washingtonpost.com%2Fnews%2Fpowerpost%2Fpaloma%2Fthe-energy-202%2F2017%2F11%2F06%2Fthe-energy-202-what-you-need-to-know-about-wilbur-ross-and-the-paradise-papers%2F59ffcbb430fb0468e76540fb%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-15"><span class="mw-cite-backlink"><b><a href="#cite_ref-15">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFDisis2017" class="citation news cs1">Disis, Jackie Wattles and Jill (6 November 2017). <a rel="nofollow" class="external text" href="https://money.cnn.com/2017/11/05/news/paradise-papers-trump-twitter-facebook/index.html">"Paradise Papers: What you need to know"</a>. <i>CNNMoney</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=CNNMoney&amp;rft.atitle=Paradise+Papers%3A+What+you+need+to+know&amp;rft.date=2017-11-06&amp;rft.aulast=Disis&amp;rft.aufirst=Jackie+Wattles+and+Jill&amp;rft&#95;id=https%3A%2F%2Fmoney.cnn.com%2F2017%2F11%2F05%2Fnews%2Fparadise-papers-trump-twitter-facebook%2Findex.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-oltermann-2021-16"><span class="mw-cite-backlink"><b><a href="#cite_ref-oltermann-2021_16-0">^</a></b></span> <span class="reference-text">
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFOltermann2021" class="citation news cs1">Oltermann, Philip (27 June 2021). <a rel="nofollow" class="external text" data-mw-original-href="http://www.theguardian.com/law/2021/jun/27/berlins-no-1-digital-detective-agency-is-on-the-trail-of-human-rights-abusers" href="https://www.theguardian.com/law/2021/jun/27/berlins-no-1-digital-detective-agency-is-on-the-trail-of-human-rights-abusers">"Berlin's no 1 digital detective agency is on the trail of human rights abusers"</a>. <i>The Guardian</i>. London, United Kingdom. <a href="/wiki/ISSN_(identifier)" class="mw-redirect" title="ISSN (identifier)">ISSN</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/issn/0261-3077">0261-3077</a><span class="reference-accessdate">. Retrieved <span class="nowrap">28 June</span> 2021</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+Guardian&amp;rft.atitle=Berlin%27s+no+1+digital+detective+agency+is+on+the+trail+of+human+rights+abusers&amp;rft.date=2021-06-27&amp;rft.issn=0261-3077&amp;rft.aulast=Oltermann&amp;rft.aufirst=Philip&amp;rft&#95;id=http%3A%2F%2Fwww.theguardian.com%2Flaw%2F2021%2Fjun%2F27%2Fberlins-no-1-digital-detective-agency-is-on-the-trail-of-human-rights-abusers&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-17"><span class="mw-cite-backlink"><b><a href="#cite_ref-17">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFalamedapost2023" class="citation web cs1">alamedapost (30 August 2023). <a rel="nofollow" class="external text" href="https://alamedapost.com/op-ed/17-organizations-form-alliance-of-nonprofit-news-outlets/">"17 Organizations Form 'Alliance of Nonprofit News Outlets'<span class="cs1-kern-right"></span>"</a>. <i>Alameda Post</i><span class="reference-accessdate">. Retrieved <span class="nowrap">26 November</span> 2025</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Alameda+Post&amp;rft.atitle=17+Organizations+Form+%27Alliance+of+Nonprofit+News+Outlets%27&amp;rft.date=2023-08-30&amp;rft.au=alamedapost&amp;rft&#95;id=https%3A%2F%2Falamedapost.com%2Fop-ed%2F17-organizations-form-alliance-of-nonprofit-news-outlets%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-18"><span class="mw-cite-backlink"><b><a href="#cite_ref-18">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFHahn2018" class="citation book cs1">Hahn, Oliver (2018). <i>Digital Investigative Journalism</i>. Springer International Publishing. pp.&#160;<span class="nowrap">145–</span>146.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Digital+Investigative+Journalism&amp;rft.pages=145-146&amp;rft.pub=Springer+International+Publishing&amp;rft.date=2018&amp;rft.aulast=Hahn&amp;rft.aufirst=Oliver&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-19"><span class="mw-cite-backlink"><b><a href="#cite_ref-19">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://ijnet.org/en/story/10-tools-investigative-journalists">"10 tools for investigative journalists"</a>. <i>International Journalists' Network</i><span class="reference-accessdate">. Retrieved <span class="nowrap">26 June</span> 2023</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=International+Journalists%27+Network&amp;rft.atitle=10+tools+for+investigative+journalists&amp;rft&#95;id=https%3A%2F%2Fijnet.org%2Fen%2Fstory%2F10-tools-investigative-journalists&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-20"><span class="mw-cite-backlink"><b><a href="#cite_ref-20">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFeInvestigator.com2022" class="citation web cs1">eInvestigator.com, Michael Kissiah (22 June 2022). <a rel="nofollow" class="external text" href="https://www.einvestigator.com/lexisnexis-investigation-solutions/">"LexisNexis Solutions for Law Enforcement and Investigators"</a>. <i>Private Investigator and Investigation Resources</i><span class="reference-accessdate">. Retrieved <span class="nowrap">26 June</span> 2023</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Private+Investigator+and+Investigation+Resources&amp;rft.atitle=LexisNexis+Solutions+for+Law+Enforcement+and+Investigators&amp;rft.date=2022-06-22&amp;rft.aulast=eInvestigator.com&amp;rft.aufirst=Michael+Kissiah&amp;rft&#95;id=https%3A%2F%2Fwww.einvestigator.com%2Flexisnexis-investigation-solutions%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-21"><span class="mw-cite-backlink"><b><a href="#cite_ref-21">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://www.whitehousehistory.org/ida-b-wells-barnett-anti-lynching-and-the-white-house">"Ida B. Wells-Barnett: Anti-lynching and the White House"</a>. <i>WHHA (en-US)</i><span class="reference-accessdate">. Retrieved <span class="nowrap">15 April</span> 2024</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=WHHA+%28en-US%29&amp;rft.atitle=Ida+B.+Wells-Barnett%3A+Anti-lynching+and+the+White+House&amp;rft&#95;id=https%3A%2F%2Fwww.whitehousehistory.org%2Fida-b-wells-barnett-anti-lynching-and-the-white-house&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-22"><span class="mw-cite-backlink"><b><a href="#cite_ref-22">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://connecticuthistory.org/ida-tarbell-the-woman-who-took-on-standard-oil/">"Ida Tarbell: The Woman Who Took On Standard Oil - Connecticut History | a CTHumanities Project"</a>. <i>Connecticut History | a CTHumanities Project - Stories about the people, traditions, innovations, and events that make up Connecticut's rich history</i>. 6 January 2022<span class="reference-accessdate">. Retrieved <span class="nowrap">15 April</span> 2024</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Connecticut+History+%7C+a+CTHumanities+Project+-+Stories+about+the+people%2C+traditions%2C+innovations%2C+and+events+that+make+up+Connecticut%27s+rich+history.&amp;rft.atitle=Ida+Tarbell%3A+The+Woman+Who+Took+On+Standard+Oil+-+Connecticut+History+%7C+a+CTHumanities+Project&amp;rft.date=2022-01-06&amp;rft&#95;id=https%3A%2F%2Fconnecticuthistory.org%2Fida-tarbell-the-woman-who-took-on-standard-oil%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-23"><span class="mw-cite-backlink"><b><a href="#cite_ref-23">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFParanick2022" class="citation web cs1">Paranick, Amber (8 November 2022). <a rel="nofollow" class="external text" href="https://blogs.loc.gov/headlinesandheroes/2022/11/nellie-bly-blackwells-island">"<span class="cs1-kern-left"></span>"Behind Asylum Bars:" Nellie Bly Reporting from Blackwell's Island. | Headlines &amp; Heroes"</a>. <i>The Library of Congress</i><span class="reference-accessdate">. Retrieved <span class="nowrap">15 April</span> 2024</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=The+Library+of+Congress&amp;rft.atitle=%22Behind+Asylum+Bars%3A%22+Nellie+Bly+Reporting+from+Blackwell%27s+Island.+%7C+Headlines+%26+Heroes&amp;rft.date=2022-11-08&amp;rft.aulast=Paranick&amp;rft.aufirst=Amber&amp;rft&#95;id=https%3A%2F%2Fblogs.loc.gov%2Fheadlinesandheroes%2F2022%2F11%2Fnellie-bly-blackwells-island&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-24"><span class="mw-cite-backlink"><b><a href="#cite_ref-24">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFElving2022" class="citation web cs1">Elving, Ron (16 June 2022). <a rel="nofollow" class="external text" href="https://www.npr.org/2022/06/16/1105158079/in-new-edition-of-classic-watergate-expose-woodward-and-bernstein-link-nixon-tru">"In new edition of classic Watergate expose, Woodward and Bernstein link Nixon, Trump"</a>. <i>NPR</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=NPR&amp;rft.atitle=In+new+edition+of+classic+Watergate+expose%2C+Woodward+and+Bernstein+link+Nixon%2C+Trump&amp;rft.date=2022-06-16&amp;rft.aulast=Elving&amp;rft.aufirst=Ron&amp;rft&#95;id=https%3A%2F%2Fwww.npr.org%2F2022%2F06%2F16%2F1105158079%2Fin-new-edition-of-classic-watergate-expose-woodward-and-bernstein-link-nixon-tru&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-25"><span class="mw-cite-backlink"><b><a href="#cite_ref-25">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFDedman1989" class="citation web cs1">Dedman, Bill (1989). <a rel="nofollow" class="external text" href="http://powerreporting.com/color/">"The Color of Money"</a>. <i>Power Reporting</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Power+Reporting&amp;rft.atitle=The+Color+of+Money&amp;rft.date=1989&amp;rft.aulast=Dedman&amp;rft.aufirst=Bill&amp;rft&#95;id=http%3A%2F%2Fpowerreporting.com%2Fcolor%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-26"><span class="mw-cite-backlink"><b><a href="#cite_ref-26">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://www.pulitzer.org/winners/bill-dedman">"Bill Dedman of The Atlanta Journal and Constitution"</a>. <i>www.pulitzer.org</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=www.pulitzer.org&amp;rft.atitle=Bill+Dedman+of+The+Atlanta+Journal+and+Constitution&amp;rft&#95;id=https%3A%2F%2Fwww.pulitzer.org%2Fwinners%2Fbill-dedman&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-27"><span class="mw-cite-backlink"><b><a href="#cite_ref-27">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFGodleeSmithMarcovitch2011" class="citation journal cs1"><a href="/wiki/Fiona_Godlee" title="Fiona Godlee">Godlee, F.</a>; Smith, J.; Marcovitch, H. (5 January 2011). <span class="id-lock-subscription" title="Paid subscription required"><a rel="nofollow" class="external text" href="http://www.bmj.com/content/342/bmj.c7452.full">"Wakefield's article linking MMR vaccine and autism was fraudulent"</a></span>. <i><a href="/wiki/BMJ" class="mw-redirect" title="BMJ">BMJ</a></i>. <b>342</b> (jan05 1) c7452. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1136%2Fbmj.c7452">10.1136/bmj.c7452</a>. <a href="/wiki/ISSN_(identifier)" class="mw-redirect" title="ISSN (identifier)">ISSN</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/issn/0959-8138">0959-8138</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/21209060">21209060</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:43640126">43640126</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=BMJ&amp;rft.atitle=Wakefield%27s+article+linking+MMR+vaccine+and+autism+was+fraudulent&amp;rft.volume=342&amp;rft.issue=jan05+1&amp;rft.artnum=c7452&amp;rft.date=2011-01-05&amp;rft.issn=0959-8138&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A43640126%23id-name%3DS2CID&amp;rft&#95;id=info%3Apmid%2F21209060&amp;rft&#95;id=info%3Adoi%2F10.1136%2Fbmj.c7452&amp;rft.aulast=Godlee&amp;rft.aufirst=F.&amp;rft.au=Smith%2C+J.&amp;rft.au=Marcovitch%2C+H.&amp;rft&#95;id=http%3A%2F%2Fwww.bmj.com%2Fcontent%2F342%2Fbmj.c7452.full&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-28"><span class="mw-cite-backlink"><b><a href="#cite_ref-28">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFZiv,&#95;Stav2015" class="citation news cs1">Ziv, Stav (10 February 2015). <a rel="nofollow" class="external text" href="http://www.newsweek.com/2015/02/20/andrew-wakefield-father-anti-vaccine-movement-sticks-his-story-305836.html">"Andrew Wakefield, Father of the Anti-Vaccine Movement, Responds to the Current Measles Outbreak for the First Time"</a>. <i>Newsweek</i>. New York<span class="reference-accessdate">. Retrieved <span class="nowrap">19 February</span> 2015</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Newsweek&amp;rft.atitle=Andrew+Wakefield%2C+Father+of+the+Anti-Vaccine+Movement%2C+Responds+to+the+Current+Measles+Outbreak+for+the+First+Time&amp;rft.date=2015-02-10&amp;rft.au=Ziv%2C+Stav&amp;rft&#95;id=http%3A%2F%2Fwww.newsweek.com%2F2015%2F02%2F20%2Fandrew-wakefield-father-anti-vaccine-movement-sticks-his-story-305836.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-29"><span class="mw-cite-backlink"><b><a href="#cite_ref-29">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBoseley,&#95;Sarah2010" class="citation news cs1">Boseley, Sarah (2 February 2010). <a rel="nofollow" class="external text" href="https://www.theguardian.com/society/2010/feb/02/lancet-retracts-mmr-paper">"Lancet retracts 'utterly false' MMR paper"</a>. <i>The Guardian</i>. London<span class="reference-accessdate">. Retrieved <span class="nowrap">14 January</span> 2015</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+Guardian&amp;rft.atitle=Lancet+retracts+%27utterly+false%27+MMR+paper&amp;rft.date=2010-02-02&amp;rft.au=Boseley%2C+Sarah&amp;rft&#95;id=https%3A%2F%2Fwww.theguardian.com%2Fsociety%2F2010%2Ffeb%2F02%2Flancet-retracts-mmr-paper&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-30"><span class="mw-cite-backlink"><b><a href="#cite_ref-30">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCrewdson,&#95;John1996" class="citation news cs1">Crewdson, John (30 June 1996). <a rel="nofollow" class="external text" href="https://www.chicagotribune.com/1996/06/30/cardiac-arrest-at-37000-feet/">"Cardiac Arrest at 37,000 Feet"</a>. <i>Chicago Tribune</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Chicago+Tribune&amp;rft.atitle=Cardiac+Arrest+at+37%2C000+Feet&amp;rft.date=1996-06-30&amp;rft.au=Crewdson%2C+John&amp;rft&#95;id=https%3A%2F%2Fwww.chicagotribune.com%2F1996%2F06%2F30%2Fcardiac-arrest-at-37000-feet%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-31"><span class="mw-cite-backlink"><b><a href="#cite_ref-31">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFKovachRosenstiel2010" class="citation book cs1">Kovach, Bill; Rosenstiel, Tom (2010). <span class="id-lock-registration" title="Free registration required"><a rel="nofollow" class="external text" href="https://archive.org/details/blurhowtoknowwha0000kova"><i>Blur: How to Know What's True in the Age of Information Overload</i></a></span>. New York: Bloomsbury Publishing. pp.&#160;<a rel="nofollow" class="external text" href="https://archive.org/details/blurhowtoknowwha0000kova/page/58">58–60</a>. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-1-60819-302-8" title="Special:BookSources/978-1-60819-302-8"><bdi>978-1-60819-302-8</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Blur%3A+How+to+Know+What%27s+True+in+the+Age+of+Information+Overload&amp;rft.place=New+York&amp;rft.pages=58-60&amp;rft.pub=Bloomsbury+Publishing&amp;rft.date=2010&amp;rft.isbn=978-1-60819-302-8&amp;rft.aulast=Kovach&amp;rft.aufirst=Bill&amp;rft.au=Rosenstiel%2C+Tom&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fblurhowtoknowwha0000kova&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-32"><span class="mw-cite-backlink"><b><a href="#cite_ref-32">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMuchena2020" class="citation news cs1">Muchena, Deprose (20 July 2020). <a rel="nofollow" class="external text" href="https://www.amnesty.org/en/latest/news/2020/07/zimbabwe-authorities-continue-their-crackdown-on-dissent-with-arrest-of-investigative-journalist-and-activist/">"Zimbabwe: Authorities continue their crackdown on dissent with arrest of investigative journalist and activist"</a>. <i><a href="/wiki/Amnesty_International" title="Amnesty International">Amnesty International</a></i><span class="reference-accessdate">. Retrieved <span class="nowrap">4 January</span> 2021</span>. <q>Zimbabwean authorities must stop misusing the criminal justice system to persecute journalists and activists who are simply exercising their right to freedom of expression and peaceful assembly. The authorities must stop using the police and courts to silence dissent.</q></cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Amnesty+International&amp;rft.atitle=Zimbabwe%3A+Authorities+continue+their+crackdown+on+dissent+with+arrest+of+investigative+journalist+and+activist&amp;rft.date=2020-07-20&amp;rft.aulast=Muchena&amp;rft.aufirst=Deprose&amp;rft&#95;id=https%3A%2F%2Fwww.amnesty.org%2Fen%2Flatest%2Fnews%2F2020%2F07%2Fzimbabwe-authorities-continue-their-crackdown-on-dissent-with-arrest-of-investigative-journalist-and-activist%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-33"><span class="mw-cite-backlink"><b><a href="#cite_ref-33">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation magazine cs1"><a rel="nofollow" class="external text" href="https://newrepublic.com/article/111173/martin-barons-plan-save-washington-post-invest-metro-coverage">"Martin Baron's Plan to Save the Washington Post"</a>. <i>The New Republic</i>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+New+Republic&amp;rft.atitle=Martin+Baron%27s+Plan+to+Save+the+Washington+Post&amp;rft&#95;id=https%3A%2F%2Fnewrepublic.com%2Farticle%2F111173%2Fmartin-barons-plan-save-washington-post-invest-metro-coverage&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></span>
+</li>
+</ol></div></div>
+<div class="mw-heading mw-heading2"><h2 id="Further_reading">Further reading</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=7" title="Edit section: Further reading"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1305433154">.mw-parser-output .ambox{border:1px solid #a2a9b1;border-left:10px solid #36c;background-color:#fbfbfb;box-sizing:border-box}.mw-parser-output .ambox+link+.ambox,.mw-parser-output .ambox+link+style+.ambox,.mw-parser-output .ambox+link+link+.ambox,.mw-parser-output .ambox+.mw-empty-elt+link+.ambox,.mw-parser-output .ambox+.mw-empty-elt+link+style+.ambox,.mw-parser-output .ambox+.mw-empty-elt+link+link+.ambox{margin-top:-1px}html body.mediawiki .mw-parser-output .ambox.mbox-small-left{margin:4px 1em 4px 0;overflow:hidden;width:238px;border-collapse:collapse;font-size:88%;line-height:1.25em}.mw-parser-output .ambox-speedy{border-left:10px solid #b32424;background-color:#fee7e6}.mw-parser-output .ambox-delete{border-left:10px solid #b32424}.mw-parser-output .ambox-content{border-left:10px solid #f28500}.mw-parser-output .ambox-style{border-left:10px solid #fc3}.mw-parser-output .ambox-move{border-left:10px solid #9932cc}.mw-parser-output .ambox-protection{border-left:10px solid #a2a9b1}.mw-parser-output .ambox .mbox-text{border:none;padding:0.25em 0.5em;width:100%}.mw-parser-output .ambox .mbox-image{border:none;padding:2px 0 2px 0.5em;text-align:center}.mw-parser-output .ambox .mbox-imageright{border:none;padding:2px 0.5em 2px 0;text-align:center}.mw-parser-output .ambox .mbox-empty-cell{border:none;padding:0;width:1px}.mw-parser-output .ambox .mbox-image-div{width:52px}@media(min-width:720px){.mw-parser-output .ambox{margin:0 10%}}@media print{body.ns-0 .mw-parser-output .ambox{display:none!important}}</style><table class="box-Update plainlinks metadata ambox ambox-content ambox-Update" role="presentation"><tbody><tr><td class="mbox-image"><div class="mbox-image-div"><span typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Ambox_current_red_Asia_Australia.svg/60px-Ambox_current_red_Asia_Australia.svg.png" decoding="async" width="42" height="34" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Ambox_current_red_Asia_Australia.svg/120px-Ambox_current_red_Asia_Australia.svg.png 2x" data-file-width="360" data-file-height="290" /></span></span></div></td><td class="mbox-text"><div class="mbox-text-span">This section needs to be <b>updated</b>. The reason given is: <b>Add some more recent sources than 2010</b>.<span class="hide-when-compact"> Please help update this article to reflect recent events or newly available information.</span>  <span class="date-container"><i>(<span class="date">March 2024</span>)</i></span></div></td></tr></tbody></table>
+<ul><li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation news cs1"><a rel="nofollow" class="external text" href="https://www.theguardian.com/membership/2021/oct/14/laws-changed-around-the-world-why-investigative-journalism-matters">"How to expose corruption, vice and incompetence – by those who have"</a>. <i>The Guardian</i>. 14 October 2021.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+Guardian&amp;rft.atitle=How+to+expose+corruption%2C+vice+and+incompetence+%E2%80%93+by+those+who+have&amp;rft.date=2021-10-14&amp;rft&#95;id=https%3A%2F%2Fwww.theguardian.com%2Fmembership%2F2021%2Foct%2F14%2Flaws-changed-around-the-world-why-investigative-journalism-matters&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span> An article by six investigative journalists on the situation of investigative journalism in the UK.</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFHarberRenn2010" class="citation book cs1">Harber, Anton; Renn, Margaret, eds. (2010). <i>Troublemakers: The Best of South Africa's Investigative Journalism</i>. Auckland Park, South Africa: Jacana Media. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-1-77009-893-0" title="Special:BookSources/978-1-77009-893-0"><bdi>978-1-77009-893-0</bdi></a>. <a href="/wiki/OCLC_(identifier)" class="mw-redirect" title="OCLC (identifier)">OCLC</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/oclc/794905854">794905854</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Troublemakers%3A+The+Best+of+South+Africa%27s+Investigative+Journalism&amp;rft.place=Auckland+Park%2C+South+Africa&amp;rft.pub=Jacana+Media&amp;rft.date=2010&amp;rft&#95;id=info%3Aoclcnum%2F794905854&amp;rft.isbn=978-1-77009-893-0&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AInvestigative+journalism" class="Z3988"></span></li>
+<li>Video of the 2010 Logan Symposium at <a href="/wiki/University_of_California_Berkeley" class="mw-redirect" title="University of California Berkeley">University of California Berkeley</a>'s <a rel="nofollow" class="external text" href="https://web.archive.org/web/20100501185406/http://fora.tv/2010/04/17/Logan_Symposium_Consequences_of_Investigative_Reporting">"Consequences of Investigative Reporting"</a> panel, in which reporters from the <a href="/wiki/Sahara_reporters" class="mw-redirect" title="Sahara reporters">Sahara Reporters</a>, the <a href="/wiki/Medill_Innocence_Project" class="mw-redirect" title="Medill Innocence Project">Medill Innocence Project</a> at <a href="/wiki/Northwestern_University" title="Northwestern University">Northwestern</a>, <i><a href="/wiki/The_Washington_Post" title="The Washington Post">The Washington Post</a></i>, <i><a href="/wiki/The_Las_Vegas_Review-Journal" class="mw-redirect" title="The Las Vegas Review-Journal">The Las Vegas Review-Journal</a></i>, and <i><a href="/wiki/The_El_Paso_Times" class="mw-redirect" title="The El Paso Times">The El Paso Times</a></i> talk about the dangers investigative reporters face; their experiences range from threat to life and limb for reporting on corruption in Africa, to subpoenas aimed at a journalism professor and his students for attempting to bring to light a miscarriage of justice; a Pulitzer Prize winner describes reporting on national security as her sources face internal inquisitions; a veteran reporter in Las Vegas talks about taking on casino moguls and organized crime; while a reporter covering the Mexican border explains how she has survived the violent reality of the undeclared war on our border, April 2010</li>
+<li><a rel="nofollow" class="external text" href="https://www.youtube.com/watch?v=yRWYa7XHMO0">"Current State of Investigative Reporting"</a>, talk by <a href="/wiki/Seymour_Hersh" title="Seymour Hersh">Seymour Hersh</a> at <a href="/wiki/Boston_University" title="Boston University">Boston University</a>, 19 May 2009</li>
+<li><i>Tell Me No Lies: Investigative Journalism That Changed the World</i>, <a href="/wiki/John_Pilger" title="John Pilger">John Pilger</a>, ed. (paperback) 2005.</li></ul>
+<div class="mw-heading mw-heading2"><h2 id="External_links">External links</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Investigative_journalism&amp;action=edit&amp;section=8" title="Edit section: External links"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1314755338">.mw-parser-output .side-box{margin:4px 0;box-sizing:border-box;border:1px solid #aaa;font-size:88%;line-height:1.25em;background-color:var(--background-color-interactive-subtle,#f8f9fa);color:inherit;display:flow-root}.mw-parser-output .infobox .side-box{font-size:100%}.mw-parser-output .side-box-abovebelow,.mw-parser-output .side-box-text{padding:0.25em 0.9em}.mw-parser-output .side-box-image{padding:2px 0 2px 0.9em;text-align:center}.mw-parser-output .side-box-imageright{padding:2px 0.9em 2px 0;text-align:center}@media(min-width:500px){.mw-parser-output .side-box-flex{display:flex;align-items:center}.mw-parser-output .side-box-text{flex:1;min-width:0}}@media(min-width:640px){.mw-parser-output .side-box{width:238px}.mw-parser-output .side-box-right{clear:right;float:right;margin-left:1em}.mw-parser-output .side-box-left{margin-right:1em}}</style><style data-mw-deduplicate="TemplateStyles:r1311551236">@media print{body.ns-0 .mw-parser-output .sistersitebox{display:none!important}}@media screen{html.skin-theme-clientpref-night .mw-parser-output .sistersitebox img[src*="Wiktionary-logo-en-v2.svg"]{filter:invert(1)brightness(55%)contrast(250%)hue-rotate(180deg)}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .sistersitebox img[src*="Wiktionary-logo-en-v2.svg"]{filter:invert(1)brightness(55%)contrast(250%)hue-rotate(180deg)}}</style><div class="side-box side-box-right plainlinks sistersitebox"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" />
+<div class="side-box-flex">
+<div class="side-box-image"><span class="noviewer" typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/40px-Wikiquote-logo.svg.png" decoding="async" width="34" height="40" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/120px-Wikiquote-logo.svg.png 2x" data-file-width="300" data-file-height="355" /></span></span></div>
+<div class="side-box-text plainlist">Wikiquote has quotations related to <i><b><a href="https://en.wikiquote.org/wiki/Special:Search/Investigative_journalism" class="extiw" title="q:Special:Search/Investigative journalism">Investigative journalism</a></b></i>.</div></div>
+</div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314755338" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1311551236" /><div class="side-box side-box-right plainlinks sistersitebox"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" />
+<div class="side-box-flex">
+<div class="side-box-image"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Wikiversity_logo_2017.svg" class="mw-file-description"><img alt="Wikiversity logo" src="//upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Wikiversity_logo_2017.svg/40px-Wikiversity_logo_2017.svg.png" decoding="async" width="40" height="33" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Wikiversity_logo_2017.svg/120px-Wikiversity_logo_2017.svg.png 2x" data-file-width="626" data-file-height="512" /></a></span></div>
+<div class="side-box-text plainlist">Wikiversity has learning resources about <i><b><a href="https://en.wikiversity.org/wiki/Video_journalism" class="extiw" title="v:Video journalism">Video journalism</a></b></i></div></div>
+</div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314755338" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1311551236" /><div class="side-box side-box-right plainlinks sistersitebox"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" />
+<div class="side-box-flex">
+<div class="side-box-image"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Commons-logo.svg" class="mw-file-description"><img alt="Wikimedia Commons logo" src="//upload.wikimedia.org/wikipedia/en/thumb/4/4a/Commons-logo.svg/40px-Commons-logo.svg.png" decoding="async" width="30" height="40" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/en/thumb/4/4a/Commons-logo.svg/60px-Commons-logo.svg.png 2x" data-file-width="1024" data-file-height="1376" /></a></span></div>
+<div class="side-box-text plainlist">Wikimedia Commons has media related to <span style="font-weight: bold; font-style: italic;"><a href="https://commons.wikimedia.org/wiki/Category:Investigative_journalism" class="extiw" title="commons:Category:Investigative journalism">Investigative journalism</a></span>.</div></div>
+</div>
+<style data-mw-deduplicate="TemplateStyles:r1235611614">.mw-parser-output .spoken-wikipedia{border:1px solid #a2a9b1;background-color:var(--background-color-interactive-subtle,#f8f9fa);margin:0.5em 0;padding:0.2em;line-height:1.5em;font-size:90%}.mw-parser-output .spoken-wikipedia-header{text-align:center}.mw-parser-output .spoken-wikipedia-listen-to{font-weight:bold}.mw-parser-output .spoken-wikipedia-files{text-align:center;margin-top:10px;margin-bottom:0.4em}.mw-parser-output .spoken-wikipedia-icon{float:left;margin-left:5px;margin-top:10px}.mw-parser-output .spoken-wikipedia-disclaimer{margin-left:60px;margin-top:10px;font-size:95%;line-height:1.4em}.mw-parser-output .spoken-wikipedia-footer{margin-top:10px;text-align:center}@media(min-width:720px){.mw-parser-output .spoken-wikipedia{width:20em;float:right;clear:right;margin-left:1em}}</style><div class="spoken-wikipedia noprint haudio"><div class="spoken-wikipedia-header"><span class="spoken-wikipedia-listen-to">Listen to this article</span> (<span class="duration"><span class="min">3</span> minutes</span>)</div><div class="spoken-wikipedia-files"><figure class="mw-halign-center" typeof="mw:File"><span><audio id="mwe_player_0" controls="" preload="none" data-mw-tmh="" class="mw-file-element" width="200" style="width:200px;" data-durationhint="166" data-mwtitle="En-investigativejournalism.ogg" data-mwprovider="wikimediacommons"><source src="//upload.wikimedia.org/wikipedia/commons/9/9d/En-investigativejournalism.ogg" type="audio/ogg; codecs=&quot;vorbis&quot;" data-width="0" data-height="0" /><source src="//upload.wikimedia.org/wikipedia/commons/transcoded/9/9d/En-investigativejournalism.ogg/En-investigativejournalism.ogg.mp3" type="audio/mpeg" data-transcodekey="mp3" data-width="0" data-height="0" /></audio></span><figcaption></figcaption></figure>
+</div><div class="spoken-wikipedia-icon"><span typeof="mw:File"><span title="Spoken Wikipedia"><img alt="Spoken Wikipedia icon" src="//upload.wikimedia.org/wikipedia/commons/thumb/8/87/Gnome-mime-sound-openclipart.svg/60px-Gnome-mime-sound-openclipart.svg.png" decoding="async" width="45" height="45" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/8/87/Gnome-mime-sound-openclipart.svg/120px-Gnome-mime-sound-openclipart.svg.png 2x" data-file-width="160" data-file-height="160" /></span></span></div><div class="spoken-wikipedia-disclaimer"><a href="/wiki/File:En-investigativejournalism.ogg" title="File:En-investigativejournalism.ogg">This audio file</a> was created from a revision of this article dated 12&#160;March&#160;2010<span style="display: none;">&#160;(<span class="bday dtstart published updated itvstart">2010-03-12</span>)</span>, and does not reflect subsequent edits.</div><div class="spoken-wikipedia-footer">(<a href="/wiki/Wikipedia:Media_help" class="mw-redirect" title="Wikipedia:Media help">Audio help</a>&#160;· <a href="/wiki/Wikipedia:Spoken_articles" title="Wikipedia:Spoken articles">More spoken articles</a>)</div></div>
+<ul><li class="mw-empty-elt"></li>
+<li class="mw-empty-elt"></li></ul>
+<div class="navbox-styles"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><style data-mw-deduplicate="TemplateStyles:r1314944253">.mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:100%;clear:both;font-size:88%;text-align:center;padding:1px;margin:1em auto 0}.mw-parser-output .navbox .navbox{margin-top:0}.mw-parser-output .navbox+.navbox,.mw-parser-output .navbox+.navbox-styles+.navbox{margin-top:-1px}.mw-parser-output .navbox-inner,.mw-parser-output .navbox-subgroup{width:100%}.mw-parser-output .navbox-group,.mw-parser-output .navbox-title,.mw-parser-output .navbox-abovebelow{padding:0.25em 1em;line-height:1.5em;text-align:center}.mw-parser-output .navbox-group{white-space:nowrap;text-align:right}.mw-parser-output .navbox,.mw-parser-output .navbox-subgroup{background-color:#fdfdfd;color:inherit}.mw-parser-output .navbox-list{line-height:1.5em;border-color:#fdfdfd}.mw-parser-output .navbox-list-with-group{text-align:left;border-left-width:2px;border-left-style:solid}.mw-parser-output tr+tr>.navbox-abovebelow,.mw-parser-output tr+tr>.navbox-group,.mw-parser-output tr+tr>.navbox-image,.mw-parser-output tr+tr>.navbox-list{border-top:2px solid #fdfdfd}.mw-parser-output .navbox-title{background-color:#ccf;color:inherit}.mw-parser-output .navbox-abovebelow,.mw-parser-output .navbox-group,.mw-parser-output .navbox-subgroup .navbox-title{background-color:#ddf;color:inherit}.mw-parser-output .navbox-subgroup .navbox-group,.mw-parser-output .navbox-subgroup .navbox-abovebelow{background-color:#e6e6ff;color:inherit}.mw-parser-output .navbox-even{background-color:#f7f7f7;color:inherit}.mw-parser-output .navbox-odd{background-color:transparent;color:inherit}.mw-parser-output .navbox .hlist td dl,.mw-parser-output .navbox .hlist td ol,.mw-parser-output .navbox .hlist td ul,.mw-parser-output .navbox td.hlist dl,.mw-parser-output .navbox td.hlist ol,.mw-parser-output .navbox td.hlist ul{padding:0.125em 0}.mw-parser-output .navbox .navbar{display:block;font-size:100%}.mw-parser-output .navbox-title .navbar{float:left;text-align:left;margin-right:0.5em}body.skin--responsive .mw-parser-output .navbox-image img{max-width:none!important}@media print{body.ns-0 .mw-parser-output .navbox{display:none!important}}</style><style data-mw-deduplicate="TemplateStyles:r1066933788">.mw-parser-output .excerpt-hat .mw-editsection-like{font-style:normal}</style><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1066933788" /></div><div role="navigation" class="navbox" aria-labelledby="Journalism6074" style="padding:3px"><table class="nowraplinks mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1239400231" /><div class="navbar plainlinks hlist navbar-mini"><ul><li class="nv-view"><a href="/wiki/Template:Journalism" title="Template:Journalism"><abbr title="View this template">v</abbr></a></li><li class="nv-talk"><a href="/wiki/Template_talk:Journalism" title="Template talk:Journalism"><abbr title="Discuss this template">t</abbr></a></li><li class="nv-edit"><a href="/wiki/Special:EditPage/Template:Journalism" title="Special:EditPage/Template:Journalism"><abbr title="Edit this template">e</abbr></a></li></ul></div><div id="Journalism6074" style="font-size:114%;margin:0 4em"><a href="/wiki/Journalism" title="Journalism">Journalism</a></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Newsroom" title="Newsroom">Newsroom</a></th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/Journalist" title="Journalist">Journalist</a> (<a href="/wiki/Staff_writer" title="Staff writer">Staff writer</a> · <a href="/wiki/Correspondent" title="Correspondent">Correspondent</a> · <a href="/wiki/Photojournalism" title="Photojournalism">Photojournalist</a> · <a href="/wiki/News_presenter" title="News presenter">News presenter</a>)</li>
+<li><a href="/wiki/Columnist" title="Columnist">Columnist</a></li>
+<li>Editors (<a href="/wiki/Editor-in-chief" title="Editor-in-chief">Editor-in-chief</a> · <a href="/wiki/Managing_editor" title="Managing editor">Managing editor</a> · <a href="/wiki/Political_editor" title="Political editor">Political editor</a> · <a href="/wiki/Editorial_board" title="Editorial board">Editorial board</a> · <a href="/wiki/Assignment_editor" title="Assignment editor">Assignment editor</a> · <a href="/wiki/Duty_editor" title="Duty editor">Duty editor</a> · <a href="/wiki/Public_editor" title="Public editor">Public editor</a> · Editor-at-large · <a href="/wiki/Contributing_editor" title="Contributing editor">Contributing editor</a>)</li>
+<li><a href="/wiki/Weather_presenter" title="Weather presenter">Weather presenter</a></li>
+<li><a href="/wiki/News_bureau" title="News bureau">News bureau</a></li>
+<li><a href="/wiki/News_director" title="News director">News director</a></li>
+<li><a href="/wiki/Pundit" title="Pundit">Pundit</a></li>
+<li><a href="/wiki/Stringer_(journalism)" title="Stringer (journalism)">Stringer</a></li></ul>
+</div></div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Product</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/News" title="News">News</a></li>
+<li><a href="/wiki/Article_(publishing)" title="Article (publishing)">Article</a> (<a href="/wiki/Headline" title="Headline">Headline</a> · <a href="/wiki/Byline" title="Byline">Byline</a> · <a href="/wiki/Dateline" title="Dateline">Dateline</a> · <a href="/wiki/Report" title="Report">Report</a> · <a href="/wiki/Breaking_news" title="Breaking news">Special report</a> · <a href="/wiki/Scoop_(news)" title="Scoop (news)">Exclusive</a> · <a href="/wiki/Interview_(journalism)" title="Interview (journalism)">Interview</a> · <a href="/wiki/Column_(periodical)" title="Column (periodical)">Column</a> · <a href="/wiki/Editorial" title="Editorial">Editorial</a> · <a href="/wiki/Op-ed" title="Op-ed">Op-ed</a>)</li>
+<li><a href="/wiki/News_style" title="News style">Writing style</a> (<a href="/wiki/Five_Ws" title="Five Ws">Five Ws</a> · <a href="/wiki/Inverted_pyramid_(journalism)" title="Inverted pyramid (journalism)">Inverted pyramid</a>)</li></ul>
+</div></div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Journalism_ethics_and_standards" title="Journalism ethics and standards">Ethics and<br />standards</a></th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/Broadcast_Standards_and_Practices" title="Broadcast Standards and Practices">Broadcast</a></li>
+<li><a href="/wiki/Chequebook_journalism" title="Chequebook journalism">Chequebook</a></li>
+<li><a href="/wiki/Churnalism" title="Churnalism">Churnalism</a></li>
+<li><a href="/wiki/Code_of_ethics_in_media" title="Code of ethics in media">Codes of ethics</a></li>
+<li><a href="/wiki/Journalism_culture" title="Journalism culture">Culture</a></li>
+<li><a href="/wiki/Editing" title="Editing">Editing</a> (<a href="/wiki/Copy_editing" title="Copy editing">Copy editing</a> · <a href="/wiki/Correction_(newspaper)" title="Correction (newspaper)">Corrections</a> · <a href="/wiki/Fact-checking" title="Fact-checking">Fact-checking</a> · <a href="/wiki/Spike_(journalism)" title="Spike (journalism)">Spiking</a>)</li>
+<li><a href="/wiki/Fake_news" title="Fake news">Fake news</a> (<a href="/wiki/Fake_news_website" title="Fake news website">Websites</a>)</li>
+<li><a href="/wiki/Horse_race_journalism" title="Horse race journalism">Horse race</a></li>
+<li><a href="/wiki/Journalese" title="Journalese">Journalese</a></li>
+<li><a href="/wiki/Media_bias" title="Media bias">Media bias</a> (<a href="/wiki/False_balance" title="False balance">False balance</a>)</li>
+<li><a href="/wiki/News_values" title="News values">News values</a> (<a href="/wiki/Above_the_fold" title="Above the fold">Above the fold</a> · <a href="/wiki/Man_bites_dog" title="Man bites dog">Man bites dog</a>)</li>
+<li><a href="/wiki/Journalistic_objectivity" title="Journalistic objectivity">Objectivity</a></li>
+<li><a href="/wiki/Pink-slime_journalism" title="Pink-slime journalism">Pink-slime</a></li>
+<li><a href="/wiki/Journalistic_scandal" title="Journalistic scandal">Scandals</a></li>
+<li><a href="/wiki/Sensationalism" title="Sensationalism">Sensationalism</a></li>
+<li><a href="/wiki/Source_(journalism)" title="Source (journalism)">Sources</a></li>
+<li><a href="/wiki/Tabloid_journalism" title="Tabloid journalism">Tabloid</a> (<a href="/wiki/Tabloid_television" title="Tabloid television">Television</a>)</li>
+<li><a href="/wiki/Yellow_journalism" title="Yellow journalism">Yellow</a></li>
+<li><a href="/wiki/Journalism_school" title="Journalism school">Journalism school</a> (<a href="/wiki/Student_publication" title="Student publication">Student publication</a>)</li></ul>
+</div></div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Beat_reporting" title="Beat reporting">Beats</a></th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/Arts_journalism" title="Arts journalism">Arts</a></li>
+<li><a href="/wiki/Business_journalism" title="Business journalism">Business</a></li>
+<li><a href="/wiki/Data_journalism" title="Data journalism">Data</a></li>
+<li><a href="/wiki/Entertainment_journalism" title="Entertainment journalism">Entertainment</a></li>
+<li><a href="/wiki/Environmental_journalism" title="Environmental journalism">Environment</a></li>
+<li><a href="/wiki/Fashion_journalism" title="Fashion journalism">Fashion</a></li>
+<li><a href="/wiki/Local_news" title="Local news">Local</a></li>
+<li><a href="/wiki/Medical_journalism" title="Medical journalism">Medicine</a></li>
+<li><a href="/wiki/Music_journalism" title="Music journalism">Music</a></li>
+<li><a href="/wiki/Political_journalism" title="Political journalism">Politics</a></li>
+<li><a href="/wiki/Science_journalism" title="Science journalism">Science</a></li>
+<li><a href="/wiki/Sports_journalism" title="Sports journalism">Sports</a></li>
+<li><a href="/wiki/Technology_journalism" title="Technology journalism">Technology</a></li>
+<li><a href="/wiki/Traffic_reporting" title="Traffic reporting">Traffic</a></li>
+<li><a href="/wiki/Video_game_journalism" title="Video game journalism">Video games</a></li>
+<li><a href="/wiki/War_correspondent" title="War correspondent">War</a></li>
+<li><a href="/wiki/Weather_forecasting" title="Weather forecasting">Weather</a></li>
+<li><a href="/wiki/World_news" title="World news">World</a></li></ul>
+</div></div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Journalism_genres" title="Journalism genres">Genres</a></th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/Adversarial_journalism" title="Adversarial journalism">Adversarial</a></li>
+<li><a href="/wiki/Advocacy_journalism" title="Advocacy journalism">Advocacy</a> (<a href="/wiki/Journalistic_interventionism" title="Journalistic interventionism">Interventionism</a>)</li>
+<li><a href="/wiki/Analytic_journalism" title="Analytic journalism">Analytic</a></li>
+<li><a href="/wiki/Blog" title="Blog">Blogging</a></li>
+<li><a href="/wiki/Citizen_journalism" title="Citizen journalism">Citizen</a></li>
+<li><a href="/wiki/Civic_journalism" title="Civic journalism">Civic</a></li>
+<li><a href="/wiki/Collaborative_journalism" title="Collaborative journalism">Collaborative</a></li>
+<li><a href="/wiki/Comics_journalism" title="Comics journalism">Comics-based</a></li>
+<li><a href="/wiki/Community_journalism" title="Community journalism">Community</a></li>
+<li><a href="/wiki/Database_journalism" title="Database journalism">Database</a></li>
+<li><a href="/wiki/Enterprise_journalism" title="Enterprise journalism">Enterprise</a></li>
+<li><a href="/wiki/Explanatory_journalism" title="Explanatory journalism">Explanatory</a></li>
+<li><a href="/wiki/Feature_story" title="Feature story">Feature story</a></li>
+<li><a href="/wiki/Gonzo_journalism" title="Gonzo journalism">Gonzo</a></li>
+<li><a href="/wiki/Human-interest_story" title="Human-interest story">Human-interest</a></li>
+<li><a href="/wiki/Immersion_journalism" title="Immersion journalism">Immersion</a></li>
+<li><a href="/wiki/Infotainment" title="Infotainment">Infotainment</a>/<a href="/wiki/Soft_media" title="Soft media">Soft media</a></li>
+<li><a href="/wiki/Interpretive_journalism" title="Interpretive journalism">Interpretive</a></li>
+<li>Investigative</li>
+<li><a href="/wiki/Long-form_journalism" title="Long-form journalism">Long-form</a></li>
+<li><a href="/wiki/Narrative_journalism" title="Narrative journalism">Narrative</a></li>
+<li><a href="/wiki/New_Journalism" title="New Journalism">New Journalism</a></li>
+<li><a href="/wiki/Opinion_journalism" title="Opinion journalism">Opinion</a></li>
+<li><a href="/wiki/Peace_journalism" title="Peace journalism">Peace</a></li>
+<li><a href="/wiki/Sensor_journalism" title="Sensor journalism">Sensor</a></li>
+<li><a href="/wiki/Underground_press" title="Underground press">Underground</a></li>
+<li><a href="/wiki/Visual_journalism" title="Visual journalism">Visual</a></li>
+<li><a href="/wiki/Watchdog_journalism" title="Watchdog journalism">Watchdog</a></li></ul>
+</div></div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Societal<br />aspects</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/Decline_of_newspapers" title="Decline of newspapers">Decline of newspapers</a> (<a href="/wiki/News_desert" title="News desert">News desert</a>)</li>
+<li><a href="/wiki/Fourth_Estate" title="Fourth Estate">Fourth Estate</a></li>
+<li><a href="/wiki/Fifth_Estate" title="Fifth Estate">Fifth Estate</a></li>
+<li><a href="/wiki/Editorial_independence" title="Editorial independence">Editorial independence</a> (<a href="/wiki/Independent_media" title="Independent media">Independent</a> · <a href="/wiki/State_media" title="State media">State</a>)</li>
+<li><a href="/wiki/Media_capture" title="Media capture">Media capture</a> · <a href="/wiki/Media_plurality" class="mw-redirect" title="Media plurality">Media plurality</a></li>
+<li><a href="/wiki/Freedom_of_information" title="Freedom of information">Freedom of information</a></li>
+<li><a href="/wiki/Freedom_of_the_press" title="Freedom of the press">Freedom of the press</a> (<a href="/wiki/Defamation" title="Defamation">Defamation</a> · <a href="/wiki/Safety_of_journalists" title="Safety of journalists">Safety</a>)</li>
+<li><a href="/wiki/Source_protection" title="Source protection">Source protection</a></li></ul>
+</div></div>
+<ul><li><a href="/wiki/World_Press_Freedom_Day" title="World Press Freedom Day">World Press Freedom Day</a></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Public_relations" title="Public relations">Public<br />relations</a></th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<li><a href="/wiki/Media_manipulation" title="Media manipulation">Media manipulation</a></li>
+<li><a href="/wiki/Media_relations" title="Media relations">Media relations</a></li>
+<li><a href="/wiki/News_embargo" title="News embargo">News embargo</a></li>
+<li><a href="/wiki/News_leak" title="News leak">News leak</a></li>
+<li><a href="/wiki/News_propaganda" title="News propaganda">News propaganda</a> (<a href="/wiki/Propaganda_model" title="Propaganda model">Model</a>)</li>
+<li><a href="/wiki/Press_conference" title="Press conference">Press conference</a> (<a href="/wiki/Media_scrum" title="Media scrum">Media scrum</a>)</li>
+<li><a href="/wiki/Press_gallery" title="Press gallery">Press gallery</a></li>
+<li><a href="/wiki/Press_line" title="Press line">Press line</a></li>
+<li><a href="/wiki/Press_pass" title="Press pass">Press pass</a></li>
+<li><a href="/wiki/Press_pool" title="Press pool">Press pool</a></li>
+<li><a href="/wiki/Press_release" title="Press release">Press release</a></li>
+<li><a href="/wiki/Sound_bite" title="Sound bite">Sound bite</a></li>
+<li><a href="/wiki/Spin_(propaganda)" title="Spin (propaganda)">Spin</a></li>
+<li><a href="/wiki/Spin_room" title="Spin room">Spin room</a></li>
+</div></div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/News_media" title="News media">News media</a></th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"><div class="excerpt-block"><div class="excerpt">
+<ul><li><a href="/wiki/Newspaper" title="Newspaper">Newspapers</a> (<a href="/wiki/Newspaper_of_record" title="Newspaper of record">Newspaper of record</a> · <a href="/wiki/Middle-market_newspaper" title="Middle-market newspaper">Middle-market</a> · <a href="/wiki/Newspaper_format" title="Newspaper format">Newspaper formats</a> · <a href="/wiki/Broadsheet" title="Broadsheet">Broadsheet</a> · <a href="/wiki/Tabloid_(newspaper_format)" title="Tabloid (newspaper format)">Tabloid</a> · <a href="/wiki/Online_newspaper" title="Online newspaper">Online</a> · <a href="/wiki/Newspaper_extra" title="Newspaper extra">Extra edition</a>)</li>
+<li><a href="/wiki/Magazine" title="Magazine">Magazines</a></li>
+<li><a href="/wiki/Broadcast_journalism" title="Broadcast journalism">Broadcast</a> (<a href="/wiki/News_broadcasting" class="mw-redirect" title="News broadcasting">TV and radio</a>)</li>
+<li><a href="/wiki/Digital_journalism" title="Digital journalism">Digital</a></li>
+<li><a href="/wiki/Multimedia_journalism" title="Multimedia journalism">Multimedia</a> (<a href="/wiki/Video_journalism" title="Video journalism">Video</a>)</li>
+<li><a href="/wiki/Documentary_film" title="Documentary film">Documentary film</a>/<a href="/wiki/Television_documentary" title="Television documentary">television</a></li>
+<li><a href="/wiki/News_agency" title="News agency">News agencies</a></li>
+<li><a href="/wiki/Alternative_media" title="Alternative media">Alternative media</a></li>
+<li><a href="/wiki/Nonprofit_journalism" title="Nonprofit journalism">Nonprofit</a>
+<ul><li><a href="/wiki/Public_service_journalism" title="Public service journalism">Public service</a></li></ul></li>
+<li><a href="/wiki/Public_broadcasting" title="Public broadcasting">Public broadcasting</a></li></ul>
+</div></div></div></td></tr><tr><td class="navbox-abovebelow" colspan="2"><div><a href="/wiki/Index_of_journalism_articles" title="Index of journalism articles">List of journalism articles</a> &#8211; <a href="/wiki/Outline_of_journalism" title="Outline of journalism">Outline</a></div></td></tr></tbody></table></div>
+<style data-mw-deduplicate="TemplateStyles:r1130092004">.mw-parser-output .portal-bar{font-size:88%;font-weight:bold;display:flex;justify-content:center;align-items:baseline}.mw-parser-output .portal-bar-bordered{padding:0 2em;background-color:#fdfdfd;border:1px solid #a2a9b1;clear:both;margin:1em auto 0}.mw-parser-output .portal-bar-related{font-size:100%;justify-content:flex-start}.mw-parser-output .portal-bar-unbordered{padding:0 1.7em;margin-left:0}.mw-parser-output .portal-bar-header{margin:0 1em 0 0.5em;flex:0 0 auto;min-height:24px}.mw-parser-output .portal-bar-content{display:flex;flex-flow:row wrap;flex:0 1 auto;padding:0.15em 0;column-gap:1em;align-items:baseline;margin:0;list-style:none}.mw-parser-output .portal-bar-content-related{margin:0;list-style:none}.mw-parser-output .portal-bar-item{display:inline-block;margin:0.15em 0.2em;min-height:24px;line-height:24px}@media screen and (max-width:768px){.mw-parser-output .portal-bar{font-size:88%;font-weight:bold;display:flex;flex-flow:column wrap;align-items:baseline}.mw-parser-output .portal-bar-header{text-align:center;flex:0;padding-left:0.5em;margin:0 auto}.mw-parser-output .portal-bar-related{font-size:100%;align-items:flex-start}.mw-parser-output .portal-bar-content{display:flex;flex-flow:row wrap;align-items:center;flex:0;column-gap:1em;border-top:1px solid #a2a9b1;margin:0 auto;list-style:none}.mw-parser-output .portal-bar-content-related{border-top:none;margin:0;list-style:none}}.mw-parser-output .navbox+link+.portal-bar,.mw-parser-output .navbox+style+.portal-bar,.mw-parser-output .navbox+link+.portal-bar-bordered,.mw-parser-output .navbox+style+.portal-bar-bordered,.mw-parser-output .sister-bar+link+.portal-bar,.mw-parser-output .sister-bar+style+.portal-bar,.mw-parser-output .portal-bar+.navbox-styles+.navbox,.mw-parser-output .portal-bar+.navbox-styles+.sister-bar{margin-top:-1px}</style><div class="portal-bar noprint metadata noviewer portal-bar-bordered" role="navigation" aria-label="Portals"><span class="portal-bar-header"><a href="/wiki/Wikipedia:Contents/Portals" title="Wikipedia:Contents/Portals">Portal</a>:</span><ul class="portal-bar-content"><li class="portal-bar-item"><span class="nowrap"><span class="noviewer" typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Newspaper_nicu_buculei_01.svg/20px-Newspaper_nicu_buculei_01.svg.png" decoding="async" width="19" height="19" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Newspaper_nicu_buculei_01.svg/40px-Newspaper_nicu_buculei_01.svg.png 2x" data-file-width="160" data-file-height="160" /></span></span> </span><a href="/wiki/Portal:Journalism" title="Portal:Journalism">Journalism</a></li></ul></div>
+<div class="navbox-styles"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314944253" /><style data-mw-deduplicate="TemplateStyles:r1038841319">.mw-parser-output .tooltip-dotted{border-bottom:1px dotted;cursor:help}</style></div><div role="navigation" class="navbox authority-control" aria-labelledby="Authority&#95;control&#95;databases&#95;frameless&amp;#124;text-top&amp;#124;10px&amp;#124;alt=Edit&#95;this&#95;at&#95;Wikidata&amp;#124;link=https&amp;#58;//www.wikidata.org/wiki/Q1127717#identifiers&amp;#124;class=noprint&amp;#124;Edit&#95;this&#95;at&#95;Wikidata1288" style="padding:3px"><table class="nowraplinks hlist mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><div id="Authority&#95;control&#95;databases&#95;frameless&amp;#124;text-top&amp;#124;10px&amp;#124;alt=Edit&#95;this&#95;at&#95;Wikidata&amp;#124;link=https&amp;#58;//www.wikidata.org/wiki/Q1127717#identifiers&amp;#124;class=noprint&amp;#124;Edit&#95;this&#95;at&#95;Wikidata1288" style="font-size:114%;margin:0 4em"><a href="/wiki/Help:Authority_control" title="Help:Authority control">Authority control databases</a> <span class="mw-valign-text-top noprint" typeof="mw:File/Frameless"><a href="https://www.wikidata.org/wiki/Q1127717#identifiers" title="Edit this at Wikidata"><img alt="Edit this at Wikidata" src="//upload.wikimedia.org/wikipedia/en/thumb/8/8a/OOjs_UI_icon_edit-ltr-progressive.svg/20px-OOjs_UI_icon_edit-ltr-progressive.svg.png" decoding="async" width="10" height="10" class="mw-file-element" data-file-width="20" data-file-height="20" /></a></span></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%">International</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.worldcat.org/fast/978154">FAST</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">National</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.loc.gov/authorities/sh87001872">United States</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://catalogue.bnf.fr/ark:/12148/cb12287269n">France</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://data.bnf.fr/ark:/12148/cb12287269n">BnF data</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.ndl.go.jp/auth/ndlna/001098478">Japan</a></span></li><li><span class="uid"><span class="rt-commentedText tooltip tooltip-dotted" title="investigativní žurnalistika"><a rel="nofollow" class="external text" href="https://aleph.nkp.cz/F/?func=find-c&amp;local_base=aut&amp;ccl_term=ica=ph114791&amp;CON_LNG=ENG">Czech Republic</a></span></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://www.nli.org.il/en/authorities/987007529857105171">Israel</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Other</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://lux.collections.yale.edu/view/activity/dd6935e9-0524-45e4-a151-90201cae89f4">Yale LUX</a></span></li></ul></div></td></tr></tbody></table></div>
+<!-- 
+NewPP limit report
+Parsed by mw‐api‐ext.codfw.main‐6b5c588c99‐bx2fm
+Cached time: 20260508005205
+Cache expiry: 86400
+Cache expiry source: Template:Ambox_globe (#time)
+Reduced expiry: true
+Complications: [vary‐revision‐sha1, prevent‐selective‐update, show‐toc]
+CPU time usage: 0.709 seconds
+Real time usage: 0.875 seconds
+Preprocessor visited node count: 2864/1000000
+Revision size: 22795/2097152 bytes
+Post‐expand include size: 153135/2097152 bytes
+Template argument size: 4426/2097152 bytes
+Highest expansion depth: 17/100
+Expensive parser function count: 9/500
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 161494/5000000 bytes
+Lua time usage: 0.492/10.000 seconds
+Lua memory usage: 7017825/52428800 bytes
+Number of Wikibase entities loaded: 1/500
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  760.615      1 -total
+ 31.54%  239.918      1 Template:Reflist
+ 15.87%  120.742     10 Template:Cite_book
+ 12.69%   96.539      1 Template:Journalism
+ 12.36%   94.022      1 Template:Navbox
+ 10.93%   83.170      1 Template:Journalism_sidebar
+ 10.70%   81.400      1 Template:Sidebar
+  8.60%   65.385      1 Template:Short_description
+  7.91%   60.136      3 Template:Sister_project
+  7.70%   58.544      3 Template:Side_box
+-->
+
+<!-- Render ID 21df2a61-4a78-11f1-9b15-5117c685910b -->
+
+<!-- Saved in parser cache with key enwiki:pcache:309754:|#|:idhash:canonical and timestamp 20260508005205 and revision id 1351812415. Rendering was triggered because: api-parse
+ -->
+</div><noscript><img src="https://en.wikipedia.org/wiki/Special:CentralAutoLogin/start?useformat=desktop&amp;type=1x1&amp;usesul3=1" alt="" width="1" height="1" style="border: none; position: absolute;"></noscript>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://en.wikipedia.org/w/index.php?title=Investigative_journalism&amp;oldid=1351812415">https://en.wikipedia.org/w/index.php?title=Investigative_journalism&amp;oldid=1351812415</a>"</div></div>
+					<div id="catlinks" class="catlinks" data-mw-interface=""><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Help:Category" title="Help:Category">Categories</a>: <ul><li><a href="/wiki/Category:Investigative_journalism" title="Category:Investigative journalism">Investigative journalism</a></li><li><a href="/wiki/Category:Types_of_journalism" title="Category:Types of journalism">Types of journalism</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden categories: <ul><li><a href="/wiki/Category:Articles_with_short_description" title="Category:Articles with short description">Articles with short description</a></li><li><a href="/wiki/Category:Short_description_matches_Wikidata" title="Category:Short description matches Wikidata">Short description matches Wikidata</a></li><li><a href="/wiki/Category:Use_dmy_dates_from_December_2020" title="Category:Use dmy dates from December 2020">Use dmy dates from December 2020</a></li><li><a href="/wiki/Category:All_articles_with_unsourced_statements" title="Category:All articles with unsourced statements">All articles with unsourced statements</a></li><li><a href="/wiki/Category:Articles_with_unsourced_statements_from_August_2025" title="Category:Articles with unsourced statements from August 2025">Articles with unsourced statements from August 2025</a></li><li><a href="/wiki/Category:Wikipedia_articles_in_need_of_updating_from_March_2024" title="Category:Wikipedia articles in need of updating from March 2024">Wikipedia articles in need of updating from March 2024</a></li><li><a href="/wiki/Category:All_Wikipedia_articles_in_need_of_updating" title="Category:All Wikipedia articles in need of updating">All Wikipedia articles in need of updating</a></li><li><a href="/wiki/Category:Commons_category_link_from_Wikidata" title="Category:Commons category link from Wikidata">Commons category link from Wikidata</a></li><li><a href="/wiki/Category:Articles_with_hAudio_microformats" title="Category:Articles with hAudio microformats">Articles with hAudio microformats</a></li><li><a href="/wiki/Category:Spoken_articles" title="Category:Spoken articles">Spoken articles</a></li><li><a href="/wiki/Category:Articles_with_excerpts" title="Category:Articles with excerpts">Articles with excerpts</a></li></ul></div></div>
+				</div>
+			</main>
+			
+		</div>
+		<div class="mw-footer-container">
+			
+<footer id="footer" class="mw-footer" >
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> This page was last edited on 30 April 2026, at 07:50<span class="anonymous-show">&#160;(UTC)</span>.</li>
+	<li id="footer-info-copyright">Text is available under the <a href="/wiki/Wikipedia:Text_of_the_Creative_Commons_Attribution-ShareAlike_4.0_International_License" title="Wikipedia:Text of the Creative Commons Attribution-ShareAlike 4.0 International License">Creative Commons Attribution-ShareAlike 4.0 License</a>;
+additional terms may apply. By using this site, you agree to the <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Terms_of_Use" class="extiw" title="foundation:Special:MyLanguage/Policy:Terms of Use">Terms of Use</a> and <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy" class="extiw" title="foundation:Special:MyLanguage/Policy:Privacy policy">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a rel="nofollow" class="external text" href="https://wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, a non-profit organization.</li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-privacy"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy">Privacy policy</a></li>
+	<li id="footer-places-about"><a href="/wiki/Wikipedia:About">About Wikipedia</a></li>
+	<li id="footer-places-disclaimers"><a href="/wiki/Wikipedia:General_disclaimer">Disclaimers</a></li>
+	<li id="footer-places-contact"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a></li>
+	<li id="footer-places-legal-safety-contacts"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Legal:Wikimedia_Foundation_Legal_and_Safety_Contact_Information">Legal &amp; safety contacts</a></li>
+	<li id="footer-places-wm-codeofconduct"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Universal_Code_of_Conduct">Code of Conduct</a></li>
+	<li id="footer-places-developers"><a href="https://developer.wikimedia.org">Developers</a></li>
+	<li id="footer-places-statslink"><a href="https://stats.wikimedia.org/#/en.wikipedia.org">Statistics</a></li>
+	<li id="footer-places-cookiestatement"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Cookie_statement">Cookie statement</a></li>
+	<li id="footer-places-mobileview"><a href="//en.wikipedia.org/w/index.php?title=Investigative_journalism&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="footer-icons" class="noprint">
+	<li id="footer-copyrightico"><a href="https://www.wikimedia.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/static/images/footer/wikimedia-button.svg" width="84" height="29"><img src="/static/images/footer/wikimedia.svg" width="25" height="25" alt="Wikimedia Foundation" lang="en" loading="lazy"></picture></a></li>
+	<li id="footer-poweredbyico"><a href="https://www.mediawiki.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/w/resources/assets/poweredby_mediawiki.svg" width="88" height="31"><img src="/w/resources/assets/mediawiki_compact.svg" alt="Powered by MediaWiki" lang="en" width="25" height="25" loading="lazy"></picture></a></li>
+</ul>
+
+</footer>
+
+		</div>
+	</div> 
+</div> 
+<div class="vector-header-container vector-sticky-header-container no-font-mode-scale">
+	<div id="vector-sticky-header" class="vector-sticky-header">
+		<div class="vector-sticky-header-start">
+			<div class="vector-sticky-header-icon-start vector-button-flush-left" aria-hidden="true">
+				<button class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-sticky-header-search-toggle" tabindex="-1" data-event-name="ui.vector-sticky-search-form.icon"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+			</button>
+		</div>
+			
+		<div role="search" class="vector-search-box-vue  vector-search-box-show-thumbnail vector-search-box">
+			<div class="vector-typeahead-search-container">
+				<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail">
+					<form action="/w/index.php" id="vector-sticky-search-form" class="cdx-search-input cdx-search-input--has-end-button">
+						<div  class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+							<div class="cdx-text-input cdx-text-input--has-start-icon">
+								<input
+									class="cdx-text-input__input mw-searchInput" autocomplete="off"
+									
+									type="search" name="search" placeholder="Search Wikipedia">
+								<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+							</div>
+							<input type="hidden" name="title" value="Special:Search">
+						</div>
+						<button class="cdx-button cdx-search-input__end-button">Search</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-context-bar">
+				<nav aria-label="Contents" class="vector-toc-landmark">
+						
+					<div id="vector-sticky-header-toc" class="vector-dropdown mw-portlet mw-portlet-sticky-header-toc vector-sticky-header-toc vector-button-flush-left"  >
+						<input type="checkbox" id="vector-sticky-header-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-sticky-header-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+						<label id="vector-sticky-header-toc-label" for="vector-sticky-header-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+						</label>
+						<div class="vector-dropdown-content">
+					
+						<div id="vector-sticky-header-toc-unpinned-container" class="vector-unpinned-container">
+						</div>
+					
+						</div>
+					</div>
+			</nav>
+				<div class="vector-sticky-header-context-bar-primary" aria-hidden="true" ><span lang="en" dir="ltr"><span class="mw-page-title-main">Investigative journalism</span></span></div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-end" aria-hidden="true">
+			<div class="vector-sticky-header-icons">
+				<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-event-name="talk-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-event-name="subject-sticky-header"><span class="vector-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-event-name="history-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only mw-watchlink" id="ca-watchstar-sticky-header" tabindex="-1" data-event-name="watch-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-star mw-ui-icon-wikimedia-wikimedia-star"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-event-name="wikitext-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-event-name="ve-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-event-name="ve-edit-protected-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span>
+
+<span></span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-buttons">
+				<button class="cdx-button cdx-button--weight-quiet mw-interlanguage-selector" id="p-lang-btn-sticky-header" tabindex="-1" data-event-name="ui.dropdown-p-lang-btn-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>39 languages</span>
+			</button>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive" id="ca-addsection-sticky-header" tabindex="-1" data-event-name="addsection-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbleAdd-progressive mw-ui-icon-wikimedia-speechBubbleAdd-progressive"></span>
+
+<span>Add topic</span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-icon-end">
+				<div class="vector-user-links">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+	<ul>
+		
+	</ul>
+</div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgHostname":"mw-web.codfw.main-7c7b59648b-w2htc","wgBackendResponseTime":93,"wgPageParseReport":{"limitreport":{"cputime":"0.709","walltime":"0.875","ppvisitednodes":{"value":2864,"limit":1000000},"revisionsize":{"value":22795,"limit":2097152},"postexpandincludesize":{"value":153135,"limit":2097152},"templateargumentsize":{"value":4426,"limit":2097152},"expansiondepth":{"value":17,"limit":100},"expensivefunctioncount":{"value":9,"limit":500},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":161494,"limit":5000000},"entityaccesscount":{"value":1,"limit":500},"timingprofile":["100.00%  760.615      1 -total"," 31.54%  239.918      1 Template:Reflist"," 15.87%  120.742     10 Template:Cite_book"," 12.69%   96.539      1 Template:Journalism"," 12.36%   94.022      1 Template:Navbox"," 10.93%   83.170      1 Template:Journalism_sidebar"," 10.70%   81.400      1 Template:Sidebar","  8.60%   65.385      1 Template:Short_description","  7.91%   60.136      3 Template:Sister_project","  7.70%   58.544      3 Template:Side_box"]},"scribunto":{"limitreport-timeusage":{"value":"0.492","limit":"10.000"},"limitreport-memusage":{"value":7017825,"limit":52428800}},"cachereport":{"origin":"mw-api-ext.codfw.main-6b5c588c99-bx2fm","timestamp":"20260508005205","ttl":86400,"transientcontent":true,"expiry-source":"Template:Ambox_globe (#time)"}}});});</script>
+<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Article","name":"Investigative journalism","url":"https:\/\/en.wikipedia.org\/wiki\/Investigative_journalism","sameAs":"http:\/\/www.wikidata.org\/entity\/Q1127717","mainEntity":"http:\/\/www.wikidata.org\/entity\/Q1127717","author":{"@type":"Organization","name":"Contributors to Wikimedia projects"},"publisher":{"@type":"Organization","name":"Wikimedia Foundation, Inc.","logo":{"@type":"ImageObject","url":"https:\/\/www.wikimedia.org\/static\/images\/wmf-hor-googpub.png"}},"datePublished":"2003-09-02T05:07:20Z","dateModified":"2026-04-30T07:50:11Z","headline":"form of journalism in which reporters deeply investigate a single topic"}</script>
+</body>
+</html>

@@ -8,12 +8,14 @@ GPU authorization explicit and preserves completed cells across process restarts
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import hashlib
 import json
 import os
 from pathlib import Path
 import re
 import socket
+import time
 from typing import Mapping, Sequence
 
 import numpy as np
@@ -21,6 +23,7 @@ import pandas as pd
 from scipy.stats import spearmanr
 
 from ..config import ImplementerConfig
+from ..backends import LLMBackend
 from ..vllm_backend import (
     CR3_BINARY_READOUT_ID,
     make_judge_backend,
@@ -43,6 +46,7 @@ from .v14_behavioral_channel import (
     BEHAVIORAL_ARMS,
     DEFAULT_TEMPLATE as DEFAULT_BEHAVIORAL_TEMPLATE,
     evaluate_behavioral_state_tables_v14,
+    shuffled_state,
 )
 from .v14_audit import (
     AUDIT_FAMILIES,
@@ -51,9 +55,9 @@ from .v14_audit import (
 )
 from .v14_mcq_channel import DEFAULT_MCQ_TEMPLATE, evaluate_mcq_state_tables_v14
 from .v14_decoder_tuning import (
-    propose_mutations,
     select_dev_metrics,
-    tune_shared_template_batched,
+    template_sha256,
+    validate_shared_template,
 )
 from .v14_panel_design import (
     build_panel_design,
@@ -98,6 +102,15 @@ from .v14_liveness_controls import (
 from .v14_probe_extension import (
     append_extension_to_split, load_extension, load_task_candidates,
     score_extension_codebook, select_extension_texts, write_extension,
+)
+from .v14_scoring_lanes import (
+    aggregate_fast_screening,
+    build_promotion_manifest,
+    fast_behavioral_label_permutation_null,
+    fast_mcq_code_permutation_null,
+    load_promotion_metric_keys,
+    scoring_lane_policy,
+    validate_lane_policy,
 )
 
 
@@ -175,7 +188,9 @@ def assert_gpu_authorized(
     ids = set(map(int, physical_gpu_ids))
     if not ids:
         raise RuntimeError("GPU phases require explicit physical IDs via --physical-gpus")
-    if host.startswith("sk3") and ids.intersection(FORBIDDEN_SK3_GPUS):
+    if (host.startswith("sk3") or host.startswith("skampere3")) and ids.intersection(
+        FORBIDDEN_SK3_GPUS
+    ):
         raise RuntimeError(
             "hard safety stop: sk3 physical GPUs 1,2,3,4 are permanently forbidden for v14"
         )
@@ -421,8 +436,14 @@ def _select_v14_certification_metrics(
 def build_designs(
     *, metrics_manifest_path: str | Path, out_root: str | Path, run_sha: str,
     metric_keys: Sequence[str] | None = None, probe_extension_root: str | Path | None = None,
+    scoring_lane: str = "cert", promotion_manifest_path: str | Path | None = None,
 ) -> list[dict]:
     """CPU-only v14 split/panel freeze over append-only 390-probe assets."""
+    lane_policy = scoring_lane_policy(scoring_lane)
+    if promotion_manifest_path is not None:
+        if scoring_lane != "cert" or metric_keys is not None:
+            raise ValueError("a promotion manifest exclusively defines the CERT metric population")
+        metric_keys = load_promotion_metric_keys(promotion_manifest_path)
     manifest, base = load_metrics_manifest(metrics_manifest_path)
     requested = None if metric_keys is None else set(map(str, metric_keys))
     selection_report = None
@@ -432,6 +453,13 @@ def build_designs(
         entries = [entry for entry in entries if str(entry["metric_key"]) in requested]
         if {str(entry["metric_key"]) for entry in entries} != requested:
             raise ValueError("requested metric key is absent from the selected manifest")
+    elif scoring_lane == "fast":
+        entries = select_metric_entries({**manifest, "selection": {}}, base)
+        selection_report = {
+            "mode": "fast_lane_all_manifest_metrics",
+            "n_selected": len(entries),
+            "claim_role": "screening_only",
+        }
     elif (manifest.get("selection") or {}).get("mode") == "target_entropy_quintiles":
         feasible, excluded = _panel_balance_candidates(
             manifest["metrics"], base=base, run_sha=str(run_sha),
@@ -465,12 +493,15 @@ def build_designs(
         ))
     out = Path(out_root).resolve()
     results = []
+    fast_exclusions = []
     for entry in entries:
         metric_key = str(entry["metric_key"])
         destination = _design_path(out, metric_key)
         if destination.is_file():
             existing = json.loads(destination.read_text(encoding="utf-8"))
             validate_metric_design(existing)
+            if str(existing.get("scoring_lane", {}).get("lane", "cert")) != scoring_lane:
+                raise RuntimeError("FAST and CERT designs require separate output roots")
             results.append(existing)
             continue
         codebook = _load_codebook_for_entry(entry, base)
@@ -494,13 +525,22 @@ def build_designs(
         ])
         target_bits = (target_scores > 0.5).astype(np.uint8)
         base_ids = ids[:300]
-        split = ensure_teaching_label_balance(
-            freeze_probe_split(
-                base_ids, run_sha=run_sha, metric_key=metric_key,
-                split_sizes={"teaching": 120, "decoder_development": 30, "heldout": 150},
-            ),
-            target_bits[:300],
-        )
+        try:
+            split = ensure_teaching_label_balance(
+                freeze_probe_split(
+                    base_ids, run_sha=run_sha, metric_key=metric_key,
+                    split_sizes={"teaching": 120, "decoder_development": 30, "heldout": 150},
+                ),
+                target_bits[:300],
+            )
+        except ValueError as exc:
+            if scoring_lane != "fast":
+                raise
+            fast_exclusions.append({
+                "metric_key": metric_key, "task": str(entry["task"]),
+                "reason": "teaching_label_balance_infeasible", "detail": str(exc),
+            })
+            continue
         split = append_extension_to_split(split, ids)
         validate_probe_split(split)
         codebook_keys, base_signatures = _codebook_signatures(codebook)
@@ -510,13 +550,24 @@ def build_designs(
             base_signatures, np.asarray(extension["scores"], dtype=float)
         ], axis=1)
         target_index = codebook_keys.index(metric_key)
-        panel = build_panel_design(
-            signatures, target_index=target_index,
-            teaching_indices=split["teaching"]["indices"], run_sha=run_sha,
-            metric_key=metric_key, probe_ids=ids,
-            decoder_families=("qwen", "llama", "mistral"),
-            panel_size=8 if metric_key in cap_sentinels else 6,
-        )
+        is_cap_sentinel = scoring_lane == "cert" and metric_key in cap_sentinels
+        panel_size = 8 if is_cap_sentinel else 6
+        try:
+            panel = build_panel_design(
+                signatures, target_index=target_index,
+                teaching_indices=split["teaching"]["indices"], run_sha=run_sha,
+                metric_key=metric_key, probe_ids=ids,
+                decoder_families=("qwen", "llama", "mistral"),
+                panel_size=panel_size,
+            )
+        except (ValueError, RuntimeError) as exc:
+            if scoring_lane != "fast":
+                raise
+            fast_exclusions.append({
+                "metric_key": metric_key, "task": str(entry["task"]),
+                "reason": "panel_infeasible", "detail": str(exc),
+            })
+            continue
         materialized_entry = dict(entry)
         for field in ("codebook_path", "assets_root", "candidate_bank_path"):
             if materialized_entry.get(field):
@@ -540,6 +591,14 @@ def build_designs(
             "source_metrics_manifest": str(Path(metrics_manifest_path).resolve()),
             "source_metrics_manifest_sha256": file_sha256(metrics_manifest_path),
             "entry": materialized_entry,
+            "scoring_lane": lane_policy,
+            "promotion_manifest": (
+                None if promotion_manifest_path is None else {
+                    "path": str(Path(promotion_manifest_path).resolve()),
+                    "sha256": file_sha256(promotion_manifest_path),
+                    "fresh_remeasurement": True,
+                }
+            ),
             "probe_split": split,
             "panel_design": panel,
             "codebook_metric_keys": codebook_keys,
@@ -554,10 +613,13 @@ def build_designs(
                 "append_only": True, "base_n": 300, "extension_n": 90,
             },
             "throughput_design": {
-                "cap_sentinel": metric_key in cap_sentinels,
-                "panel_size": 8 if metric_key in cap_sentinels else 6,
-                "menu_permutations": 8 if metric_key in cap_sentinels else 4,
-                "headline_cap": "exact_enumerated" if metric_key in cap_sentinels else "target_entropy",
+                "cap_sentinel": is_cap_sentinel,
+                "panel_size": panel_size,
+                "menu_permutations": 8 if is_cap_sentinel else 4,
+                "state_scope": lane_policy["state_scope"],
+                "headline_cap": (
+                    "exact_enumerated" if is_cap_sentinel else "target_entropy"
+                ),
             },
             "executor": {
                 "model": str(target_bootstrap.get("executor_model", FIXED_EXECUTOR)),
@@ -570,7 +632,7 @@ def build_designs(
         results.append(core)
     index = {
         "schema": "cr3-v14-design-index-v1",
-        "run_sha": str(run_sha),
+        "run_sha": str(run_sha), "scoring_lane": lane_policy,
         "metrics": [{
             "metric_key": row["metric_key"],
             "path": str(_design_path(out, row["metric_key"])),
@@ -578,9 +640,19 @@ def build_designs(
         } for row in results],
     }
     if selection_report is not None:
+        if scoring_lane == "fast":
+            selection_report["n_selected"] = len(results)
+            selection_report["n_excluded"] = len(fast_exclusions)
+            selection_report["excluded_metrics_path"] = str(out / "fast_design_exclusions.json")
         index["selection"] = selection_report
     index["index_sha256"] = canonical_sha256(index)
     _atomic_json(out / "design_index.json", index)
+    if scoring_lane == "fast":
+        _atomic_json(out / "fast_design_exclusions.json", {
+            "schema": "cr3-v14-fast-design-exclusions-v1",
+            "lane": "fast", "rows": fast_exclusions,
+            "campaign_continues_on_metric_failure": True,
+        })
     return results
 
 
@@ -597,6 +669,8 @@ def validate_metric_design(payload: Mapping[str, object]) -> None:
         raise ValueError("unsupported v14 metric design")
     validate_probe_split(payload["probe_split"])
     validate_panel_design(payload["panel_design"])
+    if "scoring_lane" in payload:
+        validate_lane_policy(payload["scoring_lane"])
     core = dict(payload)
     observed = str(core.pop("design_manifest_sha256", ""))
     if observed != canonical_sha256(core):
@@ -624,7 +698,8 @@ def load_designs(out_root: str | Path, metric_keys: Sequence[str] | None = None)
 
 def prepare_development_population(
     *, certified_out_root: str | Path, dev_metrics_manifest_path: str | Path,
-    run_sha: str,
+    run_sha: str, probe_extension_root: str | Path | None = None,
+    dev_min_tasks: int = 7,
 ) -> dict:
     """Freeze eight metric-held-out development metrics and sparse GEPA references."""
     certified = load_designs(certified_out_root)
@@ -643,10 +718,17 @@ def prepare_development_population(
         denominator = max(1, len(ranked) - 1)
         for position, row in enumerate(ranked):
             row["target_entropy_quintile"] = min(4, int(5 * position / (denominator + 1)))
+    # Overselect a candidate pool, build it failure-tolerantly (fast lane records
+    # per-metric infeasibility instead of aborting: dev panels use the ":dev" salt,
+    # so feasibility under the main salt does not imply feasibility here), then
+    # keep the first eight built designs with maximum task spread.
+    # Feasibility under the ":dev" salt is unknowable before building, so build the
+    # ENTIRE candidate pool (the caller bounds cost via the manifest size) and pick
+    # the final eight from what actually builds.
     selected = select_dev_metrics(
         candidates,
         certified_metric_keys=[*certified_keys, *DEFAULT_SENTINEL_METRIC_KEYS],
-        run_sha=run_sha, n_dev=8,
+        run_sha=run_sha, n_dev=None, min_tasks=int(dev_min_tasks),
     )
     for row in selected:
         for field in ("codebook_path", "assets_root", "candidate_bank_path"):
@@ -659,14 +741,55 @@ def prepare_development_population(
     selected_manifest = {
         "schema": "cr3-value-bound-metrics-v13.1",
         "release": "v14-development-only-no-claims",
-        "selection_provenance": "seven tasks plus one additional metric; disjoint from certified keys",
+        "selection_provenance": (
+            "overselected candidate pool; final eight chosen from successful builds "
+            "with deterministic task-spread; disjoint from certified keys"
+        ),
         "metrics": selected,
     }
     selected_path = dev_root / "dev_metrics.json"
     _atomic_json(selected_path, selected_manifest)
-    designs = build_designs(
+    built = build_designs(
         metrics_manifest_path=selected_path, out_root=dev_root, run_sha=f"{run_sha}:dev",
+        probe_extension_root=probe_extension_root, scoring_lane="fast",
     )
+    by_task: dict[str, list[dict]] = {}
+    for design in built:
+        by_task.setdefault(str(design["task"]), []).append(design)
+    for rows in by_task.values():
+        rows.sort(key=lambda row: hashlib.sha256(
+            f"{run_sha}\x1fdev-final\x1f{row['metric_key']}".encode()).hexdigest())
+    final: list[dict] = []
+    task_cycle = sorted(by_task, key=lambda task: hashlib.sha256(
+        f"{run_sha}\x1fdev-task\x1f{task}".encode()).hexdigest())
+    depth = 0
+    while len(final) < 8 and depth < 16:
+        for task in task_cycle:
+            rows = by_task[task]
+            if depth < len(rows) and len(final) < 8:
+                final.append(rows[depth])
+        depth += 1
+    if len(final) < 8:
+        raise RuntimeError(
+            f"only {len(final)} of the overselected dev candidates built successfully"
+        )
+    if len({str(row['task']) for row in final}) < int(dev_min_tasks):
+        raise RuntimeError("built development designs span fewer tasks than required")
+    final_keys = {str(row["metric_key"]) for row in final}
+    # Rewrite the development design index to exactly the final eight designs so
+    # downstream loaders (tuning contexts) see the frozen dev population only.
+    dev_index_path = dev_root / "design_index.json"
+    dev_index = json.loads(dev_index_path.read_text(encoding="utf-8"))
+    dev_index["metrics"] = [
+        row for row in dev_index["metrics"] if str(row["metric_key"]) in final_keys
+    ]
+    selection_note = dict(dev_index.get("selection") or {})
+    selection_note["final_development_metric_keys"] = sorted(final_keys)
+    dev_index["selection"] = selection_note
+    dev_index.pop("index_sha256", None)
+    dev_index["index_sha256"] = canonical_sha256(dev_index)
+    _atomic_json(dev_index_path, dev_index)
+    designs = final
     reference_rows = []
     for design in designs:
         context = _metric_context(design)
@@ -687,8 +810,11 @@ def prepare_development_population(
         subset_embeddings = cached_probe_embeddings(
             embedding_texts, cache_path=embedding_path,
         )
+        # freeze_reference_set aligns embeddings against signatures.shape[1] (the
+        # codebook probe axis), which can differ from len(probe_texts) when the
+        # 90-probe extension is appended; teaching+D_dec indices live in both.
         embeddings = np.zeros(
-            (len(context["probe_texts"]), subset_embeddings.shape[1]), dtype=float,
+            (signatures.shape[1], subset_embeddings.shape[1]), dtype=float,
         )
         embeddings[np.asarray(embedding_indices, dtype=int)] = subset_embeddings
         reference = freeze_reference_set(
@@ -761,8 +887,17 @@ def run_decoder_tuning(
     *, out_root: str | Path, channel: str, arm: str,
     decoder_models: Mapping[str, str], proposer_model: str,
     fake_backends: bool, physical_gpu_ids: Sequence[int], query_batch_size: int = 2048,
+    max_metric_calls: int = 240,
 ) -> dict:
-    """Run one finite shared-template GEPA search with model-resident round batches."""
+    """Run one shared-template search with OFFICIAL GEPA (github gepa 0.1.4).
+
+    The in-house bounded loop was deprecated 2026-07-19 (verbatim copy in
+    ``archive/inhouse_gepa_deprecated.py``). This generalizes ``official_gepa_decoder_tune.py``
+    to all three decoder families and the behavioral channel. Selection signal = SEARCH-split
+    normalized fitness ONLY (per dev-metric instance, so the Pareto frontier is meaningful);
+    held-out transfer and gate flags are computed POST-HOC over every distinct valid template
+    for the frozen report (same discipline as the in-house run it replaces).
+    """
     assert_gpu_authorized(physical_gpu_ids, fake_backends=fake_backends)
     if channel not in {"mcq", "behavioral"}:
         raise ValueError("tuning channel must be mcq or behavioral")
@@ -771,6 +906,10 @@ def run_decoder_tuning(
     contexts = _development_contexts(out_root)
     if len(contexts) != 8:
         raise RuntimeError("v14 tuning requires exactly eight development metrics")
+
+    import gepa
+    from gepa.core.adapter import EvaluationBatch, GEPAAdapter
+
     store_path = Path(out_root) / "development" / "tuning_cells.sqlite"
     seed_template = DEFAULT_MCQ_TEMPLATE if channel == "mcq" else DEFAULT_BEHAVIORAL_TEMPLATE
     required_fields = (
@@ -784,18 +923,22 @@ def run_decoder_tuning(
             str(item.get("description", "") if isinstance(item, Mapping) else item.description)
             for item in context["distractors"]
         )
+    name = "mcq" if channel == "mcq" else f"behavioral__{arm}"
+    run_dir = Path(out_root) / "development" / "tuning" / f"{name}_official_gepa"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    log_path = run_dir / "proposals.jsonl"
+    placeholders = ", ".join("{" + field + "}" for field in required_fields)
+    constraint = (
+        "HARD CONSTRAINTS for any rewritten template (violations score -1): preserve EVERY "
+        f"format placeholder from the current template EXACTLY — {placeholders} — keep them as "
+        "literal curly-brace fields; do NOT mention any metric name, description, or example "
+        "content; do NOT add exemplars; return only the template text."
+    )
 
-    def propose_fn(incumbent, feedback, round_index, count):
-        proposer, _revision = _backend(proposer_model, fake=fake_backends)
-        try:
-            return propose_mutations(
-                proposer, channel=channel, arm=arm, incumbent=incumbent,
-                feedback=feedback, round_index=round_index, count=count,
-            )
-        finally:
-            release_resident_engines()
-
-    def evaluate_batch(templates):
+    def score_templates(templates, batch_contexts):
+        # Mirror the retired evaluate_batch structure exactly: per-family decoder scoring over
+        # the shared EvidenceCellStore; behavioral additionally executes the induced rules with
+        # the FIXED_EXECUTOR after all families have been induced.
         rows = []
         behavioral_inductions = {}
         with EvidenceCellStore(store_path) as store:
@@ -804,13 +947,13 @@ def run_decoder_tuning(
                 try:
                     if channel == "mcq":
                         rows.extend(score_mcq_reference_templates(
-                            decoder, templates=templates, contexts=contexts,
+                            decoder, templates=templates, contexts=batch_contexts,
                             decoder_family=family, constructor_revision=decoder_revision,
                             store=store, query_batch_size=query_batch_size,
                         ))
                     else:
                         behavioral_inductions[family] = induce_behavioral_reference_templates(
-                            decoder, templates=templates, arm=arm, contexts=contexts,
+                            decoder, templates=templates, arm=arm, contexts=batch_contexts,
                             decoder_family=family, decoder_revision=decoder_revision,
                             store=store,
                         )
@@ -821,7 +964,7 @@ def run_decoder_tuning(
                 try:
                     for family in decoder_models:
                         rows.extend(score_behavioral_reference_templates(
-                            executor, templates=templates, arm=arm, contexts=contexts,
+                            executor, templates=templates, arm=arm, contexts=batch_contexts,
                             induction_rows=behavioral_inductions[family],
                             executor_revision=executor_revision,
                             readout_id=CR3_BINARY_READOUT_ID, store=store,
@@ -829,17 +972,231 @@ def run_decoder_tuning(
                         ))
                 finally:
                     release_resident_engines()
-        reports = aggregate_template_fitness(rows)
-        return reports
+        return rows
 
-    result = tune_shared_template_batched(
-        propose_fn, evaluate_batch, seed_template=seed_template,
-        channel=channel, arm=arm, forbidden_strings=forbidden,
-        required_fields=required_fields,
+    def per_context_search_fitness(rows, metric_key):
+        vals = [
+            float(row["normalized_fitness"]) for row in rows
+            if row["reference_split"] == "search" and str(row["metric_key"]) == str(metric_key)
+        ]
+        return float(np.mean(vals)) if vals else float("-inf")
+
+    def contrast_feedback(rows, metric_key):
+        search = [
+            row for row in rows if row["reference_split"] == "search"
+            and str(row["metric_key"]) == str(metric_key)
+        ]
+        if not search:
+            return "no search rows for this development metric"
+        best = max(search, key=lambda row: float(row["normalized_fitness"]))
+        worst = min(search, key=lambda row: float(row["normalized_fitness"]))
+        mean = float(np.mean([float(row["normalized_fitness"]) for row in search]))
+        return (
+            f"mean search fitness {mean:+.3f}; best state {best['state']} "
+            f"fitness {float(best['normalized_fitness']):+.3f}; worst state {worst['state']} "
+            f"fitness {float(worst['normalized_fitness']):+.3f}. Fitness is target lift over the "
+            "strongest control, normalized; improve evidence-routed contrastive decoding "
+            "without naming any metric content."
+        )
+
+    def log_proposal(template, batch_contexts, scores, invalid=None):
+        with open(log_path, "a") as handle:
+            handle.write(json.dumps({
+                "ts": time.time(), "template_sha256": template_sha256(template),
+                "template": template,
+                "metrics": [str(item["metric_key"]) for item in batch_contexts],
+                "scores": [None if not np.isfinite(value) else float(value) for value in scores],
+                "invalid": invalid,
+            }) + "\n")
+
+    class V14DecoderAdapter(GEPAAdapter):
+        def evaluate(self, batch, candidate, capture_traces=False):
+            template = str(next(iter(candidate.values())))
+            try:
+                validate_shared_template(
+                    template, forbidden_strings=forbidden, required_fields=required_fields,
+                )
+            except Exception as exc:
+                scores = [-1.0] * len(batch)
+                trajs = ([{"data": item, "full_assistant_response": "",
+                           "feedback": f"INVALID TEMPLATE (rejected before scoring): {exc}"}
+                          for item in batch] if capture_traces else None)
+                log_proposal(template, batch, scores, invalid=str(exc))
+                return EvaluationBatch(outputs=[{}] * len(batch), scores=scores,
+                                       trajectories=trajs)
+            rows = None
+            for attempt in range(3):
+                try:
+                    rows = score_templates([template], list(batch))
+                    break
+                except Exception as exc:
+                    # engine re-init is flaky under churn (zombie EngineCore GPU-mem);
+                    # release + wait + retry, and NEVER let one failure eat a gepa iteration.
+                    print(f"[run_decoder_tuning] scorer attempt {attempt} failed: {exc}",
+                          flush=True)
+                    try:
+                        release_resident_engines()
+                    except Exception:
+                        pass
+                    if attempt < 2:
+                        time.sleep(45)
+            if rows is None:
+                scores = [-1.0] * len(batch)
+                trajs = ([{"data": item, "full_assistant_response": "",
+                           "feedback": "evaluator transient failure (engine init); "
+                                       "not a property of this template"}
+                          for item in batch] if capture_traces else None)
+                log_proposal(template, batch, scores, invalid="scorer-transient-failure")
+                return EvaluationBatch(outputs=[{}] * len(batch), scores=scores,
+                                       trajectories=trajs)
+            scores = [per_context_search_fitness(rows, item["metric_key"]) for item in batch]
+            trajs = ([{"data": item, "full_assistant_response": "",
+                       "feedback": contrast_feedback(rows, item["metric_key"])}
+                      for item in batch] if capture_traces else None)
+            log_proposal(template, batch, scores)
+            return EvaluationBatch(outputs=[{}] * len(batch), scores=scores,
+                                   trajectories=trajs)
+
+        def make_reflective_dataset(self, candidate, eval_batch, components_to_update):
+            component = components_to_update[0]
+            items = [{
+                "Inputs": "dev metric (content withheld — the shared template must stay "
+                          "metric-agnostic)",
+                "Generated Outputs": f"(constrained {channel} decode over panel states)",
+                "Feedback": f"{trajectory['feedback']} {constraint}",
+            } for trajectory in (eval_batch.trajectories or [])]
+            return {component: items}
+
+    # Proposer spec "<backend>:<model>" (e.g. "zai_anthropic:glm-5.2") routes GEPA's reflective
+    # mutation through the HTTP API (stronger proposer + zero GPU); a bare model name loads
+    # locally. Constructed exactly as the retired propose_fn built its proposer backend.
+    if ":" in str(proposer_model) and not fake_backends:
+        backend_name, model_name = str(proposer_model).split(":", 1)
+        cfg = dataclasses.replace(ImplementerConfig(), backend=backend_name)
+        reflection_backend = LLMBackend(model_name, "generator", cfg, temperature=1.0)
+    else:
+        reflection_backend, _revision = _backend(proposer_model, fake=fake_backends)
+
+    def reflection_lm(prompt):
+        text = prompt if isinstance(prompt, str) else json.dumps(prompt)
+        return str(reflection_backend.generate_batch(
+            [text], system=None, max_tokens=1200, temperature=1.0,
+        )[0])
+
+    component = "mcq_template" if channel == "mcq" else "behavioral_template"
+    print(
+        f"[run_decoder_tuning] official-gepa channel={channel} arm={arm} "
+        f"families={sorted(decoder_models)} budget={max_metric_calls}", flush=True,
     )
-    name = "mcq" if channel == "mcq" else f"behavioral__{arm}"
-    _atomic_json(Path(out_root) / "development" / "tuning" / f"{name}.json", result)
-    return result
+    result = gepa.optimize(
+        seed_candidate={component: seed_template},
+        trainset=list(contexts), valset=list(contexts),
+        adapter=V14DecoderAdapter(), reflection_lm=reflection_lm,
+        max_metric_calls=int(max_metric_calls), run_dir=str(run_dir / "gepa_state"),
+        seed=0, display_progress_bar=False, raise_on_exception=False,
+    )
+    winner_template = str(next(iter(result.best_candidate.values())))
+
+    # POST-HOC full report (both splits, gate flags) over the seed, the winner, and every
+    # distinct valid template gepa proposed; the evidence cache makes the rescore cheap.
+    distinct, seen = [], set()
+    for template in (seed_template, winner_template):
+        digest = template_sha256(template)
+        if digest not in seen:
+            seen.add(digest)
+            distinct.append(template)
+    if log_path.exists():
+        for line in log_path.read_text().splitlines():
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            if record.get("invalid"):
+                continue
+            if record["template_sha256"] not in seen:
+                seen.add(record["template_sha256"])
+                distinct.append(record["template"])
+    # A validator-passing non-winner proposal can still crash the scorer on dev metrics GEPA
+    # never touched (reflection minibatches cover ~3 of 8 contexts); after a completed search
+    # that must cost us the one template, never the whole run. Seed and winner are load-bearing
+    # for the report, so they get the same release+retry treatment as the search path and still
+    # raise if unscorable; every other template is dropped with a warning.
+    aggregate_rows = []
+    for template in distinct:
+        digest = template_sha256(template)
+        load_bearing = template in (seed_template, winner_template)
+        rows, last_exc = None, None
+        for attempt in range(3 if load_bearing else 1):
+            try:
+                rows = score_templates([template], contexts)
+                break
+            except Exception as exc:
+                last_exc = exc
+                print(f"[run_decoder_tuning] post-hoc rescore attempt {attempt} failed for "
+                      f"{digest[:12]}: {exc}", flush=True)
+                try:
+                    release_resident_engines()
+                except Exception:
+                    pass
+                if load_bearing and attempt < 2:
+                    time.sleep(45)
+        if rows is not None:
+            aggregate_rows.extend(rows)
+        elif load_bearing:
+            raise RuntimeError(
+                f"post-hoc rescore failed for the {'seed' if template == seed_template else 'winner'} "
+                f"template ({digest[:12]}); report would be invalid without it"
+            ) from last_exc
+    reports = aggregate_template_fitness(aggregate_rows)
+    seed_sha = template_sha256(seed_template)
+    winner_sha = template_sha256(winner_template)
+    report_keys = (
+        "pooled_fitness", "heldout_prompt_fitness", "heldout_prompt_transfer_ok",
+        "far_near_transfer_ok", "dev_identification_residual_bits", "per_family_fitness",
+        "n_search_cells", "n_heldout_prompt_cells",
+    )
+
+    def finite_json(value):
+        # aggregate reports can hold -inf/NaN for empty-cell templates; _atomic_json uses
+        # allow_nan=False, so coerce every non-finite float to null before serializing.
+        if isinstance(value, float):
+            return value if np.isfinite(value) else None
+        if isinstance(value, Mapping):
+            return {key: finite_json(item) for key, item in value.items()}
+        if isinstance(value, (list, tuple)):
+            return [finite_json(item) for item in value]
+        return value
+
+    payload = {
+        "schema": "v14-tune-official-gepa-v1",
+        "optimizer": "official-gepa",
+        "channel": str(channel), "arm": str(arm),
+        "shared_across_decoder_families": True,
+        "mechanical_model_specific_chat_formatting_allowed": True,
+        "searched_per_family_variation_allowed": False,
+        "decoder_models": {str(family): str(model) for family, model in decoder_models.items()},
+        "proposer_model": str(proposer_model),
+        "budget_metric_calls": int(max_metric_calls),
+        "n_distinct_templates": len(distinct),
+        "seed_template": seed_template,
+        "seed_template_sha256": seed_sha,
+        "winner_template": winner_template,
+        "winner_template_sha256": winner_sha,
+        "winner_report": finite_json(reports.get(winner_sha, {})),
+        "seed_report": finite_json(reports.get(seed_sha, {})),
+        "reports": {
+            sha: finite_json({key: report.get(key) for key in report_keys})
+            for sha, report in reports.items()
+        },
+    }
+    # Identity hash over the frozen template selection only (deterministic, NaN-free); used by
+    # build_production_freeze as template_trace_sha256.
+    payload["freeze_sha256"] = hashlib.sha256(json.dumps({
+        "schema": payload["schema"], "channel": str(channel), "arm": str(arm),
+        "seed_template_sha256": seed_sha, "winner_template_sha256": winner_sha,
+        "winner_template": winner_template,
+    }, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")).hexdigest()
+    _atomic_json(Path(out_root) / "development" / "tuning" / f"{name}.json", payload)
+    return payload
 
 
 def _qualification_panel(design: Mapping[str, object], family: str) -> dict:
@@ -1185,6 +1542,25 @@ def _subset_panel_design(design: Mapping[str, object], family: str) -> dict:
     return panel
 
 
+def _lane_state_indices(
+    design: Mapping[str, object], context: Mapping[str, object],
+    panel_design: Mapping[str, object],
+) -> list[list[int]] | None:
+    lane = str(design.get("scoring_lane", {}).get("lane", "cert"))
+    if lane == "cert":
+        return None
+    if lane != "fast":
+        raise ValueError(f"unsupported scoring lane {lane!r}")
+    signatures = np.asarray(context["population"]["signatures"], dtype=float)
+    panels = [list(map(int, row["indices"])) for row in panel_design["panels"]]
+    codes = signatures_to_states(signatures, panels)
+    output = []
+    for position, panel in enumerate(panel_design["panels"]):
+        canonical = int("".join(map(str, panel["target_state_bits"])), 2)
+        output.append(sorted({canonical, *map(int, codes[:, position])}))
+    return output
+
+
 class _CacheOnlyConstructor:
     def generate_batch(self, *_args, **_kwargs):
         raise RuntimeError("behavioral induction cache is incomplete")
@@ -1237,10 +1613,11 @@ def run_constructor_stage(
     query_batch_size: int, sentinel_report_path: str | Path | None = None,
     require_sentinel: bool = True,
 ) -> list[dict]:
-    if require_sentinel:
+    designs = load_designs(out_root, metric_keys)
+    lane = str(designs[0].get("scoring_lane", {}).get("lane", "cert")) if designs else "cert"
+    if require_sentinel and lane == "cert":
         _require_live_sentinel(sentinel_report_path, fake_backends=fake_backends)
     assert_gpu_authorized(physical_gpu_ids, fake_backends=fake_backends)
-    designs = load_designs(out_root, metric_keys)
     freeze = load_template_freeze(template_freeze_path)
     selections = [
         row for row in freeze.get("decoder_panel", [])
@@ -1267,6 +1644,7 @@ def run_constructor_stage(
                 metric_key = str(design["metric_key"])
                 context = _metric_context(design)
                 subset = _subset_panel_design(design, decoder_family)
+                lane_states = _lane_state_indices(design, context, subset)
                 metric_root = root / "state_chunks" / _safe(metric_key) / decoder_family
                 for instrument, templates in freeze["instruments"].items():
                     instrument_root = metric_root / str(instrument)
@@ -1290,6 +1668,7 @@ def run_constructor_stage(
                                     )
                                 ),
                                 query_batch_size=int(query_batch_size),
+                                state_indices_by_panel=lane_states,
                             )
                             _atomic_npz(
                                 path, raw_lift=result["raw_lift"],
@@ -1298,6 +1677,7 @@ def run_constructor_stage(
                                 raw_target_probability=result["raw_target_probability"],
                                 shuffled_target_probability=result["shuffled_target_probability"],
                                 annotation_accuracy=result["annotation_accuracy"],
+                                observed_state_mask=result["observed_state_mask"],
                             )
                             _atomic_json(instrument_root / "mcq_metadata.json", {
                                 key: value for key, value in result.items()
@@ -1320,6 +1700,7 @@ def run_constructor_stage(
                                 store=store, templates=templates["behavioral"],
                                 max_chars=int(context["codebook"]["reconstruction_max_chars"]),
                                 query_batch_size=int(query_batch_size), induction_only=True,
+                                state_indices_by_panel=lane_states,
                             )
                             _atomic_json(marker, result)
                 reports.append({
@@ -1342,10 +1723,11 @@ def run_executor_stage(
     sentinel_report_path: str | Path | None = None,
     require_sentinel: bool = True,
 ) -> list[dict]:
-    if require_sentinel:
+    designs = load_designs(out_root, metric_keys)
+    lane = str(designs[0].get("scoring_lane", {}).get("lane", "cert")) if designs else "cert"
+    if require_sentinel and lane == "cert":
         _require_live_sentinel(sentinel_report_path, fake_backends=fake_backends)
     assert_gpu_authorized(physical_gpu_ids, fake_backends=fake_backends)
-    designs = load_designs(out_root, metric_keys)
     freeze = load_template_freeze(template_freeze_path)
     backend, revision = _backend(FIXED_EXECUTOR, fake=fake_backends)
     root = Path(out_root).resolve()
@@ -1357,18 +1739,21 @@ def run_executor_stage(
                 metric_key = str(design["metric_key"])
                 if not fake_backends and revision != str(design["executor"]["revision"]):
                     raise RuntimeError("fixed executor revision differs from the frozen design")
-                probe_embeddings = _certification_probe_embeddings(
-                    context["probe_texts"],
-                    cache_path=(
-                        root / "certification_embeddings" / f"{_safe(metric_key)}.npz"
-                    ),
-                    fake_backends=fake_backends,
-                )
+                probe_embeddings = None
+                if str(design.get("scoring_lane", {}).get("lane", "cert")) == "cert":
+                    probe_embeddings = _certification_probe_embeddings(
+                        context["probe_texts"],
+                        cache_path=(
+                            root / "certification_embeddings" / f"{_safe(metric_key)}.npz"
+                        ),
+                        fake_backends=fake_backends,
+                    )
                 for family in DEFAULT_DECODER_MODELS:
                     constructor_report_path = root / "constructor_stage" / f"{family}.json"
                     if not constructor_report_path.exists():
                         raise RuntimeError(f"constructor stage is incomplete for {family}")
                     subset = _subset_panel_design(design, family)
+                    lane_states = _lane_state_indices(design, context, subset)
                     family_root = root / "state_chunks" / _safe(metric_key) / family
                     for instrument, templates in freeze["instruments"].items():
                         instrument_root = family_root / str(instrument)
@@ -1393,6 +1778,7 @@ def run_executor_stage(
                             max_chars=int(context["codebook"]["reconstruction_max_chars"]),
                             query_batch_size=int(query_batch_size),
                             probe_embeddings=probe_embeddings,
+                            state_indices_by_panel=lane_states,
                         )
                         arrays = {}
                         metadata = {
@@ -1492,9 +1878,12 @@ def _combine_chunks(
     root: Path, design: Mapping[str, object], instrument: str, channel: str,
     arm: str | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
-    raw = np.empty((50, 256), dtype=float)
-    clipped = np.empty_like(raw)
-    filled = np.zeros(50, dtype=bool)
+    n_panels = len(design["panel_design"]["panels"])
+    panel_size = int(design["panel_design"]["panel_size"])
+    n_states = 1 << panel_size
+    raw = np.full((n_panels, n_states), np.nan, dtype=float)
+    clipped = np.full_like(raw, np.nan)
+    filled = np.zeros(n_panels, dtype=bool)
     for family in DEFAULT_DECODER_MODELS:
         subset = _subset_panel_design(design, family)
         path = (
@@ -1515,16 +1904,51 @@ def _combine_chunks(
             filled[trial] = True
     if not np.all(filled):
         raise RuntimeError("combined v14 table lacks one or more frozen trials")
-    validate_state_tables(raw, clipped)
+    lane = str(design.get("scoring_lane", {}).get("lane", "cert"))
+    if lane == "cert":
+        validate_state_tables(raw, clipped, panel_size=panel_size)
+    elif not np.any(np.isfinite(raw)):
+        raise RuntimeError("FAST state table contains no observed cells")
     return raw, clipped
+
+
+def _combine_behavioral_predictions(
+    root: Path, design: Mapping[str, object], instrument: str, arm: str,
+) -> tuple[np.ndarray, np.ndarray]:
+    n_panels = len(design["panel_design"]["panels"])
+    n_states = 1 << int(design["panel_design"]["panel_size"])
+    heldout_n = len(design["probe_split"]["heldout"]["indices"])
+    predictions = np.full((n_panels, n_states, heldout_n), -1, dtype=np.int8)
+    blind = np.full((n_panels, heldout_n), -1, dtype=np.int8)
+    filled = np.zeros(n_panels, dtype=bool)
+    for family in DEFAULT_DECODER_MODELS:
+        subset = _subset_panel_design(design, family)
+        path = (
+            root / "state_chunks" / _safe(design["metric_key"]) / family / instrument /
+            "behavioral_state_tables.npz"
+        )
+        with np.load(path, allow_pickle=False) as artifact:
+            part = np.asarray(artifact[f"{arm}__hard_predictions"], dtype=np.int8)
+            part_blind = np.asarray(artifact[f"{arm}__blind_hard_prediction"], dtype=np.int8)
+        for position, panel in enumerate(subset["panels"]):
+            trial = int(panel["original_trial"])
+            predictions[trial] = part[position]
+            blind[trial] = part_blind
+            filled[trial] = True
+    if not np.all(filled) or np.any(blind < 0):
+        raise RuntimeError("FAST behavioral predictions lack a frozen panel")
+    return predictions, blind
 
 
 def _combine_behavioral_transfer_chunks(
     root: Path, design: Mapping[str, object], instrument: str, arm: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     fields = ("near_raw_lift", "near_clipped_value", "far_raw_lift", "far_clipped_value")
-    combined = {field: np.empty((50, 256), dtype=float) for field in fields}
-    filled = np.zeros(50, dtype=bool)
+    n_panels = len(design["panel_design"]["panels"])
+    panel_size = int(design["panel_design"]["panel_size"])
+    n_states = 1 << panel_size
+    combined = {field: np.empty((n_panels, n_states), dtype=float) for field in fields}
+    filled = np.zeros(n_panels, dtype=bool)
     for family in DEFAULT_DECODER_MODELS:
         subset = _subset_panel_design(design, family)
         path = (
@@ -1543,8 +1967,12 @@ def _combine_behavioral_transfer_chunks(
             filled[trial] = True
     if not np.all(filled):
         raise RuntimeError("combined behavioral transfer table lacks frozen trials")
-    validate_state_tables(combined["near_raw_lift"], combined["near_clipped_value"])
-    validate_state_tables(combined["far_raw_lift"], combined["far_clipped_value"])
+    validate_state_tables(
+        combined["near_raw_lift"], combined["near_clipped_value"], panel_size=panel_size,
+    )
+    validate_state_tables(
+        combined["far_raw_lift"], combined["far_clipped_value"], panel_size=panel_size,
+    )
     return tuple(combined[field] for field in fields)
 
 
@@ -1600,7 +2028,7 @@ def _control_diagnostics(
             with np.load(source / "mcq_state_tables.npz", allow_pickle=False) as artifact:
                 signal = np.asarray(artifact["raw_target_probability"], dtype=float)
             blind.extend([float(metadata["blind"]["target_probability"])] * len(subset["panels"]))
-            best.extend(np.max(signal, axis=1).astype(float).tolist())
+            best.extend(np.nanmax(signal, axis=1).astype(float).tolist())
             if metadata.get("best_explanation_rate") is not None:
                 explanation.append(float(metadata["best_explanation_rate"]))
         else:
@@ -1623,12 +2051,180 @@ def _control_diagnostics(
     }
 
 
+def aggregate_fast_campaign(
+    *, out_root: str | Path, template_freeze_path: str | Path,
+    metric_keys: Sequence[str] | None, channels: Sequence[str],
+    n_permutations: int = 200,
+) -> pd.DataFrame:
+    """Aggregate quarantined observed-state screening rows; emit no certificates."""
+    if int(n_permutations) < 200:
+        raise ValueError("FAST aggregation requires at least 200 permutation draws")
+    root = Path(out_root).resolve()
+    designs = load_designs(root, metric_keys)
+    if any(str(row.get("scoring_lane", {}).get("lane", "cert")) != "fast" for row in designs):
+        raise ValueError("FAST aggregation accepts FAST designs only")
+    freeze = load_template_freeze(template_freeze_path)
+    rows = []
+    null_arrays = {}
+    arm_exclusions = []
+    for design in designs:
+        context = _metric_context(design)
+        metric_key = str(design["metric_key"])
+        signatures = np.asarray(context["population"]["signatures"], dtype=float)
+        prompts = list(map(str, context["population"]["texts"]))
+        prompt_ids = [
+            f"fast:{index}:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
+            for index, text in enumerate(prompts)
+        ]
+        panels = [row["indices"] for row in design["panel_design"]["panels"]]
+        codes = signatures_to_states(signatures, panels)
+        heldout = np.asarray(design["probe_split"]["heldout"]["indices"], dtype=int)
+        target = (np.asarray(context["target"]["target"])[heldout] > 0.5).astype(np.uint8)
+        for instrument in freeze["instruments"]:
+            channel_arms = []
+            if "mcq" in channels:
+                channel_arms.append(("mcq", None))
+            if "behavioral" in channels:
+                channel_arms.extend(("behavioral", arm) for arm in BEHAVIORAL_ARMS)
+            for channel, arm in channel_arms:
+                try:
+                    raw, clipped = _combine_chunks(root, design, str(instrument), channel, arm)
+                except ValueError as exc:
+                    # A constrained arm (e.g. no_verbatim_examples) can have VOID
+                    # induction cells for states the constraint cannot satisfy;
+                    # the achieved statistic and the null both require complete
+                    # tables, so this (channel, arm) is undefined for this metric.
+                    # FAST is screening-only: record the arm-level exclusion and
+                    # keep aggregating the defined arms instead of aborting.
+                    arm_exclusions.append({
+                        "metric_key": metric_key, "instrument": str(instrument),
+                        "channel": str(channel), "arm": arm,
+                        "stage": "combine_chunks", "detail": str(exc),
+                    })
+                    continue
+                seed = int.from_bytes(hashlib.sha256(
+                    f"{design['run_sha']}\x1f{metric_key}\x1f{instrument}\x1f{channel}\x1f{arm}".encode()
+                ).digest()[:8], "big")
+                if channel == "mcq":
+                    null = fast_mcq_code_permutation_null(
+                        clipped, codes, n_permutations=n_permutations, seed=seed,
+                    )
+                else:
+                    predictions, blind = _combine_behavioral_predictions(
+                        root, design, str(instrument), str(arm),
+                    )
+                    n_states = predictions.shape[1]
+                    shuffled_ids = np.empty((len(panels), n_states), dtype=int)
+                    for panel_position, panel in enumerate(design["panel_design"]["panels"]):
+                        shuffled_ids[panel_position] = [
+                            shuffled_state(
+                                state, int(design["panel_design"]["panel_size"]),
+                                str(panel["panel_sha256"]),
+                            )
+                            for state in range(n_states)
+                        ]
+                    try:
+                        null = fast_behavioral_label_permutation_null(
+                            target, predictions, blind, codes, shuffled_ids,
+                            n_permutations=n_permutations, seed=seed,
+                        )
+                    except ValueError as exc:
+                        # VOID induction cells leave holes the null cannot fill
+                        # (see combine_chunks handler above) — same record-and-skip.
+                        arm_exclusions.append({
+                            "metric_key": metric_key, "instrument": str(instrument),
+                            "channel": str(channel), "arm": arm,
+                            "stage": "permutation_null", "detail": str(exc),
+                        })
+                        continue
+                try:
+                    result = aggregate_fast_screening(
+                        raw_lift=raw, clipped_value=clipped,
+                        prompt_signatures=signatures, panels=panels, prompt_ids=prompt_ids,
+                        target_entropy_cap=float(design["target_entropy_on_h_bits"]),
+                        permutation_null=null, channel=channel,
+                    )
+                except ValueError as exc:
+                    arm_exclusions.append({
+                        "metric_key": metric_key, "instrument": str(instrument),
+                        "channel": str(channel), "arm": arm,
+                        "stage": "aggregate_fast_screening", "detail": str(exc),
+                    })
+                    continue
+                null_key = _safe(f"{metric_key}__{instrument}__{channel}__{arm or 'none'}")
+                null_arrays[null_key] = null
+                for horizon in (100, 300):
+                    bound = record_rank_gain_bound(
+                        n=len(prompt_ids), m=horizon, achieved=result["achieved_value"],
+                        cap=result["level0_cap"],
+                    )
+                    result[f"record_rank_gain_upper_h{horizon}"] = bound["gain_upper"]
+                rows.append({
+                    "lane": "fast", "release_eligible": False,
+                    "task": design["task"], "level": design["level"],
+                    "metric": design["metric"], "metric_key": metric_key,
+                    "instrument": instrument, "channel": channel, "arm": arm,
+                    "executor": design["executor"]["model"],
+                    "achieved_value": result["achieved_value"],
+                    "permutation_z_score": result["permutation_z_score"],
+                    "permutation_percentile": result["permutation_percentile"],
+                    "permutation_p_greater_equal": result["permutation_p_greater_equal"],
+                    "permutation_count": result["permutation_count"],
+                    "permutation_null_kind": result["permutation_null_kind"],
+                    "exact_structural_cap": None,
+                    "exact_structural_cap_status": "UNAVAILABLE_FAST_OBSERVED_ONLY",
+                    "level0_cap": result["level0_cap"],
+                    "record_rank_gain_upper_h100": result["record_rank_gain_upper_h100"],
+                    "record_rank_gain_upper_h300": result["record_rank_gain_upper_h300"],
+                    "n_observed_joint_codes": result["n_observed_joint_codes"],
+                    "screening_only_not_for_claims": True,
+                })
+    frame = pd.DataFrame(rows)
+    _atomic_parquet(root / "results.parquet", frame)
+    summary = (
+        frame.sort_values(
+            ["metric_key", "permutation_z_score"], ascending=[True, False], kind="stable"
+        ).drop_duplicates("metric_key")[
+            ["lane", "task", "metric_key", "permutation_z_score"]
+        ].reset_index(drop=True)
+    )
+    _atomic_parquet(root / "screening_summary.parquet", summary)
+    _atomic_npz(root / "fast_permutation_nulls.npz", **null_arrays)
+    _atomic_json(root / "fast_arm_exclusions.json", {
+        "schema": "cr3-v14-fast-arm-exclusions-v1",
+        "n_excluded": len(arm_exclusions),
+        "note": (
+            "channel/arm combinations undefined for a metric because VOID "
+            "induction cells (unsatisfiable constrained-arm states) leave holes "
+            "the achieved statistic and permutation null both require"
+        ),
+        "exclusions": arm_exclusions,
+    })
+    _atomic_json(root / "campaign_manifest.json", {
+        "schema": CAMPAIGN_SCHEMA, "lane": "fast", "release_eligible": False,
+        "n_metrics": len(designs), "n_results": len(frame),
+        "permutation_count": int(n_permutations),
+        "reference": "frozen_executor_verdicts",
+        "independent_reference_used": False,
+        "exact_state_enumeration_used": False,
+        "certificates_emitted": False,
+        "results_path": str(root / "results.parquet"),
+        "promotion_source_path": str(root / "screening_summary.parquet"),
+    })
+    return frame
+
+
 def aggregate_campaign(
     *, out_root: str | Path, template_freeze_path: str | Path,
     metric_keys: Sequence[str] | None, channels: Sequence[str],
 ) -> pd.DataFrame:
     root = Path(out_root).resolve()
     designs = load_designs(root, metric_keys)
+    if designs and str(designs[0].get("scoring_lane", {}).get("lane", "cert")) == "fast":
+        return aggregate_fast_campaign(
+            out_root=root, template_freeze_path=template_freeze_path,
+            metric_keys=metric_keys, channels=channels,
+        )
     freeze = load_template_freeze(template_freeze_path)
     result_rows = []
     value_tables = {}
@@ -1863,6 +2459,7 @@ def aggregate_campaign(
                     )
                 certificate = {
                     "schema": "cr3-v14-certificate-v1",
+                    "lane": str(design.get("scoring_lane", {}).get("lane", "cert")),
                     "task": design["task"], "level": design["level"],
                     "metric": design["metric"], "metric_key": metric_key,
                     "instrument": instrument, "channel": channel, "arm": arm,
@@ -1959,6 +2556,7 @@ def aggregate_campaign(
                 certificate["certificate_sha256"] = canonical_sha256(certificate)
                 _atomic_json(artifact_root / "certificate.json", certificate)
                 result_rows.append({
+                    "lane": str(design.get("scoring_lane", {}).get("lane", "cert")),
                     "task": design["task"], "level": design["level"],
                     "metric": design["metric"], "metric_key": metric_key,
                     "instrument": instrument, "channel": channel, "arm": arm,
@@ -2006,6 +2604,7 @@ def aggregate_campaign(
     _atomic_parquet(root / "results.parquet", frame)
     _atomic_json(root / "campaign_manifest.json", {
         "schema": CAMPAIGN_SCHEMA,
+        "lane": str(designs[0].get("scoring_lane", {}).get("lane", "cert")) if designs else None,
         "n_metrics": len(designs), "n_results": len(frame),
         "channels": list(channels), "template_freeze": str(Path(template_freeze_path).resolve()),
         "results_path": str(root / "results.parquet"),
@@ -2064,7 +2663,7 @@ def _selected_constructor_model(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", required=True, choices=[
-        "extend-probes", "design", "prepare-dev", "prepare-sentinel", "qualify-constructor",
+        "extend-probes", "design", "promote", "prepare-dev", "prepare-sentinel", "qualify-constructor",
         "qualify-executor", "tune", "freeze", "seed-freeze", "constructor", "executor",
         "sentinel-constructor", "sentinel-executor", "sentinel-aggregate",
         "liveness-constructor", "liveness-executor", "sentinel-gate",
@@ -2073,7 +2672,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--metrics-manifest")
     parser.add_argument("--probe-extension-root")
     parser.add_argument("--probe-corpus-manifest")
+    parser.add_argument("--scoring-lane", choices=["fast", "cert"], default="cert")
+    parser.add_argument("--promotion-manifest")
+    parser.add_argument("--fast-results")
+    parser.add_argument("--top-k-per-task", type=int, default=3)
+    parser.add_argument("--figure-metric-keys", nargs="*", default=[])
     parser.add_argument("--dev-metrics-manifest")
+    parser.add_argument("--dev-min-tasks", type=int, default=7, help=(
+        "minimum task span for the development pool; lowering below 7 is a "
+        "declared deviation and must be recorded in the run artifacts"))
     parser.add_argument("--sentinel-metrics-manifest")
     parser.add_argument(
         "--sentinel-metric-keys", nargs="+", default=list(DEFAULT_SENTINEL_METRIC_KEYS),
@@ -2088,6 +2695,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tuning-channel", choices=["mcq", "behavioral"])
     parser.add_argument("--tuning-arm", default="unconstrained")
     parser.add_argument("--proposer-model", default="meta-llama/Llama-3.3-70B-Instruct")
+    parser.add_argument("--max-metric-calls", type=int, default=240, help=(
+        "official-gepa budget for --phase tune (metric evaluations)"))
     parser.add_argument("--qualification", action="append")
     parser.add_argument("--release-commit")
     parser.add_argument("--sentinel-controls")
@@ -2122,6 +2731,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             metrics_manifest_path=args.metrics_manifest, out_root=root,
             run_sha=args.run_sha, metric_keys=args.metric_keys,
             probe_extension_root=args.probe_extension_root,
+            scoring_lane=args.scoring_lane,
+            promotion_manifest_path=args.promotion_manifest,
+        )
+    elif args.phase == "promote":
+        if not args.fast_results:
+            raise ValueError("promote requires --fast-results")
+        build_promotion_manifest(
+            args.fast_results,
+            out_path=args.promotion_manifest or root / "promotion_manifest.json",
+            run_sha=args.run_sha, top_k_per_task=args.top_k_per_task,
+            figure_metric_keys=args.figure_metric_keys,
         )
     elif args.phase == "prepare-dev":
         if not args.dev_metrics_manifest:
@@ -2130,6 +2750,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             certified_out_root=root,
             dev_metrics_manifest_path=args.dev_metrics_manifest,
             run_sha=args.run_sha,
+            probe_extension_root=args.probe_extension_root,
+            dev_min_tasks=args.dev_min_tasks,
         )
     elif args.phase == "prepare-sentinel":
         if not args.sentinel_metrics_manifest:
@@ -2168,6 +2790,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             proposer_model=args.proposer_model, fake_backends=args.fake_backends,
             physical_gpu_ids=parse_physical_gpu_ids(args.physical_gpus),
             query_batch_size=args.query_batch_size,
+            max_metric_calls=args.max_metric_calls,
         )
     elif args.phase == "freeze":
         if not args.qualification or not args.release_commit:

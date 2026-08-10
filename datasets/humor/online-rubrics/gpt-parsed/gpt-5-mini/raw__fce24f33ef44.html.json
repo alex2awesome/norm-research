@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/fce24f33ef44.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18234,
+  "output_tokens": 4551,
+  "elapsed_s": 1355.8075887078885,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in computational humor, conversational AI, and NLP engineers building joke-generation systems",
+    "subtask_short": "conversational_joke_generation_system",
+    "subtask_description": "Designing, implementing, and evaluating a system that generates contextually relevant, improvised wordplay jokes in response to user utterances in open-domain conversation.",
+    "subtask_keywords": [
+      "computational_humor",
+      "joke_generation",
+      "conversational_ai",
+      "wordplay",
+      "nlp",
+      "research"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Three-part monologue joke structure",
+        "description": "A monologue joke has three parts: the topic, the angle, and the punch line. The topic is the statement the joke is based on; the angle is a word sequence that smoothly bridges the gap between the topic and the punch line; the punch line is a surprising incongruity that appears at the end of the joke and is harmless because it actually follows from the topic.",
+        "guidance": "Cites Attardo (1994) and Suls (1972). The punch line must appear at the end of the joke. The Surprise Theory of Laughter requires sudden surprise in resolving the incongruity."
+      },
+      {
+        "name": "Basic Joke-Writing Algorithm \u2014 Step 1: Select a topic",
+        "description": "Select a topic consisting of one sentence likely to capture the audience's attention for the joke.",
+        "guidance": "In conversational use the user's utterance can be treated as the topic."
+      },
+      {
+        "name": "Basic Joke-Writing Algorithm \u2014 Step 2: Select two topic handles",
+        "description": "Select two words or phrases in the topic that are most responsible for capturing the audience's attention (topic handles). These must be memorable because the audience must remember them to make sense of a punch line based on them.",
+        "guidance": "Topic handles typically are nouns/noun phrases; they should be the two candidates least likely to appear together in the topic sentence (see Word2Vec selection method)."
+      },
+      {
+        "name": "Basic Joke-Writing Algorithm \u2014 Step 3: Generate associations of the topic handles",
+        "description": "Generate associations (people, places, things, actions, adjectives, events, concepts, quotations) for each topic handle\u2014things the audience is likely to think of when they think of the handle.",
+        "guidance": "Witscript uses Word2Vec 'most similar' to list top-50 associations per handle; future work recommends more effective, updatable association engines blending external text and word-association data."
+      },
+      {
+        "name": "Basic Joke-Writing Algorithm \u2014 Step 4: Create a punch line",
+        "description": "Create a punch line that links an association of one topic handle to an association of the other in a surprising way.",
+        "guidance": "The punch line should embody a strong incongruity that can be resolved back to the topic to be harmless and thus funny. Witscript attempts three punch-line types (juxtaposition, substitution, portmanteau) and selects the best by wordplay score."
+      },
+      {
+        "name": "Basic Joke-Writing Algorithm \u2014 Step 5: Generate an angle",
+        "description": "Generate an angle (a sentence or phrase) that connects the topic to the punch line in a natural-sounding way.",
+        "guidance": "Witscript uses a joke-tuned BERT model to generate angles by predicting tokens prepended to the punch line until a stop condition (punctuation or repeated token). If BERT's first token is punctuation, fallback to a random prewritten angle template."
+      },
+      {
+        "name": "Keyword extraction and stop-word filtering",
+        "description": "Extract nouns, noun phrases, and named entities from the user's sentence and exclude tokens present on a stop-word list (common words and others judged unlikely to be useful for jokes, e.g., 'official', 'person', 'tonight').",
+        "guidance": "Witscript uses NLTK for extraction. The remaining candidates become topic keyword candidates. The stop-word list is curated by expert judgement to omit words unlikely to support punch-line generation."
+      },
+      {
+        "name": "Selecting two topic keywords by word-embedding dissimilarity",
+        "description": "Select the two topic keywords that are least likely to appear together in the topic sentence by choosing the pair with the least cosine similarity in a pretrained Word2Vec embedding space.",
+        "guidance": "Witscript loads a pretrained Google Word2Vec model (Google-News-vectors-negative300.bin) via Gensim and uses its 'similarity' function. Rationale: words unlikely to co-occur are more attention-getting when paired."
+      },
+      {
+        "name": "Generate associations via Word2Vec top-N (N=50)",
+        "description": "For each topic keyword, list the top 50 words most closely associated with it using Word2Vec 'most similar' to form association candidates for punch-line construction.",
+        "guidance": "The number fifty was determined experimentally based on output quality. Limitations: static/pretrained embeddings can yield obscure or stale associations; future work suggests hybrid/updating association engines."
+      },
+      {
+        "name": "Types of punch lines attempted (juxtaposition, substitution, portmanteau)",
+        "description": "Attempt three types of wordplay punch lines: (1) juxtaposition \u2014 two words adjacent that incongruously exhibit wordplay; (2) substitution \u2014 substitute a new word into a multi-word chunk to create incongruity; (3) portmanteau \u2014 blend two words by syllable substitution to create a new blended word.",
+        "guidance": "Each type has a specific generation procedure (pairing associations, substituting into multi-word chunks, using Pyphen to divide syllables). Witscript generates one candidate of each type and scores them by wordplay score."
+      },
+      {
+        "name": "Juxtaposition punch-line generation procedure",
+        "description": "Create juxtaposition by pairing the first topic keyword and each of its top-50 associated words with the second topic keyword and each of its top-50 associated words, then select the pair with the best wordplay score.",
+        "guidance": "Example: from 'flower' and 'corpse' derive 'garden carcass'. The system exhaustively pairs the 50\u00d750 lists and scores pairs."
+      },
+      {
+        "name": "Substitution punch-line generation procedure",
+        "description": "Create substitution punch lines by pairing each topic keyword with each word in every multi-word chunk among the top-50 associations of the other keyword, selecting the pairing with the best wordplay score, and substituting the word into the multi-word chunk.",
+        "guidance": "Example: derive 'Puerto Demon' by substituting 'Demon' into 'Puerto Rican' association with 'Mexican'."
+      },
+      {
+        "name": "Portmanteau punch-line generation procedure",
+        "description": "Create portmanteau punch lines by finding pairs where one word's pronunciation is similar to the beginning of the other, use Pyphen to syllabify the longer word, and substitute the shorter word for equivalent starting syllables to form a blended word.",
+        "guidance": "Example: from 'flu' and 'stupidity' create 'flupidity'. Requires pronunciation/syllable alignment."
+      },
+      {
+        "name": "Wordplay score \u2014 overall weighted sum and thresholding",
+        "description": "Compute a wordplay score for any pair of words as a weighted sum of six subscores; weights and constants were determined experimentally. Use the best wordplay-scoring punch-line candidate for the joke response and filter out any candidate with a score worse than a preset empirically determined threshold; if none meet threshold, output no joke.",
+        "guidance": "The system treats the best wordplay score as a proxy for the biggest incongruity and therefore funniness (Suls 1972; Toplyn 2014). Thresholds are empirically chosen based on output quality."
+      },
+      {
+        "name": "Wordplay subscore: Edit distance subscore",
+        "description": "Edit distance between pronunciations (or spellings if no pronunciation) measured by Levenshtein distance; smaller distance yields a better subscore.",
+        "guidance": "Accounts for phonetic and orthographical similarity; punning can rely on both."
+      },
+      {
+        "name": "Wordplay subscore: Alliteration subscore",
+        "description": "Alliteration subscore is 1 if the two words start with the same consonant phoneme; additional constant points are added if more phonemes match. Greater subscore = better wordplay.",
+        "guidance": "Alliteration and assonance tend to increase funniness; matches are computed on phoneme representations."
+      },
+      {
+        "name": "Wordplay subscore: Assonance subscore",
+        "description": "If the two words rhyme, assign a constant; otherwise count the number of stressed vowels repeated between words. Greater subscore = better wordplay.",
+        "guidance": "Unexpected rhyming of words with different meanings can create surprise; uses phoneme-level vowel stress information."
+      },
+      {
+        "name": "Wordplay subscore: Stop consonant subscore",
+        "description": "Count total number of stop consonant phonemes (B, D, G, K, P, T) in both words; greater count yields a better subscore.",
+        "guidance": "Stop consonants tend to make jokes funnier (cited studies)."
+      },
+      {
+        "name": "Wordplay subscore: Ending subscore",
+        "description": "Assign 1 if the last phoneme of both words matches; add more constant points if more final phonemes match. Greater subscore = better wordplay.",
+        "guidance": "Final syllable is particularly important in wordplay (Attardo 1994)."
+      },
+      {
+        "name": "Wordplay subscore: Syllable subscore",
+        "description": "Assign 1 if the two words have the same number of syllables, increasing the pairing's improbability and surprise and thus funniness.",
+        "guidance": "Syllable parity is taken as making pairings more surprising."
+      },
+      {
+        "name": "Use of phoneme resources (CMU Pronouncing Dictionary)",
+        "description": "Use phoneme representations from the Carnegie Mellon University Pronouncing Dictionary for pronunciation-based subscores; use spellings only if pronunciation missing.",
+        "guidance": "Pronunciation-based metrics underlie edit distance, alliteration, assonance, ending, and syllable calculations."
+      },
+      {
+        "name": "Angle generation with joke-tuned BERT (backward prediction)",
+        "description": "Generate the angle by giving the joke-tuned BERT model the selected punch line preceded by a [MASK] token along with the user's input sentence; iteratively predict a token to fill the mask and prepend it to the punch line until a stop condition (punctuation mark or repeated token) produces the angle text.",
+        "guidance": "Witscript fine-tuned BERT (bert-large-uncased) on a prepared dataset of late-night monologue jokes for one epoch (one-epoch fine-tuned model judged best). Predicting tokens backward from punch line tends to produce more natural-sounding angles than predicting forward from topic."
+      },
+      {
+        "name": "Fallback angle templates when BERT fails",
+        "description": "If BERT's first predicted token is punctuation (indicating gibberish), select an angle template at random from a list and insert the selected punch line into it to form the basic joke response.",
+        "guidance": "Templates written by the author are used as a rescue mechanism when generation fails."
+      },
+      {
+        "name": "Finalizing the joke response: filler words and repetition",
+        "description": "Prepend a filler word randomly selected from a list (e.g., 'um', 'like') and repeat the two topic keywords at the beginning of the response to help users find connections between the input and punch line.",
+        "guidance": "Filler words make responses sound more humanlike (Duvall et al. 2014). Repeating topic keywords aids clarity because obscure connections harm funniness (Attardo et al. 1994)."
+      },
+      {
+        "name": "Fine-tuning dataset preparation rules for joke-tuned BERT",
+        "description": "Prepare monologue-joke dataset by: 1) removing duplicates; 2) adding a topic to jokes missing one; 3) removing extraneous lead-in/concluding text; 4) removing jokes shorter than 17 tokens; 5) removing jokes longer than 49 tokens; 6) manually annotating remaining jokes by splitting into topic and the rest.",
+        "guidance": "After cleaning, 36,781 jokes remained and were used to fine-tune BERT; token-length constraints chosen because <17 tokens lacked distinct parts and >49 tokens were too wordy to discern parts."
+      },
+      {
+        "name": "Evaluation methodology: human ratings via Mechanical Turk",
+        "description": "Evaluate responses by presenting randomized input\u2013response pairs to human evaluators (US-based, HIT approval rate \u226595%). Each pair rated by 15 workers on a 4-point scale: 1 (not a joke), 2 (almost a joke), 3 (a joke), 4 (a very good joke); compute mean rating per response and percentage of ratings \u22653 as '% jokes'.",
+        "guidance": "Evaluators were not told how responses were produced. 45 evaluators read 1\u201339 pairs each; 20 Twitter jokes (meeting selection criteria) provided inputs and gold-standard human responses; only 13 inputs yielded Witscript outputs (others failed threshold)."
+      },
+      {
+        "name": "Selection criteria for test inputs (evaluation set)",
+        "description": "Selected Twitter jokes used for testing had to: (1) have punch lines featuring wordplay; (2) have topic sentences with at least two nouns/noun phrases/named entities present in the Word2Vec vocabulary; (3) avoid topic sentences containing named entities likely to produce stale associations in the Word2Vec model.",
+        "guidance": "These constraints minimize evaluator bias against wordplay and ensure Witscript could operate given static pretrained Word2Vec associations."
+      },
+      {
+        "name": "Proposed composite funniness score (future work)",
+        "description": "A more comprehensive funniness score could be a weighted combination of feature scores: wordplay score (punch-line quality), interest score (degree to which topic keywords are unrelated/attention-getting), and clarity score (how closely related topic keywords are to the associations used to create the punch line).",
+        "guidance": "Feature scores would be weighted and combined; higher interest (less related topic keywords) and higher clarity (strong relation between keywords and their associations) should improve overall funniness. This is proposed as an improvement over selecting solely by wordplay score."
+      }
+    ]
+  }
+}

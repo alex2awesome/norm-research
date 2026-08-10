@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>DrawIsland — Free Online Drawing Tool</title>
+<meta name="description" content="Free online drawing tool. Sketch, paint, digital art in your browser. No download needed.">
+<link rel="canonical" href="https://drawisland.com">
+<link rel="stylesheet" href="style0526-1.css"><meta property="og:title" content="DrawIsland - Free Online Drawing Tool">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://drawisland.com/">
+<meta property="og:image" content="https://drawisland.com/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="google-site-verification" content="iSlQRRykmy2vtKJ0qoUNOERht1usCEHnEbzmye5Pqug" />
+
+<style>
+#app-header {
+    position: relative;
+    z-index: 1000;
+    pointer-events: auto;
+}
+#sb-download {
+  background: #2563eb !important;
+  color: #fff !important;
+  border-color: #2563eb !important;
+  font-weight: 600;
+}
+#sb-download:hover {
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+}
+#sb-download svg {
+  stroke: #fff;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════ -->
+<header id="app-header">
+  <div class="header-inner">
+    <a href="/" class="logo" aria-label="DrawIsland home">
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <circle cx="11" cy="11" r="10" fill="#2563eb"/>
+        <path d="M6 14 Q9 7 11 11 Q13 15 16 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+      DrawIsland
+    </a><span id="version-badge" style="display:inline-flex;align-items:center;gap:4px;font-size:10px;
+  font-family:monospace;background:rgba(0,0,0,.04);border:0.5px solid rgba(0,0,0,.1);
+  border-radius:20px;padding:3px 9px;color:#6b7280;cursor:pointer;user-select:none;">
+  <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+  new · may 5, 2026
+</span>
+    <nav class="header-actions">
+      <a href="/gallery" class="btn-ghost" id="btn-gallery">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        <span class="lbl">Gallery</span>
+      </a>
+      <button class="btn-ghost" id="btn-save-gallery">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span class="lbl">Save</span>
+      </button>
+      <button class="btn-ghost" id="feedback-page" onclick="openFeedback()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="lbl">Feedback</span>
+      </button>
+      <div class="auth-container" id="auth-container" style="margin-left:auto;display:flex;align-items:center;gap:10px;"></div>
+                              
+    </nav>
+  </div>
+</header>
+<div id="zoom-toast">⚠️ Click here to reset zoom to 100% before drawing</div>
+ 
+<!-- ══════════════════════════════════════════════════════
+     APP BODY — éditeur
+══════════════════════════════════════════════════════ -->
+<div id="app-body">
+
+  <!-- Mobile toolbar -->
+  <div id="mobile-toolbar" role="toolbar" aria-label="Tools">
+    <button class="m-tool active" id="m-pencil" data-tool="pencil">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+      <span>Pencil</span>
+    </button>
+    <button class="m-tool" id="m-eraser" data-tool="eraser">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/></svg>
+      <span>Eraser</span>
+    </button>
+    <button class="m-tool" id="m-select" data-tool="select">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-7 1-4 7Z"/></svg>
+      <span>Select</span>
+    </button>
+    <label class="m-color-wrap" title="Color">
+      <input type="color" id="m-color-picker" value="#000000">
+      <span id="m-color-dot" style="background:#000"></span>
+    </label>
+    <div class="m-size-ctrl">
+      <button class="m-sz-btn" id="m-sz-down">&#x2212;</button>
+      <span id="m-sz-val">4</span>
+      <button class="m-sz-btn" id="m-sz-up">+</button>
+    </div>
+    <button class="m-tool" id="m-undo" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+      <span>Undo</span>
+    </button>
+    <button class="m-tool" id="m-redo" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
+      <span>Redo</span>
+    </button>
+    <button class="m-tool" id="m-download">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Save</span>
+    </button>
+    <button class="m-tool" id="m-more" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      <span>More</span>
+    </button>
+  </div>
+
+  <!-- More panel -->
+  <div id="mobile-extra" hidden>
+    <div class="m-extra-grid">
+      <button class="m-tool" data-tool="fill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 11-8-8-8.5 8.5a5.5 5.5 0 0 0 7.78 7.78L19 11Z"/></svg><span>Fill</span></button>
+      <button class="m-tool" data-tool="text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="9" y1="20" x2="15" y2="20"/></svg><span>Text</span></button>
+      <button class="m-tool" data-shape="rect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="1"/></svg><span>Rect</span></button>
+      <button class="m-tool" data-shape="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg><span>Circle</span></button>
+      <button class="m-tool" data-shape="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg><span>Arrow</span></button>
+      <button class="m-tool" id="m-clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg><span>Clear</span></button>
+      <button class="m-tool" id="m-upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Image</span></button>
+      <button class="m-tool" id="m-share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span>Share</span></button>
+    </div>
+  </div>
+
+  <!-- Editor row -->
+  <div id="editor-wrap">
+
+    <!-- Sidebar gauche -->
+    <aside id="sidebar" aria-label="Drawing tools">
+      <div class="sb-group">
+        <span class="sb-group-label">Draw</span>
+        <!-- <button class="tool-btn active" id="sb-pencil" data-modal="modal-pencil" title="Pencil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Pencil
+        </button>-->
+        
+        
+        <button class="tool-btn" id="sb-brush" title="Brushes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.06 11.9l8.07-8.06a2.85 2.83 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1 1 2.48 1.02 3.5 1.02 2.2 0 3-1.8 3-3.02 0-1.67-1.33-3.04-1.5-3.04z"/></svg>Brush
+        </button>
+        <button class="tool-btn" data-tool="eraser" title="Eraser">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/></svg>Eraser
+        </button>
+        <button class="tool-btn" data-tool="fill" title="Fill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 11-8-8-8.5 8.5a5.5 5.5 0 0 0 7.78 7.78L19 11Z"/><path d="m19 11 2 2a2.83 2.83 0 0 1-4 4"/></svg>Fill
+        </button>
+        <button class="tool-btn" data-tool="select" title="Select / Move">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3l14 9-7 1-4 7Z"/></svg>Select
+        </button>
+        <button class="tool-btn" data-tool="text" title="Text">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Text
+        </button>
+     
+        
+        <button class="tool-btn" id="sb-shapes" data-modal="modal-shapes" title="Shapes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><circle cx="17.5" cy="6.5" r="3.5"/><path d="m3 21 4-8 4 8"/><path d="M14.5 21h7"/></svg>Shapes&#x2026;
+        </button>
+        
+          <button class="tool-btn" data-tool="symmetry" id="sb-symmetry" title="Symmetry draw">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="12" y1="3" x2="12" y2="21"/>
+    <path d="M3 8l5 4-5 4"/>
+    <path d="M21 8l-5 4 5 4"/>
+  </svg>Symmetry
+</button>
+        
+      </div>
+      
+      
+      <div class="sb-group">
+        <span class="sb-group-label">Color</span>
+        <button class="tool-btn" id="sb-color" data-modal="modal-color" title="Color &amp; opacity">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          Color<span class="cdot" id="sb-color-dot" style="background:#000"></span>
+        </button>
+       <!-- <div class="sb-palette" id="sb-mini-palette"></div>
+        -->
+        
+        <div class="sb-palette" id="recent-palette" style="gap:4px;"></div>
+
+        
+      </div>
+      
+      
+      
+      
+      
+      <div class="sb-group">
+        <span class="sb-group-label">Size</span>
+        <div class="sb-size-row">
+          <input type="range" id="brush-size" min="1" max="80" value="4" aria-label="Brush size">
+          <span class="sb-size-num" id="brush-size-val">4</span>
+        </div>
+      </div>
+      
+      <div class="sb-group" >
+  <span class="ctx-group-label">Canvas</span>
+   
+  
+  
+  <button class="tool-btn" id="sb-canvassize" data-modal="modal-canvassize" title="Canvas size">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    Canvas size
+  </button>
+    <button class="tool-btn" id="btn-clear" title="Clear canvas">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Clear
+  </button>
+</div>
+      
+      
+      
+        <div class="sb-group" style="border-bottom:0;">
+  <span class="ctx-group-label">History</span>
+  <button class="tool-btn" id="btn-undo" disabled title="Undo (Ctrl+Z)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>Undo
+  </button>
+  <button class="tool-btn" id="btn-redo" disabled title="Redo (Ctrl+Y)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>Redo
+  </button>
+
+  
+</div>
+     
+     
+      
+    </aside>
+
+    <!-- Canvas -->
+    <div id="canvas-area">
+      <div id="canvas-wrap">
+        <canvas id="drawing-canvas"></canvas>
+      </div>
+      <div id="zoom-bar" role="toolbar" aria-label="Zoom">
+        <button class="zoom-btn" id="btn-zoom-out" aria-label="Zoom out">&#x2212;</button>
+        <button class="zoom-level" id="zoom-level" title="Click: fit · Double-click: 100%">100%</button>
+
+        <button class="zoom-btn" id="btn-zoom-in" aria-label="Zoom in">+</button>
+      </div>
+      <div id="canvas-info-bar">800 &#x00D7; 520 px</div>
+    </div>
+
+
+    
+    <aside id="ctx-panel" aria-label="Object properties">
+
+  <!-- IMAGE TOOLS -->
+  <div class="ctx-group">
+    <span class="ctx-group-label">Image</span>
+    <div class="ctx-actions" style="grid-template-columns:1fr 1fr 1fr;">
+      <button class="ctx-btn" id="sb-upload" title="Upload image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Upload
+      </button>
+      <button class="ctx-btn" id="sb-imglib" data-modal="modal-imglib" title="Image library">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m2 14 5-5 4 4 4-5 5 6"/></svg>Library
+      </button>
+      <button class="ctx-btn" id="sb-crop" title="Crop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>Crop
+      </button>
+      
+         <button class="ctx-btn" id="sb-objlib" data-modal="modal-objlib" title="Object Library">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+  Objects
+</button>
+
+
+    </div>
+  </div>
+
+  <!-- ACTIONS OBJET — toujours visibles -->
+  <div class="ctx-group">
+    <span class="ctx-group-label">Actions</span>
+    <div class="ctx-actions">
+      <button class="ctx-btn danger" id="ctx-delete" title="Delete">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete
+      </button>
+      <button class="ctx-btn" id="ctx-clone" title="Clone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Clone
+      </button>
+      <button class="ctx-btn" id="ctx-flip-h" title="Flip H">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3"/><path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"/><line x1="12" y1="20" x2="12" y2="4"/></svg>Flip H
+      </button>
+      <button class="ctx-btn" id="ctx-flip-v" title="Flip V">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3"/><path d="M21 16v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3"/><line x1="4" y1="12" x2="20" y2="12"/></svg>Flip V
+      </button>
+    </div>
+  </div>
+
+  <!-- PROPRIÉTÉS OBJET — toujours visibles -->
+  <div class="ctx-group">
+    <span class="ctx-group-label">Object</span>
+    <div class="prop-row"><span class="prop-lbl">Opacity</span><input type="range" id="obj-opacity" min="0" max="1" step="0.01" value="1"></div>
+    <div class="prop-row"><span class="prop-lbl">Stroke</span><input type="color" id="obj-stroke-color" value="#000000"><input type="range" id="obj-stroke-width" min="0" max="20" value="0"></div>
+    <div class="prop-row"><span class="prop-lbl">Shadow</span><input type="color" id="shadow-color" value="#000000"><input type="range" id="shadow-blur" min="0" max="50" value="0"></div>
+    <div class="prop-row"><span class="prop-lbl" style="font-size:9px">Sh X/Y</span><input type="range" id="shadow-x" min="-100" max="100" value="0"><input type="range" id="shadow-y" min="-100" max="100" value="0"></div>
+  </div>
+
+  <!-- TEXTE — visible uniquement si i-text sélectionné -->
+  <div class="ctx-group" id="ctx-text-section">
+    <span class="ctx-group-label">Text</span>
+    <div class="prop-row">
+      <select id="text-font" aria-label="Font family">
+        <option value="Arial">Arial</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Impact">Impact</option>
+        <option value="Courier New">Courier</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Comic Sans MS">Comic</option>
+        <option value="Times New Roman">Times</option>
+      </select>
+    </div>
+    <div class="prop-row"><span class="prop-lbl">Size</span><input type="range" id="text-size" min="8" max="120" value="32"><span class="sb-size-num" id="text-size-val">32</span></div>
+    <div class="prop-row"><span class="prop-lbl">Color</span><input type="color" id="text-color" value="#000000"></div>
+  </div>
+
+  <!-- FILTRES IMAGE — visible uniquement si image sélectionnée -->
+  <div class="ctx-group" id="ctx-img-section">
+    <span class="ctx-group-label">Filters</span>
+    <div class="prop-row"><span class="prop-lbl">Bright</span><input type="range" id="img-brightness" min="-1" max="1" step="0.01" value="0"></div>
+    <div class="prop-row"><span class="prop-lbl">Contrast</span><input type="range" id="img-contrast" min="-1" max="1" step="0.01" value="0"></div>
+    <div class="prop-row"><span class="prop-lbl">Saturate</span><input type="range" id="img-saturation" min="-1" max="1" step="0.01" value="0"></div>
+    <div class="prop-row"><span class="prop-lbl">Blur</span><input type="range" id="img-blur" min="0" max="1" step="0.01" value="0"></div>
+    <button class="btn-primary full-w" id="btn-reset-filters" style="font-size:11px;padding:6px;">Reset filters</button>
+  </div>
+
+  <!-- FILE -->
+  <div class="ctx-group">
+  <span class="ctx-group-label">File</span>
+  <div class="ctx-actions">
+    <button class="ctx-btn" id="sb-download" data-modal="modal-download" title="Download">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download
+    </button>
+    <button class="ctx-btn" id="sb-projects" data-modal="modal-projects" title="My projects">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Projects
+    </button>
+    
+  </div>
+  
+  </div>
+  
+  <!-- LAYERS -->
+  <div class="ctx-group" id="layers-group">
+  <span class="ctx-group-label" style="display:flex;justify-content:space-between;align-items:center;">
+    Layers
+  </span>
+  <div id="layers-list" style="display:flex;flex-direction:column;gap:2px;max-height:200px;overflow-y:auto;"></div>
+	</div>
+   </div>
+  
+  
+  
+ 
+
+
+
+</aside>
+
+  </div><!-- /#editor-wrap -->
+</div><!-- /#app-body -->
+
+<!-- ══════════════════════════════════════════════════════
+     PUB — sous l'éditeur sur tous les écrans
+══════════════════════════════════════════════════════ -->
+
+<div id="ad-bar" aria-hidden="true"></div>
+
+        <script>
+            (function() {
+                var adContainer = document.getElementById('ad-bar');
+                if(!adContainer) return;
+                
+                // Si petit écran, supprimer la div et ne RIEN charger
+                if(window.innerWidth < 768) {
+                    adContainer.remove();
+                    return;
+                }
+                
+                // Charger dynamiquement AdSense
+                var script = document.createElement('script');
+                script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2797137122235082';
+                script.crossOrigin = 'anonymous';
+                script.async = true;
+                
+                script.onload = function() {
+                    window.addEventListener('load', function() {
+                        try {
+                            var ins = document.createElement('ins');
+                            ins.className = 'adsbygoogle';
+                            ins.style.display = 'block';
+                            ins.setAttribute('data-ad-client', 'ca-pub-2797137122235082');
+                            ins.setAttribute('data-ad-slot', '5926396904');
+                            ins.setAttribute('data-ad-format', 'horizontal');
+                            ins.setAttribute('data-full-width-responsive', 'true');
+                            adContainer.appendChild(ins);
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        } catch(e) {}
+                    });
+                };
+                
+                document.head.appendChild(script);
+            })();
+        </script>
+    
+<!-- ══════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════ -->
+<div id="footer-spacer"></div>
+<footer id="app-footer">
+  <div class="footer-inner">
+    <span>&#x00A9; 2026 DrawIsland</span>
+    <span class="footer-sep">&#x00B7;</span>
+    <a href="/contact">Contact</a>
+    <span class="footer-sep">&#x00B7;</span>
+    <a href="/privacy">Privacy</a>
+    <span class="footer-sep">&#x00B7;</span>
+    <a class="no700" href="/?v1">Old Version</a>
+    <span class="footer-sep">&#x00B7;</span>
+    <a href="/documentation">Doc</a>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════ -->
+
+<!-- Pencil -->
+<div class="modal-overlay" id="modal-pencil" hidden role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Pencil</span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="msec"><span class="msec-lbl">Size</span>
+        <div class="size-row"><input type="range" id="pencil-size" min="1" max="80" value="4"><span class="sz-dot" id="pencil-dot" style="width:8px;height:8px;"></span><span class="sz-num" id="pencil-size-val">4</span></div>
+      </div>
+      <div class="msec"><span class="msec-lbl">Opacity</span>
+        <div class="size-row"><input type="range" id="pencil-opacity" min="5" max="100" value="100"><span class="sz-num" id="pencil-opacity-val">100%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Brush -->
+<div class="modal-overlay" id="modal-brush" hidden role="dialog" aria-modal="true">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.06 11.9l8.07-8.06a2.85 2.83 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1 1 2.48 1.02 3.5 1.02 2.2 0 3-1.8 3-3.02 0-1.67-1.33-3.04-1.5-3.04z"/></svg>Brushes</span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="brush-grid" id="brush-grid"></div>
+      <div class="msec"><span class="msec-lbl">Size</span>
+        <div class="size-row"><input type="range" id="bk-size" min="1" max="80" value="4"><span class="sz-num" id="bk-size-val">4</span></div>
+      </div>
+      <div class="msec"><span class="msec-lbl">Opacity</span>
+        <div class="size-row"><input type="range" id="bk-opacity" min="5" max="100" value="90"><span class="sz-num" id="bk-opacity-val">90%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Color -->
+<div class="modal-overlay" id="modal-color" hidden role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Color</span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="color-row-main">
+        <label class="color-big" id="color-big" style="background:#000" title="Pick color">
+          <input type="color" id="color-picker" value="#000000">
+        </label>
+        <div class="opacity-col">
+          <div class="opa-labels"><span>Opacity</span><span id="opacity-val">100%</span></div>
+          <input type="range" id="opacity-slider" min="5" max="100" value="100">
+        </div>
+      </div>
+      <div class="msec"><span class="msec-lbl">Presets</span>
+        <div class="palette-wrap" id="preset-palette">
+          <button class="pal-dot on" style="--c:#000000" data-color="#000000"></button>
+          <button class="pal-dot" style="--c:#ffffff" data-color="#ffffff"></button>
+          <button class="pal-dot" style="--c:#ef4444" data-color="#ef4444"></button>
+          <button class="pal-dot" style="--c:#f97316" data-color="#f97316"></button>
+          <button class="pal-dot" style="--c:#eab308" data-color="#eab308"></button>
+          <button class="pal-dot" style="--c:#22c55e" data-color="#22c55e"></button>
+          <button class="pal-dot" style="--c:#06b6d4" data-color="#06b6d4"></button>
+          <button class="pal-dot" style="--c:#3b82f6" data-color="#3b82f6"></button>
+          <button class="pal-dot" style="--c:#8b5cf6" data-color="#8b5cf6"></button>
+          <button class="pal-dot" style="--c:#ec4899" data-color="#ec4899"></button>
+          <button class="pal-dot" style="--c:#6b7280" data-color="#6b7280"></button>
+          <button class="pal-dot" style="--c:#92400e" data-color="#92400e"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shapes -->
+<div class="modal-overlay" id="modal-shapes" hidden role="dialog" aria-modal="true">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><circle cx="17.5" cy="6.5" r="3.5"/><path d="m3 21 4-8 4 8"/></svg>Shapes</span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;">
+        <button class="shape-btn" data-shape="rect"        title="Rectangle">&#x25AD;</button>
+        <button class="shape-btn" data-shape="rect-fill"   title="Filled rect">&#x25AC;</button>
+        <button class="shape-btn" data-shape="circle"      title="Circle">&#x25CB;</button>
+        <button class="shape-btn" data-shape="circle-fill" title="Filled circle">&#x25CF;</button>
+        <button class="shape-btn" data-shape="triangle"    title="Triangle">&#x25B3;</button>
+        <button class="shape-btn" data-shape="line"        title="Line">&#x2571;</button>
+        <button class="shape-btn" data-shape="arrow"       title="Arrow">&#x2192;</button>
+        <button class="shape-btn" data-shape="star"        title="Star">&#x2606;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Download -->
+<div class="modal-overlay" id="modal-download" hidden role="dialog" aria-modal="true">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title">Download</span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px;font-size:11px;color:var(--text-2);">
+        <div style="margin-bottom:6px;font-weight:500;">Export size</div>
+        <label style="display:flex;align-items:center;gap:6px;margin-bottom:4px;cursor:pointer;">
+          <input type="radio" name="dl-size" value="full" checked> Full canvas size
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="radio" name="dl-size" value="view"> Current view (with zoom)
+        </label>
+      </div>
+      <div class="dl-grid">
+        <button class="btn-primary" id="dl-png">PNG</button>
+        <button class="btn-primary" id="dl-jpg">JPG</button>
+        <button class="btn-primary" id="dl-pdf">PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Canvas size -->
+<div class="modal-overlay" id="modal-canvassize" hidden role="dialog" aria-modal="true">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <span class="modal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/></svg>Canvas size</span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div id="size-pills-grid">
+        <button class="pill-canvas active" data-size="800x520">
+          <span class="pill-preview"></span>
+          <span class="pill-label">800×520</span>
+        </button>
+       <button class="pill-canvas" data-size="max">
+  <span class="pill-preview"></span>
+  <span class="pill-label">Max</span>
+</button>
+        <button class="pill-canvas" data-size="800x800">
+          <span class="pill-preview"></span>
+          <span class="pill-label">Square</span>
+        </button>
+        <button class="pill-canvas" data-size="600x900">
+          <span class="pill-preview"></span>
+          <span class="pill-label">Portrait</span>
+        </button>
+        <button class="pill-canvas" data-size="custom">
+          <span class="pill-preview" style="border-style:dashed;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--text-3);">?</span>
+          <span class="pill-label">Custom…</span>
+        </button>
+      </div>
+      <p id="current-canvas-size" style="font-size:11px;font-family:var(--font-mono);color:var(--text-3);margin-top:10px;text-align:center;">800 × 520 px</p>
+    </div>
+  </div>
+</div>
+<!-- Projects -->
+<div class="modal-overlay" id="modal-projects" hidden role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>My Projects
+      </span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;margin-bottom:4px;">
+        <input type="text" id="project-name" placeholder="Project name&#x2026;" style="flex:1;padding:7px 10px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-size:12px;outline:none;">
+        <button class="btn-primary" id="btn-project-save" style="padding:7px 14px;white-space:nowrap;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Save
+        </button>
+      </div>
+      <p style="font-size:10px;color:var(--text-3);margin-bottom:10px;">Local storage &#x00B7; max 5 projects</p>
+      
+      
+      <div style="display:flex;gap:8px;margin-bottom:6px;">
+  <button class="btn-primary" id="btn-export-json" style="flex:1;background:var(--surface-2);color:var(--text-2);border:1.5px solid var(--border-2);">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Export .json
+  </button>
+  <label class="btn-primary" style="flex:1;background:var(--surface-2);color:var(--text-2);border:1.5px solid var(--border-2);cursor:pointer;">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Import .json
+    <input type="file" id="btn-import-json" accept=".json" hidden>
+  </label>
+</div>
+      
+      
+      <div id="projects-list" style="display:flex;flex-direction:column;gap:6px;min-height:40px;"></div>
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</div>
+
+<!-- Object Library -->
+<div class="modal-overlay" id="modal-objlib" hidden role="dialog" aria-modal="true">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+        Object Library
+      </span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--surface-2);border:1.5px solid var(--border-2);border-radius:var(--radius);margin-bottom:10px;font-size:11px;color:var(--text-2);">
+        <span>💡 Don't forget to <strong>select all objects</strong> to move or resize them.</span>
+        <a href="https://drawisland.com/doc/select-objects.webp" target="_blank" style="flex-shrink:0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border-2);">
+          <img src="https://drawisland.com/doc/select-objects.webp" alt="Demo select objects" style="width:60px;height:36px;object-fit:cover;display:block;">
+        </a>
+      </div>
+
+      <div id="objlib-controls" style="margin-bottom:8px;"></div>
+      <div id="objlib-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Image Library -->
+<div class="modal-overlay" id="modal-imglib" hidden role="dialog" aria-modal="true">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m2 14 5-5 4 4 4-5 5 6"/></svg>Image Library
+      </span>
+      <button class="modal-close">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div id="imglib-controls" style="margin-bottom:8px;"></div>
+      <div id="imglib-grid"></div>
+      <p id="imglib-empty" style="font-size:12px;color:var(--text-3);text-align:center;padding:20px 0;display:none;">
+        No images yet. Inject via <code>window.diImgLib(images)</code>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Alert -->
+<div class="modal-overlay" id="modal-alert" hidden role="alertdialog" aria-modal="true">
+  <div class="modal modal-sm">
+    <div class="modal-body" style="padding:20px 18px;text-align:center;">
+      <p id="alert-msg" style="font-size:13px;margin-bottom:16px;"></p>
+      <button class="btn-primary full-w" id="alert-ok">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Save to Gallery -->
+<div id="save-gallery-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:12px;">
+  <div style="background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:400px;box-shadow:var(--shadow-lg);overflow:hidden;animation:m-up 170ms cubic-bezier(.34,1.3,.64,1);">
+    <div class="modal-header">
+      <span class="modal-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save to Gallery
+      </span>
+      <button class="modal-close" onclick="closeSaveGalleryModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="msec">
+        <label class="msec-lbl" for="sg-title">Title <span style="float:right;font-weight:400;color:var(--text-3);font-size:10px;text-transform:none;letter-spacing:0;"><span id="sg-title-count">0</span>/100</span></label>
+        <input type="text" id="sg-title" maxlength="100" placeholder="My awesome drawing…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-size:12px;outline:none;background:var(--surface);color:var(--text-1);font-family:inherit;">
+      </div>
+      <div class="msec">
+        <label class="msec-lbl" for="sg-desc">Description <span style="float:right;font-weight:400;color:var(--text-3);font-size:10px;text-transform:none;letter-spacing:0;"><span id="sg-desc-count">0</span>/300</span></label>
+        <textarea id="sg-desc" maxlength="300" rows="3" placeholder="Optional description…" style="width:100%;padding:8px 10px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-size:12px;outline:none;resize:vertical;background:var(--surface);color:var(--text-1);font-family:inherit;"></textarea>
+      </div>
+      <div class="msec">
+        <label class="msec-lbl" for="sg-tags">Tags <span style="float:right;font-weight:400;color:var(--text-3);font-size:10px;text-transform:none;letter-spacing:0;"><span id="sg-tags-count">0</span>/50</span></label>
+        <input type="text" id="sg-tags" maxlength="50" placeholder="art, sketch, fun (comma-separated)" style="width:100%;padding:8px 10px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-size:12px;outline:none;background:var(--surface);color:var(--text-1);font-family:inherit;">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="sg-editable" style="width:14px;height:14px;cursor:pointer;accent-color:var(--accent);">
+        <label for="sg-editable" style="font-size:12px;color:var(--text-2);cursor:pointer;">Allow others to remix this drawing</label>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button onclick="closeSaveGalleryModal()" style="flex:1;padding:9px 14px;border-radius:var(--radius);border:1.5px solid var(--border-2);background:var(--surface-2);color:var(--text-2);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button class="btn-primary" id="sg-submit-btn" onclick="submitSaveToGallery()" style="flex:2;">&#x1F4BE; Save to gallery</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="feedbackModal" style="display:none; position:fixed; top:55%; left:50%; transform:translate(-50%,-50%); background:white; padding:20px; border-radius:8px; box-shadow:0 5px 15px rgba(0,0,0,0.3); z-index:10000; width:400px; max-width:90%;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0;color:#000000;">Send Feedback</h3>
+        <button onclick="closeFeedback()" style="background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>
+    </div>
+    
+    <form id="feedbackForm">
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Category:</label>
+            <select name="category" style="width:100%; padding:8px; border-radius:4px; border:1px solid #ddd;">
+                <option value="bug">Bug Report</option>
+                <option value="suggestion">Suggestion</option>
+                <option value="question">Question</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Message (max 300 chars):</label>
+            <textarea name="message" rows="4" maxlength="300" 
+                style="width:100%; padding:8px; border-radius:4px; border:1px solid #ddd; resize:vertical;"
+                placeholder="Describe your issue or suggestion..."></textarea>
+            <div style="text-align:right; font-size:12px; color:#666; margin-top:2px;">
+                <span id="charCount">0</span>/300
+            </div>
+        </div>
+        
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px;">Email (optional):</label>
+            <input type="email" name="email" 
+                style="width:100%; padding:8px; border-radius:4px; border:1px solid #ddd;"
+                placeholder="your@email.com">
+            <div style="font-size:12px; color:#666; margin-top:2px;color:#000000;">
+                Only if you want a response
+            </div>
+        </div>
+        
+        <input type="hidden" name="page_url" id="feedbackPageUrl">
+        
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+            <button type="button" onclick="closeFeedback()" 
+                style="padding:8px 16px; background:#f0f0f0; border:1px solid #ddd; border-radius:4px; cursor:pointer;">
+                Cancel
+            </button>
+            <button type="submit" 
+                style="padding:8px 16px; background:#4CAF50; color:white; border:none; border-radius:4px; cursor:pointer;">
+                Send Feedback
+            </button>
+        </div>
+    </form>
+</div>
+
+<div id="feedbackOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;"></div>
+
+<script>
+
+document.querySelector('textarea[name="message"]').addEventListener('input', function() {
+    document.getElementById('charCount').textContent = this.value.length;
+});
+
+
+function openFeedback() {
+    document.getElementById('feedbackPageUrl').value = window.location.href;
+    document.getElementById('feedbackOverlay').style.display = 'block';
+    document.getElementById('feedbackModal').style.display = 'block';
+}
+
+
+function closeFeedback() {
+    document.getElementById('feedbackOverlay').style.display = 'none';
+    document.getElementById('feedbackModal').style.display = 'none';
+    document.getElementById('feedbackForm').reset();
+    document.getElementById('charCount').textContent = '0';
+}
+
+
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.style.opacity = '0.7';
+    
+    fetch('submit_feedback.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            closeFeedback();
+        } else {
+            alert('Error: ' + (data.error || data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Network error. Please try again.');
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        submitBtn.style.opacity = '1';
+    });
+});
+
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeFeedback();
+    }
+});
+
+
+document.getElementById('feedbackOverlay').addEventListener('click', closeFeedback);
+</script>
+
+<style>
+#feedbackModal {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+</style><!-- Hidden inputs -->
+<input type="file" id="file-image" accept="image/*" hidden>
+<input type="hidden" id="maintenance" value="no">
+
+<!-- Scripts <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+-->
+
+
+<script src="https://drawisland.com/fabric.min.js"></script>
+
+<script src="app0526-4min.js" defer></script><script src="obj0526-0.min.js" defer></script>
+<script>
+const IS_LOGGED_IN = false;
+const CURRENT_USER = null;
+
+/* ══════════════════════════════════════════════════════════
+   PATCH ZOOM — plancher = 1 (pas de dézoom sous 100 %)
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function () {
+
+
+// Permet le zoom seulement si l'utilisateur le fait intentionnellement
+let zoomTimer;
+document.addEventListener('dblclick', function(e) {
+    if (e.target.closest('#drawing-canvas, #canvas-area')) {
+        e.preventDefault();
+    }
+});
+
+  var _t = setInterval(function () {
+    if (typeof canvas === 'undefined' || !canvas.getZoom) return;
+    clearInterval(_t);
+
+    var FLOOR = 0.1;
+
+    // Bouton zoom-out
+    var btnOut = document.getElementById('btn-zoom-out');
+    if (btnOut) {
+      var nb = btnOut.cloneNode(true);
+      btnOut.parentNode.replaceChild(nb, btnOut);
+      nb.addEventListener('click', function () {
+        if (!APP._galleryZoom && canvas.getZoom() <= FLOOR) return;
+        var nz = Math.max(APP._galleryZoom ? 0.1 : FLOOR, canvas.getZoom() * (1 - 0.12));
+        canvas.zoomToPoint({ x: canvas.getWidth() / 2, y: canvas.getHeight() / 2 }, nz);
+        canvas.renderAll();
+        var l = document.getElementById('zoom-level');
+        if (l) l.textContent = Math.round(canvas.getZoom() * 100) + '%';
+      });
+    }
+
+  
+
+    // Pinch touch
+    if (canvas.upperCanvasEl) {
+      canvas.upperCanvasEl.addEventListener('touchend', function () {
+        setTimeout(function () {
+          if (!APP._galleryZoom && canvas.getZoom() < FLOOR) {
+            canvas.setViewportTransform([FLOOR, 0, 0, FLOOR, 0, 0]);
+            canvas.renderAll();
+            var l = document.getElementById('zoom-level');
+            if (l) l.textContent = Math.round(FLOOR * 100) + '%';
+          }
+        }, 50);
+      }, { passive: true });
+    }
+
+  }, 100);
+  
+   var b = document.getElementById('version-badge');
+  if(!b) return;
+  if(window.innerWidth < 900) b.style.display = 'none';
+  window.addEventListener('resize', function(){
+    b.style.display = window.innerWidth < 900 ? 'none' : 'inline-flex';
+  });
+  b.addEventListener('click', function(){
+    _showZoomToast('✨ v2 — layers fixed & improved · zoom < 100% now works');
+  });
+  
+  
+  
+});
+
+
+ 
+</script>
+<img src="https://whos.amung.us/swidget/bnn6pp7x7pta.png" title="" alt="." style="border:0;height:0;width:0;"></body>
+</html>

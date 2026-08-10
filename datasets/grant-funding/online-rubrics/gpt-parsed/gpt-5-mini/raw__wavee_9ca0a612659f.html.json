@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/wavee_9ca0a612659f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 9135,
+  "output_tokens": 3413,
+  "elapsed_s": 1527.8682336660568,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and practitioners working on data augmentation and hierarchical topic inference for research proposals; funding-administration technologists interested in automated reviewer assignment",
+    "subtask_short": "LLM-based proposal augmentation",
+    "subtask_description": "Designing and evaluating LLM-driven data augmentation for hierarchical multi-label disciplinary topic inference on research proposals, including minority-class sampling, prompt construction, generation control, and evaluation.",
+    "subtask_keywords": [
+      "nlp",
+      "data_augmentation",
+      "hierarchical_multi_label",
+      "research_proposals",
+      "llm",
+      "imbalance_learning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Research Proposal Structure",
+        "description": "A research proposal formally consists of a title, keywords, research field, and abstract. We represent a grant application proposal with D. The various components within this proposal are represented as D = {d_t}|T|_{t=1}, where each document type is signified by t belonging to the set T of all document classifications.",
+        "guidance": "Title: overall demonstration of the research. Keywords: represent the studying problem, material, or critical techniques. Research Field: a simple conclusion of this research proposal consisting of no more than ten words. Abstract: overall description in long-text form, consisting of 100 to 300 words."
+      },
+      {
+        "name": "Hierarchical Discipline Structure (\u03b3) properties",
+        "description": "The hierarchical disciplinary structure, symbolized by \u03b3, can either be a DAG or a tree structure. It\u2019s made up of academic domains and includes a directed Belongs-to association pointing from a domain to its sub-domains. The nodes within this discipline, set C = {C0 \u222a C1 \u222a ... \u222a CH}, are systematically arranged across H hierarchical stages. The partial order \u227a is asymmetric, anti-reflexive and transitive.",
+        "guidance": "Root level is C0 = {root}. Disciplines obey the belong-to rule and are connected with => in prompts to represent belonging relations. The structure may be used to guide sampling and prompt construction."
+      },
+      {
+        "name": "Disciplinary Topic Inference as hierarchical multi-label classification",
+        "description": "Disciplinary Topic Inference is approached using a Hierarchical Multi-label Classification framework. A sequence of domain-level-specific label sets symbolizes the grant application\u2019s academic codes: L = [l0, l1, l2, ..., l_HA], with top-down prediction at each level.",
+        "guidance": "Prediction is broken down in a top-down manner: \u2126(D, L<k, \u03b3; \u0398) \u2192 Lk. The likelihood factors as P(L|D, \u03b3; \u0398) = \u220f_{k=1}^{HA} P(lk|D, L<k, \u03b3; \u0398). Training optimizes this decomposition given ground-truth labels."
+      },
+      {
+        "name": "Structural-informed Minority Class Sampling (minority score sc)",
+        "description": "For each discipline c \u2208 C obtain the number n_c of related proposals and compute a minority score via: s_c = (\u03bb e^{-n_c}) / \u2211_{i\u2208C} e^{-n_i}.",
+        "guidance": "\u03bb is a hyperparameter to adjust the focal point: higher \u03bb focuses more on classes with fewer samples. The generation number for each discipline is f_c = T * s_c where T is total generation budget. Algorithmic procedure provided to accumulate node counts and compute per-node globalFreq."
+      },
+      {
+        "name": "Sampling algorithm and node frequency assignment",
+        "description": "Algorithm 1 performs minority-class sampling on \u03b3 by scanning label sets to increment node.num, pushing nodes level-wise, and computing node.globalFreq (root gets 1.0; others node.num/Count).",
+        "guidance": "Use the tree/DAG traversal to gather per-node counts and derive sampling probabilities; the root's Count is total number of labeled instances. Implemented as a level-order traversal with child pushes and per-level processing."
+      },
+      {
+        "name": "Prompt Design: four-part prompt structure",
+        "description": "A 'Prompt' consists of four main parts: Background, Principle, Format, and Language Style.",
+        "guidance": "Background supplies content descriptions and lengths for each application part. Principle defines the LLM role, guiding content, and formal restrictions. Format strictly constraints the generated text format. Language Style constrains tone and language type."
+      },
+      {
+        "name": "Background prompt requirements (format & lengths)",
+        "description": "Background: provide the specific abstract content described in each part of the application and the related length. The abstract is 100 to 300 words; the research field should be no more than ten words.",
+        "guidance": "Clarify what Title, Keywords, Research Field, and Abstract mean and their expected lengths so the LLM generates appropriately scoped content."
+      },
+      {
+        "name": "Principle section requirements (role and guiding content)",
+        "description": "Principle: Role: 'You are an expert in the following {discipline} field.' Define guiding content (what the model needs to complete) and formal restrictions on generated text.",
+        "guidance": "Explicitly assign expert role and provide directives (e.g., generate proposals based on given keywords/disciplines), to steer LLM outputs toward domain-appropriate content."
+      },
+      {
+        "name": "Format section requirements (strict output format)",
+        "description": "Format: strictly constrain the format of the generated text. Example output format: Title: xxx\\nKeywords: xxx\\nResearch Field: xxx\\nAbstract: xxx\\n",
+        "guidance": "Instruction: 'ONLY return the content in certain format, and nothing more! Be sure that there is no line break or space between abstract and it's content.' Enforce exact tokens, line breaks via \\n, and forbid extra commentary or trailing placeholders."
+      },
+      {
+        "name": "Language Style constraints",
+        "description": "Language Style: use concise and academic language, avoid repeating the content, strictly follow the format, and use \\n for line breaks.",
+        "guidance": "Specify required language: e.g., 'You must use Simplified Chinese for content filling and completion.' Constrain tone and repetition to improve quality and consistency."
+      },
+      {
+        "name": "Keyword and discipline provisioning rules",
+        "description": "Keywords and disciplines are provided as parameters: each selected keyword and discipline is manually provided by experts from funding agencies to guarantee validity.",
+        "guidance": "Provided keywords may be included in the discipline; if an example keyword is 'nan' it can be ignored. Keywords help constrain generation and improve semantic/structural diversity."
+      },
+      {
+        "name": "Generation control and budget (T and f_c)",
+        "description": "Total synthetic generation budget T is apportioned across disciplines via f_c = T * s_c where s_c is the minority score.",
+        "guidance": "Selection of T (e.g., 350 vs 1000 samples) affects downstream performance; experiments show 1000 synthetic samples yield larger MicroF1 improvements (~+8%) while 350 gave higher precision but smaller MicroF1 gains. Choose T balancing performance and efficiency."
+      },
+      {
+        "name": "Use of LLM backbone and augmentation workflow",
+        "description": "Adopt LLMs (in this study Llama V1) as data generators: constructed prompt sent to LLM, generated pseudo-research proposals appended to the training set for model training.",
+        "guidance": "Future work suggests exploring additional LLMs optimized for long-form scientific text. After generation, pseudo-proposals are included in training for downstream hierarchical classification models (e.g., frozen BERT classifier finetuning pipeline as illustrated)."
+      },
+      {
+        "name": "Evaluation metrics for augmentation effectiveness",
+        "description": "Evaluate augmentation impact using MicroF1, MacroF1, Recall, and Precision; report mean before and after augmentation.",
+        "guidance": "Compare different augmentation sizes and report trade-offs (e.g., increases in MicroF1/MacroF1 and changes in precision/recall). Use aggregate metrics to assess both overall performance and minority-class effects."
+      },
+      {
+        "name": "Prompting practice: provide keywords to improve diversity",
+        "description": "Providing keywords to the LLM yields more diverse sentence structures and superior emergent capabilities, while omitting keywords leads to outputs concentrating on provided sub-disciplines and more repetition.",
+        "guidance": "Use expert-selected keywords to constrain and diversify generated proposals. Expect some lexical errors but greater structural and semantic variety when keywords are used."
+      },
+      {
+        "name": "Fairness and representational equity goal",
+        "description": "Augment minority disciplines to rectify data imbalances that impede the precision of downstream topic models and compromise fairness of AI-assisted reviewer assignment systems.",
+        "guidance": "Assess augmentation not only by classification metrics but also by its impact on the fairness and equity of reviewer assignment; prioritize generating reasonable, high-quality scientific text data for underrepresented disciplines."
+      },
+      {
+        "name": "Prompt strictness and validation constraints",
+        "description": "The prompt enforces strict generation constraints: only return specified formatted fields, use specified language, include or optionally use provided keywords, and avoid extraneous text or placeholders.",
+        "guidance": "Prompt must validate that generated output strictly follows the required fields and lengths; use expert-provided keywords/discipline metadata to ensure domain validity and reduce meaningless or random outputs."
+      }
+    ]
+  }
+}

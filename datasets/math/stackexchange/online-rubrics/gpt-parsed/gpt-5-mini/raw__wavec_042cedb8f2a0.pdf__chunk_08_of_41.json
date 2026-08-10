@@ -1,0 +1,181 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 8,
+  "n_chunks": 41,
+  "chunk_chars": 39918,
+  "model": "gpt-5-mini",
+  "elapsed_s": 115.3511365000013,
+  "input_tokens": 13649,
+  "output_tokens": 5958,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "Users of the Magma computer-algebra system (mathematicians/programmers working with Magma)",
+    "subtask_short": "magma records and mappings",
+    "subtask_description": "Guidance and rules for defining and manipulating Magma record formats, record values, aggregate transfer functions, mappings and homomorphisms, and user-defined functions/procedures. Covers syntax, type/restriction checking, image/preimage semantics, constructors, composition and recursive map definitions.",
+    "subtask_keywords": [
+      "magma",
+      "computer_algebra",
+      "records",
+      "mappings",
+      "homomorphisms",
+      "aggregate_transfers"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Record field type restrictions",
+        "description": "A record format may restrict what may be stored in a given field by following the fieldname with a colon and an expression specifying a parent magma/type. Omitting the colon and expression allows the field to contain data of any type.",
+        "guidance": "Example: recformat< gens, order : IntegerRing(), comment : MonStgElt >; Magma will enforce the parent-magmas restrictions (e.g. order must be an integer, comment must be string), but if no restriction is given the user is responsible for sensible values (Magma will not prevent unrelated types being stored)."
+      },
+      {
+        "name": "Defining record formats and record values",
+        "description": "Record formats are defined with recformat<...>; record values of that format are created with rec< Format | field:=expr, ... >. It is not obligatory to assign values to all fields when creating a record.",
+        "guidance": "Fields can be left unassigned or assigned later. Syntax example: r := rec< F | field := expr, ... >; some fields may be permanently unassigned."
+      },
+      {
+        "name": "Accessing record fields (backquote syntax)",
+        "description": "The operator used to refer to a field of a record is the backquote ` symbol. If r is a record and f is a fieldname then r`f is the value stored in field f of r.",
+        "guidance": "Use r`f both in expressions and on the left side of assignments (e.g. gA`order := 120). Note: this is the backquote `, not the apostrophe '."
+      },
+      {
+        "name": "Dynamic field access using evaluated field names",
+        "description": "If the fieldname cannot be given literally, use r``s where s evaluates to a string equal to the fieldname.",
+        "guidance": "Example: chosen_field := \"gens\"; print gC``chosen_field; prints gC`gens. Useful when fieldname is computed at runtime."
+      },
+      {
+        "name": "Testing and deleting record fields",
+        "description": "Use the assigned operator to test whether a record field is assigned, and delete to remove an assignment, similar to identifiers.",
+        "guidance": "Example: print assigned gA`comment, assigned gB`comment; returns true/false. Use delete to unassign a field."
+      },
+      {
+        "name": "Format and Names for records",
+        "description": "Given a record r with record format F, Format(r) returns F. Names(r) or Names(F) returns the fieldnames of the record or record format as a sequence of strings.",
+        "guidance": "Useful for introspection or iterating over fields programmatically."
+      },
+      {
+        "name": "No built-in equality for records; user must define equality",
+        "description": "The operators eq and ne (and lt etc.) are not available for records because equality may not make sense for many formats. The user must write a suitable equality function.",
+        "guidance": "An equality function should specify semantics such as whether two records equal in all assigned components but with different unassigned components are considered equal."
+      },
+      {
+        "name": "Magma checks restricted fields but not semantic content of complex fields",
+        "description": "When a field has a restriction (e.g. prime : {! n in Z | n ge 1 and IsPrime(n) !}), Magma checks those constraints. For compound fields like polys : SetEnum, Magma will only check that the value is an enumerated set, not that the set contains the correct mathematical objects (e.g. monic irreducible polynomials).",
+        "guidance": "Example: irred format checks prime and degree constraints but only verifies polys is an enumerated set; user must ensure polys contains the correct polynomials."
+      },
+      {
+        "name": "Constructing record values via functions",
+        "description": "It is common to create records programmatically by functions that compute one field from others and return rec<format | ... > values.",
+        "guidance": "Example: irredCreate(p,d) returns rec<irred| prime:=p, degree:=d, polys:=AllIrreduciblePolynomials(GF(p),d)>. Use such constructors to ensure fields are consistent and to populate computationally expensive fields."
+      },
+      {
+        "name": "Selecting and filtering records in sequences",
+        "description": "After creating sequences of records, you can select or compute properties across them using list comprehensions and set/sequence operators.",
+        "guidance": "Examples: recs := [irredCreate(p,d) : p in {2,3,5}, d in {1..6}]; print { #r`polys : r in recs }; print [ r : r in recs | #r`polys in {5..8} ];"
+      },
+      {
+        "name": "Transfer functions between aggregate types preserve elements",
+        "description": "Magma provides transfer functions (e.g. SetToSequence, SequenceToSet, SequenceToMultiset, SetToIndexedSet, SequenceToList, TupleToList) that convert aggregates from one category to another, preserving their elements. As far as possible the order and multiplicity are retained given category properties.",
+        "guidance": "Table of named transfers exists (abbreviations available). Use the appropriate transfer to gain needed operations not offered by the original aggregate type."
+      },
+      {
+        "name": "Counting multiplicities via SequenceToMultiset and Multiplicity",
+        "description": "To count how many times an element occurs in a sequence, convert the sequence to a multiset with SequenceToMultiset and use Multiplicity.",
+        "guidance": "Example: mq := SequenceToMultiset(q); Multiplicity(mq, 3*x+5) returns number of occurrences. Converting to set would lose multiplicity information."
+      },
+      {
+        "name": "Prefer Map category (map/hom) over functions for structure-aware mappings",
+        "description": "When a relationship between magmas is to be treated as a mapping/homomorphism, create it as a member of the Map category (using map or hom) rather than as a bare function, so Magma enforces domain/codomain checks and provides mapping-specific operations.",
+        "guidance": "Functions do not check parents of argument or image; mappings ensure coercibility and permit operations like preimage, Image, Kernel when available."
+      },
+      {
+        "name": "Constructors often return mappings as auxiliary values",
+        "description": "Many Magma constructors return mappings as auxiliary values: sub/ideal/ncl return inclusion monomorphisms, quo returns natural epimorphism, direct product/sum return inclusion/projection homomorphisms, action functions return homomorphism, image and kernel.",
+        "guidance": "Example: S, i := sub< V | ... > returns i : S -> V; W, n := quo< V | ... > returns n : V -> W; CosetAction returns (homomorphism, image, kernel)."
+      },
+      {
+        "name": "Coercion mapping via Coercion(M,T) or Bang(M,T)",
+        "description": "The mapping used for coercion from magma M to T can be obtained by Coercion(M, T) (or Bang(M,T)); applying the mapping or using T!m gives the same coerced element and Magma checks membership/coercibility.",
+        "guidance": "Example: coerceIntToReal := Coercion(Z, R); r1 := R!17; r2 := 17 @ coerceIntToReal; r1 eq r2 returns true."
+      },
+      {
+        "name": "Mapping application notation: m(a) and a@m",
+        "description": "To calculate the image of a under mapping m there are two equivalent notations in Magma: m(a) and a@m.",
+        "guidance": "Both notations behave the same; choose the one matching functional (m(a)) or mapping (a@m) conventions. Works for single elements, sets, and sequences (with semantics below)."
+      },
+      {
+        "name": "Image of sets vs sequences under mapping",
+        "description": "For an enumerated set or indexed set T of elements of domain A, m(T) or T@m returns the enumerated set of their images (duplicates removed). For a sequence Q, m(Q) or Q@m returns the sequence of images preserving term positions (duplicates allowed).",
+        "guidance": "Example: gensV @ n produced a set with fewer elements because some images coincided; gensVseq @ n produced a sequence where repeated images remain in corresponding positions."
+      },
+      {
+        "name": "Image of a submagma under a homomorphism is a submagma",
+        "description": "If m is a homomorphism and N is a submagma of the domain A, then m(N) or N @m returns the image of N under m as a submagma of the codomain B.",
+        "guidance": "This follows from the structure-preserving nature of homomorphisms; examples show returned objects are labelled as submagmas in output."
+      },
+      {
+        "name": "Preimage operation b@@m returns one preimage or error",
+        "description": "Given m : A -> B and b in B, b@@m either returns an element a in A with m(a)=b, or raises an error if no preimage exists. If more than one preimage exists, b@@m returns a single representative (usually when m is homomorphism).",
+        "guidance": "Example: s1 := (V![3,0,0,2]) @@ i returns (3 0 0 2). If no preimage exists an application error is raised."
+      },
+      {
+        "name": "Multiple preimages for homomorphisms form coset of kernel; construct all preimages by adding kernel",
+        "description": "When m is a homomorphism and there is at least one preimage of b, the set of all preimages is a coset of Kernel(m). To get all preimages compute {preim + k : k in Kernel(m)}.",
+        "guidance": "Example: w @@ n returned one preimage preim; K := Kernel(n); allpreims := { preim + k : k in K } yields full preimage set; allpreims @ n yields {w}."
+      },
+      {
+        "name": "Preimages for sets/sequences return representatives; preimage of a submagma returns whole preimage",
+        "description": "If preimages are available, the preimage operation on a set or sequence returns coset representatives (not whole cosets). When asked for the preimage of a submagma or ideal of the image, Magma returns the whole preimage which is a submagma/ideal of the domain.",
+        "guidance": "Example: [ w, 2*w, 3*w, 4*w ] @@ n returned a list of representatives; Ws := sub< W | w >; Ws @@ n returned the full preimage vector space with basis printed."
+      },
+      {
+        "name": "Functions on mappings: Domain, Codomain, Image, Kernel",
+        "description": "Domain(m) and Codomain(m) return the declared domain and codomain of mapping m. For homomorphisms, Image(m) returns the image submagma and Kernel(m) returns the kernel as an ideal of the domain (when computable).",
+        "guidance": "Note codomain may be larger than actual image. Example checks: Domain(m1) eq U; Codomain(m1) eq DP; print Image(m1); print Kernel(m1)."
+      },
+      {
+        "name": "Construct mappings with hom< A -> B | rule > and map< A -> B | rule >",
+        "description": "Two constructors exist: hom for homomorphisms and map for general mappings. The syntax is hom< A -> B | mapping rule > or map< A -> B | mapping rule >. Magma does not automatically check that a user-defined hom is actually a homomorphism.",
+        "guidance": "Use hom-constructor for mappings known to be homomorphisms to get extra functionality; conversely, map can be used for arbitrary element-image correspondences. Be careful: Magma's distinction provides functionality differences rather than enforcement."
+      },
+      {
+        "name": "Mapping rule as expression: var :-> expression and where-clauses",
+        "description": "If the mapping rule is an expression, the right side of the constructor uses a local free variable, the maps-to symbol :->, and an expression in that variable which gives the image. A where-construction may be used to bind auxiliary names/domains.",
+        "guidance": "Examples: trigmap := map< R -> R | x :-> x-Sin(x) >; three := map< Zplus -> Zplus | n :-> IsEven(n) select n div 2 else 3*n+1 >; where-clauses allow local domain definitions."
+      },
+      {
+        "name": "Function(m) extracts underlying function (less strict parent checks)",
+        "description": "When a mapping is defined as an expression, the underlying function object can be obtained with Function(m). That function behaves like the mapping on domain elements but may accept arguments from other parents (i.e., less strict coercion checking).",
+        "guidance": "Example: fn := Function(h52); fn(b) works; fn(15) may produce a result even if 15 is not in the declared domain, whereas h52(15) raises a map application error."
+      },
+      {
+        "name": "Element-by-element mapping rule for small/fixed domains",
+        "description": "For small finite domains, a map-constructor can list element->image pairs (or <a,b> tuples) for every domain element. Every element of the domain must appear exactly once as the first element of a tuple.",
+        "guidance": "Example: map< GF(5) -> IntegerRing() | <0,34>, <1,-17>, <3,-17>, <2,42>, <4,8> >; or use 'a->b' arrow-pair syntax as shorthand. Codomain may be specified as the image set or a larger magma like Strings()."
+      },
+      {
+        "name": "Generator-image mapping rule for homomorphisms",
+        "description": "If domain A is finitely generated, the hom-constructor may specify images of the standard generators A.i in a list; Magma then computes images of all elements using the homomorphism property. Alternatively, specify images of any generating set as ai->bi pairs.",
+        "guidance": "Example: H52 := hom< S5 -> S2 | Id(S2), c > or hom< S5 -> S2 | [Id(S2), c] >; in rings/fields homomorphisms are assumed unitary and should be defined with no mapping rule after | (the map is determined by 1 mapping to 1)."
+      },
+      {
+        "name": "Composition of mappings uses m*n (algebraists' right convention)",
+        "description": "Given mappings m:A->B and n:B->C their composition is written m*n in Magma and yields a mapping A->C (algebraists' notation of applying mappings on the right).",
+        "guidance": "Example: comp := hSV * n; prints Mapping from: S to W; composition behaves as expected on elements and sequences."
+      },
+      {
+        "name": "Recursive mapping definitions using $ symbol",
+        "description": "Mappings and homomorphisms can be defined recursively by referring to the mapping being created via the $ symbol inside its mapping rule.",
+        "guidance": "Examples: facmap := map< N -> N | n :-> n eq 0 select 1 else n * $(n-1) >; binomial defined on cartesian product using $(<n-1,r>) + $(<n-1,r-1>) etc. Ensure domain formal sets restrict inputs to valid values to avoid runtime errors."
+      },
+      {
+        "name": "Mapping domain and codomain declarations enforce input/output membership",
+        "description": "Declaring a mapping's domain and codomain ensures Magma checks at application time that inputs are in the domain (or coercible into it) and that computed images are in the codomain (or coercible into it).",
+        "guidance": "Example: three defined with Zplus domain ensures 0 @ three produces a runtime error because 0 is not in the domain. Where-clauses and formal sets ensure invalid arguments are handled appropriately."
+      }
+    ]
+  }
+}

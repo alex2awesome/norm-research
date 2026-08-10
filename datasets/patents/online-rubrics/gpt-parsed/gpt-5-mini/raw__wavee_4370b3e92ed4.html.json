@@ -1,0 +1,90 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_4370b3e92ed4.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16076,
+  "output_tokens": 3500,
+  "elapsed_s": 3088.261380708078,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in patent analytics, patent examiners, patent attorneys, and IP/data scientists building predictive models of patent quality",
+    "subtask_short": "predicting patentability from text",
+    "subtask_description": "Build supervised text\u2011classification models that predict the likelihood an individual patent application will be approved (the 'patentability' score) using features extracted from specification documents and other readily-computable metadata. Includes feature engineering, model training (L2-regularized logistic regression), evaluation (AUC, cross-validation), and GUI visualization for analysts.",
+    "subtask_keywords": [
+      "patent",
+      "patentability",
+      "text_mining",
+      "machine_learning",
+      "jpo",
+      "predictive_modeling"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patentability (patent quality metric)",
+        "description": "Patentability is defined as the probability that a patent application will be approved by the patent office (p(y = +1 | x)). The patentability score is the probabilistic output of a classifier and is used as a quantitative metric of the application\u2019s likelihood of approval.",
+        "guidance": "Use probabilistic outputs (posterior probabilities) from a classifier as the patentability score rather than relying on a hard threshold. Recognize that patentability is a partial metric focused on the approval likelihood and readability/clarity of specification documents, not a full substitute for legal validity or complete patent quality."
+      },
+      {
+        "name": "Class label assignment rules for training",
+        "description": "Training labels are binary: +1 if the application was approved, 0 otherwise. Specifically, +1 is assigned to applications approved at decision or at appeal trial; 0 is assigned to applications for which a rejection decision was made or for which the time limit for appeal has passed. Applications still under examination, pending, or without an examination request are discarded.",
+        "guidance": "Only use applications with completed, definitive outcomes for supervised training. Exclude pending/no-examination-request cases. Label derivation must account for intermediate actions (appeals/trials) per the jurisdictional process to avoid mislabeling."
+      },
+      {
+        "name": "Structural property features (baseline)",
+        "description": "Statistical counts and document-structure derived features computed from specification documents (baseline feature set). Examples listed include: number of characters in title; number of characters in specification; number of sheets of drawings; number of claims; number of independent claims; depth of claims tree; whether IPC includes 'A'; number of combinations of IPC; number of inventors; number of cited references; number of positive expressions.",
+        "guidance": "Use structural properties as a baseline feature set. Most are simple counts and are easy to compute at large scale. Omit features that require expensive manual work (e.g., number of applications an examiner has examined) when automating for large corpora. Structural features capture surface-level document characteristics but are limited in semantic content."
+      },
+      {
+        "name": "TF-IDF textual features",
+        "description": "Bag-of-words TF-IDF representation of the specification document. Compute tf(s,i)*log(idf(s)) for words s, representing documents as fixed-length vectors.",
+        "guidance": "Prune the vocabulary for computational tractability; in the study they used the top 2,000 words by document frequency. TF-IDF is powerful for representing documents but must be limited in dimensionality with large datasets to keep training feasible."
+      },
+      {
+        "name": "Syntactic complexity features",
+        "description": "Numeric features derived from dependency parses measuring sentence and phrase complexity. The paper lists: maximum depth of dependencies in a sentence; maximum number of terms in a phrase; maximum number of phrases in a sentence; number of sentences in the main part; number of terms in the main part; number of phrases in the main part.",
+        "guidance": "Extract dependency structures (via a parser) and compute these six features. Underlying assumption: experienced patent authors produce more syntactically complex/specification-style sentences; complexity can help distinguish expertly written specs vs. non-expert drafts. These are compact, interpretable features for syntax-level quality."
+      },
+      {
+        "name": "Word age (novelty) features",
+        "description": "Features that estimate the relative novelty/originality of words used in a specification by computing the age of each word based on its first occurrence in the corpus, aggregating ages into monthly groups and forming a smoothed histogram (20-dimensional feature).",
+        "guidance": "Remove rare words, find first occurrences across the corpus, aggregate into a histogram over months (the study used ~300 months), smooth using a sliding window (15 months) and reduce to 20 dims. Word-age approximates novelty vs prior art and is intended to simulate examiners\u2019 assessment of novelty and non-obviousness. It differs from COA which also measures future support; word-age focuses on prior-art originality."
+      },
+      {
+        "name": "Model choice: L2-regularized logistic regression and interpretability",
+        "description": "Use linear, probabilistic classifiers (L2-regularized logistic regression) trained via conjugate gradient descent to produce interpretable weight coefficients and posterior probabilities.",
+        "guidance": "Prefer interpretable linear models so that feature weights can be inspected to explain why a patentability score is high or low (important for user trust). Regularization (L2) helps with generalization in large feature spaces. The ability to rank feature contributions enables GUI explanations for analysts."
+      },
+      {
+        "name": "Scoring/threshold guidance and use of probabilities",
+        "description": "Default classification threshold example is 0.5, but the primary goal is to use the classifier\u2019s posterior probability as the patentability score rather than optimizing a binary threshold.",
+        "guidance": "Do not focus solely on maximizing binary accuracy via threshold tuning; use the continuous probability for ranking, visualization, and quality assessment. Threshold can be adjusted if a strict accept/reject decision automation were attempted, but the paper emphasizes scores for decision support."
+      },
+      {
+        "name": "Evaluation protocol and metric (AUC, cross-validation)",
+        "description": "Model performance evaluated with 10-fold cross-validation using Area Under the ROC Curve (AUC) as the scoring metric. AUC reflects the likelihood that a randomly selected approved application gets a higher score than a rejected one.",
+        "guidance": "Use AUC for scoring models where ranking and probabilistic confidence matter. The authors used ~0.3M labeled examples and report modest AUCs (baseline 0.594; best ~0.607). Note that AUC improvements even above 0.600 were considered meaningful for this task because perfect prediction is unrealistic; use large sample sizes to reduce overfitting."
+      },
+      {
+        "name": "Data selection, preprocessing and sampling guidelines",
+        "description": "Train on applications with completed decisions and requested examinations; in the study they sampled ~10% randomly from 1989\u20131998 yielding ~0.3M labeled apps and used 1993\u20132007 as a validation set. Preprocessing includes removing rare words and pruning TF-IDF vocabulary.",
+        "guidance": "Limit training to historic cohorts with known final outcomes to ensure label correctness; remove items without an examination request and pending cases. Prune rare terms for TF-IDF and compute word ages using a sufficiently large historical window to estimate novelty."
+      },
+      {
+        "name": "Feature engineering and anti-patterns",
+        "description": "Practical constraints on features: avoid features that require manual, expensive determinations (e.g., examiner workload) for scalable systems; prune TF-IDF dimensions; be cautious when aggregating models across heterogeneous IPC groups.",
+        "guidance": "Keep features easy-to-compute at scale. Avoid over-specialized features that are hard to extract automatically. The authors found that aggregating IPC-specific models into an averaged model reduced AUC due to differing score distributions \u2014 be cautious when combining specialized models without proper calibration."
+      },
+      {
+        "name": "Patentability Analysis System GUI affordances (application & group views)",
+        "description": "A visual system for analysts that (1) computes and displays patentability score for a given application and shows feature histograms comparing the application to granted/rejected distributions (Application view) and (2) compares distributions of patentability scores across groups (Group comparison view) to detect temporal or organizational differences.",
+        "guidance": "Expose feature-level contributions and histograms so users can quickly detect weak applications and specific problematic features. Use group histograms to compare cohorts (e.g., by year, company, IPC, law firm, examiner) and infer strategy or quality differences. Use results cautiously \u2014 case studies were small and correlations are suggestive rather than definitive."
+      },
+      {
+        "name": "Interpreting scores via case-study-derived heuristics",
+        "description": "Empirical observations: higher average patentability scores correlate with higher grant ratios across law firms and can reveal examiner-dependent patterns; trial-stage decisions correlate more clearly with patentability scores than single-examiner initial decisions.",
+        "guidance": "Use patentability scores as one signal among others: compare scores against grant ratios, law-firm performance, examiner behavior, and trial outcomes. Beware of small-sample effects and institutional/process factors that can bias correlations; treat such analyses as diagnostic and hypothesis-generating rather than definitive proof of quality."
+      }
+    ]
+  }
+}

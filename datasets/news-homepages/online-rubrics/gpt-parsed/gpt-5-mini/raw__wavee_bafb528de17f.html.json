@@ -1,0 +1,94 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_bafb528de17f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12889,
+  "output_tokens": 2998,
+  "elapsed_s": 1595.1386343750637,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / machine-learning researchers and practitioners working on political-bias detection in news articles",
+    "subtask_short": "article-level political bias prediction",
+    "subtask_description": "Predict the leading political ideology (left, center, right) of individual news articles using supervised learning; includes dataset creation, debiasing methods, and evaluation under splits that control for source leakage. Focuses on article-level labels rather than media-level distant supervision.",
+    "subtask_keywords": [
+      "political_bias",
+      "news_articles",
+      "classification",
+      "nlp",
+      "media_debiasing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Article-level manual annotation (left/center/right)",
+        "description": "Collect and annotate news articles at the article level with political ideology labels: left, center, or right. The dataset created contains 34,737 articles annotated at the article level.",
+        "guidance": "Use article-level labels rather than projecting media-level labels to every article (distant supervision). Ensure the dataset spans a wide variety of topics and media and that left/center/right perspectives are balanced across topics and media. Note: 'center' denotes centrist political ideology, not absence of political content (i.e., center is a substantive class distinct from non-political articles)."
+      },
+      {
+        "name": "Annotation quality / AllSides rigorous process",
+        "description": "Source article labels from a platform (AllSides) that uses a rigorous multi-step annotation process.",
+        "guidance": "AllSides' process includes blind bias surveys, editorial reviews, third-party analysis, independent reviews, and community feedback. Prefer such multi-method annotation procedures for higher-quality article-level labels."
+      },
+      {
+        "name": "Balanced coverage across topics and media",
+        "description": "Dataset should represent topics or events from different political perspectives so classifiers learn ideology signals rather than topic correlations.",
+        "guidance": "Collect articles for many topics (paper: 109 topics) and many media (paper: 73 media), and ensure for frequent topics that left/center/right labels are represented (paper claims dataset is well-balanced across topics and media). When sampling triplets or splits, consider topic overlap to control topic-induced similarity."
+      },
+      {
+        "name": "Avoiding source leakage via dataset splits",
+        "description": "Use a media-based split where test articles come from media that were not seen during training, to prevent models from learning to identify the article's source instead of its political ideology.",
+        "guidance": "Create (i) Media-based Split: sample test articles from a subset of media and exclude remaining articles from those media from training, ensuring all articles from the same medium appear in only one of train/dev/test sets; and (ii) Random Split for comparison (typical practice). Use the media-based split for robust evaluation of ideology prediction generalization to unseen sources."
+      },
+      {
+        "name": "Pre-processing to remove explicit source markers",
+        "description": "Remove explicit markers that reveal the source (e.g., author name, medium name in article preamble or content) to reduce trivial signals for source identification.",
+        "guidance": "Strip author and medium mentions and other explicit identifiers before training so the model must rely on linguistic/semantic signals rather than explicit metadata."
+      },
+      {
+        "name": "Evaluation metrics: Accuracy, macro-F1, and MAE (ordinal-aware)",
+        "description": "Evaluate models using accuracy and macro-F1 (F1 averaged across classes), and report Mean Absolute Error (MAE) to account for the ordinal nature of labels.",
+        "guidance": "Use macro-F1 as an early stopping criterion due to class imbalance; compute MAE as 1/N sum |yi - y\u0302i| to reflect ordinal distance between predicted and true labels. Report all three metrics to capture different aspects of performance."
+      },
+      {
+        "name": "Detecting / measuring source-modeling tendency",
+        "description": "Test whether a model is learning to predict the medium from the article content (i.e., source leakage) by formulating a media-prediction experiment (multi-way classification over media).",
+        "guidance": "Train a classifier to predict the medium (paper: 73-way classification) and compare model performance to majority baseline; strong performance indicates models can easily learn source-specific signals and that special care (de-biasing) is required for ideology prediction."
+      },
+      {
+        "name": "Adversarial Media Adaptation (AA) for de-biasing",
+        "description": "Use an adversarial adaptation architecture (encoder + label predictor + media classifier with gradient reversal) so the encoder learns representations discriminative for ideology while invariant across media.",
+        "guidance": "Jointly minimize label predictor loss and maximize media classifier loss (implemented via gradient reversal). Control the trade-off with hyperparameter \u03bb (paper varied 0\u20131; best \u03bb=0.7). This reduces encoder reliance on media-specific stylistic cues and improves generalization to unseen media."
+      },
+      {
+        "name": "Triplet Loss Pre-training (TLP) for de-biasing",
+        "description": "Pre-train the encoder using a triplet loss so examples with the same ideology (but different media) are closer while examples of different ideology (possibly from same medium) are farther apart.",
+        "guidance": "Construct triplets (anchor, positive, negative) where positive shares ideology but is from a different medium, and negative has different ideology but may be from same medium. Sample triplets that discuss the same topic to minimize topic-induced distance (paper sampled ~35,017 triplets). After pre-training, fine-tune encoder + softmax on main task. TLP showed large improvements on media-based split."
+      },
+      {
+        "name": "Incorporating media-level representations as complementary features",
+        "description": "Complement article encoding with media-level representations (e.g., Twitter followers' bios, Wikipedia page content) concatenated before the softmax classifier.",
+        "guidance": "Encode Twitter followers' bios with Sentence-BERT and average up to 1,000 followers per medium; encode Wikipedia page content with BERT (average second-to-last-layer word representations). Concatenate these media features with article encoding; combined with de-biased article representations, this yields sizable gains (Twitter bios more helpful than Wikipedia)."
+      },
+      {
+        "name": "Model architectures and hyperparameter tuning for reproducibility",
+        "description": "Use both LSTM-based and Transformer-based (BERT) architectures; tune input length, layers, cell size, dropout, learning rate, gradient clipping and batch size on validation.",
+        "guidance": "Paper's best LSTM settings: 512-token input, 2-layer LSTM size 256, dropout 0.7, learning rate 1e-3, gradient clipping 0.5, batch size 32 (\u22481.1M params, GloVe 300-d inputs). BERT: 512-token input, learning rate 2e-5, gradient clipping 1 (\u2248110M params). Fix random seeds for reproducibility; report hardware/training time (paper: 4 Titan X Pascal GPUs; epoch runtimes: ~25s LSTM, ~22min BERT)."
+      },
+      {
+        "name": "Triplet sampling constraints (topic control)",
+        "description": "When sampling triplets for TLP, select examples that discuss the same topic to ensure topic similarity does not dominate embedding distances.",
+        "guidance": "Constrain triplets so anchor/positive/negative share topic to reduce topic-induced proximity; this helps the encoder cluster by ideology rather than by topic."
+      },
+      {
+        "name": "Release of dataset, splits, and code for extension and reproducibility",
+        "description": "Provide the dataset, evaluation splits (media-based and random), and code to allow others to reproduce and extend the work.",
+        "guidance": "Publish train/validation/test splits and code repository so researchers can extend the dataset as more articles are added and compare fairly (paper released data and splits on GitHub)."
+      },
+      {
+        "name": "Interpretability / explainability desideratum",
+        "description": "Systems that predict media or article ideology should enable explainability\u2014e.g., pinpoint specific articles or fragments that support a media-level classification.",
+        "guidance": "Although not fully developed in this work, the authors highlight explainability as important for downstream applications (e.g., identifying fragments where bias occurs) and for allowing media-level labels to be supported by article-level evidence."
+      }
+    ]
+  }
+}

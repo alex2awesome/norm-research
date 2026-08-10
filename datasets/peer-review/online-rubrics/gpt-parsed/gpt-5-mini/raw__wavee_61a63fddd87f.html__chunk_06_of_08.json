@@ -1,0 +1,90 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_61a63fddd87f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_61a63fddd87f.html",
+  "chunk_idx": 6,
+  "n_chunks": 8,
+  "chunk_chars": 39947,
+  "model": "gpt-5-mini",
+  "elapsed_s": 26.96330987499823,
+  "input_tokens": 14788,
+  "output_tokens": 2905,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing or analyzing paper\u2013reviewer assignment algorithms (theoretical computer science / machine learning / peer-review systems)",
+    "subtask_short": "paper-reviewer_assignment_evaluation",
+    "subtask_description": "Evaluating algorithms that order and assign papers to reviewers under the (noisy) community model, using expected paper-side gain, expected reviewer-side gain, and their combined objective; includes proofs, bounds, and properties showing (sub)optimality of algorithms (SUPER*, SIM, BID, RAND).",
+    "subtask_keywords": [
+      "peer_review",
+      "assignment_algorithm",
+      "expected_gain",
+      "noisy_community_model",
+      "theoretical_analysis"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Reviewer-side gain maximization",
+        "description": "The reviewer-side gain function is increasing in the similarity score and decreasing in the position a paper is shown; consequently, presenting papers in decreasing order of similarity to each reviewer maximizes expected reviewer-side gain.",
+        "guidance": "This is why SIM (which presents papers in decreasing order of similarity) 'obtains the maximum expected reviewer-side gain that can be achieved.' Use ordering by similarity to maximize reviewer utility; deviations only acceptable if they improve paper-side gain enough to justify reviewer-side loss. The paper uses this as the canonical metric for reviewer satisfaction and for bounding reviewer-side contribution to the combined objective."
+      },
+      {
+        "name": "Paper-side gain maximization",
+        "description": "The paper-side gain is driven by \u03b3_p(g_j) (gain as a function of number of bids); with \u03b3_p strictly concave, evenly distributing bids across papers maximizes expected paper-side gain.",
+        "guidance": "To maximize expected paper-side gain each paper should be shown in the highest position of the paper ordering to a reviewer at most once almost surely, and preferably when the paper is on the reviewer's block diagonal (so it obtains a bid almost surely). SUPER* with zero heuristic attains the maximal expected paper-side gain under these assumptions."
+      },
+      {
+        "name": "Combined objective (paper + \u03bb\u00b7reviewer)",
+        "description": "Algorithms are evaluated on the combined expected gain: sum of expected paper-side gain and \u03bb times expected reviewer-side gain.",
+        "guidance": "Compare algorithms by their combined expected gain; the analysis derives additive separation bounds (e.g., SUPER* obtains additive cmq advantage over SIM/BID/RAND for certain parameter ranges). Choose \u03bb to reflect relative importance of reviewer vs. paper objectives."
+      },
+      {
+        "name": "Sensitivity to bid counts (load-awareness)",
+        "description": "An algorithm should account for the current number of bids on papers; being oblivious to bid counts (as SIM is) can yield near-optimal reviewer-side gain but significantly suboptimal paper-side gain.",
+        "guidance": "Anti-pattern: showing a paper in highest position solely because it has marginally higher similarity despite it already having many bids. Good algorithms balance similarity order with bid-count information to avoid overconcentrating bids on few papers."
+      },
+      {
+        "name": "Showing papers in highest position to block-diagonal reviewers",
+        "description": "To maximize paper-side gain, each paper should be shown in the highest position to reviewers for which the paper is on the block diagonal (these reviewers have much higher similarity scores) and ideally exactly once.",
+        "guidance": "Design orderings such that for reviewers i in D_j (reviewers tied to paper j's block), the paper appears at position 1 with high probability; this yields near-certain bids and optimizes \u03b3_p contributions."
+      },
+      {
+        "name": "Robustness under bounded noise in similarity scores",
+        "description": "Similarity scores include bounded noise \u03bd_{i,j} drawn independently from a bounded interval; the analysis assumes noise is small enough that ordering among block-diagonal papers is preserved (Properties 2\u20133).",
+        "guidance": "Algorithms should be robust to such bounded noise: identical ordering among block-diagonal papers for SUPER* and SIM holds almost surely under the assumptions. Use concentration/ordering-preserving arguments when bounding gains."
+      },
+      {
+        "name": "Greedy immediate expected-gain maximization (SUPER* heuristic)",
+        "description": "SUPER* with zero heuristic selects for each arriving reviewer the ordering \u03c0_i that maximizes the immediate expected gain conditioned on past bids (see optimization (161)/(163)).",
+        "guidance": "This greedy per-arrival optimization balances the marginal paper-side increment (\u03b3_p(g+1)\u2212\u03b3_p(g)) and reviewer-side term \u03b3_r(\u03c0_i(j), S_{i,j}). Under model assumptions this yields near-optimal combined gain (within small additive constant of OPT)."
+      },
+      {
+        "name": "Tie-breaking: similarity-based when bids equal",
+        "description": "In BID, papers are shown in increasing order of the number of bids with ties broken in favor of the paper with the higher similarity score.",
+        "guidance": "Design tie-breaking rules that prefer higher-similarity papers when bid counts are equal; this preserves reviewer-side utility while implementing bid-aware ordering."
+      },
+      {
+        "name": "Avoiding oblivious randomization (RAND) for combined objective",
+        "description": "RAND presents papers independently of similarity scores and bids; this independence causes RAND to be significantly suboptimal in paper-side gain (and thus combined gain) relative to SUPER*.",
+        "guidance": "Random ordering can be useful as a baseline or for fairness but expect large losses in paper-side gain\u2014avoid RAND if paper-side performance is important."
+      },
+      {
+        "name": "Per-reviewer one-bid behavior modeling",
+        "description": "Under the given bidding function and model, each reviewer bids on at most one paper almost surely; algorithms and proofs exploit this behavior (e.g., decomposition (122)).",
+        "guidance": "When modeling bidder behavior, incorporate that reviewers typically select a single paper to bid on; this simplifies expected paper-side gain calculations and guides design (e.g., place highest-probability-to-bid papers in top position)."
+      },
+      {
+        "name": "Quantitative regret/additive-separation bounds",
+        "description": "Algorithms are compared via explicit additive bounds on expected gain differences (examples: SUPER* obtains additive cmq more than SIM/BID/RAND; SUPER* within additive 0.0001 of OPT under parameter regimes).",
+        "guidance": "Use such quantitative bounds to certify near-optimality or suboptimality; derive dependence on m, q, \u03bb and noise parameters and present explicit constants where possible for practical interpretation."
+      },
+      {
+        "name": "Group-structured ordering (preserving block groups and intra-group similarity order)",
+        "description": "Properties used in proofs: SUPER* and SIM show papers among the set c_i (the block associated with reviewer i) in decreasing order of the similarity scores almost surely; algorithms should respect these block-structured orderings.",
+        "guidance": "Exploit community/block structure: first present block-diagonal papers (in decreasing similarity), then other groups; respecting these group orderings maximizes reviewer-side gain while enabling paper-side control via positioning."
+      }
+    ]
+  }
+}

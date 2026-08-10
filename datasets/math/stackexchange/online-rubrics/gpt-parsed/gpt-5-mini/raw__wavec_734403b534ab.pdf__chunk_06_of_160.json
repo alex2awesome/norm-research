@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_734403b534ab.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_734403b534ab.pdf",
+  "chunk_idx": 6,
+  "n_chunks": 160,
+  "chunk_chars": 39908,
+  "model": "gpt-5-mini",
+  "elapsed_s": 59.1028446249984,
+  "input_tokens": 15037,
+  "output_tokens": 5411,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "users of the Singular computer algebra system (researchers/programmers using Singular)",
+    "subtask_short": "singular data types reference",
+    "subtask_description": "Reference/manual excerpt describing data types and I/O/link facilities in the Singular computer algebra system, including syntax, semantics, restrictions and examples for links (ASCII/SSI/pipe/DBM), lists, maps, matrices, modules, numbers, packages and polynomials.",
+    "subtask_keywords": [
+      "singular",
+      "computer_algebra",
+      "manual",
+      "data_types",
+      "reference"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Ssi links (general)",
+        "description": "Ssi (simple singular interface) links give the possibility to store and communicate data between Singular processes; read and write access is very fast compared to ASCII links. Ssi links can be established using files or using TCP sockets. For ring-dependent data, a ring description is written together with the data. Reading from an Ssi link returns an expression (not a string) which was evaluated after the read operation. If the expression read from an Ssi link is not from the same ring as the current ring, then a read changes the current ring.",
+        "guidance": "Currently under development - not everything is implemented. Use ssi links instead of ASCII links for storing large amounts of data. Remember: read returns evaluated expression (not string) and may change current ring."
+      },
+      {
+        "name": "Ssi file links: describing string and I/O direction rules",
+        "description": "The ssi file link describing string must be one of: 'ssi:r ' + filename (open for reading), 'ssi:w ' + filename (overwrite), 'ssi:a ' + filename (append). An ssi file link can be used either for reading or for writing, but not for both at the same time. A close command must be used before a change of I/O direction.",
+        "guidance": "Filename may contain a path. Data read from ssi file links is returned as expressions one at a time. Use ssi file links for large data storage rather than ASCII links. Example usage and expected read/write behaviors are provided in the manual."
+      },
+      {
+        "name": "Ssi tcp links: modes and server/client behavior",
+        "description": "Ssi tcp links can be opened in four modes: 'tcp' (Singular acts as server), 'connect' (client), 'tcp <host>:<program>' (launch mode: client launches application via ssh that acts as server), and 'fork' (client forks another Singular as server).",
+        "guidance": "To arrange evaluation by a server, quote expressions with quote to prevent local evaluation; otherwise the expression is evaluated locally and its result is written. If Singular is in server mode it waits in an infinite read-eval-write loop until the client closes, and for each expression written to server exactly one expression is written back (possibly an empty expression). Ssi tcp links should explicitly be opened before use. They are bidirectional; reading blocks until data is written; use status to check read readiness."
+      },
+      {
+        "name": "Pipe links: stdin/stdout access and syntax",
+        "description": "Pipe links provide access to stdin and stdout of any program. Pipe links are bidirectional. Syntax: '|: ' + string_for_system where the string is passed to system with connected stdin/stdout.",
+        "guidance": "After opening a pipe link, reading returns program stdout output (example: link l='|: date'; read(l); ). Close the link with close(l) when done."
+      },
+      {
+        "name": "DBM links: key-value semantics and open modes",
+        "description": "DBM links provide access to a key/value database where each entry is a (key string, value string) pair. Use write(link,key,value) to insert, write(link,key) to delete a key, read(link,key) to get a value; read(link) with one argument returns the next key in the database (enabling scanning).",
+        "guidance": "DBM describing strings: 'DBM: ' + name (open for reading), 'DBM:r ' + name (read), 'DBM:rw ' + name (read/write). Name must be given without .pag or .dir suffix. If opened for writing first time, files name.pag and name.dir are created. Example shows write/read sequences and scanning examples."
+      },
+      {
+        "name": "Lists store objects (not names) and ring membership rules",
+        "description": "Lists are arrays whose elements can be of different types. A list stores the objects themselves and not the names. If one element belongs to a ring the whole list belongs to that ring. A ring as an element of a list is not a copy but another reference to the same ring.",
+        "guidance": "To store the name of an object instead of the object use nameof(r). Accessing list elements returns objects without names; to name an element do def R = L[1];. The expression list() is the empty list."
+      },
+      {
+        "name": "List declarations, defaults and syntax",
+        "description": "Syntax: list name = expression list; or list name = list expression;. Purpose: defines a list (of objects of possibly different types). Default: empty list.",
+        "guidance": "Examples show mixed-type lists and that lists inherit ring membership if any element belongs to a ring. Use list expressions and functions that return lists as RHS."
+      },
+      {
+        "name": "List expressions and basic operations",
+        "description": "A list expression can be the empty list, an identifier of type list, a function returning list, a type cast to list, or list expressions combined by +. List entry indexing uses list expression [ int expression ] with index 1 the first element.",
+        "guidance": "Operations include concatenation (+), delete (returns new list with one element removed), insert (append or insert new element returning new list). Examples show concatenation and deletion behavior."
+      },
+      {
+        "name": "Map: target ring and preimage ring name requirement",
+        "description": "The target of a map is ALWAYS the actual basering. The preimage ring has to be stored 'by its name', i.e., maps can only be used where the name of the preimage ring can be resolved (consider this in subprocedures).",
+        "guidance": "Because the preimage ring must be referenced by name, maps cannot map arbitrary evaluated expressions from the preimage ring; objects must be defined by names. See identifier resolution and names in procedures sections for implications."
+      },
+      {
+        "name": "Allowed canonical and possible map source/target coefficient-field mappings",
+        "description": "Maps between rings with different coefficient fields are possible. Canonically realized are e.g. Q \u2192 Q(a,...), Q \u2192 R, Q \u2192 C, Z/p \u2192 (Z/p)(a,...), Z/p \u2192 GF(pn), Z/p \u2192 R, R \u2192 C. Possible further mappings include Z/p \u2192 Q, Z/p \u2192 Z/p^k, C \u2192 R, etc.",
+        "guidance": "Mapping from Q to rings with finite characteristic is allowed but with caveats: numerator and denominator are mapped separately by the usual map from Z to Z/p and image rebuilt by division. It is not allowed to map numbers whose denominator is divisible by the target characteristic or objects containing such numbers. Recommendation: use such maps only for objects with integer coefficients."
+      },
+      {
+        "name": "Map declarations and variable-to-ideal mapping behavior",
+        "description": "Syntax examples: map name = preimage_ring_name, ideal_expression; map name = preimage_ring_name, list_of_poly_and_ideal_expressions; map name = map_expression;. Maps define a ring map from the preimage ring to the basering. If the ideal contains fewer elements than variables in the preimage ring the remaining variables are mapped to 0; if the ideal contains more elements these are ignored.",
+        "guidance": "The name of a map serves as the function which maps objects from the preimage ring into the basering. These objects must be defined by names (no evaluation in the preimage ring is possible). There are convenience maps like fetch and imap for near-identity maps."
+      },
+      {
+        "name": "Map expressions and composition constraints",
+        "description": "A map expression can be an identifier of type map, a function returning a map, or map expressions combined by composition using parentheses. Composition (f(g)) yields the composition f \u25e6 g provided the target ring of g is the basering of f.",
+        "guidance": "Map entries can be indexed: map_expression [ int_expressions ] gives the image of the corresponding variable. Examples illustrate permutations and identity via composition."
+      },
+      {
+        "name": "Matrix declaration semantics and size/filling rules",
+        "description": "Syntax: matrix name[rows][cols] = list of poly expressions; or matrix name = matrix expression;. The given poly list fills the matrix from first row left to right; if the poly list contains fewer than rows*cols elements the matrix is filled with zeros; if it contains more elements only the first rows*cols elements are used. If size omitted a 1x1 matrix is created. Default value is 0 (1x1 matrix).",
+        "guidance": "You can define submatrices with slicing (e.g., m[1..2,2..3]). Examples show print formatting of matrices and creation of unit matrix via E = E + 1."
+      },
+      {
+        "name": "Matrix interactions with polynomials and operations",
+        "description": "Objects of type matrix are matrices with polynomial entries and are defined w.r.t. a basering. A matrix can be multiplied by and added to a poly; in this case the polynomial is converted into a matrix of the right size with the polynomial on the diagonal. Matrix operations supported: +, -, *, / (division by poly). Indexing: matrix expression [ int expression, int expression ] addresses entries.",
+        "guidance": "Examples include computing determinant, Cayley-Hamilton verification, matrix-vector multiplication, transpose and printing. Use matrix arithmetic and functions for common algebraic tasks."
+      },
+      {
+        "name": "Matrix type cast rules",
+        "description": "matrix(expression) or matrix(expression, int n, int m) converts expression to a matrix; expression must be of type int, intmat, intvec, number, poly, ideal, vector, module, or matrix. If n and m supplied they specify dimension; otherwise size determined by expression.",
+        "guidance": "Examples show conversions from integers, intmat/intvec, and re-shaping via size parameters."
+      },
+      {
+        "name": "Module representation as submodule of free module and presentation matrix",
+        "description": "Modules are submodules of a free module over the basering with basis gen(1), gen(2), ... and are represented by lists of vectors which generate the submodule. If R is the basering and M a submodule of R^n generated by vectors v1,...,vk then v1,...,vk may be considered as generators of relations; assignment module M=v1,...,vk; matrix A=M; creates the presentation matrix of size n\u00d7k (columns are the generators).",
+        "guidance": "This allows representing finitely generated R-modules by their module of relations. Use module->matrix conversions for algorithmic operations requiring presentation matrices."
+      },
+      {
+        "name": "Module declarations, operations and non-distributivity note",
+        "description": "Syntax: module name = list of vector expressions; or module name = module expression;. Default: [0]. Operations: '+' is concatenation of generators (with simplification); '*' is multiplication with an ideal or a poly (but not module * module). module expression [int,int] indexes entries; module expressions[int] returns a vector (column generator).",
+        "guidance": "Multiplication with polynomials/ideals is supported but module*x + module*y may not distribute as expected\u2014examples show non-distributive behaviors. Use provided module-related functions (resolutions, std/groebner wrappers, etc.) for module algebra."
+      },
+      {
+        "name": "Number declarations: must be relative to current basering/coefficient field",
+        "description": "Syntax: number name = number expression;. Purpose: defines a number. Default: 0. Numbers may only be declared w.r.t. the coefficient field of the current basering, i.e., a ring has to be defined prior to any number declaration.",
+        "guidance": "See ring declarations for available coefficient fields. Warning: watch special meaning of letter 'e' immediately following digits if the field is real (floating notation oddities). Examples show behavior in finite fields, rationals, algebraic/transcendental extensions, and floating point precision settings."
+      },
+      {
+        "name": "Number expressions, formats and integer-division oddities",
+        "description": "A number expression may be a rational number (no spaces inside), a floating point number (if field real) of the form <digits>.<digits>e<sign><digits>, an identifier of type number, a function returning number, an int expression, or number expressions combined by +,-,*,/,^,**. Note: quotient and exponentiation are only recognized as number expressions if already a number.",
+        "guidance": "Be aware of oddities: using '/' between integers can behave as integer division (yield 0) in some contexts; use number(2)/(2+3) to coerce to numbers. For integer exponentiation the exponent must be non-negative unless operands are numbers. Comparison operators behave depending on ground field. Examples illustrate conversions and errors."
+      },
+      {
+        "name": "Packages: grouping identifiers and reserved package names",
+        "description": "The data type package groups identifiers into collections, used internally to avoid name collisions between libraries and user variables. The toplevel package 'Top' contains user-defined identifiers and user-accessible library procedures. 'Current' denotes the current package name in use. Syntax: package name; defines a package (only relevant in special situations).",
+        "guidance": "Use listvar(), listvar(package) to inspect package contents. Functions related: exportto (transfer identifier to specified package), importfrom (generate copy from specified package), load/LIB to load libraries or dynamic modules."
+      },
+      {
+        "name": "Polynomials: dependence on basering and monomial syntax rules",
+        "description": "Polynomials are basic data and can only be defined or accessed with respect to a basering which determines coefficient type, indeterminate names and monomial ordering. A monomial has form [coefficient] ring_variable [exponent] ... and there are NO spaces allowed inside a monomial. Monomials containing an indexed ring variable must be built from ring_variable and coefficient with operations * and ^.",
+        "guidance": "Be careful: '2x' is a monomial but '2a(1)' is a syntax error\u2014write '2*a(1)'. '2*x^3' is different from '2x^3' due to parsing rules (e.g., (2x)^3 vs 2*x^3). Use proper multiplication '*' and '^' to avoid ambiguous parsing. Ring must be defined prior to poly declarations."
+      },
+      {
+        "name": "Poly declarations, defaults and expression composition",
+        "description": "Syntax: poly name = poly expression;. Purpose: defines a polynomial. Default: 0. Polynomial expressions can include monomials, identifier of type poly, functions returning poly, arithmetic operations (+,-,*,/,^), int expressions, and type casts to poly.",
+        "guidance": "Examples illustrate polynomial creation, lead/leadmonom, simplify for normalizing leading coefficients, cleardenom for removing denominators, and conversions from int expressions. Follow type conversion/casting rules in Section 3.5.5."
+      }
+    ]
+  }
+}

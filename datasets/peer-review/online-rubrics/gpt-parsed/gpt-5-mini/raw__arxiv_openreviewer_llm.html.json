@@ -1,0 +1,149 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/arxiv_openreviewer_llm.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12516,
+  "output_tokens": 4590,
+  "elapsed_s": 473.09800058300607,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers building or evaluating automated / AI-assisted peer review systems; ML/AI conference reviewers, conference organizers, and authors seeking pre-submission automated feedback",
+    "subtask_short": "automated peer review generation",
+    "subtask_description": "Generation and automatic evaluation of structured, conference-style peer reviews for ML/AI conference papers using a specialized LLM fine-tuned on expert reviews. Covers data collection, prompt design, model training, demo interface, evaluation metrics and ethical/deployment guidance.",
+    "subtask_keywords": [
+      "peer_review",
+      "automated_review",
+      "llm",
+      "ml_ai",
+      "review_evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Write reviews in markdown and follow the review template",
+        "description": "The system prompt specifies that the review must be written in markdown format and follow a specific review template, which is part of the input and differs across venues.",
+        "guidance": "Provide a review template as input; allow users to edit the template to change sections/aspects/rating scales; generated reviews should adhere to the template's sectioning and formatting."
+      },
+      {
+        "name": "Comprehend technical content and evaluate core scientific dimensions",
+        "description": "A good reviewer has to comprehend technical content, including mathematics and empirical results, and evaluate the work\u2019s contributions, novelty, significance, and methodological soundness according to high, field-specific standards.",
+        "guidance": "Reviews should assess technical correctness, clarity of derivations/experiments, novelty relative to related work, significance/impact of results, and soundness of methodology; include concrete examples and evidence where possible."
+      },
+      {
+        "name": "Follow conference-specific reviewer guidelines",
+        "description": "OpenReviewer is trained to follow standard review templates and guidelines, ensuring structured feedback that aligns with conference reviewing practices; system prompt is inspired by the ICLR 2024 reviewer guide.",
+        "guidance": "Align generated review structure, sections and rating scales with the target venue\u2019s reviewer guide; allow template customization for different venues."
+      },
+      {
+        "name": "Recommendation Exact Match (EM) to human reviewers",
+        "description": "Check whether the generated review\u2019s numerical recommendation exactly matches one of the human reviewers\u2019 recommendations.",
+        "guidance": "Compute EM across the test set; use as a metric for how often automated recommendations coincide with at least one human reviewer when normalized to the chosen scale."
+      },
+      {
+        "name": "Average absolute recommendation error",
+        "description": "Measure the average absolute difference between the generated review\u2019s recommendation and the human reviewers\u2019 average recommendation.",
+        "guidance": "Normalize recommendations to a common scale (here 1\u201310) before computing absolute error; report mean error and standard deviation."
+      },
+      {
+        "name": "Normalize recommendation scores to a 1\u201310 scale",
+        "description": "For cross-venue comparison, normalize recommendation scores to a scale from 1 (strong reject) to 10 (strong accept).",
+        "guidance": "Apply consistent normalization when comparing recommendations across venues or models; report mean and dispersion after normalization."
+      },
+      {
+        "name": "Match human recommendation distribution / criticalness level",
+        "description": "Generated reviews should reproduce the distribution of human reviewer recommendations rather than tending to be overly positive.",
+        "guidance": "Compare average recommendation and variance to the human reviewer distribution; avoid systematic positive bias (an anti-pattern noted for general-purpose LLMs)."
+      },
+      {
+        "name": "Preference evaluation with LLM-as-judge (Review Arena)",
+        "description": "Given expert reviews and two candidate reviews A and B, ask an LLM judge (GPT-4o in this work) to determine which generated review aligns better with the expert reviews.",
+        "guidance": "Judge should consider section-wise alignment with expert reviews and output A, B or Tie; report win rates of each model across the test set to compare quality."
+      },
+      {
+        "name": "Judge by section-wise matching to expert reviews",
+        "description": "The LLM judge assesses how well each section of a generated review matches the corresponding section in the expert reviews before deciding which review aligns better.",
+        "guidance": "When creating judge prompts, explicitly instruct the judge to compare corresponding sections (e.g., strengths, weaknesses, methodology critique) and weigh overall alignment."
+      },
+      {
+        "name": "Use greedy decoding (temperature 0) for deterministic generation",
+        "description": "Generated reviews in evaluation were produced with greedy decoding (temperature 0).",
+        "guidance": "Use deterministic decoding to make comparative evaluation fair and reproducible across models; note that choice of decoding strategy affects style and variance."
+      },
+      {
+        "name": "Training data: select earliest submission revision, avoid later camera-ready versions",
+        "description": "For each paper we obtain the earliest revision possible since later (camera-ready) revisions may already incorporate feedback from reviews.",
+        "guidance": "Prefer originals/non-camera-ready versions to avoid leakage of review content into the paper; if double-blind originals are unavailable, acknowledge and manage non-anonymized data risks."
+      },
+      {
+        "name": "Training data preprocessing: accurate PDF-to-markdown extraction including equations and tables",
+        "description": "Convert PDFs to markdown using a pipeline (Marker) that extracts text, applies OCR when needed, detects page layouts, preserves reading order, and converts equations/tables accurately \u2014 essential for scientific papers.",
+        "guidance": "Allow users to inspect/edit converted markdown to fix conversion errors; prioritize tools that retain math and table fidelity since evaluation depends on technical content understanding."
+      },
+      {
+        "name": "Training data filtering by length and reviewer confidence",
+        "description": "Filter papers and reviews by length (remove top and bottom 1% quantile) and keep only high-confidence reviews using a reviewer confidence threshold roughly equal to \u201cConfident, but not absolutely certain.\u201d",
+        "guidance": "Filtering reduces noise and outlier effects; document thresholds and report retained dataset size after filtering (79K reviews here)."
+      },
+      {
+        "name": "Discard appendix content from training data",
+        "description": "Appendix content is discarded and only the full text of the main and reference sections is retained for model training.",
+        "guidance": "Decide explicitly whether appendices are considered part of the reviewed content; if discarded, note potential information loss (e.g., detailed proofs in appendix)."
+      },
+      {
+        "name": "Prompt design: system prompt conditions reviewer role and reviewer guidelines; minimal user prompt",
+        "description": "OpenReviewer uses a system prompt that conditions the LLM on its reviewer role and defines fixed reviewer guidelines; the user prompt is minimalistic ('Review the following paper:' followed by full paper text).",
+        "guidance": "Embed reviewer instructions (tone, structure, required sections) in the system prompt; keep user prompt simple to avoid leaking instructions inconsistently."
+      },
+      {
+        "name": "Evaluation methodological caution: similarity-to-human assumption limits",
+        "description": "Evaluation approach compares generated reviews to human reviews, which assumes that similarity to human reviews equals quality \u2014 an assumption with limits because human review quality/control is limited and experts disagree.",
+        "guidance": "Complement automated similarity measures with other metrics or human evaluation where feasible; explicitly acknowledge the assumption and its limitations in results discussion."
+      },
+      {
+        "name": "Report standard evaluation statistics (EM, avg error, mean recommendation \u00b1 std)",
+        "description": "Report Exact Match (%), average recommendation error, average recommendation and standard deviations for each model to characterize alignment and bias.",
+        "guidance": "Include confidence intervals or standard deviations to communicate variability; present baseline comparisons in tables for clarity."
+      },
+      {
+        "name": "Use previous review-quality metrics (soundness, helpfulness, RQI) as complementary measures",
+        "description": "Prior work proposes metrics like soundness of reviews, helpfulness ratings, and structured quality instruments (van Rooyen et al.'s RQI) for assessing review quality.",
+        "guidance": "Consider incorporating these established instruments when evaluating generated reviews, especially with human raters, to measure dimensions beyond recommendation alignment."
+      },
+      {
+        "name": "Avoid data leakage and document anonymization issues",
+        "description": "Partial use of non-anonymized papers may introduce information leakage concerns into training and evaluation.",
+        "guidance": "Document anonymization status of training data; consider masking author/institution cues or restricting use if risk of leakage could bias model outputs."
+      },
+      {
+        "name": "Ethical deployment rules: do not replace human peer review and include clear disclaimers",
+        "description": "OpenReviewer is not intended to replace human peer review; include explicit statements of limitations, promote responsible use, make code/model open, and encourage bias detection and mitigation.",
+        "guidance": "Provide clear documentation of limitations, recommended use cases (pre-submission feedback), and safeguards to prevent misuse (e.g., not used as official reviewers); support community development of deployment guidelines."
+      },
+      {
+        "name": "Interface affordances: let users edit converted text and the review template",
+        "description": "Demo shows the markdown conversion output which users can edit to fix conversion errors, and exposes an editable review template in an accordion element so users can deviate from defaults.",
+        "guidance": "Expose conversion outputs and templates to users to correct extraction issues and tailor the review format; streaming generation can improve perceived responsiveness."
+      },
+      {
+        "name": "Model design tradeoffs: specialized training vs model scale",
+        "description": "Specialized training on peer review data helps overcome positive bias in general-purpose LLMs; a modest 8B parameter model balanced performance with accessibility and compute tradeoffs.",
+        "guidance": "When choosing model size, consider the benefit of domain-specific fine-tuning; document tradeoffs and justify choices for accessibility and performance."
+      },
+      {
+        "name": "Report win rates in pairwise comparisons against baselines",
+        "description": "In the arena evaluation, report win rates of OpenReviewer vs other LLMs (e.g., 60%\u201376% wins against various baselines) as an interpretable comparative metric.",
+        "guidance": "Compute win rates over a held-out test set using a consistent judge procedure; accompany with qualitative examples of wins/losses to interpret differences."
+      },
+      {
+        "name": "Acknowledge domain and evaluation limitations",
+        "description": "Limitations include dataset restricted to 2022+ ICLR and NeurIPS, possible non-anonymized data, dependence on PDF conversion accuracy, small test set (400 papers), automated-only evaluation without human-in-the-loop, limited baseline set, and hardware constraints.",
+        "guidance": "Explicitly list and discuss limitations; avoid overgeneralizing results beyond the domains and evaluation setup used."
+      },
+      {
+        "name": "Training procedure documentation and hyperparameters",
+        "description": "Document full training details (e.g., full-finetune Llama-3.1-8B-Instruct for three epochs, effective batch size 64, learning rate 2\u00d710^-5, max sequence length 128k, bfloat16 precision, Deepspeed ZeRO-3, Flash Attention V2, etc.).",
+        "guidance": "Provide axolotl/deepspeed configs and all hyperparameters to enable reproducibility; report compute used (64 A100 80GB GPUs, ~34 hours) and any memory/throughput optimizations."
+      }
+    ]
+  }
+}

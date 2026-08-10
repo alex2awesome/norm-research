@@ -1,0 +1,201 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/410d3c09f181.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "410d3c09f181.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 18,
+  "chunk_chars": 39928,
+  "model": "gpt-5-mini",
+  "elapsed_s": 108.64018645800388,
+  "input_tokens": 12369,
+  "output_tokens": 6254,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users and developers of the PARI/GP calculator (GP scripts), especially on Unix and with Emacs/readline",
+    "subtask_short": "PARI/GP usage and functions",
+    "subtask_description": "Practical manual describing GP startup customization (gprc), integration with GNU Emacs and readline, command-line editing/completion, and detailed semantics/constraints for many GP/PARI functions and operators.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "unix",
+      "emacs",
+      "readline",
+      "library_functions"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "gprc initialization and override precedence",
+        "description": "GP will open the corresponding gprc file and process the commands in there, before doing anything else, e.g. creating the PARI stack. If the file doesn\u2019t exist or cannot be read, GP will proceed to the initialization phase at once, eventually emitting a prompt. If any explicit commandline switches are given, they will override the values read from the gprc file.",
+        "guidance": "Keep in mind command-line switches take precedence over gprc defaults; check for hidden gprc on Unix with ls -a."
+      },
+      {
+        "name": "gprc preprocessing rules (comments and conditionals)",
+        "description": "The syntax in this file is simple-minded: comments are removed (text surrounded by /* ... */ and everything following \\\\ on a given line). Lines starting with #if keyword are treated as comments if keyword is not defined, and read normally otherwise. The condition can be negated using #if not or #if !. Only two keywords are recognized: EMACS and READL.",
+        "guidance": "Use #if EMACS / #if READL to include platform-specific prompt or settings. Example: #if READL prompt = \"(%R) ^A\\e[1m^Bgp^A\\e[m^B > \""
+      },
+      {
+        "name": "gprc accepted line types",
+        "description": "After preprocessing there remain two types of lines: lines of the form default = value, which will be set to value on actual startup; and lines of the form read \"some GP file\" which will be read just before GP prompts you for commands, but after initializing the defaults.",
+        "guidance": "Quote strings. Use read \"file\" to load alias/macro files that should run after defaults are set. See sample gprc.dft for customization."
+      },
+      {
+        "name": "prompt customization and portability",
+        "description": "You can set your prompt in the gprc file; different prompt strings may be needed for readline vs Emacs (readline wants non-printing characters braced between ^A/^B pairs).",
+        "guidance": "Example portable prompt lines are given; use the #if READL and #if EMACS blocks to select appropriate prompt escapes."
+      },
+      {
+        "name": "Using GP as subprocess under GNU Emacs",
+        "description": "It is possible to use GP as a subprocess of GNU Emacs by loading pari.el and autoloading gp-mode/gp-script-mode/gp/gpman in your .emacs file. Then M-x gp starts a special shell which launches GP with default stack size, prime limit and input buffer size.",
+        "guidance": "If you type C-u M-x gp you will be asked for executable, stack size, prime limit and input buffer size; hitting return uses defaults (UNIX defaults shown: /usr/local/bin/gp, 4000000 stack, 500000 prime limit, 30000 buffer)."
+      },
+      {
+        "name": "Advantages of Emacs integration (editing and help)",
+        "description": "Under Emacs you have the facilities of a text editor (correction/copying blocks) and a more complete on-line help available via M-?. The help in the minibuffer includes descriptions from the user manual, including functions using special symbols.",
+        "guidance": "You can also open a menu-driven help with M-\\c to pick categories; extended help (TeX-derived) is preferred if available (see Section 2.2.1)."
+      },
+      {
+        "name": "Recovering GP sessions under Emacs after crashes",
+        "description": "If the session crashes, you usually stay under Emacs but the GP buffer will be killed. To recover, type M-x gp (or C-u M-x gp) to start a new session after the old one so you can recover what you typed. This will not work if you exited Emacs before coming back.",
+        "guidance": "C-z temporarily suspends; re-running M-x gp starts a new GP buffer."
+      },
+      {
+        "name": "Recommendation to compile GP with GNU readline",
+        "description": "Make sure you get the GNU readline library before configuring or compiling GP: with readline, line editing and command name completion outside Emacs becomes powerful and convenient.",
+        "guidance": "If you cannot use Emacs/readline, Emacs integration still gives advantages but readline is strongly advised for standalone terminal use."
+      },
+      {
+        "name": "Basic readline editing and history commands",
+        "description": "Assume C- is Control, M- is Meta. Typing inserts text; arrow keys move cursor. Up/Down or C-p/C-n move through history; M-</M-> go to start/end of history. C-r/C-s start incremental search. C-k kills to end of line, M-d kills to end of word, C-y yanks, M-y rotates kill-ring. C-_ (or similar) undoes last change; M-r undoes all changes to current line. C-a/C-e move to start/end of line; M-b/M-f move by words.",
+        "guidance": "Vi-style editing can be toggled with M-C-j. Many bindings can be customized in .inputrc."
+      },
+      {
+        "name": ".inputrc customization for GP",
+        "description": "You can change default readline bindings by creating ~/.inputrc. Example includes a conditional $if Pari-GP and custom bindings like set show-all-if-ambiguous, mapping keys for backward-delete-char, bindings to dump-functions, and special insertion sequences for parentheses/brackets.",
+        "guidance": "C-x C-r rereads the init file to incorporate changes during the current session. Be cautious about bindings that can annoy when copy-pasting."
+      },
+      {
+        "name": "Handling Meta/Alt key encoding issues in readline",
+        "description": "In recent readline versions the Alt/Meta key can output 8-bit accented characters. To avoid falling back to Esc use in .inputrc: set convert-meta on and set output-meta off.",
+        "guidance": "This prevents unexpected accented output when using Meta key sequences."
+      },
+      {
+        "name": "Context-dependent command completion under readline",
+        "description": "Under readline <TAB> completion is context-dependent: GP will strive to only give meaningful completions in a given context (e.g., after ~ expect username/path, after default( expect default keywords, after whatnow( expect name of old function, after '.' expect member keyword).",
+        "guidance": "If unique completion exists GP may append a comma for defaults or parentheses for function names; a second <TAB> after a function will supply the argument list from online help. Hitting <TAB> twice lists possible completions. M-h gives short help, M-H extended help; these do not disturb the current line."
+      },
+      {
+        "name": "Function argument notation and optional arguments",
+        "description": "Function prototypes are shown like foo(x, {flag = 0}): {} denotes optional arguments (the {} should never be typed). A comma or closing parenthesis where an optional argument should have been signals GP to use the default. When more than one optional argument is present, user supplied values fill arguments in order; use the empty-arg trick foo(6,,1) to skip a middle optional argument.",
+        "guidance": "foo() yields defaults for all optional args; a standalone foo (no parentheses) is allowed only when function has no mandatory argument (not recommended for scripts). Optional args are placed at end in decreasing usefulness so you often ignore them."
+      },
+      {
+        "name": "Binary flag notation for compact toggles",
+        "description": "For optional flags using many toggles, the customary binary notation is used: letting (p0,...,pn) be switches (0 or 1), numbers represent which bits are set; e.g. 23 + 25 = 40 means p3 and p5 are set.",
+        "guidance": "Help text usually announces meaning as 'The binary digits of flag mean 1: p0, 2: p1, 4: p2', etc."
+      },
+      {
+        "name": "Pointer (&) parameter notation in prototypes",
+        "description": "If a parameter is prefixed with & in the prototype (e.g. foo(x, &e)) it means, besides the normal return value, the variable named e may be set as a side effect. When passing the argument the & sign must be typed explicitly. As of version 2.0.19, this pointer argument is optional for all documented functions and will appear between brackets as in issquare(x, {&e}).",
+        "guidance": "Use & when you want a side-effect output parameter; note GP library and syntax for optional pointer args."
+      },
+      {
+        "name": "Standard monadic and dyadic operator semantics and type restrictions",
+        "description": "Operators +x and -x for monadic; x+y and x-y for add/sub; x*y product (not necessarily commutative due to matrices) with type incompatibilities noted (scalars vs vectors, incompatible matrix sizes, integermod vs real); x/y quotient produces rational when dividing integers; x\\y Euclidean quotient (integers or polynomials) giving quotient with non-negative remainder; x\\/y rounded Euclidean quotient; x%y Euclidean remainder; divrem(x,y) gives [quotient, remainder]; x^n exponentiation with integer exponents done by binary powering (and restrictions for matrices/p-adics); shift(x,n) bit shifts (componentwise), shiftmul multiplies by 2^n but differs for negative n (ordinary division vs Euclidean division).",
+        "guidance": "Be aware of type restrictions (e.g., division/inversion for matrices requires invertible square matrices), and how GP treats integer division (rational result vs Euclidean quotient). Use x\\y, x%y, divrem when integer/polynomial Euclidean division semantics are required. For non-integer exponents treat as transcendental and componentwise on vectors/matrices."
+      },
+      {
+        "name": "Comparison and boolean operators and library-mode equivalents",
+        "description": "GP supports <=, <, >=, >, ==, != returning 1/0 as GEN; boolean ||, &&, ! are available. In library mode prefer gcmp(x,y) giving sign( x - y ) and gegal(x,y) for equality. gcmp0/gcmp1/gcmp-1 test equality to 0,1,-1; note gcmp and gegal return C-integers not GENs. GP accepts | and & as synonyms of || and &&, and <> for !=; = is assignment, not equality.",
+        "guidance": "Use library functions for type-generic or C-integer results. Use isexactzero to test for exact zero (gcmp0 treats non-exact zero as zero-equivalent)."
+      },
+      {
+        "name": "lex(x,y) lexicographic comparison behavior",
+        "description": "lex(x,y) gives lexicographic comparison; e.g., [1,3] considered smaller than longer [1,3,-1] (returns -1).",
+        "guidance": "Library syntax lexcmp(x,y). Useful when ordering vectors of different lengths."
+      },
+      {
+        "name": "vecmax/vecmin behavior on vectors/matrices and empty cases",
+        "description": "vecmax(x) returns maximum of elements if x is vector or matrix, otherwise a copy of x. Returns -infinity as -(2^31 -1) (or 2^63 -1 for 64-bit) if x is empty. vecmin similarly returns minimum or +infinity for empty.",
+        "guidance": "Be aware of machine-dependent sentinel values for empty containers."
+      },
+      {
+        "name": "Conversion functions semantics: List, Mat, Vec, Set, Str",
+        "description": "List(x=[]) transforms a vector into a list; Mat(x) turns x into a matrix (1x1 for scalar, 1-row/1-column for row/column vector); Vec(x) transforms into a row vector with particular behavior for polynomials/power series; Set(x) converts x to a row vector with strictly increasing entries (type t_STR canonicalized); Str(x,{flag=0}) converts x to a character string, with flag=1 doing environment expansion for filenames.",
+        "guidance": "Many of these are useless in library mode; use eval to recover GEN from strings; Str(\"$HOME\",1) example given for environment expansion."
+      },
+      {
+        "name": "Mod(x,y,{flag=0}) creation and heap flag semantics",
+        "description": "Mod(x,y) creates integermod or polmod. If flag equals 1, the modulus of the created result is put on the heap and not on the stack, becoming a permanent copy which cannot be erased by garbage collecting; functions will operate faster on such objects and memory consumption will be lower, but avoid creating too many such objects.",
+        "guidance": "Under GP assigning to a GP variable yields a permanent object for duration of the library function call and is subject to garbage collection; prefer that over flag where possible. Library syntax alternatives: Mod0(x,y,flag), gmodulo for flag=1, gmodulcp for flag=0."
+      },
+      {
+        "name": "Pol/Polrev/Ser behavior and warning (not substitution)",
+        "description": "Pol(x,{v=x}) makes a polynomial with main variable v; Polrev uses vector[1] as constant term; Ser(x,{v=x}) makes a power series with precision determined by serieslength. Warning: these are not substitution functions; e.g., Pol(a,y) on polynomial a = x+y yields y+y which is not a valid PARI object.",
+        "guidance": "Use these for quick transformations of representations, not for algebraic substitution. For series/polynomial interactions watch the ordering of coefficients."
+      },
+      {
+        "name": "Pol/Ser coefficient ordering conventions for vectors",
+        "description": "For Pol, if x is a vector it creates polynomial whose coefficients are given in x with x[1] being the leading coefficient. For Ser it interprets vector coefficients as starting from constant term (reverse of Pol).",
+        "guidance": "Be careful when converting polynomials/power series to/from vectors; use Polrev if you want the reverse ordering."
+      },
+      {
+        "name": "centerlift vs lift behavior and allowed/forbidden types",
+        "description": "centerlift(x,{v}) lifts an element x = a mod n of Z/nZ to a in Z such that -n/2 < y <= n/2 (centered); lift(x,{v}) lifts elements of Z/nZ to representative a in Z or polmod to polynomial, with v controlling main variable. Forbidden types for lift/centerlift: reals and p-adics. For composite types lift is applied componentwise.",
+        "guidance": "Library syntax centerlift0/lift0 available; omitted v coded as -1."
+      },
+      {
+        "name": "changevar permutation semantics",
+        "description": "changevar(x,y) creates a copy of x where variables are permuted according to vector y; permutation must be completely specified and new variable names distinct.",
+        "guidance": "Example: variables x,a,b,c; y = [x,c,a,b] maps a->c, b->a, c->b. A partially specified permutation will not work."
+      },
+      {
+        "name": "Extracting components from PARI objects (component/polcoeff/indexing)",
+        "description": "Three ways: component(x,n) extracts nth component (counts after code words; for vector nth element, for matrix nth column, for polynomial nth coefficient (degree n-1)). polcoeff(x,n) gives coefficient of degree n for polynomials/power series with respect to main variable and is more natural but restricted; x[n] under GP indexes vector/matrix elements directly. polcoeff treats scalars as degree-zero polynomials.",
+        "guidance": "component implies knowledge of internal structure; polcoeff returns 0 when n less than valuation or degree; for power series polcoeff may issue error for out-of-range n. In library mode macros coeff and mael help with GEN non-recursivity."
+      },
+      {
+        "name": "conj and conjvec semantics",
+        "description": "conj(x) returns conjugate of x; for real quadratic numbers it means conjugation in the real quadratic field. No effect on integers, reals, integermods, fractions or p-adics. conjvec(x) returns conjugate vector representation for polmods (vector of embeddings) or acts componentwise on vectors.",
+        "guidance": "conj is forbidden for polmod types (use conjvec for polmods). conjvec ordering follows polroots."
+      },
+      {
+        "name": "denominator and numerator behavior on composite types",
+        "description": "denominator(x) gives lowest denominator when x is rational number/function; returns 1 for integer or polynomial; for vectors/matrices returns lowest common denominator of components. numerator(x) returns numerator of rational number/function; for integer or polynomial returns x itself; for vector/matrix numerator(x) is defined as denominator(x)*x.",
+        "guidance": "Other types are forbidden."
+      },
+      {
+        "name": "floor, ceil, frac semantics and rational-function behavior",
+        "description": "floor(x) and ceil(x) for real x give standard floor/ceiling; applied to rational function they return Euclidean quotient of numerator by denominator. frac(x) = x - floor(x); for real x result in [0,1[.",
+        "guidance": "Use Euclidean quotient semantics when applying to rational functions."
+      },
+      {
+        "name": "bitwise and binary functions semantics (bitand, bitor, bitxor, bitneg, bittest, binary)",
+        "description": "bitand/bitxor/bitor perform bitwise operations on integers; negative numbers behave as if modulo a huge power of 2. bitneg(x,{n=-1}) is bitwise negation truncated to n bits, n=-1 means no truncation. bittest(x,n) returns nth bit of |x| starting from right. binary(x) outputs vector of binary digits of |x|; for real numbers two components (integer and fractional parts).",
+        "guidance": "Pass vector for bittest to extract multiple bits. Note semantics for negative numbers (two's complement-like)."
+      },
+      {
+        "name": "norm and norml2 definitions",
+        "description": "norm(x) is algebraic norm (product of conjugates) or conjugates for polmods; for vectors/matrices norm applied componentwise (not L2); norml2(x) is square of L2-norm restricted to (row or column) vectors.",
+        "guidance": "Be aware norm(x) for reals is square to be compatible with complex norm conventions."
+      },
+      {
+        "name": "padicprec and precision behavior",
+        "description": "padicprec(x,p) gives absolute p-adic precision of x (minimum precision of components); returns VERYBIGINT for exact objects. precision(x,{n}) gives precision in decimal digits of x; for exact types no change. For reals n is number of significant decimal digits; for vectors/matrices operation is componentwise; if n < current precision truncation occurs, else extended with zeros.",
+        "guidance": "Use precision(x,n) to coerce or inspect numeric precision. VERYBIGINT corresponds to machine limits (2^31-1 or 2^63-1)."
+      },
+      {
+        "name": "numtoperm / permtonum permutation numbering pair",
+        "description": "numtoperm(n,k) generates k-th permutation (as row vector length n) of numbers 1..n, k taken modulo n!; permtonum(x) given permutation returns k such that x = numtoperm(n,k).",
+        "guidance": "Library syntax permute(n,k) and permuteInv(x). Useful for iterating permutations by index."
+      },
+      {
+        "name": "Special note on library syntax naming conventions",
+        "description": "For many GP/PARI constructs there exists a library-mode C-name mapping: e.g. + unary is gneg(x), + binary gadd(x,y), gmul/gdiv/gdivent/gdivround/gmod etc., and conversion/utility functions have g-prefixed names.",
+        "guidance": "When writing C library code or interfacing with PARI, use the documented library syntax equivalents shown for each GP construct."
+      }
+    ]
+  }
+}

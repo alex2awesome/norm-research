@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/charlin_framework_pdf.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 13821,
+  "output_tokens": 3470,
+  "elapsed_s": 532.0049634159077,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "conference organizers, program chairs, and researchers working on paper-reviewer assignment / recommender systems",
+    "subtask_short": "paper-to-reviewer matching",
+    "subtask_description": "Designing and evaluating systems to assign submitted conference papers to appropriate reviewers by predicting reviewer-paper suitabilities and optimizing constrained matchings.",
+    "subtask_keywords": [
+      "conference_review",
+      "paper_matching",
+      "reviewer_assignment",
+      "machine_learning",
+      "optimization"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Reviewer suitability / suitability scores",
+        "description": "Suitability scores describe the relevance of a reviewer to a given paper; in the experiments scores ranged from 0 to 3 with 0 = 'paper lies outside my expertise', 1 = 'can review if necessary', 2 = 'qualified to review', 3 = 'very qualified to review.'",
+        "guidance": "Suitability scores are the primary affinity measure used by the matching procedure; they may be observed (bids) or predicted. Predicting suitabilities is a means to an end (good matching), not an end itself."
+      },
+      {
+        "name": "Maximize total reviewer suitability (J_basic)",
+        "description": "Objective that equates utility with suitability: maximize sum_{r,p} s_{rp} x_{rp} subject to assignment constraints.",
+        "guidance": "Formulated as an integer program (Basic IP). With constraints like per-paper reviewer counts and per-reviewer loads the LP relaxation remains integral (totally unimodular), so it can be solved as an LP. Used as both matching objective and evaluation metric (evaluate optimal matches using all observed and imputed scores)."
+      },
+      {
+        "name": "Number of reviewers per paper (Rtarget)",
+        "description": "Constraint enforcing the desired number of reviewers assigned to each paper: sum_r x_{rp} = Rtarget for each paper p.",
+        "guidance": "Rtarget is a required input to the IP formulation (e.g., assign a single area chair per paper in some experiments). Choosing Rtarget reflects conference policy."
+      },
+      {
+        "name": "Reviewer load limits (Pmin, Pmax)",
+        "description": "Hard constraints on the minimum and maximum number of papers assigned to each reviewer: Pmin <= sum_p x_{rp} <= Pmax.",
+        "guidance": "Small ranges ensure per-reviewer equity but may reduce match quality; ranges used in experiments (e.g., Pmin=20, Pmax=30) reflect practical workload limits. These can be encoded as hard constraints in the IP."
+      },
+      {
+        "name": "Prevent conflicts of interest (COI)",
+        "description": "Matching must prevent assignments of reviewers to papers for which they have conflicts of interest.",
+        "guidance": "Enforce by constraining the corresponding x_{rp} to 0 in the IP, or equivalently set the relevant s_{rp} to -infinity. Paper explicitly calls this 'essential' for matching."
+      },
+      {
+        "name": "Minimum suitability threshold",
+        "description": "Only make assignments involving pairs with score s_{rp} above some minimum score threshold, to ensure every paper is reviewed by a minimally suitable reviewer.",
+        "guidance": "This ensures a floor on reviewer quality per paper but may sacrifice load equity or feasibility (might make the IP infeasible if too strict). The threshold idea can be implemented as constraints or by transforming scores."
+      },
+      {
+        "name": "Load fairness / load equity (J_balance)",
+        "description": "Incorporate a soft constraint on reviewer load to encourage equity by penalizing deviation from average load: J_balance(x) = sum s_{rp} x_{rp} + lambda * penalty(sum_p x_{rp} - avg)^ (e.g., |x| or x^2).",
+        "guidance": "The parameter lambda controls the tradeoff between match quality and load equity; higher lambda produces more balanced assignments at the expense of total suitability. Use f(x)=|x| or f(x)=x^2; experimental guidance suggests lambda ~0.5 as a reasonable tradeoff in their N10 data."
+      },
+      {
+        "name": "Suitability fairness across reviewers",
+        "description": "Desideratum that reviewers should have similar score distributions over their assigned papers so that on average no reviewer is assigned papers to which she is significantly more ill-suited than others.",
+        "guidance": "Can be expressed by penalizing within-reviewer variance of assigned suitability (included in load-balance/soft-constraint formulations) or by additional objective terms to equalize assigned-score distributions."
+      },
+      {
+        "name": "Assign complementary reviewers per paper",
+        "description": "When multiple reviewers are assigned to a paper, it may be desirable to assign complementary reviewers so as to cover the range of topics spanned by a submission.",
+        "guidance": "This desideratum (and related ones such as ensuring at least one 'senior' reviewer per paper) can be encoded as additional constraints or objective modifications in the IP (e.g., constraints selecting reviewers from different topic clusters or with seniority markers)."
+      },
+      {
+        "name": "Non-linear utility transformation (J_tfm)",
+        "description": "Utility of a match may be non-linear in suitability: apply a non-linear transformation g (e.g., logistic/sigmoid) to scores in the matching objective so that higher categories (2,3) are valued much more than lower ones (0,1): J_tfm(x) = sum g(s_{rp}) x_{rp}.",
+        "guidance": "Using a sigmoid (they used sigma(s)=1/(1+exp(-(s-1.5)*beta)) with beta=4.5) produces near-binary utility (\u03c3(0)=0.001, \u03c3(1)=0.095, \u03c3(2)=0.90, \u03c3(3)=1.0). Transforming both matching and learning objectives (CLR-TFM) can improve performance on the transformed task, particularly with small training sets."
+      },
+      {
+        "name": "Optimize predictions with respect to matching objective",
+        "description": "Predicted suitabilities should be learned with the final matching objective in mind: prediction accuracy (e.g., RMSE) may not align with matching-quality; training objectives can be modified to predict transformed scores (CLR-TFM) that better reflect match utility.",
+        "guidance": "Experiments showed that directly training LR using transformed labels (CLR-TFM) improves matching performance for the transformed objective. Authors note predicting suitabilities is 'subservient' to the primary goal of good matching performance."
+      },
+      {
+        "name": "Use of side information (paper/reviewer features)",
+        "description": "Leverage side information such as author keywords, paper word counts, reviewer archives (their authored papers), and stated keyword preferences to predict suitabilities.",
+        "guidance": "Different learning methods exploit side information differently: LM and LR use document/word features (LM uses reviewer archive to form dr, LR uses wp and reviewer parameters), BPMF uses observed suitabilities only. Side information is particularly useful in cold-start and in this domain generally."
+      },
+      {
+        "name": "Predict missing suitabilities using learning methods",
+        "description": "Infer unobserved reviewer-paper suitabilities using machine learning methods (Language Model, Linear Regression, Bayesian Probabilistic Matrix Factorization, etc.) to reduce elicitation burden.",
+        "guidance": "LM: builds Pr(w|dr) from reviewer archives and computes log Pr(wp|dr); LR: learns reviewer-specific \u03b8_r applied to paper features wp optimizing MSE; BPMF: probabilistic matrix factorization using only observed scores. Choice of method depends on available side information and amount of observed scores."
+      },
+      {
+        "name": "Evaluate predictive performance via RMSE (on test set)",
+        "description": "Assess learning methods' ability to predict suitabilities using root mean squared error (RMSE) on held-out test instances; training/validation/test splits of 60/20/20 and averaging over multiple splits.",
+        "guidance": "RMSE is standard in collaborative filtering, but low RMSE does not necessarily imply good matching. Experiments averaged results over 5 splits; report mean and standard error. Distinguish test instances with true labels from truly missing instances."
+      },
+      {
+        "name": "Evaluate matching performance via matching objective (J_basic / J_tfm)",
+        "description": "Measure match quality by evaluating the objective (J_basic or J_tfm) of the optimal assignment x* using observed, predicted, and imputed suitabilities: evaluate over Str \u222a Ste \u222a Sm.",
+        "guidance": "Because many scores are missing, impute missing values with a constant \u03c4 when forming S for matching; the paper used \u03c4 = 1. Matching evaluation addresses the real goal: quality of assignments rather than predictive RMSE alone."
+      },
+      {
+        "name": "Imputation for missing scores (\u03c4)",
+        "description": "When forming full suitability matrix for matching, impute missing suitabilities with a constant \u03c4 (a conservative estimate); experiments used \u03c4 = 1.",
+        "guidance": "Missing scores are likely to be lower on average than observed ones due to elicitation bias; choose \u03c4 to reflect this (they used dataset mean ~1.14 as rationale). Imputation affects matching feasibility and outcomes."
+      },
+      {
+        "name": "Value of elicited scores / diminishing returns",
+        "description": "Assess how matching quality improves as more suitability scores are elicited (value of information); there are diminishing returns as more data is acquired.",
+        "guidance": "Experiments show LR attains high matching performance with relatively few observed scores per user (e.g., <30), while gains decrease as training set size increases. Use this to balance elicitation burden vs. matching improvement; active selection of queries is suggested as promising."
+      },
+      {
+        "name": "Formulate and solve matching as an integer program (IP) with LP relaxation",
+        "description": "Express matching desiderata as constraints/objective modifications in an integer program; the constraint matrix is totally unimodular so LP relaxation yields integral solutions.",
+        "guidance": "IP formulation allows encoding many desiderata (Rtarget, Pmin/Pmax, COI, soft constraints via penalties). Although IPs can be computationally hard in general, the special structure here permits efficient LP-based solution methods."
+      }
+    ]
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "metric-seam.projected-relation-contract.v2",
+  "task": "code_review",
+  "criterion_id": "a407",
+  "name": "Name expressiveness (information density)",
+  "articulated_construct": "Beyond casing and blacklist checks, identifier names should carry phrase-level information through their morphemes and vocabulary, should be specific enough for the scope in which they operate, and should avoid terse or filler surfaces such as x, tmp, or data when those surfaces erase distinctions needed by readers.",
+  "axes": {
+    "articulability": "A prompt-based implementation can interpret whether a name fits the surrounding program concept.",
+    "verifiability": "A code-based implementation can expose identifier surfaces, lexical scopes, declarations, uses, collisions, and shadowing.",
+    "isomorphism": "Prompt and code implementations must consume the exact same sanitized_ctext and articulated construct; agreement is measured independently from capability on either axis."
+  },
+  "representation": {
+    "input": "sanitized_ctext unified diff",
+    "sanitizer": "metric-seam.credential-value-sanitizer.v1",
+    "projection_hook": "methods.metric_seam.battery.sanitized_ctext_projection_v1.project_ctext",
+    "representation_policy": "TRAIN, prompt, code, and heldout paths must call the same frozen projection hook before consuming ctext.",
+    "comparison_policy": "A historical comparator over raw text is not representation-identical for changed rows. The primary prompt comparator must be freshly produced over the same sanitized_ctext.",
+    "not_available": [
+      "repository checkout",
+      "unchanged declarations and uses outside diff context",
+      "runtime binding behavior",
+      "execution outcomes",
+      "reference values"
+    ]
+  },
+  "projected_relations": [
+    {
+      "relation_id": "scope_weighted_specificity",
+      "channel": "code_projectable",
+      "executable_evidence": [
+        "path and enclosing language-aware lexical scopes",
+        "scope depth and added-fragment line span",
+        "declaration kind and binding forms",
+        "resolved use count and lexical reach within visible added code"
+      ],
+      "interpretive_boundary": "The appropriate amount of specificity and any eventual scope weights are not frozen by the capability."
+    },
+    {
+      "relation_id": "identifier_morpheme_information_density",
+      "channel": "code_projectable",
+      "executable_evidence": [
+        "snake-case, camel-case, acronym, and digit morpheme segmentation",
+        "surface and morpheme counts available for later aggregation",
+        "fragment-local vocabulary diversity available for later aggregation"
+      ],
+      "interpretive_boundary": "Lexical diversity is surface evidence, not proof that the information is relevant or correct."
+    },
+    {
+      "relation_id": "placeholder_avoidance",
+      "channel": "hybrid_frontier",
+      "executable_evidence": [
+        "exact conventional placeholder surfaces",
+        "language-aware scope span and resolved-use evidence"
+      ],
+      "interpretive_boundary": "Short conventional names can be appropriate in tiny mathematical, iterator, callback, or receiver scopes."
+    },
+    {
+      "relation_id": "declaration_use_consistency",
+      "channel": "code_projectable",
+      "executable_evidence": [
+        "scope-qualified declaration identities",
+        "nearest-visible lexical declaration-to-use edges",
+        "unresolved lexical uses",
+        "declarations with no resolved uses in visible added code"
+      ],
+      "interpretive_boundary": "Fragment-local unresolved or unused status may be caused by unchanged code outside the diff."
+    },
+    {
+      "relation_id": "collision_and_shadowing",
+      "channel": "hybrid_frontier",
+      "executable_evidence": [
+        "multiple declaration events for the same name in one qualified scope",
+        "a nested declaration sharing a name with a visible ancestor declaration",
+        "ambiguity of same-scope lexical resolution"
+      ],
+      "interpretive_boundary": "The relations are mechanically detectable within supported fragments, but harmfulness remains language- and context-dependent."
+    },
+    {
+      "relation_id": "semantic_context_fit",
+      "channel": "prompt_side_unresolved",
+      "executable_evidence": [],
+      "interpretive_boundary": "Whether a name denotes the right domain concept or communicates intent requires semantic interpretation absent from the structural capability."
+    }
+  ],
+  "capability_contract": {
+    "operation": "CodeScopeOpsV3.declaration_use_graph(ctext)",
+    "artifact_schema": "metric-seam.code-scope-declaration-use-graph.v3",
+    "fact_only": true,
+    "criterion_specific_aggregation_frozen": false,
+    "semantic_context_fit_claimed": false,
+    "language_rules": [
+      "Python member and subscript assignment targets are not lexical bindings",
+      "Python named redefinitions remain distinct while repeated lexical rebinding sites coalesce",
+      "Python function lookup skips intervening class namespaces",
+      "JavaScript and TypeScript let and const bind to blocks while var binds to function or file scope",
+      "Go var, short-var, range, receiver, and parameter bindings are represented",
+      "type identifiers are excluded from lexical-use events"
+    ]
+  },
+  "synthetic_contrast_probes": [
+    {
+      "probe_id": "python_member_target",
+      "contrast": "self.timeout assignment versus timeout lexical assignment",
+      "relation": "declaration_use_consistency"
+    },
+    {
+      "probe_id": "python_named_redefinition",
+      "contrast": "two same-name functions versus two assignment sites for one lexical name",
+      "relation": "collision_and_shadowing"
+    },
+    {
+      "probe_id": "javascript_block_versus_var",
+      "contrast": "nested let shadowing versus nested var function binding",
+      "relation": "collision_and_shadowing"
+    },
+    {
+      "probe_id": "go_binding_forms",
+      "contrast": "parameters, var declarations, and short-var declarations versus type identifiers",
+      "relation": "declaration_use_consistency"
+    }
+  ],
+  "claim_boundary": "This contract projects articulated sub-relations into executable facts. It does not freeze an a407 metric, establish isomorphism, validate disagreement correctness, or treat failed reconstruction as evidence of tacitness."
+}

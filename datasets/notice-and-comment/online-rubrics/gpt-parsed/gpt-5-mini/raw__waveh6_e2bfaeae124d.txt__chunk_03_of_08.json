@@ -1,0 +1,121 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/waveh6_e2bfaeae124d.txt",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "waveh6_e2bfaeae124d.txt",
+  "chunk_idx": 3,
+  "n_chunks": 8,
+  "chunk_chars": 39649,
+  "model": "gpt-5-mini",
+  "elapsed_s": 41.381586832983885,
+  "input_tokens": 10846,
+  "output_tokens": 4121,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "Department of Defense medical managers, military medical service analysts, health services researchers and policymakers responsible for productivity measurement and resource allocation",
+    "subtask_short": "health care unit output metric",
+    "subtask_description": "Guidance and evaluation criteria for computing, refining, and critiquing the 'Health Care Unit' (HCU) as an output/productivity measure for military medical facilities, including methods for computing inpatient/outpatient weights, sample selection, inflation adjustment, peer grouping thresholds, and known limitations.",
+    "subtask_keywords": [
+      "health_care_unit",
+      "productivity_measure",
+      "military_health",
+      "performance_weights",
+      "costing",
+      "uniform_chart_of_accounts"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Outlier removal (2 standard deviations)",
+        "description": "Any numbers which deviate by more than two standard deviations would be discarded and a new mean would be recomputed.",
+        "guidance": "Compute mean and standard deviation across data points (e.g., facility costs); remove observations >2 SD from mean, then recompute the mean before proceeding to weight calculations."
+      },
+      {
+        "name": "Outpatient performance factor weight (original and modified)",
+        "description": "The original weight computed for each outpatient performance factor is the average cost of a visit to that specific service; the modified weight is this average cost divided by the Fiscal Year average cost per disposition.",
+        "guidance": "Example: original weight $21.21 for a medical visit; modified weight = $21.21 / $1,129.89 (FY avg cost per disposition). Perform this modification for each outpatient account so weights reflect outpatient visit value relative to disposition cost."
+      },
+      {
+        "name": "Inpatient weights via length-of-stay regression",
+        "description": "For each inpatient account compute average length of stay (total occupied bed days \u00f7 total dispositions) and cost per disposition; plot LOS vs cost and perform a least-squares fit. The regression intercept is the weight for the inpatient disposition factor and the slope is the weight for the occupied bed day account, both divided by the Fiscal Year average cost per disposition.",
+        "guidance": "Calculate pairs (LOS, cost per disposition) for each hospital/account, run least squares regression, take intercept and slope, then normalize by FY average cost per disposition to obtain weights (see Exhibits referenced)."
+      },
+      {
+        "name": "Weight update frequency (3\u20135 year interval)",
+        "description": "No specific time frame is mandated; rather, at 3 to 5 year intervals, weights should be recomputed to determine if any significant changes had occurred.",
+        "guidance": "Periodic recomputation at multi-year intervals balances stability for comparability and responsiveness to cost/service changes."
+      },
+      {
+        "name": "Peer grouping inclusion thresholds (Category I/II/III)",
+        "description": "Peer groupings (Categories I, II, III) were proposed based on Health Care Units accumulated, Full Time Equivalents (FTEs), number of physicians, and operating beds. Example: Category I\u20140\u20139,000 HCUs, <500 FTEs, <30 physicians, <70 operating beds.",
+        "guidance": "Use these thresholds to assign facilities to peer groups when applying peer-group-based weighting schemes."
+      },
+      {
+        "name": "Peer-group weighting method (indirect regression; fixed vs variable charges)",
+        "description": "Weights computed using the indirect regression method, divided by fiscal year average cost per disposition. For peer-group inpatient stays, treat costs on the day of admission as 'fixed charges' and costs for 2nd and subsequent occupied bed days as 'variable' so each day/element shares credit for care.",
+        "guidance": "This approach avoids setting some Performance Factor Weights to zero and distributes 'credit' across disposition and bed-day factors for an inpatient stay."
+      },
+      {
+        "name": "Refined inpatient weight computation (middle 50% subsample)",
+        "description": "Refined weights are based on a subsample: for each inpatient summary account use the middle fifty percent of facilities by number of dispositions after eliminating upper and lower quartiles; perform regression on that subsample to obtain coefficients B0 and B1.",
+        "guidance": "Using the mid-50% reduces influence from outliers and extreme facilities when deriving regression coefficients for weights."
+      },
+      {
+        "name": "Inflation adjustment in regression (year dummies and inflation parameters)",
+        "description": "Because parameters (B0, B1) may increase significantly year-to-year due to hospital cost inflation, include additional parameters to compensate: reformulated equation includes terms (1 + k1\u00b7d(yr1) + k2\u00b7d(yr2)) where k1,k2 represent levels of hospital inflation and d(yr) are year dummy variables.",
+        "guidance": "Derive B0 and B1 from a base year regression (e.g., FY1980) and adjust coefficients for later fiscal years using estimated inflation parameters and year dummy variables."
+      },
+      {
+        "name": "Refined weight formulas (normalize by average cost per disposition)",
+        "description": "Refined weights for each inpatient disposition and occupied bed day account computed as B0_k / average cost per disposition and B1_k / average cost per disposition respectively, where B0_k and B1_k are regression coefficients adjusted for fiscal year values.",
+        "guidance": "Apply adjusted regression coefficients and divide by FY average cost per disposition to obtain normalized weights for dispositions and bed days."
+      },
+      {
+        "name": "Refined outpatient and dental weight computation (middle 50% and ratio)",
+        "description": "Outpatient Visit and Dental Weights are computed after eliminating facilities in upper/lower quartiles (middle 50%), based on average cost: W_outpatient = Fiscal Year cost per account / average fiscal year cost per disposition. Empirical implication: 10 to 30 outpatient visits \u2248 1 inpatient stay.",
+        "guidance": "Compute outpatient/dental weights relative to disposition cost to reflect one outpatient visit's value in relation to an average inpatient disposition."
+      },
+      {
+        "name": "Uniform Chart of Accounts as data source (limitations on data control and allocations)",
+        "description": "The Uniform Chart of Accounts supplies the cost and workload data for HCU computation but final account expenses do not necessarily come under the control of the service chief; allocation procedures for cost pools may differ by facility.",
+        "guidance": "When using Uniform Chart of Accounts data, review local allocation procedures and recognize potential inconsistencies across facilities that can affect weight and HCU calculations."
+      },
+      {
+        "name": "HCU strengths versus CWU (coverage and expense-linkage)",
+        "description": "The Health Care Unit partitions inpatient care into separate categories, apportions outpatient care into categories, includes dental care, and ties the expense of providing care into a unit\u2014offering a more comprehensive proxy output than the Composite Work Unit.",
+        "guidance": "HCU's multi-factor structure makes it better suited for very large systems that require finer product-category detail than CWU's four gross inputs."
+      },
+      {
+        "name": "HCU limitation \u2014 quasi-output and occupied bed day assumption",
+        "description": "HCU is a quasi-output: including occupied bed days assumes that (a) all bed days in a hospital for a given illness are required, and (b) hospitalization is required for that illness; these assumptions may be invalid across services and facilities.",
+        "guidance": "Be cautious interpreting HCU as 'actual output'\u2014differences in admission practices and care modalities cause biases in workload credit across services (e.g., Navy vs Army/Air Force admission rates)."
+      },
+      {
+        "name": "Risk of gaming/manipulation via occupied bed days",
+        "description": "Using occupied bed days as an input can be manipulated to increase reported workload (e.g., admitting marginal patients because beds are available), and may reduce incentive to shorten lengths of stay.",
+        "guidance": "Consider using dispositions as the inpatient input (each disposition representing a fixed sum of bed days) to reduce manipulation, but recognize that DRG/LOS variability and regional differences complicate that solution."
+      },
+      {
+        "name": "Non-measurable and mission-driven activities omitted",
+        "description": "HCU does not measure non-quantifiable factors such as contingency/standby capability, variable emergency room usage, training (interns/residents) time, research, or other mission-specific services that generate workload but are not captured by dispositions/bed days/visits.",
+        "guidance": "Supplement HCU-based measurement with qualitative or separate quantitative measures for standby/mission/training activities when these are significant to facility mission."
+      },
+      {
+        "name": "Underlying quality and correctness assumptions",
+        "description": "Using HCU as a workload/output indicator assumes that all care provided is quality care as established by standards, that diagnoses are correct, and that physicians are equally competent.",
+        "guidance": "Explicitly acknowledge and, where possible, validate these assumptions; HCU does not by itself measure clinical quality or appropriateness of care."
+      },
+      {
+        "name": "Limitations for resource allocation (need for per-hospital adjustments)",
+        "description": "Weights are based on historical expenses and there are no established standards for what these costs 'should' be; wide ranges across hospitals mean HCU cannot straightforwardly be used for resource allocation without per-hospital adjustment factors.",
+        "guidance": "If HCU is used to allocate resources at higher organizational levels, include additional hospital-specific weighting or adjustment terms to avoid penalizing facilities with different case mix, complexity, or treatment modalities."
+      },
+      {
+        "name": "Composite Work Unit (CWU) criticisms (summary)",
+        "description": "CWU shortcomings include: (1) resource requirements of CWU elements probably not adequately reflected in weights; (2) CWU does not recognize service-mix/case-mix differences; (3) quality variation among facilities not recognized; (4) holding CWU weights constant ignores economies of scale/tech change; (5) CWU/FTE index does not permit comparison of absolute efficiency between entities; (6) CWU/FTE single-factor measure cannot reflect inputs other than labor; (7) CWU/FTE cannot separate operational efficiency from patient characteristics.",
+        "guidance": "Use these points as evaluation criteria when assessing CWU or other single-factor productivity indices; HCU attempts to address some but not all of these criticisms."
+      }
+    ]
+  }
+}

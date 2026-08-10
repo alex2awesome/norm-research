@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 71,
+  "n_chunks": 92,
+  "chunk_chars": 39757,
+  "model": "gpt-5-mini",
+  "elapsed_s": 441.21008233299654,
+  "input_tokens": 13591,
+  "output_tokens": 5525,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and computational group theorists computing character tables and class functions",
+    "subtask_short": "constructing character tables in GAP",
+    "subtask_description": "Reference-manual guidance for using GAP routines to compute, manipulate, and relate character tables and class functions (Dixon-Schneider routines, direct products, factor groups, isoclinic constructions, wreath products, sorting, automorphisms, normal subgroup caching, and class function objects).",
+    "subtask_keywords": [
+      "gap",
+      "character_table",
+      "class_functions",
+      "group_theory",
+      "software_documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dixon record fields",
+        "description": "The \u201cDixon record\u201d D returned by DixonInit stores all the information that is used by the Dixon-Schneider routines while computing the irreducible characters of a group. Some entries may be useful to know about when using the algorithm interactively.",
+        "guidance": "Relevant entries described: group (the group G of which the character table is to be computed), conjugacyClasses (classes of G), irreducibles (the already known irreducible characters as lists of their values), characterTable (the CharacterTable value of G whose irreducible characters are not yet known), and ClassElement(D, el) (a function returning the class number containing element el). Users should inspect these fields when interacting with the Dixon machinery (see 71.19)."
+      },
+      {
+        "name": "Dixon-Schneider interactive workflow",
+        "description": "Workflow used in example: initialise Dixon record with DixonInit, possibly increase info level for internal printout, apply DixonSplit to split spaces, derive irreducibles via tensor products (AntiSymmetricParts, ReducedCharacters, DxIncludeIrreducibles), compute induced characters from cyclic subgroups (InducedCyclic), apply LLL to remainders, convert LLL class function objects to values lists and include them (DxIncludeIrreducibles), and finally obtain irreducibles and set them on the group (DixontinI, SetIrr).",
+        "guidance": "Practical notes from example: use SetInfoLevel( InfoCharacterTable, 1 ) for internal results; after LLL, convert returned class function objects to lists of values (ValuesOfClassFunction) before feeding them to Dixon routines; check lengths of d.irreducibles and d.classes to confirm completeness; reset info level afterwards."
+      },
+      {
+        "name": "CharacterTableDirectProduct behavior",
+        "description": "CharacterTableDirectProduct(tbl1, tbl2) is the table of the direct product of the character tables tbl1 and tbl2. The matrix of irreducibles of this table is the Kronecker product of the irreducibles of tbl1 and tbl2.",
+        "guidance": "Products of ordinary and Brauer character tables are supported. In general the result will not know an underlying group, so missing power maps and irreducibles of input tables may be computed to construct the direct product. Embeddings of inputs into the direct product are stored and retrievable with GetFusionMap; projections are stored as well. The attribute FactorsOfDirectProduct is set to the list of arguments. The * operator for two character tables delegates to this operation."
+      },
+      {
+        "name": "FactorsOfDirectProduct attribute usage",
+        "description": "For an ordinary character table constructed via CharacterTableDirectProduct, the value of FactorsOfDirectProduct is the list of arguments of the CharacterTableDirectProduct call.",
+        "guidance": "There is no default method for computing FactorsOfDirectProduct; it is set when the direct product construction is used. Users can rely on this attribute to identify factors of a constructed direct-product table."
+      },
+      {
+        "name": "CharacterTableFactorGroup requirement",
+        "description": "CharacterTableFactorGroup(tbl, classes) returns the character table of the factor group of the ordinary character table tbl by the normal closure of the classes whose positions are contained in the list classes.",
+        "guidance": "The / operator for a character table and a list of class positions delegates to this operation. Provide class positions (indices) of classes to be factored out."
+      },
+      {
+        "name": "CharacterTableIsoclinic applicability and options",
+        "description": "CharacterTableIsoclinic(tbl[, arec]) returns the table of an isoclinic group when tbl is the (ordinary or modular) character table of a group H with structure p.G.p (i.e., H/Z has a normal subgroup N of index p and a central subgroup Z of order p contained in N).",
+        "guidance": "Optional arguments: if tbl does not determine class positions of N or Z uniquely, specify via a record arec (components normalSubgroup and centralElement). For p=2 one may specify lists classes and centre; centre can be a single involution position if Z has order 2. For odd p, an integer k in arec selects variant number; default k=1. If arguments are a Brauer table and an ordinary table, the SourceOfIsoclinicTable machinery relates them. Use SourceOfIsoclinicTable to inspect construction metadata (table, p, k, outerClasses, centralElement)."
+      },
+      {
+        "name": "SourceOfIsoclinicTable structure",
+        "description": "For ordinary tables constructed via CharacterTableIsoclinic, SourceOfIsoclinicTable encodes the construction: for p=2 it's [tbl, classes, list_of_positions_of_nonidentity_elements_in_Z, class_position_of_generator_of_Z]; for odd p it's a record with table, p, k, outerClasses (list of coset class positions), centralElement.",
+        "guidance": "There is no default method for computing SourceOfIsoclinicTable; inspect it after constructing isoclinic tables to understand how they were built."
+      },
+      {
+        "name": "CharacterTableOfNormalSubgroup contract",
+        "description": "CharacterTableOfNormalSubgroup(ordtbl, classes) returns the character table of N when the classes given form a normal subgroup N of the underlying group and these classes are conjugacy classes of N; otherwise it returns fail.",
+        "guidance": "Provide a list of class positions relative to ordtbl. Use this function to extract character tables of normal subgroups when class partition information is available; the call returns fail if the classes do not form a normal subgroup or are not conjugacy classes of N."
+      },
+      {
+        "name": "CharacterTableWreathSymmetric parametrization",
+        "description": "CharacterTableWreathSymmetric(tbl, n) returns the character table of the wreath product of a group G (with tbl its character table) with the full symmetric group on n points. The result has values for ClassParameters and CharacterParameters stored as sequences of partitions.",
+        "guidance": "Because of this parametrization principal character may not be the first in the list of irreducibles. Use CharacterParameters and ClassParameters to navigate positions. The function can be used to compute full wreath-product tables which exploit recursive intermediate results."
+      },
+      {
+        "name": "CharacterValueWreathSymmetric usage tradeoff",
+        "description": "CharacterValueWreathSymmetric(tbl, n, beta, pi) computes a single character value from the character table of the wreath product: conjugacy classes and irreducibles are parametrized by r-tuples of partitions.",
+        "guidance": "This function is useful if only a few character values are needed. If many values are needed, computing the whole character table via CharacterTableWreathSymmetric is probably faster because it avoids repeated work using recursion and intermediate results."
+      },
+      {
+        "name": "CharacterTableWithSortedCharacters behavior",
+        "description": "CharacterTableWithSortedCharacters(tbl[, perm]) is a character table differing from tbl only by the succession (ordering) of its irreducible characters; Irr and CharacterParameters are permuted by perm. If no perm is given, characters are ordered by increasing degree.",
+        "guidance": "SupportedCharacterTableInfo attributes that do not depend on ordering are preserved. Use this operation to change only character ordering (e.g., for presentation or algorithms relying on sorted degrees)."
+      },
+      {
+        "name": "SortedCharacters sorting rules",
+        "description": "SortedCharacters(tbl, chars[, flag]) returns chars ordered by flag: 'norm' sorts by ascending norms, 'degree' by ascending degree, or with no flag sorts by norm then degree. Rational characters precede others with same norm/degree; the trivial character always goes first if present.",
+        "guidance": "Use 'norm' to prioritize smaller norms, 'degree' to prioritize smaller degrees, or default to sort by norm then degree. Rationality and trivial-character precedence are explicit tie-breakers."
+      },
+      {
+        "name": "CharacterTableWithSortedClasses sorting options",
+        "description": "CharacterTableWithSortedClasses(tbl[, flag]) permutes classes of tbl. If flag='centralizers' classes are sorted by descending centralizer orders; if flag='representatives' by ascending representative orders; default sorts by ascending representative orders with ties broken by descending centralizer orders. If flag is a permutation, it is applied directly.",
+        "guidance": "SupportedCharacterTableInfo attributes that do not depend on ordering are preserved. Use this to reorder classes for presentation or for operations that exploit particular class orderings."
+      },
+      {
+        "name": "SortedCharacterTable w.r.t. normal subgroups",
+        "description": "SortedCharacterTable(tbl, kernel) (and variants with normalseries or facttbl) permutes classes and irreducibles so that classes in kernel are first and the first characters are those whose kernels contain kernel. For a normalseries the same is done successively.",
+        "guidance": "Third form requires that computed factor group F of tbl modulo kernel is permutation equivalent to facttbl (via TransformingPermutationsCharacterTables), otherwise fail. The transformation is unique only up to table automorphisms of F and of tbl; rearrangements are stable (relative positions of indistinguished classes/characters unchanged). CharacterTableWithSortedClasses and CharacterTableWithSortedCharacters are used internally."
+      },
+      {
+        "name": "ClassPermutation necessity",
+        "description": "ClassPermutation(tbl) is a permutation \u03c0 of classes of tbl stored if tbl was obtained by permuting classes via CharacterTableWithSortedClasses or SortedCharacterTable. If bound, class fusions into tbl that are stored on other tables must be followed by \u03c0 to describe the correct fusion.",
+        "guidance": "This attribute is necessary because the original and sorted table have the same identifier and same group (if known), so stored fusions must be adjusted by ClassPermutation to remain valid. It is only bound for permuted tables."
+      },
+      {
+        "name": "MatrixAutomorphisms functionality",
+        "description": "MatrixAutomorphisms(mat[, maps, subgroup]) returns the group of permutations of the columns of mat that leave the set of rows of mat invariant. If maps and subgroup are given, only permutations fixing each list in maps pointwise and lying in subgroup are constructed.",
+        "guidance": "Each entry in maps must be a list of the same length as the rows of mat (e.g., orders of class representatives). Use maps to impose extra invariants; supply a known subgroup to restrict computation."
+      },
+      {
+        "name": "TableAutomorphisms invariants",
+        "description": "TableAutomorphisms(tbl, characters[, info]) returns the permutation group of matrix automorphisms (of characters) that leave element orders and all stored power maps of tbl invariant.",
+        "guidance": "If characters is closed under Galois conjugacy (true for full Irr of ordinary tables), the string 'closed' may be used as info; alternatively a known subgroup may be supplied. Use AutomorphismsOfTable attribute to compute and store automorphisms for the Irr value."
+      },
+      {
+        "name": "TransformingPermutations contract",
+        "description": "TransformingPermutations(mat1, mat2) tries to construct a permutation \u03c0 that transforms the set of rows of mat1 to the set of rows of mat2 by permuting columns. If such \u03c0 exists a record with components columns, rows, and group is returned, otherwise fail.",
+        "guidance": "For returned record r, mat2 = Permuted( List(mat1, x -> Permuted(x, r.columns)), r.rows ). r.group is the group of matrix automorphisms of mat2 stabilizing the transformation. Use this to test column-permutation equivalence between row-sets of matrices."
+      },
+      {
+        "name": "TransformingPermutationsCharacterTables matching constraints",
+        "description": "TransformingPermutationsCharacterTables(tbl1, tbl2) attempts to find a permutation \u03c0 that transforms Irr(tbl1) to Irr(tbl2) by permuting columns such that \u03c0 also transforms power maps and element orders.",
+        "guidance": "If such \u03c0 exists, returns record with columns (\u03c0), rows (the permutation of Irr(tbl1) corresponding to \u03c0), and group (permutation group of table automorphisms of tbl2). If none exists returns fail. Use this to test permutation-equivalence of character tables under the extra constraints of power maps and element orders."
+      },
+      {
+        "name": "FamiliesOfRows partitioning rule",
+        "description": "FamiliesOfRows(mat, maps) groups rows of mat into families: two rows belong to same family if a permutation of columns maps one row to the other; each entry in maps is regarded as a family of length 1.",
+        "guidance": "Returns record with famreps (representatives), permutations (permutations mapping family members to representative), and families (positions of members). Use to identify rows equivalent up to column permutations while keeping specified maps fixed as singleton families."
+      },
+      {
+        "name": "NormalSubgroupClassesInfo caching and components",
+        "description": "NormalSubgroupClassesInfo(tbl) stores information to help computations involving normal subgroups: components nsg (list of normal subgroups of G), nsgclasses (at position i the list of conjugacy class positions forming the i-th nsg entry), nsgfactors (if bound the factor group modulo the i-th nsg entry).",
+        "guidance": "NormalSubgroupClasses, FactorGroupNormalSubgroupClasses, and ClassPositionsOfNormalSubgroup use these components and are the only functions to do so. Use NormalSubgroupClasses(tbl, classes) to obtain normal-subgroup objects and benefit from caching; KernelOfCharacter calls NormalSubgroupClasses, so character-kernel-based computations reuse cached info."
+      },
+      {
+        "name": "ClassPositionsOfNormalSubgroup output",
+        "description": "ClassPositionsOfNormalSubgroup(tbl, N) returns the list of positions of conjugacy classes of the character table tbl that are contained in the normal subgroup N of the underlying group of tbl.",
+        "guidance": "Use this to map a group-theoretic normal subgroup to the indices of classes in the character table. Example: KernelOfCharacter and ClassPositionsOfKernel interplay with these functions."
+      },
+      {
+        "name": "NormalSubgroupClasses contract with NormalSubgroupClassesInfo",
+        "description": "NormalSubgroupClasses(tbl, classes) returns the normal subgroup of the underlying group G of tbl that consists of those conjugacy classes whose positions are in classes. If NormalSubgroupClassesInfo(tbl).nsg already contains the required normal subgroup, and if NormalSubgroupClassesInfo(tbl).normalSubgroups is bound, the result will be identical to that stored group.",
+        "guidance": "This function both computes and caches normal-subgroup objects when class-position information is available; subsequent calls reuse existing entries from NormalSubgroupClassesInfo."
+      },
+      {
+        "name": "FactorGroupNormalSubgroupClasses return",
+        "description": "FactorGroupNormalSubgroupClasses(tbl, classes) returns the factor group of the underlying group G of tbl modulo the normal subgroup consisting of those conjugacy classes whose positions are in classes.",
+        "guidance": "Use when you need to obtain the factor group corresponding to a list of class positions. The result is cached in NormalSubgroupClassesInfo.nsgfactors if computed."
+      },
+      {
+        "name": "Use class function objects rather than plain value lists",
+        "description": "Class function objects carry context: they are equal to their values lists but also carry information (like irreducibility, kernel, centre, determinant, central character) and allow operations (scalar/tensor/induction/conjugation) without explicitly supplying the character table argument every time.",
+        "guidance": "Advantages: avoid repeatedly supplying character table arguments; object carries subgroup relations (kernel, centre) and other attributes. When dealing with tables from the GAP Character Table Library (no access to groups), values lists may suffice because stored fusions and power maps often allow computations. For incomplete tables or when group-specific choices matter, explicit arguments (and plain value lists) might be required. Note limitation: non-normal subgroups (e.g., inertia subgroups) generally cannot be computed from tables alone."
+      },
+      {
+        "name": "IsClassFunction representation and ordering",
+        "description": "A class function in GAP is represented by an immutable list where the i-th position stores the value on the i-th conjugacy class of the character table. The ordering of conjugacy classes is the one used in the underlying character table.",
+        "guidance": "If the character table has access to its underlying group the ordering of classes in the group and the table may differ; class functions always refer to the ordering in the character table. For class functions in characteristic p, they map p-regular elements to cyclotomics and are constant on conjugacy classes."
+      }
+    ]
+  }
+}

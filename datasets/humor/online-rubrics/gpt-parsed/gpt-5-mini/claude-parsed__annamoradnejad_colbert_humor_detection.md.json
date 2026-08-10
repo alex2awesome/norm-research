@@ -1,0 +1,109 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/claude-parsed/annamoradnejad_colbert_humor_detection.md",
+  "model": "gpt-5-mini",
+  "input_tokens": 2894,
+  "output_tokens": 2954,
+  "elapsed_s": 496.8247171251569,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners working on computational humor detection and computational humor production",
+    "subtask_short": "computational_humor_detection",
+    "subtask_description": "Designing, evaluating, or producing short-text humor detectors (and producing short jokes) using sentence-level BERT embeddings and parallel architectures that capture setup\u2013punchline script relations.",
+    "subtask_keywords": [
+      "computational_humor",
+      "humor_detection",
+      "bert",
+      "sentence_embedding",
+      "short_jokes"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Sentence segmentation",
+        "description": "Input text is split into its constituent sentences.",
+        "guidance": "Ensure clear sentence boundaries in inputs (and generated texts). The architecture assumes sentence-level units so texts without clear sentence segmentation are poorly modeled."
+      },
+      {
+        "name": "BERT embedding per sentence",
+        "description": "Each sentence is independently encoded with BERT, producing a fixed embedding.",
+        "guidance": "Encode sentences independently rather than pooling entire text; independent embeddings preserve sentence-level script information that pooling would destroy."
+      },
+      {
+        "name": "Parallel hidden layers (one channel per sentence)",
+        "description": "Each sentence embedding feeds its own line of hidden layers (a parallel 'channel' per sentence).",
+        "guidance": "Maintain separate downstream processing for each sentence to keep script-specific information separate before combining; this design choice underlies ColBERT's gains over single-channel models."
+      },
+      {
+        "name": "Concatenation and classification head",
+        "description": "The parallel channels' outputs are concatenated and passed to a final classification head which produces the humor label or score.",
+        "guidance": "Combine sentence-specific representations only after sentence-level processing; final classifier should leverage between-channel relations rather than relying on a single pooled vector."
+      },
+      {
+        "name": "Preserve script-level structure",
+        "description": "Architectures that preserve script-level structure outperform architectures that merge text into a single representation.",
+        "guidance": "Design models to preserve and compare sentence-level scripts (e.g., setup vs punchline) rather than collapsing all tokens into one representation."
+      },
+      {
+        "name": "Script opposition / between-script relations (incongruity)",
+        "description": "Humor arises from the relation between sentence-level scripts (especially incongruity).",
+        "guidance": "Detection should target contrasts or oppositions between scripts carried by different sentences (setup vs punchline) rather than only intra-sentence features."
+      },
+      {
+        "name": "Sentence-level incongruity detection",
+        "description": "The second/last sentence shifts the interpretive frame (i.e., a meaningful asymmetry between sentences).",
+        "guidance": "Measure and exploit shifts in embedding-space between sentences; models should be sensitive to frame-shifting second/last sentences as key humor signals."
+      },
+      {
+        "name": "Lexical surprise patterns",
+        "description": "Particularly low-frequency or phonetically marked words at punchline position are predictive of humor.",
+        "guidance": "Place comic-significant or surprising lexical items at the punchline; model features should capture lexical distinctiveness and surprise at punchline positions."
+      },
+      {
+        "name": "Structural pattern features",
+        "description": "Patterns such as length distributions, sentence count, and the ending position of comic load are useful signals.",
+        "guidance": "Use structural features (e.g., number of sentences, punchline placement, length) as part of detection; comic load often concentrates near the end."
+      },
+      {
+        "name": "Domain-specific markers and topical biases",
+        "description": "Certain topics or domain markers are frequently associated with jokes and can be learned by the model.",
+        "guidance": "Account for domain/topic signals but beware of dataset-specific topical biases; distinguish genuine humor signals from topical confounds."
+      },
+      {
+        "name": "Dataset balancing and matched negatives",
+        "description": "The released dataset contains 100,000 humorous and 100,000 non-humorous texts matched for length and style.",
+        "guidance": "When building/evaluating benchmarks, match non-humorous negatives on length/style to avoid trivial discriminative cues; use large, balanced datasets for robust evaluation."
+      },
+      {
+        "name": "Applicability scope and limitation awareness",
+        "description": "The architecture works on short jokes with clear sentence-segmented setup\u2013punchline format but struggles with long-form, subtle/ironic, or world-knowledge humor.",
+        "guidance": "Limit claims to genres represented in training data (short, sentence-separated jokes). Expect degraded performance on long-form narratives, irony requiring pragmatic/world knowledge, or culturally specific humor absent from data."
+      },
+      {
+        "name": "Multiple-sentence requirement for script detection",
+        "description": "A joke is detectable to the extent that multiple sentences are present with internally coherent meaning.",
+        "guidance": "Prefer inputs (or generated jokes) that include at least a setup and a punchline as separate sentences\u2014single-sentence jokes may not exhibit separable scripts for this architecture."
+      },
+      {
+        "name": "Punchline embedding asymmetry",
+        "description": "The punchline sentence's embedding should be meaningfully different from the setup's (script asymmetry).",
+        "guidance": "Evaluate embedding-distance or representational difference between setup and punchline as a diagnostic signal; ensure punchline distinctiveness in semantics/lexicon/structure."
+      },
+      {
+        "name": "Concentrate comic load at final sentence",
+        "description": "Comic load is often concentrated in the final sentence (or last clause).",
+        "guidance": "When producing or evaluating jokes for this model, place comic-significant material toward the end of the text so between-sentence comparisons capture the comic effect."
+      },
+      {
+        "name": "Practical production/evaluation principles",
+        "description": "Generate or evaluate text with sentence boundaries clear; maintain setup\u2013punchline asymmetry; place comic-significant words at the punchline; use sentence-separable scripts that contrast cleanly.",
+        "guidance": "Use these heuristics to craft data or synthetic jokes amenable to parallel-architecture detection; they are operational prescriptions derived from model behavior and theoretical framing."
+      },
+      {
+        "name": "Diagnostic evaluation questions",
+        "description": "Questions to check whether a text is analyzable by parallel-architecture humor detectors (e.g., Are sentences individually coherent under their own script? Do embeddings reflect asymmetry? Is comic load concentrated in the final sentence?).",
+        "guidance": "Apply these diagnostic questions during data curation and model error analysis to identify why a model succeeded or failed on a given instance."
+      }
+    ]
+  }
+}

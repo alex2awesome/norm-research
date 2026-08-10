@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_8a529657c71c.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15417,
+  "output_tokens": 3823,
+  "elapsed_s": 1608.552366167074,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "policy analysts, AI/ML researchers, government technology and procurement staff, and practitioners evaluating AI for policy-document analysis",
+    "subtask_short": "AI-assisted policy document extraction",
+    "subtask_description": "Using LLM-based AI systems to answer questions and extract structured content (entities, actions, deadlines, references) from complex policy documents (e.g., executive orders), and comparing AI outputs to human ground truth using standard IR/evaluation metrics.",
+    "subtask_keywords": [
+      "policy_documents",
+      "information_extraction",
+      "llm",
+      "precision_recall",
+      "executive_order"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Multiple-choice accuracy (% correct)",
+        "description": "Percent correct on a set of multiple-choice questions (100-question set used). Each model was run multiple times and percent correct measured per run and averaged.",
+        "guidance": "Questions introduced all at once in tabular form; prompt required answers as table rows with question number and letter (A\u2013E) only. Measured variation run-to-run and compared systems (e.g., Gemini \u224871.4% avg, GPT4 \u224838.4%, Cohere \u224837.6%). Note that introducing all questions at once may affect performance; prompt-engineering effects not explored."
+      },
+      {
+        "name": "Precision",
+        "description": "Precision computed for information-extraction tasks (true positives / (true positives + false positives)).",
+        "guidance": "Used to evaluate retrieved lists against ground truth (e.g., Task 1\u20136). Table reports P per model and task. High precision indicates few extraneous items; RAG approaches can raise precision by restricting context but may miss items (low recall)."
+      },
+      {
+        "name": "Recall",
+        "description": "Recall computed for information-extraction tasks (true positives / (true positives + false negatives)).",
+        "guidance": "Used alongside precision to measure coverage of ground-truth items (e.g., human baseline recall vs AI systems). RAG/deterministic retrieval can limit recall if relevant passages are not returned by the retriever."
+      },
+      {
+        "name": "F1 score",
+        "description": "F1 score (harmonic mean of precision and recall) used to summarize extraction performance on each task.",
+        "guidance": "Reported per task and averaged (e.g., Gemini average F1 across tasks 1\u20136 = 0.74). F1 facilitates comparison when precision and recall trade off."
+      },
+      {
+        "name": "Replicability (run-to-run agreement)",
+        "description": "A metric for run-to-run agreement across repeated runs: 0% corresponds to five different answers, 100% corresponds to five identical answers (conversion formula noted: (n-1)/(q-1) where n = number agreeing, q = number choices).",
+        "guidance": "Measured per-answer replicability and average replicability per model (e.g., GPT4 41.0%, Cohere 81.5%, Gemini 80.0%). Strong correlation observed between higher run-to-run agreement and a higher probability that the consensus answer is correct (except for some methods like Cohere where trend weaker)."
+      },
+      {
+        "name": "Consensus answer accuracy",
+        "description": "Accuracy of the most-often-produced answer across multiple runs ('consensus'); compared to single-run average accuracy.",
+        "guidance": "Consensus sometimes marginally improved or degraded accuracy (e.g., GPT4 per-run 38.4% vs consensus 41.0%; Gemini per-run 71.4% vs consensus 66.0%). Pooling across models produced a different consensus (e.g., pooled consensus 65.0%). Use consensus carefully; run-to-run agreement is an informative signal but consensus is not guaranteed to improve accuracy."
+      },
+      {
+        "name": "Instruction-following / output-format fidelity",
+        "description": "Ability of an AI system to follow explicit output-format instructions (e.g., return a two-column table with question number and letter only).",
+        "guidance": "All systems were able to follow these directions and return a table of 100 answers. Adherence to strict output formats enables automated grading and reduces post-processing; prompt wording and chat vs API modality can affect adherence."
+      },
+      {
+        "name": "Faithfulness to source / hallucination avoidance",
+        "description": "Degree to which outputs are faithful to the uploaded document and avoid fabricating information when the model lacks access or knowledge.",
+        "guidance": "Examples: Cohere (knowledge cutoff Jan 2023) produced a false narrative when asked to summarize without the document; Claude and Gemini explicitly stated they had no knowledge when appropriate. Faithfulness measured indirectly via precision/recall/F1 and manual inspection. Systems should recognize lack of knowledge or reference the source; hallucinations are an anti-pattern."
+      },
+      {
+        "name": "Retrieval strategy tradeoffs (RAG determinism vs full-context)",
+        "description": "Impact of retrieval-augmented generation (RAG) vs providing full document context: RAG uses deterministic semantic search to select passages, which reduces context size but can omit relevant passages; full-context LLMs get broader context but may have other failure modes.",
+        "guidance": "Cohere (RAG) was most replicable but not most accurate; deterministic retrieval can yield consistent but incomplete 'hay bale' contexts that miss the 'needle'. Consider retriever coverage, chunking strategy, and whether the document fits model context windows when choosing approach."
+      },
+      {
+        "name": "Handling of complex document structure and reference resolution",
+        "description": "Ability to interpret hierarchical numbering, backtrack to top-level headings, and supply full, fully-numbered paragraph references (e.g., 10.1(b)(viii)(C)).",
+        "guidance": "Manual backtracking is tedious; tested AI systems 'provided full and accurate document references in almost all cases.' This is a key capability for legal/policy document work where precise citations matter."
+      },
+      {
+        "name": "Adherence to inclusion/exclusion criteria / scope parsing",
+        "description": "Ability to correctly interpret question-specific scope rules (e.g., include organizations if an individual affiliated is mentioned; exclude boards, councils, programs).",
+        "guidance": "Task 1 explicitly instructed inclusion/exclusion rules. Some systems (e.g., Cohere) occasionally included irrelevant information or misinterpreted scope; others (Claude, Gemini) followed scope more precisely. Clear, explicit prompts and examples can reduce scope-misinterpretation errors."
+      },
+      {
+        "name": "Deadline/time-bound filtering accuracy",
+        "description": "Accuracy at extracting actions with specified time constraints (e.g., list actions that must be completed within 6 months / 180 days).",
+        "guidance": "Task 3 required outputting items with item number, specified deadline, and action. Cohere included items beyond 180 days in one example, an anti-pattern. Evaluation used precision/recall/F1 on the extracted deadline-filtered set."
+      },
+      {
+        "name": "Readability and structure of outputs (formatting quality)",
+        "description": "Usefulness of formatting (tables, bullet points, clear lists) to present extracted items and improve human consumption.",
+        "guidance": "Claude and Gemini produced concise, accurate, and well-structured responses using tables and bullet points. Readable structure aids verification and human review; lack of structure or extraneous prose complicates grading and comparison to ground truth."
+      },
+      {
+        "name": "Efficiency / time-to-completion relative to human baseline",
+        "description": "Comparing time required by AI systems vs human analysts to complete the same extraction tasks (humans given a time budget of 4 hours for Tasks 1\u20133).",
+        "guidance": "Gemini completed tasks in minutes that took human reviewers ~4 hours. Efficiency should be considered alongside accuracy and reproducibility; faster outputs that are less accurate may not be acceptable."
+      },
+      {
+        "name": "Safety filtering interference",
+        "description": "Whether content-safety filters block or alter processing of policy documents even when content is benign (e.g., phrases that trigger sexual-content filters).",
+        "guidance": "Gemini occasionally halted citing \u201cunsafe sexually explicit material\u201d despite EO containing no explicit content; sensitivity adjustments allowed continuation. Systems should allow controlled adjustment or auditing of safety filters for policy-analysis contexts."
+      },
+      {
+        "name": "Question difficulty characteristics",
+        "description": "Qualitative rubric identifying what makes a question 'easy' vs 'hard' for LLMs: easy = high-level principles, repeated requirements, explicit definitions; hard = buried specifics, lesser-known entities, technical implementation details, or directives phrased less explicitly.",
+        "guidance": "Use this taxonomy to stratify evaluation sets and interpret results; expect lower accuracy on questions about obscure entities, deeply nested clauses, or implicit/directive phrasing."
+      },
+      {
+        "name": "Human baseline methodology and time budget",
+        "description": "Human baseline established by three volunteers with prior health policy experience, given 4 hours for tasks and allowed to consult web references but not AI-based tools.",
+        "guidance": "Human performance used to compare F1/precision/recall. When designing evaluations, provide clear instructions and reasonable time budgets to create meaningful human baselines."
+      },
+      {
+        "name": "Sensitivity to prompting, batching, and hyperparameters",
+        "description": "Performance dependence on prompt engineering (phrasing), whether questions are introduced all at once vs individually, and model hyperparameters (temperature, top-k/top-p).",
+        "guidance": "The study did not explore prompt engineering, batching effects, or hyperparameter tuning, but explicitly notes these as potentially influential factors and limitations. Evaluators should consider experiments varying these dimensions."
+      },
+      {
+        "name": "Reproducibility and trustworthiness (overall reliability)",
+        "description": "Global assessment of whether AI outputs can be consistently trusted and reproduced across runs and versions; identified as a critical challenge.",
+        "guidance": "Run-to-run variability observed across models; techniques such as self-consistency and self-evaluation cited as promising approaches to reduce variability. Reproducibility should be a primary acceptance criterion for operational use."
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+You are the ARBITER for a preregistered criterion-routing protocol.
+
+Two independent parties disagree about where a scoring criterion belongs:
+
+  TRACK A = the criterion measures genuine evidence about the construct named below
+            (substance, reasoning, evidence, craft, content). Track-A criteria JOIN the
+            articulated-criterion bank and are allowed to raise the bank's measured AUC.
+  TRACK B = the criterion measures something predictive but NOT the construct: length,
+            format, boilerplate, community style, topic markers, temporal tells, or a
+            textual fingerprint of some upstream circumstance of the item's production
+            (who made it, with what resources, when, with what help). Track-B channels
+            become DECLARED NUISANCES and are used only to discount the other models.
+
+For each dispute below you see: the criterion, the track that proposed it, that
+proposer's rationale, and an independent blind auditor's contrary verdict. Rule on each.
+
+Decide on the criterion's TEXT and what it would actually make a judge measure — not on
+who proposed it and not on which answer is more generous. The decisive question is:
+if a judge scored exactly this instruction, would a high score be evidence ABOUT the
+construct, or evidence about something that merely travels with it?
+
+Also return `mixed`: true if you route it B but its upstream cause plausibly produces
+genuine quality as well (these are reported in both discounted and undiscounted readouts).
+
+DISPUTES:
+
+--- DISPUTE cap_finalist / B01 ---
+CORPUS: reader-submitted captions for a weekly cartoon caption contest   ITEM: caption   CONSTRUCT AT ISSUE: how good the caption is as a contest entry
+CRITERION NAME: Specific numeric or quantitative detail
+SCORING INSTRUCTION: Score 0-10 the extent to which the caption's joke is built around a specific, concrete number or quantity (a day count, weight, measurement, dollar amount, etc.) stated in the text, where 10 = a specific number is the central device of the joke and 0 = no numbers appear. Do not judge whether the particular number chosen is funny.
+PROPOSED BY TRACK: B  (A = quality-relevant miner, B = suspected-spurious miner)
+PROPOSER'S UPSTREAM PARENT TAG: surface-only
+PROPOSER'S RATIONALE: Specific numeric details recur across dense_high_card_low items: R17 '581 days' (dense_pct=.741), R36 '45 pounds ... a leg' (dense_pct=.656), R49 '88 keys' (dense_pct=.714), R59 '500 this morning' (dense_pct=.880). Reliance on an arbitrary concrete number is a compositional habit that can pattern-match to 'specific = funny' without being the actual source of quality.
+BLIND AUDITOR SAID: quality_relevant -- Judges whether a number functions as the structural centerpiece of the joke, a compositional property, not merely its presence.
+
+--- DISPUTE nc_outcome / A07 ---
+CORPUS: public comments submitted to United States federal agency rulemaking dockets   ITEM: public comment   CONSTRUCT AT ISSUE: the substantive quality of the comment
+CRITERION NAME: Original firsthand text vs. formulaic template language
+SCORING INSTRUCTION: Score whether the comment's language is specific to this commenter's own situation and this particular docket, versus reading like a generic template that could be dropped into many different comment periods with minor edits. A 10 is clearly composed for this specific submission with situation-specific detail. A 0 reads as boilerplate (e.g., a generic extension-request form) with the docket number as the only customized element.
+PROPOSED BY TRACK: A  (A = quality-relevant miner, B = suspected-spurious miner)
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R15, R24, R40, and R49 are all comment-period extension requests that follow a near-identical template (trade association credentials, complexity claim, requested number of days) -- all four are dense_low_card_high, suggesting the scorecard rewards this formulaic genre more than the dense model does, which may be picking up on its generic, reusable phrasing.
+BLIND AUDITOR SAID: incidental -- Distinguishing situation-specific prose from template/boilerplate phrasing is a production-style fingerprint, though genuine bespoke engagement plausibly co-occurs with genuinely better substance.
+
+--- DISPUTE peer_curation / A14 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT AT ISSUE: research quality
+CRITERION NAME: Low packaging density: few coined acronyms, sparse raw statistics
+SCORING INSTRUCTION: Score 0-10 inversely with 'packaging density': count coined acronyms/brand names for the method, dataset, and/or benchmark together with the frequency of standalone specific numbers (percentages, counts, sample sizes) not woven into an explanatory sentence. A 10 uses plain descriptive language, at most one simple method name, and numbers only in service of a stated argument. A 0 uses multiple coined acronyms (e.g., separate names for the dataset and the benchmark) plus several free-standing statistics presented as a checklist of achievements.
+PROPOSED BY TRACK: A  (A = quality-relevant miner, B = suspected-spurious miner)
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R06 (LOKI) reports '18K carefully curated questions across 26 subcategories' and '22 open-source LMMs and 6 closed-source models' as a checklist of scale statistics; R23 coins SELF-PARAM as a nested acronym-of-an-acronym. Contrast R27 and R46, which use no coined branding and almost no free-standing statistics.
+BLIND AUDITOR SAID: incidental -- This aggregates naming/branding and raw-statistic density, a packaging-style measure, though a less marketing-driven writing culture may also reflect a more careful research group.
+
+--- DISPUTE peer_revealed / A05 ---
+CORPUS: abstracts of machine-learning conference paper submissions   ITEM: abstract   CONSTRUCT AT ISSUE: research quality
+CRITERION NAME: Judgability from printed text alone, no title recognition
+SCORING INSTRUCTION: Score 0-10 on whether the item text itself (title + abstract body) contains enough substantive description of motivation, method, and results to be judged on its own, without needing to recognize the paper from its title. A 10 = the abstract body fully describes what was done and found in prose. A 0 = the abstract body is missing or is a content-free stub (title only, or a placeholder), such that any score would have to rely on recognizing the paper rather than reading its content.
+PROPOSED BY TRACK: A  (A = quality-relevant miner, B = suspected-spurious miner)
+PROPOSER'S UPSTREAM PARENT TAG: None
+PROPOSER'S RATIONALE: R20 ('Quasi-Recurrent Neural Networks') has literally no abstract body -- only a title -- yet still receives card_pct=0.902, a very high scorecard percentile, which is only explicable if the judge scored based on recognizing this as a well-known paper rather than from the (absent) text, a direct violation of text-only scoring. Contrast with R42 (card_pct=0.145), which is also short but contains real content (a stated problem, method, and general result) and receives a much lower, more text-grounded card score -- showing the gradient this criterion should track.
+BLIND AUDITOR SAID: incidental -- Measures whether the text is complete/self-contained enough to be judged at all, a data-completeness/production-circumstance check rather than a signal of the underlying research's quality.
+
+OUTPUT. Emit exactly one JSON object and nothing else:
+
+{"rulings": [
+  {"cell": "<cell>", "blind_id": "<id>", "route": "A" or "B", "mixed": true or false,
+   "reason": "<two sentences max>"},
+  ... one per dispute ...
+]}

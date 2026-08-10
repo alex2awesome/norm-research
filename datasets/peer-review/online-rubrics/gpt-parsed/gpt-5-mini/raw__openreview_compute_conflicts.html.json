@@ -1,0 +1,74 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/openreview_compute_conflicts.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 2411,
+  "output_tokens": 2206,
+  "elapsed_s": 833.9412240411621,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "conference organizers / program committee chairs / developers using the OpenReview Python client to compute reviewer-author conflicts",
+    "subtask_short": "compute conflicts in OpenReview",
+    "subtask_description": "Procedural guide for computing conflicts-of-interest between reviewers and authors (single or multiple submissions) using the openreview-py client, obtaining author/reviewer profiles, running the conflict check, and posting conflict edges.",
+    "subtask_keywords": [
+      "openreview",
+      "conflict_detection",
+      "python_client",
+      "conference_review",
+      "paper_matching"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Install and instantiate the openreview-py client",
+        "description": "install and instantiate the openreview-py client.",
+        "guidance": "This is a prerequisite step repeated for single-submission and batch workflows; you must have a working client before fetching notes, groups, or profiles."
+      },
+      {
+        "name": "Understand and follow the venue's conflict policies",
+        "description": "Read for more information about conflict policies.",
+        "guidance": "Before computing conflicts, make sure you know the venue's conflict policy so you can decide which profile fields (e.g., publications or relations) to use and how to interpret shared groups returned by get_conflicts."
+      },
+      {
+        "name": "Fetch the submission (note) to compute conflicts for",
+        "description": "Get the note that you are interested in computing conflicts for. note = client.get_note(<submission_id>)",
+        "guidance": "You must fetch the specific submission object to access its content.authorids and other metadata needed to look up author profiles."
+      },
+      {
+        "name": "Identify the reviewer group",
+        "description": "Set reviewer_group_id to the reviewers group (example: \"robot-learning.org/CoRL/2022/Conference/Submission99/Reviewers\").",
+        "guidance": "You need the reviewer group id (or its members) to fetch reviewer profiles for conflict checking."
+      },
+      {
+        "name": "Obtain author profiles (with publications if required)",
+        "description": "author_profiles = openreview.tools.get_profiles(client, submission.content['authorids']['value'], with_publications=True)",
+        "guidance": "By default the example requests with_publications=True. If your custom policy does not require authors' publications, you may omit that flag to save resources."
+      },
+      {
+        "name": "Obtain reviewer profiles (with publications and relations as needed)",
+        "description": "reviewers = openreview.tools.get_profiles(client, client.get_group(reviewer_group_id).members, with_publications=True, with_relations=True)",
+        "guidance": "The example requests both publications and relations for reviewers. with_relations=True can be necessary if your conflict policy considers explicit profile relationships."
+      },
+      {
+        "name": "Compute conflicts using get_conflicts and interpret results",
+        "description": "Compute the conflicts. If no conflicts are found, get_conflicts will return an empty list. Otherwise, the list will contain the shared groups that put them in conflict with each other.",
+        "guidance": "Call the get_conflicts helper (openreview.tools.get_conflicts or equivalent). Treat an empty list as no conflict; a non-empty list indicates which shared groups or relationships trigger the conflict according to the policy."
+      },
+      {
+        "name": "Post conflict Edges with label 'Conflict'",
+        "description": "The last step is posting the conflict Edges. You can follow this guide to post custom conflicts, and keep the label as 'Conflict'.",
+        "guidance": "After computing conflicts, persist them by posting OpenReview Edge objects labeled 'Conflict' so the system (and assignment workflows) can use them."
+      },
+      {
+        "name": "Batch: get all submissions and author/reviewer profiles for multi-submission conflict computation",
+        "description": "Get all submissions, authorids of all submissions, and the author and reviewer Profiles. If you're using a custom policy that does not need the author's publications, you can exclude with_publications=True",
+        "guidance": "When computing conflicts across all submissions, fetch submissions in bulk and retrieve profiles accordingly. Omitting with_publications can speed up processing if the policy allows."
+      },
+      {
+        "name": "Multi-reviewer / all-submissions workflow and efficiency note",
+        "description": "Get all active submissions under review and save them to a variable \"submissions\". Get the profiles for the new reviewers. For each submission, get the author_profiles and then get conflicts for each reviewer.",
+        "guidance": "Be aware that getting author profiles per submission can be inefficient for large venues; instead, first query all author profile ids and fetch all profiles together to improve performance."
+      }
+    ]
+  }
+}

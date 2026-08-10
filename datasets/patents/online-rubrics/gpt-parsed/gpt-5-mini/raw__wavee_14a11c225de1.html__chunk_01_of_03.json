@@ -1,0 +1,136 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_14a11c225de1.html",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "wavee_14a11c225de1.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39827,
+  "model": "gpt-5-mini",
+  "elapsed_s": 44.2176507920085,
+  "input_tokens": 11756,
+  "output_tokens": 3822,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "legal scholars, computational social scientists, and data scientists studying patent examination, gender bias, and empirical patent analytics",
+    "subtask_short": "empirical analysis of gender in patents",
+    "subtask_description": "An empirical study using text classification, clustering, and feature-importance analysis to test whether inventor gender can be predicted from patent text, whether patent grant can be predicted from application attributes, and whether female-dominated technical fields have higher rejection rates.",
+    "subtask_keywords": [
+      "patent_empirics",
+      "gender_bias",
+      "text_classification",
+      "clustering",
+      "uspc",
+      "machine_learning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Hypothesis 1 support criterion (gender prediction)",
+        "description": "If a classifier trained on patent abstracts achieves an accuracy score above 50% (better than random guess after balancing), the hypothesis that inventor gender can be identified by textual content is supported.",
+        "guidance": "Two classifiers were used (Logistic Regression on TFIDF and DeBerta transformer). Models were run nine times with different random samples; results averaged. Reported accuracies (per category/model) and overall averaged accuracy used to decide support (e.g., logistic regression ~67.45%, DeBerta ~58.36%)."
+      },
+      {
+        "name": "Use complementary models to separate textual choices vs semantics",
+        "description": "Compare a TFIDF + Logistic Regression classifier (sensitive to specific words/textual choices) with a transformer (DeBERTa) that captures deeper semantic/topic information to evaluate whether predictions are driven by word choice or substantive topics.",
+        "guidance": "Interpret higher TFIDF/logistic performance as indicating textual-choice signals; higher transformer performance as semantic/topic signals. Use both for complementary insights."
+      },
+      {
+        "name": "Class balancing by under-sampling for imbalanced gender data",
+        "description": "When dataset is highly imbalanced (~9 male : 1 female), adopt an under-sampling approach that randomly removes entries from the larger class until both classes are the same size.",
+        "guidance": "Under-sampling helps prevent overfitting on majority class. In this study, each experiment matched majority class sample size to the minority class and repeated sampling across nine iterations."
+      },
+      {
+        "name": "Experimental repetition and averaging",
+        "description": "Perform multiple runs with different random seeds/samples (nine runs here) and average accuracy results to obtain a robust estimate of classifier performance.",
+        "guidance": "Each iteration used a different random sample of the majority class; final reported accuracy is the average over iterations."
+      },
+      {
+        "name": "Train/test split 80/20",
+        "description": "Allocate 80% of the balanced dataset to training and 20% to testing for each iteration.",
+        "guidance": "Apply this split per iteration before evaluating predictive performance."
+      },
+      {
+        "name": "Text preprocessing: remove stop words and normalize forms",
+        "description": "Prepare abstracts by removing stop words and normalizing different forms of the same word (e.g., singular/plural) to homogenize related terms prior to analysis.",
+        "guidance": "Stop-word removal and normalization reduce noise and improve the signal for TFIDF and other text features."
+      },
+      {
+        "name": "TFIDF feature construction and interpretation",
+        "description": "Convert textual data into a TFIDF matrix (term-frequency inverse-document-frequency) to represent importance of terms; use Logistic Regression on TFIDF vectors for binary classification.",
+        "guidance": "TFIDF emphasizes individual terms and textual choices; analysis of TFIDF-based model feature weights can identify specific words predictive of gender."
+      },
+      {
+        "name": "Transformer (DeBERTa) embeddings and classification",
+        "description": "Use a DeBERTa transformer model to produce contextual sentence/abstract embeddings and add a classification head to predict gender or grant outcome.",
+        "guidance": "DeBERTa captures nuanced contextual and semantic relations beyond raw term frequencies; compare its performance to TFIDF-based models for interpretive insights."
+      },
+      {
+        "name": "Definition of gender-identifying words via iteration frequency",
+        "description": "A term is considered gender-identifying if it appears in the list of top 20 most important words in at least 5 of the 9 classifier iterations.",
+        "guidance": "This operational definition was used to produce a candidate list (e.g., 'hair', 'child', 'decorative', etc.)."
+      },
+      {
+        "name": "Hypothesis 2 support criterion (predicting patent grant)",
+        "description": "If a classifier (Random Forest here) trained on application attributes (metadata, textual-choice features, cluster keywords) achieves accuracy exceeding 50% (the balanced random baseline), the hypothesis that patent grant can be predicted from these features is supported.",
+        "guidance": "The study used under-sampling to balance classes; reported Random Forest accuracy ~62%. Use feature-importance analysis to identify the most predictive attributes."
+      },
+      {
+        "name": "Random Forest model configuration for grant prediction",
+        "description": "Configure Random Forest with substantial capacity for the task (in this study: 500 estimators and maximum depth 150) and consider GPU-accelerated implementations for efficiency.",
+        "guidance": "Use Random Forest Feature Importance to rank attributes; GPU cuML/RAPIDS was used to accelerate training."
+      },
+      {
+        "name": "Feature engineering: textual-choice metrics (Readability package)",
+        "description": "Quantify textual choices using readability and lexical measures (e.g., average sentence length, vocabulary breadth/type-token ratio, syllables per word, average word length, words per sentence, word count, long/complex words, sentences per paragraph, median word length).",
+        "guidance": "These textual-choice features dominated the top importance rankings for grant prediction (e.g., type-token ratio, skew word length, syllables per word ranked highly)."
+      },
+      {
+        "name": "Feature taxonomy for interpretation",
+        "description": "Classify features into categories for analysis and interpretation: Textual Choice, Technological Classification (USPC), Cluster Keyword, and Metadata Attribute (e.g., inventor gender).",
+        "guidance": "Use this taxonomy when presenting top features (the paper presented top 30 features labeled by type)."
+      },
+      {
+        "name": "Subject-matter keyword extraction via clustering pipeline",
+        "description": "Derive cluster-based subject-matter keywords by: (1) splitting abstracts into sentences and producing sentence embeddings with DeBERTa; (2) reducing dimensionality with UMAP to 5 dimensions; (3) clustering with HDBSCAN (min_cluster_size set to 7); (4) selecting the two most central sentences per cluster and extracting the three most common nouns from unigrams and bigrams as cluster topics; (5) associating those cluster keywords with all patents in the cluster.",
+        "guidance": "HDBSCAN chosen because it does not require predefined cluster counts and handles varying densities. UMAP reduces 768-dim embeddings to 5-dim for efficiency. min_cluster_size = 7 was used after tuning."
+      },
+      {
+        "name": "One-hot encoding of USPC classes and removal of irrelevant columns",
+        "description": "Convert the USPC class column into one-hot encoded vectors for model input and remove columns deemed non-relevant (e.g., application_number, one_if_male, one_if_patented, one_if_abandoned, one_if_pending, abstract, clean_abstract, Gender_Target, Parent_Category) prior to classification.",
+        "guidance": "Prepare features to be machine-readable and eliminate identifiers or leakage-prone columns."
+      },
+      {
+        "name": "Hypothesis 3 test: top-25 USPC class analysis",
+        "description": "Assess whether female inventors disproportionately file in USPC technological classes with higher rejection rates by calculating the top 25 USPC classes for each gender and computing each class's overall rejection rate (pending applications excluded).",
+        "guidance": "Color-code classes by rejection rate (<50% green, >50% red) for visual analysis; compare percentage of apps per class across genders."
+      },
+      {
+        "name": "Cluster-type definitions and thresholds (female/male/reject clusters)",
+        "description": "Define cluster types as: Female Cluster = cluster with >50% female applications; Male Cluster = cluster with >50% male applications; Neutral = exactly 50/50; Reject Cluster = cluster where >35% of its patent applications were rejected (35% is the dataset average rejection rate).",
+        "guidance": "Use these thresholds to categorize clusters and analyze overlaps (e.g., female clusters that are also reject clusters)."
+      },
+      {
+        "name": "Reject-cluster threshold tied to dataset average rejection rate",
+        "description": "Operationalize 'reject cluster' as any cluster exceeding the dataset's average rejection rate (here, >35%).",
+        "guidance": "This threshold grounds the 'reject' label relative to dataset-wide norms and was used to identify 792 reject clusters out of 1,716 total clusters."
+      },
+      {
+        "name": "Cluster assignment coverage and reporting",
+        "description": "Report cluster assignment coverage (percentage of abstracts assigned to at least one cluster); in this study ~64.5% of abstracts were assigned to at least one cluster.",
+        "guidance": "Document the fraction of data clustered to contextualize cluster-based analyses and limitations."
+      },
+      {
+        "name": "Corpus-linguistics method for testing term gender association",
+        "description": "Evaluate whether classifier-identified gender-predictive terms have gendered connotations in natural language using COCA: search for term occurrences adjacent to gendered pronouns ('his'/'her') both directly adjacent and with a one-word gap, sum observations to obtain masculine/feminine frequencies, and adjust ratios by baseline his/her imbalance (~1.30 favoring 'his').",
+        "guidance": "Restrict COCA-based analysis to terms that occur at least 100 times in COCA (to ensure reliability). Compute adjusted ratios to determine whether a term is disproportionately feminine or masculine in general usage."
+      },
+      {
+        "name": "Exclude pending applications from USPC rejection-rate analysis",
+        "description": "When computing grant/rejection probabilities by USPC class, exclude pending applications to avoid biasing rejection/acceptance rates.",
+        "guidance": "This ensures that only resolved outcomes (accepted/rejected) contribute to class-level statistics."
+      }
+    ]
+  }
+}

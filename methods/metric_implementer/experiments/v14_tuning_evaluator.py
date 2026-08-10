@@ -272,7 +272,11 @@ def score_behavioral_reference_templates(
         entropy = binary_entropy_bits(target)
         logical = induction_rows[metric_key]["logical_keys"]
         induced = induction_rows[metric_key]["induced"]
-        rules = {str(row["rule_sha256"]): str(row["rule"]) for row in induced.values()}
+        rules = {
+            str(row["rule_sha256"]): str(row["rule"])
+            for row in induced.values()
+            if not row.get("void") and str(row.get("rule_sha256", ""))
+        }
         demo_texts = [
             str(context["probe_texts"][index])
             for trial in context["reference_set"]["trials"]
@@ -289,6 +293,10 @@ def score_behavioral_reference_templates(
         ddec_position = {int(index): position for position, index in enumerate(ddec)}
 
         def mi_for_key(key, positions=None):
+            if induced[key].get("void"):
+                # A template whose induction voids scores the worst possible MI,
+                # so tuning is penalized for prompts that cannot satisfy the arm.
+                return 0.0
             rule_sha = str(induced[key]["rule_sha256"])
             predicted = [executions[(rule_sha, index)]["hard_prediction"] for index in range(len(ddec))]
             if positions is None:
@@ -405,7 +413,12 @@ def score_mcq_reference_templates(
                     target_description=str(context["target_description"]),
                     target_score_rows=rows, probe_texts=texts,
                     distractors=list(context["distractors"]), design_indices=indices,
-                    codebook_frozen_before_prompt_search=True, n_examples=8,
+                    # n_examples is the frozen teaching-panel size (the estimand);
+                    # dev-pool panels are built with the FAST lane's panel_size=6,
+                    # so derive it from the panel rather than assuming the
+                    # cap-sentinel size of 8 (matches cr3_sampled_value_certify).
+                    codebook_frozen_before_prompt_search=True,
+                    n_examples=len(indices),
                     n_reconstruction_draws=8, query_batch_size=query_batch_size,
                     fixed_teaching_panel=True, mcq_prompt_template=template,
                 )
@@ -422,7 +435,10 @@ def score_mcq_reference_templates(
                     ), axis=0)
                     predicted_position = int(np.argmax(probabilities))
                     predicted_metric = str(
-                        detail["option_codebook"][predicted_position]["metric_id"]
+                        # option_codebook lives inside the identification report,
+                        # in canonical option order (target first) — the same
+                        # order as canonical_choice_probabilities above.
+                        identification["option_codebook"][predicted_position]["metric_id"]
                     )
                     batch_rows.append({
                         "template_sha256": template_sha,

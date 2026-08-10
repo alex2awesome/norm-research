@@ -1,0 +1,150 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/71e13c438d4f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "71e13c438d4f.pdf",
+  "chunk_idx": 8,
+  "n_chunks": 16,
+  "chunk_chars": 39381,
+  "model": "gpt-5-mini",
+  "elapsed_s": 84.07045758300228,
+  "input_tokens": 12330,
+  "output_tokens": 5015,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users of the Metamath system (proof authors, verifiers, and students of formalized mathematics)",
+    "subtask_short": "metamath proof writing and verification",
+    "subtask_description": "Guidance and formal specification for writing, inspecting, and verifying Metamath databases and proofs (including strategies for translating natural deduction proofs into Metamath). Intended to teach Metamath language syntax, proof format, commands, and best practices for concise, correct proofs.",
+    "subtask_keywords": [
+      "metamath",
+      "proof_verification",
+      "formal_proofs",
+      "language_spec",
+      "set.mm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Translate ND hypotheses into Metamath antecedents",
+        "description": "To transform a natural deduction (ND) hypothesis into a Metamath antecedent, prefix assertions with a universal antecedent (typically '\u03d5 \u2192') and add assumptions to the implication antecedent (typically using adantr), or use simpr when you want to depend directly on the new assumption.",
+        "guidance": "Example: given ND hypotheses (\u03c8 \u2192 \u03c7) and \u00ac\u03c7 to prove \u00ac\u03c8, translate into MPE as (\u03d5 \u2192 (\u03c8 \u2192 \u03c7)), (\u03d5 \u2192 \u00ac\u03c7) and goal (\u03d5 \u2192 \u00ac\u03c8). Use adantr to add an ND hypothesis to an assertion's antecedent; use simpr when you want to depend directly on the new assumption. If using an assertion outside the current ND scope, modify the assertion so the ND hypothesis assumption is added to its antecedent (adantr)."
+      },
+      {
+        "name": "Prefer reuse of already-proven assertions for concise proofs",
+        "description": "Relying only on specific natural deduction rules (or only on axioms) can produce very long proofs; reuse already-proven assertions expressed in deduction form to keep proofs short and clear.",
+        "guidance": "Anti-pattern: Starting from scratch using only axioms or only ND rules. Practical advice: whenever possible, call previously proven theorems/assertions rather than expanding everything down to axioms."
+      },
+      {
+        "name": "Preferred deduction strategy (Carneiro -> weak DT -> standard DT)",
+        "description": "Use Mario Carneiro\u2019s natural deduction method first, then the weak deduction theorem when Carneiro\u2019s method is hard to apply, and only use the full standard Deduction Theorem as a last resort.",
+        "guidance": "Rationale: Carneiro\u2019s method and the weak deduction theorem avoid introducing additional metalogic; the weak deduction theorem converts an inference directly into a closed theorem without needing external metalogical justification."
+      },
+      {
+        "name": "Use weak deduction theorem to avoid extra metalogic",
+        "description": "The weak deduction theorem converts an inference into a closed-form theorem with a rigorous proof that uses only the axiom system and does not require additional metalogic.",
+        "guidance": "Unlike the standard Deduction Theorem, no implicit external justification is required; use it when it suffices to avoid stepping outside the Hilbert-style axiom system."
+      },
+      {
+        "name": "Study database structure before tackling deep proofs",
+        "description": "When exploring set.mm or other Metamath databases, pay attention to assumptions needed to define wffs, the variable types ($f statements), and the definitions that are introduced; begin with simple theorems and understand each step.",
+        "guidance": "Recommendation: work with standard set theory textbooks alongside set.mm to gain higher-level understanding; inspect comments near the beginning of set.mm; use the search command to find references."
+      },
+      {
+        "name": "Verify proofs after reading a database",
+        "description": "After reading a Metamath database file, run the verifier (MM> verify proof *) to check the integrity of proofs; the verifier should report that all proofs were verified (or report errors).",
+        "guidance": "Example output: 'All proofs in the database were verified in 2.84 s.' Note: after reading a file the program may say 'However, proofs were not checked'\u2014you must run the verify command explicitly."
+      },
+      {
+        "name": "Use Metamath program commands to inspect statements and proofs",
+        "description": "Familiarize yourself with commands such as show statement, show proof (with qualifiers like /lemmon, /renumber, /all, /detailed_step), search, show trace_back, show usage, save proof, etc., to navigate, inspect, and analyze database content.",
+        "guidance": "Examples: 'show statement id1/full' displays mandatory/optional hypotheses and variables; 'show proof id1 /lemmon/renumber' shows a compact renumbered proof; 'show proof id1 /detailed_step 20' displays substitutions and source/target details for step 20."
+      },
+      {
+        "name": "Interpret statement displays (mandatory vs optional hypotheses/variables)",
+        "description": "The 'show statement' display indicates mandatory hypotheses (active $f and $e statements containing mandatory variables) and optional hypotheses/variables (present due to scope but not necessarily used).",
+        "guidance": "Note: optional variables/hypotheses may appear because the statement is in the scope of other declarations; in propositional calculus many optional hypotheses are unused, but they become important after introducing quantifiers."
+      },
+      {
+        "name": "Inspect substitutions made in proof steps",
+        "description": "Use detailed step displays to see which substitutions were made from a referenced assertion or axiom into a target step and which source hypothesis/target hypothesis slots they correspond to.",
+        "guidance": "Example: 'show proof id1 /detailed_step 20' shows the source assertion, the substitutions for each variable, and which target hypothesis they substitute into\u2014this helps verify correctness of substitution and understand proof flow."
+      },
+      {
+        "name": "Handle compact/compressed proof formats correctly",
+        "description": "Compact proofs may use local labels (e.g., @4) to avoid repeating identical subproofs; compressed proofs are an alternate notation. A verifier should support compressed proofs and the user can reformat compact proofs into normal form (save proof ... /normal) to see explicit steps.",
+        "guidance": "Compact format reduces repeated steps; expanding (save proof /normal) increases displayed steps but shows explicit true step numbers. Compressed proofs are described in Appendix B and are part of the language extension; verifiers should be able to parse them."
+      },
+      {
+        "name": "Search effectively using comments and expression patterns",
+        "description": "The search command can find statements by strings in comments or by content patterns; quotes around the search string are optional unless ambiguous; $* and the trailing * wildcard in SEARCH are useful.",
+        "guidance": "Examples: 'search * \"enderton\" / comments' finds statements whose comment contains 'enderton'; 'search * \"ph -> ps $* ch -> th\"' finds statements containing the pattern of expressions with wildcards."
+      },
+      {
+        "name": "Backtrack to axioms and measure proof complexity",
+        "description": "Use show trace_back (with /essential/axioms and /essential/count_steps qualifiers) to determine which axioms/statements a theorem ultimately depends on, total steps if expanded to axioms, number of subtheorems, and maximum path length.",
+        "guidance": "Output includes counts of actual steps, subtheorems, maximum path length, and a longest path sequence\u2014useful as a metric of theorem depth and proof complexity."
+      },
+      {
+        "name": "Analyze usage (direct and indirect) of theorems",
+        "description": "Use show usage (optionally with /recursive) to see which proofs directly reference a theorem and which proofs are affected indirectly by it.",
+        "guidance": "Example: 'show usage prth' lists direct references; '/recursive' expands to show all direct and indirect dependents (which may be many thousands)."
+      },
+      {
+        "name": "Metamath token and character restrictions",
+        "description": "Only the 94 non-whitespace printable ASCII characters are allowed in Metamath source files; tokens are sequences separated by whitespace. Keywords are special tokens beginning with $ (e.g., $c, $v, $f, $e, $d, $a, $p, ${, $}).",
+        "guidance": "Math symbol tokens may be any combination of the printable ASCII characters except space or $. Label tokens may use letters, digits, hyphen, underscore, and period. All tokens are case-sensitive."
+      },
+      {
+        "name": "File inclusion rules ($[ ... $])",
+        "description": "A file inclusion command is $[ filename $]; it is only allowed in the outermost scope (not between ${ and $}), must reference an existing file, and only the first inclusion of a given file is processed (later references ignored).",
+        "guidance": "Included files cannot contain unmatched comment or inclusion keywords or incomplete statements; path references are unspecified so databases should avoid path separators; file names may not contain $ or whitespace."
+      },
+      {
+        "name": "Scoping and activation rules for declarations and assertions",
+        "description": "$v and $c declarations activate math symbols as variables/constants for the remainder of their block; $f, $e, $d statements are active from occurrence until block end; $a and $p statements are active from occurrence through the end of the database. Constants must be declared in outermost block.",
+        "guidance": "A variable may not be declared twice while active; labels are unique; a constant may not be redeclared. The type declared by an $f statement for a label is global even if the variable is local."
+      },
+      {
+        "name": "Determine mandatory variables, hypotheses, and $d statements",
+        "description": "The set of mandatory variables associated with an assertion is the set of variables in the assertion and any active $e statements; mandatory hypotheses are all active $f statements containing those variables plus active $e statements; mandatory $d statements are active $d statements whose variables are among the mandatory variables.",
+        "guidance": "These definitions determine what a referenced assertion requires when used in a proof and are crucial for verifying substitutions and disjoint-variable conditions."
+      },
+      {
+        "name": "Proof verification algorithm (stack & substitution matching)",
+        "description": "A proof is verified by scanning its label sequence: hypotheses push their expressions onto a stack; when an assertion label is encountered, a unique substitution must exist making the assertion's mandatory hypotheses match the topmost stack entries (in order); those entries are popped and the instantiated assertion is pushed. After the last label, the stack must contain a single entry matching the $p statement expression.",
+        "guidance": "This is the canonical verification algorithm; a proof may contain labels that refer only to active hypotheses or earlier assertions. Ensure substitution uniqueness and correct stack ordering when constructing/verifying proofs."
+      },
+      {
+        "name": "Handling '?' unknown proof steps",
+        "description": "A proof may contain a '?' in place of a label to indicate an unknown or incomplete step; a proof verifier may ignore proofs containing '?' but should warn the user that the proof is incomplete.",
+        "guidance": "Use '?' only for incomplete work-in-progress proofs; do not commit '?' in proofs intended to be complete in the database without appropriate warning."
+      },
+      {
+        "name": "Compressed proof notation support",
+        "description": "Compressed proofs are an alternate, more compact proof notation described in Appendix B and are a Metamath language extension; a complete proof verifier should be able to parse and verify compressed proofs.",
+        "guidance": "Be aware compressed proofs exist; consult Appendix B for format and ensure verifier compatibility if databases use compressed proofs."
+      },
+      {
+        "name": "Verify disjoint-variable restrictions during substitutions",
+        "description": "When a substitution replaces variables that are constrained by a mandatory $d statement of the referenced assertion, the two resulting expressions must (1) have no variables in common, and (2) every possible pair of variables (one from each expression) must be present in an active $d statement of the $p statement containing the proof.",
+        "guidance": "This check must be performed for each substitution in a proof. It enforces the distinct-variable constraints and prevents variable-capture or unintended identifications across substituted expressions."
+      },
+      {
+        "name": "Basic and auxiliary keywords summary and usage",
+        "description": "Know the basic keywords ($c, $v, $d, $f, $e, $a, $p, $=, $., ${, $}) and auxiliary keywords ($(, $), $[, $]) and their functions (constant/variable declarations, hypotheses, assertions, proof start/end, comments, includes, blocks).",
+        "guidance": "Table summaries are provided: e.g., $f = floating (variable-type) hypothesis, $e = essential hypothesis, $a = axiomatic assertion, $p = provable assertion, $= begins proof labels. Understanding these basics is essential to authoring and parsing Metamath source files."
+      },
+      {
+        "name": "User-defined token rules and naming conventions",
+        "description": "User-defined tokens (labels and math symbols) cannot contain '$', are case-sensitive, and should be chosen to resemble mathematical symbols for readability; labels must be unique and must not match any math symbol token.",
+        "guidance": "Recommended to make math symbol tokens resemble actual mathematical notation within ASCII constraints. The restriction 'no label token may match any math symbol token' simplifies parser implementation (added 2006)."
+      },
+      {
+        "name": "Expressions and substitution semantics",
+        "description": "An expression is a sequence of math symbols. A substitution map associates variables with expressions; it is acceptable for a variable to be mapped to an expression that itself contains that variable (simultaneous substitution).",
+        "guidance": "Substitutions are applied simultaneously to mandatory hypotheses when matching an assertion during verification. The substitution algorithm must respect disjoint-variable restrictions and uniqueness requirements."
+      }
+    ]
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 38,
+  "n_chunks": 92,
+  "chunk_chars": 39946,
+  "model": "gpt-5-mini",
+  "elapsed_s": 224.64246108299994,
+  "input_tokens": 14268,
+  "output_tokens": 6030,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of the GAP system (mathematicians and package authors) working with groups, homomorphisms, automorphisms and group actions",
+    "subtask_short": "GAP group/homomorphism API usage",
+    "subtask_description": "Reference guidance for using and implementing GAP operations and attributes related to nice monomorphisms, (auto)morphisms, searching for homomorphisms, and group actions; covers required preconditions, representation choices, and performance notes relevant to callers and implementers.",
+    "subtask_keywords": [
+      "gap",
+      "group_theory",
+      "homomorphism",
+      "automorphism",
+      "group_action",
+      "software_documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "NiceMonomorphism requirement for translating calculations",
+        "description": "NiceMonomorphism(obj) is a homomorphism defined (at least) on the whole of obj whose restriction to obj is injective; using a NiceMonomorphism lets one do calculations in an isomorphic image representation (e.g., permutation group) that has better algorithms.",
+        "guidance": "There must be effective methods to evaluate the NiceMonomorphism value on elements and to take preimages under it; normally achieved by using ActionHomomorphism or GroupHomomorphismByFunction. The domain of the homomorphism may be larger than obj; use NiceObject(obj) to obtain the image of obj under the homomorphism."
+      },
+      {
+        "name": "IsHandledByNiceMonomorphism property",
+        "description": "If IsHandledByNiceMonomorphism(obj) is true, high-valued methods that translate all calculations in obj into the image under its NiceMonomorphism become available for obj.",
+        "guidance": "This property signals that efficient translated methods can be used for obj. No extra guidance beyond the property semantics is provided."
+      },
+      {
+        "name": "Setting a NiceMonomorphism manually",
+        "description": "If a suitable monomorphism map is known, one can prescribe it via SetNiceMonomorphism(G, map), provided that map stores that it is injective.",
+        "guidance": "Ensure the map stores injectivity: call IsInjective(map) to test it, or if sure and wanting to avoid the overhead, call SetIsInjective(map, true)."
+      },
+      {
+        "name": "IsCanonicalNiceMonomorphism definition and cost",
+        "description": "A nice monomorphism nhom is canonical if the image set only depends on the set of group elements (not on the generating set) and the comparison of group elements translates through the nice monomorphism; equal objects will then have equal NiceObject values.",
+        "guidance": "Achieving canonicity can be expensive; therefore it is not guaranteed for every nice monomorphism."
+      },
+      {
+        "name": "ConjugatorIsomorphism behavior",
+        "description": "ConjugatorIsomorphism(G,g) returns the isomorphism from G to G^g defined by h -> h^g for all h in G (where g is an element in the same family as elements of G).",
+        "guidance": "Use ConjugatorIsomorphism when conjugation maps G to a conjugate group; see ConjugatorAutomorphism if g normalizes G and you want an automorphism."
+      },
+      {
+        "name": "ConjugatorAutomorphism precondition",
+        "description": "ConjugatorAutomorphism(G,g) returns the automorphism h -> h^g for all h in G only if conjugation by g leaves G invariant (i.e., g normalizes G); otherwise it returns fail.",
+        "guidance": "Use ConjugatorAutomorphismNC to omit the normalization check if you know g normalizes G or choose g from G when possible."
+      },
+      {
+        "name": "InnerAutomorphism precondition",
+        "description": "InnerAutomorphism(G,g) returns h -> h^g for all h in G only if g is an element of G; otherwise it returns fail.",
+        "guidance": "Use InnerAutomorphismNC to skip the membership check when you can assume g \u2208 G. If g \u2209 G but conjugation induces an isomorphism, use ConjugatorIsomorphism or ConjugatorAutomorphism."
+      },
+      {
+        "name": "IsConjugatorIsomorphism / IsConjugatorAutomorphism / IsInnerAutomorphism semantics",
+        "description": "These properties test whether a given group general mapping hom is induced by conjugation (IsConjugatorIsomorphism), is regarded as a conjugator automorphism (IsConjugatorAutomorphism), or is an inner automorphism with a conjugator inside the source group (IsInnerAutomorphism).",
+        "guidance": "Natural embeddings for permutation, matrix, finitely presented, and polycyclic-presented groups are specially handled; in other cases IsConjugatorIsomorphism may return false even if hom is induced by conjugation. If true, ConjugatorOfConjugatorIsomorphism(hom) gives an element inducing hom."
+      },
+      {
+        "name": "ConjugatorOfConjugatorIsomorphism selection",
+        "description": "ConjugatorOfConjugatorIsomorphism(hom) returns an element g such that hom is induced by conjugation with g; to avoid problems with IsInnerAutomorphism, the conjugator is chosen from the source of hom if possible.",
+        "guidance": "This helps ensure the returned conjugator is an element of the expected group when possible; see examples in manual for behavior differences."
+      },
+      {
+        "name": "AutomorphismGroup returns full automorphism group",
+        "description": "AutomorphismGroup(G) returns the full automorphism group of G; automorphisms act by the caret operator ^.",
+        "guidance": "The automorphism group often stores a NiceMonomorphism whose image is a permutation group obtained by action on a subset of G."
+      },
+      {
+        "name": "AutomorphismGroup performance expectation",
+        "description": "Current methods for AutomorphismGroup require G to be a permutation group or a pc group to be efficient; for groups in other representations the calculation is likely very slow.",
+        "guidance": "For finite p-groups and finitely generated subgroups of free groups, consider using AutPGrp and FGA packages respectively; other domains may have package methods (see package manuals)."
+      },
+      {
+        "name": "IsGroupOfAutomorphisms and AutomorphismDomain",
+        "description": "IsGroupOfAutomorphisms(G) indicates whether G consists of automorphisms of another group H; AutomorphismDomain(G) returns that domain H.",
+        "guidance": "Set/recognize these attributes when building or manipulating groups that are known to act as automorphisms of another group."
+      },
+      {
+        "name": "IsAutomorphismGroup meaning",
+        "description": "IsAutomorphismGroup(G) indicates whether G (which must be IsGroupOfAutomorphisms) is the full automorphism group of another group H (whose AutomorphismDomain is H).",
+        "guidance": "Use this property to mark or test that a group is the full automorphism group; examples in manual show expected returned structures."
+      },
+      {
+        "name": "InnerAutomorphismsAutomorphismGroup and InnerAutomorphismGroup attributes",
+        "description": "InnerAutomorphismsAutomorphismGroup(autgroup) stores the subgroup of inner automorphisms inside an automorphism group; InnerAutomorphismGroup(G) stores the group of inner automorphisms of G.",
+        "guidance": "These attributes let one access the inner-automorphism subgroup easily; examples show retrieval via these attributes."
+      },
+      {
+        "name": "InducedAutomorphism kernel-fixed requirement",
+        "description": "InducedAutomorphism(epi, aut) returns the automorphism of U = image(epi) induced by aut via epi only when the kernel of epi is fixed under aut.",
+        "guidance": "Ensure the kernel of epi is invariant under aut before calling InducedAutomorphism; the result maps g^epi to (g^aut)^epi for g \u2208 G."
+      },
+      {
+        "name": "Prefer translating automorphism-group calculations to better representations",
+        "description": "Usually the best way to calculate in a group of automorphisms is to translate calculations to an isomorphic group in a representation with better algorithms (e.g., a permutation group) via a NiceMonomorphism.",
+        "guidance": "GAP will try to find a nice monomorphism automatically when it knows a group is a group of automorphisms; you can also create or set one yourself using NiceMonomorphismAutomGroup or SetNiceMonomorphism."
+      },
+      {
+        "name": "Nice homomorphisms inherit to subgroups but may not extend",
+        "description": "Nice homomorphisms inherit down to subgroups but cannot necessarily be extended from a subgroup to the whole group.",
+        "guidance": "When working with automorphism groups, it can be beneficial to enforce calculation of the nice monomorphism for the whole group at the start (e.g., call Random and ignore the result) to avoid repeated recalculation or inconsistent representations."
+      },
+      {
+        "name": "AssignNiceMonomorphismAutomorphismGroup behavior",
+        "description": "AssignNiceMonomorphismAutomorphismGroup(autgrp, group) computes a nice monomorphism for autgrp acting on group and stores it as NiceMonomorphism value of autgrp.",
+        "guidance": "If the centre of AutomorphismDomain(autgrp) is trivial, the operation will first try to represent all automorphisms by conjugation (in group or a natural parent). If that fails it tries to find a small subset of group on which the action is faithful. The operation sets the attribute and returns no value."
+      },
+      {
+        "name": "NiceMonomorphismAutomGroup construction rules",
+        "description": "NiceMonomorphismAutomGroup(autgrp, elms, elmsgens) creates a monomorphism for an automorphism group autgrp by permuting the group elements in list elms; elmsgens is a list of generators (subset of elms) used to ensure faithfulness.",
+        "guidance": "The list elms must be chosen to yield a faithful representation. This function does not assign the result as the NiceMonomorphism value."
+      },
+      {
+        "name": "IsomorphismGroups performance and alternatives",
+        "description": "IsomorphismGroups(G,H) computes an isomorphism between G and H if isomorphic and returns fail otherwise; the time needed grows with the size of a generating system of G.",
+        "guidance": "If you only need to know whether groups are isomorphic, consider using IdGroup or the random isomorphism test RandomIsomorphismTest to avoid heavy computations."
+      },
+      {
+        "name": "AllHomomorphismClasses vs AllHomomorphisms",
+        "description": "AllHomomorphismClasses(G,H) returns representatives of all homomorphisms G->H up to H-conjugacy; AllHomomorphisms returns all homomorphisms (which grows quickly).",
+        "guidance": "Use AllHomomorphismClasses in most cases to avoid combinatorial explosion; AllEndomorphisms returns all homomorphisms G->G and AllAutomorphisms returns all bijective endomorphisms."
+      },
+      {
+        "name": "GQuotients computational growth and findall option",
+        "description": "GQuotients(F,G) computes all epimorphisms from F onto G up to automorphisms of G; the time grows with the size of a generating system of G.",
+        "guidance": "If the findall option is set to false the algorithm stops once one homomorphism is found (faster when one example suffices)."
+      },
+      {
+        "name": "IsomorphicSubgroups growth, main uses, and p-subgroup suggestion",
+        "description": "IsomorphicSubgroups(G,H) computes all monomorphisms from H into G up to G-conjugacy; the amount of time grows with the size of a generating system of G.",
+        "guidance": "A principal use is to find nonsolvable subgroups (often 2-generated). To find p-subgroups it is often faster to compute the subgroup lattice of a Sylow subgroup and then use IdGroup to identify subgroup types. The findall option false lets the algorithm stop once one embedding is found."
+      },
+      {
+        "name": "MorClassLoop use and parameter contract",
+        "description": "MorClassLoop(range, classes, params, action) loops over element tuples taken from classes and checks them for properties (e.g., generating a given group or fulfilling relations) and can be used to find small generating sets or all types of morphisms; the element tuples are used only up to inner automorphisms.",
+        "guidance": "classes must be a list of records with components representative and size (plus list of conjugacy classes). params may include gens, from, to, free, rels, dom, aut, condition. action is a bitmask with bits: 1 homomorphism, 2 injective, 4 surjective, 8 find all. The function returns homomorphisms when searching for homomorphisms by mapping gens rather than element tuples. The Morpheus algorithm is referenced in Hul96."
+      },
+      {
+        "name": "Representations determine methods for homomorphisms",
+        "description": "Different representations of group homomorphisms (IsGroupGeneralMappingByImages, IsPermGroupGeneralMapping, IsGroupGeneralMappingByPcgs, IsFromFpGroupGeneralMappingByImages, etc.) indicate the type of source and target groups and determine which methods are used to compute images and preimages.",
+        "guidance": "MappingGeneratorsImages(map) stores generator lists and their images for the 'by images' representation. Implementers should pick or provide the representation that enables efficient algorithmic support for the domain/range types they expect."
+      },
+      {
+        "name": "Group action definition and right-action convention",
+        "description": "A group action is a triple (G, \u03a9, \u03bc) with \u03bc: \u03a9 \u00d7 G \u2192 \u03a9 compatible with group arithmetic; in GAP groups always act from the right (\u03bc(\u03bc(x,g),h) = \u03bc(x,gh)).",
+        "guidance": "\u03a9 may be a duplicate-free collection allowing \u03a9[n] access; GAP does not test whether \u03bc satisfies the group action axioms \u2014 it silently assumes correctness, so results are unpredictable if \u03bc is not a proper right action."
+      },
+      {
+        "name": "Flexible calling conventions for action-based operations",
+        "description": "Operations like OrbitsDomain accept multiple signatures (e.g., OrbitsDomain(G,\u03a9[,\u03bc]), OrbitsDomain(G,\u03a9,gens,acts[,\u03bc]), OrbitsDomain(xset)); the gens/acts variant permits implementing an action induced by a homomorphism without constructing the homomorphism as a GAP object.",
+        "guidance": "Using gens/acts avoids constructing the homomorphism and range group H as GAP objects (good for performance); however GAP does not check that gens -> acts actually induces a homomorphism \u2014 unpredictable results if it does not."
+      },
+      {
+        "name": "actfun contract for user-defined actions",
+        "description": "A user-defined acting function must conform to actfun(omega, g) returning the image of omega under g and must implement a right action.",
+        "guidance": "The function signature is required for GAP built-in operations to work; failing to implement a right action leads to unpredictable results (no verification is performed)."
+      },
+      {
+        "name": "OnPoints / OnRight / OnLeftInverse semantics",
+        "description": "OnPoints(pnt,g) returns pnt^g (e.g., permutation group action on points); OnRight(pnt,g) returns pnt * g (right multiplication action); OnLeftInverse(pnt,g) returns g^{-1} * pnt (used to represent right cosets as external sets).",
+        "guidance": "Choose the appropriate action function depending on whether you model conjugation, right multiplication, or coset actions; be mindful that GAP always expects right actions."
+      },
+      {
+        "name": "Action functions with canonical-form input requirements",
+        "description": "Several action functions (OnSetsSets, OnSetsDisjointSets, OnSetsTuples, OnTuplesSets, OnLines, OnSubspacesByCanonicalBasis, etc.) assume inputs are given in a particular canonical form (e.g., sorted lists, Hermite normal form, normed row vectors); otherwise an error is triggered.",
+        "guidance": "If domain elements are not in required canonical form GAP will issue 'Action not well-defined' errors; for interactive use canonicalization can be achieved by acting with the identity element of the group to get canonical representatives."
+      },
+      {
+        "name": "OnLines preconditions",
+        "description": "OnLines(vec,g) acts on a normed row vector vec (first nonzero entry normed to identity of the field) and returns the normalized image after multiplication by g; if vec is zero or not normed an error is triggered.",
+        "guidance": "Use normed row vectors (see NormedRowVector) when using OnLines (projective action of matrix group on 1-d subspaces)."
+      },
+      {
+        "name": "Orbit/Orbits/OrbitsDomain semantics and ordering",
+        "description": "Orbit(G[,Omega],pnt[,...]) returns the list of all images of pnt under the action; Orbits/OrbitsDomain return duplicate-free lists of orbits (as lists). The arrangement of orbits or points within an orbit is not defined by the operation.",
+        "guidance": "For permutation groups Orbits(G) or OrbitsDomain(G) return orbits of natural action; OrbitsDomain is often faster but requires the domain \u03a9 to be closed under the action or an error can occur."
+      },
+      {
+        "name": "OrbitLength and OrbitLengths operations",
+        "description": "OrbitLength computes the length of a point's orbit; OrbitLengths returns lengths of orbits for given seeds or for the natural action of a permutation group.",
+        "guidance": "Use OrbitLengths(G) for permutation groups to quickly obtain all orbit lengths; semantics mirror Orbit/Orbits regarding optional action functions and argument forms."
+      }
+    ]
+  }
+}

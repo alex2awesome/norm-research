@@ -1,0 +1,813 @@
+<!-- URL: https://www.prweek.com/article/1917662/winners-2025-prweek-purpose-awards -->
+<!-- HTTP: 200 SIZE:    36582 -->
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>  <html prefix="og: http://ogp.me/ns#" class="no-js ie6 lte9 lte8 lte7" lang="en"> <![endif]-->
+<!--[if IE 7]>     <html prefix="og: http://ogp.me/ns#" class="no-js ie7 lte9 lte8 lte7" lang="en"> <![endif]-->
+<!--[if IE 8]>     <html prefix="og: http://ogp.me/ns#" class="no-js ie8 lte9 lte9 lte8" lang="en"> <![endif]-->
+<!--[if IE 9]>     <html prefix="og: http://ogp.me/ns#" class="no-js ie9 lte9" lang="en"> <![endif]-->
+<!--[if IE 10]>    <html prefix="og: http://ogp.me/ns#" class="no-js ie10 lte10" lang="en"> <![endif]-->
+<!--[if gt IE 10]> <html prefix="og: http://ogp.me/ns#" class="no-js" lang="en"> <![endif]-->
+<!--[if !IE]><!-->
+
+<html prefix="og: http://ogp.me/ns#" class="no-js global-layout" lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+
+    
+        <meta name="ROBOTS" content="noarchive" />
+
+        <script>var enableCMP = true;</script>
+
+        <!-- OneTrust Cookies Consent Notice start -->
+        <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="3a3140ae-5943-4aee-b842-da79e31c2986"></script>
+<script type="text/javascript">
+    function OptanonWrapper() { }
+</script>        <!-- OneTrust Cookies Consent Notice end -->
+    
+
+        <title>Winners of the 2025 PRWeek Purpose Awards | PR Week</title>
+		<meta name="description" content="Winners of the 2025 PRWeek Purpose Awards. From PR Week"/>
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    
+	
+		<link rel="dns-prefetch" href="//static.prweek.com" />
+		<link rel="dns-prefetch" href="//ajax.googleapis.com" />
+		<link rel="dns-prefetch" href="//cached.imagescaler.hbpl.co.uk" />
+		<link rel="dns-prefetch" href="//cached.offlinehbpl.hbpl.co.uk" />
+	   <link rel="preconnect" href="//static.prweek.com" />
+	   <link rel="preconnect" href="//ajax.googleapis.com" />
+	   <link rel="preconnect" href="//cached.imagescaler.hbpl.co.uk" />
+	   <link rel="preconnect" href="//cached.offlinehbpl.hbpl.co.uk" />
+
+
+    
+	
+
+
+    
+		<meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no" />
+
+
+
+    
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#FFFFFF">
+
+<link rel="manifest" href="/site.webmanifest">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+
+    
+
+
+
+        <meta name="com.silverpop.brandeddomains" content="www.pages05.net,awards.prweekus.com,prweek.com,prweekus.com,talent.prweekus.com,thehubcomms.com" />
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://static.prweek.com/css/min/_Layout_Universal_PRLayoutMediaProvider_2D156C07165D72A7B1CCC34130A97DD1.css" />
+
+    
+    
+
+    	<!--[if !(lt IE 9)]><!-->
+<link rel="stylesheet" type="text/css" href="https://static.prweek.com/css/min/GatedArticle_D8C6AD3CE092022489F6B4AA4B562D82.css" />	<!--<![endif]-->
+	<!--[if (gte IE 6)&(lte IE 8)]>
+		<link rel="stylesheet" type="text/css" href="/css/min/GatedArticle_D8C6AD3CE092022489F6B4AA4B562D82.css" />
+	<![endif]--> 
+
+
+
+
+
+    
+    <!--[if IE]>
+<link rel="stylesheet" type="text/css" href="/css/min/_IE_CE2547C10EB8E3F5769A5A379829AB95.css" />    <![endif]-->
+
+    	<script type="text/javascript" charset="utf-8">
+		var ContentInfo = {
+			Site:{"Domain":"prweek.com","SiteFormat":"responsive"},
+			Article:{"Id":1917662,"Title":"Winners of the 2025 PRWeek Purpose Awards","ArticleDate":"2025-05-21T21:00:00+01:00","PublishedDate":"2025-05-21T21:00:00+01:00","ModifiedDate":"2025-05-22T15:04:08+01:00","JournalCode":"PRO","AuthorName":"PRWeek staff","AuthorUrl":"","ShareUrl":"https://www.prweek.com/article/1917662","HasAssets":false,"RelatedLinks":[],"GatedLogin":false,"ArticleAge":353,"Thumbnail":{"Label":"","AltText":"PRWeek Purpose Awards 2025 logo","FileName":"prweek-purpose-awards-2025-banner-1920x1080.jpg","Path":"\\\\san\\Media\\websites\\offLine_HBPL\\news\\ORP\\prweek-purpose-awards-2025-banner-1920x1080.jpg","Directory":"\\\\san\\Media\\websites\\offLine_HBPL\\news\\ORP\\","Url":"https://cached.offlinehbpl.hbpl.co.uk/news/ORP/prweek-purpose-awards-2025-banner-1920x1080.jpg","Extension":"jpg","JournalCode":"PRO"},"MainImageHeight":0,"MainImageWidth":0,"TemplateName":"Wide","WordCount":6367,"TagGroups":[{"TagGroupId":5,"ArticleTagIds":[9836,13760,12765],"PathToPrimaryTagId":[12765],"TopLevelTagIds":[13760,9836,12765],"SubLevelTagIds":[]},{"TagGroupId":8,"ArticleTagIds":[2876,2913],"PathToPrimaryTagId":[2876,2913],"TopLevelTagIds":[2876],"SubLevelTagIds":[2913]},{"TagGroupId":157,"ArticleTagIds":[12998],"PathToPrimaryTagId":[12998],"TopLevelTagIds":[12998],"SubLevelTagIds":[]},{"TagGroupId":180,"ArticleTagIds":[14701],"PathToPrimaryTagId":[14701],"TopLevelTagIds":[14701],"SubLevelTagIds":[]},{"TagGroupId":243,"ArticleTagIds":[29798,29799],"PathToPrimaryTagId":[29798],"TopLevelTagIds":[29798,29799],"SubLevelTagIds":[]}],"NewsType":{"Name":"Feature","Id":15},"TagHierarchy":[{"Id":157,"Name":"Access Shared","Children":[{"Id":12998,"Name":"Registered metered content","Children":[]}]},{"Id":5,"Name":"Category/Discipline","Children":[{"Id":13760,"Name":"Diversity","Children":[]},{"Id":9836,"Name":"PRWeek Events","Children":[]},{"Id":12765,"Name":"Purpose","Children":[]}]},{"Id":8,"Name":"Exposure","Children":[{"Id":2876,"Name":"North America","Children":[{"Id":2913,"Name":"United States","Children":[]}]}]},{"Id":243,"Name":"Haymarket Impact","Children":[{"Id":29798,"Name":"DEI","Children":[]},{"Id":29799,"Name":"ESG","Children":[]}]},{"Id":180,"Name":"Home Page Modules US","Children":[{"Id":14701,"Name":"Events","Children":[]}]}],"CommentCount":0,"TagDataForGtm":{"157":{"groupId":157,"groupName":"Access Shared","primaryTagPath":"12998 Registered metered content","allGroupTags":"12998"},"5":{"groupId":5,"groupName":"Category/Discipline","primaryTagPath":"12765 Purpose","allGroupTags":"13760,9836,12765"},"8":{"groupId":8,"groupName":"Exposure","primaryTagPath":"2876 North America|2913 United States","allGroupTags":"2876,2876|2913"},"243":{"groupId":243,"groupName":"Haymarket Impact","primaryTagPath":"29798 DEI","allGroupTags":"29798,29799"},"180":{"groupId":180,"groupName":"Home Page Modules US","primaryTagPath":"14701 Events","allGroupTags":"14701"}}},
+Magazine:{"JournalCode":"PRG","Url":"https://www.prweek.com/","PublisherName":"PR Week Global 2014","PublisherLogoHeight":0,"PublisherLogoWidth":0,"SiteCatalystSitePrefix":"PRG","GoogleAnalyticsMainAccountCode":"UA-1290429-51"},
+PageInfo:{"DartZoneName":"/news/article","PageName":"prg:news:article:article:article-1917662","Hierarchy":"prg:news:article:1917662","DartHostName":"prw.main","PageUrl":"news","ContentInfoType":3}
+		}
+	</script>
+
+    
+    
+    <script type="text/javascript">ContentInfo.Article.Gated = true;ContentInfo.Article.GatedReason = "GC_NOACC_SIGNEDOUT";</script>
+    
+
+    
+
+
+
+    
+
+
+    <script type="text/javascript" charset="utf-8">
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(ContentInfo);
+    </script>
+
+
+                <!-- Google Tag Manager -->
+                <script>
+(function (w, d, s, l, i) {w[l] = w[l] || []; w[l].push({'gtm.start':
+            new Date().getTime(), event: 'gtm.js'}); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl + '&gtm_auth=EBwdIIPtBycSVPp-wdEm7g&gtm_preview=env-2&gtm_cookies_win=x'; f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-5C8T9F4');</script>
+                <!-- End Google Tag Manager -->
+
+
+<script type="text/javascript" src="https://static.prweek.com/js/min/modernizr_F645DB2D08433AFE645D1319A4217EEF.js"></script>                <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type="text/javascript"></script>
+		<!--[if (gte IE 6)&(lte IE 8)]>
+			<script type="text/javascript" src="/_hbi_ui/basesitenet/js/libs/selectivizr-min.js"></script>
+			<script type="text/javascript" src="/_hbi_ui/basesitenet/js/libs/respond.min.js"></script>
+		<![endif]-->
+		<!--[if (IE 7)]>
+			<script type="text/javascript" src="/js/ie7.js"></script>
+		<![endif]--> 
+
+
+    
+    
+    
+<script type="application/ld+json">
+    [{
+    "@context": "http://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": "https://www.prweek.com/article/1917662/winners-2025-prweek-purpose-awards",
+    "headline": "Winners of the 2025 PRWeek Purpose Awards",
+    "image": {
+    "@type": "ImageObject",
+    "url": "https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/888/?sUrl=https://cached.offlinehbpl.hbpl.co.uk/news/ORP/prweek-purpose-awards-2025-banner-1920x1080.jpg",
+    "height": 600,
+    "width": 888
+    },
+    "datePublished": "2025-05-21T21:00:00Z",
+    "dateModified": "2025-05-22T15:04:08Z",
+    "description": "The year’s best campaigns and most purposeful organizations and individuals were announced during a virtual event ceremony on May 21.",
+        
+            "author":{
+            "@type": "Person",
+            "name": "PRWeek staff",
+            "url": ""
+            },
+        
+    "articleSection": "Feature",
+    "publisher": {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "PR Week Global",
+    "logo": {
+    "@type": "ImageObject",
+    "url": "https://www.prweek.com/img/logo.png"
+    },
+    "sameAs": ["https://www.facebook.com/PRWeekUK/","https://twitter.com/prweekuknews","http://prweek.tumblr.com/","https://www.linkedin.com/groups/3791999","http://www.pinterest.com/prweek/"]
+    },
+    "isAccessibleForFree":"False",
+    "hasPart": [
+            
+            {
+            "@type": "WebPageElement",
+            "isAccessibleForFree": "False",
+            "cssSelector":".ArticleBodyPaywall"
+            }
+        
+             ,
+        
+            {
+            "@type": "WebPageElement",
+            "isAccessibleForFree": "False",
+            "cssSelector":".SocialMediaPaywall"
+            }
+        
+    ]
+    }
+    ]
+</script>
+
+        <meta property="og:title" content="Winners of the 2025 PRWeek Purpose Awards" />
+    <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://www.prweek.com/article/1917662?utm_source=website&utm_medium=social" />
+            <meta property="og:image" content="https://cached.imagescaler.hbpl.co.uk/resize/scaleHeight/150/cached.offlinehbpl.hbpl.co.uk/news/ORP/prweek-purpose-awards-2025-banner-1920x1080.jpg" />
+
+    
+
+
+
+
+
+    <script>
+                         var netlineconfig = {
+                             "DataApi": 'https://www.prweek.com/AuthorizeApi/GetAccessTokenAzureUrlForV2',
+                             "DataApiSearch": 'https://hbmdataapiv2.hbpl.co.uk/api/v1/netlinefeed/Publication/Search',
+                             "NetlineBrandName": 'PRWeek',
+                        }
+
+                        var contentApiConfig = {
+                            'HbiContentApi': 'https://hbmcontentapiv2.hbpl.co.uk/',
+                            'GetTagsByTagId': '',
+                            'EnableHbmContentApiV2': true,
+                            'UrlForV2Token': 'https://www.prweek.com/AuthorizeApi/GetAccessTokenAzureUrlForV2'
+                        }
+    </script>
+
+
+
+
+</head>
+                        <body>
+ 
+
+
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5C8T9F4"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
+<div id="outerWrap">
+
+        <div class="a11y">
+            <ul>
+                <li><a href="#main" accesskey="s">Skip to Content</a></li>
+                <li><a href="#responsiveNavigation" accesskey="1">Skip to Main Navigation</a></li>
+                <li><a href="#topNav" accesskey="3">Skip to Information Links</a></li>
+                <li><a href="#topSearchForm" accesskey="4">Skip to Site Search</a></li>
+                <li><a href="#mainFooter" accesskey="5">Skip to Footer</a></li>
+                <li><a href="/accessibility" accesskey="6">Skip to Accessibility Information</a></li>
+                <li><a href="/" accesskey="h">Home Page</a></li>
+            </ul>
+        </div>
+
+    
+
+        <div id="container" class="page-main-content-tracked global">
+            
+            
+            
+            <div id="wrap" class="clearfix">
+                    <header id="masthead" class="topHeader topHeaderV2">
+                        
+
+
+
+
+<div id="commercialTop">
+	<div id="t101Ad" class="commercialSlot" data-location-code="T" data-sizes="970x90|970x250|728x90"></div>
+
+</div>
+
+<div id="sl701Ad" class="commercialSlot" data-location-code="SL" data-sizes="288x900"></div>
+
+<div id="sr702Ad" class="commercialSlot" data-location-code="SR" data-sizes="288x901"></div>
+
+<div id="headerWrap" class="inner " data-cy="headerContainer">
+
+        <h2 class="a11y">Information Links</h2>
+
+
+        <nav id="topNav" aria-label="Account Actions">
+
+
+<div class="brandSwitchingBar brandSwitchingBarUS ">
+    <div class="brandSwitchingBar__inner">
+                
+<div id="siteRegion">
+    <label class="regionLabel">PRWEEK global</label>
+    <ul>
+<li><a href='/us'>PRWEEK US</a></li><li><a href='/uk'>PRWEEK UK</a></li><li><a href='/middleeast'>PRWEEK Middle East</a></li><li><a href='/asia'>PRWEEK Asia</a></li>
+    </ul>
+   
+</div>
+
+            <ul class="brandSwitchingBar__nav">
+            </ul>
+
+    </div>
+</div>
+            <ul id="accountActions">
+                        <li id="subscribe" data-cy="subscribe">
+                            <a href="/global/subscribe" title="Subscribe">Subscribe</a>
+                        </li>
+
+            <li id="signInOut" data-cy="signInOut" class="">
+
+            <a href="/login?returnUrl=https://www.prweek.com/article/1917662/winners-2025-prweek-purpose-awards" title="Sign in" class="nav__link">Sign in</a>
+
+                        </li>
+                                            <li id="register" class="register" data-cy="register">            <a href="https://www.prweek.com/register/?returnUrl=https://www.prweek.com/article/1917662/winners-2025-prweek-purpose-awards" title="Register" class="nav__link">Register</a>
+</li>
+                                            </ul>
+        </nav>
+
+
+
+    <div class="column">
+
+
+    <div id="title" class="mainNavLogo">
+        <figure>
+            
+            <a href="https://www.prweek.com/">
+                <h2>
+                    <span>PR Week Global</span>
+                </h2>
+            </a>
+        </figure>
+    </div>
+
+
+    </div>
+
+    <div id="navContainer">
+
+        <div id="mobNavIcons">
+                <ul>
+                    <li id="mobSearchButton"><a href="#">Search</a></li>
+                    <li id="mobNavToggle"><a href="#nav">Menu</a></li>
+                </ul>
+
+        </div>
+
+
+        <div id="responsiveNavigation">
+            <div class="responsiveMainNavLogo">
+                <div class="inner">
+                    <div id="mobNavHeader">
+                        <a id="mobNavLogo" href="/" class="cssLogoinr"></a>
+                        <a id="mobNavButton" href="#">Menu</a>
+
+
+
+<div class="brandSwitchingBar brandSwitchingBarUS ">
+    <div class="brandSwitchingBar__inner">
+                
+<div id="siteRegion">
+    <label class="regionLabel">PRWEEK global</label>
+    <ul>
+<li><a href='/us'>PRWEEK US</a></li><li><a href='/uk'>PRWEEK UK</a></li><li><a href='/middleeast'>PRWEEK Middle East</a></li><li><a href='/asia'>PRWEEK Asia</a></li>
+    </ul>
+   
+</div>
+
+            <ul class="brandSwitchingBar__nav">
+            </ul>
+
+    </div>
+</div>
+                    </div>
+
+                        <h2 class="a11y">Main Navigation</h2>
+                    
+
+    <nav id="primaryNav" data-cy="accountNav" class="nestedNav" aria-label="Primary">
+        <ul class="topNav">
+            <li class="primaryLink first last" data-cy="headerPrimaryLink">
+                
+                        <a href="/">home</a>
+
+
+            </li>
+ 
+        </ul>
+    </nav>
+
+
+                    
+<div id="siteSearch">
+<form action="/search" class="searchForm" id="topSearchForm" method="get">                <div class="searchFields">
+                    <label for="KeyWords">Search</label>
+                    <input data-cy="searchPhrase" id="searchPhrase" name="KeyWords" placeholder="Search" type="text" value="" />
+                    <button type="submit" class="searchSubmit" data-cy="headerSearch">Search</button>
+                </div>
+</form></div>       
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mobSearchForm" id="mobSearch"></div>
+
+</div>
+
+
+
+
+
+                    </header>
+
+
+                
+
+                <hr class="a11y" />
+
+
+
+                <div class="innerWrap">
+                    <section id="main" role="main">
+
+
+
+
+
+	    
+
+
+                        
+
+
+
+
+
+
+				<div class="">
+						<div class="grid1">
+							<div class="zone">
+								<!-- zone 2 -->
+								
+
+
+<article id="articleDetail" class="gatedArticle">
+    <div id="articleMain">
+        <div class="gatedArticle__heading">
+            <header>
+                <div class="headlines">
+                    <h1 class="gatedArticle__title" data-cy="articleHeading">Winners of the 2025 PRWeek Purpose Awards</h1>
+                        <p class="gatedArticle__summary">The year’s best campaigns and most purposeful organizations and individuals were announced during a virtual event ceremony on May 21.</p>
+                                            <div class="author">
+
+                                by
+                            PRWeek staff
+                        </div>
+                </div>
+            </header>
+        </div>
+            <div class="gatedArticle__body">
+                
+            </div>
+    <div class="gatedArticle__gate" id="articleGate">
+        <div class="gatedArticle__fader"></div>
+        <div class="gatedArticle__accessMessage">
+            <h2>Sign in to continue</h2>
+        </div>
+        <div class="gatedArticle__gateInner inner">
+                            <section class="gatedArticle__options">
+
+                        <div class="gatedArticle__option" id="loginOption">
+                            <header><div class="regionalMessaging regionalMessaging--us"><header>
+<h2>Sign in</h2>
+</header></div>
+<div class="regionalMessaging regionalMessaging--uk"><header>
+<h2>Sign in</h2>
+</header>
+<p>Or <a href="https://www.prweek.com/register" target="_Blank">register now</a></p>
+</div>
+<div class="regionalMessaging regionalMessaging--asia regionalMessaging--middleeast"><header>
+<h3>Sign in</h3>
+</header></div></header>
+                            
+
+
+
+
+<form action="/login" method="post"><input id="ReturnUrl" name="ReturnUrl" type="hidden" value="http://www.prweek.com/article/1917662/winners-2025-prweek-purpose-awards" />    <div class="form__group">
+        <p class="form__block">
+<label class="form__label" for="Email">Email address</label>            <input class="form__input form__input--text" data-cy="loginEmail" data-val="true" data-val-email="Please enter a valid email address" data-val-required="The Email address field is required." id="Email" name="Email" type="email" />
+            <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+        </p>
+        <p class="form__block form__block--last form__block--password">
+<label class="form__label" for="Password">Password</label>            <input class="form__input form__input--text" data-cy="loginPassword" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password" />
+            <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                <span id="viewPassword" class="form__block__togglePassword">
+
+                </span>
+
+
+        </p>
+        <p class="checkbox form__block form__block--checkbox">
+            <input checked="checked" class="form__input form__input--checkbox" data-val="true" data-val-required="The Stay signed in for 30 days field is required." id="RememberMe" name="RememberMe" type="checkbox" value="true" /><input name="RememberMe" type="hidden" value="false" />
+<label for="RememberMe">Stay signed in</label>        </p>
+    </div>
+        <input type="submit" class="button" value="Sign in" id="btnSignIn" data-cy="signInButton" />
+</form>
+                            <div class="optionFooter">
+                                <div class="optionFooter__action">
+                                        <a href="#" id="helpToggle" class="togglePanel__title">Trouble signing in?</a>
+                                    <div id="helpPanel" class="togglePanel togglePanel--help">
+                                            <p>
+                                                Reset password: <a href="/ForgotPassword" id="articleGateForgotPassword">Click here</a>
+                                            </p>
+
+                                        <div class="cmsText" id="bodyMiddleText"><p>US and Asia<br><a href="mailto:subscriptions@prweek.com">subscriptions@prweek.com</a><br>+001 (800) 558-1708</p>
+<p>UK &amp; Europe<br><a href="mailto:support@prweek.com">support@prweek.com</a><br>+44 (0)20 8267 8121</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="gatedArticle__option" id="registerOption"><style><!--
+.asia .regionalMessaging--asia, .middleeast .regionalMessaging--middleeast, .uk .regionalMessaging--uk, .us .regionalMessaging--us{display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;}
+--></style>
+<div class="regionalMessaging regionalMessaging--us"><header>
+<h2>Register</h2>
+<h4>Don't have an account? Complete easy registration and receive:</h4>
+</header>
+<ul>
+<li>Limited Article Views (Excludes Subscriber Only Content)</li>
+<li>Select Newsletters (Excludes Subscriber Only Bulletins)</li>
+</ul>
+<p style="text-align: center;"><a class="button" href="https://www.prweek.com/register/" target="_self">Register Now</a></p>
+</div>
+<div class="regionalMessaging regionalMessaging--uk"><header>
+<h2>Register</h2>
+<h4>FREE</h4>
+</header>
+<ul>
+<li>Limited free articles a month</li>
+<li>Limited number of free bulletins</li>
+<li>Weekly podcasts</li>
+</ul>
+<p style="text-align: center;"><a class="button" href="https://www.prweek.com/register/" target="_self">Register</a></p>
+</div>
+<div class="regionalMessaging regionalMessaging--asia regionalMessaging--middleeast"><header>
+<h2>Register</h2>
+<h4>FREE</h4>
+</header>
+<ul>
+<li>Limited free articles a month</li>
+<li>Limited number of free email bulletins</li>
+</ul>
+<p style="text-align: center;"><a class="button" href="https://www.prweek.com/register/" target="_self">Register Now</a></p>
+</div></div>
+
+                    <div class="gatedArticle__option" id="subscribeOption"><div class="regionalMessaging regionalMessaging--ukKnowledge"><header>
+<h2>Subscribe to PRWeek Insights</h2>
+<h4>To receive full access to PRWeek's content subscribe today and receive:</h4>
+</header>
+<ul>
+<li>Unrestricted access to all Essential and Insights content</li>
+<li>Access to the PRWeek Consultancy Tracker and the Top 150 Monthly Trading Tracker Hub</li>
+<li>In-depth reports including quarterly and annual new-business rankings</li>
+</ul>
+<p style="text-align: center;"><a class="button" href="http://shop.haymarket.com/prgb/gatetk/" target="_self">Subscribe</a></p>
+</div>
+<div class="regionalMessaging regionalMessaging--us"><header>
+<h2>Subscribe</h2>
+</header><header style="display: inline !important;">
+<h4 style="display: inline !important;">To receive full access to PRWeek's content subscribe today and receive:</h4>
+</header>
+<ul>
+<li>Unrestricted individual access to prweek.com</li>
+<li>Breaking news and industry updates via PRWeek Daily News bulletin</li>
+<li>Exclusive access to Agency Business Report, annual Salary Survey, Power List, 40 Under 40, Best Places to Work, and more</li>
+</ul>
+<a class="button" href="http://forms.haymarketsubscribe.com/loading.do?omedasite=PRWeek_Land">
+<p style="text-align: center;">Subscribe&nbsp;Options</p>
+</a></div>
+<div class="regionalMessaging regionalMessaging--uk regionalMessaging--asia"><header>
+<h2><strong data-renderer-mark="true">30-day free trial</strong></h2>
+<p data-pm-slice="1 1 []"><span>Join&nbsp;PRWeek&nbsp;now and pay nothing for the first 30 days.</span></p>
+<p></p>
+<ul>
+<li><span>Unrestricted individual access to </span><a data-testid="link-with-safety" href="http://prweek.com/" title="http://prweek.com/" data-renderer-mark="true" class="css-tgpl01">prweek.com</a></li>
+<li>
+<p data-pm-slice="1 1 [&quot;bulletList&quot;,null,&quot;listItem&quot;,null]"><span>Breaking news and industry updates via PRWeek Daily News bulletin</span></p>
+</li>
+<li>
+<p data-pm-slice="1 1 [&quot;bulletList&quot;,null,&quot;listItem&quot;,null]"><span>Exclusive access to the Power Book and Top 150 UK consultancies report</span></p>
+</li>
+</ul>
+<p style="text-align: center;"><a class="button" href="http://shop.haymarket.com/prgb/freegate/" target="_self">Start trial</a></p>
+</header></div>
+<div class="regionalMessaging regionalMessaging--middleeast"><header><a href="http://shop.haymarket.com/prgb/freegate/">
+<h2>The Middle East Power Book is here</h2>
+</a>
+<p>Take a free trial out today to access:</p>
+</header>
+<ul>
+<li>The Middle East Power Book - discover the most influential PR professionals in the region</li>
+<li>PRWeek Daily News and subscriber-only bulletins</li>
+<li>The PRWeek UK and EMEA podcast</li>
+</ul>
+<p style="text-align: center;"><a class="button" href="http://shop.haymarket.com/prg/pbmegate/" target="_self">Start free trial</a></p>
+</div>
+<style><!--
+div.asia .activeKnowledgeTag .regionalMessaging--us, 
+div.middleeast .activeKnowledgeTag .regionalMessaging--us, 
+div.uk .activeKnowledgeTag .regionalMessaging--us
+{display:none;}
+div.uk .activeKnowledgeTag .regionalMessaging--ukKnowledge{display:block;}
+div.asia .activeKnowledgeTag .regionalMessaging--asia, div.middleeast .activeKnowledgeTag .regionalMessaging--middleeast{
+	display:block;
+}
+--></style></div>
+
+
+                </section>
+                    <section class="genericModule bodyBottomText__container">
+                        <div class="cmsText" id="bodyBottomText"><div class="regionalMessaging regionalMessaging--us"><header>
+<h2>Need to activate your subscription?</h2>
+<div>
+<p>Domain/Group Subscriptions <br><a href="https://www.prweek.com/register" target="_self">Click here &gt;&gt;</a></p>
+<p>Individual Subscriptions<br><a href="http://users.prweek.com/subscription/basic" target="_self">Click here &gt;&gt;</a></p>
+</div>
+</header></div>
+<div class="regionalMessaging regionalMessaging--uk regionalMessaging--asia regionalMessaging--middleeast"><header>
+<h3>Need to activate&nbsp;your Subscription</h3>
+<div>
+<p>Company Wide Subscriptions <br><a href="/register" target="_self" data-feathr-click-track="true">Click here &gt;&gt;</a></p>
+<p>&nbsp;UK Individual Subscribers<br><a href="/register/subscription/activation" target="_self" data-feathr-click-track="true">Click here &gt;&gt;</a></p>
+</div>
+</header></div></div>
+                    </section>
+        </div>
+    </div>
+
+    </div>
+</article>
+
+
+
+							</div>
+						</div>
+			</div >
+<div class="groups">
+    
+</div>
+
+
+
+
+
+
+
+
+                    </section>
+                </div>
+                
+    
+
+
+                
+<div id="advertBodyBottom">
+    <div id="f201Ad" class="commercialSlot" data-location-code="F" data-sizes="600x300|728x90"></div>
+
+    <div id="x601Ad" class="commercialSlot" data-location-code="X" data-sizes="1x1"></div>
+<div id="x602Ad" class="commercialSlot" data-location-code="X" data-sizes="1x1"></div>
+<div id="x603Ad" class="commercialSlot" data-location-code="X" data-sizes="1x1"></div>
+
+    <div id="z100Ad" class="commercialSlot" data-location-code="Z" data-sizes="120x597"></div>
+
+
+<div id="d300Ad" class="commercialSlot" data-location-code="D" data-sizes="970x90|990x90|980x90|728x90"></div>
+
+</div>
+            </div>
+        </div>
+        <hr class="a11y" />
+        <div id="footerWrap">
+            <footer id="mainFooter">
+                
+                
+
+
+
+
+        <nav id="footerNav">
+            <div class="footerLeftNav">
+                <h3>JOIN, SHARE, LIKE, FOLLOW US ON:</h3>
+                <ul id="siteSocial" class="socialIcons">
+                </ul>
+            </div>
+            <div class="footerRightNav">
+                        <div class="footerModuleGroup">
+                                    <div class="footerModule">
+                                        <h6>PRWeek</h6>
+                                            <ul>
+                                                    <li>
+                                                        <a href="/about_us" title="About us"   rel="nofollow"  >About us</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/contact-us" title="Contact us"   rel="nofollow"  >Contact us</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/advertise" title="Advertise"   rel="nofollow"  >Advertise</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/faq" title="FAQ"   rel="nofollow"  >FAQ</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/subscribe" title="Subscribe"   rel="nofollow"  >Subscribe</a>
+                                                    </li>
+                                            </ul>
+                                    </div>
+                                    <div class="footerModule">
+                                        <h6>Global</h6>
+                                            <ul>
+                                                    <li>
+                                                        <a href="/asia" title="PRWeek Asia"   rel="nofollow"  >PRWeek Asia</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/uk" title="PRWeek UK"   rel="nofollow"  >PRWeek UK</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/us" title="PRWeek US"   rel="nofollow"  >PRWeek US</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://prreport.de/" title="PR Report (Germany)"   rel="nofollow"  >PR Report (Germany)</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.campaignasia.com/" title="Campaign Asia"   rel="nofollow"  >Campaign Asia</a>
+                                                    </li>
+                                            </ul>
+                                    </div>
+                                    <div class="footerModule">
+                                        <h6>Brand Republic Group</h6>
+                                            <ul>
+                                                    <li>
+                                                        <a href="http://www.brandrepublic.com/" title="Brand Republic"   rel="nofollow"  >Brand Republic</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.campaignlive.co.uk/" title="Campaign"   rel="nofollow"  >Campaign</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.marketingmagazine.co.uk/" title="Marketing"   rel="nofollow"  >Marketing</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.mediaweek.co.uk/" title="Media Week"   rel="nofollow"  >Media Week</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.dmnews.com/" title="Direct Marketing News"   rel="nofollow"  >Direct Marketing News</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="http://www.thehubcomms.com/" title="The Hub"   rel="nofollow"  >The Hub</a>
+                                                    </li>
+                                            </ul>
+                                    </div>
+                        </div>
+
+            </div>
+        </nav>
+
+
+
+
+
+
+<div id="copyright" class="copyright copyright--stretch">
+    <div class="colWrapper">
+                <div class="col">
+                    <a id="haymarketLogo" title="Haymarket" href="http://www.haymarket.com"   rel="nofollow"  >
+                        <img alt="Haymarket" src="/_hbi_ui/basesitenet/img/responsive/logoHaymarket.svg" />
+                    </a>
+                    <span class="footerCopyright">&copy; Haymarket Media Group Ltd.</span> <span class="footerSeparator">|</span> <a href="http://www.haymarket.com/terms-and-conditions" title="Terms &amp; Conditions" rel="nofollow">Terms &amp; Conditions</a> <span class="footerSeparator">|</span> <a href="https://www.haymarket.com/privacy-policy/#heading-cookies" title="Cookie Notice" rel="nofollow">Cookie Notice</a> <span class="footerSeparator">|</span> <a href="http://www.haymarket.com/privacy-policy" title="Privacy Notice" rel="nofollow">Privacy Notice</a><span class="footerSeparator">|</span> <a class="ot-sdk-show-settings" href="javascript:void(0)">Cookie Settings</a>                </div>
+                <div class="col">
+                    <a id="ipso" title="IPSO" href="https://www.ipso.co.uk/what-we-do/"   rel="nofollow"  >
+                        <img alt="IPSO" src="/_hbi_ui/basesitenet/img/responsive/ipso.svg" />
+                    </a>
+                </div>
+
+
+    </div>
+</div>
+
+            </footer>
+        </div>
+
+
+
+</div>
+
+
+	
+<script type="text/javascript" src="https://static.prweek.com/js/min/_Layout_Universal_PRLayoutMediaProvider6425A4460FA01185CBAF470A09F64733.js"></script>
+    
+    
+
+    <script type="text/javascript" src="https://static.prweek.com/js/min/validation_A30D6B4724C41883766934A7E6A657E0.js"></script>
+    
+
+
+
+
+
+    </body>
+</html>

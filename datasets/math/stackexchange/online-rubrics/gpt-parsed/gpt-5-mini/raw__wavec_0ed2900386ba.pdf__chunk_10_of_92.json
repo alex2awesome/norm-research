@@ -1,0 +1,285 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 10,
+  "n_chunks": 92,
+  "chunk_chars": 39996,
+  "model": "gpt-5-mini",
+  "elapsed_s": 98.18300754200027,
+  "input_tokens": 11805,
+  "output_tokens": 8555,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and package developers writing code that uses file/stream and process operations",
+    "subtask_short": "GAP streams and file operations",
+    "subtask_description": "Reference rules and behavioral specifications for GAP's file, stream, logging, CSV and process operations, including constraints (resource limits, blocking semantics), categories, and recommended usages.",
+    "subtask_keywords": [
+      "gap",
+      "streams",
+      "file_io",
+      "processes",
+      "reference_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "PrintTo overwrite behaviour",
+        "description": "PrintTo will overwrite the previous contents of this file if it already existed; in particular, PrintTo with just the filename argument empties that file.",
+        "guidance": "Be careful when using PrintTo with filenames: it replaces existing file contents. For appending use AppendTo. Avoid using PrintTo on logfiles unless overwriting is intended."
+      },
+      {
+        "name": "AppendTo behaviour",
+        "description": "AppendTo works like PrintTo, except that the output does not overwrite the previous contents of the file, but is appended to the file.",
+        "guidance": "Use AppendTo when you want to add output to an existing file. Note: still observe open-file limits and other logging interactions."
+      },
+      {
+        "name": "Limit on concurrently open output files",
+        "description": "There is an upper limit of 15 on the number of output files that may be open simultaneously.",
+        "guidance": "Close output streams promptly (CloseStream) to avoid hitting the limit. Be mindful of other parts of your program that may open files."
+      },
+      {
+        "name": "Do not write to logfile with PrintTo/AppendTo",
+        "description": "One should be careful not to write to a logfile (see LogTo) with PrintTo or AppendTo.",
+        "guidance": "Writing directly to the logfile may interfere with session logging semantics. Prefer logging APIs (LogTo/InputLogTo/OutputLogTo) when interacting with logs."
+      },
+      {
+        "name": "LogTo (file) behaviour",
+        "description": "Calling LogTo with a string filename causes the subsequent interaction to be logged to the file with the name filename. This file must be writable by GAP. LogTo will overwrite the previous contents of this file if it already existed. Called without arguments, LogTo stops logging.",
+        "guidance": "Ensure the file is writable; be aware that existing contents will be lost. Use LogTo() (no args) to stop logging."
+      },
+      {
+        "name": "InputLogTo (file) behaviour",
+        "description": "Calling InputLogTo with a string filename causes the subsequent input to be logged to the file with the name filename. InputLogTo will overwrite the previous contents of this file if it already existed. Called without arguments, InputLogTo stops logging.",
+        "guidance": "InputLogTo and LogTo cannot be used at the same time. InputLogTo and OutputLogTo can be used together. Ensure file writability and that overwriting is acceptable."
+      },
+      {
+        "name": "OutputLogTo (file) behaviour",
+        "description": "Calling OutputLogTo with a string filename causes the subsequent output to be logged to the file with the name filename. OutputLogTo will overwrite the previous contents of this file if it already existed. Called without arguments, OutputLogTo stops logging.",
+        "guidance": "OutputLogTo and LogTo cannot be used concurrently, while OutputLogTo and InputLogTo can. Ensure you do not unintentionally overwrite important output files."
+      },
+      {
+        "name": "CrcFile behaviour",
+        "description": "CrcFile(filename) computes a CRC (cyclic redundancy check) checksum value for the file with filename and returns this value as an integer. The function returns fail if an error occurred (e.g., filename does not exist).",
+        "guidance": "On error use LastSystemError to retrieve diagnostic information. See also related functions like HexSHA256."
+      },
+      {
+        "name": "RemoveFile behaviour",
+        "description": "RemoveFile(filename) will remove the file with filename and returns true in case of success. The function returns fail if a system error occurred (for example, permissions issues).",
+        "guidance": "On failure inspect LastSystemError for details. Ensure you have appropriate permissions before calling."
+      },
+      {
+        "name": "UserHomeExpand behaviour",
+        "description": "If the string str starts with a '~' character this function returns a new string with the leading '~' substituted by the user's home directory as stored in GAPInfo.UserHome. Otherwise str is returned unchanged.",
+        "guidance": "Useful for tilde-expansion in filenames; uses GAPInfo.UserHome as the canonical home directory."
+      },
+      {
+        "name": "Reread semantics and caveats",
+        "description": "Reread(filename) sets the global variable REREADING to true, reads the file named by filename and then resets REREADING. Various system functions behave differently when REREADING is true (e.g., assignment to read-only globals is permitted, NewRepresentation/NewInfoClass return existing objects, methods may displace existing ones).",
+        "guidance": "Reread may not fully produce intended results if super-representations or method requirements changed; in such cases restart GAP. It is not advisable to use Reread programmatically (e.g., nested Reread calls can reset REREADING too early). Use with caution."
+      },
+      {
+        "name": "Streams: text vs binary",
+        "description": "Streams are either text streams, which translate the end-of-line character (\\n) to/from the system's representation of end-of-line (e.g., new-line under UNIX, CR+LF under DOS), or binary streams, which do not translate end-of-line. Processing of other unprintable characters by text streams is undefined; binary streams pass them unchanged.",
+        "guidance": "Use text streams for human-readable text and when newline translation is desired; use binary streams for raw binary data to avoid unwanted translations."
+      },
+      {
+        "name": "Stream resource usage and closing",
+        "description": "Streams consume system resources and only a limited number can be open at any time; therefore it is necessary to close a stream as soon as possible using CloseStream.",
+        "guidance": "Always CloseStream when finished. If stream creation fails, use LastSystemError to get information. Some functions mention specific limits (e.g., at most 256 files open for reading/writing)."
+      },
+      {
+        "name": "Stream categories and StreamsFamily",
+        "description": "Open streams and stream types lie in categories such as IsStream, IsClosedStream, IsInputStream, IsInputTextStream, IsInputTextNone, IsOutputStream, IsOutputTextStream, IsOutputTextNone; all streams are in StreamsFamily.",
+        "guidance": "Use these categories to test stream types and to install methods that trap accesses (e.g., methods for closed streams). Dummy streams are distinguished with IsInputTextNone/IsOutputTextNone."
+      },
+      {
+        "name": "CloseStream requirement",
+        "description": "CloseStream(stream) should be used to close every stream as soon as it is no longer used, to preserve system resources and to flush output streams. It is an error to read/write a closed stream.",
+        "guidance": "Closing lets the GAP kernel/OS know the file is no longer needed. This avoids hitting OS limits on open streams and ensures output is flushed."
+      },
+      {
+        "name": "FileDescriptorOfStream limitation",
+        "description": "FileDescriptorOfStream(stream) returns the UNIX file descriptor of the underlying file. This is mainly useful for UNIXSelect. It is only available on UNIX-like operating systems and only for streams to local processes and local files.",
+        "guidance": "Only use on supported OSes and appropriate streams; relies on underlying UNIX file descriptors."
+      },
+      {
+        "name": "UNIXSelect behaviour",
+        "description": "UNIXSelect(inlist, outlist, exclist, timeoutsec, timeoutusec) exposes the UNIX select function for streams. The timeout arguments control total timeout; if a timeout argument is not a small integer then no timeout is applicable. The return value is the number of streams ready (may be 0). All file descriptors in the three lists that are not yet ready are replaced by fail in this function. The lists are mutated.",
+        "guidance": "This function is only available if the OS has select (detected at compilation). Use FileDescriptorOfStream to obtain descriptors for streams to local processes/files. Be prepared for lists to be modified in-place."
+      },
+      {
+        "name": "Read (stream) behaviour",
+        "description": "Read(input-text-stream) reads the input-text-stream as input until end-of-stream occurs; input is parsed and executed.",
+        "guidance": "Use Read to process GAP input from streams. For reading as a function use ReadAsFunction. When reading from a stream, GAP generates calls to ReadLine(str) for parser input."
+      },
+      {
+        "name": "ReadAsFunction (stream)",
+        "description": "ReadAsFunction(input-text-stream) reads the input-text-stream as a function and returns this function.",
+        "guidance": "Useful when stream content defines a function; example shows local variable isolation compared with Read."
+      },
+      {
+        "name": "ReadByte semantics",
+        "description": "ReadByte(input-stream) returns one character (as integer) from the input stream. It returns fail if there is no character available (e.g., end-of-file). ReadByte will wait (block) until a byte is available for blocking streams; for streams that may not block, non-blocking implementations should be provided.",
+        "guidance": "ReadByte is the fundamental input operation; installing a non-blocking ReadByte for user-defined stream types enables other input operations to work correctly."
+      },
+      {
+        "name": "ReadLine semantics",
+        "description": "ReadLine(input-stream) returns one line (string including the newline) from input-stream, reading until newline or end-of-stream. For input/output process streams it may return fail or an incomplete line if the other process has not written more; it will wait for at least one byte.",
+        "guidance": "Default ReadLine calls ReadByte repeatedly\u2014this is unsafe for blocking streams. Kernel uses ReadLine to supply parser input when reading from streams."
+      },
+      {
+        "name": "ReadAll semantics",
+        "description": "ReadAll(input-stream[, limit]) returns all characters as a string from the input stream. It waits until at least one character is available or until there is evidence no characters will ever be available (end-of-stream). If the stream is already at end-of-file fail is returned. With limit given, at most limit bytes are returned. Default method calls ReadLine repeatedly (unsafe for blocking streams).",
+        "guidance": "For regular files, ReadAll will typically read the remainder immediately. For streams that can block or are interactive, provide a suitable ReadAll method. Bounded internal buffering may cause slightly more bytes than limit to be returned."
+      },
+      {
+        "name": "IsEndOfStream nuance",
+        "description": "IsEndOfStream(input-stream) returns true if the input stream is at end-of-stream and false otherwise. Note that IsEndOfStream might return false even if the next ReadByte fails.",
+        "guidance": "Do not rely solely on IsEndOfStream to predict ReadByte results in all stream types."
+      },
+      {
+        "name": "PositionStream semantics",
+        "description": "PositionStream(input-stream) returns a non-negative integer denoting the current position in the stream (usually the number of characters before the next one to be read). If not possible (e.g., standard input), fail is returned.",
+        "guidance": "Use PositionStream for streams that support random access (string streams, disk file streams); check for fail on non-seekable streams."
+      },
+      {
+        "name": "RewindStream behaviour",
+        "description": "RewindStream(input-stream) attempts to return an input stream to its starting condition so that the same characters can be read again. It returns true on success and fail otherwise. A default method implements RewindStream using SeekPositionStream.",
+        "guidance": "Not all streams support rewinding\u2014check return value. For some streams rewinding may be impossible (e.g., piped input)."
+      },
+      {
+        "name": "SeekPositionStream behaviour",
+        "description": "SeekPositionStream(input-stream, pos) attempts to set the stream to the specified position. It returns true if successful and fail otherwise.",
+        "guidance": "Only supported for streams that provide random access. Use PositionStream to learn current position before seeking."
+      },
+      {
+        "name": "WriteByte semantics",
+        "description": "WriteByte(output-stream, byte) writes the next character (given as integer) to the output stream and returns true if the write succeeds and fail otherwise. WriteByte is the basic operation for output streams.",
+        "guidance": "Installing a WriteByte method for a user-defined stream makes other output operations work (possibly not at peak efficiency)."
+      },
+      {
+        "name": "WriteLine semantics",
+        "description": "WriteLine(output-stream, string) appends string to output-stream and writes a final newline. It returns true if the write succeeds and fail otherwise. A default method implements WriteLine by repeated calls to WriteByte.",
+        "guidance": "Use WriteLine for line-oriented output; defaults rely on WriteByte implementations."
+      },
+      {
+        "name": "WriteAll semantics",
+        "description": "WriteAll(output-stream, string) appends string to output-stream with no final newline. It returns true if the write succeeds and fail otherwise. It will block as long as necessary for the write to complete (e.g., child process clearing input buffer). A default method implements WriteAll via repeated WriteByte calls.",
+        "guidance": "When printing/appending to a stream (PrintTo/AppendTo/LogTo), the kernel generates a WriteAll call per output line. For performance with large outputs, provide efficient WriteAll implementations."
+      },
+      {
+        "name": "PrintTo/AppendTo for streams",
+        "description": "PrintTo(output-stream, ...) and AppendTo(output-stream, ...) work like Print and Append, except the output is appended to the output stream output-stream.",
+        "guidance": "Useful for writing formatted GAP output to streams; be mindful of the stream's formatting status (SetPrintFormattingStatus)."
+      },
+      {
+        "name": "LogTo/InputLogTo/OutputLogTo for streams",
+        "description": "LogTo(stream), InputLogTo(stream), and OutputLogTo(stream) cause subsequent interaction/input/output to be logged to the given output stream. They work the same way as the file variants.",
+        "guidance": "These variants let you direct session logging to arbitrary output streams (e.g., in-memory buffers). Observe mutual exclusivity rules analogous to file versions."
+      },
+      {
+        "name": "SetPrintFormattingStatus/PrintFormattingStatus",
+        "description": "SetPrintFormattingStatus(stream, newstatus) sets whether output sent to the output text stream via PrintTo/AppendTo/LogTo will be formatted (line breaks, indentation). If newstatus is true output will be formatted; if false it will not. For non-text streams only false is allowed. PrintFormattingStatus(stream) returns current formatting setting. The special strings '*stdout*' and '*errout*' refer to standard output and standard error formatting status.",
+        "guidance": "Formatting is desirable for human-readable output but may be harmful if the output is to be consumed by another program. These functions do not affect WriteByte/WriteLine/WriteAll (which always write raw)."
+      },
+      {
+        "name": "InputTextFile behaviour and limits",
+        "description": "InputTextFile(filename) returns an input text stream that delivers the characters from the file. If filename ends in .gz and the file is a valid gzipped file, it will be transparently uncompressed. InputTextFile is designed for text files and automatically handles Windows-style line endings; it should not be used for binary data.",
+        "guidance": "For binary data use IO_File from the IO package. Note: at most 256 files may be open for reading or writing at the same time; CloseStream to free handles."
+      },
+      {
+        "name": "OutputTextFile/OutputGzipFile behaviour",
+        "description": "OutputTextFile(filename, append) returns an output stream writing to filename; if append is false the file is emptied first, otherwise characters are appended. OutputGzipFile acts identically except it compresses output with gzip.",
+        "guidance": "Observe the same limit of at most 256 files open simultaneously. Close output streams to flush and free resources."
+      },
+      {
+        "name": "InputTextUser behaviour",
+        "description": "InputTextUser() returns an input text stream which delivers characters typed by the user (or from standard input if redirected). Characters are normally delivered one by one as typed, without waiting for end of line. No prompts are printed.",
+        "guidance": "Use InputTextUser when reading interactive input character-by-character; note the lack of automatic prompt handling."
+      },
+      {
+        "name": "OutputTextUser behaviour",
+        "description": "OutputTextUser() returns an output stream which delivers characters to the user's display (or redirected stdout). Each character is delivered immediately as written. Text written this way is not written to the session log.",
+        "guidance": "Great for interactive immediate output; if you need to log this output, use logging APIs separately."
+      },
+      {
+        "name": "InputFromUser behaviour",
+        "description": "InputFromUser(arg) prints arg as a prompt, waits until a text is typed by the user (a single expression followed by enter), evaluates it, and returns the result.",
+        "guidance": "Use for prompting the user for a GAP expression; parsing/evaluation is done via EvalString."
+      },
+      {
+        "name": "InputTextString behaviour",
+        "description": "InputTextString(string) returns an input stream that delivers the characters from the given string. The string is not changed when reading characters, and changes to the string after the call do not affect the stream.",
+        "guidance": "Useful for testing or treating in-memory strings as input streams."
+      },
+      {
+        "name": "OutputTextString behaviour",
+        "description": "OutputTextString(list, append) returns an output stream that puts all received characters into the list. If append is false the list is emptied first, otherwise characters are added at the end.",
+        "guidance": "Use to capture printed output into an in-memory list/string. CloseStream to finalize and to allow reading the collected content."
+      },
+      {
+        "name": "Input-Output streams characteristics",
+        "description": "Input-output streams capture bidirectional communications between GAP and another process (locally via pseudo-tty). They support both input and output operations, should provide some buffering, but buffering amount is OS dependent; write operations are blocking, read operations block for the first character but not thereafter.",
+        "guidance": "Take care to avoid deadlocks by not writing too far ahead or falling too far behind in reading. Behavior (e.g., control character handling) may depend on pseudo-tty implementation details."
+      },
+      {
+        "name": "IsInputOutputStream category",
+        "description": "IsInputOutputStream(obj) is the category test for input-output streams (returns true for such streams).",
+        "guidance": "Use to detect bidirectional streams to child processes and to install appropriate methods."
+      },
+      {
+        "name": "InputOutputLocalProcess behaviour",
+        "description": "InputOutputLocalProcess(dir, executable, args) starts a child process with executable and args in directory dir and returns an InputOutputStream. Bytes written to this stream are received by the child as if typed on its stdin; bytes written by the child to stdout can be read from the stream. When the stream is closed, SIGTERM is delivered to the child process which is expected to exit.",
+        "guidance": "Choose dir carefully (DirectoryCurrent, DirectoryTemporary, or package directories) depending on whether temporary/log files are produced. Use Filename and IsExecutableFile for portability of executable paths."
+      },
+      {
+        "name": "ReadAllLine semantics for i/o streams",
+        "description": "ReadAllLine(iostream[, nofail][, IsAllLine]) reads until a newline character if any input is found and is non-blocking in that case (returns fail if no input). If nofail=true, it will wait for input and never return fail. If IsAllLine is provided, it's used to decide what constitutes a whole line; default checks for non-empty string ending with '\\n'. For ordinary input streams (not i/o streams) behaviour falls back to ReadLine.",
+        "guidance": "Use IsAllLine for external processes that use prompts without newline terminators. Use nofail to force blocking behaviour."
+      },
+      {
+        "name": "Dummy streams InputTextNone/OutputTextNone",
+        "description": "InputTextNone() returns a dummy input text stream that delivers no characters (always at end-of-stream). OutputTextNone() returns a dummy output stream that discards all received characters.",
+        "guidance": "Main use is for Process calls when the started program does not read or write anything; they avoid needing real files or terminals."
+      },
+      {
+        "name": "Background stream handling via char-read hooks",
+        "description": "GAP can handle ready streams 'in the background' right before reading a keypress by calling installed handler functions via InstallCharReadHookFunc(stream, mode, func). mode is a string containing letters r (read), w (write), x (exception) to indicate events. UnInstallCharReadHookFunc(stream, func) removes handlers. This feature only works if the OS has select.",
+        "guidance": "Handler functions must accept one integer argument (index) and must not return anything. Handlers should be quick and should not output to stdout (this would ruin command-line editing)."
+      },
+      {
+        "name": "InstallCharReadHookFunc requirements",
+        "description": "InstallCharReadHookFunc(stream, mode, func) installs func as a handler for stream for operations indicated by mode (r/w/x). Handler functions must be fast and must not return anything; they receive an integer index argument.",
+        "guidance": "Only available on systems with select. Handlers usually should not output to standard output to avoid disrupting the command line."
+      },
+      {
+        "name": "UnInstallCharReadHookFunc behaviour",
+        "description": "UnInstallCharReadHookFunc(stream, func) uninstalls the function func as a handler for stream. All instances are uninstalled, regardless of the mode.",
+        "guidance": "Works only if the operating system provides select. Use to clean up installed handlers."
+      },
+      {
+        "name": "ReadCSV behaviour",
+        "description": "ReadCSV(filename[, nohead][, separator]) reads a CSV file and returns its entries as a list of records. The first line is used as labels for record components; blanks are translated to underscores. If nohead=true then record components are named fieldn. separator overrides the default comma.",
+        "guidance": "Useful for ingesting spreadsheet-like CSV data. Ensure header line semantics align with your data and set separator if different from comma."
+      },
+      {
+        "name": "PrintCSV behaviour",
+        "description": "PrintCSV(filename, list[, fields]) prints a list of records as a CSV file. Names of record components are printed in the first line. If fields is given only those listed fields are printed, in that order. If noheader option is true the header line is not printed.",
+        "guidance": "Use fields to control the order and subset of columns. Set noheader when a header row is undesired."
+      },
+      {
+        "name": "OpenExternal behaviour",
+        "description": "OpenExternal(filename) opens the file using the default application for this file in the operating system (e.g., HTML, PDF, images).",
+        "guidance": "Useful for launching files in GUI environments directly from GAP to view results; platform behavior depends on OS configuration."
+      },
+      {
+        "name": "Process(dir, prg, stream-in, stream-out, options) semantics",
+        "description": "Process runs a new process and returns when the process terminates; it returns the process return value if the OS supports that. dir is the directory used as current directory for the process; prg is the program filename (use Filename and IsExecutableFile). Process does not search PATH. stream-in supplies input to the process and should be one of InputTextNone, InputTextUser, InputTextFile (unused), or InputTextString for portability. stream-out is the output stream receiving process output and should be one of OutputTextNone, OutputTextUser, OutputTextFile, or OutputTextString. options is a list of strings passed as command-line arguments (no shell processing, each string is one argument); input/output redirection commands are not allowed.",
+        "guidance": "Use DirectoryTemporary for processes that create temporary files. If launching package programs that need specific data directories, use DirectoriesPackageLibrary or DirectoriesPackagePrograms. Process may consume all provided input even if the program does not require it. Use PathSystemProgram to find system programs."
+      }
+    ]
+  }
+}

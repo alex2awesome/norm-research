@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/b50e7cb153f7.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 14768,
+  "output_tokens": 3908,
+  "elapsed_s": 1131.6159588331357,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine_learning researchers and practitioners, computational social scientists, and NLP/CV researchers working on meme analysis and template identification",
+    "subtask_short": "meme template identification",
+    "subtask_description": "Automatically identify meme templates from image-with-text data, including distinguishing templated memes from templateless memes and non-meme images, evaluated on labeled (Imgflip) and real-world social media data.",
+    "subtask_keywords": [
+      "memes",
+      "template_identification",
+      "image_classification",
+      "computer_vision",
+      "social_media"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Template identification accuracy",
+        "description": "Ability to correctly identify meme templates (classify a meme image into the correct template class).",
+        "guidance": "Measured using multiclass metrics such as Matthew's Correlation Coefficient (MCC), Cohen's Kappa, and F1 score on the Imgflip test set (1,145 templates) and on manually labeled social media samples. Evaluation scenarios include All Memes, Model Templated, and True Templated subsets."
+      },
+      {
+        "name": "Ability to reject non-memes and templateless memes",
+        "description": "Capacity of a method to reject images that are not from known meme templates (templateless) or are non-meme images, avoiding false template assignments.",
+        "guidance": "Explicitly tested by including a Non-Meme dataset (Flickr30k, movie posters, advertisements, screenshots) and by evaluating binary meme vs. non-meme classification. Methods such as radius nearest neighbors, SCI for sparse matching, and a separate binary head in CNNs can be used for rejection."
+      },
+      {
+        "name": "Out-of-distribution handling (OOD detection)",
+        "description": "Algorithms should handle out-of-distribution inputs since social media images may not belong to any of the predefined template classes.",
+        "guidance": "Design choices include radius-based neighbor detection (label as templateless if no neighbors within radius) and architectural solutions (two-headed CNN: one head for meme vs non-meme, second for template identification). Confidence thresholds were considered but a two-headed architecture was used."
+      },
+      {
+        "name": "Scalability and time efficiency",
+        "description": "Practical runtime and scalability of methods when applied to very large datasets (hundreds of thousands to millions of images).",
+        "guidance": "Consider computational cost trade-offs: RNN-Feature Matching is accurate but computationally expensive (two weeks on distributed machines); FLANN-based matcher can speed up feature matching; dense feature-comparison methods may be impractical at scale."
+      },
+      {
+        "name": "Dataset diversity and representativeness",
+        "description": "Collect data from varied social platforms and labeled sources to ensure the dataset covers real-world diversity of memes and non-memes.",
+        "guidance": "Authors collected labeled templates from Imgflip and large unlabeled datasets from Reddit, Twitter (X), and Facebook, excluding platforms that might bias results; deduplicate templates (CLIP + cosine similarity) and include a curated Non-Meme dataset to reflect realistic OOD inputs."
+      },
+      {
+        "name": "Evaluation protocol and cross-validation",
+        "description": "Robust model selection and evaluation procedures to ensure reliable results.",
+        "guidance": "Hyperparameters were optimized via 5-fold stratified cross-validation on the Imgflip dataset with the optimization objective set to maximize MCC. CNN training used 10 epochs with early stopping on cross-entropy loss."
+      },
+      {
+        "name": "Appropriate metric selection for extreme multiclass imbalance",
+        "description": "Use evaluation metrics that are robust to extreme multiclass problems with highly imbalanced classes.",
+        "guidance": "Authors used Matthews Correlation Coefficient (MCC), Cohen's Kappa, and F1 score because these handle multiclass imbalance better than plain accuracy in this context."
+      },
+      {
+        "name": "Feature engineering: prefer visual-only modality for template",
+        "description": "Focus on visual features (background image) for template identification rather than combining image and overlay text.",
+        "guidance": "Rationale: the background image provides the template while overlaid text is local context; models used only visual features, including RGB/grayscale histograms, LBP texture, ORB features, pHash, CLIP embeddings, and CNN embeddings."
+      },
+      {
+        "name": "Perceptual hashing approach and conservative thresholding",
+        "description": "Use pHash and Hamming distance to generate compact fingerprints and cluster visually similar memes, with strict thresholds leading to high-precision matches.",
+        "guidance": "Following Zannettou et al., use pHash (64-bit) and Hamming distance with threshold delta=8; expect very high precision but low recall and conservative clustering (may produce many small homogeneous clusters and classify many images as templateless)."
+      },
+      {
+        "name": "CLIP embeddings for deduplication and feature representation",
+        "description": "Use CLIP image embeddings to deduplicate template references and as a feature representation for retrieval and clustering.",
+        "guidance": "Authors embedded reference images with CLIP and used cosine similarity to manually filter duplicate templates (resulting in 1,145 unique templates); CLIP embeddings were also used with UMAP+HDBSCAN for clustering."
+      },
+      {
+        "name": "Preprocessing: blur text regions to reduce text influence on visual matching",
+        "description": "Preprocess images by blurring text regions so visual feature matching focuses on template imagery rather than overlay text.",
+        "guidance": "Adopted from Courtois & Frissen: blurring text regions reduces false positives related to text features and allows matching on 'global context' visual elements; note the preprocessing adds computational overhead."
+      },
+      {
+        "name": "Sparse matching and use of sparsity concentration index (SCI)",
+        "description": "Apply sparse representation to separate overlay (local context) from template (global context) and use SCI to detect templateless inputs.",
+        "guidance": "Implementation includes color normalization, downsampling, L1-minimization for sparse coefficients, and computing SCI to measure concentration of coefficients on a single class to decide rejection; concatenation of image/text features is optional but sparse matching module handles template assignment."
+      },
+      {
+        "name": "Feature-matching criteria (d and m parameters)",
+        "description": "Define image similarity by requiring at least m feature matches within distance d between image pairs.",
+        "guidance": "Original Courtois & Frissen recommended d=27 and m=4; on the larger Imgflip dataset the authors found the best combination to be d=27 and m=20. These parameters materially affect precision/recall and runtime."
+      },
+      {
+        "name": "Clustering pipeline and cluster-to-template assignment",
+        "description": "Unsupervised pipeline: compute embeddings, reduce dimensionality, cluster, then assign clusters to templates using labeled examples.",
+        "guidance": "Authors used CLIP/pHash embeddings, UMAP for dimensionality reduction, and HDBSCAN for clustering; templates were assigned to clusters by majority vote from 80% labeled Imgflip memes, evaluated on the held-out 20%."
+      },
+      {
+        "name": "Radius Nearest Neighbors (RNN) for outlier/templateless detection",
+        "description": "Use radius-based k-NN to detect outliers; images without neighbors within a predefined radius are marked templateless.",
+        "guidance": "Set radius to the smallest value where none of the labeled samples are classified as templateless. Tested with pHash + Hamming distance and DenseNet embeddings + cosine similarity."
+      },
+      {
+        "name": "Transfer learning and CNN fine-tuning practices",
+        "description": "Adapt pre-trained convolutional neural networks for the meme template classification task by adjusting the final classification layer and fine-tuning.",
+        "guidance": "Modify classification layer to match template count (1,145), train new classification layer first, then selectively fine-tune deeper layers. Use early stopping (cross-entropy) and limited epochs (authors used 10). Two-headed DenseNet was used to separate meme detection from template identification."
+      },
+      {
+        "name": "Manual annotation protocol for real-world evaluation",
+        "description": "Use human annotators to create gold-standard labels for social media evaluation with procedures to ensure quality and independence.",
+        "guidance": "Authors used 6 annotators with meme domain knowledge, annotators labeled predictions as Correct/Incorrect independently, majority decision used as ground truth. Inter-annotator agreement measured via Fleiss kappa (0.85 indicates substantial agreement)."
+      },
+      {
+        "name": "Handling extreme class imbalance in templates",
+        "description": "Recognize and accommodate the severe imbalance across many template classes when training and evaluating models.",
+        "guidance": "Imgflip dataset has 1,145 templates with widely varying counts per template (median 111, range 31-582). Use stratified cross-validation, robust metrics (MCC, Kappa), and careful sampling/regularization to mitigate imbalance effects."
+      },
+      {
+        "name": "Precision vs recall trade-offs and method selection by use-case",
+        "description": "Select methods according to whether high-confidence template assignments (precision) or broad coverage (recall) is more important for the application.",
+        "guidance": "Perceptual hashing yields very high precision but low recall (good for high-confidence assignment); two-headed DenseNet yields high recall but lower precision in rejecting templateless images. RNN-FM and RNN+pHash provide balanced behavior but with runtime trade-offs."
+      },
+      {
+        "name": "Data deduplication and template curation",
+        "description": "Remove duplicated templates with slightly different names to obtain a clean set of unique templates for supervised training.",
+        "guidance": "Authors scraped 2,277 templates from Imgflip, embedded reference images with CLIP, used cosine similarity search and manual filtering to produce 1,145 unique templates; this step ensures consistent labels for training and evaluation."
+      }
+    ]
+  }
+}

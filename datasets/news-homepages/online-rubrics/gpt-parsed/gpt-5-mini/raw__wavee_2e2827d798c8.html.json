@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/wavee_2e2827d798c8.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11811,
+  "output_tokens": 3199,
+  "elapsed_s": 1518.2271395418793,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers in NLP, medical informatics, and computational social science studying media coverage of health science research",
+    "subtask_short": "predicting newsworthiness of health articles",
+    "subtask_description": "Build interpretable statistical models to predict whether a published health science article will (1) receive a press release from the publishing journal and (2) garner mainstream media coverage, and to identify topical/content attributes that correlate with these outcomes.",
+    "subtask_keywords": [
+      "health_news",
+      "newsworthiness",
+      "press_release_prediction",
+      "media_coverage",
+      "slda",
+      "nlp"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "News values (proximity, significance, novelty)",
+        "description": "Journalistic 'news values' \u2014 defined as the elements of a story that make it likely to be published (examples: proximity, significance, novelty) \u2014 act as criteria for deciding what is newsworthy and most likely to increase audience attention.",
+        "guidance": "Use news-value concepts to reason about likely public interest in study findings; these are qualitative criteria used by journalists and PR practitioners when deciding what to pitch or issue as a press release."
+      },
+      {
+        "name": "Press release issuance as a target outcome",
+        "description": "Whether journal editors issue a press release for an article (used here as a label for 'perceived newsworthiness' by journals).",
+        "guidance": "Model this as a binary outcome (press release issued / not issued); the authors constructed PR datasets (Sumner PR, JAMA) and used matched negative sampling to control for venue/time. Predictive performance reported with AUC."
+      },
+      {
+        "name": "Mainstream media coverage as a target outcome",
+        "description": "Whether an article garners mainstream media coverage (used here as a label for actual news coverage received).",
+        "guidance": "Model this as a binary label (covered / not covered). The authors used Sumner NC and Reuters corpora with matched negative sampling and reported predictive performance with AUC."
+      },
+      {
+        "name": "Topical/content features (unigrams and bigrams from titles and abstracts)",
+        "description": "Lexical features (counts of uni- and bigrams extracted from article titles and abstracts) used as primary predictors of press release issuance and media coverage.",
+        "guidance": "Preprocess with a standard English stop word list; keep features appearing in at least two instances; cap at most 50,000 most frequent features (dataset-specific caps reported). Rank predictive terms using bootstrap confidence intervals."
+      },
+      {
+        "name": "MeSH terms as features",
+        "description": "Medical Subject Headings (MeSH) drawn from the NLM controlled vocabulary and manually assigned to citations were included as features to capture topical/semantic content.",
+        "guidance": "Treat MeSH terms similarly to lexical features; MeSH prefixes (MH-/mh) appear in reported topic/feature lists and sLDA vocabularies."
+      },
+      {
+        "name": "Basic-science topicality anticorrelates with newsworthiness",
+        "description": "Features indicative of basic science (examples given: 'binding', 'receptor', 'mice', 'protein') were observed to be negatively correlated with press release generation and media coverage.",
+        "guidance": "Interpret negative predictive lists as evidence that mechanistic/basic-lab work is less likely to be considered newsworthy for lay audiences."
+      },
+      {
+        "name": "Population-level / epidemiological topicality correlates with newsworthiness",
+        "description": "Topics and words associated with population-level findings or common behaviors (examples given: 'women', 'pregnancy', 'alcohol', 'flu', '95% CI', 'cohort') correlated positively with press release issuance and media coverage.",
+        "guidance": "Such topics likely map to perceived relevance/relatability for general audiences and thus increase probability of PR issuance or news coverage."
+      },
+      {
+        "name": "Matched negative sampling (same journal/issue/year)",
+        "description": "Negative instances (articles not receiving press releases or coverage) were sampled from the same journal and same issue (or same journal/year/volume) as positive instances to control for venue and temporal factors.",
+        "guidance": "Sumner PR: up to 10 negatives per positive (same journal/issue). Reuters: up to 20 negatives per positive (same journal/year/volume). This procedural requirement isolates content predictors from venue/time confounds."
+      },
+      {
+        "name": "Discriminative modeling: L2-regularized logistic regression",
+        "description": "Use standard logistic regression with a squared \u21132 norm penalty as the discriminative classifier whose features are unigram/bigram and MeSH counts.",
+        "guidance": "Fit with LIBLINEAR; select regularization hyper-parameter \u03bb via nested cross-validation (log line search from 1e-5 to 100). Report mean AUC over five-fold cross-validation."
+      },
+      {
+        "name": "Performance metric: area under the ROC curve (AUC)",
+        "description": "AUC is used as the main evaluation metric, reflecting the probability a positive instance ranks above a negative instance.",
+        "guidance": "Compute mean and SD across five-fold cross-validation; report fold ranges. Use AUC to compare model discriminative power across datasets/tasks."
+      },
+      {
+        "name": "Model selection and validation: five-fold nested cross-validation",
+        "description": "Five-fold cross-validation was used to estimate predictive performance; hyper-parameter selection (\u03bb) performed via nested (tuned on training folds) cross-validation.",
+        "guidance": "Use nested cross-validation when selecting hyper-parameters to avoid information leakage into test folds; report averaged metrics across folds."
+      },
+      {
+        "name": "Bootstrap confidence intervals for feature coefficients",
+        "description": "Construct bootstrap samples (1000 resamples) to estimate variance and approximate 95% confidence intervals around logistic regression coefficient estimates.",
+        "guidance": "Rank robustly predictive features by the lower bound of their CI for positive predictors and by the upper bound for negative predictors. Use coefficient distributions from bootstrap to assess robustness."
+      },
+      {
+        "name": "Supervised topic modeling (sLDA) to uncover discriminative topics",
+        "description": "Use supervised latent Dirichlet allocation (sLDA) to uncover latent topics whose prevalences correlate with press release issuance or media coverage (labels).",
+        "guidance": "Set number of topics K=20 (authors' chosen 'intuitively reasonable' value); set symmetric Dirichlet prior \u03b1=1; model document topic proportions and predict binary labels via a softmax; interpret topic coefficients to see positive/negative correlations with outcomes."
+      },
+      {
+        "name": "Vocabulary and feature-cap settings",
+        "description": "Vocabularies consisted of unique unigrams (from titles, abstracts, MeSH). Features were limited to the top-frequent words up to dataset-specific caps (examples: 50,000 features for several datasets; 10,004 for Sumner NC discriminative task; sLDA vocab sizes reported per corpus).",
+        "guidance": "Keep a reasonable cap to limit dimensionality; report the final number of features used for each dataset and modeling approach."
+      },
+      {
+        "name": "Text preprocessing rules",
+        "description": "Standard English stop word list applied; only keep features appearing in at least two instances in a dataset.",
+        "guidance": "Apply consistent preprocessing across datasets to ensure comparability; these choices affect feature sparsity and downstream model performance."
+      },
+      {
+        "name": "Use of press release text as alternative features for media prediction",
+        "description": "For predicting news coverage, consider using features extracted from the press release text as predictors (in addition to or instead of original article features).",
+        "guidance": "Authors found press-release-based models achieved somewhat different predictive performance; comparing models helps understand how press releases influence media uptake."
+      },
+      {
+        "name": "Interpretation and reporting of top predictive n-grams and topics",
+        "description": "Report and interpret top positive and negative n-gram features and sLDA topics (top-N words per topic) and plot coefficient distributions to understand drivers of predictions.",
+        "guidance": "Rank terms by CI bounds (bootstrap) rather than raw coefficients to emphasize robustness; visualize topic coefficients to convey which topics correlate with outcomes."
+      },
+      {
+        "name": "Limitations and caution about generalizability",
+        "description": "Recognize limitations: inability to infer causality about why PRs were written or stories covered; news values vary across organizations; modeling focused on lexical/topic proxies and omitted higher-level study metadata.",
+        "guidance": "Use caution when generalizing findings; consider adding higher-level features (cohort size, study design, basic vs applied) and richer linguistic features in future work to improve interpretability and performance."
+      },
+      {
+        "name": "Practical implication: journals select press releases for relatable/lay-appropriate topics",
+        "description": "Observation that scientific journals intentionally disseminate press releases that cover topics likely to be found 'newsworthy' by lay audiences (e.g., women, pregnancy, flu), which aids journalists and shapes public attention.",
+        "guidance": "When aiming for media uptake, consider emphasizing study aspects that increase general-audience relevance and ease of translation to lay language; but be mindful of potential selection biases."
+      }
+    ]
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_c9ea877e21cf.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 15834,
+  "output_tokens": 5211,
+  "elapsed_s": 3246.3501241670456,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "empirical researchers, data scientists, and policymakers studying patent examination and USPTO data",
+    "subtask_short": "USPTO office action dataset construction",
+    "subtask_description": "Describes methods to extract structured data from examiner Office actions (headings, form paragraphs, action sentences, and citations) and to produce three research-ready data files (office_actions, rejections, citations) from millions of Office actions. Includes classification rules, NLP methods, similarity thresholds, variable definitions, and coverage/limitation notes.",
+    "subtask_keywords": [
+      "patent",
+      "office_action",
+      "dataset",
+      "usp_to",
+      "text_mining",
+      "patent_examination"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Office action contents (definition)",
+        "description": "An \u201cOffice action\u201d is a written notification to the applicant of the examiner\u2019s decision on patentability and generally discloses information, such as the grounds for a rejection, the claims affected, and the pertinent prior art.",
+        "guidance": "Office actions are the primary unit of analysis: they should contain grounds for rejections/objections, the specific claims affected, and any cited prior art to be useful for dataset extraction and analysis."
+      },
+      {
+        "name": "Complete patent application components",
+        "description": "A complete application includes a written description of the invention (called a \u201cspecification\u201d), at least one claim, and any necessary drawings.",
+        "guidance": "Only complete applications (with filing date assigned) proceed to examination; data users should be aware that dataset coverage is of such complete applications."
+      },
+      {
+        "name": "Examiner evaluation checklist (statutory and regulatory checks)",
+        "description": "The examiner evaluates the claims for compliance with statutes and regulations: patent-eligible subject matter (35 U.S.C. 101), adequate written description/enablement/clarity (35 U.S.C. 112), novelty (35 U.S.C. 102), and nonobviousness (35 U.S.C. 103).",
+        "guidance": "These statutory categories form the core action_type classification in the Dataset and drive the extraction and subtype mapping logic."
+      },
+      {
+        "name": "Office action structural segmentation",
+        "description": "Office actions are segmented into three units: (1) heading, (2) form paragraph, and (3) action sentence.",
+        "guidance": "The three-part segmentation is fundamental to extraction: headings and form paragraphs are matched to pre-labeled standardized text where possible; the action sentence is parsed for claim-level details."
+      },
+      {
+        "name": "Recommendation for standardized headings and form paragraphs",
+        "description": "USPTO recommends that examiners utilize Office action templates with standardized headings and custom form paragraphs to render documents consistent, easy to read, and legally proper.",
+        "guidance": "Standardized headings/form paragraphs facilitate automated matching; lack thereof requires fallback NLP methods and reduces matching coverage."
+      },
+      {
+        "name": "Three-step examiner drafting process (for raising rejections/objections)",
+        "description": "When an examiner raises an objection and/or rejection they typically: (1) enter an appropriate heading for the action, (2) insert an appropriate set of form paragraphs to specify the legal grounds for the action, and (3) apply a \u201cstandard\u201d sentence structure to express the action taken on the claim(s).",
+        "guidance": "Extraction methods exploit this typical structure; deviations are handled with additional NLP heuristics."
+      },
+      {
+        "name": "Standard action sentence structure",
+        "description": "Typical action sentences contain: the claims to be addressed (subject), a verb phrase reflecting the action taken (e.g., 'are rejected'), a prepositional phrase stating the legal grounds (e.g., 'under pre-AIA 35 U.S.C. 102(b)'), and a prepositional phrase declaring prior art references.",
+        "guidance": "Parsing expects these constituents and maps them to four main data elements (claims, action, legal ground, prior art). Nonconforming sentences require additional NER/entity-resolution logic."
+      },
+      {
+        "name": "Four main data elements to extract from action sentences",
+        "description": "By analyzing action sentences the Dataset extracts: (1) Claim(s) in question, (2) Action taken on claim(s), (3) Legal ground for the action, and (4) Prior art(s) cited in the action.",
+        "guidance": "These elements are encoded into the rejections and citations files and are central to downstream research uses."
+      },
+      {
+        "name": "Headings/form-paragraph classification using pre-labeled set",
+        "description": "Classify headings and form paragraphs into types of action taken based on similarity to a pre-labeled set of standardized headings and form paragraphs derived from examiner tools and manuals. The final pre-labeled set includes 76 unique headings and 37 unique form paragraphs.",
+        "guidance": "This supervised matching yields straightforward action type/subtype classification for documents using standard text; it covers roughly 84% of Office actions in the Dataset."
+      },
+      {
+        "name": "Heading matching similarity measures and threshold",
+        "description": "For matching extracted headings, two text similarity measures are used: (1) Jaro-Winkler distance and (2) a variation of the Jaccard Index. If both measures exceed a predefined threshold of 0.85, we classify the extracted heading as the one it is most similar to in the pre-labeled headings set.",
+        "guidance": "Threshold 0.85 was established via manual validation; headings failing thresholds are sent to fallback methods."
+      },
+      {
+        "name": "Form-paragraph matching (first 600 characters) and similarity threshold",
+        "description": "For extracted form paragraphs, only the first 600 characters are used for matching. Matching uses Jaro-Winkler distance and a cosine similarity on term-frequency vectors; a combined similarity score (weighted sum) exceeding 0.80 classifies the extracted form paragraph as the pre-labeled one it most resembles.",
+        "guidance": "The 600-character truncation and 0.80 combined threshold were determined via iterative experimentation and manual validation; form paragraphs below threshold require alternate extraction."
+      },
+      {
+        "name": "Fallback NLP method for missing/nonstandard headings/form paragraphs",
+        "description": "For documents without headings/form paragraphs or where similarity scores fall below thresholds, a second method uses NLP, domain knowledge, and heuristic logic to extract data from the action sentence(s).",
+        "guidance": "This method involves syntactic parsing, named entity recognition, and heuristics to recover claims, actions, legal grounds, and prior art when structured markers are absent."
+      },
+      {
+        "name": "Constituency parsing with Stanford CoreNLP",
+        "description": "Apply a sentence parser (Stanford CoreNLP) to generate a constituency-based parsing tree and part-of-speech labels, and then use the parsing tree to identify and map sentence constituents to the desired data elements.",
+        "guidance": "Constituency parsing is used to identify NP/VP/PP constituents corresponding to claims, action verbs, legal grounds, and prior art mentions."
+      },
+      {
+        "name": "Named Entity Recognition and entity resolution for prior art mentions",
+        "description": "Adopt a Named Entity Recognition algorithm and heuristic logic (e.g., noun before 'et al.' likely a person) to identify person names and canonicalize prior art citations; subsequent mentions retrieve the stored canonical form via entity resolution based on Jaro-Winkler distance.",
+        "guidance": "This handles abbreviated prior-art mention patterns (e.g., 'Schmitt et al.') so the Dataset stores consistent patent/publication identifiers."
+      },
+      {
+        "name": "Combined-method agreement check and mismatch flagging",
+        "description": "Combine headings/form-paragraph analysis with NLP sentence analysis to identify action types and subtypes. The action types from both methods agree in 95 percent of cases. For remaining mismatches, the Dataset explicitly indicates them via a mismatch flag (rejection_fp_mismatch).",
+        "guidance": "rejection_fp_mismatch signals documents where form paragraphs contradict action sentence rejections; users should treat these as lower-confidence classifications."
+      },
+      {
+        "name": "Action type taxonomy (document-level)",
+        "description": "Action types encoded include: 35 U.S.C. 101 rejections, 102 rejections (lack of novelty), 103 rejections (obviousness), 112 rejections (written description/indefinite claims), non-statutory double patenting, objection, and allowable claim.",
+        "guidance": "Action type categories are not mutually exclusive; a single Office action may include multiple action types (mean action types per Office Action = 2.1)."
+      },
+      {
+        "name": "Rejection subtype labels for 102/103/112 and mapping across AIA",
+        "description": "Derive consistent action subtype labels for rejections under 35 U.S.C. 102, 103, and 112 based on relevant section paragraphs; to ensure consistency over time map pre-AIA paragraphs to their post-AIA equivalents (e.g., pre-AIA 112 paragraphs mapped to post-AIA alphabetical equivalents).",
+        "guidance": "Users should note AIA-era statute changes and that some pre-AIA paragraphs (e.g., 102(c,d,f,g)) have special meanings retained as 'pre-AIA' labels in the Dataset."
+      },
+      {
+        "name": "101 rejection ontology and subtype derivation",
+        "description": "Create a basic 35 U.S.C. 101 ontology using MPEP categorizations (double patenting, subject matter eligibility, utility, improper naming of inventor) and refine into 12 action subtype labels using training materials, memoranda, recommended form paragraphs, search terms, and prioritization of Supreme Court decisions (in reverse temporal order).",
+        "guidance": "Because 101 case law evolves, subtype labels are an initial attempt and should not be considered authoritative; the Dataset includes flags for citations to Alice, Bilski, Mayo, and Myriad decisions (alice_in, bilski_in, mayo_in, myriad_in)."
+      },
+      {
+        "name": "Keyword/search-term mapping for 101 subtypes",
+        "description": "Map key search terms and phrases to 101 rejection action subtype labels (examples: 'Alice' -> non-statutory-alice; 'Nature, natural, law of nature' -> non-statutory-nature; 'Transitory, Software, Computer program' -> non-statutory-data/non-statutory-software).",
+        "guidance": "The mapping is implemented by querying 101 rejection texts for these keywords/phrases; multiple matches are resolved by prioritizing Supreme Court decisions then keywords."
+      },
+      {
+        "name": "Prior-art citation augmentation from PTO forms",
+        "description": "Supplement prior art citations parsed from Office action text with citations from Form PTO-892 (examiner-cited references) and Form PTO-1449 (applicant-submitted IDS); convert these forms to XML and parse to generate structured citation tables.",
+        "guidance": "This allows differentiation of examiner- vs applicant-cited prior art and links Office-action citation mentions to the canonical forms on PTO documents."
+      },
+      {
+        "name": "Citation parsing limitations (non-patent literature and foreign docs)",
+        "description": "Non-patent literature citations are typically not correctly identified/parsed by the second method; some foreign patent document numbers in standard formats may be parsed, but many non-U.S. or nonstandard formats are omitted. Consequently, a small number of 102/103 rejections referencing only non-patent literature have no prior-art recorded in the Dataset.",
+        "guidance": "Researchers should be cautious using the citations file for analyses that require comprehensive non-patent or foreign prior-art coverage."
+      },
+      {
+        "name": "Dataset coverage and inclusion rules",
+        "description": "Dataset includes Non-Final Rejection and Final Rejection Office actions for applications in series 12\u201315 (filing dates roughly 2008\u20132017), excluding design patents and excluding certain document types (first action allowance, Ex parte Quayle, Advisory Actions, Notices of Allowability). Also excludes unpublished applications.",
+        "guidance": "Understand the selection criteria and gaps (see Section V Limitations) when analyzing cohort trends or filing-year coverage."
+      },
+      {
+        "name": "Action-level citation metrics",
+        "description": "Derived office_actions fields include indicators and counts: cite102_gt1 (1 if >1 prior art citation in 102 rejection), cite103_gt3 (1 if >3 citations in 103 rejection), cite103_eq1 (1 if exactly 1 prior-art citation in 103 rejection), and cite103_max (max number of prior-art citations referenced in 103 rejection).",
+        "guidance": "These metrics signal the complexity/weight of prior-art evidence cited per rejection and can be used as covariates in empirical analyses."
+      },
+      {
+        "name": "Document-quality flags in office_actions",
+        "description": "office_actions includes binary flags indicating document features: header_missing (no or missing headings), fp_missing (no form paragraphs), closing_missing (no closing paragraph), rejection_fp_mismatch (form paragraph vs action sentence mismatch).",
+        "guidance": "These flags identify documents that likely required fallback NLP processing and may be lower-confidence observations."
+      },
+      {
+        "name": "Data join keys and relational structure",
+        "description": "The Dataset consists of three files: office_actions (document-level), rejections (document-action pair level), and citations (application-citation or document-citation level). Each Office action is identified by a unique ifw_number which serves as the key to join files; rejections are uniquely identified by ifw_number + action_type + action_subtype.",
+        "guidance": "Users should join via ifw_number for document-level merges and use action_type/subtype for claim-level merges; citations include fields to link back to document-action pairs when referenced in action sentences."
+      },
+      {
+        "name": "Statistical validation and agreement rates",
+        "description": "The heading/form-paragraph matching method classifies roughly 84% of documents; the two methods (heading/form-paragraph vs NLP action-sentence analysis) agree on action types in 95% of cases. Mean number of action types per Office Action is 2.1; mean number of rejections per document is 1.8.",
+        "guidance": "These summary statistics are provided as internal validation metrics; mismatches and missing structured elements should be accounted for in robustness checks."
+      },
+      {
+        "name": "Similarity metric definitions and formulas",
+        "description": "Appendices provide formulas/definitions: Jaro-Winkler distance (with scaling factor 0.1), a modified Jaccard Index (intersection divided by MIN length), and cosine similarity between term-frequency vectors for form paragraphs.",
+        "guidance": "Implementation should follow the documented formulas and tokenization/stemming choices (e.g., Porter stemmer used for Jaccard sets) to reproduce matching behavior and thresholds."
+      },
+      {
+        "name": "Caveat about 101 subtype authoritative status",
+        "description": "Deriving consistent action subtype labels for 101 rejections was challenging given evolving case law and shifting form paragraph use; 'Action subtype labels should not be considered an authoritative classification by the USPTO.'",
+        "guidance": "Treat 101 subtype labels as an initial research-oriented categorization; researchers may want to reclassify or augment 101 labels for specific studies."
+      }
+    ]
+  }
+}

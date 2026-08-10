@@ -1,0 +1,165 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/defend_automated_rebuttals.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11446,
+  "output_tokens": 4912,
+  "elapsed_s": 593.3998771668412,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / ML researchers and developers working on automated peer-review and rebuttal generation",
+    "subtask_short": "automated rebuttal generation",
+    "subtask_description": "Generate rebuttals to peer reviews using LLMs with an author-in-the-loop, via segmented review analysis and a sequential pipeline (deficiency \u2192 error-type \u2192 rebuttal action \u2192 rebuttal generation). Evaluation is at the review-segment level using metrics for refutation strength, factual correctness, and consistency.",
+    "subtask_keywords": [
+      "peer_review",
+      "rebuttal_generation",
+      "llm",
+      "author_in_the_loop",
+      "review_segmentation",
+      "evaluation_metrics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Effective rebuttal qualities",
+        "description": "An effective rebuttal must directly address the reviewer\u2019s specific concerns, be factually accurate, grounded in the paper and relevant literature, maintain internal consistency, and be able to refute wherever appropriate.",
+        "guidance": "Authors should precisely interpret reviewer critiques and craft appropriate response strategies (actions) such as clarifying, correcting, justifying, or conceding with a plan for revision; rebuttals should correct factual inaccuracies, technical misinterpretations and unsubstantiated claims in the review."
+      },
+      {
+        "name": "Strength of refutation (metric)",
+        "description": "Represents the ability of the system to refute the criticism whenever needed.",
+        "guidance": "Measured by matching the strength of refutation between gold rebuttal segments and model outputs; reported as segment-level precision (whether the model refutes where needed)."
+      },
+      {
+        "name": "Factual correctness (metric)",
+        "description": "Represents the ability to generate factually correct responses without hallucination or wrong information.",
+        "guidance": "Determined by providing the gold rebuttal segment in context and using LLM-as-a-judge to evaluate; reported as precision at segment level. Literature augmentation (retrieval) can slightly improve factual correctness."
+      },
+      {
+        "name": "Consistency (metric)",
+        "description": "Represents the ability to generate coherent, consistent, non-ambiguous responses without internal contradiction.",
+        "guidance": "Evaluated at segment level using LLM-as-a-judge and reported as precision; segment-wise approaches improve consistency relative to direct one-shot generation."
+      },
+      {
+        "name": "Segment-wise review segmentation",
+        "description": "Segment the review into semantically meaningful components (e.g., summary of the paper, individual strengths, individual weaknesses \u2014 each strength/weakness is a separate segment).",
+        "guidance": "Segmentation constrains generation to localized concerns, enabling more focused rebuttals; after per-segment rebuttal generation, consolidate segments into a final rebuttal."
+      },
+      {
+        "name": "Direct Rebuttal Generation (DRG) practice / limitation",
+        "description": "One-step LLM prompting with paper title, paper content, and the entire review to generate a rebuttal without intermediate reasoning or decomposition.",
+        "guidance": "DRG tends to perform poorly in factual correctness and targeted refutation compared to structured or segment-wise approaches; not recommended for high factual/targeted refutation needs."
+      },
+      {
+        "name": "Sequential approach (SA) pipeline - overall standard",
+        "description": "Decompose rebuttal generation into a four-step pipeline: (i) Deficiency prediction, (ii) Error-type prediction, (iii) Rebuttal action prediction, and (iv) Rebuttal generation.",
+        "guidance": "This explicit step-wise reasoning emulates author behavior and improves targeted responses; however, each automated stage can be error-prone and benefits from author-in-the-loop corrections."
+      },
+      {
+        "name": "Deficiency Prediction (DP)",
+        "description": "Binary classification of whether a review segment is deficient (contains factual errors, lacks constructive feedback, is subjective, or without evidence) or non-deficient.",
+        "guidance": "LLM is prompted with paper title, content, entire review, the target segment, and the definition of deficiency; results should be shown to the author in natural language (not just labels) for interpretability. Reported performance: precision/recall/F1 .54/.53/.53 in zero-shot experiments."
+      },
+      {
+        "name": "Definition of deficiency (natural language mapping)",
+        "description": "Natural-language mapping for deficiency status: True = 'The review statement is not valid. It contains either factual errors, lacks constructive feedback, is subjective, or is without evidence (Deficient).' False = 'The review statement is valid in terms of factuality and constructive feedback (Non-deficient).'",
+        "guidance": "Presenting this NL statement to authors increases interpretability versus raw labels and helps author-in-the-loop corrections."
+      },
+      {
+        "name": "Error-type Prediction (ETP)",
+        "description": "For segments classified as deficient, predict a finer-grained error type describing the exact problem in the segment (coarse-grained taxonomy derived from Du et al. 2024).",
+        "guidance": "Use a coarser taxonomy to reduce semantic overlap (e.g., group misunderstanding, neglect, and inexpert statement); present predictions in NL; this step is skipped for non-deficient segments. Reported zero-shot performance: precision/recall/F1 .50/.62/.46."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Incorrect references",
+        "description": "The reviewer is not citing the appropriate sources (non peer-reviewed or concurrent work) in the current statement.",
+        "guidance": "Maps to rebuttal actions like 'Reject Request' (Table 5). Use NL explanation to present to author."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Less rigor in reviewing methodology and experiments",
+        "description": "The reviewer is suggesting things beyond the scope of the paper or the reviewer\u2019s criticism is invalid (out-of-scope, invalid criticism, less rigor).",
+        "guidance": "Maps to rebuttal actions such as 'Accept for future work', 'Reject criticism', or 'Refute question'. Use coarse grouping to avoid boundary ambiguity."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Misinterpretation of claims and ideas",
+        "description": "The reviewer is misinterpreting the claims and ideas presented in the paper, overlooked important details, or exhibits lack of domain knowledge (misunderstanding, neglect, inexpert statement, unstated statement).",
+        "guidance": "Maps to rebuttal actions like 'Contradict Assertion', 'Refute question', 'Reject criticism'. NL descriptions should be shown to the author."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Superficial and vague review",
+        "description": "The reviewer misinterprets novelty or lacks specificity in components (misinterpret novelty, vague critique, subjective, superficial review, missing reference).",
+        "guidance": "Maps to rebuttal actions such as 'Refute question', 'Reject criticism', 'Contradict assertion'. Consider prompting for clarification or asking the reviewer for specificity when appropriate."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Incomplete, incorrect, or copied summary",
+        "description": "The summary misrepresents the paper, is too short, or directly copied from the paper (inaccurate summary, summary too short, copy-pasted).",
+        "guidance": "Maps to 'All' rebuttal actions (i.e., any appropriate action); authors should point to correct summary locations and provide concise corrections."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Syntactic, structural, or semantic issues in the review",
+        "description": "Typo, contradiction, misplaced attributes, duplication \u2014 typological errors in the review affecting clarity.",
+        "guidance": "Maps primarily to 'Reject criticism' rebuttal action; may be handled by asking for clarification or ignoring minor typos that do not change substance."
+      },
+      {
+        "name": "Error-type taxonomy \u2014 Misidentification of syntactic or structural issues in the paper",
+        "description": "The reviewer has misidentified structural issues in the paper (writing, misunderstanding of submission rule).",
+        "guidance": "Provide NL explanation and mapping; usually respond by pointing to the correct structural choices or submission rules if applicable."
+      },
+      {
+        "name": "Static mapping of error-types to rebuttal actions (Table 5)",
+        "description": "Each error type is mapped to one or more possible rebuttal actions (e.g., Incorrect references \u2192 Reject Request; Less rigor in methodology \u2192 Accept for future work / Reject criticism / Refute question; Non-deficient \u2192 Answer question / The task is done / Concede criticism / etc.).",
+        "guidance": "Use a static lookup to constrain the set of candidate rebuttal actions for a segment; present these mapped actions in NL to the author and allow overriding."
+      },
+      {
+        "name": "Rebuttal Action Prediction (RAP)",
+        "description": "Given an identified deficient/non-deficient status and an (optional) error type, predict the rebuttal action from the subset fetched from the static table.",
+        "guidance": "LLM predicts action from allowed set; present NL messages mapping actions to suggested phrasing; allow author to correct; reported zero-shot performance low (precision/recall/F1 .28/.20/.16), so author intervention is important."
+      },
+      {
+        "name": "Natural-language mapping for error-types and rebuttal actions (interpretability requirement)",
+        "description": "Present deficiency status, error-type, and rebuttal action predictions to the author in natural language (NL) rather than raw class labels.",
+        "guidance": "NL statements for error-types and rebuttal actions (Tables 6\u20138) increase interpretability and usability; authors can provide NL feedback to correct predictions before final rebuttal generation."
+      },
+      {
+        "name": "Rebuttal generation (final step)",
+        "description": "Generate the rebuttal segment by prompting the LLM with deficiency status, error-type, rebuttal action, paper title/content, and the review segment (and optionally retrieved evidence).",
+        "guidance": "System produces a draft rebuttal for each segment, author may edit; consolidate segment drafts into a final rebuttal. Optionally use RAG (retrieval from paper or literature) to supply grounding evidence."
+      },
+      {
+        "name": "RAG utilization: retrieval from the paper",
+        "description": "Retrieve relevant content from the paper for a particular review segment rather than providing the entire paper.",
+        "guidance": "In experiments retrieval from the paper did not show improvements; still useful in some cases to localize grounding, but must be tested per dataset/setting."
+      },
+      {
+        "name": "RAG utilization: retrieval from the literature",
+        "description": "Retrieve relevant literature to respond to review segments (e.g., using scholarqa / Semantic Scholar) and provide it as context to the LLM.",
+        "guidance": "Augmenting with relevant literature showed slight improvement for SA in factual correctness; requires careful retrieval and grounding techniques to avoid noisy evidence or hallucinations."
+      },
+      {
+        "name": "Segment-level evaluation protocol",
+        "description": "Evaluate approaches at the review-segment granularity (map each review segment to one or more rebuttal segments) rather than only scoring whole rebuttals.",
+        "guidance": "Segment-level evaluation enables fine-grained measures of strength of refutation, factual correctness, and consistency using LLM-as-a-judge; mapping disagreements often arise due to granularity mismatches and multi-function rebuttal segments."
+      },
+      {
+        "name": "Annotation and dataset construction protocol",
+        "description": "Procedure to create fine-grained annotations: (i) retrieve rebuttals via API, (ii) create semantic segments (LLM-assisted), (iii) manually map review segments to rebuttal segments, (iv) manually annotate deficiency and error-type labels, (v) predict rebuttal actions with LLM and have annotator verify.",
+        "guidance": "Use expert annotators (authors used two PhD-level NLP researchers), report pre-adjudication agreement, resolve disagreements via discussion; common sources of disagreement: granularity mismatches, threshold for deficiency, category overlap, multi-action rebuttal segments."
+      },
+      {
+        "name": "User-study evaluation dimensions",
+        "description": "Human evaluation of system along four groups: Rebuttal Quality (Q1\u2013Q4), Controllability (Q5\u2013Q7), Cognitive Load (Q8\u2013Q10), Overall Usefulness (Q11) using a 5-point Likert scale.",
+        "guidance": "Questions include: does final rebuttal address concerns, is it factually accurate and grounded, does it appropriately refute incorrect claims, is it coherent and consistent; controllability questions assess interpretability of generation and usefulness of intermediate steps; cognitive load questions assess ease-of-interaction and effort reduction. Use these scores to assess practical utility."
+      },
+      {
+        "name": "Author-in-the-loop minimal-intervention design principle",
+        "description": "Keep the author-in-the-loop with minimal, to-the-point interventions so the tool reduces cognitive load while allowing correction of pipeline mis-predictions.",
+        "guidance": "Provide SWRG drafts first and only present SA steps when the author disagrees with a draft; allow selection and NL correction at every step; prefer small, staged choices over asking authors to provide full rebuttals or complex instructions."
+      },
+      {
+        "name": "Limitations and evaluation caveats",
+        "description": "Using LLM-as-a-judge and providing gold rebuttal in context are common but potentially biased evaluation choices; retrieving literature requires stronger grounding techniques.",
+        "guidance": "Report these limitations explicitly when evaluating systems; performance numbers (e.g., Defend vs SA-Pred vs SWRG vs DRG) should be interpreted in light of these evaluation choices."
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peer_reviews_pr_rct_pmc.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "peer_reviews_pr_rct_pmc.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39944,
+  "model": "gpt-5-mini",
+  "elapsed_s": 42.362720249999256,
+  "input_tokens": 11478,
+  "output_tokens": 3903,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, conference and journal organizers, and practitioners studying or designing peer-review evaluation systems",
+    "subtask_short": "evaluating_peer_review_quality",
+    "subtask_description": "Guidance and experimental metrics for assessing the quality of peer reviews (i.e., 'reviews of reviews'), including specific sub-criteria, statistical measures of agreement and calibration, and considerations for incentives and data/reporting requirements. Applicable to empirical studies and operational review-evaluation systems.",
+    "subtask_keywords": [
+      "peer_review",
+      "review_quality",
+      "evaluation_metrics",
+      "conference_peer_review",
+      "experimental_study"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Overall score",
+        "description": "An overall quality score given by an evaluator to a review (used a 7-point rating scale in this study).",
+        "guidance": "Used as the primary aggregate judgment of a review's quality. The study reports tie rates (29% of paired evaluations were ties on overall score) and compares overall-score disagreement rates (~0.3) to baselines from paper reviews (e.g., NeurIPS). Overall scores can be compared or mapped from criteria scores (see commensuration bias)."
+      },
+      {
+        "name": "Understanding of the paper",
+        "description": "A criterion asking evaluators to assess the reviewer's demonstrated understanding of the paper under review.",
+        "guidance": "One of four explicit criteria used to evaluate reviews (evaluators scored this criterion separately). Tie rates for criteria scores were 37%\u201340% in the study. This criterion is used as input to learned mappings from criteria to overall score."
+      },
+      {
+        "name": "Coverage of required aspects of a review",
+        "description": "A criterion assessing whether the review covers the aspects expected in a quality review (i.e., completeness/coverage).",
+        "guidance": "One of the four specific criteria collected from evaluators. Used together with other criteria to analyze how evaluators form overall judgments and to measure subjectivity/commensuration bias."
+      },
+      {
+        "name": "Substantiation with evidence",
+        "description": "A criterion measuring whether the review supports its claims and recommendations with appropriate evidence or reasoning.",
+        "guidance": "One of the four specific criteria; used to quantify substantive backing in a review and as an input to mappings from criteria to overall score."
+      },
+      {
+        "name": "Constructiveness of the feedback",
+        "description": "A criterion evaluating whether the review provides constructive, actionable feedback to authors.",
+        "guidance": "One of the four criteria used in evaluations; constructive feedback is treated as distinct from mere length or verbosity and is central to distinguishing useful long reviews from 'uselessly elongated' reviews."
+      },
+      {
+        "name": "Inter-evaluator agreement / disagreement rate",
+        "description": "A measure of how often two evaluators give consistent relative judgments between pairs of reviews (agreement if both score the same review higher than the other; disagreement if they rank oppositely; ties discarded).",
+        "guidance": "Compute total agreements and disagreements over evaluator-pair quadruples, discard ties, and report disagreement rates with 95% confidence intervals. The random baseline when scores are independent is 0.5. In this study, disagreement rates were \u22480.3 across overall and criteria scores; tie rates were substantial (29% overall, 37%\u201340% per criterion). Use these statistics to compare reliability across settings (e.g., NeurIPS comparisons)."
+      },
+      {
+        "name": "Miscalibration (evaluator bias)",
+        "description": "The tendency of evaluators to be systematically lenient or harsh; modeled as evaluator-specific offsets (b_j) in a linear score-generation model y_ij = f_i + b_j + \u03b5_ij.",
+        "guidance": "Fit a linear miscalibration model (objective quality f_i ~ N(\u03bc, \u03b1_f), evaluator offset b_j ~ N(0, \u03b1_b,t) with per-evaluator-type variances \u03b1_b,t, and idiosyncratic noise \u03b5_ij ~ N(0, \u03c3^2)). Estimate parameters via maximum likelihood (e.g., Gaussian Process Regression). Interpret \u03b1_b,t (often normalized by \u03b1_f) as degree of miscalibration for each evaluator type; larger \u03b1_b,t indicates more miscalibration. Compare these parameters to prior studies to contextualize magnitude (the paper reports \u03b1_b,t/\u03b1_f \u2248 0.43\u20130.78 across types and \u03c3^2/\u03b1_f \u2248 1.467)."
+      },
+      {
+        "name": "Subjectivity / commensuration bias",
+        "description": "Differences across evaluators in how they map individual criterion scores to an overall quality score (i.e., differing weights or mappings among criteria).",
+        "guidance": "Estimate a monotone mapping function from criteria scores to overall scores and measure disagreement via an L(1,1) loss (absolute difference between the learned aggregate function and evaluators' overall scores, averaged). Use a train/test split to compare a single combined-evaluator-type function versus per-type functions; enforce monotonicity constraints and solve convex optimization problems to predict unseen criterion combinations. Higher L(1,1) loss indicates greater commensuration bias. In this study, mean loss \u2248 0.45 for evaluations-of-reviews (after scale normalization) and was comparable to loss measured on paper reviews."
+      },
+      {
+        "name": "Measurement method for commensuration (monotone mapping with L(1,1) loss)",
+        "description": "A concrete methodological choice to quantify commensuration bias: learn a monotone function mapping criteria scores to overall scores and evaluate L(1,1) loss.",
+        "guidance": "Choose the L(1,1) norm following theoretical guidance; enforce monotonicity so that increasing any criterion (holding others constant) does not decrease the aggregate score. Use convex optimization to infer predictions for unseen criterion vectors. Note that higher loss may also reflect unobserved latent differences between reviews, not only mapping variability."
+      },
+      {
+        "name": "Uselessly elongated review bias (length bias)",
+        "description": "The phenomenon where longer reviews may be perceived as higher quality even when additional length is low-value filler.",
+        "guidance": "Recognize length as a potential cheap/spurious signal of quality that can bias evaluators and measurement. When designing incentives or measuring interventions (e.g., LLM-generated reviews), check for and account for length bias to avoid false-positive conclusions. Conversely, longer reviews may sometimes reflect genuine detail; incentive designs must distinguish the two."
+      },
+      {
+        "name": "Statistical and reliability reporting expectations",
+        "description": "Reporting practices expected when evaluating review-quality measurements (e.g., reporting tie rates, sample sizes, confidence intervals, and comparisons to baselines).",
+        "guidance": "Report sample sizes (the paper lists n_overall = 25,346 and per-criterion sample sizes), percent ties, disagreement rates with 95% CIs, and comparisons to relevant baselines (e.g., prior conference data or random baseline of 0.5). Explain modeling choices and compare to previous literature for context."
+      },
+      {
+        "name": "Data availability and ethical/privacy constraints (journal policy)",
+        "description": "PLOS ONE requirement that all data underlying findings be fully available unless there are specified legal or ethical restrictions; if restrictions exist they must be explained and contact info provided; otherwise deposit minimal anonymized dataset in a stable public repository.",
+        "guidance": "If legal/ethical restrictions prevent public sharing, explain the restrictions in detail (who imposed them) and provide contact information for a data access body. If no restrictions, upload anonymized minimal data to recommended repositories or as Supporting Information and provide URLs/DOIs. Update the Data Availability statement accordingly. Note that promises to participants (e.g., 'data will not be distributed') may conflict with journal policy and must be addressed."
+      },
+      {
+        "name": "Manuscript revision and reporting requirements (journal production checklist)",
+        "description": "Procedural requirements for resubmitting a revised manuscript to PLOS ONE: include a rebuttal/response to reviewers, a marked-up manuscript showing changes, an unmarked clean manuscript, adhere to journal style templates, and include full ethics statement (IRB name and consent details).",
+        "guidance": "Follow provided file-naming and formatting templates. Include a response-to-reviewers letter addressing each point. Provide full ethics approval details in Methods and update financial disclosure if needed. Consider depositing laboratory protocols to protocols.io if applicable."
+      },
+      {
+        "name": "Reviewer evaluation checklist used by journal reviewers",
+        "description": "The set of questions reviewers answer about a manuscript: (1) Is the manuscript technically sound and do data support conclusions? (2) Was statistical analysis performed appropriately? (3) Have authors made all underlying data fully available? (4) Is the manuscript intelligible and in standard English? (5) Additional comments to authors.",
+        "guidance": "Reviewers respond (Yes/No) and provide detailed comments. Authors should address these points explicitly in revisions and rebuttal letters. Journals may require corrections in references, formatting, and justification for data-sharing choices."
+      },
+      {
+        "name": "Use and adaptation of established review-quality instruments (e.g., RQI)",
+        "description": "Reference to established instruments and tools for assessing peer-review reports, such as the Review Quality Instrument (RQI) and systematic reviews of such tools.",
+        "guidance": "When using or modifying standardized instruments (like the RQI), explain modifications and justify choices. Consider prior methodological work (development of RQI, systematic reviews of tools) when designing evaluation instruments and reporting their use."
+      }
+    ]
+  }
+}

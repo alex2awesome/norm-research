@@ -1,0 +1,190 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 7,
+  "n_chunks": 92,
+  "chunk_chars": 39994,
+  "model": "gpt-5-mini",
+  "elapsed_s": 64.15460441699543,
+  "input_tokens": 11749,
+  "output_tokens": 6091,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "GAP users and developers (mathematicians and programmers using the GAP system interactively and for package/method development)",
+    "subtask_short": "gap interactive usage and debugging",
+    "subtask_description": "Guidance and behavioral specifications for using GAP interactively: error handling and break loops, environment inspection, line-editing/readline configuration, editing files, quitting behavior, tracing and method-inspection, info-class logging, and teaching-mode/display options.",
+    "subtask_keywords": [
+      "gap",
+      "reference_manual",
+      "interactive",
+      "debugging",
+      "readline"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Variable lookup precedence in break loop",
+        "description": "Search for variables in the break loop looks first in the chain of outer functions which enclosed the definition of a currently executing function, before it looks at the chain of calling functions which led to the current invocation of the function.",
+        "guidance": "This determines which binding of a variable name you see when inspecting in a break loop; use DownEnv/UpEnv to move between environment levels if needed (example demonstrates foo/bar/fun with different x values)."
+      },
+      {
+        "name": "DownEnv only affects break-loop variable access",
+        "description": "The change of the environment caused by DownEnv only affects variable access in the break loop. If you use return to continue a calculation GAP automatically jumps to the right environment level again.",
+        "guidance": "Use DownEnv to inspect variables from different calling environments while stopped in a break loop, but changes are local to the break context."
+      },
+      {
+        "name": "Error: semantics and resumability",
+        "description": "Error(messages, ...) prints messages (as if Print were called) and then enters a break loop, unless standard error output is not connected to a terminal. You can leave this break loop with return; to continue execution with the statement following the call to Error.",
+        "guidance": "Use Error from within functions to signal problems while allowing interactive inspection and the option to return and continue. The printed messages are produced exactly as by Print."
+      },
+      {
+        "name": "ErrorNoReturn: non-resumable errors",
+        "description": "ErrorNoReturn(messages, ...) behaves like Error but the break loop it enters can only be exited with quit;. The function differs from Error by not allowing execution to continue.",
+        "guidance": "Use ErrorNoReturn when you want to force termination (except by quitting the GAP session) and disallow resuming after the break loop."
+      },
+      {
+        "name": "ErrorCount: global error tally",
+        "description": "ErrorCount() returns the count of the number of errors (including user interruptions) which have occurred in the GAP session so far. The count is incremented by each error, even if GAP was started with the -T option to disable the break loop.",
+        "guidance": "Useful for diagnostics or workflows that need to know whether errors have occurred during a session; increments on every error event."
+      },
+      {
+        "name": "Normal session termination keywords and emergency QUIT",
+        "description": "The normal way to terminate a GAP session is quit; or an end-of-file character (usually CTRL-D). An emergency way to leave GAP is to enter QUIT at any gap> or brk> or brk_nn > prompt.",
+        "guidance": "QUIT is a global variable usable at any prompt for emergency exit; prefer quit; or EOF for normal termination."
+      },
+      {
+        "name": "GapExitCode return semantics",
+        "description": "GapExitCode([ret]) sets the exit value returned to the OS when GAP exits. Argument may be integer in [-128..127] (others reduced modulo 256), or boolean: true -> 0 (success), false -> 1 (failure). The previous exit code is returned; no argument leaves it unchanged.",
+        "guidance": "Pass an integer or boolean to control shell-visible exit code; useful in scripts that invoke GAP."
+      },
+      {
+        "name": "QuitGap and ForceQuitGap behavior",
+        "description": "QuitGap([ret]) exits GAP cleanly and calls any functions installed using InstallAtExit. ForceQuitGap([ret]) exits immediately, ignoring InstallAtExit functions and other normal exit-time functions such as flushing partially output lines.",
+        "guidance": "Use QuitGap for normal programmatic exit (which runs cleanup handlers); use ForceQuitGap for immediate termination when cleanup should be skipped. Both pass their optional argument to GapExitCode."
+      },
+      {
+        "name": "InstallAtExit: installing exit handlers and QUITTING indicator",
+        "description": "InstallAtExit(func) registers a zero-argument function to be called before GAP terminates (used for cleanup tasks like removing temporary files). If an error occurs during one of these functions the function is abandoned and no break loop is entered. During execution of these functions the global variable QUITTING is true if exiting because the user typed QUIT and false otherwise.",
+        "guidance": "Use InstallAtExit to guarantee cleanup on normal exits; design handlers to tolerate errors since they are abandoned on failure; check QUITTING inside handlers to adapt behavior for emergency QUIT vs normal exit."
+      },
+      {
+        "name": "SaveOnExitFile workspace saving rule",
+        "description": "If, when GAP is exiting due to quit or end-of-file (not due to QUIT) the variable SaveOnExitFile is bound to a string value, the system will try to save the GAP workspace to that file (see SaveWorkspace).",
+        "guidance": "Bind SaveOnExitFile to a filename to automatically save workspace on normal exit; it does not trigger on emergency QUIT."
+      },
+      {
+        "name": "Line editing: control/escape key model and conventions",
+        "description": "GAP line editing supports control keys (CTRL-key) and escape keys (ESC-key); case of key does not matter. Typing CTRL-KEY or ESC-KEY for characters not mentioned inserts the literal control/escape sequence. Arrow keys can substitute for some control keys (e.g., arrow left/right/up/down for CTRL-B/CTRL-F/CTRL-P/CTRL-N).",
+        "guidance": "Learn the listed standard keybindings (CTRL-A/E/B/F, ESC-B/ESC-F, DEL/CTRL-D, CTRL-K, CTRL-Y, etc.) for efficient interactive editing; note that these behaviors are subject to whether the readline library is used."
+      },
+      {
+        "name": "TAB completion behavior",
+        "description": "TAB (CTRL-I) looks at characters before the cursor, interprets them as the beginning of an identifier and tries to complete; if multiple completions, completes to the longest common prefix. If already at the longest common prefix, hitting TAB a second time displays all possible completions.",
+        "guidance": "Use TAB to complete identifiers; a second TAB lists options. This works similarly to many shells when GAP is compiled with readline (or equivalent built-in support)."
+      },
+      {
+        "name": "Readline advantages and configuration",
+        "description": "When GAP uses the GNU readline library, command line editing is similar to bash: additional commands (undo, keyboard macros, file name completion, matching-paren show, vi-style bindings), better multi-line handling, unicode in string literals, configurable key bindings (via ~/.inputrc or ReadlineInitLine), persistent command history, and possibility to implement new editing functions on GAP level.",
+        "guidance": "Prefer building GAP with readline support for a richer interactive experience; configure per-user ~/.inputrc and/or use ReadlineInitLine for GAP-specific bindings (use $if GAP/$endif to scope settings)."
+      },
+      {
+        "name": "Readline init-file caveat (overwritten keys)",
+        "description": "GAP overwrites the following keys after reading ~/.inputrc: \\C-g, \\C-i, \\C-n, \\C-o, \\C-p, \\C-r, \\C-\\, \\e<, \\e>, Up, Down, TAB, Space, PageUp, PageDown. Do not redefine these in ~/.inputrc expecting them to apply in GAP.",
+        "guidance": "If you want settings to apply in GAP, either place them between $if GAP/$endif in ~/.inputrc or use GAP's ReadlineInitLine to set bindings from inside GAP."
+      },
+      {
+        "name": "CTRL-V/CTRL-G unicode and verbatim input",
+        "description": "After pressing CTRL-V the next special character is input verbatim. CTRL-G can be used to type any unicode character by its code point: the number can be given as a count or taken from characters before cursor (decimal or hex starting with 0x).",
+        "guidance": "Use CTRL-V for entering special key sequences literally (useful for key binding entries). Use CTRL-G to input arbitrary Unicode characters by code point (examples given: ESC 8484 CTRL-G, 8484 CTRL-G, 0X2124 CTRL-G)."
+      },
+      {
+        "name": "Terminal stop/start/quit key handling",
+        "description": "Some terminals map CTRL-S/CTRL-Q to stop/restart output, and CTRL-\\ may quit a program. To disable this behaviour so these keys can be used for editing, use Exec(\"stty stop undef; stty start undef; stty quit undef\"); in your GAP session or gaprc file.",
+        "guidance": "If you need full use of these keys for readline bindings, disable terminal flow-control/quit mappings via stty as shown."
+      },
+      {
+        "name": "Command line history persistence and configuration",
+        "description": "SaveCommandLineHistory([fname][,app]) saves current history to fname (default 'history' in GAPInfo.UserGapRoot or '~/.gap_hist'); ReadCommandLineHistory([fname][,app]) reads history from fname (app flag controls append vs overwrite/prepend). Default history stores up to 1000 lines; change with SetUserPreference(\"HistoryMaxLines\", num) (num >= 0 or infinity). Automatic saving/restoring via SetUserPreference(\"SaveAndRestoreHistory\", true).",
+        "guidance": "Use these functions and preferences to persist command history across sessions; these functions are available only if GAP is configured with readline."
+      },
+      {
+        "name": "Readline macro API and return-value contract",
+        "description": "User-written command-line-editing functions for readline accept a list l = [count, key, line, cursorpos, markpos] and must return one of several forms: [str] to insert str; [kill, begin, end] to remove text (and optionally kill it); [begin, end, str] to substitute; [1, lstr] to display completion list; [2, chars] to inject characters; [100] to ring bell. Results may include new cursor/mark positions.",
+        "guidance": "Install such functions as macros via InstallReadlineMacro(name, fun) and bind them with InvocationReadlineMacro(name) and ReadlineInitLine. Example provided for adding quotes around a word and installing as ESC Q."
+      },
+      {
+        "name": "Editing files with Edit(filename) and Editor preference",
+        "description": "Edit(filename) starts an external editor on the given file and reads it back into GAP when the editor exits. GAP calls the editor set via SetUserPreference(\"Editor\", path) (on macOS prefer \"open\" and optionally SetUserPreference(\"EditorOptions\", [\"-t\"]) or [\"-a\", \"<appl>\"]).",
+        "guidance": "Set 'Editor' and optional 'EditorOptions' preferences (or configure gap.ini) to control which external editor Edit uses; useful for writing longer programs outside the REPL."
+      },
+      {
+        "name": "Editor support: vim/emacs setup guidelines",
+        "description": "GAP distribution provides vim setup files in etc/vim; to enable, copy etc/vim/gap.vim to ~/.vim/syntax/gap.vim and etc/vim/gap_indent.vim to ~/.vim/indent/gap.vim, and add suggested autocommands to .vimrc for filetype detection and formatting. Emacs/xemacs users are referred to a major-mode by Ivan Andrus.",
+        "guidance": "Follow the provided example .vimrc lines to enable syntax highlighting, filetype detection, and optional formatting using external 'par' utility. Adjust to personal taste and send suggestions to support@gap-system.org."
+      },
+      {
+        "name": "SizeScreen parameter constraints and behavior",
+        "description": "SizeScreen([sz]) returns or sets the screen size [line_length, num_lines]. Line length must be between 20 and 4096 (inclusive) and number of lines at least 10. Values outside this range are adjusted to the nearest endpoint.",
+        "guidance": "Use SizeScreen to query or set terminal geometry within these bounds; line-breaking for files/streams is controlled separately via PrintFormattingStatus/SetPrintFormattingStatus."
+      },
+      {
+        "name": "TeachingMode: simplified display defaults",
+        "description": "TeachingMode([switch]) toggles teaching mode. When on, certain default print representations are simplified: prime field elements printed as ZmodnZObj instead of powers of primitive root; quadratic irrationalities printed with ER square root instead of roots of unity; some small-group creator functions create finitely presented groups by default (making generators easier to interpret).",
+        "guidance": "Turn on TeachingMode(true) for undergraduate teaching contexts to simplify printed representations at a possible cost in printing performance; turn off to restore standard representations."
+      },
+      {
+        "name": "Break loop as primary debugging tool",
+        "description": "The break loop (entered by Error or Control-C) is the most important debugging tool: it lets you inspect variables, stack traces, and issue commands interactively. Use DownEnv, UpEnv, Where, and WhereWithVars to navigate environments and stack traces.",
+        "guidance": "Place Error calls or hit Control-C to drop into a break loop for interactive debugging; remember that leaving the break loop may discard the incident information."
+      },
+      {
+        "name": "ShowArguments / ShowArgument / ShowDetails usage in NoMethodFound debugging",
+        "description": "Within a break loop caused by a NoMethodFound error, ShowArguments() prints the argument list; ShowArgument(nr) prints the nr-th argument; ShowDetails() prints operation, argument count, trace/constructor flags, and the number of methods that refused to apply (Choice printed as ordinal).",
+        "guidance": "Use these functions immediately in the break loop to gain insight into why method selection failed; the information is no longer accessible after quitting the break loop."
+      },
+      {
+        "name": "ShowMethods and ShowOtherMethods verbosity semantics",
+        "description": "ShowMethods([verbosity]) (usable in NoMethodFound break loop) prints an overview of installed methods for the operation call: default verbosity 2 lists all applicable methods; verbosity 1 shows only number of installed and the methods matching (those already called and refused); verbosity 3 also shows for each not-applicable method the reasons. ShowOtherMethods([verbosity]) does similar for other argument counts (verbosity default 1).",
+        "guidance": "Adjust verbosity to get more detailed diagnostics; verbosity 3 prints reasons for non-applicability, but for simulated argument counts this can be uninformative."
+      },
+      {
+        "name": "ApplicableMethod / ApplicableMethodTypes semantics and printlevel mapping",
+        "description": "ApplicableMethod(opr, args[, printlevel[, nr]]) returns the highest-rank applicable method or fail. nr may select an ordinal or 'all'. printlevel (default 0) controls additional printed information: 0=no info; 1=info about the applicable method; 2=also info about not-applicable methods of higher rank; 3=for each not-applicable method the first reason why it is not applicable; 4=all reasons for each not-applicable method; 6=also the function body of selected method(s). ApplicableMethodTypes takes types/filters of arguments instead of actual args.",
+        "guidance": "Use increasing printlevel to debug method selection; note kernel may bypass method selection for certain builtin infix ops so ApplicableMethod may return a method not actually used by the kernel."
+      },
+      {
+        "name": "TraceMethods family: tracing API and effects",
+        "description": "TraceMethods(opr1, opr2, ...) enables printing of the information string installed with methods when those operations' methods are called. TraceAllMethods() traces all operations. UntraceMethods/UntraceAllMethods turn tracing off. TraceImmediateMethods([flag]) enables tracing for immediate methods when flag true or absent; UntraceImmediateMethods disables. TraceInternalMethods/UntraceInternalMethods enable/disable tracing of a predefined set of internal methods; GetTraceInternalMethodsCounts() returns counts of how often internal methods were applied per variable type; ClearTraceInternalMethodsCounts() resets counts.",
+        "guidance": "Use Trace* functions to get runtime method-selection/dispatch insight. Be aware that internal methods can be called extremely often; tracing there is aggregated and counters should be used for performance-friendly diagnostics."
+      },
+      {
+        "name": "Info classes and levels (Info mechanism)",
+        "description": "The Info mechanism provides intermediate or progress information via named info classes. Each info class has an integer level; Info(infoclass, level, info, ...) evaluates and prints its info only if the class's level is at least level. At creation an info class has level 0. Built-in classes default to level 0 except several (InfoWarning, InfoPackageLoading, InfoDebug, InfoPerformance, InfoTempDirectories, InfoPrimeInt, InfoSLP) which default to 1.",
+        "guidance": "Define and use Info classes to instrument library/package code; choose levels carefully to avoid expensive evaluations when info level is too low, since the arguments are not evaluated unless triggered."
+      },
+      {
+        "name": "NewInfoClass / DeclareInfoClass and SetInfoLevel / InfoLevel",
+        "description": "NewInfoClass(name) creates a new info class. DeclareInfoClass(name) creates a new info class and binds it to the global variable name (which must be writable and becomes read-only after). SetInfoLevel(infoclass, level) sets the non-negative integer level for the class. InfoLevel(infoclass) returns its current level.",
+        "guidance": "Use DeclareInfoClass in package/library initialization to create documented classes bound to names; change levels at runtime to control verbosity."
+      },
+      {
+        "name": "ShowUsedInfoClasses runtime diagnostic",
+        "description": "ShowUsedInfoClasses(true) makes GAP print the info class and level of any executed Info statement (each level of each class printed only once); calling with false stops this printing. The history of printed classes/levels is reset whenever true is passed.",
+        "guidance": "Useful to discover which Info classes are being triggered during execution; use it to adjust which classes to set nonzero levels for."
+      },
+      {
+        "name": "Info statement semantics and selectors",
+        "description": "Info(infoclass, level, info[, moreinfo,...]) triggers evaluation and printing of remaining args if infoclass's level >= level. By default prints '#I ' prefix and newline after. If infoclass is a sum (selector) of classes or a set, the handler/triggering is determined by the first summand's handler and the message is triggered if any class in the selector has sufficient level.",
+        "guidance": "Place expensive computations as arguments to Info so they are skipped when level too low; combine classes with + as shorthand for Union to trigger on multiple classes."
+      },
+      {
+        "name": "Customizing Info output and handlers",
+        "description": "SetInfoHandler(infoclass, handler) installs a function handler(infoclass, level, list) to process Info arguments; default handler DefaultInfoHandler prints '#I ' and the subsequent arguments. SetInfoOutput(infoclass, out) directs Info output for a class to a file/stream or special names '*Print*', '*errout*', '*stdout*'. InfoOutput retrieves output setting; UnbindInfoOutput resets to default. SetDefaultInfoOutput(out) changes the initial default output for all classes.",
+        "guidance": "Use SetInfoHandler to implement custom formatting or logging; to redirect Info output to stderr use SetDefaultInfoOutput(\"*errout*\") or SetInfoOutput for individual classes. The handler receives unevaluated third+ arguments as a list already evaluated by Info when triggered."
+      }
+    ]
+  }
+}

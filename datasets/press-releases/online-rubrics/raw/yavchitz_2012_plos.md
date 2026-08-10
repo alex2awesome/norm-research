@@ -1,0 +1,1742 @@
+<!-- URL: https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1001308 -->
+<!-- HTTP: 200 SIZE:   183424 -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:doi="http://dx.doi.org/"
+      lang="en" xml:lang="en"
+      itemscope itemtype="http://schema.org/Article"
+      class="no-js">
+
+
+
+<head prefix="og: http://ogp.me/ns#">
+
+
+
+
+<link rel="stylesheet" href="/resource/css/screen.css?0fb657a3c547f5ffc99cb6b2321e3698"/>
+  <!-- allows for  extra head tags -->
+
+
+<!-- hello -->
+<link rel="stylesheet" type="text/css"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600">
+
+<link media="print" rel="stylesheet" type="text/css"  href="/resource/css/print.css"/>
+    <script type="text/javascript">
+        var siteUrlPrefix = "/plosmedicine/";
+    </script>
+  <script src="/resource/js/vendor/modernizr-v2.7.1.js" type="text/javascript"></script>
+  <script src="/resource/js/vendor/detectizr.min.js" type="text/javascript"></script>
+
+  <link rel="shortcut icon" href="/resource/img/favicon.ico" type="image/x-icon"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+
+
+
+
+
+  <link rel="canonical" href="https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1001308" />
+  <meta name="description" content="A study conducted by Am&eacute;lie Yavchitz and colleagues examines the factors associated with &ldquo;spin&rdquo; (specific reporting strategies, intentional or unintentional, that emphasize the beneficial effect of treatments) in press releases of clinical trials." />
+
+  <meta name="citation_abstract" content="A study conducted by Am&eacute;lie Yavchitz and colleagues examines the factors associated with &ldquo;spin&rdquo; (specific reporting strategies, intentional or unintentional, that emphasize the beneficial effect of treatments) in press releases of clinical trials.">
+
+
+  <meta name="keywords" content="Publication ethics,Randomized controlled trials,Medical journals,Clinical trial reporting,Drug therapy,Peer review,Bivariate analysis,Medicine and health sciences" />
+
+
+<meta name="citation_doi" content="10.1371/journal.pmed.1001308"/>
+<meta name="citation_author" content="Amélie Yavchitz"/>
+  <meta name="citation_author_institution" content="INSERM, U738, Paris, France"/>
+  <meta name="citation_author_institution" content="Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France"/>
+  <meta name="citation_author_institution" content="Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France"/>
+<meta name="citation_author" content="Isabelle Boutron"/>
+  <meta name="citation_author_institution" content="INSERM, U738, Paris, France"/>
+  <meta name="citation_author_institution" content="Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France"/>
+  <meta name="citation_author_institution" content="Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France"/>
+<meta name="citation_author" content="Aida Bafeta"/>
+  <meta name="citation_author_institution" content="INSERM, U738, Paris, France"/>
+  <meta name="citation_author_institution" content="Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France"/>
+  <meta name="citation_author_institution" content="Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France"/>
+<meta name="citation_author" content="Ibrahim Marroun"/>
+  <meta name="citation_author_institution" content="Department of Internal Medicine, Hôpital Foch, Suresnes, France"/>
+<meta name="citation_author" content="Pierre Charles"/>
+  <meta name="citation_author_institution" content="Department of Internal Medicine, Hôpital Foch, Suresnes, France"/>
+<meta name="citation_author" content="Jean Mantz"/>
+  <meta name="citation_author_institution" content="Department of Anesthesiology and Critical Care, Beaujon University Hospital, Clichy, France"/>
+<meta name="citation_author" content="Philippe Ravaud"/>
+  <meta name="citation_author_institution" content="INSERM, U738, Paris, France"/>
+  <meta name="citation_author_institution" content="Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France"/>
+  <meta name="citation_author_institution" content="Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France"/>
+
+<meta name="citation_title" content="Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study"/>
+<meta itemprop="name" content="Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study"/>
+<meta name="citation_journal_title" content="PLOS Medicine"/>
+<meta name="citation_journal_abbrev" content="PLOS Medicine"/>
+<meta name="citation_date" content="Sep 11, 2012"/>
+<meta name="citation_firstpage" content="e1001308"/>
+<meta name="citation_issue" content="9"/>
+<meta name="citation_volume" content="9"/>
+<meta name="citation_issn" content="1549-1676"/>
+<meta name="citation_publisher" content="Public Library of Science"/>
+
+  <meta name="citation_pdf_url" content="https://journals.plos.org/plosmedicine/article/file?id=10.1371/journal.pmed.1001308&type=printable">
+
+  <meta name="citation_article_type" content="Research Article">
+
+<meta name="dc.identifier" content="10.1371/journal.pmed.1001308" />
+
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="plosmedicine"/>
+    <meta name="twitter:title" content="Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study" />
+    <meta property="twitter:description" content="A study conducted by Am&eacute;lie Yavchitz and colleagues examines the factors associated with &ldquo;spin&rdquo; (specific reporting strategies, intentional or unintentional, that emphasize the beneficial effect of treatments) in press releases of clinical trials." />
+    <meta property="twitter:image" content="https://journals.plos.org/plosmedicine/article/figure/image?id=10.1371/journal.pmed.1001308.g003&size=inline" />
+
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1001308"/>
+<meta property="og:title" content="Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study"/>
+<meta property="og:description" content="A study conducted by Am&eacute;lie Yavchitz and colleagues examines the factors associated with &ldquo;spin&rdquo; (specific reporting strategies, intentional or unintentional, that emphasize the beneficial effect of treatments) in press releases of clinical trials."/>
+<meta property="og:image" content="https://journals.plos.org/plosmedicine/article/figure/image?id=10.1371/journal.pmed.1001308.g003&size=inline"/>
+
+<meta name="citation_reference" content="citation_title=The media matter: a call for straightforward medical reporting;citation_author=LM Schwartz;citation_author=S Woloshin;citation_journal_title=Ann Intern Med;citation_volume=140;citation_number=140;citation_first_page=226;citation_last_page=228;citation_publication_date=2004;"/>    
+
+<meta name="citation_reference" content="Jaques H (2011) BMJ Careers - get your research reported well in the news. Available:  http://careers.bmj.com/careers/advice/view-article.html?id=20001805 . Accessed 8 August 2012."/>
+<meta name="citation_reference" content="citation_title=Incomplete reporting of research in academic press releases;citation_journal_title=Lancet;citation_volume=373;citation_number=373;citation_first_page=1920;"/>    
+<meta name="citation_reference" content="citation_title=Press releases: translating research into news;citation_author=S Woloshin;citation_author=LM Schwartz;citation_journal_title=JAMA;citation_volume=287;citation_number=287;citation_first_page=2856;citation_last_page=2858;citation_publication_date=2002;"/>    
+<meta name="citation_reference" content="citation_title=Journalists and their sources of ideas and information on medicines;citation_author=AM van Trigt;citation_author=LT de Jong-van den Berg;citation_author=FM Haaijer-Ruskamp;citation_author=J Willems;citation_author=TF Tromp;citation_journal_title=Soc Sci Med;citation_volume=38;citation_number=38;citation_first_page=637;citation_last_page=643;citation_publication_date=1994;"/>    
+<meta name="citation_reference" content="citation_title=Quality of pharmaceutical industry press releases based on original research;citation_author=B Kuriya;citation_author=EC Schneid;citation_author=CM Bell;citation_journal_title=PLoS One;citation_volume=3;citation_number=3;citation_first_page=e2828;citation_publication_date=2008;"/>    
+<meta name="citation_reference" content="citation_title=Press-released papers are more downloaded and cited;citation_author=S Chapman;citation_author=TN Nguyen;citation_author=C White;citation_journal_title=Tob Control;citation_volume=16;citation_number=16;citation_first_page=71;citation_publication_date=2007;"/>    
+<meta name="citation_reference" content="citation_title=Reporting research in medical journals and newspapers;citation_author=V Entwistle;citation_journal_title=BMJ;citation_volume=310;citation_number=310;citation_first_page=920;citation_last_page=923;citation_publication_date=1995;"/>    
+<meta name="citation_reference" content="citation_title=Promoting healthy skepticism in the news: helping journalists get it right;citation_author=S Woloshin;citation_author=LM Schwartz;citation_author=BS Kramer;citation_journal_title=J Natl Cancer Inst;citation_volume=101;citation_number=101;citation_first_page=1596;citation_last_page=1599;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Evidence based medicine: what it is and what it isn&amp;apos;t;citation_author=DL Sackett;citation_author=WM Rosenberg;citation_author=JA Gray;citation_author=RB Haynes;citation_author=WS Richardson;citation_journal_title=BMJ;citation_volume=312;citation_number=312;citation_first_page=71;citation_last_page=72;citation_publication_date=1996;"/>    
+<meta name="citation_reference" content="citation_title=Importance of the lay press in the transmission of medical knowledge to the scientific community;citation_author=DP Phillips;citation_author=EJ Kanter;citation_author=B Bednarczyk;citation_author=PL Tastad;citation_journal_title=N Engl J Med;citation_volume=325;citation_number=325;citation_first_page=1180;citation_last_page=1183;citation_publication_date=1991;"/>    
+<meta name="citation_reference" content="citation_title=Reporting and interpretation of randomized controlled trials with statistically nonsignificant results for primary outcomes;citation_author=I Boutron;citation_author=S Dutton;citation_author=P Ravaud;citation_author=DG Altman;citation_journal_title=JAMA;citation_volume=303;citation_number=303;citation_first_page=2058;citation_last_page=2064;citation_publication_date=2010;"/>    
+<meta name="citation_reference" content="citation_title=Press releases by academic medical centers: not so academic?;citation_author=S Woloshin;citation_author=LM Schwartz;citation_author=SL Casella;citation_author=AT Kennedy;citation_author=RJ Larson;citation_journal_title=Ann Intern Med;citation_volume=150;citation_number=150;citation_first_page=613;citation_last_page=618;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Association of funding and conclusions in randomized drug trials: a reflection of treatment effect or adverse events?;citation_author=B Als-Nielsen;citation_author=W Chen;citation_author=C Gluud;citation_author=LL Kjaergard;citation_journal_title=JAMA;citation_volume=290;citation_number=290;citation_first_page=921;citation_last_page=928;citation_publication_date=2003;"/>    
+<meta name="citation_reference" content="citation_title=News media coverage of screening mammography for women in their 40 s and tamoxifen for primary prevention of breast cancer;citation_author=LM Schwartz;citation_author=S Woloshin;citation_journal_title=JAMA;citation_volume=287;citation_number=287;citation_first_page=3136;citation_last_page=3142;citation_publication_date=2002;"/>    
+<meta name="citation_reference" content="citation_title=A modified poisson regression approach to prospective studies with binary data;citation_author=G Zou;citation_journal_title=Am J Epidemiol;citation_volume=159;citation_number=159;citation_first_page=702;citation_last_page=706;citation_publication_date=2004;"/>    
+<meta name="citation_reference" content="citation_title=Bootstrap methods for developing predictive models;citation_author=PC Austin;citation_author=JV Tu;citation_journal_title=The American Statistician;citation_volume=58;citation_number=58;citation_first_page=131;citation_last_page=137;citation_publication_date=2004;"/>    
+<meta name="citation_reference" content="citation_title=Changes in the use of postmenopausal hormone therapy after the publication of clinical trial results;citation_author=JS Haas;citation_author=CP Kaplan;citation_author=EP Gerstenberger;citation_author=K Kerlikowske;citation_journal_title=Ann Intern Med;citation_volume=140;citation_number=140;citation_first_page=184;citation_last_page=188;citation_publication_date=2004;"/>    
+<meta name="citation_reference" content="citation_title=Mass media interventions: effects on health services utilisation;citation_author=R Grilli;citation_author=C Ramsay;citation_author=S Minozzi;citation_journal_title=Cochrane Database Syst Rev;citation_first_page=CD000389;citation_publication_date=2002;"/>    
+<meta name="citation_reference" content="citation_title=Influence of the news media on diagnostic testing in the emergency department;citation_author=V Sharma;citation_author=MD Dowd;citation_author=DS Swanson;citation_author=AJ Slaughter;citation_author=SD Simon;citation_journal_title=Arch Pediatr Adolesc Med;citation_volume=157;citation_number=157;citation_first_page=257;citation_last_page=260;citation_publication_date=2003;"/>    
+<meta name="citation_reference" content="citation_title=Misunderstandings about the effects of race and sex on physicians&amp;apos; referrals for cardiac catheterization;citation_author=LM Schwartz;citation_author=S Woloshin;citation_author=HG Welch;citation_journal_title=N Engl J Med;citation_volume=341;citation_number=341;citation_first_page=277;citation_last_page=279;citation_publication_date=1999;"/>    
+<meta name="citation_reference" content="citation_title=Coverage by the news media of the benefits and risks of medications;citation_author=R Moynihan;citation_author=L Bero;citation_author=D Ross-Degnan;citation_author=D Henry;citation_author=K Lee;citation_journal_title=N Engl J Med;citation_volume=342;citation_number=342;citation_first_page=1645;citation_last_page=1650;citation_publication_date=2000;"/>    
+<meta name="citation_reference" content="citation_title=Measured enthusiasm: does the method of reporting trial results alter perceptions of therapeutic effectiveness?;citation_author=CD Naylor;citation_author=E Chen;citation_author=B Strauss;citation_journal_title=Ann Intern Med;citation_volume=117;citation_number=117;citation_first_page=916;citation_last_page=921;citation_publication_date=1992;"/>    
+<meta name="citation_reference" content="citation_title=Influence of medical journal press releases on the quality of associated newspaper coverage: retrospective cohort study;citation_author=LM Schwartz;citation_author=S Woloshin;citation_author=A Andrews;citation_author=TA Stukel;citation_journal_title=BMJ;citation_volume=344;citation_number=344;citation_first_page=d8164;citation_publication_date=2012;"/>    
+<meta name="citation_reference" content="citation_title=CONSORT for reporting randomized controlled trials in journal and conference abstracts: explanation and elaboration;citation_author=S Hopewell;citation_author=M Clarke;citation_author=D Moher;citation_author=E Wager;citation_author=P Middleton;citation_journal_title=PLoS Med;citation_volume=5;citation_number=5;citation_first_page=e20;citation_publication_date=2008;"/>    
+<meta name="citation_reference" content="citation_title=Believability of relative risks and odds ratios in abstracts: cross sectional study;citation_author=PC Gøtzsche;citation_journal_title=BMJ;citation_volume=333;citation_number=333;citation_first_page=231;citation_last_page=234;citation_publication_date=2006;"/>    
+<meta name="citation_reference" content="citation_title=The hidden research paper;citation_author=R Horton;citation_journal_title=JAMA;citation_volume=287;citation_number=287;citation_first_page=2775;citation_last_page=2778;citation_publication_date=2002;"/>    
+
+
+<script type="text/javascript">
+    var WombatConfig = WombatConfig || {};
+    WombatConfig.journalKey = "PLoSMedicine";
+    WombatConfig.journalName = "PLOS Medicine";
+    WombatConfig.figurePath = "/plosmedicine/article/figure/image";
+    WombatConfig.figShareInstitutionString = "plos";
+    WombatConfig.doiResolverPrefix = "https://dx.plos.org/";
+</script>
+
+<script type="text/javascript">
+  var WombatConfig = WombatConfig || {};
+  WombatConfig.metrics = WombatConfig.metrics || {};
+  WombatConfig.metrics.referenceUrl      = "http://lagotto.io/plos";
+  WombatConfig.metrics.googleScholarUrl  = "https://scholar.google.com/scholar";
+  WombatConfig.metrics.googleScholarCitationUrl  = WombatConfig.metrics.googleScholarUrl + "?hl=en&lr=&q=";
+  WombatConfig.metrics.crossrefUrl  = "https://www.crossref.org";
+</script>
+<script defer="defer" src="/resource/js/defer.js?89114d19103f57200f7c"></script><script src="/resource/js/sync.js?89114d19103f57200f7c"></script>
+<script src="/resource/js/vendor/jquery.min.js" type="text/javascript"></script>
+
+          <script type="text/javascript" src="https://widgets.figshare.com/static/figshare.js"></script>
+
+<script src="/resource/js/vendor/fastclick/lib/fastclick.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/underscore-min.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/underscore.string.min.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/moment.js" type="text/javascript"></script>
+
+
+<script src="/resource/js/vendor/jquery-ui-effects.min.js" type="text/javascript"></script>
+
+<script src="/resource/js/vendor/foundation/foundation.tooltip.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.dropdown.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.tab.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.reveal.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.slider.js" type="text/javascript"></script>
+
+<script src="/resource/js/util/utils.js" type="text/javascript"></script>
+<script src="/resource/js/components/toggle.js" type="text/javascript"></script>
+<script src="/resource/js/components/truncate_elem.js" type="text/javascript"></script>
+<script src="/resource/js/components/tooltip_hover.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/jquery.dotdotdot.js" type="text/javascript"></script>
+
+
+<!-- DoubleClick overall ad setup script -->
+<script type='text/javascript'>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+  if (window.plosCookieConsent?.hasConsented('advertising')) {
+    (function() {
+      var gads = document.createElement('script');
+      gads.async = true;
+      gads.type = 'text/javascript';
+      var useSSL = 'https:' == document.location.protocol;
+      gads.src = (useSSL ? 'https:' : 'http:') +
+          '//www.googletagservices.com/tag/js/gpt.js';
+      var node = document.getElementsByTagName('script')[0];
+      node.parentNode.insertBefore(gads, node);
+    })();
+  }
+</script>
+
+<!-- DoubleClick ad slot setup script -->
+
+  <script id="doubleClickSetupScript" type='text/javascript'>
+    googletag.cmd.push(function() {
+  googletag.defineSlot('/75507958/PMED_728x90_ATF', [728, 90], 'div-gpt-ad-1458247671871-0').addService(googletag.pubads());
+  googletag.defineSlot('/75507958/PMED_160x600_BTF', [160, 600], 'div-gpt-ad-1458247671871-1').addService(googletag.pubads());
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+    });
+  </script>
+
+<!--For Google Tag manager to be able to track site information  -->
+<script>
+
+  dataLayer = [{
+    'mobileSite': 'false',
+    'desktopSite': 'true'
+  }];
+
+</script>
+
+    <title>Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study | PLOS Medicine</title>
+</head>
+
+<body class="article plosmedicine">
+
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TP26BH"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TP26BH');
+</script>
+
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MQQMGF"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MQQMGF');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Start of HubSpot Embed Code -->
+<script>
+  // from https://developers.hubspot.com/docs/reference/api/analytics-and-events/cookie-banner/cookie-banner-api#example-using-a-third-party-cookie-banner-to-control-hubspot-cookies
+  window.disableHubSpotCookieBanner = true;
+  window._hsp = window._hsp || [];
+  window._hsp.push(['setHubSpotConsent',
+      {
+        analytics: window.plosCookieConsent?.hasConsented('analytics'),
+        advertisement: window.plosCookieConsent?.hasConsented('advertising'),
+        functionality: window.plosCookieConsent?.hasConsented('functionality')
+      }
+    ]);
+</script>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/44092021.js"></script>
+<!-- End of HubSpot Embed Code -->
+
+<!-- New Relic -->
+<script type="text/javascript">
+  ;window.NREUM||(NREUM={});NREUM.init={distributed_tracing:{enabled:true},privacy:{cookies_enabled:true},ajax:{deny_list:["bam.nr-data.net"]}};
+  window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o||e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({1:[function(t,e,n){function r(t){try{s.console&&console.log(t)}catch(e){}}var o,i=t("ee"),a=t(32),s={};try{o=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(s.console=!0,o.indexOf("dev")!==-1&&(s.dev=!0),o.indexOf("nr_dev")!==-1&&(s.nrDev=!0))}catch(c){}s.nrDev&&i.on("internal-error",function(t){r(t.stack)}),s.dev&&i.on("fn-err",function(t,e,n){r(n.stack)}),s.dev&&(r("NR AGENT IN DEVELOPMENT MODE"),r("flags: "+a(s,function(t,e){return t}).join(", ")))},{}],2:[function(t,e,n){function r(t,e,n,r,s){try{l?l-=1:o(s||new UncaughtException(t,e,n),!0)}catch(f){try{i("ierr",[f,c.now(),!0])}catch(d){}}return"function"==typeof u&&u.apply(this,a(arguments))}function UncaughtException(t,e,n){this.message=t||"Uncaught error with no additional information",this.sourceURL=e,this.line=n}function o(t,e){var n=e?null:c.now();i("err",[t,n])}var i=t("handle"),a=t(33),s=t("ee"),c=t("loader"),f=t("gos"),u=window.onerror,d=!1,p="nr@seenError";if(!c.disabled){var l=0;c.features.err=!0,t(1),window.onerror=r;try{throw new Error}catch(h){"stack"in h&&(t(14),t(13),"addEventListener"in window&&t(7),c.xhrWrappable&&t(15),d=!0)}s.on("fn-start",function(t,e,n){d&&(l+=1)}),s.on("fn-err",function(t,e,n){d&&!n[p]&&(f(n,p,function(){return!0}),this.thrown=!0,o(n))}),s.on("fn-end",function(){d&&!this.thrown&&l>0&&(l-=1)}),s.on("internal-error",function(t){i("ierr",[t,c.now(),!0])})}},{}],3:[function(t,e,n){var r=t("loader");r.disabled||(r.features.ins=!0)},{}],4:[function(t,e,n){function r(){U++,L=g.hash,this[u]=y.now()}function o(){U--,g.hash!==L&&i(0,!0);var t=y.now();this[h]=~~this[h]+t-this[u],this[d]=t}function i(t,e){E.emit("newURL",[""+g,e])}function a(t,e){t.on(e,function(){this[e]=y.now()})}var s="-start",c="-end",f="-body",u="fn"+s,d="fn"+c,p="cb"+s,l="cb"+c,h="jsTime",m="fetch",v="addEventListener",w=window,g=w.location,y=t("loader");if(w[v]&&y.xhrWrappable&&!y.disabled){var x=t(11),b=t(12),E=t(9),R=t(7),O=t(14),T=t(8),P=t(15),S=t(10),M=t("ee"),N=M.get("tracer"),C=t(23);t(17),y.features.spa=!0;var L,U=0;M.on(u,r),b.on(p,r),S.on(p,r),M.on(d,o),b.on(l,o),S.on(l,o),M.buffer([u,d,"xhr-resolved"]),R.buffer([u]),O.buffer(["setTimeout"+c,"clearTimeout"+s,u]),P.buffer([u,"new-xhr","send-xhr"+s]),T.buffer([m+s,m+"-done",m+f+s,m+f+c]),E.buffer(["newURL"]),x.buffer([u]),b.buffer(["propagate",p,l,"executor-err","resolve"+s]),N.buffer([u,"no-"+u]),S.buffer(["new-jsonp","cb-start","jsonp-error","jsonp-end"]),a(T,m+s),a(T,m+"-done"),a(S,"new-jsonp"),a(S,"jsonp-end"),a(S,"cb-start"),E.on("pushState-end",i),E.on("replaceState-end",i),w[v]("hashchange",i,C(!0)),w[v]("load",i,C(!0)),w[v]("popstate",function(){i(0,U>1)},C(!0))}},{}],5:[function(t,e,n){function r(){var t=new PerformanceObserver(function(t,e){var n=t.getEntries();s(v,[n])});try{t.observe({entryTypes:["resource"]})}catch(e){}}function o(t){if(s(v,[window.performance.getEntriesByType(w)]),window.performance["c"+p])try{window.performance[h](m,o,!1)}catch(t){}else try{window.performance[h]("webkit"+m,o,!1)}catch(t){}}function i(t){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var a=t("ee"),s=t("handle"),c=t(14),f=t(13),u=t(6),d=t(23),p="learResourceTimings",l="addEventListener",h="removeEventListener",m="resourcetimingbufferfull",v="bstResource",w="resource",g="-start",y="-end",x="fn"+g,b="fn"+y,E="bstTimer",R="pushState",O=t("loader");if(!O.disabled){O.features.stn=!0,t(9),"addEventListener"in window&&t(7);var T=NREUM.o.EV;a.on(x,function(t,e){var n=t[0];n instanceof T&&(this.bstStart=O.now())}),a.on(b,function(t,e){var n=t[0];n instanceof T&&s("bst",[n,e,this.bstStart,O.now()])}),c.on(x,function(t,e,n){this.bstStart=O.now(),this.bstType=n}),c.on(b,function(t,e){s(E,[e,this.bstStart,O.now(),this.bstType])}),f.on(x,function(){this.bstStart=O.now()}),f.on(b,function(t,e){s(E,[e,this.bstStart,O.now(),"requestAnimationFrame"])}),a.on(R+g,function(t){this.time=O.now(),this.startPath=location.pathname+location.hash}),a.on(R+y,function(t){s("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),u()?(s(v,[window.performance.getEntriesByType("resource")]),r()):l in window.performance&&(window.performance["c"+p]?window.performance[l](m,o,d(!1)):window.performance[l]("webkit"+m,o,d(!1))),document[l]("scroll",i,d(!1)),document[l]("keypress",i,d(!1)),document[l]("click",i,d(!1))}}},{}],6:[function(t,e,n){e.exports=function(){return"PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver}},{}],7:[function(t,e,n){function r(t){for(var e=t;e&&!e.hasOwnProperty(u);)e=Object.getPrototypeOf(e);e&&o(e)}function o(t){s.inPlace(t,[u,d],"-",i)}function i(t,e){return t[1]}var a=t("ee").get("events"),s=t("wrap-function")(a,!0),c=t("gos"),f=XMLHttpRequest,u="addEventListener",d="removeEventListener";e.exports=a,"getPrototypeOf"in Object?(r(document),r(window),r(f.prototype)):f.prototype.hasOwnProperty(u)&&(o(window),o(f.prototype)),a.on(u+"-start",function(t,e){var n=t[1];if(null!==n&&("function"==typeof n||"object"==typeof n)){var r=c(n,"nr@wrapped",function(){function t(){if("function"==typeof n.handleEvent)return n.handleEvent.apply(n,arguments)}var e={object:t,"function":n}[typeof n];return e?s(e,"fn-",null,e.name||"anonymous"):n});this.wrapped=t[1]=r}}),a.on(d+"-start",function(t){t[1]=this.wrapped||t[1]})},{}],8:[function(t,e,n){function r(t,e,n){var r=t[e];"function"==typeof r&&(t[e]=function(){var t=i(arguments),e={};o.emit(n+"before-start",[t],e);var a;e[m]&&e[m].dt&&(a=e[m].dt);var s=r.apply(this,t);return o.emit(n+"start",[t,a],s),s.then(function(t){return o.emit(n+"end",[null,t],s),t},function(t){throw o.emit(n+"end",[t],s),t})})}var o=t("ee").get("fetch"),i=t(33),a=t(32);e.exports=o;var s=window,c="fetch-",f=c+"body-",u=["arrayBuffer","blob","json","text","formData"],d=s.Request,p=s.Response,l=s.fetch,h="prototype",m="nr@context";d&&p&&l&&(a(u,function(t,e){r(d[h],e,f),r(p[h],e,f)}),r(s,"fetch",c),o.on(c+"end",function(t,e){var n=this;if(e){var r=e.headers.get("content-length");null!==r&&(n.rxSize=r),o.emit(c+"done",[null,e],n)}else o.emit(c+"done",[t],n)}))},{}],9:[function(t,e,n){var r=t("ee").get("history"),o=t("wrap-function")(r);e.exports=r;var i=window.history&&window.history.constructor&&window.history.constructor.prototype,a=window.history;i&&i.pushState&&i.replaceState&&(a=i),o.inPlace(a,["pushState","replaceState"],"-")},{}],10:[function(t,e,n){function r(t){function e(){f.emit("jsonp-end",[],l),t.removeEventListener("load",e,c(!1)),t.removeEventListener("error",n,c(!1))}function n(){f.emit("jsonp-error",[],l),f.emit("jsonp-end",[],l),t.removeEventListener("load",e,c(!1)),t.removeEventListener("error",n,c(!1))}var r=t&&"string"==typeof t.nodeName&&"script"===t.nodeName.toLowerCase();if(r){var o="function"==typeof t.addEventListener;if(o){var a=i(t.src);if(a){var d=s(a),p="function"==typeof d.parent[d.key];if(p){var l={};u.inPlace(d.parent,[d.key],"cb-",l),t.addEventListener("load",e,c(!1)),t.addEventListener("error",n,c(!1)),f.emit("new-jsonp",[t.src],l)}}}}}function o(){return"addEventListener"in window}function i(t){var e=t.match(d);return e?e[1]:null}function a(t,e){var n=t.match(l),r=n[1],o=n[3];return o?a(o,e[r]):e[r]}function s(t){var e=t.match(p);return e&&e.length>=3?{key:e[2],parent:a(e[1],window)}:{key:t,parent:window}}var c=t(23),f=t("ee").get("jsonp"),u=t("wrap-function")(f);if(e.exports=f,o()){var d=/[?&](?:callback|cb)=([^&#]+)/,p=/(.*)\.([^.]+)/,l=/^(\w+)(\.|$)(.*)$/,h=["appendChild","insertBefore","replaceChild"];Node&&Node.prototype&&Node.prototype.appendChild?u.inPlace(Node.prototype,h,"dom-"):(u.inPlace(HTMLElement.prototype,h,"dom-"),u.inPlace(HTMLHeadElement.prototype,h,"dom-"),u.inPlace(HTMLBodyElement.prototype,h,"dom-")),f.on("dom-start",function(t){r(t[0])})}},{}],11:[function(t,e,n){var r=t("ee").get("mutation"),o=t("wrap-function")(r),i=NREUM.o.MO;e.exports=r,i&&(window.MutationObserver=function(t){return this instanceof i?new i(o(t,"fn-")):i.apply(this,arguments)},MutationObserver.prototype=i.prototype)},{}],12:[function(t,e,n){function r(t){var e=i.context(),n=s(t,"executor-",e,null,!1),r=new f(n);return i.context(r).getCtx=function(){return e},r}var o=t("wrap-function"),i=t("ee").get("promise"),a=t("ee").getOrSetContext,s=o(i),c=t(32),f=NREUM.o.PR;e.exports=i,f&&(window.Promise=r,["all","race"].forEach(function(t){var e=f[t];f[t]=function(n){function r(t){return function(){i.emit("propagate",[null,!o],a,!1,!1),o=o||!t}}var o=!1;c(n,function(e,n){Promise.resolve(n).then(r("all"===t),r(!1))});var a=e.apply(f,arguments),s=f.resolve(a);return s}}),["resolve","reject"].forEach(function(t){var e=f[t];f[t]=function(t){var n=e.apply(f,arguments);return t!==n&&i.emit("propagate",[t,!0],n,!1,!1),n}}),f.prototype["catch"]=function(t){return this.then(null,t)},f.prototype=Object.create(f.prototype,{constructor:{value:r}}),c(Object.getOwnPropertyNames(f),function(t,e){try{r[e]=f[e]}catch(n){}}),o.wrapInPlace(f.prototype,"then",function(t){return function(){var e=this,n=o.argsToArray.apply(this,arguments),r=a(e);r.promise=e,n[0]=s(n[0],"cb-",r,null,!1),n[1]=s(n[1],"cb-",r,null,!1);var c=t.apply(this,n);return r.nextPromise=c,i.emit("propagate",[e,!0],c,!1,!1),c}}),i.on("executor-start",function(t){t[0]=s(t[0],"resolve-",this,null,!1),t[1]=s(t[1],"resolve-",this,null,!1)}),i.on("executor-err",function(t,e,n){t[1](n)}),i.on("cb-end",function(t,e,n){i.emit("propagate",[n,!0],this.nextPromise,!1,!1)}),i.on("propagate",function(t,e,n){this.getCtx&&!e||(this.getCtx=function(){if(t instanceof Promise)var e=i.context(t);return e&&e.getCtx?e.getCtx():this})}),r.toString=function(){return""+f})},{}],13:[function(t,e,n){var r=t("ee").get("raf"),o=t("wrap-function")(r),i="equestAnimationFrame";e.exports=r,o.inPlace(window,["r"+i,"mozR"+i,"webkitR"+i,"msR"+i],"raf-"),r.on("raf-start",function(t){t[0]=o(t[0],"fn-")})},{}],14:[function(t,e,n){function r(t,e,n){t[0]=a(t[0],"fn-",null,n)}function o(t,e,n){this.method=n,this.timerDuration=isNaN(t[1])?0:+t[1],t[0]=a(t[0],"fn-",this,n)}var i=t("ee").get("timer"),a=t("wrap-function")(i),s="setTimeout",c="setInterval",f="clearTimeout",u="-start",d="-";e.exports=i,a.inPlace(window,[s,"setImmediate"],s+d),a.inPlace(window,[c],c+d),a.inPlace(window,[f,"clearImmediate"],f+d),i.on(c+u,r),i.on(s+u,o)},{}],15:[function(t,e,n){function r(t,e){d.inPlace(e,["onreadystatechange"],"fn-",s)}function o(){var t=this,e=u.context(t);t.readyState>3&&!e.resolved&&(e.resolved=!0,u.emit("xhr-resolved",[],t)),d.inPlace(t,y,"fn-",s)}function i(t){x.push(t),m&&(E?E.then(a):w?w(a):(R=-R,O.data=R))}function a(){for(var t=0;t<x.length;t++)r([],x[t]);x.length&&(x=[])}function s(t,e){return e}function c(t,e){for(var n in t)e[n]=t[n];return e}t(7);var f=t("ee"),u=f.get("xhr"),d=t("wrap-function")(u),p=t(23),l=NREUM.o,h=l.XHR,m=l.MO,v=l.PR,w=l.SI,g="readystatechange",y=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"],x=[];e.exports=u;var b=window.XMLHttpRequest=function(t){var e=new h(t);try{u.emit("new-xhr",[e],e),e.addEventListener(g,o,p(!1))}catch(n){try{u.emit("internal-error",[n])}catch(r){}}return e};if(c(h,b),b.prototype=h.prototype,d.inPlace(b.prototype,["open","send"],"-xhr-",s),u.on("send-xhr-start",function(t,e){r(t,e),i(e)}),u.on("open-xhr-start",r),m){var E=v&&v.resolve();if(!w&&!v){var R=1,O=document.createTextNode(R);new m(a).observe(O,{characterData:!0})}}else f.on("fn-end",function(t){t[0]&&t[0].type===g||a()})},{}],16:[function(t,e,n){function r(t){if(!s(t))return null;var e=window.NREUM;if(!e.loader_config)return null;var n=(e.loader_config.accountID||"").toString()||null,r=(e.loader_config.agentID||"").toString()||null,f=(e.loader_config.trustKey||"").toString()||null;if(!n||!r)return null;var h=l.generateSpanId(),m=l.generateTraceId(),v=Date.now(),w={spanId:h,traceId:m,timestamp:v};return(t.sameOrigin||c(t)&&p())&&(w.traceContextParentHeader=o(h,m),w.traceContextStateHeader=i(h,v,n,r,f)),(t.sameOrigin&&!u()||!t.sameOrigin&&c(t)&&d())&&(w.newrelicHeader=a(h,m,v,n,r,f)),w}function o(t,e){return"00-"+e+"-"+t+"-01"}function i(t,e,n,r,o){var i=0,a="",s=1,c="",f="";return o+"@nr="+i+"-"+s+"-"+n+"-"+r+"-"+t+"-"+a+"-"+c+"-"+f+"-"+e}function a(t,e,n,r,o,i){var a="btoa"in window&&"function"==typeof window.btoa;if(!a)return null;var s={v:[0,1],d:{ty:"Browser",ac:r,ap:o,id:t,tr:e,ti:n}};return i&&r!==i&&(s.d.tk=i),btoa(JSON.stringify(s))}function s(t){return f()&&c(t)}function c(t){var e=!1,n={};if("init"in NREUM&&"distributed_tracing"in NREUM.init&&(n=NREUM.init.distributed_tracing),t.sameOrigin)e=!0;else if(n.allowed_origins instanceof Array)for(var r=0;r<n.allowed_origins.length;r++){var o=h(n.allowed_origins[r]);if(t.hostname===o.hostname&&t.protocol===o.protocol&&t.port===o.port){e=!0;break}}return e}function f(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.enabled}function u(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.exclude_newrelic_header}function d(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&NREUM.init.distributed_tracing.cors_use_newrelic_header!==!1}function p(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.cors_use_tracecontext_headers}var l=t(29),h=t(18);e.exports={generateTracePayload:r,shouldGenerateTrace:s}},{}],17:[function(t,e,n){function r(t){var e=this.params,n=this.metrics;if(!this.ended){this.ended=!0;for(var r=0;r<p;r++)t.removeEventListener(d[r],this.listener,!1);e.aborted||(n.duration=a.now()-this.startTime,this.loadCaptureCalled||4!==t.readyState?null==e.status&&(e.status=0):i(this,t),n.cbTime=this.cbTime,s("xhr",[e,n,this.startTime,this.endTime,"xhr"],this))}}function o(t,e){var n=c(e),r=t.params;r.hostname=n.hostname,r.port=n.port,r.protocol=n.protocol,r.host=n.hostname+":"+n.port,r.pathname=n.pathname,t.parsedOrigin=n,t.sameOrigin=n.sameOrigin}function i(t,e){t.params.status=e.status;var n=v(e,t.lastSize);if(n&&(t.metrics.rxSize=n),t.sameOrigin){var r=e.getResponseHeader("X-NewRelic-App-Data");r&&(t.params.cat=r.split(", ").pop())}t.loadCaptureCalled=!0}var a=t("loader");if(a.xhrWrappable&&!a.disabled){var s=t("handle"),c=t(18),f=t(16).generateTracePayload,u=t("ee"),d=["load","error","abort","timeout"],p=d.length,l=t("id"),h=t(24),m=t(22),v=t(19),w=t(23),g=NREUM.o.REQ,y=window.XMLHttpRequest;a.features.xhr=!0,t(15),t(8),u.on("new-xhr",function(t){var e=this;e.totalCbs=0,e.called=0,e.cbTime=0,e.end=r,e.ended=!1,e.xhrGuids={},e.lastSize=null,e.loadCaptureCalled=!1,e.params=this.params||{},e.metrics=this.metrics||{},t.addEventListener("load",function(n){i(e,t)},w(!1)),h&&(h>34||h<10)||t.addEventListener("progress",function(t){e.lastSize=t.loaded},w(!1))}),u.on("open-xhr-start",function(t){this.params={method:t[0]},o(this,t[1]),this.metrics={}}),u.on("open-xhr-end",function(t,e){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&e.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid);var n=f(this.parsedOrigin);if(n){var r=!1;n.newrelicHeader&&(e.setRequestHeader("newrelic",n.newrelicHeader),r=!0),n.traceContextParentHeader&&(e.setRequestHeader("traceparent",n.traceContextParentHeader),n.traceContextStateHeader&&e.setRequestHeader("tracestate",n.traceContextStateHeader),r=!0),r&&(this.dt=n)}}),u.on("send-xhr-start",function(t,e){var n=this.metrics,r=t[0],o=this;if(n&&r){var i=m(r);i&&(n.txSize=i)}this.startTime=a.now(),this.listener=function(t){try{"abort"!==t.type||o.loadCaptureCalled||(o.params.aborted=!0),("load"!==t.type||o.called===o.totalCbs&&(o.onloadCalled||"function"!=typeof e.onload))&&o.end(e)}catch(n){try{u.emit("internal-error",[n])}catch(r){}}};for(var s=0;s<p;s++)e.addEventListener(d[s],this.listener,w(!1))}),u.on("xhr-cb-time",function(t,e,n){this.cbTime+=t,e?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof n.onload||this.end(n)}),u.on("xhr-load-added",function(t,e){var n=""+l(t)+!!e;this.xhrGuids&&!this.xhrGuids[n]&&(this.xhrGuids[n]=!0,this.totalCbs+=1)}),u.on("xhr-load-removed",function(t,e){var n=""+l(t)+!!e;this.xhrGuids&&this.xhrGuids[n]&&(delete this.xhrGuids[n],this.totalCbs-=1)}),u.on("xhr-resolved",function(){this.endTime=a.now()}),u.on("addEventListener-end",function(t,e){e instanceof y&&"load"===t[0]&&u.emit("xhr-load-added",[t[1],t[2]],e)}),u.on("removeEventListener-end",function(t,e){e instanceof y&&"load"===t[0]&&u.emit("xhr-load-removed",[t[1],t[2]],e)}),u.on("fn-start",function(t,e,n){e instanceof y&&("onload"===n&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=a.now()))}),u.on("fn-end",function(t,e){this.xhrCbStart&&u.emit("xhr-cb-time",[a.now()-this.xhrCbStart,this.onload,e],e)}),u.on("fetch-before-start",function(t){function e(t,e){var n=!1;return e.newrelicHeader&&(t.set("newrelic",e.newrelicHeader),n=!0),e.traceContextParentHeader&&(t.set("traceparent",e.traceContextParentHeader),e.traceContextStateHeader&&t.set("tracestate",e.traceContextStateHeader),n=!0),n}var n,r=t[1]||{};"string"==typeof t[0]?n=t[0]:t[0]&&t[0].url?n=t[0].url:window.URL&&t[0]&&t[0]instanceof URL&&(n=t[0].href),n&&(this.parsedOrigin=c(n),this.sameOrigin=this.parsedOrigin.sameOrigin);var o=f(this.parsedOrigin);if(o&&(o.newrelicHeader||o.traceContextParentHeader))if("string"==typeof t[0]||window.URL&&t[0]&&t[0]instanceof URL){var i={};for(var a in r)i[a]=r[a];i.headers=new Headers(r.headers||{}),e(i.headers,o)&&(this.dt=o),t.length>1?t[1]=i:t.push(i)}else t[0]&&t[0].headers&&e(t[0].headers,o)&&(this.dt=o)}),u.on("fetch-start",function(t,e){this.params={},this.metrics={},this.startTime=a.now(),this.dt=e,t.length>=1&&(this.target=t[0]),t.length>=2&&(this.opts=t[1]);var n,r=this.opts||{},i=this.target;"string"==typeof i?n=i:"object"==typeof i&&i instanceof g?n=i.url:window.URL&&"object"==typeof i&&i instanceof URL&&(n=i.href),o(this,n);var s=(""+(i&&i instanceof g&&i.method||r.method||"GET")).toUpperCase();this.params.method=s,this.txSize=m(r.body)||0}),u.on("fetch-done",function(t,e){this.endTime=a.now(),this.params||(this.params={}),this.params.status=e?e.status:0;var n;"string"==typeof this.rxSize&&this.rxSize.length>0&&(n=+this.rxSize);var r={txSize:this.txSize,rxSize:n,duration:a.now()-this.startTime};s("xhr",[this.params,r,this.startTime,this.endTime,"fetch"],this)})}},{}],18:[function(t,e,n){var r={};e.exports=function(t){if(t in r)return r[t];var e=document.createElement("a"),n=window.location,o={};e.href=t,o.port=e.port;var i=e.href.split("://");!o.port&&i[1]&&(o.port=i[1].split("/")[0].split("@").pop().split(":")[1]),o.port&&"0"!==o.port||(o.port="https"===i[0]?"443":"80"),o.hostname=e.hostname||n.hostname,o.pathname=e.pathname,o.protocol=i[0],"/"!==o.pathname.charAt(0)&&(o.pathname="/"+o.pathname);var a=!e.protocol||":"===e.protocol||e.protocol===n.protocol,s=e.hostname===document.domain&&e.port===n.port;return o.sameOrigin=a&&(!e.hostname||s),"/"===o.pathname&&(r[t]=o),o}},{}],19:[function(t,e,n){function r(t,e){var n=t.responseType;return"json"===n&&null!==e?e:"arraybuffer"===n||"blob"===n||"json"===n?o(t.response):"text"===n||""===n||void 0===n?o(t.responseText):void 0}var o=t(22);e.exports=r},{}],20:[function(t,e,n){function r(){}function o(t,e,n,r){return function(){return u.recordSupportability("API/"+e+"/called"),i(t+e,[f.now()].concat(s(arguments)),n?null:this,r),n?void 0:this}}var i=t("handle"),a=t(32),s=t(33),c=t("ee").get("tracer"),f=t("loader"),u=t(25),d=NREUM;"undefined"==typeof window.newrelic&&(newrelic=d);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],l="api-",h=l+"ixn-";a(p,function(t,e){d[e]=o(l,e,!0,"api")}),d.addPageAction=o(l,"addPageAction",!0),d.setCurrentRouteName=o(l,"routeName",!0),e.exports=newrelic,d.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(t,e){var n={},r=this,o="function"==typeof e;return i(h+"tracer",[f.now(),t,n],r),function(){if(c.emit((o?"":"no-")+"fn-start",[f.now(),r,o],n),o)try{return e.apply(this,arguments)}catch(t){throw c.emit("fn-err",[arguments,this,t],n),t}finally{c.emit("fn-end",[f.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,e){m[e]=o(h,e)}),newrelic.noticeError=function(t,e){"string"==typeof t&&(t=new Error(t)),u.recordSupportability("API/noticeError/called"),i("err",[t,f.now(),!1,e])}},{}],21:[function(t,e,n){function r(t){if(NREUM.init){for(var e=NREUM.init,n=t.split("."),r=0;r<n.length-1;r++)if(e=e[n[r]],"object"!=typeof e)return;return e=e[n[n.length-1]]}}e.exports={getConfiguration:r}},{}],22:[function(t,e,n){e.exports=function(t){if("string"==typeof t&&t.length)return t.length;if("object"==typeof t){if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if(!("undefined"!=typeof FormData&&t instanceof FormData))try{return JSON.stringify(t).length}catch(e){return}}}},{}],23:[function(t,e,n){var r=!1;try{var o=Object.defineProperty({},"passive",{get:function(){r=!0}});window.addEventListener("testPassive",null,o),window.removeEventListener("testPassive",null,o)}catch(i){}e.exports=function(t){return r?{passive:!0,capture:!!t}:!!t}},{}],24:[function(t,e,n){var r=0,o=navigator.userAgent.match(/Firefox[\/\s](\d+\.\d+)/);o&&(r=+o[1]),e.exports=r},{}],25:[function(t,e,n){function r(t,e){var n=[a,t,{name:t},e];return i("storeMetric",n,null,"api"),n}function o(t,e){var n=[s,t,{name:t},e];return i("storeEventMetrics",n,null,"api"),n}var i=t("handle"),a="sm",s="cm";e.exports={constants:{SUPPORTABILITY_METRIC:a,CUSTOM_METRIC:s},recordSupportability:r,recordCustom:o}},{}],26:[function(t,e,n){function r(){return s.exists&&performance.now?Math.round(performance.now()):(i=Math.max((new Date).getTime(),i))-a}function o(){return i}var i=(new Date).getTime(),a=i,s=t(34);e.exports=r,e.exports.offset=a,e.exports.getLastTimestamp=o},{}],27:[function(t,e,n){function r(t){return!(!t||!t.protocol||"file:"===t.protocol)}e.exports=r},{}],28:[function(t,e,n){function r(t,e){var n=t.getEntries();n.forEach(function(t){"first-paint"===t.name?p("timing",["fp",Math.floor(t.startTime)]):"first-contentful-paint"===t.name&&p("timing",["fcp",Math.floor(t.startTime)])})}function o(t,e){var n=t.getEntries();if(n.length>0){var r=n[n.length-1];if(c&&c<r.startTime)return;p("lcp",[r])}}function i(t){t.getEntries().forEach(function(t){t.hadRecentInput||p("cls",[t])})}function a(t){if(t instanceof v&&!g){var e=Math.round(t.timeStamp),n={type:t.type};e<=l.now()?n.fid=l.now()-e:e>l.offset&&e<=Date.now()?(e-=l.offset,n.fid=l.now()-e):e=l.now(),g=!0,p("timing",["fi",e,n])}}function s(t){"hidden"===t&&(c=l.now(),p("pageHide",[c]))}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var c,f,u,d,p=t("handle"),l=t("loader"),h=t(31),m=t(23),v=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){f=new PerformanceObserver(r);try{f.observe({entryTypes:["paint"]})}catch(w){}u=new PerformanceObserver(o);try{u.observe({entryTypes:["largest-contentful-paint"]})}catch(w){}d=new PerformanceObserver(i);try{d.observe({type:"layout-shift",buffered:!0})}catch(w){}}if("addEventListener"in document){var g=!1,y=["click","keydown","mousedown","pointerdown","touchstart"];y.forEach(function(t){document.addEventListener(t,a,m(!1))})}h(s)}},{}],29:[function(t,e,n){function r(){function t(){return e?15&e[n++]:16*Math.random()|0}var e=null,n=0,r=window.crypto||window.msCrypto;r&&r.getRandomValues&&(e=r.getRandomValues(new Uint8Array(31)));for(var o,i="xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",a="",s=0;s<i.length;s++)o=i[s],"x"===o?a+=t().toString(16):"y"===o?(o=3&t()|8,a+=o.toString(16)):a+=o;return a}function o(){return a(16)}function i(){return a(32)}function a(t){function e(){return n?15&n[r++]:16*Math.random()|0}var n=null,r=0,o=window.crypto||window.msCrypto;o&&o.getRandomValues&&Uint8Array&&(n=o.getRandomValues(new Uint8Array(31)));for(var i=[],a=0;a<t;a++)i.push(e().toString(16));return i.join("")}e.exports={generateUuid:r,generateSpanId:o,generateTraceId:i}},{}],30:[function(t,e,n){function r(t,e){if(!o)return!1;if(t!==o)return!1;if(!e)return!0;if(!i)return!1;for(var n=i.split("."),r=e.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var o=null,i=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var s=navigator.userAgent,c=s.match(a);c&&s.indexOf("Chrome")===-1&&s.indexOf("Chromium")===-1&&(o="Safari",i=c[1])}e.exports={agent:o,version:i,match:r}},{}],31:[function(t,e,n){function r(t){function e(){t(s&&document[s]?document[s]:document[i]?"hidden":"visible")}"addEventListener"in document&&a&&document.addEventListener(a,e,o(!1))}var o=t(23);e.exports=r;var i,a,s;"undefined"!=typeof document.hidden?(i="hidden",a="visibilitychange",s="visibilityState"):"undefined"!=typeof document.msHidden?(i="msHidden",a="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(i="webkitHidden",a="webkitvisibilitychange",s="webkitVisibilityState")},{}],32:[function(t,e,n){function r(t,e){var n=[],r="",i=0;for(r in t)o.call(t,r)&&(n[i]=e(r,t[r]),i+=1);return n}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],33:[function(t,e,n){function r(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(o<0?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=r},{}],34:[function(t,e,n){e.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(t,e,n){function r(){}function o(t){function e(t){return t&&t instanceof r?t:t?f(t,c,a):a()}function n(n,r,o,i,a){if(a!==!1&&(a=!0),!l.aborted||i){t&&a&&t(n,r,o);for(var s=e(o),c=m(n),f=c.length,u=0;u<f;u++)c[u].apply(s,r);var p=d[y[n]];return p&&p.push([x,n,r,s]),s}}function i(t,e){g[t]=m(t).concat(e)}function h(t,e){var n=g[t];if(n)for(var r=0;r<n.length;r++)n[r]===e&&n.splice(r,1)}function m(t){return g[t]||[]}function v(t){return p[t]=p[t]||o(n)}function w(t,e){l.aborted||u(t,function(t,n){e=e||"feature",y[n]=e,e in d||(d[e]=[])})}var g={},y={},x={on:i,addEventListener:i,removeEventListener:h,emit:n,get:v,listeners:m,context:e,buffer:w,abort:s,aborted:!1};return x}function i(t){return f(t,c,a)}function a(){return new r}function s(){(d.api||d.feature)&&(l.aborted=!0,d=l.backlog={})}var c="nr@context",f=t("gos"),u=t(32),d={},p={},l=e.exports=o();e.exports.getOrSetContext=i,l.backlog=d},{}],gos:[function(t,e,n){function r(t,e,n){if(o.call(t,e))return t[e];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return t[e]=r,r}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(t,e,n){function r(t,e,n,r){o.buffer([t],r),o.emit(t,e,n)}var o=t("ee").get("handle");e.exports=r,r.ee=o},{}],id:[function(t,e,n){function r(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:a(t,i,function(){return o++})}var o=1,i="nr@id",a=t("gos");e.exports=r},{}],loader:[function(t,e,n){function r(){if(!P++){var t=T.info=NREUM.info,e=v.getElementsByTagName("script")[0];if(setTimeout(f.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&e))return f.abort();c(R,function(e,n){t[e]||(t[e]=n)});var n=a();s("mark",["onload",n+T.offset],null,"api"),s("timing",["load",n]);var r=v.createElement("script");0===t.agent.indexOf("http://")||0===t.agent.indexOf("https://")?r.src=t.agent:r.src=h+"://"+t.agent,e.parentNode.insertBefore(r,e)}}function o(){"complete"===v.readyState&&i()}function i(){s("mark",["domContent",a()+T.offset],null,"api")}var a=t(26),s=t("handle"),c=t(32),f=t("ee"),u=t(30),d=t(27),p=t(21),l=t(23),h=p.getConfiguration("ssl")===!1?"http":"https",m=window,v=m.document,w="addEventListener",g="attachEvent",y=m.XMLHttpRequest,x=y&&y.prototype,b=!d(m.location);NREUM.o={ST:setTimeout,SI:m.setImmediate,CT:clearTimeout,XHR:y,REQ:m.Request,EV:m.Event,PR:m.Promise,MO:m.MutationObserver};var E=""+location,R={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-spa-1212.min.js"},O=y&&x&&x[w]&&!/CriOS/.test(navigator.userAgent),T=e.exports={offset:a.getLastTimestamp(),now:a,origin:E,features:{},xhrWrappable:O,userAgent:u,disabled:b};if(!b){t(20),t(28),v[w]?(v[w]("DOMContentLoaded",i,l(!1)),m[w]("load",r,l(!1))):(v[g]("onreadystatechange",o),m[g]("onload",r)),s("mark",["firstbyte",a.getLastTimestamp()],null,"api");var P=0}},{}],"wrap-function":[function(t,e,n){function r(t,e){function n(e,n,r,c,f){function nrWrapper(){var i,a,u,p;try{a=this,i=d(arguments),u="function"==typeof r?r(i,a):r||{}}catch(l){o([l,"",[i,a,c],u],t)}s(n+"start",[i,a,c],u,f);try{return p=e.apply(a,i)}catch(h){throw s(n+"err",[i,a,h],u,f),h}finally{s(n+"end",[i,a,p],u,f)}}return a(e)?e:(n||(n=""),nrWrapper[p]=e,i(e,nrWrapper,t),nrWrapper)}function r(t,e,r,o,i){r||(r="");var s,c,f,u="-"===r.charAt(0);for(f=0;f<e.length;f++)c=e[f],s=t[c],a(s)||(t[c]=n(s,u?c+r:r,o,c,i))}function s(n,r,i,a){if(!h||e){var s=h;h=!0;try{t.emit(n,r,i,e,a)}catch(c){o([c,n,r,i],t)}h=s}}return t||(t=u),n.inPlace=r,n.flag=p,n}function o(t,e){e||(e=u);try{e.emit("internal-error",t)}catch(n){}}function i(t,e,n){if(Object.defineProperty&&Object.keys)try{var r=Object.keys(t);return r.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(i){o([i],n)}for(var a in t)l.call(t,a)&&(e[a]=t[a]);return e}function a(t){return!(t&&t instanceof Function&&t.apply&&!t[p])}function s(t,e){var n=e(t);return n[p]=t,i(t,n,u),n}function c(t,e,n){var r=t[e];t[e]=s(r,n)}function f(){for(var t=arguments.length,e=new Array(t),n=0;n<t;++n)e[n]=arguments[n];return e}var u=t("ee"),d=t(33),p="nr@original",l=Object.prototype.hasOwnProperty,h=!1;e.exports=r,e.exports.wrapFunction=s,e.exports.wrapInPlace=c,e.exports.argsToArray=f},{}]},{},["loader",2,17,5,3,4]);
+  ;NREUM.loader_config={accountID:"804283",trustKey:"804283",agentID:"402703674",licenseKey:"cf99e8d2a3",applicationID:"402703674"}
+  ;NREUM.info={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",licenseKey:"cf99e8d2a3",
+    // Modified this value from the generated script, to pass prod vs dev
+    applicationID: window.location.hostname.includes('journals.plos.org') ? "402703674" : "402694889",
+    sa:1}
+</script>
+<!-- End New Relic -->
+
+
+
+<header>
+  <div id="topslot" class="head-top">
+  <a id="skip-to-content" tabindex="0" class="button" href="#main-content">
+    Skip to main content
+  </a>
+
+<div class="center">
+<div class="title">Advertisement</div>
+<!-- DoubleClick Ad Zone -->
+  <div class='advertisement' id='div-gpt-ad-1458247671871-0' style='width:728px; height:90px;'>
+    <script type='text/javascript'>
+      googletag.cmd.push(function() { googletag.display('div-gpt-ad-1458247671871-0'); });
+    </script>
+  </div>
+</div>
+  </div>
+
+  <div id="user" class="nav" data-user-management-url="https://community.plos.org">
+  </div>
+  <div id="pagehdr">
+
+    <nav class="nav-main">
+
+
+
+
+<h1 class="logo">
+  <a href="/plosmedicine/.">PLOS Medicine</a>
+</h1>
+
+<section class="top-bar-section"> 
+
+<ul class="nav-elements">
+
+
+
+  <li class="menu-section-header has-dropdown " id="browse">
+    <span class="menu-section-header-title">  Browse </span>
+
+    <ul class="menu-section dropdown "
+        id="browse-dropdown-list">
+      <li>
+    <a href="/plosmedicine/issue" >Current Issue</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/volume" >Journal Archive</a>
+  </li>
+
+      <li>
+    <a href="https://collections.plos.org/s/plos-medicine-special-issues" >Special Issues</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/collections" >Collections</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/find-and-read-articles" >Find and Read Articles</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+    <li class="multi-col-parent menu-section-header has-dropdown" id="publish">
+    Publish
+      <div class="dropdown mega ">
+        <ul class="multi-col" id="publish-dropdown-list">
+
+  <li class="menu-section-header " id="submissions">
+    <span class="menu-section-header-title">  Submissions </span>
+
+    <ul class="menu-section "
+        id="submissions-dropdown-list">
+      <li>
+    <a href="/plosmedicine/s/getting-started" >Getting Started</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/submission-guidelines" >Submission Guidelines</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/figures" >Figures</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/tables" >Tables</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/supporting-information" >Supporting Information</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/latex" >LaTeX</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/other-article-types" >Other Article Types</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/preprints" >Preprints</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/revising-your-manuscript" >Revising Your Manuscript</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/submit-now" >Submit Now</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+  <li class="menu-section-header " id="policies">
+    <span class="menu-section-header-title">  Policies </span>
+
+    <ul class="menu-section "
+        id="policies-dropdown-list">
+      <li>
+    <a href="/plosmedicine/s/best-practices-in-research-reporting" >Best Practices in Research Reporting</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/human-subjects-research" >Human Subjects Research</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/animal-research" >Animal Research</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/competing-interests" >Competing Interests</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/disclosure-of-funding-sources" >Disclosure of Funding Sources</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/licenses-and-copyright" >Licenses and Copyright</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/data-availability" >Data Availability</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/complementary-research" >Complementary Research</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/materials-software-and-code-sharing" >Materials, Software and Code Sharing</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/ethical-publishing-practice" >Ethical Publishing Practice</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/authorship" >Authorship</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/corrections-expressions-of-concern-and-retractions" >Corrections, Expressions of Concern, and Retractions</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+  <li class="menu-section-header " id="manuscript-review-and-publication">
+    <span class="menu-section-header-title">  Manuscript Review and Publication </span>
+
+    <ul class="menu-section "
+        id="manuscript-review-and-publication-dropdown-list">
+      <li>
+    <a href="/plosmedicine/s/editorial-and-peer-review-process" >Editorial and Peer Review Process</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/reviewer-guidelines" >Guidelines for Reviewers</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/accepted-manuscripts" >Accepted Manuscripts</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/comments" >Comments</a>
+  </li>
+
+    </ul>
+
+  </li>
+        </ul>
+          <div class="calloutcontainer">
+
+
+  <h3 class="callout-headline">Submit Your Manuscript</h3>
+
+  <div class="action-contain">
+  <p class="callout-content">
+<em>PLOS Medicine</em> publishes research and commentary of general interest with clear implications for patient care, public policy or clinical research agendas.
+  </p>
+  <p class="button-contain">
+    <a class="button button-default" href="/plosmedicine/s/submit-now">
+Get Started
+    </a>
+  </p>
+  </div> <!-- opens in siteMenuCalloutDescription -->
+          </div>
+      </div>
+    </li>
+
+
+
+  <li class="menu-section-header has-dropdown " id="about">
+    <span class="menu-section-header-title">  About </span>
+
+    <ul class="menu-section dropdown "
+        id="about-dropdown-list">
+      <li>
+    <a href="/plosmedicine/s/journal-information" >Journal Information</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/staff-editors" >Staff Editors</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/editorial-board" >Editorial Board</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/publishing-information" >Publishing Information</a>
+  </li>
+
+      <li>
+    <a href="https://plos.org/publication-fees" >Publication Fees</a>
+  </li>
+
+      <li>
+    <a href="https://plos.org/press-and-media" >Press and Media</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/resources" >Resources</a>
+  </li>
+
+      <li>
+    <a href="/plosmedicine/s/contact" >Contact</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+<script src="/resource/js/vendor/jquery.hoverIntent.js" type="text/javascript"></script>
+<script src="/resource/js/components/menu_drop.js" type="text/javascript"></script>
+<script src="/resource/js/components/hover_delay.js" type="text/javascript"></script>
+      <li id="navsearch" class="head-search">
+
+
+    <form name="searchForm" action="/plosmedicine/search" method="get">
+      <fieldset>
+        <legend>Search</legend>
+        <label for="search">Search</label>
+        <div class="search-contain">
+          <input id="search" type="text" name="q" placeholder="SEARCH" required/>
+          <button id="headerSearchButton" type="submit" aria-label="Submit search">
+            <i title="Submit search" class="search-icon"></i>
+          </button>
+        </div>
+      </fieldset>
+      <input type="hidden" name="filterJournals" value="PLoSMedicine"/>
+    </form>
+
+    <a id="advSearch"
+       href="/plosmedicine/search">
+      advanced search
+    </a>
+
+
+
+
+<script src="/resource/js/components/placeholder_style.js" type="text/javascript"></script>
+      </li>
+
+      </ul>     
+      </section>  
+    </nav>
+  </div>
+
+</header>
+<main id="main-content"> <div class="set-grid">
+
+<header class="title-block">
+
+
+
+<script src="/resource/js/components/signposts.js" type="text/javascript"></script>
+
+<ul id="almSignposts" class="signposts">
+  <li id="loadingMetrics">
+    <p>Loading metrics</p>
+  </li>
+</ul>
+
+<script type="text/template" id="signpostsGeneralErrorTemplate">
+  <li id="metricsError">Article metrics are unavailable at this time. Please try again later.</li>
+</script>
+
+<script type="text/template" id="signpostsNewArticleErrorTemplate">
+  <li></li><li></li><li id="tooSoon">Article metrics are unavailable for recently published articles.</li>
+</script>
+
+<script type="text/template" id="signpostsTemplate">
+    <li id="almSaves">
+      <%= s.numberFormat(saveCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#savedHeader">Save</a>
+        <p class="saves-tip" data-js-tooltip-hover="target"><a href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#savedHeader">Total Mendeley and Citeulike bookmarks.</a></p>
+      </div>
+    </li>
+
+    <li id="almCitations">
+      <%= s.numberFormat(citationCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#citedHeader">Citation</a>
+        <p class="citations-tip" data-js-tooltip-hover="target"><a href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#citedHeader">Paper's citation count computed by Dimensions.</a></p>
+      </div>
+    </li>
+
+    <li id="almViews">
+      <%= s.numberFormat(viewCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#viewedHeader">View</a>
+        <p class="views-tip" data-js-tooltip-hover="target"><a href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#viewedHeader">PLOS views and downloads.</a></p>
+      </div>
+    </li>
+
+    <li id="almShares">
+      <%= s.numberFormat(shareCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#discussedHeader">Share</a>
+        <p class="shares-tip" data-js-tooltip-hover="target"><a href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308#discussedHeader">Sum of Facebook, Twitter, Reddit and Wikipedia activity.</a></p>
+      </div>
+    </li>
+</script>
+
+    <div class="article-meta">
+
+<div class="classifications">
+  <p class="license-short" id="licenseShort">Open Access</p>
+  <p class="peer-reviewed" id="peerReviewed">Peer-reviewed</p>
+
+<div class="article-type" >
+  <p class="type-article" id="artType">Research Article</p>
+</div>
+
+
+</div>
+    </div>
+    <div class="article-title-etc">
+
+
+
+<div class="title-authors">
+  <h1 id="artTitle"><?xml version="1.0" encoding="UTF-8"?>Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study</h1>
+
+<ul class="author-list clearfix"  data-js-tooltip="tooltip_container" id="author-list">
+
+
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="0" class="author-name" >
+Amélie Yavchitz,</a>    <div id="author-meta-0" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-0"><span class="type">Affiliations</span>
+    INSERM, U738, Paris, France, 
+    Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France, 
+    Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose0"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="1" class="author-name" >
+Isabelle Boutron <span class="email">  </span>,</a>    <div id="author-meta-1" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  <p id="authCorresponding-1"> <span class="email">* E-mail:</span> <a href="mailto:isabelle.boutron@htd.aphp.fr">isabelle.boutron@htd.aphp.fr</a></p>
+  <p id="authAffiliations-1"><span class="type">Affiliations</span>
+    INSERM, U738, Paris, France, 
+    Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France, 
+    Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose1"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="2" class="author-name" >
+Aida Bafeta,</a>    <div id="author-meta-2" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-2"><span class="type">Affiliations</span>
+    INSERM, U738, Paris, France, 
+    Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France, 
+    Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose2"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="3" class="author-name" >
+Ibrahim Marroun,</a>    <div id="author-meta-3" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-3"><span class="type">Affiliation</span>
+    Department of Internal Medicine, Hôpital Foch, Suresnes, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose3"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="4" class="author-name" >
+Pierre Charles,</a>    <div id="author-meta-4" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-4"><span class="type">Affiliation</span>
+    Department of Internal Medicine, Hôpital Foch, Suresnes, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose4"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="5" class="author-name" >
+Jean Mantz,</a>    <div id="author-meta-5" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-5"><span class="type">Affiliation</span>
+    Department of Anesthesiology and Critical Care, Beaujon University Hospital, Clichy, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose5"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="6" class="author-name" >
+Philippe Ravaud</a>    <div id="author-meta-6" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-6"><span class="type">Affiliations</span>
+    INSERM, U738, Paris, France, 
+    Centre d'Épidémiologie Clinique, AP-HP (Assistance Publique des Hôpitaux de Paris), Hôpital Hôtel Dieu, Paris, France, 
+    Université Paris Descartes, Sorbonne Paris Cité, Faculté de Médecine, Paris, France
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose6"> &#x02A2F; </a>
+    </div>
+</li>
+
+</ul>
+<script src="/resource/js/components/tooltip.js" type="text/javascript"></script>
+
+</div>
+
+
+<div id="floatTitleTop" data-js-floater="title_author" class="float-title" role="presentation">
+  <div class="set-grid">
+    <div class="float-title-inner">
+      <h1><?xml version="1.0" encoding="UTF-8"?>Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study</h1>
+
+<ul id="floatAuthorList" data-js-floater="floated_authors">
+
+  <li data-float-index="1">Amélie Yavchitz,&nbsp;
+
+  </li>
+  <li data-float-index="2">Isabelle Boutron,&nbsp;
+
+  </li>
+  <li data-float-index="3">Aida Bafeta,&nbsp;
+
+  </li>
+  <li data-float-index="4">Ibrahim Marroun,&nbsp;
+
+  </li>
+  <li data-float-index="5">Pierre Charles,&nbsp;
+
+  </li>
+  <li data-float-index="6">Jean Mantz,&nbsp;
+
+  </li>
+  <li data-float-index="7">Philippe Ravaud
+
+  </li>
+
+</ul>
+
+
+
+    </div>
+    <div class="logo-close" id="titleTopCloser">
+      <img src="/resource/img/logo-plos-full-color.svg" style="height: 2em" alt="PLOS" />
+      <div class="close-floater" title="close">x</div>
+    </div>
+  </div>
+</div>
+
+      <ul class="date-doi">
+        <li id="artPubDate">Published: September 11, 2012</li>
+        <li id="artDoi">
+<a   href="https://doi.org/10.1371/journal.pmed.1001308">https://doi.org/10.1371/journal.pmed.1001308</a>
+        </li>
+        <li class="flex-spacer"></li>
+      </ul>
+
+    </div>
+  <div>
+
+  </div>
+</header>
+  <section class="article-body">
+
+
+
+<ul class="article-tabs">
+
+          <li class="tab-title active" id="tabArticle">
+            <a href="/plosmedicine/article?id=10.1371/journal.pmed.1001308" class="article-tab-1">Article</a>
+        </li>
+
+
+              <li class="tab-title " id="tabAuthors">
+            <a href="/plosmedicine/article/authors?id=10.1371/journal.pmed.1001308" class="article-tab-2">Authors</a>
+        </li>
+
+
+          <li class="tab-title " id="tabMetrics">
+            <a href="/plosmedicine/article/metrics?id=10.1371/journal.pmed.1001308" class="article-tab-3">Metrics</a>
+        </li>
+
+
+          <li class="tab-title " id="tabComments">
+            <a href="/plosmedicine/article/comments?id=10.1371/journal.pmed.1001308" class="article-tab-4">Comments</a>
+        </li>
+
+  <li class="tab-title" id="tabRelated">
+    <a class="article-tab-5" id="tabRelated-link" target="_blank" href="http://plos.altmetric.com/details/doi/10.1371/journal.pmed.1001308">Media Coverage</a>
+  </li>
+</ul>
+
+    <div class="article-container">
+
+
+<div id="nav-article">
+  <ul class="nav-secondary">
+
+    <li class="nav-comments" id="nav-comments">
+      <a href="article/comments?id=10.1371/journal.pmed.1001308">Reader Comments</a>
+    </li>
+
+    <li id="nav-figures"><a href="#" data-doi="10.1371/journal.pmed.1001308">Figures</a></li>
+  </ul>
+  <div id="nav-data-linking" data-data-url="">
+  </div>
+</div>
+<script src="/resource/js/components/scroll.js" type="text/javascript"></script>
+<script src="/resource/js/components/nav_builder.js" type="text/javascript"></script>
+<script src="/resource/js/components/floating_nav.js" type="text/javascript"></script>
+
+<div id="figure-lightbox-container"></div>
+
+<script id="figure-lightbox-template" type="text/template">
+  <div id="figure-lightbox" class="reveal-modal full" data-reveal aria-hidden="true"
+       role="dialog">
+    <div class="lb-header">
+      <h1 id="lb-title"><%= articleTitle %></h1>
+
+      <div id="lb-authors">
+              <span>Amélie Yavchitz</span>
+              <span>Isabelle Boutron</span>
+          <a class="more-authors" href="/plosmedicine/article/authors?id=10.1371/journal.pmed.1001308">...</a>
+          <span>Philippe Ravaud</span>
+      </div>
+
+      <div class="lb-close" title="close">&nbsp;</div>
+    </div>
+    <div class="img-container">
+      <div class="loader"> <i class="fa-spinner"></i> </div>
+      <img class="main-lightbox-image" src=""/>
+      <aside id="figures-list">
+        <% figureList.each(function (ix, figure) { %>
+        <div class="change-img" data-doi="<%= figure.getAttribute('data-doi') %>">
+          <img class="aside-figure" src="/plosmedicine/article/figure/image?size=inline&id=<%= figure.getAttribute('data-doi') %>" />
+        </div>
+        <% }) %>
+        <div class="dummy-figure">
+        </div>
+      </aside>
+    </div>
+    <div id="lightbox-footer">
+
+      <div id="btns-container" class="lightbox-row <% if(figureList.length <= 1) { print('one-figure-only') } %>">
+        <div class="fig-btns-container reset-zoom-wrapper left">
+          <span class="fig-btn reset-zoom-btn">Reset zoom</span>
+        </div>
+        <div class="zoom-slider-container">
+          <div class="range-slider-container">
+            <span id="lb-zoom-min"></span>
+            <div class="range-slider round" data-slider data-options="start: 20; end: 200; initial: 20;">
+              <span class="range-slider-handle" role="slider" tabindex="0"></span>
+              <span class="range-slider-active-segment"></span>
+              <input type="hidden">
+            </div>
+            <span id="lb-zoom-max"></span>
+          </div>
+        </div>
+        <% if(figureList.length > 1) { %>
+        <div class="fig-btns-container">
+          <span class="fig-btn all-fig-btn"><i class="icon icon-all"></i> All Figures</span>
+          <span class="fig-btn next-fig-btn"><i class="icon icon-next"></i> Next</span>
+          <span class="fig-btn prev-fig-btn"><i class="icon icon-prev"></i> Previous</span>
+        </div>
+        <% } %>
+      </div>
+      <div id="image-context">
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="image-context-template" type="text/template">
+  <div class="footer-text">
+    <div id="figure-description-wrapper">
+      <div id="view-more-wrapper" style="<% descriptionExpanded? print('display:none;') : '' %>">
+        <span id="figure-title"><%= title %></span>
+        <p id="figure-description">
+          <%= description %>&nbsp;&nbsp;
+        </p>
+        <span id="view-more">show more<i class="icon-arrow-right"></i></span>
+
+      </div>
+      <div id="view-less-wrapper" style="<% descriptionExpanded? print('display:inline-block;') : '' %>" >
+        <span id="figure-title"><%= title %></span>
+        <p id="full-figure-description">
+          <%= description %>&nbsp;&nbsp;
+          <span id="view-less">show less<i class="icon-arrow-left"></i></span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="show-context-container">
+    <a class="btn show-context" href="<%= showInContext(strippedDoi) %>">Show in Context</a>
+  </div>
+  <div id="download-buttons">
+    <h3>Download:</h3>
+    <div class="item">
+      <a href="/plosmedicine/article/figure/image?size=original&download=&id=<%= doi %>" title="original image">
+        <span class="download-btn">TIFF</span>
+      </a>
+      <span class="file-size"><%= fileSizes.original %></span>
+    </div>
+    <div class="item">
+      <a href="/plosmedicine/article/figure/image?size=large&download=&id=<%= doi %>" title="large image">
+        <span class="download-btn">PNG</span>
+      </a>
+      <span class="file-size"><%= fileSizes.large %></span>
+    </div>
+
+  </div>
+</script>
+      <div class="article-content">
+
+
+
+
+
+
+<div id="figure-carousel-section">
+  <h2>Figures</h2>
+
+  <div id="figure-carousel">
+
+    <div class="carousel-wrapper">
+      <div class="slider">
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.g001">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.g001"
+                     loading="lazy"
+                     alt="Figure 1"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.t001">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t001"
+                     loading="lazy"
+                     alt="Table 1"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.t002">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t002"
+                     loading="lazy"
+                     alt="Table 2"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.t003">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t003"
+                     loading="lazy"
+                     alt="Table 3"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.t004">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t004"
+                     loading="lazy"
+                     alt="Table 4"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.g002">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.g002"
+                     loading="lazy"
+                     alt="Figure 2"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pmed.1001308.g003">
+
+                <img src="/plosmedicine/article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.g003"
+                     loading="lazy"
+                     alt="Figure 3"
+                />
+
+            </div>
+      </div>
+    </div>
+
+    <div class="carousel-control">
+      <span class="button previous"></span>
+      <span class="button next"></span>
+    </div>
+    <div class="carousel-page-buttons">
+
+    </div>
+  </div>
+</div>
+<script src="/resource/js/vendor/jquery.touchswipe.js" type="text/javascript"></script>
+<script src="/resource/js/components/figure_carousel.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/jquery.dotdotdot.js" type="text/javascript"></script>
+
+
+        <div class="article-text" id="artText">
+          
+
+
+
+<div xmlns:plos="http://plos.org" class="abstract toc-section abstract-type-"><a id="abstract1" name="abstract1" data-toc="abstract1" class="link-target" title="Abstract"></a><h2>Abstract</h2><div class="abstract-content">
+<div id="section1" class="section toc-section"><a id="" name="" class="link-target" title="Background"></a>
+<h3>Background</h3>
+<a id="article1.front1.article-meta1.abstract2.sec1.p1" name="article1.front1.article-meta1.abstract2.sec1.p1" class="link-target"></a><p>Previous studies indicate that in published reports, trial results can be distorted by the use of “spin” (specific reporting strategies, intentional or unintentional, emphasizing the beneficial effect of the experimental treatment). We aimed to (1) evaluate the presence of “spin” in press releases and associated media coverage; and (2) evaluate whether findings of randomized controlled trials (RCTs) based on press releases and media coverage are misinterpreted.</p>
+</div>
+
+<div id="section2" class="section toc-section"><a id="" name="" class="link-target" title="Methods and Findings"></a>
+<h3>Methods and Findings</h3>
+<a id="article1.front1.article-meta1.abstract2.sec2.p1" name="article1.front1.article-meta1.abstract2.sec2.p1" class="link-target"></a><p>We systematically searched for all press releases indexed in the EurekAlert! database between December 2009 and March 2010. Of the 498 press releases retrieved and screened, we included press releases for all two-arm, parallel-group RCTs (<em>n</em> = 70). We obtained a copy of the scientific article to which the press release related and we systematically searched for related news items using Lexis Nexis.</p>
+<a id="article1.front1.article-meta1.abstract2.sec2.p2" name="article1.front1.article-meta1.abstract2.sec2.p2" class="link-target"></a><p>“Spin,” defined as specific reporting strategies (intentional or unintentional) emphasizing the beneficial effect of the experimental treatment, was identified in 28 (40%) scientific article abstract conclusions and in 33 (47%) press releases. From bivariate and multivariable analysis assessing the journal type, funding source, sample size, type of treatment (drug or other), results of the primary outcomes (all nonstatistically significant versus other), author of the press release, and the presence of “spin” in the abstract conclusion, the only factor associated, with “spin” in the press release was “spin” in the article abstract conclusions (relative risk [RR] 5.6, [95% CI 2.8–11.1], <em>p</em>&lt;0.001). Findings of RCTs based on press releases were overestimated for 19 (27%) reports. News items were identified for 41 RCTs; 21 (51%) were reported with “spin,” mainly the same type of “spin” as those identified in the press release and article abstract conclusion. Findings of RCTs based on the news item was overestimated for ten (24%) reports.</p>
+</div>
+
+<div id="section3" class="section toc-section"><a id="" name="" class="link-target" title="Conclusion"></a>
+<h3>Conclusion</h3>
+<a id="article1.front1.article-meta1.abstract2.sec3.p1" name="article1.front1.article-meta1.abstract2.sec3.p1" class="link-target"></a><p>“Spin” was identified in about half of press releases and media coverage. In multivariable analysis, the main factor associated with “spin” in press releases was the presence of “spin” in the article abstract conclusion.</p>
+</div>
+</div></div><div xmlns:plos="http://plos.org" class="abstract toc-section abstract-type-editors-summary"><a id="abstract2" name="abstract2" data-toc="abstract2" class="link-target" title="Editors' Summary"></a>
+<h2>Editors' Summary</h2>
+<div class="abstract-content">
+<div id="section1" class="section toc-section"><a id="" name="" class="link-target" title="Background"></a>
+<h3>Background</h3>
+<a id="article1.front1.article-meta1.abstract3.sec1.p1" name="article1.front1.article-meta1.abstract3.sec1.p1" class="link-target"></a><p>The mass media play an important role in disseminating the results of medical research. Every day, news items in newspapers and magazines and on the television, radio, and internet provide the general public with information about the latest clinical studies. Such news items are written by journalists and are often based on information in “press releases.” These short communications, which are posted on online databases such as EurekAlert! and sent directly to journalists, are prepared by researchers or more often by the drug companies, funding bodies, or institutions supporting the clinical research and are designed to attract favorable media attention to newly published research results. Press releases provide journalists with the information they need to develop and publish a news story, including a link to the peer-reviewed journal (a scholarly periodical containing articles that have been judged by independent experts) in which the research results appear.</p>
+</div>
+
+<div id="section2" class="section toc-section"><a id="" name="" class="link-target" title="Why Was This Study Done?"></a>
+<h3>Why Was This Study Done?</h3>
+<a id="article1.front1.article-meta1.abstract3.sec2.p1" name="article1.front1.article-meta1.abstract3.sec2.p1" class="link-target"></a><p>In an ideal world, journal articles, press releases, and news stories would all accurately reflect the results of health research. Unfortunately, the findings of randomized controlled trials (RCTs—studies that compare the outcomes of patients randomly assigned to receive alternative interventions), which are the best way to evaluate new treatments, are sometimes distorted in peer-reviewed journals by the use of “spin”—reporting that emphasizes the beneficial effects of the experimental (new) treatment. For example, a journal article may interpret nonstatistically significant differences as showing the equivalence of two treatments although such results actually indicate a lack of evidence for the superiority of either treatment. “Spin” can distort the transposition of research into clinical practice and, when reproduced in the mass media, it can give patients unrealistic expectations about new treatments. It is important, therefore, to know where “spin” occurs and to understand the effects of that “spin”. In this study, the researchers evaluate the presence of “spin” in press releases and associated media coverage and analyze whether the interpretation of RCT results based on press releases and associated news items could lead to the misinterpretation of RCT results.</p>
+</div>
+
+<div id="section3" class="section toc-section"><a id="" name="" class="link-target" title="What Did the Researchers Do and Find?"></a>
+<h3>What Did the Researchers Do and Find?</h3>
+<a id="article1.front1.article-meta1.abstract3.sec3.p1" name="article1.front1.article-meta1.abstract3.sec3.p1" class="link-target"></a><p>The researchers identified 70 press releases indexed in EurekAlert! over a 4-month period that described two-arm, parallel-group RCTs. They used Lexis Nexis, a database of news reports from around the world, to identify associated news items for 41 of these press releases and then analyzed the press releases, news items, and abstracts of the scientific articles related to each press release for “spin”. Finally, they interpreted the results of the RCTs using each source of information independently. Nearly half the press releases and article abstract conclusions contained “spin” and, importantly, “spin” in the press releases was associated with “spin” in the article abstracts. The researchers overestimated the benefits of the experimental treatment from the press release as compared to the full-text peer-reviewed article for 27% of reports. Factors that were associated with this overestimation of treatment benefits included publication in a specialized journal and having “spin” in the press release. Of the news items related to press releases, half contained “spin”, usually of the same type as identified in the press release and article abstract. Finally, the researchers overestimated the benefit of the experimental treatment from the news item as compared to the full-text peer-reviewed article in 24% of cases.</p>
+</div>
+
+<div id="section4" class="section toc-section"><a id="" name="" class="link-target" title="What Do These Findings Mean?"></a>
+<h3>What Do These Findings Mean?</h3>
+<a id="article1.front1.article-meta1.abstract3.sec4.p1" name="article1.front1.article-meta1.abstract3.sec4.p1" class="link-target"></a><p>These findings show that “spin” in press releases and news reports is related to the presence of “spin” in the abstract of peer-reviewed reports of RCTs and suggest that the interpretation of RCT results based solely on press releases or media coverage could distort the interpretation of research findings in a way that favors experimental treatments. This interpretation shift is probably related to the presence of “spin” in peer-reviewed article abstracts, press releases, and news items and may be partly responsible for a mismatch between the perceived and real beneficial effects of new treatments among the general public. Overall, these findings highlight the important role that journal reviewers and editors play in disseminating research findings. These individuals, the researchers conclude, have a responsibility to ensure that the conclusions reported in the abstracts of peer-reviewed articles are appropriate and do not over-interpret the results of clinical research.</p>
+</div>
+
+<div id="section5" class="section toc-section"><a id="" name="" class="link-target" title="Additional Information"></a>
+<h3>Additional Information</h3>
+<a id="article1.front1.article-meta1.abstract3.sec5.p1" name="article1.front1.article-meta1.abstract3.sec5.p1" class="link-target"></a><p>Please access these Web sites via the online version of this summary at <a href="http://dx.doi.org/10.1371/journal.pmed.1001308">http://dx.doi.org/10.1371/journal.pmed.1001308</a>.</p>
+
+
+<ul class="bulleted">
+
+<li>The <a href="http://clinicaltrials.ploshubs.org/home.action">PLOS Hub for Clinical Trials</a>, which collects PLOS journals relating to clinical trials, includes some other articles on “spin” in clinical trial reports</li>
+
+<li><a href="http://www.eurekalert.org/">EurekAlert</a> is an online free database for science press releases</li>
+
+<li>The UK National Health Service Choices website includes <a href="http://www.nhs.uk/news/Pages/NewsIndex.aspx">Beyond the Headlines</a>, a resource that provides an unbiased and evidence-based analysis of health stories that make the news for both the public and health professionals</li>
+
+<li>The US-based organization <a href="http://www.healthnewsreview.org/">HealthNewsReview</a>, a project supported by the <a href="http://informedmedicaldecisions.org/">Foundation for Informed Medical Decision Making</a>, also provides expert reviews of news stories</li>
+
+</ul></div>
+</div></div>
+
+
+<div xmlns:plos="http://plos.org" class="articleinfo"><p><strong>Citation: </strong>Yavchitz A, Boutron I, Bafeta A, Marroun I, Charles P, Mantz J, et al.  (2012) Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study. PLoS Med 9(9):
+           e1001308.
+        
+        https://doi.org/10.1371/journal.pmed.1001308</p><p><strong>Academic Editor: </strong>Lisa A. Bero, 
+        University of California, San Francisco, United States of America
+      </p><p><strong>Received: </strong>November 16, 2011; <strong>Accepted: </strong>August 1, 2012; <strong>Published: </strong> September 11, 2012</p><p><strong>Copyright: </strong> ©  Yavchitz et al. This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</p><p><strong>Funding: </strong>No direct funding was received for this study. The authors were personally salaried by their institutions during the period of writing (though no specific salary was set aside or given for the writing of this paper). No funding bodies had any role in the study design, data collection, analysis, decision to publish or preparation of the manuscript.</p><p><strong>Competing interests: </strong> Isabelle Boutron is a member of <em>PLOS Medicine</em> Editorial Board. The authors have declared that no other competing interests exist.</p><p><strong>Abbreviations:
+          </strong>RCT,
+            randomized controlled trial</p></div>
+
+
+
+
+
+<div xmlns:plos="http://plos.org" id="section1" class="section toc-section"><a id="s2" name="s2" data-toc="s2" class="link-target" title="Introduction"></a><h2>Introduction</h2><a id="article1.body1.sec1.p1" name="article1.body1.sec1.p1" class="link-target"></a><p>The media play an important role in the dissemination of findings from health research. More than half of US adults report that they follow health news closely <a href="#pmed.1001308-Schwartz1" class="ref-tip">[1]</a>. Further, 90% of the general public gets most of its information about science from the mass media <a href="#pmed.1001308-Jaques1" class="ref-tip">[2]</a>. Press releases are a major source of information for one-third of medical reports in US newspapers <a href="#pmed.1001308-1" class="ref-tip">[3]</a>. Press releases are widely used by the medical researchers to attract favorable media attention <a href="#pmed.1001308-Woloshin1" class="ref-tip">[4]</a>–<a href="#pmed.1001308-Kuriya1" class="ref-tip">[6]</a> and to promote their research <a href="#pmed.1001308-Chapman1" class="ref-tip">[7]</a>–<a href="#pmed.1001308-Woloshin2" class="ref-tip">[9]</a>. A press release should provide journalists with the basic information needed to develop a news story and publish it in the mass media.</p>
+<a id="article1.body1.sec1.p2" name="article1.body1.sec1.p2" class="link-target"></a><p>Randomized controlled trials (RCTs) are considered the gold standard for therapeutic evaluation <a href="#pmed.1001308-Sackett1" class="ref-tip">[10]</a>. Adequate and undistorted communication of the findings from RCTs is essential for physicians, researchers, and patients because it allows for efficient uptake of research into clinical practice <a href="#pmed.1001308-Phillips1" class="ref-tip">[11]</a>. Theoretically, in reports of RCTs published in peer-reviewed journals, the data should speak for themselves. However, a recent study showed that research findings can be distorted in published articles, by the use of “spin,” which is defined as specific reporting emphasizing the beneficial effect of the experimental treatment <a href="#pmed.1001308-Boutron1" class="ref-tip">[12]</a>. The types of distorted presentation or “spin” are diverse, with, for example, a particular focus on statistically significant results (within-group comparison, subgroup analyses, and secondary outcomes) or an inadequate interpretation of nonstatistically significant differences as demonstrating equivalence in treatment effectiveness or lack of difference in adverse events.</p>
+<a id="article1.body1.sec1.p3" name="article1.body1.sec1.p3" class="link-target"></a><p>We aimed to (1) evaluate the presence of “spin” in press releases and associated media coverage and (2) evaluate whether findings of RCTs contained within press releases and media coverage are misinterpreted.</p>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section2" class="section toc-section"><a id="s3" name="s3" data-toc="s3" class="link-target" title="Methods"></a><h2>Methods</h2>
+<div id="section1" class="section toc-section"><a id="s3a" name="s3a" class="link-target" title="Selection of Press Releases, Related Scientific Articles, and News Items"></a>
+<h3>Selection of Press Releases, Related Scientific Articles, and News Items</h3>
+<a id="article1.body1.sec2.sec1.p1" name="article1.body1.sec2.sec1.p1" class="link-target"></a><p>We identified all press releases indexed in EurekAlert! (online free database for science press releases; <a href="http://www.eurekalert.org">www.eurekalert.org</a>) between December 1, 2009, and March 31, 2010, using the following search strategy: topic “medicine and health,” type of release “research news,” keyword: random* <a href="#pmed.1001308-Woloshin1" class="ref-tip">[4]</a>,<a href="#pmed.1001308-Woloshin3" class="ref-tip">[13]</a>. We included press releases for published results of two-arm, parallel-group RCTs defined as prospective studies assessing health care interventions in human participants. To have a homogeneous sample, we excluded press releases for equivalence or noninferiority, cross-over, cluster, and multiple-arm trials; follow-up studies; press releases not reported in English; and those about more than one study. Duplicate press releases (i.e., press releases published more than once in the database) were systematically searched and excluded.</p>
+<a id="article1.body1.sec2.sec1.p2" name="article1.body1.sec2.sec1.p2" class="link-target"></a><p>The title and full text of all retrieved press releases were screened by one reviewer to exclude any non-eligible press releases.</p>
+<a id="article1.body1.sec2.sec1.p3" name="article1.body1.sec2.sec1.p3" class="link-target"></a><p>We obtained a copy of the scientific article related to the press release from (1) the direct link or full reference citation reported in the press release, if available; or (2) the PubMed single citation matcher indicating the year of publication, journal, and author's name. Each retrieved scientific article (abstract and full text) was assessed by the same reader to confirm eligibility.</p>
+<a id="article1.body1.sec2.sec1.p4" name="article1.body1.sec2.sec1.p4" class="link-target"></a><p>Finally, for all selected press releases, we systematically searched for related news items in the “general news” library of LEXIS-NEXIS using (1) the name of the disease; (2) the treatment being evaluated, and, if needed, the name of the first or second author. All news related to the articles or press releases were retrieved, and we selected the news that had the highest number of words dedicated to the selected study.</p>
+</div>
+
+<div id="section2" class="section toc-section"><a id="s3b" name="s3b" class="link-target" title="Data Abstraction"></a>
+<h3>Data Abstraction</h3>
+<a id="article1.body1.sec2.sec2.p1" name="article1.body1.sec2.sec2.p1" class="link-target"></a><p>Data were abstracted from the press release, news items, and the related published scientific article. For this purpose, we developed a standardized data-abstraction form using previous work on the same topics <a href="#pmed.1001308-Boutron1" class="ref-tip">[12]</a>–<a href="#pmed.1001308-AlsNielsen1" class="ref-tip">[14]</a>. The data-abstraction form and details about the methods is available in Texts S1 and S2.</p>
+<a id="article1.body1.sec2.sec2.p2" name="article1.body1.sec2.sec2.p2" class="link-target"></a><p>The data-abstraction form was preliminarily tested by two of the reviewers with a sample of 15 press releases and original articles indexed in January 2008. The data that involved some subjectivity, such as the type of “spin” were abstracted by two independent reviewers, with discrepancies resolved by consensus. Other data were evaluated by a single reviewer. The concordance between the two reviewers for the assessment of “spin” is reported in Text S3; the mean kappa coefficient for “spin” was 0.56 (range 0.43–0.69).</p>
+<a id="article1.body1.sec2.sec2.p3" name="article1.body1.sec2.sec2.p3" class="link-target"></a><p>We systematically extracted data related to the characteristics of (1) the RCT, (2) the press releases, and (3) the presence of “spin” in the article abstract conclusions, in the press release and, when available, in the news items.</p>
+<a id="article1.body1.sec2.sec2.p4" name="article1.body1.sec2.sec2.p4" class="link-target"></a><p>We defined “spin” as a specific reporting (intentional or unintentional) that emphasizes the beneficial effect of the experimental treatment. We used a classification of “spin” described in a previous work <a href="#pmed.1001308-Boutron1" class="ref-tip">[12]</a>. This classification was initially developed in the context of trials with a nonstatistically significant primary outcome. This classification was adapted for all RCTs. We considered “spin” as being a focus on statistically significant results (within-group comparison, secondary outcomes, subgroup analyses, modified population of analyses); an interpretation of statistically nonsignificant results for the primary outcomes as showing treatment equivalence or comparable effectiveness; or any inadequate claim of safety or emphasis of the beneficial effect of the treatment.</p>
+</div>
+
+<div id="section3" class="section toc-section"><a id="s3c" name="s3c" class="link-target" title="Results Interpretation"></a>
+<h3>Results Interpretation</h3>
+<a id="article1.body1.sec2.sec3.p1" name="article1.body1.sec2.sec3.p1" class="link-target"></a><p>The RCT results were interpreted independently from three different sources: (1) from the full text of the scientific article, (2) from the press release, and (3) from the news items.</p>
+<a id="article1.body1.sec2.sec3.p2" name="article1.body1.sec2.sec3.p2" class="link-target"></a><p>For each source, different pairs of assessors independently evaluated the results of the RCT and achieved consensus. Assessment based on the scientific article relied on the results for the primary outcomes, secondary outcomes, and harm. For assessment of press releases, assessors were blinded to the authors of the press release, the content of the scientific article, and the journal of publication. For assessment of news items, assessors were blinded to the content of the press release and scientific article. All results reported represent the consensus of each pair of assessors.</p>
+
+<div id="section1" class="section toc-section"><a id="s3c1" name="s3c1" class="link-target" title="Interpreting the RCT results"></a><h4>Interpreting the RCT results.</h4><a id="article1.body1.sec2.sec3.sec1.p1" name="article1.body1.sec2.sec3.sec1.p1" class="link-target"></a><p>The trial results were interpreted independently by use of the same scale, from 1 to 5 <a href="#pmed.1001308-Schwartz2" class="ref-tip">[15]</a>. According to this scale, the assessors had to indicate whether patients should (1) definitely get the experimental treatment evaluated, (2) probably get the experimental treatment evaluated, (3) decide for themselves (i.e., the article was neutral), (4) probably not get the experimental treatment evaluated, or (5) definitely not get the experimental treatment evaluated. If the interpretation of the RCT results was classified as 1 or 2, the experimental treatment was considered beneficial; 3, the trial results were neutral; 4 or 5, the experimental treatment was considered not beneficial.</p>
+</div>
+
+<div id="section2" class="section toc-section"><a id="s3c2" name="s3c2" class="link-target" title="Definition of misinterpretation"></a><h4>Definition of misinterpretation.</h4><a id="article1.body1.sec2.sec3.sec2.p1" name="article1.body1.sec2.sec3.sec2.p1" class="link-target"></a><p>Misinterpretation was defined as the interpretation of the press release or news items differing from that based on the full-text article by at least one class according to the above three-class system of scores. Misinterpretation of the press release or news items could overestimate the treatment beneficial effect or underestimate the treatment effect. For example, an overestimation of the treatment beneficial effect in the press release or news items occurred when reading the published article led to rating the trial results as neutral, whereas reading the press release or new items led to rating the experimental treatment as beneficial.</p>
+</div>
+</div>
+
+<div id="section4" class="section toc-section"><a id="s3d" name="s3d" class="link-target" title="Statistical Analysis"></a>
+<h3>Statistical Analysis</h3>
+<a id="article1.body1.sec2.sec4.p1" name="article1.body1.sec2.sec4.p1" class="link-target"></a><p>Data for quantitative variables are expressed with medians and IQRs. Data for qualitative variables are expressed with frequencies and percentages. We planned bivariate and multivariable analysis to identify factors associated with (1) “spin” in the press releases, (2) an overestimation of the beneficial effect of the experimental treatment from press releases, (3) “spin” in the news items, and (4) an overestimation of the beneficial effect of the experimental treatment from news items. For bivariate analysis, we used the chi-square or Fisher exact test for categorical data and the Student <em>t</em>-test for quantitative data. For the multivariable analysis, we performed a Poisson regression with robust error variance <a href="#pmed.1001308-Zou1" class="ref-tip">[16]</a> with a bootstrap model selection variable method <a href="#pmed.1001308-Austin1" class="ref-tip">[17]</a> to assess all relevant variables. We used 1,000 bootstrap samples. Variables with <em>p</em>&lt;0.25 in bivariate analysis were selected for possible inclusion in the multivariable model. Variables identified as independent factors associated with “spin” in the press release in at least 60% of the bootstrap samples were kept in the multivariable model.</p>
+<a id="article1.body1.sec2.sec4.p2" name="article1.body1.sec2.sec4.p2" class="link-target"></a><p><a href="#s4">Results</a> are expressed as risk ratio (RR) and 95% CIs. We did not perform multivariable analysis to identify factors associated with overestimation of the benefit of the experimental treatment because there were few events as compared with the number of variables to include.</p>
+<a id="article1.body1.sec2.sec4.p3" name="article1.body1.sec2.sec4.p3" class="link-target"></a><p>Statistical analysis involved use of SAS v9.1 (SAS Institute).</p>
+</div>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section3" class="section toc-section"><a id="s4" name="s4" data-toc="s4" class="link-target" title="Results"></a><h2>Results</h2>
+<div id="section1" class="section toc-section"><a id="s4a" name="s4a" class="link-target" title="Selection of Press Releases and Scientific Articles"></a>
+<h3>Selection of Press Releases and Scientific Articles</h3>
+<a id="article1.body1.sec3.sec1.p1" name="article1.body1.sec3.sec1.p1" class="link-target"></a><p>The search strategy in EurekAlert! between December 1, 2009, and March 31, 2010, retrieved 498 press releases. The selection process resulted in 70 press releases and related scientific articles (<a href="#pmed-1001308-g001">Figure 1</a>). Of these, 41 had associated news items. The list of press releases and published articles included is available in <a href="#pmed.1001308.s004">Text S4</a>.</p>
+<a class="link-target" id="pmed-1001308-g001" name="pmed-1001308-g001"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.g001"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.g001" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.g001"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.g001" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.g001"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.g001"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Figure 1. </span> Flow diagram of the selected press releases and related articles.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.g001">
+              https://doi.org/10.1371/journal.pmed.1001308.g001</a></p></div></div>
+
+<div id="section2" class="section toc-section"><a id="s4b" name="s4b" class="link-target" title="Characteristics of RCTS"></a>
+<h3>Characteristics of RCTS</h3>
+<a id="article1.body1.sec3.sec2.p1" name="article1.body1.sec3.sec2.p1" class="link-target"></a><p>The description of the scientific articles is in <a href="#pmed-1001308-t001">Table 1</a>. In total, 38 (54%) articles were published in a specialized journal; the median (interquartile range) journal impact factor was 17.2 (4.8–28.4). The funding source was for-profit (only or with a nonprofit source) for about half of the reports. In 34 reports (49%), the primary outcomes were statistically significant, and in 24 (34%), all primary outcomes were not statistically significant. In all, 28 articles (40%) exhibited at least one type of “spin” in the abstract conclusions. The main types of “spin” in the abstract conclusions were no acknowledgement of nonstatistically significant primary outcomes (20%); interpreting <em>p</em>&gt;0.05 as demonstrating equivalence (7%); inappropriate extrapolation (9%); focus on statistically significant results such as subgroup analyses (6%), within-group comparisons (9%), and secondary outcomes (4%); or inadequate claim of safety (6%).</p>
+<a class="link-target" id="pmed-1001308-t001" name="pmed-1001308-t001"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.t001"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.t001" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.t001"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t001" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.t001"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.t001"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Table 1. </span> General characteristics of articles.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.t001">
+              https://doi.org/10.1371/journal.pmed.1001308.t001</a></p></div></div>
+
+<div id="section3" class="section toc-section"><a id="s4c" name="s4c" class="link-target" title="Characteristics of Press Releases"></a>
+<h3>Characteristics of Press Releases</h3>
+<a id="article1.body1.sec3.sec3.p1" name="article1.body1.sec3.sec3.p1" class="link-target"></a><p>The general characteristics of press releases are in <a href="#pmed-1001308-t002">Table 2</a>: 57% were written by a press officer; half provided easy access to the research article that had been press released (i.e., a direct link or the full reference) and 25 (36%) reported the funding source. The results for primary outcomes were reported with words only in 29 (41%) press releases. Safety was mentioned in 24 (34%) and quantified in 14 (20%); the study limitations were reported in ten (14%). A total of 58 (83%) press releases contained quotations from authors or editors of the article. In 30 (52%), the interview reported results with emphasis, such as “this work paves the way for further study,” or in 22 (38%) with moderation, such as “further investigation is needed to establish (…).” Quotations from the article were included in 22 (31%) of the releases. In 11 (50%), the quotations reported results with emphasis, such as “clinical findings are indeed very encouraging, said Dr…”), or in seven (32%) with moderation.</p>
+<a class="link-target" id="pmed-1001308-t002" name="pmed-1001308-t002"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.t002"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.t002" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.t002"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t002" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.t002"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.t002"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Table 2. </span> General characteristics of press releases.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.t002">
+              https://doi.org/10.1371/journal.pmed.1001308.t002</a></p></div><a id="article1.body1.sec3.sec3.p2" name="article1.body1.sec3.sec3.p2" class="link-target"></a><p>About half of the press releases (33; 47%) had at least one type of “spin” (<a href="#pmed-1001308-t002">Table 2</a>).</p>
+</div>
+
+<div id="section4" class="section toc-section"><a id="s4d" name="s4d" class="link-target" title="Factors Associated with “Spin” in Press Releases"></a>
+<h3>Factors Associated with “Spin” in Press Releases</h3>
+<a id="article1.body1.sec3.sec4.p1" name="article1.body1.sec3.sec4.p1" class="link-target"></a><p>From bivariate analysis (<a href="#pmed-1001308-t003">Table 3</a>), “spin” in press releases was more frequent in trials published in a specialized journal (58% versus 34% in a general journal; <em>p</em> = 0.05), trials with small sample size (i.e., &lt;112) (63% versus 31%; <em>p</em> = 0.008), and trials with “spin” in the scientific article abstract conclusion (93%, yes, versus 17%, no; <em>p</em>&lt;0.001). The presence of “spin” in the press release was not associated with funding source (45% profit versus 49% other: <em>p</em> = 0.8), author of the press release (48% press officer versus 47% other; <em>p</em> = 0.9), the experimental treatment (47% drug versus 47% other; <em>p</em> = 1.0) or results of the primary outcome (46% all nonstatistically significant versus 48% other; <em>p</em> = 0.9). In multivariable analysis including all variables with <em>p</em>&lt;0.25 in the bivariate analysis (i.e., journal, “spin” in the abstract conclusion, and sample size), the only factor associated with “spin” in the press release was “spin” in the scientific article abstract conclusions (RR = 5.6, 95% CI 2.8–11.0, <em>p</em>&lt;0.001) (<a href="#pmed.1001308.s005">Text S5</a>).</p>
+<a class="link-target" id="pmed-1001308-t003" name="pmed-1001308-t003"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.t003"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.t003" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.t003"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t003" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.t003"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.t003"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Table 3. </span> Bivariate analysis of factors associated with and “spin” in the press releases.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.t003">
+              https://doi.org/10.1371/journal.pmed.1001308.t003</a></p></div></div>
+
+<div id="section5" class="section toc-section"><a id="s4e" name="s4e" class="link-target" title="Interpretation of the Trial Results from Press Releases"></a>
+<h3>Interpretation of the Trial Results from Press Releases</h3>
+<a id="article1.body1.sec3.sec5.p1" name="article1.body1.sec3.sec5.p1" class="link-target"></a><p>For the interpretation based on the full-text scientific articles, for 38 articles (54%), the experimental treatment was considered beneficial, 18 (26%) neutral, and 14 (20%) not beneficial. In contrast, for the interpretation based on press releases, for 55 releases (79%), the experimental treatment was considered beneficial, two (3%) neutral, and 13 (18%) not beneficial. The results were misinterpreted in 22 press releases (31%); for 19 (86%), the assessors overestimated the benefit of the experimental treatment from the press release and for three (14%), they underestimated the benefit of the experimental treatment from the press release.</p>
+<a id="article1.body1.sec3.sec5.p2" name="article1.body1.sec3.sec5.p2" class="link-target"></a><p>As shown in <a href="#pmed-1001308-t004">Table 4</a>, on the basis of press releases, the benefit of the experimental treatment was overestimated more often for trial results published in a specialized journal rather than in a general medical journal (45% versus 6%; <em>p</em>&lt;0.001), for trials with a small rather than large sample size (46% versus 9%; <em>p</em>&lt;0.001), for trials with nonstatistically rather than significant primary outcomes (42% versus20%; <em>p</em> = 0.05), and for trials with “spin” rather than without “spin” in the press release (48% versus 8%; <em>p</em>&lt;0.001). These results did not differ significantly by funding source, author of the press release, or type of experimental treatment.</p>
+<a class="link-target" id="pmed-1001308-t004" name="pmed-1001308-t004"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.t004"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.t004" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.t004"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.t004" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.t004"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.t004"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Table 4. </span> Bivariate analysis of factors associated with an overestimation of the benefit of the experimental treatment from the press releases as compared with the interpretation from articles.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.t004">
+              https://doi.org/10.1371/journal.pmed.1001308.t004</a></p></div></div>
+
+<div id="section6" class="section toc-section"><a id="s4f" name="s4f" class="link-target" title="“Spin” and Interpretation of the News"></a>
+<h3>“Spin” and Interpretation of the News</h3>
+<a id="article1.body1.sec3.sec6.p1" name="article1.body1.sec3.sec6.p1" class="link-target"></a><p>For a sample of 41 RCTS we retrieved the scientific article, the press release, and any news items. “Spin” was identified in 17 (41%) abstracts, 19 (46%) press releases, and 21 (51%) news items.</p>
+<a id="article1.body1.sec3.sec6.p2" name="article1.body1.sec3.sec6.p2" class="link-target"></a><p><a href="#pmed-1001308-g002">Figure 2</a> describes the reporting of “spin” in abstracts, press releases, and news items. For the 17 abstracts reported with “spin”, 16 press releases and related news items featured the same “spin.” For the 24 abstracts without “spin,” only three press releases featured “spin,” which was subsequently reported in the related news items. Examples of “spin” in the abstract and related press releases and news items are in <a href="#pmed-1001308-g003">Figure 3</a>. The factors associated with “spin” in the news were specialty journals (67% versus 35%; <em>p</em> = 0.04), small sample size (68% versus 32%; <em>p</em> = 0.02), “spin” in abstract (100% versus 5%; <em>p</em>&lt;0.001), and “spin” in the press release (100% versus 13%; <em>p</em>&lt;0.001) (<a href="#pmed.1001308.s006">Text S6</a>).</p>
+<a class="link-target" id="pmed-1001308-g002" name="pmed-1001308-g002"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.g002"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.g002" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.g002"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.g002" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.g002"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.g002"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Figure 2. </span> “Spin” in abstract conclusions, press releases, and news items.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.g002">
+              https://doi.org/10.1371/journal.pmed.1001308.g002</a></p></div><a class="link-target" id="pmed-1001308-g003" name="pmed-1001308-g003"></a><div class="figure" data-doi="10.1371/journal.pmed.1001308.g003"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pmed.1001308.g003" data-doi="10.1371/journal.pmed.1001308" data-uri="10.1371/journal.pmed.1001308.g003"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pmed.1001308.g003" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pmed.1001308.g003"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pmed.1001308.g003"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Figure 3. </span> Examples of “spin” in abstracts, in press releases, and in related news items.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pmed.1001308.g003">
+              https://doi.org/10.1371/journal.pmed.1001308.g003</a></p></div><a id="article1.body1.sec3.sec6.p3" name="article1.body1.sec3.sec6.p3" class="link-target"></a><p>Overall, the assessors overestimated the benefit of the experimental treatment from the news for 10 (24%) reports. Factors associated with overestimation of the beneficial effect of the treatment from the news items were small sample size (41% versus 5%, <em>p</em> = 0.01), and “spin” in the news (43% versus 5%, <em>p</em> = 0.009) (<a href="#pmed.1001308.s007">Text S7</a>).</p>
+</div>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section4" class="section toc-section"><a id="s5" name="s5" data-toc="s5" class="link-target" title="Discussion"></a><h2>Discussion</h2><a id="article1.body1.sec4.p1" name="article1.body1.sec4.p1" class="link-target"></a><p>Our results highlight a tendency for press releases and the associated media coverage of RCTs to place emphasis on the beneficial effects of experimental treatments. This tendency is probably related to the presence of “spin” in conclusions of the scientific article's abstract. This tendency, in conjunction with other well-known biases such as publication bias, selective reporting of outcomes, and lack of external validity, may be responsible for an important gap between the public perception of the beneficial effect and the real effect of the treatment studied.</p>
+<a id="article1.body1.sec4.p2" name="article1.body1.sec4.p2" class="link-target"></a><p>Previous studies have highlighted the importance of press releases for results communication and dissemination <a href="#pmed.1001308-Woloshin1" class="ref-tip">[4]</a>,<a href="#pmed.1001308-vanTrigt1" class="ref-tip">[5]</a>. Indeed, as a direct means of communication between medical journals and the media, press releases provide an opportunity for journals to influence how the research is translated into news <a href="#pmed.1001308-Woloshin1" class="ref-tip">[4]</a>. The press release is essential when considering the impact of press coverage by the media on health care utilization, clinical practice, and researchers' behavior <a href="#pmed.1001308-Schwartz1" class="ref-tip">[1]</a>. This influence has been clearly shown in a quasi-experimental study evaluating the impact of media coverage <a href="#pmed.1001308-Phillips1" class="ref-tip">[11]</a>. The authors compared the number of scientific citations of articles published in the <em>New England Journal of Medicine</em> that were covered by the <em>New York Times</em> to similar articles that were not covered. They also performed this comparison during a 3-mo period when the <em>New York Times</em> was on strike; the <em>New York Times</em> continued to print an “edition of record” but did not sell copies to the public because of the strike. The authors demonstrated that the high citation of articles covered by the <em>New York Times</em> was not present during the strike. Consequently, the high citation was related to the media coverage, not the importance of the research <a href="#pmed.1001308-Haas1" class="ref-tip">[18]</a>. A Cochrane systematic review highlighted the impact of the mass media on health services utilization <a href="#pmed.1001308-Grilli1" class="ref-tip">[19]</a>. It showed a consistent effect after planned campaigns and unplanned coverage. Another study showed a clear association of the media coverage of invasive group A streptococcal (GAS) disease and testing for GAS in pediatric emergency departments, with an important increase in the prescription of rapid tests for GAS in pediatric emergency departments concomitant with a peak in media attention, despite no increase in the number of children presenting symptoms that might warrant such testing <a href="#pmed.1001308-Sharma1" class="ref-tip">[20]</a>.</p>
+<a id="article1.body1.sec4.p3" name="article1.body1.sec4.p3" class="link-target"></a><p>Unfortunately, as shown in our study, and previous work the quality of media reports is questionable. An assessment of the reporting of medical news in the mainstream media highlighted the inadequate accuracy and balance of the news media in reporting medical science <a href="#pmed.1001308-Schwartz3" class="ref-tip">[21]</a>–<a href="#pmed.1001308-Naylor1" class="ref-tip">[23]</a>. The criticisms of the mainstream media also applied to press releases. Woloshin et al., in evaluating press releases issued by 20 academic medical centers, showed that the releases frequently promoted preliminary research without giving basic details or the cautions needed to judge the meaning, relevance, or validation of the science (42% of press releases evaluated in this study did not provide any relevant caveats, and 90% about animal or laboratory studies lacked caveats about extrapolating results to humans) <a href="#pmed.1001308-Woloshin3" class="ref-tip">[13]</a>. Furthermore, press releases tended to overstate the importance of the research, 29% were rated as exaggerating the findings' importance and 26% of investigator quotes were considered to overstate the research importance <a href="#pmed.1001308-Woloshin3" class="ref-tip">[13]</a>. Recently, a study showed that the quality of press releases influenced subsequent media coverage content <a href="#pmed.1001308-Schwartz4" class="ref-tip">[24]</a>.</p>
+<a id="article1.body1.sec4.p4" name="article1.body1.sec4.p4" class="link-target"></a><p>Of course, press releases are not meant to be condensed versions of scientific papers; they are meant to summarize the most important findings, contextualize these finding for journalists, and provide contact details for authors and quotes. By being condensed, they always lack details that are contained in the papers. The use of “spin” or a particular emphasis could be a way to increase the interest of journalists and subsequent citations in the peer-reviewed literature.</p>
+<a id="article1.body1.sec4.p5" name="article1.body1.sec4.p5" class="link-target"></a><p>However, this situation becomes problematic if it modifies readers' interpretation of research findings. Our results add to these previous studies by showing the link between the distorted presentation and interpretation of the results in scientific articles and the distorted content and interpretation of press releases. These findings raise the issue of the quality of the peer review process and highlight the importance of this process for disseminating accurate research results.</p>
+<a id="article1.body1.sec4.p6" name="article1.body1.sec4.p6" class="link-target"></a><p>Our study has several limitations. Firstly, our sample included only published reports of RCTs with a press release indexed in the Eurekalert! database within a 4 mo period, and reported in English; this sample may not be representative of all press releases of RCT results. In fact, half of the press releases selected were written by press officers of medical journals with a high impact factor. Other sources of press releases exist on industry websites, medical journal websites, or other databases for journalists. However, the Eurekalert! database is one of the most important sources of freely available press releases, and most research published on press releases has used this database. Further, there is no reason to believe that the selection of the sample over only 4 mo would bias the results. Secondly, RCTs represent only a small part of the medical literature and the findings may not apply to media reporting of medical or scientific research as a whole. Thirdly, we searched for “spin” only in the article abstract conclusions, not in the entire published article. Consequently, we are not able to determine whether “spin” in the press release was the same as the “spin” in the whole article. We chose the abstract conclusions because it is the most accessible section of an article. Readers often base their initial assessment of a trial on the information reported in an abstract conclusion, and in some geographic areas, the abstract of an RCT report may be all that health professionals have easy access to <a href="#pmed.1001308-Hopewell1" class="ref-tip">[25]</a>,<a href="#pmed.1001308-Gtzsche1" class="ref-tip">[26]</a>. Fourthly, the content analysis and the interpretation coding were subjective <a href="#pmed.1001308-Horton1" class="ref-tip">[27]</a>. However, two independent reviewers performed this assessment with consensus. Fifthly, we focused on articles and press releases of RCT results. We did not evaluate press releases for other study designs or proceedings of conferences.</p>
+<a id="article1.body1.sec4.p7" name="article1.body1.sec4.p7" class="link-target"></a><p>In conclusion, previous work showed that exaggerated and inappropriate coverage of research findings in the news media is linked to inappropriate reporting of press releases. Our study adds to these results showing that “spin” in press releases and the news is related to the presence of “spin” in the published article, namely the abstract conclusions. Additionally, our work highlights that this inappropriate reporting could bias readers' interpretation of research results.</p>
+<a id="article1.body1.sec4.p8" name="article1.body1.sec4.p8" class="link-target"></a><p>Consequently, reviewers and editors of published articles have an important role to play in the dissemination of research findings and should be particularly aware of the need to ensure that the conclusions reported are an appropriate reflection of the trial findings and do not overinterpret or misinterpret the results.</p>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section5" class="section toc-section"><a id="s6" name="s6" data-toc="s6" class="link-target" title="Supporting Information"></a><h2>Supporting Information</h2><div class="figshare_widget" doi="10.1371/journal.pmed.1001308"></div><div class="supplementary-material"><a name="pmed.1001308.s001" id="pmed.1001308.s001" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s001">Text S1. </a></h3><a id="article1.body1.sec5.supplementary-material1.caption1.p1" name="article1.body1.sec5.supplementary-material1.caption1.p1" class="link-target"></a><p class="preSiDOI">Data abstraction form.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s001">https://doi.org/10.1371/journal.pmed.1001308.s001</a></p><a id="article1.body1.sec5.supplementary-material1.caption1.p2" name="article1.body1.sec5.supplementary-material1.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pmed.1001308.s002" id="pmed.1001308.s002" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s002">Text S2. </a></h3><a id="article1.body1.sec5.supplementary-material2.caption1.p1" name="article1.body1.sec5.supplementary-material2.caption1.p1" class="link-target"></a><p class="preSiDOI">Details related to the method.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s002">https://doi.org/10.1371/journal.pmed.1001308.s002</a></p><a id="article1.body1.sec5.supplementary-material2.caption1.p2" name="article1.body1.sec5.supplementary-material2.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pmed.1001308.s003" id="pmed.1001308.s003" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s003">Text S3. </a></h3><a id="article1.body1.sec5.supplementary-material3.caption1.p1" name="article1.body1.sec5.supplementary-material3.caption1.p1" class="link-target"></a><p class="preSiDOI">Kappa coefficient or agreement percentage for the assessment of “spin” in press releases and in articles.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s003">https://doi.org/10.1371/journal.pmed.1001308.s003</a></p><a id="article1.body1.sec5.supplementary-material3.caption1.p2" name="article1.body1.sec5.supplementary-material3.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pmed.1001308.s004" id="pmed.1001308.s004" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s004">Text S4. </a></h3><a id="article1.body1.sec5.supplementary-material4.caption1.p1" name="article1.body1.sec5.supplementary-material4.caption1.p1" class="link-target"></a><p class="preSiDOI">List of press releases and published articles examined.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s004">https://doi.org/10.1371/journal.pmed.1001308.s004</a></p><a id="article1.body1.sec5.supplementary-material4.caption1.p2" name="article1.body1.sec5.supplementary-material4.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pmed.1001308.s005" id="pmed.1001308.s005" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s005">Text S5. </a></h3><a id="article1.body1.sec5.supplementary-material5.caption1.p1" name="article1.body1.sec5.supplementary-material5.caption1.p1" class="link-target"></a><p class="preSiDOI">Multivariate analysis of factors associated with “spin” in press releases.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s005">https://doi.org/10.1371/journal.pmed.1001308.s005</a></p><a id="article1.body1.sec5.supplementary-material5.caption1.p2" name="article1.body1.sec5.supplementary-material5.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pmed.1001308.s006" id="pmed.1001308.s006" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s006">Text S6. </a></h3><a id="article1.body1.sec5.supplementary-material6.caption1.p1" name="article1.body1.sec5.supplementary-material6.caption1.p1" class="link-target"></a><p class="preSiDOI">Bivariate analysis of factors associated with “spin” in news items (<em>n</em> = 41).</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s006">https://doi.org/10.1371/journal.pmed.1001308.s006</a></p><a id="article1.body1.sec5.supplementary-material6.caption1.p2" name="article1.body1.sec5.supplementary-material6.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pmed.1001308.s007" id="pmed.1001308.s007" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pmed.1001308.s007">Text S7. </a></h3><a id="article1.body1.sec5.supplementary-material7.caption1.p1" name="article1.body1.sec5.supplementary-material7.caption1.p1" class="link-target"></a><p class="preSiDOI">Bivariate analysis of factors associated with an overestimation of the benefit of the experimental treatment from the news as compared with the interpretation from the article abstract conclusions (<em>n</em> = 41).</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pmed.1001308.s007">https://doi.org/10.1371/journal.pmed.1001308.s007</a></p><a id="article1.body1.sec5.supplementary-material7.caption1.p2" name="article1.body1.sec5.supplementary-material7.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div></div>
+
+
+
+
+
+<div xmlns:plos="http://plos.org" class="section toc-section"><a id="ack" name="ack" data-toc="ack" title="Acknowledgments" class="link-target"></a><h2>Acknowledgments</h2>
+<a id="article1.back1.ack1.p1" name="article1.back1.ack1.p1" class="link-target"></a><p>We would like to thank Elodie Perrodeau, Nizar Ahmad, Karima Amazzough, and Guillaume Lonjon for their help in this study.</p>
+</div><div xmlns:plos="http://plos.org" class="contributions toc-section"><a id="authcontrib" name="authcontrib" data-toc="authcontrib" title="Author Contributions"></a><h2>Author Contributions</h2><p>Conceived and designed the experiments: AY IB PR. Performed the experiments: AY AB IM PC. Analyzed the data: AY. Contributed reagents/materials/analysis tools: AY IB AB IM PC JM PR. Wrote the first draft of the manuscript: AY IB. Contributed to the writing of the manuscript: AY IB PR. <a href="http://www.icmje.org/">ICMJE</a> criteria for authorship read and met: AY IB AB IM PC JM PR. Agree with manuscript results and conclusions: AY IB AB IM PC JM PR.</p></div><div xmlns:plos="http://plos.org" class="toc-section"><a id="references" name="references" class="link-target" data-toc="references" title="References"></a><h2>References</h2><ol class="references"><li id="ref1"><span class="order">1.
+            </span><a name="pmed.1001308-Schwartz1" id="pmed.1001308-Schwartz1" class="link-target"></a>Schwartz LM, Woloshin S (2004) The media matter: a call for straightforward medical reporting. Ann Intern Med 140: 226–228. <ul class="reflinks"><li><a href="#" data-author="Schwartz" data-cit="SchwartzLM%2C%20WoloshinS%20%282004%29%20The%20media%20matter%3A%20a%20call%20for%20straightforward%20medical%20reporting.%20Ann%20Intern%20Med%20140%3A%20226%E2%80%93228." data-title="The%20media%20matter%3A%20a%20call%20for%20straightforward%20medical%20reporting" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=The+media+matter%3A+a+call+for+straightforward+medical+reporting+Schwartz+2004" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref2"><span class="order">2.
+            </span><a name="pmed.1001308-Jaques1" id="pmed.1001308-Jaques1" class="link-target"></a>Jaques H (2011) BMJ Careers - get your research reported well in the news. Available: <a href="http://careers.bmj.com/careers/advice/view-article.html?id=20001805">http://careers.bmj.com/careers/advice/view-article.html?id=20001805</a>. Accessed 8 August 2012. <ul class="find-nolinks"></ul></li><li id="ref3"><span class="order">3.
+            </span><a name="pmed.1001308-1" id="pmed.1001308-1" class="link-target"></a>Incomplete reporting of research in academic press releases. Lancet 373: 1920. <ul class="reflinks"><li><a href="#" data-author="" data-cit="Incomplete%20reporting%20of%20research%20in%20academic%20press%20releases.%20Lancet%20373%3A%201920." data-title="Incomplete%20reporting%20of%20research%20in%20academic%20press%20releases" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Incomplete+reporting+of+research+in+academic+press+releases++" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref4"><span class="order">4.
+            </span><a name="pmed.1001308-Woloshin1" id="pmed.1001308-Woloshin1" class="link-target"></a>Woloshin S, Schwartz LM (2002) Press releases: translating research into news. JAMA 287: 2856–2858. <ul class="reflinks"><li><a href="#" data-author="Woloshin" data-cit="WoloshinS%2C%20SchwartzLM%20%282002%29%20Press%20releases%3A%20translating%20research%20into%20news.%20JAMA%20287%3A%202856%E2%80%932858." data-title="Press%20releases%3A%20translating%20research%20into%20news" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Press+releases%3A+translating+research+into+news+Woloshin+2002" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref5"><span class="order">5.
+            </span><a name="pmed.1001308-vanTrigt1" id="pmed.1001308-vanTrigt1" class="link-target"></a>van Trigt AM, de Jong-van den Berg LT, Haaijer-Ruskamp FM, Willems J, Tromp TF (1994) Journalists and their sources of ideas and information on medicines. Soc Sci Med 38: 637–643. <ul class="reflinks"><li><a href="#" data-author="van%20Trigt" data-cit="van%20TrigtAM%2C%20de%20Jong-van%20den%20BergLT%2C%20Haaijer-RuskampFM%2C%20WillemsJ%2C%20TrompTF%20%281994%29%20Journalists%20and%20their%20sources%20of%20ideas%20and%20information%20on%20medicines.%20Soc%20Sci%20Med%2038%3A%20637%E2%80%93643." data-title="Journalists%20and%20their%20sources%20of%20ideas%20and%20information%20on%20medicines" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Journalists+and+their+sources+of+ideas+and+information+on+medicines+van+Trigt+1994" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref6"><span class="order">6.
+            </span><a name="pmed.1001308-Kuriya1" id="pmed.1001308-Kuriya1" class="link-target"></a>Kuriya B, Schneid EC, Bell CM (2008) Quality of pharmaceutical industry press releases based on original research. PLoS One 3: e2828 doi:<a href="https://doi.org/10.1371/journal.pone.0002828">https://doi.org/10.1371/journal.pone.0002828</a>. <ul class="reflinks" data-doi="10.1371/journal.pone.0002828"><li><a href="https://doi.org/10.1371/journal.pone.0002828" data-author="doi-provided" data-cit="doi-provided" data-title="doi-provided" target="_new" title="Go to article">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Quality+of+pharmaceutical+industry+press+releases+based+on+original+research+Kuriya+2008" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref7"><span class="order">7.
+            </span><a name="pmed.1001308-Chapman1" id="pmed.1001308-Chapman1" class="link-target"></a>Chapman S, Nguyen TN, White C (2007) Press-released papers are more downloaded and cited. Tob Control 16: 71. <ul class="reflinks"><li><a href="#" data-author="Chapman" data-cit="ChapmanS%2C%20NguyenTN%2C%20WhiteC%20%282007%29%20Press-released%20papers%20are%20more%20downloaded%20and%20cited.%20Tob%20Control%2016%3A%2071." data-title="Press-released%20papers%20are%20more%20downloaded%20and%20cited" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Press-released+papers+are+more+downloaded+and+cited+Chapman+2007" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref8"><span class="order">8.
+            </span><a name="pmed.1001308-Entwistle1" id="pmed.1001308-Entwistle1" class="link-target"></a>Entwistle V (1995) Reporting research in medical journals and newspapers. BMJ 310: 920–923. <ul class="reflinks"><li><a href="#" data-author="Entwistle" data-cit="EntwistleV%20%281995%29%20Reporting%20research%20in%20medical%20journals%20and%20newspapers.%20BMJ%20310%3A%20920%E2%80%93923." data-title="Reporting%20research%20in%20medical%20journals%20and%20newspapers" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Reporting+research+in+medical+journals+and+newspapers+Entwistle+1995" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref9"><span class="order">9.
+            </span><a name="pmed.1001308-Woloshin2" id="pmed.1001308-Woloshin2" class="link-target"></a>Woloshin S, Schwartz LM, Kramer BS (2009) Promoting healthy skepticism in the news: helping journalists get it right. J Natl Cancer Inst 101: 1596–1599. <ul class="reflinks"><li><a href="#" data-author="Woloshin" data-cit="WoloshinS%2C%20SchwartzLM%2C%20KramerBS%20%282009%29%20Promoting%20healthy%20skepticism%20in%20the%20news%3A%20helping%20journalists%20get%20it%20right.%20J%20Natl%20Cancer%20Inst%20101%3A%201596%E2%80%931599." data-title="Promoting%20healthy%20skepticism%20in%20the%20news%3A%20helping%20journalists%20get%20it%20right" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Promoting+healthy+skepticism+in+the+news%3A+helping+journalists+get+it+right+Woloshin+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref10"><span class="order">10.
+            </span><a name="pmed.1001308-Sackett1" id="pmed.1001308-Sackett1" class="link-target"></a>Sackett DL, Rosenberg WM, Gray JA, Haynes RB, Richardson WS (1996) Evidence based medicine: what it is and what it isn't. BMJ 312: 71–72. <ul class="reflinks"><li><a href="#" data-author="Sackett" data-cit="SackettDL%2C%20RosenbergWM%2C%20GrayJA%2C%20HaynesRB%2C%20RichardsonWS%20%281996%29%20Evidence%20based%20medicine%3A%20what%20it%20is%20and%20what%20it%20isn%27t.%20BMJ%20312%3A%2071%E2%80%9372." data-title="Evidence%20based%20medicine%3A%20what%20it%20is%20and%20what%20it%20isn%26apos%3Bt" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Evidence+based+medicine%3A+what+it+is+and+what+it+isn%26apos%3Bt+Sackett+1996" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref11"><span class="order">11.
+            </span><a name="pmed.1001308-Phillips1" id="pmed.1001308-Phillips1" class="link-target"></a>Phillips DP, Kanter EJ, Bednarczyk B, Tastad PL (1991) Importance of the lay press in the transmission of medical knowledge to the scientific community. N Engl J Med 325: 1180–1183. <ul class="reflinks"><li><a href="#" data-author="Phillips" data-cit="PhillipsDP%2C%20KanterEJ%2C%20BednarczykB%2C%20TastadPL%20%281991%29%20Importance%20of%20the%20lay%20press%20in%20the%20transmission%20of%20medical%20knowledge%20to%20the%20scientific%20community.%20N%20Engl%20J%20Med%20325%3A%201180%E2%80%931183." data-title="Importance%20of%20the%20lay%20press%20in%20the%20transmission%20of%20medical%20knowledge%20to%20the%20scientific%20community" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Importance+of+the+lay+press+in+the+transmission+of+medical+knowledge+to+the+scientific+community+Phillips+1991" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref12"><span class="order">12.
+            </span><a name="pmed.1001308-Boutron1" id="pmed.1001308-Boutron1" class="link-target"></a>Boutron I, Dutton S, Ravaud P, Altman DG (2010) Reporting and interpretation of randomized controlled trials with statistically nonsignificant results for primary outcomes. JAMA 303: 2058–2064. <ul class="reflinks"><li><a href="#" data-author="Boutron" data-cit="BoutronI%2C%20DuttonS%2C%20RavaudP%2C%20AltmanDG%20%282010%29%20Reporting%20and%20interpretation%20of%20randomized%20controlled%20trials%20with%20statistically%20nonsignificant%20results%20for%20primary%20outcomes.%20JAMA%20303%3A%202058%E2%80%932064." data-title="Reporting%20and%20interpretation%20of%20randomized%20controlled%20trials%20with%20statistically%20nonsignificant%20results%20for%20primary%20outcomes" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Reporting+and+interpretation+of+randomized+controlled+trials+with+statistically+nonsignificant+results+for+primary+outcomes+Boutron+2010" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref13"><span class="order">13.
+            </span><a name="pmed.1001308-Woloshin3" id="pmed.1001308-Woloshin3" class="link-target"></a>Woloshin S, Schwartz LM, Casella SL, Kennedy AT, Larson RJ (2009) Press releases by academic medical centers: not so academic? Ann Intern Med 150: 613–618. <ul class="reflinks"><li><a href="#" data-author="Woloshin" data-cit="WoloshinS%2C%20SchwartzLM%2C%20CasellaSL%2C%20KennedyAT%2C%20LarsonRJ%20%282009%29%20Press%20releases%20by%20academic%20medical%20centers%3A%20not%20so%20academic%3F%20Ann%20Intern%20Med%20150%3A%20613%E2%80%93618." data-title="Press%20releases%20by%20academic%20medical%20centers%3A%20not%20so%20academic%3F" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Press+releases+by+academic+medical+centers%3A+not+so+academic%3F+Woloshin+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref14"><span class="order">14.
+            </span><a name="pmed.1001308-AlsNielsen1" id="pmed.1001308-AlsNielsen1" class="link-target"></a>Als-Nielsen B, Chen W, Gluud C, Kjaergard LL (2003) Association of funding and conclusions in randomized drug trials: a reflection of treatment effect or adverse events? JAMA 290: 921–928. <ul class="reflinks"><li><a href="#" data-author="Als-Nielsen" data-cit="Als-NielsenB%2C%20ChenW%2C%20GluudC%2C%20KjaergardLL%20%282003%29%20Association%20of%20funding%20and%20conclusions%20in%20randomized%20drug%20trials%3A%20a%20reflection%20of%20treatment%20effect%20or%20adverse%20events%3F%20JAMA%20290%3A%20921%E2%80%93928." data-title="Association%20of%20funding%20and%20conclusions%20in%20randomized%20drug%20trials%3A%20a%20reflection%20of%20treatment%20effect%20or%20adverse%20events%3F" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Association+of+funding+and+conclusions+in+randomized+drug+trials%3A+a+reflection+of+treatment+effect+or+adverse+events%3F+Als-Nielsen+2003" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref15"><span class="order">15.
+            </span><a name="pmed.1001308-Schwartz2" id="pmed.1001308-Schwartz2" class="link-target"></a>Schwartz LM, Woloshin S (2002) News media coverage of screening mammography for women in their 40 s and tamoxifen for primary prevention of breast cancer. JAMA 287: 3136–3142. <ul class="reflinks"><li><a href="#" data-author="Schwartz" data-cit="SchwartzLM%2C%20WoloshinS%20%282002%29%20News%20media%20coverage%20of%20screening%20mammography%20for%20women%20in%20their%2040%20s%20and%20tamoxifen%20for%20primary%20prevention%20of%20breast%20cancer.%20JAMA%20287%3A%203136%E2%80%933142." data-title="News%20media%20coverage%20of%20screening%20mammography%20for%20women%20in%20their%2040%20s%20and%20tamoxifen%20for%20primary%20prevention%20of%20breast%20cancer" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=News+media+coverage+of+screening+mammography+for+women+in+their+40+s+and+tamoxifen+for+primary+prevention+of+breast+cancer+Schwartz+2002" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref16"><span class="order">16.
+            </span><a name="pmed.1001308-Zou1" id="pmed.1001308-Zou1" class="link-target"></a>Zou G (2004) A modified poisson regression approach to prospective studies with binary data. Am J Epidemiol 159: 702–706. <ul class="reflinks"><li><a href="#" data-author="Zou" data-cit="ZouG%20%282004%29%20A%20modified%20poisson%20regression%20approach%20to%20prospective%20studies%20with%20binary%20data.%20Am%20J%20Epidemiol%20159%3A%20702%E2%80%93706." data-title="A%20modified%20poisson%20regression%20approach%20to%20prospective%20studies%20with%20binary%20data" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=A+modified+poisson+regression+approach+to+prospective+studies+with+binary+data+Zou+2004" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref17"><span class="order">17.
+            </span><a name="pmed.1001308-Austin1" id="pmed.1001308-Austin1" class="link-target"></a>Austin PC, Tu JV (2004) Bootstrap methods for developing predictive models. The American Statistician 58: 131–137. <ul class="reflinks"><li><a href="#" data-author="Austin" data-cit="AustinPC%2C%20TuJV%20%282004%29%20Bootstrap%20methods%20for%20developing%20predictive%20models.%20The%20American%20Statistician%2058%3A%20131%E2%80%93137." data-title="Bootstrap%20methods%20for%20developing%20predictive%20models" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Bootstrap+methods+for+developing+predictive+models+Austin+2004" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref18"><span class="order">18.
+            </span><a name="pmed.1001308-Haas1" id="pmed.1001308-Haas1" class="link-target"></a>Haas JS, Kaplan CP, Gerstenberger EP, Kerlikowske K (2004) Changes in the use of postmenopausal hormone therapy after the publication of clinical trial results. Ann Intern Med 140: 184–188. <ul class="reflinks"><li><a href="#" data-author="Haas" data-cit="HaasJS%2C%20KaplanCP%2C%20GerstenbergerEP%2C%20KerlikowskeK%20%282004%29%20Changes%20in%20the%20use%20of%20postmenopausal%20hormone%20therapy%20after%20the%20publication%20of%20clinical%20trial%20results.%20Ann%20Intern%20Med%20140%3A%20184%E2%80%93188." data-title="Changes%20in%20the%20use%20of%20postmenopausal%20hormone%20therapy%20after%20the%20publication%20of%20clinical%20trial%20results" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Changes+in+the+use+of+postmenopausal+hormone+therapy+after+the+publication+of+clinical+trial+results+Haas+2004" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref19"><span class="order">19.
+            </span><a name="pmed.1001308-Grilli1" id="pmed.1001308-Grilli1" class="link-target"></a>Grilli R, Ramsay C, Minozzi S (2002) Mass media interventions: effects on health services utilisation. Cochrane Database Syst Rev CD000389. <ul class="reflinks"><li><a href="#" data-author="Grilli" data-cit="GrilliR%2C%20RamsayC%2C%20MinozziS%20%282002%29%20Mass%20media%20interventions%3A%20effects%20on%20health%20services%20utilisation.%20Cochrane%20Database%20Syst%20Rev%20CD000389." data-title="Mass%20media%20interventions%3A%20effects%20on%20health%20services%20utilisation" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Mass+media+interventions%3A+effects+on+health+services+utilisation+Grilli+2002" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref20"><span class="order">20.
+            </span><a name="pmed.1001308-Sharma1" id="pmed.1001308-Sharma1" class="link-target"></a>Sharma V, Dowd MD, Swanson DS, Slaughter AJ, Simon SD (2003) Influence of the news media on diagnostic testing in the emergency department. Arch Pediatr Adolesc Med 157: 257–260. <ul class="reflinks"><li><a href="#" data-author="Sharma" data-cit="SharmaV%2C%20DowdMD%2C%20SwansonDS%2C%20SlaughterAJ%2C%20SimonSD%20%282003%29%20Influence%20of%20the%20news%20media%20on%20diagnostic%20testing%20in%20the%20emergency%20department.%20Arch%20Pediatr%20Adolesc%20Med%20157%3A%20257%E2%80%93260." data-title="Influence%20of%20the%20news%20media%20on%20diagnostic%20testing%20in%20the%20emergency%20department" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Influence+of+the+news+media+on+diagnostic+testing+in+the+emergency+department+Sharma+2003" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref21"><span class="order">21.
+            </span><a name="pmed.1001308-Schwartz3" id="pmed.1001308-Schwartz3" class="link-target"></a>Schwartz LM, Woloshin S, Welch HG (1999) Misunderstandings about the effects of race and sex on physicians' referrals for cardiac catheterization. N Engl J Med 341: 277–279. <ul class="reflinks"><li><a href="#" data-author="Schwartz" data-cit="SchwartzLM%2C%20WoloshinS%2C%20WelchHG%20%281999%29%20Misunderstandings%20about%20the%20effects%20of%20race%20and%20sex%20on%20physicians%27%20referrals%20for%20cardiac%20catheterization.%20N%20Engl%20J%20Med%20341%3A%20277%E2%80%93279." data-title="Misunderstandings%20about%20the%20effects%20of%20race%20and%20sex%20on%20physicians%26apos%3B%20referrals%20for%20cardiac%20catheterization" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Misunderstandings+about+the+effects+of+race+and+sex+on+physicians%26apos%3B+referrals+for+cardiac+catheterization+Schwartz+1999" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref22"><span class="order">22.
+            </span><a name="pmed.1001308-Moynihan1" id="pmed.1001308-Moynihan1" class="link-target"></a>Moynihan R, Bero L, Ross-Degnan D, Henry D, Lee K, et al. (2000) Coverage by the news media of the benefits and risks of medications. N Engl J Med 342: 1645–1650. <ul class="reflinks"><li><a href="#" data-author="Moynihan" data-cit="MoynihanR%2C%20BeroL%2C%20Ross-DegnanD%2C%20HenryD%2C%20LeeK%2C%20et%20al.%20%282000%29%20Coverage%20by%20the%20news%20media%20of%20the%20benefits%20and%20risks%20of%20medications.%20N%20Engl%20J%20Med%20342%3A%201645%E2%80%931650." data-title="Coverage%20by%20the%20news%20media%20of%20the%20benefits%20and%20risks%20of%20medications" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Coverage+by+the+news+media+of+the+benefits+and+risks+of+medications+Moynihan+2000" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref23"><span class="order">23.
+            </span><a name="pmed.1001308-Naylor1" id="pmed.1001308-Naylor1" class="link-target"></a>Naylor CD, Chen E, Strauss B (1992) Measured enthusiasm: does the method of reporting trial results alter perceptions of therapeutic effectiveness? Ann Intern Med 117: 916–921. <ul class="reflinks"><li><a href="#" data-author="Naylor" data-cit="NaylorCD%2C%20ChenE%2C%20StraussB%20%281992%29%20Measured%20enthusiasm%3A%20does%20the%20method%20of%20reporting%20trial%20results%20alter%20perceptions%20of%20therapeutic%20effectiveness%3F%20Ann%20Intern%20Med%20117%3A%20916%E2%80%93921." data-title="Measured%20enthusiasm%3A%20does%20the%20method%20of%20reporting%20trial%20results%20alter%20perceptions%20of%20therapeutic%20effectiveness%3F" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Measured+enthusiasm%3A+does+the+method+of+reporting+trial+results+alter+perceptions+of+therapeutic+effectiveness%3F+Naylor+1992" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref24"><span class="order">24.
+            </span><a name="pmed.1001308-Schwartz4" id="pmed.1001308-Schwartz4" class="link-target"></a>Schwartz LM, Woloshin S, Andrews A, Stukel TA (2012) Influence of medical journal press releases on the quality of associated newspaper coverage: retrospective cohort study. BMJ 344: d8164. <ul class="reflinks"><li><a href="#" data-author="Schwartz" data-cit="SchwartzLM%2C%20WoloshinS%2C%20AndrewsA%2C%20StukelTA%20%282012%29%20Influence%20of%20medical%20journal%20press%20releases%20on%20the%20quality%20of%20associated%20newspaper%20coverage%3A%20retrospective%20cohort%20study.%20BMJ%20344%3A%20d8164." data-title="Influence%20of%20medical%20journal%20press%20releases%20on%20the%20quality%20of%20associated%20newspaper%20coverage%3A%20retrospective%20cohort%20study" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Influence+of+medical+journal+press+releases+on+the+quality+of+associated+newspaper+coverage%3A+retrospective+cohort+study+Schwartz+2012" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref25"><span class="order">25.
+            </span><a name="pmed.1001308-Hopewell1" id="pmed.1001308-Hopewell1" class="link-target"></a>Hopewell S, Clarke M, Moher D, Wager E, Middleton P, et al. (2008) CONSORT for reporting randomized controlled trials in journal and conference abstracts: explanation and elaboration. PLoS Med 5: e20 doi:<a href="https://doi.org/10.1371/journal.pmed.0050020">https://doi.org/10.1371/journal.pmed.0050020</a>. <ul class="reflinks" data-doi="10.1371/journal.pmed.0050020"><li><a href="https://doi.org/10.1371/journal.pmed.0050020" data-author="doi-provided" data-cit="doi-provided" data-title="doi-provided" target="_new" title="Go to article">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=CONSORT+for+reporting+randomized+controlled+trials+in+journal+and+conference+abstracts%3A+explanation+and+elaboration+Hopewell+2008" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref26"><span class="order">26.
+            </span><a name="pmed.1001308-Gtzsche1" id="pmed.1001308-Gtzsche1" class="link-target"></a>Gøtzsche PC (2006) Believability of relative risks and odds ratios in abstracts: cross sectional study. BMJ 333: 231–234. <ul class="reflinks"><li><a href="#" data-author="G%C3%B8tzsche" data-cit="G%C3%B8tzschePC%20%282006%29%20Believability%20of%20relative%20risks%20and%20odds%20ratios%20in%20abstracts%3A%20cross%20sectional%20study.%20BMJ%20333%3A%20231%E2%80%93234." data-title="Believability%20of%20relative%20risks%20and%20odds%20ratios%20in%20abstracts%3A%20cross%20sectional%20study" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Believability+of+relative+risks+and+odds+ratios+in+abstracts%3A+cross+sectional+study+G%C3%B8tzsche+2006" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref27"><span class="order">27.
+            </span><a name="pmed.1001308-Horton1" id="pmed.1001308-Horton1" class="link-target"></a>Horton R (2002) The hidden research paper. JAMA 287: 2775–2778. <ul class="reflinks"><li><a href="#" data-author="Horton" data-cit="HortonR%20%282002%29%20The%20hidden%20research%20paper.%20JAMA%20287%3A%202775%E2%80%932778." data-title="The%20hidden%20research%20paper" target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=The+hidden+research+paper+Horton+2002" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li></ol></div>
+
+
+
+          <div class="ref-tooltip">
+            <div class="ref_tooltip-content">
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <aside class="article-aside">
+
+
+<!--[if IE 9]>
+<style>
+.dload-xml {margin-top: 38px}
+</style>
+<![endif]-->
+<div class="dload-menu">
+  <div class="dload-pdf">
+    <a href="/plosmedicine/article/file?id=10.1371/journal.pmed.1001308&type=printable"
+       id="downloadPdf" target="_blank">Download PDF</a>
+  </div>
+  <div data-js-tooltip-hover="trigger" class="dload-hover">&nbsp;
+    <ul class="dload-xml" data-js-tooltip-hover="target">
+      <li><a href="/plosmedicine/article/citation?id=10.1371/journal.pmed.1001308"
+             id="downloadCitation">Citation</a></li>
+      <li><a href="/plosmedicine/article/file?id=10.1371/journal.pmed.1001308&type=manuscript"
+             id="downloadXml">XML</a>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="aside-container">
+  <div class="print-article" id="printArticle" data-js-tooltip-hover="trigger">
+    <a href="#" onclick="window.print(); return false;" class="preventDefault" id="printBrowser">Print</a>
+  </div>
+  <div class="share-article" id="shareArticle" data-js-tooltip-hover="trigger">
+    Share
+    <ul data-js-tooltip-hover="target" class="share-options" id="share-options">
+
+      <li><a href="https://www.reddit.com/submit?url=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pmed.1001308" id="shareReddit" target="_blank" title="Submit to Reddit"><img src="/resource/img/icon.reddit.16.png" width="16" height="16" alt="Reddit">Reddit</a></li>
+
+      <li><a href="https://www.facebook.com/share.php?u=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pmed.1001308&t=Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study" id="shareFacebook" target="_blank" title="Share on Facebook"><img src="/resource/img/icon.fb.16.png" width="16" height="16" alt="Facebook">Facebook</a></li>
+
+      <li><a href="https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pmed.1001308&title=Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study&summary=Checkout this article I found at PLOS"  id="shareLinkedIn" target="_blank" title="Add to LinkedIn"><img src="/resource/img/icon.linkedin.16.png" width="16" height="16" alt="LinkedIn">LinkedIn</a></li>
+
+      <li><a href="https://www.mendeley.com/import/?url=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pmed.1001308"  id="shareMendeley" target="_blank" title="Add to Mendeley"><img src="/resource/img/icon.mendeley.16.png" width="16" height="16" alt="Mendeley">Mendeley</a></li>
+
+      <li><a href="https://bsky.app/intent/compose?text=Checkout%20this%20article%20I%20found%20at%20PLOS:%20https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pmed.1001308"  id="shareBluesky" target="_blank" title="Share on Bluesky"><img src="/resource/img/icon.bluesky.light.png" width="16" height="16" alt="Bluesky">Bluesky</a></li>
+
+      <li><a href="mailto:?subject=Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study&body=I%20thought%20you%20would%20find%20this%20article%20interesting.%20From%20PLOS Medicine:%20https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pmed.1001308"  id="shareEmail" rel="noreferrer" aria-label="Email"><img src="/resource/img/icon.email.16.png" width="16" height="16" alt="Email">Email</a></li>
+    </ul>
+  </div>
+</div>
+
+
+     <!-- Crossmark 2.0 widget -->
+    <script src="https://crossmark-cdn.crossref.org/widget/v2.0/widget.js"></script>
+    <a aria-label="Check for updates via CrossMark" data-target="crossmark">
+      <img alt="Check for updates via CrossMark" width="150" src="https://crossmark-cdn.crossref.org/widget/v2.0/logos/CROSSMARK_BW_horizontal.svg">
+    </a>
+    <!-- End Crossmark 2.0 widget -->
+
+
+
+<div class="aside-container collections-aside-container"><!-- React Magic --></div>
+
+
+<div class="skyscraper-container">
+  <div class="title">Advertisement</div>
+<!-- DoubleClick Ad Zone -->
+  <div class='advertisement' id='div-gpt-ad-1458247671871-1' style='width:160px; height:600px;'>
+    <script type='text/javascript'>
+      googletag.cmd.push(function() { googletag.display('div-gpt-ad-1458247671871-1'); });
+    </script>
+  </div>
+</div>
+
+
+
+
+<div class="subject-areas-container">
+  <h3>Subject Areas <div id="subjInfo">?</div>
+    <div id="subjInfoText">
+      <p>For more information about PLOS Subject Areas, click
+        <a href="https://github.com/PLOS/plos-thesaurus/blob/master/README.md" target="_blank" title="Link opens in new window">here</a>.</p>
+      <span class="inline-intro">We want your feedback.</span> Do these Subject Areas make sense for this article? Click the target next to the incorrect Subject Area and let us know. Thanks for your help!
+
+
+    </div>
+  </h3>
+  <ul id="subjectList">
+      <li>
+              <a class="taxo-term" title="Search for articles about Publication ethics"
+                 href="/plosmedicine/search?filterSubjects=Publication+ethics&filterJournals=PLoSMedicine&q=">Publication ethics</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Publication ethics"><p class="taxo-explain">Is the Subject Area <strong>"Publication ethics"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Randomized controlled trials"
+                 href="/plosmedicine/search?filterSubjects=Randomized+controlled+trials&filterJournals=PLoSMedicine&q=">Randomized controlled trials</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Randomized controlled trials"><p class="taxo-explain">Is the Subject Area <strong>"Randomized controlled trials"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Medical journals"
+                 href="/plosmedicine/search?filterSubjects=Medical+journals&filterJournals=PLoSMedicine&q=">Medical journals</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Medical journals"><p class="taxo-explain">Is the Subject Area <strong>"Medical journals"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Clinical trial reporting"
+                 href="/plosmedicine/search?filterSubjects=Clinical+trial+reporting&filterJournals=PLoSMedicine&q=">Clinical trial reporting</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Clinical trial reporting"><p class="taxo-explain">Is the Subject Area <strong>"Clinical trial reporting"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Drug therapy"
+                 href="/plosmedicine/search?filterSubjects=Drug+therapy&filterJournals=PLoSMedicine&q=">Drug therapy</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Drug therapy"><p class="taxo-explain">Is the Subject Area <strong>"Drug therapy"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Peer review"
+                 href="/plosmedicine/search?filterSubjects=Peer+review&filterJournals=PLoSMedicine&q=">Peer review</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Peer review"><p class="taxo-explain">Is the Subject Area <strong>"Peer review"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Bivariate analysis"
+                 href="/plosmedicine/search?filterSubjects=Bivariate+analysis&filterJournals=PLoSMedicine&q=">Bivariate analysis</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Bivariate analysis"><p class="taxo-explain">Is the Subject Area <strong>"Bivariate analysis"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Medicine and health sciences"
+                 href="/plosmedicine/search?filterSubjects=Medicine+and+health+sciences&filterJournals=PLoSMedicine&q=">Medicine and health sciences</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Medicine and health sciences"><p class="taxo-explain">Is the Subject Area <strong>"Medicine and health sciences"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+  </ul>
+</div>
+<div id="subjectErrors"></div>
+  </aside>
+</div>
+
+
+
+
+</main>
+<footer id="pageftr">
+  <div class="row">
+    <div class="block x-small">
+
+<ul class="nav nav-secondary">
+    <li class="ftr-header"><a href="https://plos.org/our-journals/">Publications</a></li>
+    <li><a href="/agingandhealth/" id="ftr-age">PLOS Aging and Health</a></li>
+    <li><a href="/plosbiology/" id="ftr-bio">PLOS Biology</a></li>
+    <li><a href="/climate/" id="ftr-climate">PLOS Climate</a></li>
+    <li><a href="/complexsystems/" id="ftr-complex-systems">PLOS Complex Systems</a></li>
+    <li><a href="/ploscompbiol/" id="ftr-compbio">PLOS Computational Biology</a></li>
+    <li><a href="/digitalhealth/" id="ftr-digitalhealth">PLOS Digital Health</a></li>
+    <li><a href="/ecosystems/" id="ftr-eco">PLOS Ecosystems</a></li>
+    <li><a href="/plosgenetics/" id="ftr-gen">PLOS Genetics</a></li>
+  </ul>
+    </div>
+    <div class="block x-small">
+
+<ul class="nav nav-secondary">
+    <li class="ftr-header">&nbsp;</li>
+    <li><a href="/globalpublichealth/" id="ftr-globalpublichealth">PLOS Global Public Health</a></li>
+    <li><a href="/plosmedicine/" id="ftr-med">PLOS Medicine</a></li>
+    <li><a href="/mentalhealth/" id="ftr-mental-health">PLOS Mental Health</a></li>
+    <li><a href="/plosntds/" id="ftr-ntds">PLOS Neglected Tropical Diseases</a></li>
+    <li><a href="/plosone/" id="ftr-one">PLOS One</a></li>
+    <li><a href="/plospathogens/" id="ftr-path">PLOS Pathogens</a></li>
+    <li><a href="/sustainabilitytransformation/" id="ftr-sustainabilitytransformation">PLOS Sustainability and Transformation</a></li>
+    <li><a href="/water/" id="ftr-water">PLOS Water</a></li>
+</ul>
+    </div>
+    <div class="block xx-small">	
+
+
+<ul class="nav nav-tertiary">
+  <li>
+    <a href="https://plos.org" id="ftr-home">Home</a>
+  </li>
+  <li>
+    <a href="https://blogs.plos.org" id="ftr-blog">Blogs</a>
+  </li>
+  <li>
+    <a href="https://collections.plos.org/" id="ftr-collections">Collections</a>
+  </li>
+  <li>
+    <a href="mailto:customercare@plos.org" id="ftr-feedback">Give feedback</a>
+  </li>
+  <li>
+    <a href="/plosmedicine/lockss-manifest" id="ftr-lockss">LOCKSS</a>
+  </li>
+</ul>
+    </div>
+    <div class="block xx-small">
+
+<ul class="nav nav-primary">
+  <li><a href="https://plos.org/privacy-policy" id="ftr-privacy">Privacy Policy</a></li>
+  <li><a href="https://plos.org/terms-of-use" id="ftr-terms">Terms of Use</a></li>
+  <li><a href="https://plos.org/advertise/" id="ftr-advertise">Advertise</a></li>
+  <li><a href="https://plos.org/media-inquiries" id="ftr-media">Media Inquiries</a></li>
+  <li><a href="https://plos.org/contact" id="ftr-contact">Contact</a></li>
+</ul>
+    </div>
+  </div>
+  <div class="row">
+    <p>
+
+<img src="/resource/img/logo-plos-footer.png" alt="PLOS" class="logo-footer"/>
+
+
+<span class="footer-non-profit-statement">PLOS is a nonprofit 501(c)(3) corporation, #C2354500, based in California, US</span>    </p>
+    <div class="block">
+    </div>
+  </div>
+ 
+<script src="/resource/js/global.js" type="text/javascript"></script>
+</footer>
+
+
+
+
+<script type="text/javascript">
+  var ArticleData = {
+    doi: '10.1371/journal.pmed.1001308',
+    title: '<article-title xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">Misrepresentation of Randomized Controlled Trials in Press Releases and News Coverage: A Cohort Study<\/article-title>',
+    date: 'Sep 11, 2012'
+  };
+</script>
+<script src="/resource/js/components/show_onscroll.js" type="text/javascript"></script>
+<script src="/resource/js/components/pagination.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/spin.js" type="text/javascript"></script>
+<script src="/resource/js/pages/article.js" type="text/javascript"></script>
+<script src="/resource/js/pages/article_references.js" type="text/javascript"></script>
+<script src="/resource/js/pages/article_sidebar.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.dropdown.js" type="text/javascript"></script>
+  <script src="/resource/js/components/table_open.js" type="text/javascript"></script>
+
+        <script src="/resource/js/components/figshare.js" type="text/javascript"></script>
+  <script src="/resource/js/vendor/jquery.panzoom.min.js" type="text/javascript"></script>
+  <script src="/resource/js/vendor/jquery.mousewheel.js" type="text/javascript"></script>
+
+  <script src="/resource/js/components/lightbox.js" type="text/javascript"></script>
+
+  <script src="/resource/js/pages/article_body.js" type="text/javascript"></script>
+
+
+<!-- This file should be loaded before the renderJs, to avoid conflicts with the FigShare, that implements the MathJax also. -->
+
+<!--  mathjax configuration options  -->
+<!-- more can be found at http://docs.mathjax.org/en/latest/ -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  "HTML-CSS": {
+    scale: 100,
+    availableFonts: ["STIX","TeX"],
+    preferredFont: "STIX",
+    webFont: "STIX-Web",
+    linebreaks: { automatic: false }
+  },
+  jax: ["input/MathML", "output/HTML-CSS"]
+});
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=MML_HTMLorMML"></script>
+
+<div class="reveal-modal-bg"></div>
+</body>
+</html>

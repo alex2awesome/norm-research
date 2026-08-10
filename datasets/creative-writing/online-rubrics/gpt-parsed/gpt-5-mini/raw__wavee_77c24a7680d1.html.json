@@ -1,0 +1,139 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_77c24a7680d1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17126,
+  "output_tokens": 3567,
+  "elapsed_s": 1152.6859130829107,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational linguistics / NLP researchers and practitioners working on sentiment analysis (lexicon-based methods)",
+    "subtask_short": "lexicon-based sentiment analysis",
+    "subtask_description": "Designing and evaluating lexicon-based systems that compute semantic orientation (polarity and strength) of words/phrases and aggregate them for polarity classification of texts; includes dictionary construction, handling of valence shifters, negation, irrealis, and evaluation across domains.",
+    "subtask_keywords": [
+      "sentiment_analysis",
+      "lexicon_based",
+      "polarity_classification",
+      "dictionary_construction",
+      "contextual_valence_shifters"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Polarity classification task",
+        "description": "The process of assigning a positive or negative label to a text that captures the text\u2019s opinion towards its main subject matter.",
+        "guidance": "SO-CAL is applied to this task and evaluated on consistency across domains and on completely unseen data; performance measured by accuracy on held-out corpora (e.g., movie reviews, Epinions)."
+      },
+      {
+        "name": "Assumption of prior polarity and numeric SO values",
+        "description": "Individual words have a prior polarity (semantic orientation independent of context) and that semantic orientation can be expressed as a numerical value.",
+        "guidance": "Many lexicon-based approaches adopt this; SO values in SO-CAL are numeric (hand-ranked on a \u22125 to +5 scale) and averaged across likely interpretations when senses are not disambiguated."
+      },
+      {
+        "name": "Dictionary creation method (manual vs automatic / semi-automatic)",
+        "description": "Dictionaries can be created manually (hand-tagging) or automatically/semi-automatically (seed words, corpus co-occurrence, Web counts).",
+        "guidance": "Automatically created dictionaries can find novel words but may be unstable (Google-based methods unstable); manual creation (hand-tagging from development corpus) yields reliable entries but requires effort; a committee review and Mechanical Turk checks can improve consistency and reliability."
+      },
+      {
+        "name": "Parts of speech coverage (adjectives, nouns, verbs, adverbs)",
+        "description": "Include open-class words beyond adjectives; create separate dictionaries for adjectives, nouns, verbs, and adverbs.",
+        "guidance": "Early work focused on adjectives, but nouns/verbs/adverbs carry SO too; SO-CAL uses separate noun, verb, and adverb dictionaries (and an adjective dictionary) with hand-ranked SO values."
+      },
+      {
+        "name": "SO value scale and neutrality treatment",
+        "description": "Use a signed numeric scale (SO values from +5 to \u22125) with neutral/zero words excluded from dictionaries.",
+        "guidance": "Values reflect both prior polarity and strength; when one sense is uncommon the averaged value is used; neutral words (0) are excluded from the active dictionaries."
+      },
+      {
+        "name": "Lemmatization and form-insensitivity",
+        "description": "Lemmatize nouns and verbs and ignore morphological form (singular/plural, tense) when looking up SO values.",
+        "guidance": "After stripping endings, perform dictionary look-up; this avoids treating inflected forms as distinct entries."
+      },
+      {
+        "name": "Multi-word expressions and precedence",
+        "description": "Support multi-word entries (regular-expression-like) and give multi-word entries precedence over single-word entries.",
+        "guidance": "Examples: phrasal verbs like 'fall apart' or intensifier phrases like 'a little bit'; multi-word matches override single-word SO values (e.g., 'act funny' negative despite 'funny' positive)."
+      },
+      {
+        "name": "Intensification modeled with percentage modifiers",
+        "description": "Model intensifiers and downtoners as percentage modifiers applied multiplicatively to the SO value of the target word.",
+        "guidance": "Each intensifying word has a percent (e.g., very +25%, somewhat \u221230%); modifiers apply recursively from closest to the SO-valued word; this captures both modifier strength and dependence on the item being modified (e.g., 'truly fantastic' vs 'truly okay')."
+      },
+      {
+        "name": "Include non-lexical intensifiers (caps, exclamation, discourse connectives)",
+        "description": "Treat features such as all-capital letters, exclamation marks, and discourse connective 'but' as intensifiers affecting SO.",
+        "guidance": "These genre-specific signals are included in the intensifier dictionary or handled as special intensification mechanisms (e.g., '... but the movie was GREAT!')."
+      },
+      {
+        "name": "Adjectival intensifiers vs adjective SO entries",
+        "description": "Some adjectives act as intensifiers when modifying nouns rather than as independent SO-bearing items.",
+        "guidance": "Maintain a separate adjectival intensifier dictionary so when such adjectives appear adjacent to SO-valued nouns they are treated as modifiers (e.g., 'total failure' treats 'total' as an intensifier rather than independent SO)."
+      },
+      {
+        "name": "Negation handling: scope detection and two negation models",
+        "description": "Negation requires (a) detecting scope (where the negator applies) and (b) deciding how to change SO (switch/polarity flip or polarity shift).",
+        "guidance": "SO-CAL implements backward search for negators up to clause boundaries or using skip-lists tailored by part of speech (conservative approach used). Two negation models discussed: switch negation (flip sign) and shift negation (shift toward opposite polarity by fixed amount, e.g., 4); authors prefer polarity shift as more pragmatically realistic."
+      },
+      {
+        "name": "Negation scope search strategies",
+        "description": "Two approaches for negation scope: (1) look backwards until a clause boundary marker; (2) look backwards while words/tags are in a backward-search skip list (different lists per part of speech).",
+        "guidance": "The conservative skip-list approach (allowing some tokens to be skipped but stopping at others) worked better in experiments and is used in SO-CAL; full parsing is an alternative but slower and ambiguous."
+      },
+      {
+        "name": "Negation interaction with intensifiers",
+        "description": "Negation interacts with intensifiers and must handle compound expressions (e.g., 'not very good') correctly.",
+        "guidance": "Options include flipping both adjective and intensifier or using polarity shift; polarity-flip models can produce counterintuitive results ('not very good' more negative than 'not good'), so polarity shift or flipping intensifier signs may be preferable with tuned parameters."
+      },
+      {
+        "name": "Irrealis blocking (ignore SO in non-factive contexts)",
+        "description": "Ignore semantic-orientation values for words within the scope of irrealis markers (non-factive contexts), because they may not reflect the author's stance.",
+        "guidance": "Irrealis markers include modals, conditional markers (if), NPIs like any, certain intensional verbs (expect, doubt), questions, and quoted words; SO-CAL currently ignores SO inside such scopes rather than flipping polarity."
+      },
+      {
+        "name": "Treatment of negative polarity items (NPIs)",
+        "description": "Handle NPIs (any, anything, ever, at all) primarily as irrealis blockers rather than negators.",
+        "guidance": "NPIs often occur in nonveridical contexts; treating them as irrealis blockers reduces SO values in such contexts; in some cases searching for NPI may be more effective than searching for explicit negators."
+      },
+      {
+        "name": "Coverage vs noise tradeoff in dictionary size",
+        "description": "Larger dictionaries (greater coverage) are not necessarily better because including rarer or descriptive vocabulary can introduce noise and reduce performance.",
+        "guidance": "Adding words found in held-out texts decreased performance in experiments (e.g., adding low-frequency sentiment words dropped accuracy); balance coverage with noise control and consider genre descriptiveness."
+      },
+      {
+        "name": "Stop-word lists associated with POS-specific dictionaries",
+        "description": "Associate stop-word lists with each POS dictionary to exclude tokens that are tagged as that POS but should not be treated as SO-bearing (e.g., more, much tagged as adjectives).",
+        "guidance": "Stop-lists prevent misinterpretation due to POS tagging errors and common non-SO tokens; maintain per-dictionary stop lists (adjective, noun, verb, adverb)."
+      },
+      {
+        "name": "Automatic derivation of adverb dictionary with manual corrections",
+        "description": "Construct adverb entries by mapping -ly adverbs to corresponding adjective entries, with manual corrections for mismatches.",
+        "guidance": "This method yields good coverage but some adverbs (e.g., 'essentially') require manual adjustment when meaning diverges from adjective base."
+      },
+      {
+        "name": "Handle grammatical metaphor and POS-specific SO differences",
+        "description": "Recognize that related forms (verb vs noun) can have different SO values (e.g., exaggerate \u22121 vs exaggeration \u22122) and grammatical metaphor (noun referring to action) can add negativity.",
+        "guidance": "Assign different SO values per lemma+POS; treat noun/verb separately rather than assuming same polarity/strength across forms."
+      },
+      {
+        "name": "Aggregation methods for document SO",
+        "description": "Aggregate individual word/phrase SO values into a single document score; earlier versions used add-and-average (sum SO values divided by number of adjectives), whereas later versions use more sophisticated weighting.",
+        "guidance": "Simple aggregate-and-average is a baseline but may be improved by weighting contributions (e.g., taking intensifiers, relevance, multi-word precedence, and POS into account); relevance and genre should influence aggregation."
+      },
+      {
+        "name": "Dictionary validation and reliability checks",
+        "description": "Validate dictionaries against other resources and human judgments; use committee review and crowd-sourced checks to ensure consistency and reliability.",
+        "guidance": "SO-CAL dictionaries were hand-ranked and reviewed by a committee; Mechanical Turk was used to compare and confirm values; compare against existing lexicons (General Inquirer, SentiWordNet, Maryland) to assess robustness."
+      },
+      {
+        "name": "Evaluate robustness across domains and unseen data",
+        "description": "Measure system performance across multiple domains and on completely unseen datasets to assess domain independence and generalizability.",
+        "guidance": "SO-CAL experiments show consistent performance across domains; compare performance to supervised classifiers which often drop when transferred across domains."
+      },
+      {
+        "name": "Handle descriptive/genre-specific signals separately",
+        "description": "Recognize that descriptive vocabulary (genre-specific terms) may not reflect sentiment and can bias classifiers or lexicons trained on domain data.",
+        "guidance": "Address descriptive noise (e.g., movie-review specific tokens like 'sequel', '2', 'tv') through genre-aware methods or filters; avoid learning prejudicial domain-specific associations that do not generalize."
+      }
+    ]
+  }
+}

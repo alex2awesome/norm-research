@@ -1,0 +1,162 @@
+[
+{
+"review_id": "colm_pUEDkZyPDl_r3",
+"paper_id": "colm_pUEDkZyPDl",
+"review_text": "The recently introduced FlashAttention re-packages the computation of attention ($softmax(QK^\\top)\\cdot V$) so that it reduces the number of I/O operations in a _single_ GPU setup. This led to substantial improvement over the earlier implementations of Attention. However, FlashAttention was only designed for a single GPU case.\n\nThis paper considers the problem of extending FlashAttention to work for the case of a cluster of GPUs. Specifically the paper identifies three bottlenecks in this extension:\n\n1. For the case of causal Attention, one would expect to see a factor $2\\times$ speedup over non-causal Attention (since the former only performs half the number of FLOPs over the latter). However, if one is not careful in how `chunks' of FlashAttention computations are distributed then lot of processors would sit 'idle.' The idea in the paper is to re-distribute the computation of the sub-blocks across processors.\n2. The problem with re-distributing 'chunks' of the Attention computation to various processors is that if not done properly, this could lead to a large communication overhead. Thus, to get towards regaining the $2\\times$ improvement mentioned above, this paper proposes a better scheduling of these partial computations to reduce the communication. Further, the paper shows how to parallelize the communication and computation tasks at each processor to gain further improvement.\n3. To handle really long context length, the now standard practice is to do _gradient checkpointing_, which basically trades memory for re-computation. However, for longer context lengths this recomputation time starts to become a bottleneck. This paper observes that in FlashAttention backward pass recomputation is not needed.\n\nThe paper implements the above into a system it calls DistFlashAttention and compares their implementation to existing distributed Attention implementations including Ring (Self)Attention, Megatron-LM and DeepSpeed-Ulysses. It achieves a minimum speedup of $1.26\\times$ and a max of $5.64\\times$ speedup over various implementations. The speedups for Ring Self-Attention and Megatron-LM also comes along with $2-8\\times$ longer sequence lengths. The paper also presents ablation experiments.\n\nOverall, the paper considers an important problem and proposes new system that achieves speedup over existing systems. However, the current writing leaves certain questions unanswered (please see the Question to Authors section for more). Because of these questions, I am rating this a just above threshold of acceptance. However, if the authors are able to address those questions satisfactorily then this paper _could_ be a clear accept for me.\n\nDetailed Comments for Authors\n-----------------------------\n\nBelow is a list if minor typos/presentation comments:\n\n* [Pg. 2, line -3] \"$5.64\\times$ compared\"-- \"speedup\" is missing.\n* [Pg. 4, line 2] \"which\" -> \"that\"\n* [Pg. 5, 2 lines above eq (3)] The final implementation of DistFlashAttention is Algorithm 2?"
+},
+{
+"review_id": "colm_LKEJPySnlt_r0",
+"paper_id": "colm_LKEJPySnlt",
+"review_text": "1. The paper proposes a novel method to train fully differentiable MoE models for autoregressive tasks. Concretely it proposes\n\n1.1 A segment level routing tasks that computes the expert mixing weights for a segment based on the (aggregate) hidden representation from the previous segment, and uses that to softly mix the experts in parameter space\n\n1.2 Leveraging similarity based data batching, similar to In-context pretraining [1] to avoid expert under-utilization, that subsequently results in better domain specialization of experts\n\n2. The authors demonstrate superior performance on both perplexity as well as downstream tasks compared to an (active) parameter matched dense model setup across a series of compute budgets. They also demonstrate competitive performance compared to token level hard-routing baselines (Expert Choice [2])\n\n3. Furthermore, they also demonstrate that the proposed use of similarity based batching benefits MoE training more than it's random sampling counterpart, and that strong performance gains are observed even for dense models (with the dense sim-batch model outperforming the MoE random batch baseline).\n\n4. The paper also demonstrates that the proposed method achieves good domain level expert specialization without any domain level supervision.\n\n[1] Shi, Weijia, et al. \"In-Context Pretraining: Language Modeling Beyond Document Boundaries.\" arXiv preprint arXiv:2310.10638 (2023).\n\n[2] Zhou, Yanqi, et al. \"Mixture-of-experts with expert choice routing.\" Advances in Neural Information Processing Systems 35 (2022): 7103-7114."
+},
+{
+"review_id": "colm_LKEJPySnlt_r1",
+"paper_id": "colm_LKEJPySnlt",
+"review_text": "This paper introduces 'Lory,' a novel mixture-of-experts pretraining approach. Lory features two innovative techniques: (1) a causal segment routing strategy that efficiently merges expert contributions while preserving the autoregressive properties of language models, and (2) a similarity-based data batching method that fosters expert specialization by grouping similar documents during training. The authors pretrain a series of Lory models on 150 billion tokens from scratch, incorporating up to 32 experts and 30 billion parameters. Compared to traditional dense models, the mixture-of-expert pretraining approach demonstrates superior performance in both perplexity and in-context learning evaluation."
+},
+{
+"review_id": "colm_LKEJPySnlt_r2",
+"paper_id": "colm_LKEJPySnlt",
+"review_text": "The paper looks into the problem of improving the model quality of MoE during pre-training via fully differentiable architecture. MoE models, which rely on sparsely activated experts and token routing such as top-K gating, pose training stability challenges due to their non-differentiable nature. Recent work, SMEAR, introduced softly merged experts in the parameter space, making MoE fully differentiable. However, SMEAR was primarily tested during fine-tuning for classification tasks. This paper extends SMEAR to the pre-training stage and introduces additional optimizations, including segment routing and similarity-based batching to enhance expert specialization. Evaluation shows that the proposed method can lead to lower pretraining loss than standard MoE architecture."
+},
+{
+"review_id": "colm_LKEJPySnlt_r3",
+"paper_id": "colm_LKEJPySnlt",
+"review_text": "This paper makes a notable contribution towards fully-differentiable MoE LMs by proposing a couple of ways to help scale the \"soft MoE\" (i.e. fully-differentiable MoE) approach. Specifically, they propose:\n\n* doing routing decisions at the segment level and not the token level. They group tokens into segments, and make subsequent routing decisions based on the segment history (some kind of averaging of hidden representations of the segments)\n* a training strategy that groups semantically-similar segments, which they find leads to much better expert utilization\n\nThe claims were empirically validated at the 0.3B and 1.5B parameter-level on both perplexity (LM) tasks as well as downstream applications. Compared to equivalently-sized dense models they show improvements"
+},
+{
+"review_id": "colm_Uhwze2LEwq_r0",
+"paper_id": "colm_Uhwze2LEwq",
+"review_text": "This paper presents a new benchmark, with a focus on multi-image scenarios. The benchmark mainly evaluates the long-context performance on the M-LLMs. \n\nThe paper provides a comprehensive evaluation of several existing models, and shows that long-context capability is demanding for improvements."
+},
+{
+"review_id": "colm_Uhwze2LEwq_r1",
+"paper_id": "colm_Uhwze2LEwq",
+"review_text": "The paper introduces MILEBENCH, a benchmark designed to assess the capabilities of Multimodal Large Language Models (MLLMs) in handling long-context scenarios involving multiple images and texts. This benchmark is motivated by the limitations of existing benchmarks that predominantly focus on short texts and single images, which do not adequately represent real-world multimodal tasks that require handling complex, lengthy contexts with multiple images. MILEBENCH includes two types of evaluations: diagnostic and realistic, aiming to thoroughly assess the performance of MLLMs in complex scenarios that mimic real-world applications. The benchmark tests 19 different models, highlighting that while the proprietary model GPT-4(Vision) excels, most open-source models struggle with these tasks."
+},
+{
+"review_id": "colm_Uhwze2LEwq_r2",
+"paper_id": "colm_Uhwze2LEwq",
+"review_text": "This paper focuses on evaluating the long-context understanding capabilities of multimodal large language models. The authors introduce MILEBENCH, a comprehensive benchmark encompassing multiple dimensions of multimodal long-context understanding, such as Temporal Multi-image Understanding, Semantic Multi-image Understanding, Needle in a Haystack, and Image Retrieval. Additionally, the paper provides a brief evaluation of various multimodal models, ranging from closed-source to open-source, trained on images and videos, presenting a comparative analysis of their performance."
+},
+{
+"review_id": "colm_Uhwze2LEwq_r3",
+"paper_id": "colm_Uhwze2LEwq",
+"review_text": "The paper presents a new benchmark dataset for multimodal (image+text) LLMs, called MileBench.\n\nThe novelty of this benchmark is in its focus - testing multimodal models in long contexts with many images. The collected dataset is a subset of existing datasets and synthetically generated examples. The examples from the existing datasets were picked in a way which agrees with the benchmark's focus. The resulting dataset consists of around 6k examples categorized in 12 different tasks.\n\nThe authors also measured the performance of various models on this benchmark and report the results. Notably, the closed-source models emerged as clear winners on most of the tasks.\n\nOverall, the paper is well written and presents a relevant and potentially useful contribution."
+},
+{
+"review_id": "colm_8w0RApM5yG_r0",
+"paper_id": "colm_8w0RApM5yG",
+"review_text": "This paper introduces a novel approach to manage the memory overhead of Transformer-based LLMs by summarizing the key-value (KV) cache dynamically. The proposed BumbleBee framework uses a mixture of submodular functions to optimize the selection of key-value pairs, balancing diversity and importance based on accumulated attention scores. This method enables efficient memory utilization without sacrificing accuracy, even with long context sequences. BumbleBee operates both offline and online, accommodating various operational phases of LLMs. The effectiveness of this approach is validated through experiments on multiple datasets, showing improved performance over existing techniques with similar context reduction ratios."
+},
+{
+"review_id": "colm_8w0RApM5yG_r1",
+"paper_id": "colm_8w0RApM5yG",
+"review_text": "This paper presents a technique to compress the KV cache in LLMs using a mixture of submodular functions to select a diverse and representative set of keys from the context. Experiments on a series of well-studied LLM benchmark datasets indicate that this technique typically outperforms prior work and is occasionally competitive with full-context models."
+},
+{
+"review_id": "colm_8w0RApM5yG_r2",
+"paper_id": "colm_8w0RApM5yG",
+"review_text": "This paper proposes a submodular optimization framework called BumbleBee to compress the KQ cache in a long context. They aim to maintain the most representative KQ embeddings in history evaluated based on similarity and representativeness. The KV cache is iteratively updated at each decoding step. They validate BumbleBee's effectiveness on extensive tasks with impressive cache budget reductions."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "colm_8w0RApM5yG_r3",
+"paper_id": "colm_8w0RApM5yG",
+"review_text": "This paper proposes BumbleBee, a KV cache summarization method. KV cache is a technique to speed up the decoding procedure by caching key-value pairs computed in the previous steps. KV cache can avoid redundant computations, however, the number of cache entries grows linearly with the number of tokens and can be huge for recent LLMs dealing with long sequences. The proposed method reduces the amount of KV cache by selecting appropriate subsets of key-value pairs. The paper formulates the subset selection problem as an online submodular function maximization problem under cardinality constraints and proposes a simple greedy procedure to select appropriate subsets of key-value pairs for each generation step. \n\nThe paper combines BumbleBee with multiple LLMs and evaluates the performance in multiple tasks. Experimental results show that the proposed method outperforms baseline KV cache reduction methods."
+},
+{
+"review_id": "colm_tEYskw1VY2_r0",
+"paper_id": "colm_tEYskw1VY2",
+"review_text": "The paper proposes an improvement over state-space models that solve issues resulting from static nature of SSMs. The main idea is that the parameters of SSMs (e.g., CNN filters) are not input-dependent. The proposed method gives the model the ability to solve tasks that require \"context-aware reasoning\".\n\nWhile this change sacrifices the efficiency of static SSMs, the paper also proposes a hardware kernel to speed up the models. The model demonstrates strong results on various modalities including text, DNA, audio etc. \n\nOverall, the paper presents a very interesting model that has clear motivations, with solid executions. However, the experiments results, especially the language part look insufficient to show its superiority over transformers."
+},
+{
+"review_id": "colm_tEYskw1VY2_r1",
+"paper_id": "colm_tEYskw1VY2",
+"review_text": "The authors integrate selective SSMs into a simplified end-to-end neural network architecture without attention or even MLP blocks (Mamba). Mamba enjoys fast inference (5\u00d7 higher throughput than Transformers) and linear scaling in sequence length, and its\nperformance improves on real data up to million-length sequences. Mamba achieves state-of-the-art performance across\nseveral modalities such as language, audio, and genomics. On language modeling, Mamba-3B model outperforms Transformers of the same size and matches Transformers twice its size, both in pretraining and downstream evaluation."
+},
+{
+"review_id": "colm_tEYskw1VY2_r2",
+"paper_id": "colm_tEYskw1VY2",
+"review_text": "This paper proposes Mamba, a linear-time sequence model with an intra-layer combination of Selective S4D, Short Convolution and Gated Linear Unit. The paper introduces input-dependent gating to SSM and provides a hardware-aware efficient implementation for the selective parallel scan operator. Mamba shows strong performance in language, DNA and audio modeling compared to models based on attention/RNN/convolution."
+},
+{
+"review_id": "colm_tEYskw1VY2_r3",
+"paper_id": "colm_tEYskw1VY2",
+"review_text": "Previous state-space models (SSMs) aimed to address the inefficiencies of Transformer architectures over long sequences, but they generally underperformed compared to Transformers. This paper introduces a new SSM architecture, Mamba, which has efficient long-context language modeling with linear complexity. Compared to S4, Mamba incorporates a selection mechanism that allows the model to selectively memorize information based on previous inputs. The architecture also combines Mamba layers with MLP blocks to further improve computational efficiency. The implementation uses a hardware-aware design that efficiently utilizes SRAM for discretization and recurrence. \n\nIn synthetic tasks such as selective copying and induction heads, Mamba demonstrated significant improvements over previous SSMs, including H3 and S4 models. These enhancements show Mamba's capability to handle long context effectively. Further experimentation with models scaling up to 2.8 billion parameters confirmed Mamba's robustness on language modeling, showing that it achieves comparable performance to Transformer models with the same amount of training data. The authors have conducted experiments extends beyond language modeling with experiments on audio and genomics data, which illustrates its great performance in processing long sequences across different modalities."
+},
+{
+"review_id": "colm_zl16jLb91v_r0",
+"paper_id": "colm_zl16jLb91v",
+"review_text": "This paper studies which population of people LLMs\u2019 perspectives on societal issues are most aligned with.They combine Pew Research\u2019s Global Attitudes survey and the World Values Survey to create a dataset of 2.5k questions that cover a variety of topics. They then evaluate a series of prompting strategies and compare how well the LLM aligns with people from different regions and countries. Their results show that by default LLMs are more aligned with Western countries, and instructing the model to answer from the perspective of a certain country\u2019s population can propagate harmful biases. The authors plan to release the dataset after peer review."
+},
+{
+"review_id": "colm_zl16jLb91v_r1",
+"paper_id": "colm_zl16jLb91v",
+"review_text": "In this work the authors evaluate an LLM on two sets of subjective multiple choice questions that social scientists used to measure differences between countries. The LLM answers turn out to be more similar to the USA and some other countries and less similar to e.g. China.\nAsking the models about the likely responses of people from country X yields the expected results whereas translating the question doesn't necessarily invoke another identity in the model."
+},
+{
+"review_id": "colm_zl16jLb91v_r2",
+"paper_id": "colm_zl16jLb91v",
+"review_text": "The paper compares human values to LLMs\u2019 values, across cultures and languages. It does so via a multiple-choice questionnaire and additional prompting and changing of languages.\nIn summary this paper present interesting results, but could be improved by making the experimental design more thorough and by sharpening the story and take-home message of the paper."
+},
+{
+"review_id": "colm_zl16jLb91v_r3",
+"paper_id": "colm_zl16jLb91v",
+"review_text": "*NOTE: I am very familiar with the preprint version of this paper released in June 2023. The preprint is well-known. I have not had any direct contact with the authors of this paper.*\n\nThis paper introduces the GlobalOpinionQA dataset for measuring the representation of subjective global opinions in language models. The dataset was a seminal contribution to the growing literature on pluralistic alignment when it first came out in June 2023, marking a shift from concerns around national (US-centric) representation towards global representation. The dataset and corresponding experiments are designed with care and described in detail. Reviewing the paper on its own terms in April 2024, however, I believe there are two missed opportunities: 1) the paper should engage with critical literature around the use of multiple-choice / survey questions for language model evaluation which has been published since June 2023, and 2) the paper should consider reporting reproducible results for at least one open language model. I will gladly raise my review score if the authors commit to one or both of these points.\n\n**Q**: What is your overall opinion on the paper?\n**A**: Positive, but I would like to see the two points mentioned above addressed or at least acknowledged in the camera-ready version."
+},
+{
+"review_id": "colm_3TzGD95Jw1_r0",
+"paper_id": "colm_3TzGD95Jw1",
+"review_text": "This paper proposes a model, Timo, achieving new SOTA at 7B and 13B scales, which leverages the mathematical datasets to set a solid foundation model for temporal reasoning and enhance with self-critic temporal optimization method."
+},
+{
+"review_id": "colm_3TzGD95Jw1_r1",
+"paper_id": "colm_3TzGD95Jw1",
+"review_text": "Comments after Author Discussion\nReasoning about time is essential for Large Language Models (LLMs) to understand the world. In this paper, the authors propose a simple but effective self-critic temporal optimization method (TIMO) to enhance the model\u2019s temporal reasoning capabilities without sacrificing general task abilities. It\u2019s designed to excel in temporal reasoning at the 7B and 13B scales and outperforms the LLaMA2 by 10 and 7.6 in average accuracy scores on 38 Temporal reasoning tasks."
+},
+{
+"review_id": "colm_3TzGD95Jw1_r2",
+"paper_id": "colm_3TzGD95Jw1",
+"review_text": "This paper presents a framework to improve the general temporal reasoning capabilities of LLMs. The authors empirically verify the intuition that temporal reasoning is closely related to math reasoning, which motivates the proposed approach that adopts the LLM-as-Judge scheme using a math LLM and temporal reasoning instructions to produce temporal-related pairwise preference dataset, which is later adopted for training a DPO model called TIMO. The authors conduct experiments on TRAM (a temporal reasoning benchmark consisting of 10 categories) and show that TIMO outperforms the math LLM under most cases."
+},
+{
+"review_id": "colm_NV8yRJRET1_r0",
+"paper_id": "colm_NV8yRJRET1",
+"review_text": "This paper presents DiagrammerGPT, which leverages large language models (LLMs) to produce text-visual diagrams. With the powerful capability of layout planning, they first derive and refine a diagram plan via LLMs. Then, they can follow the plan to generate the resulting diagram via the layout-grounded diffusion model."
+},
+{
+"review_id": "colm_NV8yRJRET1_r1",
+"paper_id": "colm_NV8yRJRET1",
+"review_text": "The paper proposes DiagrammerGPT, a method to generate diagram images using a combination of LLMs and diffusion models. The method first generates layouts of the objects, including bounding boxes, paired text annotations, and arrows or lines between objects. This stage involves in-context learning and self-correction loops to refine the layouts. Then a GLIGEN-based layout-to-image model is fine-tuned and used for generating the diagram image based on the layouts. A new dataset named AI2D-Caption is generated based on an existing diagram dataset for the task and experiment. Experimental results show a clear improvement of the method over existing baselines."
+},
+{
+"review_id": "colm_NV8yRJRET1_r2",
+"paper_id": "colm_NV8yRJRET1",
+"review_text": "This paper presents a text-to-diagram approach named DiagrammerGPT. It uses a two-step process to create open-domain diagrams from textual prompts, where GPT4 is prompted to generate a diagram plan followed by a visual generator creating the actual diagram from the generated diagram plan. \n\nInitially, the authors use GPT-4 to create diagram plans from text prompts during the diagram planning stage, which includes listing entities, their relationships, and layouts. Afterward, leveraging recent advances, another Language Model acts as an auditor to identify errors such as misplaced objects. The plan is then refined based on this feedback to correct inaccuracies like incorrect sizes, resulting in notably accurate LLM-generated diagram plans with minimal errors. \n\nDuring stage two, a new model called DiagramGLIGEN is designed for creating diagrams from plans and clearly rendering text labels for legibility. It's built upon the GLIGEN framework and trained using the AI2D-Caption dataset, which includes gated self-attention layers in the Stable Diffusion v1.4 model. To overcome the difficulty of text rendering in existing T2I models, the authors directly overlay text on diagrams to ensure clarity. \n\nBoth human evaluation and LLaVA/ClIP based evaluation show that the proposed approach can generate diagrams with better quality."
+},
+{
+"review_id": "colm_NV8yRJRET1_r3",
+"paper_id": "colm_NV8yRJRET1",
+"review_text": "This paper introduces DiagrammerGPT, a novel framework for the challenging task of diagram generation. The authors developed AI2D-Caption, a new dataset to benchmark text-to-diagram generation. DiagrammerGPT employs a two-stage process: the first stage uses LLMs to create and refine 'diagram plans' through a planner-auditor feedback loop, while the second stage utilizes DiagramGLIGEN and a text label rendering module to generate diagrams based on these plans. The framework also supports features such as open-domain generation, vector graphic creation, human-in-the-loop editing, and multimodal planning."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "colm_ybaK4asBT2_r0",
+"paper_id": "colm_ybaK4asBT2",
+"review_text": "This paper proposes an approach to enhancing the creativity of large language models (LLMs) by facilitating multi-agent discussions and incorporating role-playing elements. The key ideas of a three-phase discussion framework and role assignment are well-motivated and explained. The authors conduct evaluations across 4 creativity benchmarks, comparing their proposed method against baselines. The results demonstrate improvements in some metrics of TTCT like originality and elaboration, suggesting that the proposed approach can indeed induce more creative and novel responses from LLMs. Overall, this work presents a relatively convincing approach to an important problem in AI, with findings that are likely to stimulate further research in this area."
+},
+{
+"review_id": "colm_ybaK4asBT2_r1",
+"paper_id": "colm_ybaK4asBT2",
+"review_text": "The presented approach gets much better results on key measures of creativity compared to SOTA.\n\nThis paper is a well-written presentation of the novel LLM Discussion approach to generating creative responses on established creativity and scientific innovation benchmark tests. \n\nThe approach is a highly original simulation of \"collaborative discussions with diversified peers\" that involves (i) a three-phase, initiation-discussion-convergence framework for multi-turn dialogues designed to elicit diverse and creative responses from (ii) LLM-based agents, each of what are assigned distinct roles and are directed to generate answers building on the others' responses.\n\nThis framework, (i), is compared against single-LLM and multi-LLM approaches and outperforms these previous methods on several creativity metrics.\n\nThe role-playing LLM-based agents, (ii), cleverly leverages the ability of LLMs to imitate very different personalities in order to generate more diversity of ideas."
+}
+]

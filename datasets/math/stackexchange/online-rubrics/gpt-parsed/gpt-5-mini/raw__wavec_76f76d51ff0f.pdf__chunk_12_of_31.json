@@ -1,0 +1,195 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_76f76d51ff0f.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_76f76d51ff0f.pdf",
+  "chunk_idx": 12,
+  "n_chunks": 31,
+  "chunk_chars": 39965,
+  "model": "gpt-5-mini",
+  "elapsed_s": 113.76422862499749,
+  "input_tokens": 14588,
+  "output_tokens": 7799,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "computational number theorists / PARI/GP users computing L-functions (researchers and advanced users)",
+    "subtask_short": "computing L-functions with PARI/GP",
+    "subtask_description": "Documentation and usage guidelines for the L-function routines in PARI/GP: how to construct Ldata/Linit, required formats, caveats about precision and domains, supported constructors (Dirichlet, Hecke, Artin, elliptic, genus-2, eta-quotients), and how to use the various lfun*/lfuntheta* routines safely and efficiently.",
+    "subtask_keywords": [
+      "l-function",
+      "pari_gp",
+      "numerical",
+      "computational_number_theory",
+      "software_api"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Growth exponent and experimental intent caveat",
+        "description": "Important Caveat. We currently assume that we can take the growth exponent k1 = (k \u2212 1)/2 if L is entire and k1 = k \u2212 1 otherwise, and that the implied constants in the O(...) are small. This may be changed and made user-configurable in future versions but the essential point remains that it is impossible to return proven results in such a generic framework, without more detailed information about the L function. The intended use of the L-function package is not to prove theorems, but to experiment and formulate conjectures, so all numerical results should be taken with a grain of salt. One can always increase realbitprecision and recompute: the difference estimates the actual absolute error in the original output.",
+        "guidance": "Do not treat numerical outputs as proofs. When higher confidence is needed, increase realbitprecision and recompute to estimate absolute error."
+      },
+      {
+        "name": "Precision handling and recommendation",
+        "description": "Note. The requested precision has a major impact on runtimes. Because of this, most L-function routines, in particular lfun itself, specify the requested precision in bits, not in decimal digits. This is transparent for the user once realprecision or realbitprecision are set. We advise to manipulate precision via realbitprecision as it allows finer granularity: realprecision increases by increments of 64 bits, i.e. 19 decimal digits at a time.",
+        "guidance": "Prefer setting realbitprecision rather than realprecision for fine-grained control. Expect large runtime increases when increasing precision."
+      },
+      {
+        "name": "Theta function definition and domain",
+        "description": "Given an L-function as above, we define an attached theta function via Mellin inversion: for any positive real t > 0, \u03b8(a, t) := (1/2\u03c0i) \u222b_(Re(s)=c) t^{\u2212s} \u039b(s) ds (with c chosen suitably). Note that this function is analytic and actually makes sense for complex t, such that Re(t^{2/d}) > 0, i.e. in a cone containing the positive real half-line. The functional equation for \u039b translates into \u03b8(a, 1/t) \u2212 i^k t^k \u03b8(a*, t) = P_\u039b(t), where P_\u039b is an explicit polynomial in t and log t given by the Taylor development of the polar part of \u039b: there are no log\u2019s if all poles are simple, and P = 0 if \u039b is entire. The values \u03b8(t) are generally easier to compute than the L(s), and this functional equation provides a fast way to guess possible values for missing invariants in the L-function definition.",
+        "guidance": "Theta functions can be used to compute/guess missing invariants; when using complex t ensure t lies in the permitted cone (argument constraints depend on degree d)."
+      },
+      {
+        "name": "Three levels of L-function description (Lmath, Ldata, Linit)",
+        "description": "We have 3 levels of description: an Lmath is an arbitrary description of the underlying mathematical situation; an Ldata is a computational description containing the complete datum (a, a*, A, k, N, eps, r) and is obtained via lfuncreate; an Linit contains an Ldata and everything needed for fast numerical computations (fixed derivative order m, a domain, output accuracy) and is obtained via lfuninit or lfunthetainit.",
+        "guidance": "Use Linit when many evaluations are required (plots, zero searches). If you call a computation outside the Linit domain a warning is issued (initialization performed again => inefficiency). For single evaluations you may skip Linit."
+      },
+      {
+        "name": "Ldata components should be given exactly (design problem)",
+        "description": "Design problem. All components of an Ldata should be given exactly since the accuracy to which they must be computed is not bounded a priori; but this is not always possible, in particular for a(n) and r (polar part).",
+        "guidance": "Provide exact data where possible. If parts (like polar part) are unknown, supply best guesses and use checking routines (lfuncheckfeq) to detect inconsistencies."
+      },
+      {
+        "name": "Use of lfuninit for efficiency",
+        "description": "If a single value is to be computed, it makes no difference whether the first argument is an Lmath, an Ldata, or an Linit, but when many values are needed (e.g. for plots or when searching for zeros), one should first construct an Linit attached to the search range and use it in all subsequent calls.",
+        "guidance": "Always initialize with lfuninit for batch computations; failing to do so will trigger warnings and large slowdowns."
+      },
+      {
+        "name": "Computational complexity guideline",
+        "description": "Complexity. The implementation requires O(N (|t| + 1))^{1/2} coefficients a_n to evaluate L of conductor N at s = \u03c3 + it.",
+        "guidance": "Expect number of coefficients and runtime to grow roughly with the square root of conductor times (|t|+1)^{1/2}; large N or large |t| drastically increases cost."
+      },
+      {
+        "name": "Dirichlet L-functions: supported formats and restrictions",
+        "description": "Dirichlet L-functions. Given a Dirichlet character \u03c7 : (Z/NZ)^* \u2192 C, L(\u03c7,s) = \u2211 \u03c7(n) n^{\u2212s}. Only primitive characters are supported. Representations: Conrey notation, bid structure describing (Z/NZ)^*, Conrey logarithm (fastest), or as Hecke characters over Q (more complicated and less efficient).",
+        "guidance": "Prefer Conrey index/log format (znconreychar / znconreylog) for efficiency; use bid structure when constructing characters from generators; only primitive characters are accepted."
+      },
+      {
+        "name": "Hecke L-functions: encoding and special cases",
+        "description": "Hecke L-functions. The Dedekind zeta of K = Q[X]/(T) is encoded by the defining polynomial T or an absolute number fields structure. Given a finite order Hecke character \u03c7 : Cl_f(K) \u2192 C, L(\u03c7,s) = \u2211 \u03c7(A) N_{K/Q}(A)^{\u2212s}. Cl_f(K) is encoded via a bnr structure; a character is given by a row vector v and the pair [bnr, v] encodes the primitive character. Dirichlet characters on (Z/NZ)^* are a special case (K = Q).",
+        "guidance": "Prefer direct Dirichlet constructions for K=Q; when using full Hecke machinery, build bnr structures and vectors v to encode characters."
+      },
+      {
+        "name": "Artin L-functions: representation encoding and variable priority",
+        "description": "Artin L-functions. Given a Galois number field N/Q with group G = galoisinit(N), a representation \u03c1 of G over Q(\u03b6_n) is specified by matrices giving the images of G.gen by \u03c1. The corresponding Artin L-function is created using lfunartin. Note: in examples the polynomial variable representing \u03b6_n must have lower priority than the polynomial variable x.",
+        "guidance": "Provide representation matrices with entries in polynomial form over the cyclotomic field; ensure variable priorities are set correctly (priority of cyclotomic variable lower than polynomial variable used elsewhere)."
+      },
+      {
+        "name": "L-functions of algebraic varieties: supported types and caveats",
+        "description": "L-function of elliptic curves over number fields are supported (ellinit \u2192 lfuncreate). L-function of hyperelliptic genus-2 curves can be created with lfungenus2. Currently, the model needs to be minimal at 2, and if the conductor is even, its valuation at 2 might be incorrect (a warning is issued).",
+        "guidance": "Be aware of the 2-adic minimality requirement for genus-2 models and verify warnings about conductor valuation at 2."
+      },
+      {
+        "name": "Eta quotients / Modular forms assumptions",
+        "description": "An eta quotient is created by lfunetaquo from a matrix [m, r_m] representing f(\u03c4) = \u220f \u03b7(m\u03c4)^{r_m}. It is currently assumed that f is a self-dual cuspidal form on \u03930(N) for some N. More general modular forms defined by modular symbols will be added later.",
+        "guidance": "Only use lfunetaquo for eta-quotients that are self-dual cuspidal forms on \u03930(N); otherwise behavior is unspecified."
+      },
+      {
+        "name": "Low-level Ldata input formats for a(n)",
+        "description": "Low-level Ldata format: V[1] = a encodes the Dirichlet series coefficients. Preferred format: a closure n -> vector(n,i,a(i)). Closure may return more or fewer coefficients (fewer triggers warnings). Alternative: closure (p,d) -> L_p giving local factor at p as a rational function to be evaluated at p^{\u2212s} (d = floor(log_p(n))). Another option: dir = [an, [p1, L_p^{-1}], ...] to describe generic coefficients plus bad local factors. Also allowed: input a fixed vector v as shorthand (precomputed coefficients).",
+        "guidance": "For multiplicative L-functions prefer the local-factor closure format; ensure closure semantics match expected lengths. If fewer coefficients are provided than needed, warnings and loss of accuracy occur."
+      },
+      {
+        "name": "Low-level Ldata other components (astar, Vga, k, N, eps, poles)",
+        "description": "V[2]=astar encodes dual coefficients (sentinels 0 or 1 for special cases where a=a*). V[3]=Vga is the vector of \u03b1_j giving the \u03b3-factor \u03b3_A(s)=\u220f \u0393_R(s+\u03b1_j); length d is degree. V[4]=k is positive integer (functional equation s \u2194 k \u2212 s). V[5]=N is conductor \u22651. V[6]=eps is root number \u03b5. V[7]=poles (optional) encodes polar part as list of [\u03b2, P_\u03b2(x)] or a scalar r to indicate a single simple pole at s=k with residue r; type distinguishes L vs \u039b.",
+        "guidance": "Provide Vga as exact rational numbers when possible; poles must be given unless a=a* (or use poles=r coding for single simple pole). Omitting mandatory polar-part information can make some computations impossible or incorrect."
+      },
+      {
+        "name": "Strong recommendation to check functional equation after creating Ldata",
+        "description": "It is strongly suggested to first check consistency of the created L-function: ? L = lfuncreate([a, as, A, k, N, eps, r]); ? lfuncheckfeq(L)  \\ check functional equation",
+        "guidance": "Always run lfuncheckfeq on hand-built Ldata to detect mistakes in the data (root number/functional equation inconsistencies)."
+      },
+      {
+        "name": "lfun(L,s,{D=0}) behavior and error bounds",
+        "description": "lfun(L, s, {D = 0}). Compute the L-function value L(s), or if D is set, the derivative of order D at s. The parameter L may be Lmath, Ldata or Linit. The argument s may be a power series (return Taylor expansion). The result is given with absolute error less than 2^{\u2212B}, where B = realbitprecision.",
+        "guidance": "Set realbitprecision to control absolute error; for Taylor expansions pass s as a power series. Use Linit for repeated computations."
+      },
+      {
+        "name": "lfuncheckfeq: semantics and caution about t and precision",
+        "description": "lfuncheckfeq(L, {t}). Given Lmath/Ldata/Linit, check whether the functional equation is satisfied. If the function has poles, the polar part must be specified. The routine returns a bit accuracy b such that |w \u2212 \u02c6w| < 2^b (where w is root number in data and \u02c6w is computed). A large negative value of the order of realbitprecision is expected. If t is given, it should be close to the unit disc for efficiency and such that \u03b8(t) \u2260 0. Checking away from the unit disc may fail with precision errors or give disappointing results.",
+        "guidance": "Run the check near the unit disc for meaningful results. If precision errors occur, increase realbitprecision/default bit precision."
+      },
+      {
+        "name": "lfunconductor: heuristic nature and usage",
+        "description": "lfunconductor(L, {ab = [1,10000]}, {flag = 0}). Compute the conductor of the given L-function (if the structure contains a conductor, it is ignored); ab = [a,b] is the interval where we expect the conductor; may be a scalar b meaning [1,b]. If flag=0 return integer(s) found; flag=1 return floating approximations without rounding; flag=2 return all conductors found, even far from integers. Caveat: This is a heuristic program and the result is not proven in any way.",
+        "guidance": "Use lfunconductor only when primes dividing conductor are unknown; otherwise prefer lfuncheckfeq searching over prime exponents for rigorous determination. Increase search interval ab for better accuracy at cost of runtime."
+      },
+      {
+        "name": "lfuncost: cost estimation semantics",
+        "description": "lfuncost(L, {sdom}, {der = 0}). Estimate the cost of running lfuninit(L,sdom,der) at current bit precision. Returns [t, b], indicating t coefficients a_n will be computed and t values of gammamellininv at bit accuracy b. If L is an Linit, sdom and der are ignored. If L factorizes (e.g., Dedekind zeta of abelian fields), the function may return a vector of costs for each factor.",
+        "guidance": "Use lfuncost to estimate memory/time; expect costs to grow quickly with target height, conductor, and requested bit precision. After lfuninit actual costs may be much lower if factorization occurs."
+      },
+      {
+        "name": "lfuncreate: prefer high-level constructors; examples",
+        "description": "lfuncreate(obj). Low-level routine creates Ldata. Urged to use a high-level constructor when available (e.g., numeric codes for zeta, Dirichlet characters, polynomials for number fields, ellinit for elliptic curves). The low-level input is a 6 or 7 component vector V = [a, astar, Vga, k, N, eps, poles] with specific encoding formats for each component.",
+        "guidance": "Use built-in constructors when possible. When using low-level lfuncreate, follow exact input formats for closures/vectors and pole encodings to avoid inconsistent Ldata."
+      },
+      {
+        "name": "lfundiv/lfunmul: algebraic manipulations of Ldata",
+        "description": "lfundiv(L1, L2) creates Ldata for quotient L1/L2 (without initialization). Assume vz(L1) \u2265 vz(L2) at all complex numbers z: the construction may not create new poles nor increase the order of existing ones. lfunmul(L1, L2) creates the product Ldata.",
+        "guidance": "Ensure input Ldata satisfy vz assumption when dividing; use appropriate bitprec argument when calling these low-level operations."
+      },
+      {
+        "name": "lfunorderzero: order-of-vanishing heuristics and m parameter",
+        "description": "lfunorderzero(L, {m = \u22121}). Computes the order of the possible zero of L at the center k/2; returns 0 if non-vanishing. If m \u2265 0 assume order \u2264 m. Otherwise defaults: if L is an Linit assume a multiple zero has order \u2264 maximal allowed derivation order; else assume order < 4. You may explicitly increase m (may force recomputation of Linit).",
+        "guidance": "Increase m only for low heights or use lfunorderzero selectively due to cost; when using Linit ensure its maximal derivation order is sufficient."
+      },
+      {
+        "name": "lfunrootres: computing residues and root number requirements",
+        "description": "lfunrootres(data). Given Ldata (or lfunthetainit output), compute [r, R, w] where r is residue of L(s) at unique pole, R residue of \u039b(s), and w the root number. In current implementation either the polar part must be completely known (then function determines root number), or at most a single pole is allowed (function computes both root number and residue, 0 if no pole).",
+        "guidance": "Provide full polar part when possible for robust root-number determination. If only a single simple pole is present you may set poles=r with r=0 to have the routine compute residue."
+      },
+      {
+        "name": "lfuntheta and lfunthetainit: definitions, domains, and cone/argument constraints",
+        "description": "lfuntheta(data, t, {m=0}): compute m-th derivative at t of theta function \u0398(t) = \u2211 a(n) K(n t / N^{1/2}) where K is inverse Mellin transform of gamma product. lfunthetainit(L,{tdom},{m=0}) initializes evaluation of theta derivatives in domain tdom. By default t real, t \u2265 1. tdom may be scalar \u03c1 (real t\u2265\u03c1), a complex number for a particular t (allows computing \u03b8(z) for any z with |z|\u2265|t| and |arg z| \u2264 |arg t|), or pair [\u03c1,\u03b1]: assume |t| \u2265 \u03c1 and |arg t| \u2264 \u03b1. We must have |2 arg z / d| < \u03c0/2 where d is degree of \u0393 factor. Initialization equivalent to lfunthetainit(L, [abs(t), arg(t)])",
+        "guidance": "Use lfunthetainit to compute many theta values in a cone; ensure argument constraints (|2 arg z / d| < \u03c0/2) are satisfied to avoid domain errors. lfunthetainit dramatically speeds repeated evaluations."
+      },
+      {
+        "name": "lfunthetacost: cost estimation and domain errors",
+        "description": "lfunthetacost(L, {tdom}, {m=0}). Estimates number of coefficients a_n that would be computed for lfunthetainit at current bit precision; also estimates cost of subsequent lfuntheta. If L is Linit, tdom and m are ignored. lfunthetacost produces domain errors if arg(t) is too large (arg constraint arg t <= 0.785... in examples).",
+        "guidance": "Use lfunthetacost before initialization to estimate runtime/memory. If domain error "
+      },
+      {
+        "name": "lfunzeros: naive zero-finding assumptions and parameters",
+        "description": "lfunzeros(L, lim, {divz=8}). lim either positive upper limit or interval inside [0,\u221e[, computes ordered list of zeros of L(s) on the critical line up to given limit. Uses a naive algorithm which may miss zeros: assumes two consecutive zeros at height T \u2265 1 differ by at least 2\u03c0/\u03c9 where \u03c9 := divz\u00b7(d log(T/2\u03c0) + d + 2 log(N/(\u03c0/2)^d)). To use a finer search mesh set divz > 8. Algorithm also assumes all zeros are simple except possibly at s=k/2, and no poles in the search interval. If using Linit, ensure Linit domain contains [0,T+1] or Linit(Ldata,T+1) so zeros near T are detected.",
+        "guidance": "lfunzeros can miss zeros \u2014 increase divz to refine mesh, ensure no poles in interval, and initialize L up to T+1 to detect zeros near the endpoint."
+      },
+      {
+        "name": "lfunhardy: Hardy Z-variant definition and practical initialization requirement",
+        "description": "lfunhardy(L, t). Variant of Hardy Z-function given by L, used for plotting or locating zeros of L(k/2 + it) on the critical line. Definition: for s=k/2+it=\u03c1 e^{i\u03b8}, E = (d(k/2 \u2212 1) + \u03a3 \u03b1_j)/2, Z(t)=\u03b5^{\u22121/2} \u039b(s)\u00b7|s|^{\u2212E} e^{d t \u03b8/2}, which is real for self-dual \u039b and vanishes exactly when L(k/2+it) does. The normalizing factor compensates exponential decrease of \u03b3_A(s) as t\u2192\u221e so Z(t)\u22481. Using lfuninit is critical for applications computing thousands of values; initialize up to maximal t needed.",
+        "guidance": "Always build an Linit covering the maximal t you will evaluate to avoid warnings and performance penalties."
+      },
+      {
+        "name": "lfuninit domain format and runtime dependence",
+        "description": "lfuninit(L, sdom, {der=0}). Initialization for computations of L(s) where s is in rectangular domain sdom = [center, w, h] with |Re(s) \u2212 center| \u2264 w and |Im(s)| \u2264 h. Abbreviations: [h] encodes [k/2, 0, h]; [w,h] encodes [k/2, w, h]. der is max derivative order. The height h is crucial: if only real s are needed set h=0. Running time roughly proportional to (B/d + \u03c0 h / 4)^{d/2+3} N^{1/2} (with exponent reduced for d=1 or d=2); dependency on w is less crucial but use minimal domain needed.",
+        "guidance": "Choose the smallest sdom and minimal der necessary. Large h or high requested bit accuracy B massively increases runtime."
+      },
+      {
+        "name": "lfunlambda: completed L-function error scaling",
+        "description": "lfunlambda(L, s, {D = 0}). Compute completed L-function \u039b(s) = N^{s/2} \u03b3(s) L(s) or its D-th derivative. The result is given with absolute error less than 2^{\u2212B} |\u03b3(s) N^{s/2}| where B = realbitprecision.",
+        "guidance": "Be aware that absolute error scales with |\u03b3(s) N^{s/2}|; increase realbitprecision to control error in \u039b(s)."
+      },
+      {
+        "name": "lfunan: computing Dirichlet series coefficients",
+        "description": "lfunan(L, n). Compute the first n terms of the Dirichlet series attached to L (Lmath, Ldata or Linit). The library syntax is GEN lfunan(GEN L, long n, long prec).",
+        "guidance": "Use lfunan to inspect or export coefficients; for built-in L-functions this is inexpensive (example: lfunan(1,10) for Riemann zeta)."
+      },
+      {
+        "name": "lfunabelianrelinit: relative initialization is more efficient when available",
+        "description": "lfunabelianrelinit(bnfL, bnfK, polrel, sdom, {der = 0}). Returns the Linit structure attached to Dedekind zeta of L using knowledge that L/K is abelian. Using abelian relative structure is often much more efficient than direct computation; difference becomes drastic as absolute degree increases while subfield degree remains constant.",
+        "guidance": "When available, provide relative field data (polrel and bnfK) to exploit abelian factorization and reduce computation time and memory."
+      },
+      {
+        "name": "lfunthetacost/lfunthetainit domain error checks and cone conditions",
+        "description": "lfunthetacost(L,{tdom},{m=0}) estimates cost of lfunthetainit. Domain errors occur if arg(t) too large (example: arg t > 0.785...). lfunthetainit(L,tdom,m) initialization for theta derivatives with domain tdom; tdom may be scalar \u03c1, a complex number, or [\u03c1,\u03b1], but must satisfy |2 arg z / d| < \u03c0/2 where d is degree of \u0393 factor.",
+        "guidance": "Before initializing, call lfunthetacost to confirm domain allowed and cost. If you need theta in a wide cone, ensure degree d and arg constraints permit it or choose real t\u2265\u03c1 defaults."
+      },
+      {
+        "name": "msinit and modular symbols supported scope",
+        "description": "Modular symbols: currently only groups \u03930(N) (N>1) and representations V_k = Q[X,Y]_{k\u22122} (k\u22652) over Q are supported. Represent a space by an ms structure via msinit that encodes Z[G]-generators of \u0394 and an F-basis of M. Subspaces (cuspidal/Eisenstein, new/old) are given by structures allowing quick projection and restriction. Examples: msatkinlehner(M,Q,{H}) returns matrix of Atkin-Lehner involution on subspace H; mscuspidal(M,{flag=0}) returns cuspidal part S (or [S,E]).",
+        "guidance": "Use msinit for modular-symbol computations; API functions assume the stated supported groups and representations."
+      }
+    ]
+  }
+}

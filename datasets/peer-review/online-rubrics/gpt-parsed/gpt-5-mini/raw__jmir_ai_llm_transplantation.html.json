@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/jmir_ai_llm_transplantation.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15216,
+  "output_tokens": 3519,
+  "elapsed_s": 754.4707795421127,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, ML/AI practitioners, journal editors, and scholars interested in LLMs for peer review and scholarly publishing (particularly transplantation research)",
+    "subtask_short": "LLM-assisted peer review evaluation",
+    "subtask_description": "Evaluation of large language models' ability to perform peer-review\u2013style classification (predicting journal quartile) and fairness (affiliation bias) in transplantation research, comparing prompting strategies, temperatures, runtimes, and model behaviors. The study is an algorithm validation experiment using 200 published papers, multiple LLMs, and statistical tests.",
+    "subtask_keywords": [
+      "peer_review",
+      "llm",
+      "transplantation",
+      "evaluation",
+      "prompt_engineering",
+      "rAG"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Exact match accuracy",
+        "description": "Exact match accuracy is based on completely correct predictions of journal quartiles (Q1, Q2, Q3, Q4).",
+        "guidance": "Used as the primary strict correctness metric; reported with 95% CIs. In this study the highest exact match accuracy observed was 0.35 (RAG, temp 0.5). Exact match is insufficient alone for nuanced evaluation because it requires precise quartile identification."
+      },
+      {
+        "name": "Loose match accuracy",
+        "description": "Loose match accuracy considers a prediction correct if it is within 1 quartile of the input paper\u2019s true quartile.",
+        "guidance": "Intended to capture near-miss decisions; reported alongside exact match. Loose match can inflate perceived performance when models prefer centrist predictions (e.g., placing many papers in Q2/Q3), as seen here where loose match reached 0.78 despite low exact match."
+      },
+      {
+        "name": "Per-quartile accuracy (Q1/Q2/Q3/Q4 accuracy)",
+        "description": "Breakdown of accuracy by each journal quartile: Q1 accuracy, Q2 accuracy, Q3 accuracy, Q4 accuracy.",
+        "guidance": "Useful to detect systematic over/underprediction of specific tiers (e.g., models avoiding extremes). Report per-quartile to reveal tendencies such as inflation toward Q2/Q3 or zero accuracies for Q3/Q4 in some prompting methods."
+      },
+      {
+        "name": "Fairness: affiliation bias detection",
+        "description": "Assess whether input author affiliation (none, prestigious, less prestigious) affects model quartile predictions (presence of affiliation bias).",
+        "guidance": "Implement controlled trials where each paper is evaluated multiple times with different affiliations. Use contingency-table analysis (chi-square test for independence), adjusted Pearson residuals, and effect sizes (Cramer V) to detect association. In this paper, three trials per paper (none/high/low affiliation) were used; no substantial affiliation bias was found overall."
+      },
+      {
+        "name": "Statistical testing and thresholds",
+        "description": "Statistical methods and decision thresholds used for inference: chi-square tests for independence, significance \u03b1 = .05, adjusted Pearson residuals, Cramer V with 95% CIs via nonparametric bootstrapping (5000 resamples).",
+        "guidance": "Declare \u03b1 and CI calculation method. Consider adjusted Pearson residuals with absolute value >1.96 as statistically significant. Report effect sizes (Cramer V) and interpret magnitude; negligible effect sizes (e.g., \u22640.10) imply minimal real-world association even if P values are low."
+      },
+      {
+        "name": "Adjusted Pearson residuals and combined residuals",
+        "description": "Adjusted Pearson residuals quantify over- or under-representation of model predictions relative to expectation; combined residuals for Q1+Q2 vs Q3+Q4 are used for interpretability.",
+        "guidance": "Report residuals per cell and consider |residual| > 1.96 statistically significant. Combine top-two and bottom-two quartiles when helpful to interpret high-tier vs low-tier decisions."
+      },
+      {
+        "name": "Prompt engineering strategies",
+        "description": "Compare prompting techniques: zero-shot prompting, few-shot prompting, tree of thoughts (ToT) prompting, and retrieval-augmented generation (RAG).",
+        "guidance": "Describe each method's mechanics and practical consequences: zero-shot (no examples), few-shot (in-context examples), ToT (explicit intermediate reasoning steps), RAG (retrieve external documents and feed with prompt). Evaluate how each affects accuracy, runtime, input length, and biases (e.g., ToT biased towards Q2; RAG produced greatest diversity and best accuracy). Include full prompt templates in supplementary materials for reproducibility."
+      },
+      {
+        "name": "RAG-specific capability: full-text ingestion & retrieval",
+        "description": "RAG uses retrieval (FAISS vector DB here) to feed relevant documents to the LLM, enabling ingestion of full papers and reducing hallucination/outdated-knowledge issues.",
+        "guidance": "RAG was the only strategy that could process full papers (others were limited to abstracts by token limits). Recognize that input-length asymmetry can advantage RAG; report that RAG produced higher diversity in predictions and higher exact/loose accuracies in this study."
+      },
+      {
+        "name": "Temperature hyperparameter tuning",
+        "description": "The sampling temperature controls output randomness (0 to 1); grid search over temperatures (0, 0.1, 0.5, 1.0) was performed to find optimal balance between determinism and creativity.",
+        "guidance": "Report performance at each temperature. In this work temperature 0.5 provided the best performance (exact match 0.35) \u2014 suggesting moderate sampling diversity can be beneficial for classification-like review tasks. Consider adaptive temperature schedules for future work."
+      },
+      {
+        "name": "Efficiency: runtime and computing resource use",
+        "description": "Measure average runtime (seconds) and computing resource footprint (model parameter size) per model/strategy as part of evaluation.",
+        "guidance": "Compare models by both accuracy and cost (e.g., Mistral-7B had highest exact match with lowest runtime; Qwen 2.5 had high runtime but highest loose match). Use these metrics to assess practical deployability and trade-offs between accuracy and cost."
+      },
+      {
+        "name": "Model 'personality' / decision preference profiling",
+        "description": "Characterize each model\u2019s consistent preference distribution across quartiles (e.g., Llama 3.3 \u2192 Q2; Gemma \u2192 Q3).",
+        "guidance": "Profile and report stable tendencies ('personalities') because they can systematically skew outcomes. Recommend monitoring, audits, and validation to detect and mitigate such stable biases before deployment in editorial workflows."
+      },
+      {
+        "name": "Dataset composition and ground-truth selection (use of journal quartiles)",
+        "description": "Use of journal quartiles (SCImago-based Q1\u2013Q4) as proxy labels for manuscript quality; dataset comprised 200 published transplantation papers with 50 from each quartile.",
+        "guidance": "Acknowledge quartiles are an imperfect proxy for article-level quality and may bias models to pick up venue-specific stylistic cues. Report dataset attributes (title, authors, abstract, full paper, quartile), and note limitation that only published manuscripts were included (no rejected submissions). Consider alternative labels (5-option include 'not publishable', reviewer scores) in future work."
+      },
+      {
+        "name": "Experimental design & reproducibility practices",
+        "description": "Practices include pilot hyperparameter search (Llama 3.3 on 80 papers), then round-2 comprehensive testing (200 papers, 5 models, 3 affiliation trials), multiple temperatures, and inclusion of prompt materials and methods in appendices.",
+        "guidance": "Publish full prompts, RAG implementation details, and runtime/resource recording methods in supplementary files to enable replication. Use multiple trials per condition and explain pilot-to-full-study transition."
+      },
+      {
+        "name": "Significance & effect-size reporting via bootstrapping",
+        "description": "Calculate effect sizes (Cramer V) with 95% CIs via nonparametric bootstrapping (5000 resamples) to quantify strength of any association between affiliation and quartile decisions.",
+        "guidance": "Report both P values and effect sizes with CIs to avoid overinterpreting small but statistically significant associations. Note that negligible effect sizes imply minimal practical association even when P approaches significance."
+      },
+      {
+        "name": "Handling of token-limit asymmetry and input-length constraints",
+        "description": "Acknowledge that non-RAG prompting strategies were restricted to abstracts due to token limits, while RAG could ingest full texts.",
+        "guidance": "When comparing strategies, explicitly state the input-length differences and consider them when interpreting superior performance by methods that can access full texts."
+      },
+      {
+        "name": "Anti-pattern detection: centrist/neutral bias and prompting artifacts",
+        "description": "Identify prompting-induced artifacts such as ToT producing 100% Q2 accuracy or zero-shot overpredicting Q1, indicating strategy-specific biases.",
+        "guidance": "Report such anti-patterns and avoid using prompting strategies that produce degenerate distributions for decision tasks. Validate that prompting does not systematically push models toward safe/neutral classifications."
+      },
+      {
+        "name": "Appropriate role assignment for LLMs in peer review",
+        "description": "Recommendation that LLMs are currently insufficient to replace human reviewers and should be limited to supportive roles (preliminary triage, flagging methodological red flags, assembling structured digests).",
+        "guidance": "Enforce nonnegotiable human supervision of model outputs for editorial decisions. Use LLMs to increase recall for issues but rely on human experts for nuanced judgment and final decisions."
+      },
+      {
+        "name": "Ethical and regulatory considerations",
+        "description": "Consider IRB applicability (this study considered publicly available literature and did not constitute human-subjects research); consider fairness, bias amplification, and potential harms from automated review.",
+        "guidance": "Document ethical rationale for study design and ensure transparency about data sources, limitations, and the need for oversight if LLMs are integrated into peer review. Recommend ongoing auditing for bias reemergence as models or corpora change."
+      }
+    ]
+  }
+}

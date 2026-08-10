@@ -1,0 +1,129 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_250b2ac4580a.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15478,
+  "output_tokens": 3961,
+  "elapsed_s": 1559.324217208894,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers in computational social science, political science, and natural language processing studying parliamentary debates and EU data-protection politics",
+    "subtask_short": "text_mining EU plenary questions",
+    "subtask_description": "Exploratory text-mining and topic-modeling analysis of questions (and answers) raised in European Parliament plenary sessions about data protection across multiple Commissions (1995\u2013early 2023). The work combines preprocessing rules, regular-expression parsing of legal/political entities, LDA topic modeling, and a topic\u2013political-group network analysis.",
+    "subtask_keywords": [
+      "text_mining",
+      "topic_modeling",
+      "eu_parliament",
+      "parliamentary_questions",
+      "gdpr_politics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Keyword-based data collection",
+        "description": "Retrieve documents from the Parliament\u2019s online database using the two words 'data protection' for the keyword search.",
+        "guidance": "Search was executed on 7 February 2023; both oral and written questions are covered and Commission answers (always written) were included. The period covered spans the Commissions from 1995 to early 2023 (Santer, Prodi, Barroso, Juncker, von der Leyen)."
+      },
+      {
+        "name": "Document unit: question\u2013answer merging and longitudinal reference",
+        "description": "Merge question and answer pairs into single documents (document = answer-question pair), but use the date the question was raised as the longitudinal reference point.",
+        "guidance": "Dataset contains 1230 questions and 1163 answers; after merging the sample size is n = 1230. Note many questions received no answer; longitudinal analyses reference question dates rather than answer dates."
+      },
+      {
+        "name": "Regular-expression parsing of legal/policy references",
+        "description": "Use regular expressions to locate references to directives, regulations, decisions, and Commission proposals using common EU naming conventions.",
+        "guidance": "These parsed items are collectively referred to as 'policies' for analysis (counts of references to regulations/directives/decisions/communications). Exploits standard syntactic naming conventions in EU jurisprudence and archiving."
+      },
+      {
+        "name": "Regular-expression parsing of political affiliations and group mapping",
+        "description": "Parse MEP political affiliations from texts with regex and map historical group names into a unified set aligned with the Parliament\u2019s current composition.",
+        "guidance": "Historical groups were merged into seven groups: centre-right, liberal, social democratic, left-wing, green, eurosceptics, and others. All affiliations on multi-MEP questions were counted (total affiliations = 1643), so affiliation counts may exceed document counts. Mapping details (which historical groups merged into which current groups) are specified in the paper."
+      },
+      {
+        "name": "Bag-of-words construction with bigrams for interpretability",
+        "description": "Construct a bag-of-words corpus using bigrams (2-grams) formed from adjacent tokens to improve interpretability of topics.",
+        "guidance": "Bigrams were preferred because of improved interpretability; after preprocessing and frequency filtering the corpus had 13,366 bigrams and 1,220 documents (reduced from initial set by preprocessing steps)."
+      },
+      {
+        "name": "HTML removal and lower-casing",
+        "description": "Remove all HTML elements and convert all textual data to lower-case.",
+        "guidance": "These are the first preprocessing steps applied to raw archival material prior to tokenization."
+      },
+      {
+        "name": "Tokenization and alphabetical-only token filtering",
+        "description": "Tokenize text on white space and punctuation characters and retain only alphabetical tokens.",
+        "guidance": "Tokenization strategy explicitly used whitespace/punctuation boundaries; non-alphabetical tokens (digits, punctuation) were excluded to focus on word tokens."
+      },
+      {
+        "name": "Stopword removal including a domain-specific custom list",
+        "description": "Omit stopwords using standard toolkit stopwords augmented with a custom domain stopword list.",
+        "guidance": "Custom stopwords included domain-/corpus-specific frequent terms (e.g., question, answer, data, protection, parliament, commission, directive, regulation, article, tabled, reply, within, http, months, etc.). The custom list is explicitly enumerated in the methods."
+      },
+      {
+        "name": "Token length filtering",
+        "description": "Exclude tokens with lengths less than three or more than twenty characters.",
+        "guidance": "Helps remove spurious short tokens and extremely long tokens that are likely artifacts; applied before bigram construction."
+      },
+      {
+        "name": "Bigram frequency thresholding",
+        "description": "Exclude bigrams that occur in the corpus fewer than three times.",
+        "guidance": "Applied after bigram construction and term-frequency calculation (the 9th preprocessing step); this filtering reduced the corpus to 1,220 documents and 13,366 bigrams."
+      },
+      {
+        "name": "Use of NLTK (2019) for preprocessing",
+        "description": "Employ NLTK toolkit for tokenization, stopword handling and other preprocessing tasks.",
+        "guidance": "Version cited is NLTK 2019 (v3.4.5 referenced); standard toolkit stopwords augmented by custom list."
+      },
+      {
+        "name": "Choice of topic modeling method: LDA with Gibbs sampling",
+        "description": "Apply latent Dirichlet allocation (LDA) to extract latent topics, using the Gibbs sampler for estimation.",
+        "guidance": "LDA treated as Bayesian mixture-of-bigrams model: topics are mixtures of bigrams and documents mixtures of topics. R package 'topicmodels' (Gr\u00fcn & Hornik, 2011) with Gibbs sampler was used for final computation."
+      },
+      {
+        "name": "Algorithmic tuning for selecting number of topics",
+        "description": "Use multiple automatic model-selection algorithms (Cao et al. 2009; Deveaud et al. 2014; Griffiths & Steyvers 2014) implemented in ldatuning to guide choice of number of topics, evaluating k in the range 2..100.",
+        "guidance": "The three algorithms give different signals (e.g., optimality around 60\u201380 by some); the authors considered both algorithmic outputs and interpretability trade-offs. To avoid cherry-picking and incoherent overlap at low k, a middle-ground k = 24 was chosen with explicit rationale discussed."
+      },
+      {
+        "name": "Hyperparameter handling (\u03b1 and \u03b2)",
+        "description": "Allow the LDA implementation to estimate the Dirichlet hyperparameters \u03b1 and \u03b2 automatically rather than fixing them by heuristic.",
+        "guidance": "Paper notes a lack of robust computational heuristics for choosing \u03b1 and \u03b2 and therefore uses the R package\u2019s estimation facility."
+      },
+      {
+        "name": "Human interpretability and labeling of topics",
+        "description": "Interpret and label extracted topics manually; merge topics that represent the same substantive issue when appropriate.",
+        "guidance": "All 24 topics could be reasonably interpreted and labeled. Three subject areas (telecommunications, GDPR, PNR) were each represented by two topics and were merged for further analysis; one topic relating to procedural plenary practicalities was treated as non-data-protection and handled accordingly."
+      },
+      {
+        "name": "Avoiding cherry-picking vs. preference for interpretability",
+        "description": "Balance algorithmic optima with human interpretability when choosing model complexity to prevent cherry-picking while producing coherent topics.",
+        "guidance": "Authors considered estimating 60\u201380 topics (many sharp topics but some uninterpretable) and fewer topics (more overlap/incoherence). They chose 24 topics as a compromise, explicitly noting the tradeoffs and risks of cherry-picking."
+      },
+      {
+        "name": "Dominant-topic assignment per document",
+        "description": "For each document, determine the dominant (most likely) LDA topic and use it in downstream analyses.",
+        "guidance": "Dominant topic per document was used to link documents to political groups (one document may link to multiple groups if multiple MEP affiliations were present)."
+      },
+      {
+        "name": "Construction of an undirected weighted network linking topics and political groups",
+        "description": "Build an undirected weighted network whose vertices are topics and political groups and whose edge weights equal the number of times an MEP from a given political group asked a question with a given dominant topic.",
+        "guidance": "Edges represent counts (weights) and the network resembles co-word networks; vertex sizes scaled by degree and edge widths by counts in visualizations."
+      },
+      {
+        "name": "Use of descriptive statistics and time-series analysis alongside topic modeling",
+        "description": "Complement topic-model outputs with descriptive counts (e.g., references to specific laws) and time-series plots (e.g., volume of questions over time, references to GDPR vs Directive 95/46/EC).",
+        "guidance": "Examples include counting references to directives/regulations/decisions/COMs and plotting political-group question volumes over time to identify spikes and trends; supports triangulation of topic-model findings."
+      },
+      {
+        "name": "Counting multiple MEP affiliations per question",
+        "description": "When questions were asked by informal groups of MEPs with different affiliations, count all of the affiliations rather than choosing a single affiliation.",
+        "guidance": "This counting method increases the number of affiliation records (1643) beyond the number of questions and is explicitly used in group-level analyses; authors note the approach is imperfect but adequate for quantitative analysis."
+      },
+      {
+        "name": "Domain-aware stopword inclusion to remove formulaic/legal tokens",
+        "description": "Include legal/institutional/formulaic tokens in the stopword list to prevent these frequent but low-informational tokens (e.g., 'directive', 'regulation', 'article', 'parliament', 'commission') from dominating topics.",
+        "guidance": "Custom stopwords were extensive and tailored to the corpus; authors emphasize that Commission replies often contain structured references to laws which were parsed separately (via regex) rather than left inside the free-form topical text."
+      }
+    ]
+  }
+}

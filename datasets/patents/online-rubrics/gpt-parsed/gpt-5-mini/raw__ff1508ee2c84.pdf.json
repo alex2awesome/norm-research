@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/ff1508ee2c84.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 15732,
+  "output_tokens": 4499,
+  "elapsed_s": 2053.627439457923,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academic researchers, economists, data scientists, and policy analysts studying U.S. government-funded patents and R&D",
+    "subtask_short": "building government-funded patent register",
+    "subtask_description": "Constructing a consolidated, research-grade dataset of U.S. government-funded patents by digitizing the historical USPTO Government Register and combining it with modern administrative and text-derived sources, with careful cleaning, harmonization, and validation. The goal is a precise, extensible record of government-funded patents (including funding agency and legal interest) from the early twentieth century through 2020.",
+    "subtask_keywords": [
+      "patent_data",
+      "government_funding",
+      "dataset_construction",
+      "uspto",
+      "historical_register",
+      "data_validation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use the USPTO historical Government Register as a primary source",
+        "description": "Digitize and use USPTO\u2019s historical Register of Government Interest in Patents (the Government Register) \u2014 index card sets maintained by the USPTO Assignment Branch that record patents where the government had title or license, including metadata fields (patent number, filing/issue dates, title, inventor, assignor, and government interest).",
+        "guidance": "Locate the register in archival records (e.g., NARA Record Group 241), choose an index set to digitize (cards are sequenced by assignor, funding agency, and patent number), and extract full card contents. Expect backfilled historical coverage (cards go back to the 1890s) and that the register was the official record required by Executive Order 9424."
+      },
+      {
+        "name": "Combine multiple sources to build a consolidated Government Patent Register",
+        "description": "Merge the historical Government Register with modern administrative sources (USPTO Patent Assignment Dataset/UPAD, PatentsView government interest statements and assignee data) and prior text-based efforts (Fleming et al. 2019) to create an extensible, long-run dataset of government-funded patents.",
+        "guidance": "Triangulate across sources because each source fills gaps in others; use the historical register for pre-electronic-era coverage and UPAD/PatentsView for post-1980 records. Provide code and instructions to extend the series as new data become available."
+      },
+      {
+        "name": "Inclusion rule: consider a patent government-funded if any source identifies it",
+        "description": "Measure a patent as government interest (government-funded) if it is identified as such by any of the constituent sources (historical register, UPAD, PatentsView interest statements, or government assignee indicators).",
+        "guidance": "For legal interest (title or license) and funding agency, accept the measurement if any source ever records it; this maximizes capture while relying on prior cleaning and validation for precision."
+      },
+      {
+        "name": "Classify legal interest as title, license, or unknown",
+        "description": "Record whether the government had title to the patent, only a license, or an unknown/ambiguous interest. Use explicit register labels or assignment/conveyance text to classify.",
+        "guidance": "When the register or conveyance data indicate both title and license (ambiguous cases), treat the interest as unknown. Manually review conveyance text in UPAD to categorize transactions as title or license."
+      },
+      {
+        "name": "Harmonize and crosswalk funding agency names to modern cabinet-level departments",
+        "description": "Aggregate and harmonize agency names and spellings (e.g., Army/Navy/Air Force/War Department \u2192 DoD; AEC \u2192 DOE; HEW/PHS/NIH \u2192 HHS) so patents can be associated with consistent, modern agency labels.",
+        "guidance": "Manually map named entities to focal agencies and document mappings. Allow multiple associated agencies per patent when cards or sources list multiple agencies."
+      },
+      {
+        "name": "Exclude certain record types from the main dataset",
+        "description": "Drop index cards and records that do not reflect substantive U.S. patent grants of interest: patent applications later abandoned, foreign patent office records, design patents, reissues, and a handful of special-case blanket wartime licenses treated as public service (not contractual interest).",
+        "guidance": "These exclusions remove non-applicable records; special wartime blanket licenses comprised ~3% of cards and were interpreted as public service rather than legal interests."
+      },
+      {
+        "name": "Cross-validate and correct transcription errors using patent publications (Google Patents)",
+        "description": "Validate every index card\u2019s patent number, serial, filing and issue dates, inventors, and titles against Google Patents (or similar patent publication sources) and correct typographical errors in the source cards.",
+        "guidance": "If patent number disagrees with other fields but other fields match publications, replace the provided patent number with the one implied by other fields (the authors corrected ~694 patents, ~0.5%). Drop patents (<100) that cannot be reconciled."
+      },
+      {
+        "name": "Prefer precision over recall in ambiguous text-derived signals",
+        "description": "Where a source (e.g., Fleming et al. 2019 government-acknowledging indicator) is prone to false positives, do not include that signal unless corroborated by other sources.",
+        "guidance": "Examples of false positives include patents mentioning the word 'government' as a potential user, or OCR-caused garbling. Prioritize avoiding misclassification even if it reduces coverage slightly."
+      },
+      {
+        "name": "Identify government conveyances in UPAD using conveyance type and text",
+        "description": "In the USPTO Patent Assignment Dataset (UPAD), detect government interests via (i) the author-coded 'conveyance type' value 'govern' and (ii) conveyance text strings such as 'EXECUTIVE ORDER 9424' or 'CONFIRMATORY LICENSE'.",
+        "guidance": "Collect assignees appearing in such conveyances, then evaluate whether assignees are government entities and whether transactions convey title or license; cast a broad but precise net to capture government-interest conveyances."
+      },
+      {
+        "name": "Manual review and string-matching of UPAD assignees",
+        "description": "Manually inspect UPAD assignees, perform careful string matching to federal agency names, retrieve conveyance texts for candidate assignees, and categorize conveyances as title or license.",
+        "guidance": "This manual categorization is essential because not all government interests in UPAD follow the same textual conventions. The authors found 90% overlap of UPAD-identified government interest patents with other sources."
+      },
+      {
+        "name": "Inspect conveyance letters for UPAD-only cases when necessary",
+        "description": "For patents identified only in UPAD and not in other sources, read the associated conveyance letters (via the USPTO Patent Assignment Search) to confirm the legal interest when needed (e.g., for litigation or case-level work).",
+        "guidance": "Random sample validation showed ~88% accuracy for UPAD-only cases; most mistakes were data-entry errors linking conveyances to wrong patents."
+      },
+      {
+        "name": "Use PatentsView government interest statements and extract agencies",
+        "description": "Leverage PatentsView's 'g_gov_interest.tsv' (government interest statements) and 'g_gov_interest_org.tsv' (extracted organizations) as a source of patent-level government-interest signals and potential agency names.",
+        "guidance": "PatentsView is complementary: interest statements are not consistently present, but when present they provide explicit acknowledgments that can be crosswalked to agencies (with manual checks for imprecisions)."
+      },
+      {
+        "name": "Extract funding agencies from interest statements using LLMs with manual post-processing",
+        "description": "Feed PatentsView interest statement text to a large language model (GPT-4) to identify acknowledged U.S. federal agencies or generic 'U.S. government' mentions, then manually map entities to focal agencies and weed out foreign/state/private entities.",
+        "guidance": "The approach is cheap (~$1.50 per 1,000 statements), scalable, and yielded high agreement with PatentsView extracted orgs (95% agreement on overlapping cases), while capturing some improvements and filling gaps."
+      },
+      {
+        "name": "Measure government-assigned patents via assignee data",
+        "description": "Use PatentsView assignee data and Fleming et al. (2019) assignee extraction to identify patents assigned to U.S. government entities, manually reviewing assignee text to avoid foreign-government false positives.",
+        "guidance": "Extend backward by using Fleming et al. (2019) for pre-1976 assignees (with manual corrections for OCR-caused errors)."
+      },
+      {
+        "name": "Aggregate and deduplicate across sources",
+        "description": "Construct a consolidated patent-level file by merging a base list of USPTO patents (e.g., Google Patents patents 1836\u20132020) with government-interest flags, legal interest type, and funding agency drawn from the multiple sources described.",
+        "guidance": "Record provenance (which source(s) identified the patent) and allow multiple agencies and multiple measurements per patent; track which source provided title/license/agency information."
+      },
+      {
+        "name": "Treat employee-invention statutes distinctly (U.S.C. 266 / Act of 1883)",
+        "description": "Label patents that are government employee inventions (not contractual extramural inventions) when index cards or sources indicate 'Act of 1883' or 'U.S.C. 266', which reflect statutory government rights in employee inventions.",
+        "guidance": "These are conceptually different legal bases for government interest and should be flagged separately in the dataset."
+      },
+      {
+        "name": "Handle ambiguous cards with multiple interests or agencies carefully",
+        "description": "When a patent card or source lists multiple recorded interests (both title and license) or multiple agencies, record all observed values and treat joint title+license entries as 'unknown interest' for analysis that requires clean classification.",
+        "guidance": "For agency multiplicity, record multiple agencies (authors found ~0.6% of patents with 2+ associated agencies)."
+      },
+      {
+        "name": "Digitization and data-cleaning protocol: scan, transcribe, clean, and regularize",
+        "description": "When digitizing index cards, scan and transcribe card text, clean non-numeric characters from numeric fields, ensure internal consistency, manually resolve inconsistencies, and harmonize names/spellings.",
+        "guidance": "Hand-check numeric fields with non-numeric characters and validate internal consistency across fields. Expect to correct a small share of records (~0.5%) and drop a handful of unreconcilable cards."
+      },
+      {
+        "name": "Document limits and potential underreporting/non-compliance",
+        "description": "Acknowledge that patents are imperfect proxies for government R&D spending; reporting under E.O. 9424 and inclusion of government interest statements has been historically incomplete, so some government-funded patents may be missing.",
+        "guidance": "Advise researchers to triangulate across sources, be cautious about propensity-to-patent differences across fields/agencies/time, and, for specific-case work, verify UPAD-only or otherwise single-source cases by reviewing assignment/conveyance documentation."
+      },
+      {
+        "name": "Quantify and report overlaps, source contributions, and error rates",
+        "description": "Provide statistics showing how many patents each source contributes uniquely and in overlap (e.g., ~20% of all government interest patents and >50% of pre-1976 patents are identifiable only by the historical register), and report validation/error-rate checks (e.g., UPAD-only sample 88% accurate).",
+        "guidance": "Use these diagnostics to justify source-combination choices and to inform users about coverage strengths and caveats by era or agency."
+      },
+      {
+        "name": "Do not rely on single text signals (e.g., 'government' word) without corroboration",
+        "description": "Avoid classifying patents as government-funded solely because the patent text contains words like 'government' that may be descriptive or referential rather than acknowledgments of funding or legal interest.",
+        "guidance": "Prefer administrative records or explicit conveyance/interest-statement extractions; when using text-derived signals, validate against other sources to reduce false positives."
+      },
+      {
+        "name": "Release data, documentation, and code to facilitate reuse and extension",
+        "description": "Provide the historical Government Register, the consolidated Government Patent Register through 2020, and accompanying documentation, code, and instructions so users can replicate and extend the dataset.",
+        "guidance": "Include base-layer patent list (e.g., Google Patents), provenance fields, mapping tables for agencies, and scripts for adding future UPAD/PatentsView updates."
+      },
+      {
+        "name": "Account for differing patenting norms across fields and eras in interpretation",
+        "description": "When using the dataset for analysis, remember that historical norms (e.g., against patenting publicly-funded medical research) and changing policy (e.g., Bayh-Dole 1981) affect the relationship between government funding and observed patents.",
+        "guidance": "Use caution comparing across eras/agencies; consider supplementing with spending, publication, or other administrative records to interpret observed patent patterns."
+      }
+    ]
+  }
+}

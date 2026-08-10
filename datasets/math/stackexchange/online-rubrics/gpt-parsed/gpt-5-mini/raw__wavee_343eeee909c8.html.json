@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_343eeee909c8.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18619,
+  "output_tokens": 3696,
+  "elapsed_s": 1404.436685416149,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners evaluating or building LLMs for mathematical reasoning (ML/AI researchers, benchmark authors)",
+    "subtask_short": "LLM mathematical reasoning benchmarking",
+    "subtask_description": "Designing, constructing, and using a benchmark (RV-BENCH) of random-variable mathematical questions to evaluate large language models' genuine mathematical reasoning, including dataset generation, difficulty calibration, prompting/inference, and evaluation metrics.",
+    "subtask_keywords": [
+      "llm",
+      "mathematical_reasoning",
+      "benchmark",
+      "rv-bench",
+      "evaluation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Exact Match Accuracy (Acc)",
+        "description": "Measures the correctness of the answer for each RVQ through strict string matching (exact string equality between predicted and ground-truth answer).",
+        "guidance": "Acc is computed across all RVQs; higher is better. Formula provided in the paper (Acc = (1/(m\u00b7n)) \u00b7 sum_{i,j} 1[\u00e2^{(i)}_j = a^{(i)}_j]). Used as the primary overall accuracy metric for RV-BENCH."
+      },
+      {
+        "name": "Group Accuracy@n (GA@n)",
+        "description": "Indicates that all n generated RVQs in a group G(i) are answered correctly (i.e., all n instantiated questions for a question function must have correct answers).",
+        "guidance": "GA@n is a group-level consistency metric: higher GA@n indicates greater consistency across variable combinations within a question function. Defined formally as proportion of groups where \u2200q_j \u2208 G(i), \u00e2^{(i)}_j = a^{(i)}_j."
+      },
+      {
+        "name": "Complete Ratio (CR)",
+        "description": "Measures whether the original (static) problem is answered correctly and at least 80% of the RVQs generated from that problem are also correct, as a measure of the model's understanding.",
+        "guidance": "Formally counts groups where \u00e2^{(i)}_{SP} = a^{(i)}_{SP} \u2227 NG(i) \u2265 \u23080.8\u00b7n\u2309, averaged over groups. Higher CR reflects more complete understanding of both original and RV variants; reported alongside Acc and GA@n."
+      },
+      {
+        "name": "Original Only Ratio (OOR)",
+        "description": "Proportion of cases where the original problem is answered correctly while at most 20% of the RVQs (instantiated variants) are correct \u2014 i.e., model solves the original but fails on most RVQs.",
+        "guidance": "Formally OOR = (1/m)\u00b7sum 1[\u00e2^{(i)}_{SP} = a^{(i)}_{SP} \u2227 NG(i) \u2264 \u23080.2\u00b7n\u2309]. Lower OOR is better; a high OOR suggests the model relied on memorization of the original instance rather than understanding the underlying pattern."
+      },
+      {
+        "name": "Pattern understanding score S (per RVQ group)",
+        "description": "A discrete score SG(i) assigned to each RVQ group indicating degree of understanding: SG(i)=1 if NG(i) \u2265 \u23080.8\u00b7n\u2309, SG(i)=0 if NG(i) \u2264 \u23080.2\u00b7n\u2309, SG(i)=0.5 otherwise.",
+        "guidance": "SG(i) categorizes group-level understanding as 'complete' (1), 'partial' (0.5), or 'collapsed' (0). Average SG across groups is used to quantify overall pattern-understanding consistency; models with average score < 0.6 are flagged as inconsistent."
+      },
+      {
+        "name": "pass@k / Test-time scaling",
+        "description": "A metric measuring accuracy when the model is allowed P independent attempts and successes are counted if at least one of k selected outputs is correct: pass@k = EQuestions[1 - (C(P-c, k)/C(P, k))] (paper uses P=256).",
+        "guidance": "Used to evaluate how repeated sampling (test-time scaling) elicits latent proficiency/generalization; demonstrates substantial performance gains (e.g., pass@200 approaching \u224890%). Report pass@k curves to show elicitation effects; used with P=256 in experiments."
+      },
+      {
+        "name": "Question-generating function structure (init / sol / gen)",
+        "description": "Each question function must consist of three modules: init (randomize variable combination), sol (compute the corresponding answer given variables), and gen (output the instantiated question and answer QA pair).",
+        "guidance": "This modular structure ensures RVQs are reproducible and solvable programmatically. The sol module should compute answers for arbitrary variable instantiations and be validated for correctness and runtime."
+      },
+      {
+        "name": "Difficulty calibration / control",
+        "description": "Manual control of numerical complexity and conceptual difficulty for each question function to ensure RVQs are comparable to original problems and avoid confounding arithmetic difficulty.",
+        "guidance": "Three stated criteria when defining random ranges: (1) fluctuation range of variables should remain uniform across questions; (2) variables that significantly affect complexity may be fixed; (3) random ranges for simpler questions can be broader while for more difficult ones should be narrower. Empirical error analysis (NCE proportions) is used to validate that calibration succeeded."
+      },
+      {
+        "name": "Sampling strategy & dataset composition",
+        "description": "Select problems from MATH test set and LeetCode-Math branch; construct question-generating functions from uniformly/randomly sampled problems; generate 5 RVQs per question function; total of 230 question functions (115 MATH, 115 LeetCode) producing 1,150 RVQs.",
+        "guidance": "Maintain similar distributions of difficulty, type, and bias as original datasets. Use a fixed random seed (42) for reproducibility. For LeetCode, original example instantiations define LEETCODE-SP."
+      },
+      {
+        "name": "Annotation & generation workflow (3-step process)",
+        "description": "Step 1: identify slots/variables in original problem; Step 2: define initialization ranges and implement solution (often converting text solutions to code); Step 3: generate QA pairs by instantiating slots and formatting outputs.",
+        "guidance": "Annotators must remove extraneous content, convert text solutions to code where needed, validate solutions across variable ranges, and ensure generated questions focus on relevant details. For LeetCode problems, annotators may translate community-validated code solutions into the sol module."
+      },
+      {
+        "name": "Calibration and post-filtering procedures",
+        "description": "After annotation, perform cross-calibration where annotators review each other's functions, verify correctness, test runtime across variable combinations, and remove functions that cannot guarantee solvability or generalization.",
+        "guidance": "Runtime testing helps identify issues like recursion depth. LeetCode-derived functions not closely related to math/computation are filtered out. Calibration enhances consistency and objectivity of question functions."
+      },
+      {
+        "name": "Error taxonomy for analysis (QUE, ILE, NCE)",
+        "description": "Classify LLM errors into three types: Question Understanding Error (QUE), Inference Logical Error (ILE), and Numerical Computational Error (NCE).",
+        "guidance": "Use this taxonomy in error analysis to separate misunderstanding, logical/inference mistakes, and arithmetic/computational mistakes. The paper reports NCE proportion remains similar between original and RV settings, supporting difficulty calibration validity."
+      },
+      {
+        "name": "Prompting & inference protocol (few-shot templates)",
+        "description": "Use 4-shot prompting from Minerva for MATH tasks and 4 manually crafted step-by-step solutions for LeetCode tasks as few-shot examples; follow LLaMA-3 recommended settings for MATH experiments.",
+        "guidance": "Keep prompting consistent across evaluated models to ensure fair comparison; include explicit system/human/bot demonstration examples as shown in the paper. Evaluate generated answers with exact-match Acc unless otherwise noted."
+      },
+      {
+        "name": "Implementation & experimental environment requirements",
+        "description": "Open-source model experiments were run on NVIDIA server with 8 A100 GPUs; proprietary models accessed via official APIs.",
+        "guidance": "Report compute environment for reproducibility. Use consistent inference settings (few-shot, sampling seeds, etc.) and document proprietary models whose sizes are undisclosed."
+      },
+      {
+        "name": "AI-assisted annotation policy",
+        "description": "LLMs (e.g., GPT-4o, DeepSeek-V3) may be used to generate initial code prototypes for sol modules, but human annotators must refine and validate outputs; full automation is avoided due to hallucination risks.",
+        "guidance": "AI tools can reduce annotation time (paper cites ~15 minutes saved), but manual oversight and correction are required to ensure correctness and reliability of solution modules."
+      },
+      {
+        "name": "Validation of difficulty-control via error analysis",
+        "description": "Empirically validate that replacing fixed variables with random ones does not significantly increase numerical computational errors (NCE) by comparing NCE proportions between original and RV settings.",
+        "guidance": "If NCE proportions remain stable (within ~2%), conclude RVQs do not introduce confounding numerical difficulty; use this to justify attributing accuracy drops to pattern/generalization issues rather than just arithmetic difficulty."
+      },
+      {
+        "name": "Interpretation guidance for RV-BENCH metrics",
+        "description": "How to interpret metric outcomes: models should demonstrate higher Acc, CR, GA@5 and lower OOR to be considered to have complete question-pattern understanding and genuine mathematical reasoning; typically Acc \u2265 CR \u2265 GA@5.",
+        "guidance": "Use CR to reflect completeness of understanding, OOR to identify memorization-of-original instances, and GA@5 to measure consistency across RV variants. Flag models with average pattern-understanding score below 0.6 as inconsistent in pattern understanding."
+      },
+      {
+        "name": "Fixed group-size design (n=5 RVQs per question function)",
+        "description": "For each question-generating function the study instantiates five RVQs (n=5) when constructing an RVQ group used for evaluation.",
+        "guidance": "The group-size choice affects GA@n, CR, OOR computations and pattern-understanding thresholds; the paper's reported metrics and thresholds (80% and 20%) are defined relative to this grouping practice."
+      }
+    ]
+  }
+}

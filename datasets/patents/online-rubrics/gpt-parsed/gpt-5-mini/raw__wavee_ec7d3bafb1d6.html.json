@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_ec7d3bafb1d6.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15768,
+  "output_tokens": 3812,
+  "elapsed_s": 3213.5045885408763,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "patent attorneys, legal-technology researchers, and practitioners building/using Office Action response automation (recommender + LLM) systems",
+    "subtask_short": "Office Action response automation",
+    "subtask_description": "Developing, evaluating, and deploying systems (PARIS / LE-PARIS) to recommend and generate patent Office Action (OA) responses using response-template databases, hybrid recommender systems, and LLM-based generation with human-in-the-loop editing. Includes dataset construction, topic modeling, expert consensus, recommender evaluation, and user studies.",
+    "subtask_keywords": [
+      "patent",
+      "office_action",
+      "recommender_system",
+      "llm",
+      "response_template",
+      "legal_tech"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Timeliness / statutory response deadlines",
+        "description": "Responses to Office Actions are time-sensitive; statutory response deadlines are critical and failure to respond promptly can render an application invalid and harm applicant rights.",
+        "guidance": "Timeliness directly influences market value and prosecution progress; systems should help attorneys meet deadlines to avoid adverse legal consequences."
+      },
+      {
+        "name": "Quality and constructiveness of response templates",
+        "description": "Response templates must be well-constructed to guide attorneys to cover necessary information and organize response structure; templates should support fill-in-the-blank customization while complying with patent legal requirements and reflecting unique case characteristics.",
+        "guidance": "Templates are created by mining OA/response corpora, then filtered by patent value analysis (see separate criterion). High-quality templates should be customizable, include autofillable bibliographic/technical fields, and leave argument sections for attorney editing."
+      },
+      {
+        "name": "OA topic modeling quality (perplexity and coherence)",
+        "description": "Topic modeling on OA-response corpora is evaluated using perplexity (predictive power) and coherence (semantic similarity of top words); choice of topic count should balance these metrics (example: coherence peaked at 80 topics; perplexity decreased with more topics).",
+        "guidance": "Select topic count considering both perplexity (lower is better) and coherence (higher is better) and apply Occam's razor; visualize topics (intertopic distance, word clouds) to inspect interpretability."
+      },
+      {
+        "name": "Expert consensus via Convergent Delphi",
+        "description": "A convergent Delphi process with an internal expert panel and a broader set of practicing attorneys is used to validate and refine topics and legal keywords, using Likert suitability scoring and consensus thresholds.",
+        "guidance": "Panel composition guidance: experts with \u226510 years experience and senior positions; practicing attorneys with \u22653 years. Measurement: five-point Likert for suitability and higher-order decomposition; algorithmic thresholds used in procedure include \u03bb (critical suitability threshold, example \u03bb=4) and \u03b8 (consensus threshold, example \u03b8=0.7) to determine convergence and decomposition."
+      },
+      {
+        "name": "Inclusion of response exemplars via patent value analysis",
+        "description": "When building response templates, individual historical responses are evaluated by patent value analysis and included if their weighted normalized value exceeds a threshold.",
+        "guidance": "Value indicators include number of forward rejections, changes in claim, law firm rankings, and other quantifiable proxies for a response\u2019s efficacy; compute normalized scores and include responses surpassing the chosen threshold."
+      },
+      {
+        "name": "Content-based retrieval similarity (embedding + cosine similarity)",
+        "description": "Content-based filtering (CB) transforms the current OA and source OAs into embeddings and computes cosine similarity to identify top-k most similar tuples for recommendation.",
+        "guidance": "Use LM/LLM-derived embeddings (e.g., Sentence-BERT, text-embedding-ada-002) with document segmentation when necessary for token limits; choose k and use top-k nearest neighbors (Dk) as candidate templates."
+      },
+      {
+        "name": "Collaborative filtering on topic-specific submatrices",
+        "description": "CF is applied not globally but on submatrices of user-template interactions restricted to templates within each content-identified topic, producing topic-specific CF rankings.",
+        "guidance": "Construct user-template matrix M, extract Mci for each topic ci \u2208 C, apply CF algorithms (ALS, BPR, BiVAE) to each Mci, and combine outputs with CB candidates for re-ranking."
+      },
+      {
+        "name": "Cascade hybrid recommender / re-ranking design",
+        "description": "A cascade hybrid approach: first apply CB to find top related templates/topics, then apply CF per-topic and refine rankings via a linear combination of CF and CB results to produce final ranked templates.",
+        "guidance": "Design choices include how to combine (weighted linear combination L(\u00b7)), how to re-rank, priority of CB vs CF within topic, and selection of final top-k templates per topic. System mirrors attorney behavior of addressing topics sequentially."
+      },
+      {
+        "name": "Recommendation system evaluation metrics",
+        "description": "Recommender systems are evaluated using precision@k, recall@k, and nDCG@k (reporting median and mean across topics for hybrid methods).",
+        "guidance": "Report metrics per year and configuration; analyze median and mean values; track trends over time as matrix sparsity changes; example reported metrics: precision@10, recall@10, nDCG@10."
+      },
+      {
+        "name": "Embedding representation quality and semantic clustering",
+        "description": "Quality of embedding methods is judged by semantic clarity and clustering (e.g., t-SNE visualizations showing more clustered embeddings for LE-PARIS vs dispersed for PARIS) and closer distances between OA embedding and top-k template embeddings.",
+        "guidance": "Prefer embeddings that yield concentrated neighborhoods for true nearest neighbors; evaluate using visualization and nearest-neighbor distance statistics."
+      },
+      {
+        "name": "Choice of CF algorithms and empirical performance",
+        "description": "Select CF algorithms (ALS, BPR, BiVAE) based on empirical performance; e.g., BPR showed strong standalone CF recall/precision, and LE-PARIS+BiVAE achieved highest hybrid performance in study.",
+        "guidance": "Benchmark multiple CF algorithms on real interaction data (sparsity, number of users/templates) and choose combinations that maximize chosen metrics (precision@k, recall@k, nDCG@k)."
+      },
+      {
+        "name": "Data acquisition and preprocessing standards",
+        "description": "OA and response corpora should be sourced from authoritative APIs (e.g., USPTO Office Action API, Global Dossier), OCR-corrected, lowercased, tokenized, stripped of stop words, punctuation, special characters and domain-specific common words, and converted to document-term matrices for modeling.",
+        "guidance": "Use OCR with post-correction for PDFs, include domain-specific stopword lists (e.g., 'office action'), and use libraries like Gensim for document-term matrices; perform stratified sampling if needed to reduce computational load."
+      },
+      {
+        "name": "Semi-autocompletion / workflow support",
+        "description": "System must extract bibliographic and technical keywords (claim numbers, cited cases, inventor names, drawings), autofill template blanks, import previous claims, and leave argument sections for manual attorney completion.",
+        "guidance": "Use an NLP parser, part-of-speech tagging, patent-specific regex adjustments, and an autofill UI that preserves manual editability; prioritize preserving attorney control over argumentative content."
+      },
+      {
+        "name": "LLM-based generation quality & human evaluation",
+        "description": "LLM-generated responses are evaluated by patent attorneys via satisfaction ratings (1\u20135 stars) and statistical tests (e.g., repeated measures ANOVA).",
+        "guidance": "Present multiple outputs per LLM to attorneys, collect average ratings per model per attorney, and analyze differences with appropriate corrections (e.g., FDR); prefer models that show statistically higher satisfaction (example: GPT-4 outperformed earlier models)."
+      },
+      {
+        "name": "Avoiding hallucination / proper use of LLMs (scope of generation)",
+        "description": "LLM generation should focus on arguing technical differences and drafting response drafts rather than generating patent claims (claims are prone to hallucination); ensure alignment with factual and legal sources.",
+        "guidance": "Use external relevant resources (Re-examination, MPEP-2100) for references, weight Response Draft highest among inputs, and design prompts to reduce hallucination; consider RLHF/fine-tuning on OA-response data for alignment."
+      },
+      {
+        "name": "Token optimization and prompt engineering for LLM input limits",
+        "description": "Before LLM input, optimize token counts by removing redundant/irrelevant text while retaining key content, and craft prompts tailored for the specific OA response task.",
+        "guidance": "Implement token optimizer modules, perform syntactic/semantic segmentation for large documents, and apply prompt engineering practices to fit model input size and elicit desired output structure."
+      },
+      {
+        "name": "User engagement measurement and impact on attorney performance",
+        "description": "Measure system engagement as number of full utilizations (entry-to-completion of a response draft) weighted by depth of operation; analyze relationship with attorney performance (e.g., monthly OA workload adjusted for difficulty) using mixed linear models controlling for demographics and random effects.",
+        "guidance": "Collect longitudinal usage logs, weight engagement by depth, control for gender/age/tenure/education and time/attorney random effects; mixed effects model fit comparisons (e.g., -2 log-likelihood) justify model choice. Report effect sizes and significance (example coefficients: PARIS Engagement .086**, LE-PARIS Engagement .162**)."
+      },
+      {
+        "name": "Confidentiality and ethical safeguards",
+        "description": "Using LLMs in prosecution raises IP and client confidentiality risks (e.g., ABA Rule 1.6); systems must mitigate leakage of confidential unpublished patent information.",
+        "guidance": "Recommend local/on-premise or open-source LLMs instead of external APIs for confidential data, implement access controls, logging, and data minimization; include attorney-informed consent and compliance reviews."
+      },
+      {
+        "name": "System logging, feedback, and iterative optimization",
+        "description": "Record all user activities (template choices, filled/submitted data, generated drafts, multiple interactions with a single OA) in a User Log Database to improve recommendations and analyze effectiveness.",
+        "guidance": "Use logged interactions to reduce matrix sparsity over time, enable iterative recommender retraining, and perform longitudinal analyses to guide system updates and measure practical value."
+      },
+      {
+        "name": "Scale/coverage benchmarks for OA topics and templates",
+        "description": "Track and report corpus and system coverage metrics such as number of identified OA topics and number of response templates (example: 132 topics; 15,571 templates).",
+        "guidance": "Use these counts as system capacity benchmarks; expand topic granularity as practice demands, and monitor per-topic template counts to ensure topic coverage and avoid bottlenecks in selection."
+      }
+    ]
+  }
+}

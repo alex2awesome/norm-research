@@ -1,0 +1,175 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_37c5025eb81f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13615,
+  "output_tokens": 4768,
+  "elapsed_s": 3123.1364777910057,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and ML engineers working on patent-domain language models and patent NLP",
+    "subtask_short": "pretraining patent language models",
+    "subtask_description": "Designing, pretraining, and evaluating masked language models specifically for patent text, including corpus construction, tokenizer design, architecture/efficiency choices, training recipe, and downstream classification evaluation.",
+    "subtask_keywords": [
+      "patent_nlp",
+      "pretraining",
+      "masked_language_model",
+      "modernbert",
+      "tokenization",
+      "efficiency"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Architecture and Efficiency (ModernBERT adaptations)",
+        "description": "Adopt the ModernBERT/FlexBERT design and incorporate recent training/architecture optimizations (e.g., FlashAttention, rotary embeddings, GLU feed-forward layers, Pre-LayerNorm with residual scaling).",
+        "guidance": "These enhancements 'significantly reduce pretraining time and compute cost' while maintaining or improving model quality. Specific practices: 22 encoder blocks, hidden size 768 (base), 12 attention heads; remove dropout entirely for base variants; scale residual connections by 0.5; use GELU activation and apply LayerNorm at the beginning of each sublayer to improve stability."
+      },
+      {
+        "name": "Use of FlashAttention and attention/kernel choices",
+        "description": "Prefer FlashAttention-based attention kernels for efficiency and throughput where supported.",
+        "guidance": "FlashAttention enables larger batch sizes and longer sequences, yielding substantial training/inference throughput gains (reported 2.32\u00d7 training and 3.55\u00d7 inference vs PatentBERT aggregated). Note that throughput gains reflect both attention kernels and parameter counts."
+      },
+      {
+        "name": "Positional encoding choice (ALiBi / RoPE / rotary)",
+        "description": "Use ALiBi (attention with linear biases) or rotary/rope positional encodings instead of learned absolute position embeddings.",
+        "guidance": "ALiBi adds a relative position bias and enables generalization to longer sequences than seen in training. RoPE/rotary embeddings are used in some variants (e.g., RoPE \u03b8 settings reported) to support long contexts."
+      },
+      {
+        "name": "Feed-forward design: GLU expansions",
+        "description": "Implement feed-forward layers with a Gated Linear Unit (GLU) pattern where appropriate.",
+        "guidance": "GLU splits intermediate outputs and uses a gating signal to multiplicatively modulate the activated part; reported intermediate/G ELU/GLU expansion sizes for variants (e.g., GLU expansion to 2304 in VX; to 5248 in Mosaic-BERT-large)."
+      },
+      {
+        "name": "Tokenizer construction: BPE with domain-specific vocabulary",
+        "description": "Train a domain-specific BPE tokenizer (target 49,152 subwords) normalized by Unicode NFKC and lowercased; reserve special tokens [UNK],[PAD],[CLS],[SEP],[MASK].",
+        "guidance": "Pre-tokenization uses whitespace splitting; punctuation remains attached but may be segmented. BPE allowed frequent technical terms to appear as single tokens, improving MLM efficiency versus WordPiece in this work."
+      },
+      {
+        "name": "Tokenizer choice: BPE preferred over WordPiece for patents",
+        "description": "Evaluate subword/tokenizer algorithms; in this work BPE provided more efficient/compact representation and better downstream performance than WordPiece/section-aware variants.",
+        "guidance": "Comparisons used average token entropy and unknown-token rates; BPE reduced MLM loss and increased masked token prediction accuracy in early training stages."
+      },
+      {
+        "name": "Vocabulary normalization practices",
+        "description": "Normalize input text using Unicode NFKC normalization followed by lowercasing to reduce sparsity and canonicalize characters.",
+        "guidance": "This reduces case-induced sparsity and consolidates visually or canonically distinct code points; out-of-vocabulary sequences are mapped to [UNK]."
+      },
+      {
+        "name": "Fields retained for pretraining",
+        "description": "Retain abstracts, the first independent claim, and DWPI (where available) from patent records as the primary fields for pretraining.",
+        "guidance": "Non-essential text (figure references, non-English characters) should be removed. Only the first independent claim per patent was retained to control input scope."
+      },
+      {
+        "name": "Training data composition and provenance",
+        "description": "Construct a diverse corpus that blends public patent data with proprietary DWPI text rewritten by subject-matter experts.",
+        "guidance": "Hybrid data helps the model generalize across patent categories and jurisdictions. Report final counts (e.g., ~64M patents, ~30.8B tokens; held-out test set of 3.4M patents ~1.6B tokens). Compare corpus size to baselines (e.g., about half of Google PatentBERT)."
+      },
+      {
+        "name": "Two-phase preprocessing pipeline (Phase 1 & Phase 2)",
+        "description": "Apply Phase 1: extraction, basic normalization, family-level deduplication; then Phase 2: per-field FineWeb-inspired filtering and MinHash-based near-duplicate removal.",
+        "guidance": "Phase 1 keeps most-recent family representative; Phase 2 applies language filtering, repetition/quality heuristics, FineWeb-style filters, and MinHash LSH to remove near-duplicates. Document the pipeline, pseudocode, and intermediate sizes."
+      },
+      {
+        "name": "Language filtering",
+        "description": "Apply language identification to retain English-language patents only (fastText-based LID recommended).",
+        "guidance": "Filtering is applied per-field in Phase 2 to exclude non-English content prior to deduplication and reassembly."
+      },
+      {
+        "name": "Quality and repetition filters",
+        "description": "Use MassiveText/Gopher-inspired heuristics and FineWeb-style quality filters to remove low-quality or repetitive documents.",
+        "guidance": "Implement repetition/quality checks (e.g., Rae et al., 2021) per field; discard documents failing heuristics to improve pretraining signal."
+      },
+      {
+        "name": "Deduplication and near-duplicate removal (MinHash LSH)",
+        "description": "Apply MinHash-based fuzzy deduplication on 5-gram shingles with 64-bit hashes and a 14\u00d78 banding scheme to cluster and remove near-duplicates, keeping one representative per cluster.",
+        "guidance": "This step crucially reduced dataset size (e.g., from ~47.7B to ~31.6B tokens; \u221233.79%). Use DataTrove or similar libraries for signatures, bucketing, clustering and filtering."
+      },
+      {
+        "name": "Masking probability for MLM",
+        "description": "Use a masking probability of 30% for masked language modeling pretraining.",
+        "guidance": "Recent findings indicate 15% (original BERT) is suboptimal; 30% was used here as more effective (citing Wettig et al., 2023)."
+      },
+      {
+        "name": "Pretraining objective: MLM-only",
+        "description": "Use the masked language modeling (MLM) objective and omit Next Sentence Prediction (NSP).",
+        "guidance": "NSP was excluded as it provides minimal downstream benefit per cited literature (Liu et al., 2019; Izsak et al., 2021). Consider exploring complementary objectives (contrastive, span prediction, retrieval) in future work."
+      },
+      {
+        "name": "Optimizer choice and settings",
+        "description": "Use StableAdamW (an enhancement of AdamW incorporating per-parameter update clipping) for pretraining with settings (e.g., lr 3e-4 for base, \u03b2=(0.90,0.98), \u03b5=1e-6).",
+        "guidance": "StableAdamW aids stable low-precision training; report hyperparameters and any deviations across variants."
+      },
+      {
+        "name": "Learning rate schedule and warmup",
+        "description": "Use a linear warmup (6% of training steps) from 0 to peak learning rate (e.g., 3\u00d710^-4) followed by linear decay for the remainder of training.",
+        "guidance": "This avoids initial instability; reported warmup fraction: 6%; final LR decays to ~2% of peak by the end of training."
+      },
+      {
+        "name": "Batching and distributed training configuration",
+        "description": "Use a global batch size of 4096 sequences per step distributed across GPUs, with a micro-batch of 128 sequences per GPU and gradient synchronization across devices.",
+        "guidance": "Training in experiments used 8\u00d7H100 GPUs. Document hardware and distributed strategy (Distributed DataParallel)."
+      },
+      {
+        "name": "Max sequence length and long-context support",
+        "description": "Set maximum sequence length appropriate to model variant: base variants used 1024 tokens; Mosaic-BERT-large supports up to 8192 tokens for long patent contexts.",
+        "guidance": "Choice affects tokenizer/training efficiency and model suitability for long patent texts; ALiBi helps generalize to longer lengths than seen in training."
+      },
+      {
+        "name": "Model scaling experiments and naming (corpus suffixes)",
+        "description": "Train and compare multiple model sizes and corpus variants (e.g., ModernBERT-base-PT, ModernBERT-base-VX, Mosaic-BERT-large) and indicate corpus suffixes (-PT clean vs -VX raw).",
+        "guidance": "-PT indicates Phase 2 cleaned/near-deduplicated corpus; -VX indicates raw corpus prior to Phase 2 filtering. Report parameter counts (e.g., 149M base, 395M large) and differences in hyperparameters/optimizer scheduling."
+      },
+      {
+        "name": "Finetuning protocol and hyperparameters",
+        "description": "Specify finetuning optimizer, learning rates, epochs, seeds and other hyperparameters (e.g., adamw_torch_fused lr 3e-5 for some variants; 20 epochs; 4 seeds).",
+        "guidance": "Report per-dataset finetuning settings and use consistent seeds/epochs across model comparisons to ensure fair evaluation."
+      },
+      {
+        "name": "Downstream evaluation datasets and splits",
+        "description": "Evaluate on multiple patent classification datasets (WIPO, WIPOEC, HUPD, proprietary DatasetCLV), and report train/validation/test splits and label sets.",
+        "guidance": "Include dataset statistics (counts per split), category label descriptions (appendix), and ensure consistent preprocessing for finetuning and evaluation."
+      },
+      {
+        "name": "Evaluation metrics and statistical reporting",
+        "description": "Report downstream performance primarily via F1-scores (micro-averaged and per-dataset), masked accuracy and MLM loss for pretraining, and throughput measures for efficiency.",
+        "guidance": "Present mean \u00b1 std across multiple runs (here, averages over 4 runs), include 95% confidence intervals estimated via Student's t distribution clipped to [0,1], and display per-dataset throughput (samples/sec) for training and inference."
+      },
+      {
+        "name": "Experimental repetition and seeds",
+        "description": "Run experiments multiple times with different random seeds and average results to quantify variance.",
+        "guidance": "This work ran four seeds per (dataset, model) and reported mean \u00b1 std; use multiple seeds to support statistical claims and compute confidence intervals."
+      },
+      {
+        "name": "Throughput benchmarking (training & inference)",
+        "description": "Measure and report training and inference throughput in samples/sec across datasets and models to quantify computational efficiency.",
+        "guidance": "Report per-dataset mean \u00b1 std and macro-averaged values; attribute differences to attention kernels and model parameter counts when interpreting speedups."
+      },
+      {
+        "name": "Reporting reductions and dataset shrinkage",
+        "description": "Quantify dataset size reductions across preprocessing phases (documents and tokens) and report absolute/relative reductions.",
+        "guidance": "Provide a summary table of reductions (e.g., Phase1: \u2248150M \u2192 \u224870M patents; Phase2 tokens reduced \u224833.79%)."
+      },
+      {
+        "name": "Limitations disclosure",
+        "description": "Explicitly state limitations such as English-only pretraining, MLM-only objective, limited compute budget compared to larger models, and limited downstream task scope.",
+        "guidance": "Use limitations to motivate future work (multilingual corpora, complementary objectives, scaling data/model, broader downstream tasks like retrieval/summarization/novelty detection)."
+      },
+      {
+        "name": "Tokenizer and model comparison reporting",
+        "description": "When comparing tokenizers/models, report pretraining loss curves, masked accuracy trajectories, downstream F1 across epochs, and which variant uses which tokenizer.",
+        "guidance": "Include visualization (loss/accuracy/f1 curves) and describe observed behaviors (e.g., BPE tokenizer showed steeper decline in MLM loss and higher stabilized masked accuracy)."
+      },
+      {
+        "name": "Hyperparameter documentation and reproducibility",
+        "description": "Provide detailed tables of pretraining and finetuning hyperparameters (optimizers, learning rates, \u03b2, \u03b5, warmup, MLM masking, sliding windows, ALiBi start sizes, batch sizes, epochs, seeds).",
+        "guidance": "Document training hardware, train times, and distributed strategy (e.g., 8\u00d7 H100; Distributed DataParallel) to aid reproducibility."
+      },
+      {
+        "name": "Evaluation protocol fairness considerations",
+        "description": "Compare models fairly by controlling for training data, tokenizer, architecture differences, and reporting when baselines used different pretraining corpora (e.g., PatentBERT trained on USPTO data).",
+        "guidance": "Note dataset/pretraining corpus overlaps and domain alignment effects (e.g., PatentBERT outperforming others on HUPD likely due to USPTO pretraining data)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/wavee_41c682fbdf1e.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 9250,
+  "output_tokens": 3635,
+  "elapsed_s": 2179.339196542045,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and practitioners building or evaluating sarcasm-detection datasets and systems",
+    "subtask_short": "sarcasm_dataset_construction",
+    "subtask_description": "Designing, filtering, evaluating, and releasing a large self-annotated sarcasm corpus (from Reddit) and specification of benchmark classification tasks for sarcasm detection.",
+    "subtask_keywords": [
+      "sarcasm",
+      "dataset",
+      "reddit",
+      "nlp",
+      "benchmark",
+      "self_annotated"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Major corpus evaluation metrics",
+        "description": "There are three major metrics of interest for evaluating our corpora: (1) size, (2) the proportion of sarcastic to non-sarcastic comments, and (3) the rate of false positives and false negatives.",
+        "guidance": "Also consider the quality of the text in the corpus and its applicability to other NLP tasks when comparing corpora."
+      },
+      {
+        "name": "Corpus size (scale)",
+        "description": "Corpus should be large enough to support learning in both balanced and unbalanced label regimes (SARC: ~1.3M sarcastic comments; raw CSV contains ~533M comments overall).",
+        "guidance": "A larger dataset enables both large-scale machine learning and deriving smaller benchmark tasks; report absolute counts of sarcastic and non-sarcastic examples."
+      },
+      {
+        "name": "Class proportion / balancing",
+        "description": "Characterize and provide both unbalanced and balanced subsets: (unbalanced) reflect the natural low prevalence of sarcasm, (balanced) subsample to equalize labels for certain evaluations.",
+        "guidance": "When making balanced datasets, select one sarcastic and one non-sarcastic response per context (see similarity filtering guidance) and report prevalence statistics for each split."
+      },
+      {
+        "name": "False positive / false negative measurement",
+        "description": "Estimate the rate of false positives (items labeled sarcastic incorrectly) and false negatives (sarcastic items unlabeled) induced by self-annotation.",
+        "guidance": "Use manual evaluation (authors used: random sample of 500 sarcastic and 500 non-sarcastic with full context). Example results reported: false positive rate 1.0%, false negative rate 2.0%. Document definitions used for FP and FN."
+      },
+      {
+        "name": "Self-annotation validity filters (author-awareness and placement)",
+        "description": "To reduce noise from using the textual marker \u201c/s\u201d as the sarcasm label, restrict to comments whose authors have previously used \u201c/s\u201d (in the same month or earlier) and keep only comments where \u201c/s\u201d appears at the end of the comment.",
+        "guidance": "This filter reduces false negatives from users unaware of the convention and false positives where \u201c/s\u201d is used in other senses; document the exact temporal criterion for 'previous use' (authors used same month or earlier)."
+      },
+      {
+        "name": "Subreddit and sense-disambiguation filtering",
+        "description": "Exclude comments from subreddits where \u201c/s\u201d has alternate meanings (e.g., technical discussion of strike-through or web programming) to reduce sense-mismatch false positives.",
+        "guidance": "If alternate senses persist, consider restricting to well-moderated or topical subreddits that are unlikely to use \u201c/s\u201d in other senses (example: avoid programming subreddits; politics used as topic-specific subsample)."
+      },
+      {
+        "name": "Conversation-structure filtering (exclude descendants)",
+        "description": "Discard child comments (descendants) of sarcastic comments in a thread because annotation in such cases is extremely noisy (chains of sarcasm without explicit tags).",
+        "guidance": "This avoids ambiguous propagation of sarcasm labels through reply chains where subsequent comments may echo sarcasm without tagging."
+      },
+      {
+        "name": "Basic preprocessing filters",
+        "description": "Apply standard preprocessing such as excluding comments that contain URLs, restricting characters to ASCII, and removing very short/long or non-sentence comments.",
+        "guidance": "For evaluation subsamples the authors removed comments that are not complete sentences and kept only comments between 2 and 50 tokens long to produce cleaner evaluation data."
+      },
+      {
+        "name": "Manual evaluation protocol for corpus noise",
+        "description": "Assess corpus noisiness by manually checking random subsets of labeled and unlabeled comments with full conversation context to determine FP/FN rates.",
+        "guidance": "Authors used 500 comments labeled sarcastic and 500 labeled non-sarcastic, providing local context to raters; define FP as '/s' present but not an annotation, FN as clearly sarcastic to human raters despite no tag. Note limitation: some sarcasm requires external knowledge."
+      },
+      {
+        "name": "Release and data-format requirements",
+        "description": "Provide raw files sufficient for reproduction and flexible benchmark construction: (1) CSV array of comments (with author awareness flag and parent comment), (2) JSON hashtable of all comments/posts in conversation threads of sarcastic comments and siblings, (3) CSV array of sequences leading up to sarcastic comments with response labels.",
+        "guidance": "Document schema for each file, include identifiers linking back to original scraped dataset, and make code to reproduce benchmarks available (authors provided GitHub link)."
+      },
+      {
+        "name": "Primary benchmark task specification",
+        "description": "Define a detection task: given a post and a sequence of comments, determine which comments among the responses to the last element in the sequence are sarcastic; datapoints consist of a conversation thread followed by responses and sarcasm labels.",
+        "guidance": "Measure performance on this general task using average precision, recall and F1 scores. Provide full conversation thread and comment metadata to learning algorithms."
+      },
+      {
+        "name": "Balanced-label benchmark construction (pairwise choice)",
+        "description": "Construct a balanced task by selecting one sarcastic and one non-sarcastic response from each response set; the task becomes choosing which of two statements sharing context is sarcastic.",
+        "guidance": "To reduce near-duplicate selection of non-sarcastic statements, featurize statements using normalized sum of word embeddings and only choose non-sarcastic examples with similarity \u2264 0.95 to the sarcastic statement (authors used Common Crawl GloVe for this similarity). Measure performance by accuracy."
+      },
+      {
+        "name": "Topic-specific subsampling and evaluation",
+        "description": "Create topic-restricted subsamples (e.g., politics subreddit) to test detection when background knowledge matters; ensure evaluators have sufficient topical background.",
+        "guidance": "Authors used a politics subsample (17K sequences, avg. sarcastic responses 23.2%) and observed different human agreement (higher Fleiss kappa). Report proportions and motivate topic selection."
+      },
+      {
+        "name": "Feature selection thresholds for bag-of-n-grams baselines",
+        "description": "When using bag-of-words or bag-of-bigrams, include only n-gram features that occur at least a minimum number of times in training (authors: \u22655 occurrences for 'all subreddits' experiments; \u2265100 occurrences for the politics unbalanced task).",
+        "guidance": "Report which threshold was used per experiment and justify choice based on dataset size; authors noted that some simple metadata (length, scores) were not particularly informative."
+      },
+      {
+        "name": "Representation and baseline methods",
+        "description": "Provide simple baseline methods to establish benchmarks: Bag-of-Words, Bag-of-Bigrams, Sentence Embedding (elementwise sum of word embeddings), human baseline (multiple annotators, majority vote), and random baseline.",
+        "guidance": "Specify embedding model used for sentence embedding (authors: 1600-dimensional GloVe trained on Amazon product corpus), train-test split (authors: 80% train / 20% test), and how the random baseline selects sarcasm probability (set to average fraction of sarcastic responses in training set). Report accuracy/F1/precision/recall as appropriate; compare to human performance and report inter-annotator agreement (Fleiss kappa)."
+      },
+      {
+        "name": "Human evaluation protocol and agreement reporting",
+        "description": "Measure human performance by presenting evaluators with tasks equivalent to algorithms (e.g., choose which of two statements is sarcastic), provide full context, use multiple annotators, and aggregate by majority vote.",
+        "guidance": "Authors used 5 evaluators each given 100 samples; reported average and majority human performance as well as Fleiss kappa (0.5 on main dataset = moderate agreement; 0.67 on politics subsample = substantial agreement). Include details on sample sizes and how majority labels were formed."
+      },
+      {
+        "name": "Reporting classifier diagnostics and indicative features",
+        "description": "Report classifier diagnostics such as F1 or accuracy per task and list most positively/negatively weighted n-grams to indicate what signals classifiers rely on.",
+        "guidance": "Authors displayed lists of top positive/negative n-grams with weights from the Bag-of-Bigrams classifier and reported baselines' performance (e.g., Bag-of-Words, Bag-of-Bigrams, Sentence Embedding scores) alongside human and random baselines."
+      }
+    ]
+  }
+}

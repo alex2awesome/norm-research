@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/detecting_llm_pr.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "detecting_llm_pr.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39896,
+  "model": "gpt-5-mini",
+  "elapsed_s": 31.03337320799983,
+  "input_tokens": 16080,
+  "output_tokens": 3367,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing or evaluating methods to detect LLM-generated peer reviews (conference organizers, ML security/privacy researchers)",
+    "subtask_short": "detecting_llm_generated_peer_reviews",
+    "subtask_description": "Algorithms and experimental protocols for embedding watermarks in LLM-generated peer reviews and for detecting those watermarks across one or many reviews while controlling false positives. Includes optimization formulations, greedy heuristics, and empirical evaluation metrics against defenses.",
+    "subtask_keywords": [
+      "peer_review",
+      "llm_detection",
+      "watermarking",
+      "statistical_testing",
+      "conference_peer_review"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Family-wise error rate (FWER) control",
+        "description": "Under the null hypothesis (all reviews human-written), control the family-wise error rate so that the probability any review is falsely flagged is at most \u03b1. This is enforced via constraint (1b): \u2211_{i\u2208R\\I, j\u2208W\\J} X_{ij} \u2264 \u03b1 |W|.",
+        "guidance": "Enforce constraint (1b) in the optimization (Algorithm 2) or in the greedy heuristic (Algorithm 3). When satisfied, the derivation shows FWER \u2264 \u03b1 and the expected fraction of reviews flagged is \u2264 \u03b1/|R|. Use this constraint as the primary statistical validity requirement."
+      },
+      {
+        "name": "Per-review false alarm bound (Algorithm 1 / single-review)",
+        "description": "For Algorithm 1 applied to a single review, choose threshold k so that P(false alarm) \u2264 k/|W|. If watermark is inserted at a specific chosen position, P(false alarm) \u2264 1/|W|.",
+        "guidance": "Select k relative to the watermark set size |W| to upper-bound the single-review false positive rate (FPR). Use Proposition 1 (part (a)) for theoretical guarantees. Choose smaller k to reduce FPR at cost of power."
+      },
+      {
+        "name": "User-specified upper bounds on discarded reviews and watermarks ((1c))",
+        "description": "Allow the user to specify an upper bound \u03c1 on the number of discarded reviews and an upper bound \u03a9 on the number of discarded watermarks, enforced via |I| \u2264 \u03c1 and |J| \u2264 \u03a9.",
+        "guidance": "Users who do not want any watermarks discarded can set \u03a9 = 0; users who do not want any reviews discarded can set \u03c1 = 0. For full flexibility set \u03c1 = |R| and \u03a9 = |W|. Respect these bounds when solving the optimization or running the greedy heuristic."
+      },
+      {
+        "name": "Minimize effective discarded reviews (objective (1a))",
+        "description": "Formulate objective (1a): minimize |I| + (|J| * |R\\I|) / |W|. This objective represents the expected number of reviews effectively discarded when removing reviews I and watermarks J.",
+        "guidance": "Solve this optimization (Algorithm 2) exactly or approximately (Algorithm 3) to choose the smallest set of reviews and watermarks to discard, thereby attempting to maximize detection power while respecting FWER and (\u03c1,\u03a9) constraints."
+      },
+      {
+        "name": "Term-occurrence representation (term-occurrence matrix X)",
+        "description": "Represent presence of watermarks in reviews via a binary term-occurrence matrix X \u2208 {0,1}^{|R|\u00d7|W|} with X_{ij}=1 if review i contains watermark j (at the specified position), else 0.",
+        "guidance": "Compute X as a preprocessing step (Step 3 of Algorithm 2). Use X to evaluate the constraints, objective, and to select reviews/watermarks in the greedy heuristic."
+      },
+      {
+        "name": "Flagging rule for reviews",
+        "description": "For each review i \u2208 R\\I, flag the review as AI-generated if the chosen watermark w_i^* is present in the review and w_i^* \u2208 W\\J (i.e., chosen watermark not discarded).",
+        "guidance": "Apply this deterministic rule at Step 5 of Algorithm 2 after computing I and J. The correctness guarantees (FWER bounds) assume the watermark chosen uniformly at random from W."
+      },
+      {
+        "name": "Infeasible (\u03c1, \u03a9) handling",
+        "description": "If the optimization problem with the provided \u03c1 and \u03a9 bounds is infeasible, report an error: 'Error: infeasible combination of \u03c1 and \u03a9'.",
+        "guidance": "Detect infeasibility before attempting to flag; provide informative feedback to user to relax one of the bounds (increase \u03c1 or \u03a9) or change other settings."
+      },
+      {
+        "name": "Greedy heuristic selection rule (Algorithm 3)",
+        "description": "Iteratively identify the review i* containing the most elements of W\\J and the watermark j* present in the maximum number of reviews R\\I; choose to discard the review or watermark by comparing ratios of objective increase to reduction in LHS of constraint (1b), while respecting (\u03a9,\u03c1).",
+        "guidance": "Break ties uniformly at random. Stop when constraint (1b) is met or when |I| \u2265 \u03c1 and |J| \u2265 \u03a9 (in which case return infeasible). The heuristic approximates the optimization (1a) with practical runtime."
+      },
+      {
+        "name": "Statistical power consideration / preference for Algorithm 2",
+        "description": "Algorithm 2 (multi-review constrained optimization) has higher statistical power than Algorithm 1 with Bonferroni correction, since Bonferroni can effectively discard all reviews when |R| > \u03b1 |W|, whereas Algorithm 2 can retain power by discarding a small set of watermarks/reviews.",
+        "guidance": "Prefer multi-review detection (Algorithm 2) over single-review Bonferroni correction when testing many reviews; tune (\u03c1,\u03a9) and objective to balance FWER control and detection power."
+      },
+      {
+        "name": "Expectation accounting when discarding watermarks",
+        "description": "Discarding a subset J \u2286 W of watermarks effectively discards (|J|/|W|) reviews in expectation, because for each review the watermark is chosen uniformly at random from W.",
+        "guidance": "Use this expectation to interpret the objective (1a) and to reason about tradeoffs when choosing to discard watermarks versus reviews. The objective explicitly incorporates this expected effect."
+      },
+      {
+        "name": "High-probability success rate (HPSR) for watermark injection",
+        "description": "HPSR: an abstract/paper is considered successfully watermarked if the predefined watermark appears in at least 8 out of 10 independently generated reviews (binary success per item).",
+        "guidance": "Use HPSR to evaluate the binary effectiveness of cryptic prompt injection across items (e.g., abstracts or papers). Choose threshold (8/10) as defined; adjust if needed for other experiments."
+      },
+      {
+        "name": "Overall success rate (OSR) for watermark injection",
+        "description": "OSR: the proportion of generated reviews containing the watermark across all abstracts/papers and all review samples (aggregate per-review success).",
+        "guidance": "Report OSR to capture fine-grained efficacy at the individual review level; use alongside HPSR to understand both per-item and per-review performance."
+      },
+      {
+        "name": "Robustness metrics against reviewer defenses",
+        "description": "Evaluate watermark resilience using specific defense strategies: (1) paraphrasing \u2014 measure paraphrased accuracies (portion of paraphrases that retain watermark given original had it); (2) identifying watermarks \u2014 identifying accuracy (fraction of times LLM detects obfuscated instruction in paper); (3) cropping last page \u2014 measure detection when injection moved to other pages.",
+        "guidance": "Report results per watermark type and per LLM; interpret lower identifying accuracy as higher robustness of the obfuscated instruction. For paraphrasing, expect random-start to fail and random-citation to be more robust."
+      },
+      {
+        "name": "Experimental uncertainty reporting (bootstrap CIs)",
+        "description": "Report accuracies with 95% confidence intervals computed using bootstrap resampling with 10,000 replicates.",
+        "guidance": "Use bootstrap (10k replicates) to quantify sampling uncertainty in measured accuracies (e.g., fraction of reviews containing watermark). Present CIs alongside point estimates."
+      },
+      {
+        "name": "Watermark injection and prompt-injection techniques",
+        "description": "Evaluate multiple watermarking strategies (random citation, random start, technical term) and prompt-injection techniques (white text, different language, font embedding).",
+        "guidance": "Compare performance across watermark types and injection techniques for multiple LLMs to select the most robust combination (e.g., random citation + white text achieved highest accuracy in experiments)."
+      },
+      {
+        "name": "Model-specific susceptibility and optimization iterations (cryptic prompt injection)",
+        "description": "When optimizing cryptic prompts (white-box) with the Greedy Coordinate Gradient algorithm, model-specific factors and iteration count affect performance (HPSR/OSR). Some models improve steadily with iterations (Llama 2), others may overfit (Vicuna 1.5).",
+        "guidance": "Tune iteration count (e.g., up to 6000) and number of optimizable tokens (e.g., 30) per-model; evaluate on target models/datasets because transfer to black-box models is uncertain."
+      },
+      {
+        "name": "Empirical FPR/TPR evaluation and calibration using control datasets",
+        "description": "Empirically evaluate False Positive Rate (FPR) and True Positive Rate (TPR) on control datasets (ICLR 2021/2024) augmented with LLM-generated watermarked reviews; compare empirical FPR to theoretical bounds from Proposition 1 and choose thresholds (k) accordingly.",
+        "guidance": "Use large control datasets (example: 10,022 reviews ICLR 2021, 28,028 reviews ICLR 2024) to estimate empirical FPR/TPR across watermark types and thresholds. Choose k to upper-bound FPR at desired levels (e.g., 0.05, 0.01, 0.001) and report both empirical and theoretical values."
+      }
+    ]
+  }
+}

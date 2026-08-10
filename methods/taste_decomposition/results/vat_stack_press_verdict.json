@@ -1,0 +1,369 @@
+{
+  "cell": "press_verdict",
+  "direction": "1_mirror2",
+  "n_E": 605,
+  "pos_rate_E": 0.5008264462809917,
+  "n_groups_E": 45,
+  "population": "dense-held-out rows (dense_split in {eval,test}) of the 2,956-row k>=3 press-verdict population (ids/y/company from results/press_verdict_pr_A_k3_scores_CACHE.npz, V rebuilt by press_verdict_v_features_recon.py); joined to datasets/press-releases/dense_standard_k3 BY ID (row_id)",
+  "group_column": "company",
+  "dense_dir": "datasets/press-releases/dense_standard_k3",
+  "family": "clean_once",
+  "family_reason": "press_verdict_layer1.py imputes ONCE at population level (A = where(applicable, levels, 0.5); V has no NaN) and applies its degeneracy screen once, then hands one fixed NaN-free matrix to both the linear and the GBM leg -- the clean_once family. NOTE the frozen clean_once linear is linear_oof_family2 (StandardScaler + LR C=1, max_iter 2000, no class_weight) whereas press's own linear uses class_weight='balanced', max_iter=3000; the cell is exactly balanced (pos_rate .500) so the weighting is a no-op, and Direction-1 comparability (VA vs VAT on identical footing) is the controlling requirement for the E-refit. The GATE above uses press's own pipeline.",
+  "sklearn": {
+    "required": "1.9.0",
+    "this_run": "1.9.0",
+    "match": true,
+    "numpy": "2.3.5",
+    "scipy": "1.18.0",
+    "platform_this_run": "Darwin-arm64",
+    "platform_required": "Darwin-arm64 (local mac)",
+    "platform_landmine": "GroupKFold's group->fold assignment uses np.argsort (kind='quicksort', unstable) over group sizes, so equal-sized groups are ordered by the sort kernel and the fold assignment is ARCHITECTURE-dependent. Verified: byte-identical matrices + identical sklearn 1.8.0/numpy 2.2.6/scipy 1.17.1 give different fold fingerprints on linux-x86_64 vs macOS-arm64 (aops_curation VA_lin .77116 vs .76922). Reproduce a cell on the platform its published Layer-1 ran on."
+  },
+  "n_features_raw": {
+    "V": 88,
+    "A": 40
+  },
+  "n_full_population": 2956,
+  "dense_seeds_available": [
+    "seed42",
+    "seed1",
+    "seed2"
+  ],
+  "T_honest_reference": {
+    "eval_mean": 0.7497,
+    "test_mean": 0.7525,
+    "seed_eval_auc": {
+      "seed42": 0.759,
+      "seed1": 0.7359,
+      "seed2": 0.7542
+    },
+    "seed_test_auc": {
+      "seed42": 0.7702,
+      "seed1": 0.7149,
+      "seed2": 0.7724
+    },
+    "source": "results/samerows_T_press.json"
+  },
+  "join_assertions": {
+    "n_bank_rows": 2956,
+    "n_join_rows": 2956,
+    "join_ids_unique": true,
+    "bank_ids_unique": true,
+    "id_sets_equal": true,
+    "y_equal_elementwise": true,
+    "group_equal_elementwise": true,
+    "id_join_key": "row_id",
+    "dense_split_counts": {
+      "train": 2351,
+      "test": 317,
+      "eval": 288
+    },
+    "dense_prob_columns_found": [
+      "dense_prob_seed1",
+      "dense_prob_seed2",
+      "dense_prob_seed42"
+    ],
+    "dense_prob_seed42_finite_on_eval_test": 605,
+    "dense_prob_seed42_finite_on_train": 0,
+    "dense_prob_seed1_finite_on_eval_test": 605,
+    "dense_prob_seed1_finite_on_train": 0,
+    "dense_prob_seed2_finite_on_eval_test": 605,
+    "dense_prob_seed2_finite_on_train": 0,
+    "dense_pred_id_provenance": "datasets/press-releases/dense_standard_k3/rm_out_seed{42,1,2}/preds_{eval,test}.csv carry only (judgement, prob, group) -- NO id. The id was recovered from dense_standard_k3/split/{eval,test}.csv (carries row_id) BY ROW ORDER with judgement AND group asserted equal elementwise (fusion/dense_joins/export_report.json). row_id is the press_verdict_pr_A_k3_scores_CACHE.npz id."
+  },
+  "va_reproduction_gate": {
+    "tol": 0.006,
+    "source": "results/press_verdict_layer1.json ['ledger'] (VA_lin / VA_nl_mean; produced under sklearn 1.9.0)",
+    "VA_lin": {
+      "published": 0.671245932677923,
+      "reproduced": 0.671245932677923,
+      "abs_diff": 0.0,
+      "pass": true
+    },
+    "VA_nl_mean": {
+      "published": 0.701068154615308,
+      "reproduced": 0.701068154615308,
+      "abs_diff": 0.0,
+      "pass": true
+    },
+    "VA_nl_seeds_reproduced": [
+      0.7068518240463194,
+      0.6955441193435155,
+      0.7008085204560894
+    ],
+    "pass": true,
+    "gate_pipeline": "press_verdict_layer1.py's OWN linear_oof (SimpleImputer(constant .5) + StandardScaler + LogisticRegression(C=1, max_iter=3000, class_weight='balanced')) and gbm_oof -- NOT the frozen Direction-1 family2 linear; the gate must reproduce the cell's published pipeline."
+  },
+  "fullfit_at_E": {
+    "note": "full-population Layer-1 grouped-OOF predictions evaluated on E rows only (no E-refit small-train handicap; still out-of-fold for every row)",
+    "VA_lin_fullfit_at_E": 0.7048007780910541,
+    "VA_nl_fullfit_at_E_seeds": [
+      0.7361866981400127,
+      0.7376128341310952,
+      0.7348042751294996
+    ],
+    "VA_nl_fullfit_at_E_mean_of_seed_aucs": 0.7362012691335359,
+    "VA_nl_fullfit_at_E_seedmean_probs": 0.7442080300745306
+  },
+  "per_split_T": {
+    "eval": {
+      "n": 288,
+      "T": 0.7672164351851852
+    },
+    "test": {
+      "n": 317,
+      "T": 0.7801727569461031
+    }
+  },
+  "arms": {
+    "layer1_bank": {
+      "arm": "layer1_bank",
+      "family": "clean_once",
+      "n_features_VA": 122,
+      "n_features_VA_prescreen": 128,
+      "T_E": 0.7744027714029681,
+      "VA_lin_E": 0.5796286582300615,
+      "VA_nl_E_seeds": [
+        0.6768736476296635,
+        0.6642788451030532,
+        0.7019211854960331
+      ],
+      "VA_nl_E_mean": 0.6810245594095833,
+      "VA_nl_E_spread": 0.03764234039297987,
+      "VAT_lin_E": 0.6225657333945316,
+      "VAT_nl_E_seeds": [
+        0.755502371429196,
+        0.7410333748606649,
+        0.7494699801105938
+      ],
+      "VAT_nl_E_mean": 0.7486685754668182,
+      "VAT_nl_E_spread": 0.014468996568531067,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.07862872379953245,
+        "ci95": [
+          0.05126802851041717,
+          0.11503559129342311
+        ],
+        "p_gt_0": 1.0,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.01890039997377213,
+        "ci95": [
+          -0.0449427304304358,
+          0.007060552396909912
+        ],
+        "p_gt_0": 0.06,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      }
+    }
+  },
+  "per_dense_seed": {
+    "seed42": {
+      "arm": "layer1_bank_seed42",
+      "family": "clean_once",
+      "n_features_VA": 122,
+      "n_features_VA_prescreen": 128,
+      "T_E": 0.7632341048674405,
+      "VA_lin_E": 0.5796286582300615,
+      "VA_nl_E_seeds": [
+        0.6768736476296635,
+        0.6642788451030532,
+        0.7019211854960331
+      ],
+      "VA_nl_E_mean": 0.6810245594095833,
+      "VA_nl_E_spread": 0.03764234039297987,
+      "VAT_lin_E": 0.6158448626319586,
+      "VAT_nl_E_seeds": [
+        0.7434157323017071,
+        0.7365036172491422,
+        0.7421261993749044
+      ],
+      "VAT_nl_E_mean": 0.740681849641918,
+      "VAT_nl_E_spread": 0.006912115052564949,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.06654208467204359,
+        "ci95": [
+          0.025134885976663055,
+          0.11047159593325308
+        ],
+        "p_gt_0": 0.9985,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.019818372565733378,
+        "ci95": [
+          -0.04682348358234016,
+          -0.0022282104582830972
+        ],
+        "p_gt_0": 0.0135,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "per_split_T": {
+        "eval": {
+          "n": 288,
+          "T": 0.7589699074074073
+        },
+        "test": {
+          "n": 317,
+          "T": 0.7701815142106521
+        }
+      }
+    },
+    "seed1": {
+      "arm": "layer1_bank_seed1",
+      "family": "clean_once",
+      "n_features_VA": 122,
+      "n_features_VA_prescreen": 128,
+      "T_E": 0.7246792560050707,
+      "VA_lin_E": 0.5796286582300615,
+      "VA_nl_E_seeds": [
+        0.6768736476296635,
+        0.6642788451030532,
+        0.7019211854960331
+      ],
+      "VA_nl_E_mean": 0.6810245594095833,
+      "VA_nl_E_spread": 0.03764234039297987,
+      "VAT_lin_E": 0.6003048980394728,
+      "VAT_nl_E_seeds": [
+        0.7425742574257427,
+        0.7087950516905996,
+        0.7197287609555658
+      ],
+      "VAT_nl_E_mean": 0.723699356690636,
+      "VAT_nl_E_spread": 0.033779205735143036,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.06570060979607917,
+        "ci95": [
+          0.035211679217202016,
+          0.10058382322020214
+        ],
+        "p_gt_0": 1.0,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": 0.01789500142067202,
+        "ci95": [
+          -0.027003590565254636,
+          0.04298184375588562
+        ],
+        "p_gt_0": 0.8445,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "per_split_T": {
+        "eval": {
+          "n": 288,
+          "T": 0.7359182098765433
+        },
+        "test": {
+          "n": 317,
+          "T": 0.7148913303080965
+        }
+      }
+    },
+    "seed2": {
+      "arm": "layer1_bank_seed2",
+      "family": "clean_once",
+      "n_features_VA": 122,
+      "n_features_VA_prescreen": 128,
+      "T_E": 0.764441675955675,
+      "VA_lin_E": 0.5796286582300615,
+      "VA_nl_E_seeds": [
+        0.6768736476296635,
+        0.6642788451030532,
+        0.7019211854960331
+      ],
+      "VA_nl_E_mean": 0.6810245594095833,
+      "VA_nl_E_spread": 0.03764234039297987,
+      "VAT_lin_E": 0.6165114855856446,
+      "VAT_nl_E_seeds": [
+        0.7282200074312067,
+        0.721559242016917,
+        0.7460330470133106
+      ],
+      "VAT_nl_E_mean": 0.7319374321538116,
+      "VAT_nl_E_spread": 0.024473804996393622,
+      "boot_group_VAT_nl_minus_VA_nl": {
+        "estimate": 0.05134635980154323,
+        "ci95": [
+          0.023533096156174108,
+          0.08949888566174775
+        ],
+        "p_gt_0": 0.9965,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "boot_group_VAT_nl_minus_T": {
+        "estimate": -0.03622166852446829,
+        "ci95": [
+          -0.06917755791762374,
+          -0.00709781870724023
+        ],
+        "p_gt_0": 0.011,
+        "n_boot_used": 2000,
+        "n_groups": 45
+      },
+      "per_split_T": {
+        "eval": {
+          "n": 288,
+          "T": 0.7541714891975309
+        },
+        "test": {
+          "n": 317,
+          "T": 0.7723907332218773
+        }
+      }
+    }
+  },
+  "status": "GATE_PASSED_PROCEED",
+  "ensemble": {
+    "arm": "layer1_bank",
+    "family": "clean_once",
+    "n_features_VA": 122,
+    "n_features_VA_prescreen": 128,
+    "T_E": 0.7744027714029681,
+    "VA_lin_E": 0.5796286582300615,
+    "VA_nl_E_seeds": [
+      0.6768736476296635,
+      0.6642788451030532,
+      0.7019211854960331
+    ],
+    "VA_nl_E_mean": 0.6810245594095833,
+    "VA_nl_E_spread": 0.03764234039297987,
+    "VAT_lin_E": 0.6225657333945316,
+    "VAT_nl_E_seeds": [
+      0.755502371429196,
+      0.7410333748606649,
+      0.7494699801105938
+    ],
+    "VAT_nl_E_mean": 0.7486685754668182,
+    "VAT_nl_E_spread": 0.014468996568531067,
+    "boot_group_VAT_nl_minus_VA_nl": {
+      "estimate": 0.07862872379953245,
+      "ci95": [
+        0.05126802851041717,
+        0.11503559129342311
+      ],
+      "p_gt_0": 1.0,
+      "n_boot_used": 2000,
+      "n_groups": 45
+    },
+    "boot_group_VAT_nl_minus_T": {
+      "estimate": -0.01890039997377213,
+      "ci95": [
+        -0.0449427304304358,
+        0.007060552396909912
+      ],
+      "p_gt_0": 0.06,
+      "n_boot_used": 2000,
+      "n_groups": 45
+    }
+  },
+  "runtime_sec": 2223.2659759521484
+}

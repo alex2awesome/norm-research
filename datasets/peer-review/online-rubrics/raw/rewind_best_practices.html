@@ -1,0 +1,2307 @@
+<!--
+
+  Hello friend!
+
+
+
+  What brings you in to the source for Rewind today? Whatever your reason, we
+
+  want to hear it!
+
+
+
+  If you are a hacker, a tinkerer, a dreamer, or just a curious mind,
+
+  then perhaps you want to consider helping us build Rewind? If so, contact us
+
+  at jobs@rewind.com and tell us your story...
+
+
+
+  Security researcher and believe you have found a vulnerability? See our 
+
+  Vulnerability Disclosure Policy https://rewind.com/legal/vulnerability-disclosure-policy/
+
+  for information on how to report to us
+
+
+
+  Cheers!
+
+  - The Rewind Team
+
+ -->
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="google-site-verification" content="SMUS5OzIutrxAUIDyPfUNHkDzl5xIXw_Vle5a37LIQs" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+	<link rel="pingback" href="https://rewind.com/xmlrpc.php" />
+
+	<script type="text/javascript">
+		document.documentElement.className = 'js';
+	</script>
+
+	<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+	<!-- This site is optimized with the Yoast SEO Premium plugin v26.3 (Yoast SEO v26.4) - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Best Practices for Reviewing Pull Requests in GitHub</title>
+	<meta name="description" content="Getting pull requests in GitHub right involves good communication and more. Find out how to do great PRs at the Rewind blog." />
+	<link rel="canonical" href="https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Best Practices for Reviewing Pull Requests in GitHub" />
+	<meta property="og:description" content="Do not harm the project’s code. This was the crucial principle my seniors would stress every day when I started as a software developer. It was the same" />
+	<meta property="og:url" content="https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/" />
+	<meta property="og:site_name" content="Rewind Backups" />
+	<meta property="article:publisher" content="https://www.linkedin.com/company/rewind.io/" />
+	<meta property="article:published_time" content="2021-05-15T19:16:00+00:00" />
+	<meta property="article:modified_time" content="2024-08-28T16:52:09+00:00" />
+	<meta property="og:image" content="https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png" />
+	<meta property="og:image:width" content="780" />
+	<meta property="og:image:height" content="252" />
+	<meta property="og:image:type" content="image/png" />
+	<meta name="author" content="Piero Borrelli" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:creator" content="@rewind" />
+	<meta name="twitter:site" content="@rewind" />
+	<meta name="twitter:label1" content="Written by" />
+	<meta name="twitter:data1" content="Piero Borrelli" />
+	<meta name="twitter:label2" content="Est. reading time" />
+	<meta name="twitter:data2" content="9 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/#article","author":{"name":"Piero Borrelli","@id":"https://rewind.com/#/schema/person/f5f77223bdf5e40f05f0e7e90608eae5"},"headline":"Best Practices for Reviewing Pull Requests in GitHub","datePublished":"2021-05-15T19:16:00+00:00","dateModified":"2024-08-28T16:52:09+00:00","commentCount":0,"publisher":{"@id":"https://rewind.com/#organization"},"image":{"@id":"https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/#primaryimage"},"thumbnailUrl":"https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png","articleSection":["Engineering"],"inLanguage":"en-US","potentialAction":[{"@type":"CommentAction","name":"Comment","target":["https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/#respond"]}]},{"@type":"ImageObject","inLanguage":"en-US","@id":"https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/#primaryimage","url":"https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png","contentUrl":"https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png","width":780,"height":252},{"@type":"BreadcrumbList","@id":"https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rewind.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://rewind.com/blog/"},{"@type":"ListItem","position":3,"name":"Engineering","item":"https://rewind.com/category/engineering/"}]},{"@type":"WebSite","@id":"https://rewind.com/#website","url":"https://rewind.com/","name":"Rewind Backups","description":"","publisher":{"@id":"https://rewind.com/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://rewind.com/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Person","@id":"https://rewind.com/#/schema/person/f5f77223bdf5e40f05f0e7e90608eae5","name":"Piero Borrelli","description":"Software developer for the Wi-Fi industry. Coding educator for the Stackademic initiative. Burning keyboards with JavaScript code.","url":"https://rewind.com/blog/author/piero-borrelli/"}]}</script>
+	<!-- / Yoast SEO Premium plugin. -->
+
+
+<link rel="alternate" type="application/rss+xml" title="Rewind &raquo; Feed" href="https://rewind.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Rewind &raquo; Comments Feed" href="https://rewind.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Rewind &raquo; Best Practices for Reviewing Pull Requests in GitHub Comments Feed" href="https://rewind.com/blog/best-practices-for-reviewing-pull-requests-in-github/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://rewind.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Frewind.com%2Fblog%2Fbest-practices-for-reviewing-pull-requests-in-github%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://rewind.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Frewind.com%2Fblog%2Fbest-practices-for-reviewing-pull-requests-in-github%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://rewind.com/wp-includes/css/dist/block-library/style.min.css?ver=6.9.4' media='all' />
+<style id='rewind-blocks-trusted-logos-style-inline-css'>
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./src/trusted-logos/style.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.quick-links .navbar-nav {
+  list-style-type: none !important;
+}
+
+.quick-links .navbar-nav .nav-link {
+  text-decoration: none !important;
+}
+
+.quick-links .navbar-nav .nav-item {
+  margin-bottom: 0px;
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/trusted-logos/style-index.css */
+</style>
+<style id='rewind-blocks-tabs-content-style-inline-css'>
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/tabs-content/style.scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+
+
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/tabs-content/style-index.css */
+</style>
+<style id='rewind-blocks-tabs-content-child-style-inline-css'>
+/*!**********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/tabs-content-child/style.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/tabs-content-child/style-index.css */
+</style>
+<style id='rewind-blocks-stats-style-inline-css'>
+/*!*********************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/stats/style.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.rewind-stats {
+  padding-left: 15px;
+}
+.rewind-stats .rewind-stats__num {
+  position: relative;
+}
+.rewind-stats .rewind-stats__num:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -14px;
+  width: 1px;
+  height: 100%;
+  background-color: #3c5df3;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-primary-color:before {
+  background-color: #f7c20f;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-primary-light-color:before {
+  background-color: #FCFA69;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-secondary-color:before {
+  background-color: #3c5df3;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-blue-light-color:before {
+  background-color: #f5f8fc;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-light-color:before {
+  background-color: #ecf0f1;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-purple-color:before {
+  background-color: #5f27cd;
+}
+.rewind-stats .rewind-stats__num.has-text-color.has-dark-color:before {
+  background-color: #2c3e50;
+}
+.rewind-stats__num:not(.has-text-color) {
+  color: #3c5df3 !important;
+}
+@media (min-width: 1200px) {
+  .rewind-stats__num {
+    font-size: 36px !important;
+    line-height: 44px !important;
+  }
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/stats/style-index.css */
+</style>
+<style id='rewind-blocks-terms-snippets-style-inline-css'>
+/*!******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/terms-snippets/style.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************/
+
+
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/terms-snippets/style-index.css */
+</style>
+<style id='rewind-blocks-testimonial-element-style-inline-css'>
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/testimonial-element/style.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+.wp-block-rewind-blocks-testimonial-element .testimonial-card.dark-background .testimonial-name,
+.wp-block-rewind-blocks-testimonial-element .testimonial-card.dark-background .btn-link {
+  color: #fff !important;
+}
+.wp-block-rewind-blocks-testimonial-element .testimonial-card.dark-background .testimonial-text:before {
+  content: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0Ny44NDIiIGhlaWdodD0iNDEuNSIgdmlld0JveD0iMCAwIDQ3Ljg0MiA0MS41Ij4KICA8cGF0aCBpZD0icXVvdGUtaWNvbi13aGl0ZS1vdXRsaW5lIiBkPSJNMTAsMCwwLDIwLjYyNFY0MEgyMC4zMTJWMTguNzQ5SDEyLjM0M0wxOS4wNjIsMFptMjYuMDMsMC0xMCwyMC42MjRWNDBINDYuMzQyVjE4Ljc0OWgtNy45N0w0NS4wOTEsMFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuNzUgMC43NSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4K);
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/testimonial-element/style-index.css */
+</style>
+<style id='rewind-blocks-process-block-style-inline-css'>
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/process-block/style.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+.rw-block-process__children {
+  display: flex;
+  flex-wrap: wrap;
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child {
+  width: 100%;
+  margin-bottom: 30px;
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(1) .rw-process-block__number:before {
+  content: "1";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(2) .rw-process-block__number:before {
+  content: "2";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(3) .rw-process-block__number:before {
+  content: "3";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(4) .rw-process-block__number:before {
+  content: "4";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(5) .rw-process-block__number:before {
+  content: "5";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(6) .rw-process-block__number:before {
+  content: "6";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(7) .rw-process-block__number:before {
+  content: "7";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-child(8) .rw-process-block__number:before {
+  content: "8";
+}
+.rw-block-process__children .wp-block-rewind-blocks-process-block-child:last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 992px) {
+  .rw-block-process__children .wp-block-rewind-blocks-process-block-child {
+    width: 50%;
+  }
+  .rw-block-process__children .wp-block-rewind-blocks-process-block-child:nth-last-child(2) {
+    margin-bottom: 0;
+  }
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/process-block/style-index.css */
+</style>
+<style id='rewind-blocks-process-block-child-style-inline-css'>
+/*!***********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/process-block-child/style.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************/
+.rw-process-block__child {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.rw-process-block__number {
+  background-color: #3c5df3;
+  flex-shrink: 0;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/process-block-child/style-index.css */
+</style>
+<style id='rewind-blocks-social-highlights-style-inline-css'>
+/*!*********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/social-highlights/style.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************/
+.g2-logos {
+  justify-content: center;
+}
+.g2-logos img {
+  max-width: 120px;
+}
+
+.partnerships-logos {
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content: center;
+  gap: 7.5px;
+}
+@media (min-width: 992px) {
+  .partnerships-logos {
+    gap: 15px;
+  }
+}
+.partnerships-logos .logo-el {
+  flex-shrink: 1;
+}
+.partnerships-logos img {
+  flex-shrink: 0;
+  flex-grow: 0;
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: auto;
+  max-width: 120px;
+  max-height: 50px;
+}
+@media (min-width: 992px) {
+  .partnerships-logos img {
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/social-highlights/style-index.css */
+</style>
+<style id='safe-svg-svg-icon-style-inline-css'>
+.safe-svg-cover{text-align:center}.safe-svg-cover .safe-svg-inside{display:inline-block;max-width:100%}.safe-svg-cover svg{fill:currentColor;height:100%;max-height:100%;max-width:100%;width:100%}
+
+/*# sourceURL=https://rewind.com/wp-content/plugins/safe-svg/dist/safe-svg-block-frontend.css */
+</style>
+<style id='pdfemb-pdf-embedder-viewer-style-inline-css'>
+.wp-block-pdfemb-pdf-embedder-viewer{max-width:none}
+
+/*# sourceURL=https://rewind.com/wp-content/plugins/pdf-embedder/block/build/style-index.css */
+</style>
+<style id='global-styles-inline-css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #FFFFFF;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--primary: #F7C20F;--wp--preset--color--primary-light: #FCFA69;--wp--preset--color--secondary: #3C5DF3;--wp--preset--color--secondary-light: #EBEEFE;--wp--preset--color--blue-light: #F5F8FC;--wp--preset--color--blue: #3498DB;--wp--preset--color--purple: #5F27CD;--wp--preset--color--light: #ECF0F1;--wp--preset--color--lightblue-new: #B8E3FF;--wp--preset--color--dark: #2C3E50;--wp--preset--color--dark-new: #0b1b31;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--gradient--secondary-to-purple: linear-gradient(366deg, var(--wp--preset--color--purple), var(--wp--preset--color--secondary));--wp--preset--gradient--blue-to-secondary: linear-gradient(366deg, var(--wp--preset--color--blue), var(--wp--preset--color--secondary));--wp--preset--gradient--purple-to-purple-tint: linear-gradient(366deg, var(--wp--preset--color--purple), #9d7be1);--wp--preset--gradient--primary-to-primary-tint: linear-gradient(366deg, var(--wp--preset--color--primary), #e26c00);--wp--preset--font-size--small: 16px;--wp--preset--font-size--medium: 24px;--wp--preset--font-size--large: 35px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-size--extra-small: 14px;--wp--preset--font-size--normal: 18px;--wp--preset--font-size--medium-large: 28px;--wp--preset--font-size--extra-large: 43px;--wp--preset--font-size--2-xl-large: 56px;--wp--preset--font-family--system-fonts: "Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;--wp--preset--font-family--cabin: 'Cabin', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:root { --wp--style--global--content-size: 1660px;--wp--style--global--wide-size: 1660px; }:where(body) { margin: 0; }.wp-site-blocks > .alignleft { float: left; margin-right: 2em; }.wp-site-blocks > .alignright { float: right; margin-left: 2em; }.wp-site-blocks > .aligncenter { justify-content: center; margin-left: auto; margin-right: auto; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}.is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}.is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}.is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}.is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{font-family: var(--wp--preset--font-family--cabin);font-size: var(--wp--preset--font-size--normal);line-height: 1.5;padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}a:where(:not(.wp-element-button)){text-decoration: none;}h2{font-size: var(--wp--preset--font-size--extra-large);}h3{font-size: var(--wp--preset--font-size--large);}h4{font-size: var(--wp--preset--font-size--medium);}h5{font-size: var(--wp--preset--font-size--normal);}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-color{color: var(--wp--preset--color--primary) !important;}.has-primary-light-color{color: var(--wp--preset--color--primary-light) !important;}.has-secondary-color{color: var(--wp--preset--color--secondary) !important;}.has-secondary-light-color{color: var(--wp--preset--color--secondary-light) !important;}.has-blue-light-color{color: var(--wp--preset--color--blue-light) !important;}.has-blue-color{color: var(--wp--preset--color--blue) !important;}.has-purple-color{color: var(--wp--preset--color--purple) !important;}.has-light-color{color: var(--wp--preset--color--light) !important;}.has-lightblue-new-color{color: var(--wp--preset--color--lightblue-new) !important;}.has-dark-color{color: var(--wp--preset--color--dark) !important;}.has-dark-new-color{color: var(--wp--preset--color--dark-new) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-background-color{background-color: var(--wp--preset--color--primary) !important;}.has-primary-light-background-color{background-color: var(--wp--preset--color--primary-light) !important;}.has-secondary-background-color{background-color: var(--wp--preset--color--secondary) !important;}.has-secondary-light-background-color{background-color: var(--wp--preset--color--secondary-light) !important;}.has-blue-light-background-color{background-color: var(--wp--preset--color--blue-light) !important;}.has-blue-background-color{background-color: var(--wp--preset--color--blue) !important;}.has-purple-background-color{background-color: var(--wp--preset--color--purple) !important;}.has-light-background-color{background-color: var(--wp--preset--color--light) !important;}.has-lightblue-new-background-color{background-color: var(--wp--preset--color--lightblue-new) !important;}.has-dark-background-color{background-color: var(--wp--preset--color--dark) !important;}.has-dark-new-background-color{background-color: var(--wp--preset--color--dark-new) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-primary-border-color{border-color: var(--wp--preset--color--primary) !important;}.has-primary-light-border-color{border-color: var(--wp--preset--color--primary-light) !important;}.has-secondary-border-color{border-color: var(--wp--preset--color--secondary) !important;}.has-secondary-light-border-color{border-color: var(--wp--preset--color--secondary-light) !important;}.has-blue-light-border-color{border-color: var(--wp--preset--color--blue-light) !important;}.has-blue-border-color{border-color: var(--wp--preset--color--blue) !important;}.has-purple-border-color{border-color: var(--wp--preset--color--purple) !important;}.has-light-border-color{border-color: var(--wp--preset--color--light) !important;}.has-lightblue-new-border-color{border-color: var(--wp--preset--color--lightblue-new) !important;}.has-dark-border-color{border-color: var(--wp--preset--color--dark) !important;}.has-dark-new-border-color{border-color: var(--wp--preset--color--dark-new) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-secondary-to-purple-gradient-background{background: var(--wp--preset--gradient--secondary-to-purple) !important;}.has-blue-to-secondary-gradient-background{background: var(--wp--preset--gradient--blue-to-secondary) !important;}.has-purple-to-purple-tint-gradient-background{background: var(--wp--preset--gradient--purple-to-purple-tint) !important;}.has-primary-to-primary-tint-gradient-background{background: var(--wp--preset--gradient--primary-to-primary-tint) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-extra-small-font-size{font-size: var(--wp--preset--font-size--extra-small) !important;}.has-normal-font-size{font-size: var(--wp--preset--font-size--normal) !important;}.has-medium-large-font-size{font-size: var(--wp--preset--font-size--medium-large) !important;}.has-extra-large-font-size{font-size: var(--wp--preset--font-size--extra-large) !important;}.has-2-xl-large-font-size{font-size: var(--wp--preset--font-size--2-xl-large) !important;}.has-system-fonts-font-family{font-family: var(--wp--preset--font-family--system-fonts) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}
+:root :where(.wp-block-button .wp-block-button__link){background-color: var(--wp--preset--color--primary);color: var(--wp--preset--color--dark);font-size: var(--wp--preset--font-size--normal);font-weight: 700;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-term-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-term-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+:root :where(.wp-block-heading){color: var(--wp--preset--color--dark);}
+:root :where(p){color: var(--wp--preset--color--dark);font-weight: 400;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+<link rel='stylesheet' id='noui-style-css' href='https://rewind.com/wp-content/plugins/av-product-slider/assets/noUiSlider/nouislider.css?ver=4.2.0' media='all' />
+<link rel='stylesheet' id='av-prices-style-css' href='https://rewind.com/wp-content/plugins/av-product-slider/assets/av-rewind-prices.css?ver=4.2.0' media='all' />
+<link rel='stylesheet' id='main-style-css' href='https://rewind.com/wp-content/themes/rewind-theme/assets/css/main.min.css?ver=3.3.9' media='all' />
+<link rel="https://api.w.org/" href="https://rewind.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://rewind.com/wp-json/wp/v2/posts/79900" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://rewind.com/xmlrpc.php?rsd" />
+<link rel='shortlink' href='https://rewind.com/?p=79900' />
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>
+	<script>
+		//Segment initial function
+		! function() {
+			var analytics = window.analytics = window.analytics || [];
+			if (!analytics.initialize)
+				if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice.");
+				else {
+					analytics.invoked = !0;
+					analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware"];
+					analytics.factory = function(e) {
+						return function() {
+							var t = Array.prototype.slice.call(arguments);
+							t.unshift(e);
+							analytics.push(t);
+							return analytics
+						}
+					};
+					for (var e = 0; e < analytics.methods.length; e++) {
+						var key = analytics.methods[e];
+						analytics[key] = analytics.factory(key)
+					}
+					analytics.load = function(key, e) {
+						var t = document.createElement("script");
+						t.type = "text/javascript";
+						t.async = !0;
+						t.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";
+						var n = document.getElementsByTagName("script")[0];
+						n.parentNode.insertBefore(t, n);
+						analytics._loadOptions = e
+					};
+					analytics._writeKey = "HYwfyLI2zHbl6xQrCKevlc97PqmCOw53";;
+					analytics.SNIPPET_VERSION = "4.15.3";
+					analytics.load("HYwfyLI2zHbl6xQrCKevlc97PqmCOw53");
+					analytics.page();
+				}
+		}();
+		const newCookies = {
+			sessionIdKey: '____session_id'
+		}
+		window._hsp = window._hsp || [];
+
+		//This function check if the user accept the cookies or not
+		//We use this to fire the getSessionId function as soon as the user scrolls down on the page for US
+		// window.addEventListener('load', handleSessionStart);
+
+		window.addEventListener('load', function() {
+
+			if (window?.rewindConsentState?.ad_storage === 'granted') {
+				getSessionId();
+			} else {
+				if (window?._hsp) {
+					_hsp.push(['addPrivacyConsentListener', function(e) {
+						getSessionId();
+					}]);
+				}
+			}
+		});
+
+		// The session_id is a timestamp and passed through the options object on the
+		// different event calls
+		// Keep session alive for 30 minutes. 
+		// If session is used during that time, renew for 30 more mins
+		function getSessionId() {
+			try {
+				//Check every time when we use this function and make sure the user accept the cookies
+				if (window?.rewindConsentState?.ad_storage !== 'granted') {
+					return;
+				}
+				const {
+					sessionIdKey
+				} = newCookies;
+				const now = new Date();
+				const timeNow = now.getTime();
+				const in30Minutes = 1 / 48; // 1/48th of a day
+
+				let currentCookie = Cookies.get(sessionIdKey);
+
+				// Keep the session_id alive for 30 minutes
+				// if we have a cookie, we reuse it and renew its expiration time for 30 minutes
+				// otherwise, we create a new timestamp and add an expiration time of 30 minutes
+				if (currentCookie) {
+					Cookies.set(sessionIdKey, currentCookie, {
+						expires: in30Minutes
+					});
+				} else {
+					currentCookie = timeNow + ""; // cast to string
+					Cookies.set(sessionIdKey, timeNow, {
+						expires: in30Minutes
+					});
+					//fire the Session Started event
+					analytics.track("Session Started", {
+						session_id: currentCookie
+					});
+				}
+				return currentCookie;
+			} catch (error) {
+				console.error('id error', error)
+			}
+		};
+
+
+		//Button Clicked event
+		document.addEventListener("click", function(event) {
+			const session_id = getSessionId();
+			const targetMolElement = event.target.closest('.btn') || event.target.closest('.wp-block-button__link') || event.target.closest('.av-btn');
+			if (targetMolElement) {
+				let module_link = targetMolElement.href;
+				let module_CTA = targetMolElement.innerText.trim();
+				analytics.track("Button Clicked", {
+					session_id: session_id,
+					url: module_link,
+					label: module_CTA
+				});
+			}
+		});
+
+		//Form Submitted event
+		try {
+			const formCookies = {
+				contactForm: '_____contact_form_info'
+			}
+			const {
+				contactForm
+			} = formCookies;
+
+			//Uses a SHA1 hash of the email address to create a user_id value
+			async function emailSha1(str) {
+				const buffer = new TextEncoder('utf-8').encode(str);
+				const digest = await crypto.subtle.digest('SHA-1', buffer);
+				// Convert digest to hex string
+				const result = Array.from(new Uint8Array(digest)).map(x => x.toString(16).padStart(2, '0')).join('');
+				return result;
+			}
+
+			async function formCallback(event) {
+				const theFormData = event?.data?.data;
+				const form_id = event?.data?.id;
+
+				if (theFormData) {
+					let first_name, last_name, company, subject, question, email, phone;
+					let marketing_opt_in = false;
+					let personal_data_opt_in = false;
+
+					const payload = {
+						form_id
+					}
+
+					/**
+					 * Get each contact form property from the form data
+					 */
+					for (let item of theFormData) {
+						if (item.name.includes("email") && item.value) {
+							payload.email = item.value.toLowerCase();
+						} else if (item.name.includes("firstname") && item.value) {
+							payload.first_name = item.value;
+						} else if (item.name.includes("lastname") && item.value) {
+							payload.last_name = item.value;
+						} else if (item.name.includes("phone") && item.value) {
+							payload.phone = item.value;
+						} else if (item.name.includes("company") && item.value) {
+							payload.company = item.value;
+						} else if (item.name.includes("subject") && item.value) {
+							payload.subject = item.value;
+						} else if (item.name.includes("additional_comments") && item.value) {
+							payload.question = item.value;
+						} else if (item.name.includes("LEGAL_CONSENT.subscription_type_") && item.value) {
+							payload.marketing_opt_in = true;
+						} else if (item.name.includes("LEGAL_CONSENT.processing") && item.value) {
+							payload.personal_data_opt_in = true;
+						} else {
+							payload[item.name] = item.value;
+						}
+					}
+
+					/**
+					 * Stored the form data as a cookie and use it on the next page so we can make sure the form has been submitted 
+					 */
+					// Cookies.set(contactForm, JSON.stringify(payload));
+
+					signUpEvent(payload);
+				}
+			}
+
+			//Fire the form submitted event
+			async function signUpEvent(formPayload) {
+
+				/**
+				 * Get the form data from the cookie and fire the event if the cookie is not empty
+				 */
+				if (formPayload) {
+					let email = formPayload.email;
+					let user_id = await emailSha1(email);
+					const session_id = getSessionId();
+					const payload = {
+						...formPayload,
+						session_id: session_id
+					}
+					const identifyPayload = {
+						first_name: formPayload.first_name,
+						last_name: formPayload.last_name,
+						email: formPayload.email,
+						phone: formPayload.phone
+					}
+					analytics.identify(user_id, identifyPayload);
+					analytics.track("Form Submitted", payload);
+					Cookies.remove(contactForm);
+				}
+			}
+
+			const formSubmittedEvent = () => {
+
+				const config = {
+					childList: true,
+					subtree: true
+				};
+
+				window.addEventListener("message", function(event) {
+					if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormSubmit') {
+						formCallback(event);
+					}
+				});
+
+				document.addEventListener('submit', formCallback)
+			}
+			formSubmittedEvent();
+		} catch (error) {
+			console.error('Contact Form:  ', error);
+		}
+	</script>
+	<script>
+		// window variables
+		let url = window.location.href;
+	</script>
+<meta name="zoom-domain-verification" content="ZOOM_verify_byPw-hhKQaK3Sx9eQrjUKA">
+<meta name="zoom-domain-verification" content="ZOOM_verify_EVxb9pSRSEqrFPdw7TPtkw">
+
+<!-- Facebook Domain Verification -->
+<meta name="facebook-domain-verification" content="mpunht6hrqoikuqz337ofxko73gx0v" />
+
+
+<!-- Google Tag Manager -->
+<script data-cookieconsent="ignore">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N35RHTK');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Ahrefs Tracking Code for rewind.com -->
+<meta name="ahrefs-site-verification" content="87a917922cd3811246cf7e233133ba55f79c3d5ff1612fafc6de12e8a62480ce">
+
+<!-- Roxanne's Search Console Owner verification -->
+<meta name="google-site-verification" content="mTqG8QhrIqvYppsoFyGuvYJAbGoKcdHSxJ2N5NKXpXs" />
+
+<!-- Henry's Search Console Owner Verification -->
+<meta name="google-site-verification" content="Q3jaN5NgyuQPJLEab1DN2y2QNhX6mU2Ll3A5A_wCW-A" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=1" /><meta name="generator" content="Elementor 3.35.5; features: e_font_icon_svg, additional_custom_breakpoints; settings: css_print_method-external, google_font-enabled, font_display-swap">
+			<style>
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+				.e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {
+					background-image: none !important;
+				}
+				@media screen and (max-height: 1024px) {
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+				@media screen and (max-height: 640px) {
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),
+					.e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {
+						background-image: none !important;
+					}
+				}
+			</style>
+			<link rel="icon" href="https://rewind.com/wp-content/uploads/2021/01/cropped-android-chrome-512x512-1-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://rewind.com/wp-content/uploads/2021/01/cropped-android-chrome-512x512-1-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://rewind.com/wp-content/uploads/2021/01/cropped-android-chrome-512x512-1-180x180.png" />
+<meta name="msapplication-TileImage" content="https://rewind.com/wp-content/uploads/2021/01/cropped-android-chrome-512x512-1-270x270.png" />
+		<style id="wp-custom-css">
+			
+/* .bios--centered .col-12 .row{
+	justify-content: center;
+} */
+
+.main-banner--landing .h1, .main-banner--landing h1{
+	line-height: 1!important;
+}
+
+/* #platPlan6_2 .planinfo__price, #platPlan6_2 .planinfo__avg{
+	display:none;
+}  */
+
+
+/* .page-id-93721 .action-buttons:after, .page-id-93077 .action-buttons:after {
+    display: block;
+    content: '* No credit card required';
+    position: relative;
+    top: -20px;
+    font-size: 16px;
+    width: 100%;
+} */
+
+/* .planinfo__linkdescription .rounded-1.bg-white.border.p-1.text-smallest{
+	display: none !important;
+} */
+
+.ribbon{
+	clip-path: polygon(0 0,100% 0,calc(100% - 10px) 50%,100% 100%,0 100%,10px 50%);
+}
+
+
+.ribbon span {
+	display: flex;
+	align-items: center;
+	transform: translatey(-2px);
+}
+
+.platform-boxes .swiper-slide:nth-child(4) .rounded-pill, 
+.platform-boxes .swiper-slide:nth-child(5) .rounded-pill {
+ display: none !important;
+}
+
+.term--events {
+    display: none !important;
+}
+
+.page-template-events .bg-gradient-light{
+	display: none;
+}
+
+[data-platformname="Jira (test)"], [data-platformname="Confluence (test)"]{ display: none !important; }
+
+.max-w-150 {
+	max-width: 150px;
+}
+
+.max-w-100 {
+	max-width: 100px;
+}
+
+
+/* Homepage 2.0 */
+.new-banner {
+	padding-top: 150px;
+	max-width: 996px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.new-banner h1 {
+	font-size: 64px;
+	line-height: 72px;
+	margin-bottom: 32px;
+}
+
+.new-banner p {
+	font-size: 28px;
+	line-height: 40px;
+}
+
+.btn-link-arrow:after {
+	vertical-align: middle;
+	content: url(/wp-content/themes/rewind-theme/assets/img/icons/arrow-right.svg);
+}
+
+.btn-link-arrow.btn-link-white:after {
+	content: url(/wp-content/themes/rewind-theme/assets/img/icons/arrow-right-white.svg);
+}
+
+.btn-link-arrow.btn-link-dark {
+	color: #2c3e50!important;
+}
+
+.btn-link-arrow.btn-link-dark:after {
+	content: url(/wp-content/themes/rewind-theme/assets/img/icons/arrow-right-dark.svg);
+}
+
+.new-testimonial-section .testimonial-card .swiper-slide .col-lg-5 {
+    display: none !important;
+}
+
+.new-testimonial-section .testimonial-card .swiper-slide .testimonial-text.col-lg-7 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+}
+
+.new-testimonial-section .testimonial-card .product-img-wrapper.platform-wrapper {
+	display: none;
+}
+
+.new-testimonial-section .testimonial-card .testimonial-text:before {
+    content: url(/wp-content/themes/rewind-theme/assets/img/icons/quote-icon-new.svg);
+}
+
+.btn-triangle:before {
+    content: url(/wp-content/themes/rewind-theme/assets/img/icons/triangle-white.svg);
+    display: inline-block;
+    margin-right: 7.5px;
+    transition: .1s;
+}
+
+.new-testimonial-section .testimonial-text h3 {
+	font-size: 28px;
+	line-height: 40px;
+}
+
+.new-testimonial-section .testimonial-text a {
+	font-size: 28px!important;
+	line-height: 40px;
+	border-left: 2px solid #3366FF;
+  padding-left: 15px;
+}
+
+.new-testimonial-section .testimonial-card {
+	background-color: #E8EEFF!important;
+	padding-top: 30px !important;
+  padding-bottom: 25px !important;
+}
+
+/* helpers */
+
+.bg-light-yellow {
+	background-color: #FCE79F;
+}
+
+.p-24 {
+	padding: 24px;
+}
+.yellow-line-after {
+	width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.yellow-line-after:after {
+	content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #FCE79F;
+}
+.bg-half {
+	background: linear-gradient(to bottom, #f5f8fc 60%, #ffffff 40%);
+}
+
+.p-link-no-underline a {
+	text-decoration: none!important;
+}
+
+.fs-20 {
+	font-size: 20px!important;
+}
+
+.rounded-iframe iframe {
+	border-radius: 15px;
+}
+
+.page-id-71441 .rewind-featured-section {
+	display: none;
+}
+
+@media (min-width: 1200px) {
+    .main-header .menu--resources-new.has-columns .menu--dropdown {
+        width: 400px;
+        justify-content: space-between;
+    }
+}		</style>
+		</head>
+
+<body class="wp-singular post-template-default single single-post postid-79900 single-format-standard wp-theme-rewind-theme position-relative elementor-default elementor-kit-101639"  data-rw-platform-rel="github">
+
+	
+<noscript>
+    <img src="https://ws.zoominfo.com/pixel/EFd8cjoeXyGdalvRDhfi" width="1" height="1" alt="zoominfo" style="display: none;" />
+</noscript>
+	<header>
+				<section class="main-header ">
+			<nav class="navbar navbar-expand-xl py-1 py-lg-1 py-xl-3">
+				<div class="container">
+
+					<a class="navbar-brand py-0" rel="home" href="https://rewind.com/" itemprop="url" aria-label="Rewind Logo">
+						        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="34" viewBox="0 0 120 34" fill="none">
+            <g clip-path="url(#clip0)" class="logotext">
+                <path class="logo-letter" d="M32.049 26.3445C32.0092 26.0922 31.9893 25.5488 31.9893 24.7142V15.7477C32.2879 15.2916 32.6512 14.9277 33.0792 14.656C33.5172 14.3745 33.9452 14.2338 34.3632 14.2338C35.4581 14.2338 36.1798 14.5347 36.5282 15.1363L36.5879 15.0926L36.8566 11.177C36.3191 10.9539 35.5826 10.8423 34.6469 10.8423C33.7212 10.8423 32.8353 11.3129 31.9893 12.2542C31.9893 12.2542 31.9893 12.438 31.9893 11.7857C31.9893 11.1334 31.2 11.1334 31.2 11.1334H27.3778C27.3778 11.3524 28.3313 11.1334 28.3313 13.6056C28.3313 16.0777 28.3313 26.3445 28.3313 26.3445H32.049Z" fill="#373F41"></path>
+                <path class="logo-letter" fill-rule="evenodd" clip-rule="evenodd" d="M38.5289 15.704C38.1307 16.6744 37.9316 17.7273 37.9316 18.8627C37.9316 21.114 38.7628 22.9627 40.425 24.4086C42.0773 25.8448 44.1676 26.5629 46.6959 26.5629C47.1537 26.5629 47.6315 26.5338 48.1292 26.4755C49.8213 26.2814 51.0456 25.9321 51.8021 25.4275L51.9664 23.1567C51.9962 22.7298 52.0211 22.3125 52.041 21.9049C51.8917 22.0311 51.6677 22.1669 51.3691 22.3125C50.2344 22.8656 48.8757 23.1422 47.2931 23.1422C45.7801 23.1422 44.5508 22.8559 43.6052 22.2834C42.6596 21.7011 42.0574 20.8908 41.7986 19.8525H47.0542C50.11 19.8525 52.1356 19.7166 53.1309 19.4449C53.2504 19.1635 53.3101 18.6395 53.3101 17.8729C53.3101 15.8738 52.678 14.2144 51.4139 12.8947C50.1299 11.5264 48.4278 10.8423 46.3077 10.8423C43.7993 10.8423 41.7688 11.6137 40.216 13.1567C39.4894 13.8845 38.927 14.7336 38.5289 15.704ZM45.8448 13.899C47.7659 13.899 48.9305 14.9422 49.3386 17.0286C49.0798 17.048 48.7861 17.0626 48.4577 17.0723L47.2334 17.1159C46.7456 17.1256 46.248 17.1305 45.7403 17.1305H44.8893C44.5508 17.1305 44.1975 17.1256 43.8292 17.1159H42.7243C42.376 17.1062 42.0823 17.0965 41.8434 17.0868C41.9728 16.621 42.157 16.1941 42.3959 15.8059C43.1822 14.5347 44.3319 13.899 45.8448 13.899Z" fill="#373F41"></path>
+                <path class="logo-letter" d="M54.4747 11.1334H58.491L61.2681 22.065L64.2542 11.1334H67.6882L70.7789 22.2979L73.5559 11.1334H77.1691L72.5705 26.3445H68.7035L65.7473 16.3736L63 26.3445H59.1629L54.4747 11.1334Z" fill="#373F41"></path>
+                <g class="logo-letter">
+                    <path d="M83.007 26.3445C82.9672 26.0922 82.9473 25.5488 82.9473 24.7142V11.1334H79.2146V26.3445H83.007Z" fill="#373F41"></path>
+                    <path d="M81.1556 8.83927C82.5302 8.83927 83.6445 7.7529 83.6445 6.4128C83.6445 5.0727 82.5302 3.98633 81.1556 3.98633C79.781 3.98633 78.6667 5.0727 78.6667 6.4128C78.6667 7.7529 79.781 8.83927 81.1556 8.83927Z" fill="#373F41"></path>
+                </g>
+                <path class="logo-letter" d="M91.0994 24.4813C91.0994 25.3353 91.1392 25.9564 91.2188 26.3445H87.4712V11.1334H91.0994V12.4289C92.4132 11.3711 93.8167 10.8423 95.3098 10.8423C96.9422 10.8423 98.2461 11.3857 99.2216 12.4725C100.197 13.5497 100.685 14.9713 100.685 16.7375V22.5308C100.685 24.1708 100.71 25.1558 100.759 25.4857C100.809 25.8157 100.874 26.0291 100.954 26.1262C101.043 26.2232 101.118 26.3106 101.177 26.3882L101.148 26.4464C100.341 26.3785 99.7541 26.3445 99.3858 26.3445H98.3407C98.0222 26.3445 97.5941 26.3591 97.0566 26.3882V18.4551C97.0566 15.6118 96.1708 14.1902 94.399 14.1902C93.0851 14.1902 91.9852 14.85 91.0994 16.1698V24.4813Z" fill="#373F41"></path>
+                <path class="logo-letter" fill-rule="evenodd" clip-rule="evenodd" d="M111.972 26.5629C113.236 26.5629 114.501 26.2184 115.765 25.5294C116.083 25.9467 116.501 26.2912 117.019 26.5629L119.826 24.1465C119.587 23.9816 119.388 23.8069 119.229 23.6225C119.079 23.4382 118.94 23.147 118.81 22.7492C118.691 22.3513 118.631 21.507 118.631 20.2164V4.65591H114.973V11.1334C114.237 10.9393 113.485 10.8423 112.719 10.8423C110.22 10.8423 108.17 11.6186 106.567 13.1712C104.975 14.7045 104.179 16.6259 104.179 18.9355C104.179 21.1674 104.865 22.9821 106.239 24.3794C106.906 25.0587 107.712 25.5925 108.658 25.9806C109.603 26.3688 110.708 26.5629 111.972 26.5629ZM114.973 22.7492C114.277 23.0597 113.51 23.215 112.674 23.215C111.071 23.215 109.842 22.7734 108.986 21.8904C108.19 21.0655 107.792 19.9592 107.792 18.5716C107.792 17.3003 108.23 16.2668 109.106 15.4711C109.524 15.0926 110.021 14.7967 110.599 14.5832C111.186 14.3697 111.888 14.2629 112.704 14.2629C113.52 14.2629 114.277 14.4037 114.973 14.6851V22.7492Z" fill="#373F41"></path>
+            </g>
+            <g clip-path="url(#clip1)" class="boomerang">
+                <path d="M17.1867 28.8514C17.1867 28.8514 10.8732 21.7116 9.09755 17.3275C7.69456 13.8829 6.92729 10.146 6.88345 6.26294C-2.54293 15.4069 -2.30179 17.0979 7.76032 26.7011C18.7651 37.1603 21.5491 32.985 17.1867 28.8514Z" fill="#F7C20F"></path>
+                <path d="M19.1597 1.41905C19.1597 -0.564224 14.8411 -0.668607 11.1363 2.25412C10.4348 2.79691 8.68105 4.50879 8.68105 4.50879C8.65913 4.96808 8.63721 5.44824 8.63721 5.90752C8.63721 8.97639 9.11949 11.9409 10.0402 14.7383C11.6624 10.8553 14.0738 7.36889 17.099 4.44616C18.6336 2.9848 19.1597 2.46288 19.1597 1.41905Z" fill="#F7C20F"></path>
+            </g>
+            <defs>
+                <clipPath id="clip0">
+                    <rect width="120" height="33.2773" fill="white"></rect>
+                </clipPath>
+                <clipPath id="clip1">
+                    <rect width="19.1597" height="33.2773" fill="white"></rect>
+                </clipPath>
+            </defs>
+        </svg>
+    					</a>
+
+											<button class="navbar-toggler py-0 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+							<svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M0 0H20V2H0V0Z" fill="#53A1EB" />
+								<path d="M0 6H20V8H0V6Z" fill="#53A1EB" />
+								<path d="M0 12H20V14H0V12Z" fill="#53A1EB" />
+							</svg>
+						</button>
+
+						<div id="navbarNav" class="collapse navbar-collapse"><ul id="main-menu" class="navbar-nav ms-lg-1 mt-lg-1"><li  id="menu-item-87687" class="mega-menu menu--products menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-87687 nav-item"><a href="https://rewind.com/products/" class="nav-link">Products</a>
+<ul class="menu--dropdown dropdown depth--0" >
+	<li  id="menu-item-90593" class="mega-menu-sub-menu menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-90593 nav-item"><a href="https://rewind.com/products/backups/ecommerce/" class="dropdown-item">Ecommerce</a>
+	<ul class="menu--dropdown dropdown depth--1" >
+		<li  id="menu-item-74200" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-74200 nav-item"><a href="/products/backups/shopify/" class="dropdown-item">Backups for Shopify</a></li>
+		<li  id="menu-item-90934" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-90934 nav-item"><a href="https://rewind.com/products/protection-suite/" class="dropdown-item">Protection Suite for Shopify</a></li>
+		<li  id="menu-item-74201" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-74201 nav-item"><a href="/products/backups/bigcommerce/" class="dropdown-item">Backups for BigCommerce</a></li>
+		<li  id="menu-item-93654" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93654 nav-item"><a href="https://rewind.com/products/backups/klaviyo/" class="dropdown-item">Backups for Klaviyo</a></li>
+		<li  id="menu-item-93771" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93771 nav-item"><a href="https://rewind.com/products/backups/mailchimp/" class="dropdown-item">Backups for Mailchimp</a></li>
+	</ul>
+</li>
+	<li  id="menu-item-90592" class="mega-menu-sub-menu menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-90592 nav-item"><a href="https://rewind.com/products/backups/development/" class="dropdown-item">Software Development</a>
+	<ul class="menu--dropdown dropdown depth--1" >
+		<li  id="menu-item-74203" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-74203 nav-item"><a href="/products/backups/github/" class="dropdown-item">Backups for GitHub</a></li>
+		<li  id="menu-item-83837" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-83837 nav-item"><a href="https://rewind.com/products/backups/jira/" class="dropdown-item">Backups for Jira</a></li>
+		<li  id="menu-item-90608" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-90608 nav-item"><a href="https://rewind.com/products/backups/jira-service-management/" class="dropdown-item">Backups for Jira Service Management</a></li>
+		<li  id="menu-item-87070" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-87070 nav-item"><a href="https://rewind.com/products/backups/confluence/" class="dropdown-item">Backups for Confluence</a></li>
+		<li  id="menu-item-88846" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88846 nav-item"><a href="https://rewind.com/products/backups/bitbucket/" class="dropdown-item">Backups for Bitbucket</a></li>
+		<li  id="menu-item-94463" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-94463 nav-item"><a href="https://rewind.com/products/backups/azure-devops/" class="dropdown-item">Backups for Azure DevOps</a></li>
+		<li  id="menu-item-96187" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-96187 nav-item"><a href="https://rewind.com/products/backups/miro/" class="dropdown-item">Backups for Miro</a></li>
+	</ul>
+</li>
+	<li  id="menu-item-90596" class="rw-menu-group menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown menu-item-90596 nav-item">
+	<ul class="menu--dropdown dropdown depth--1" >
+		<li  id="menu-item-90594" class="mega-menu-sub-menu menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-90594 nav-item"><a href="https://rewind.com/products/backups/accounting/" class="dropdown-item">Accounting</a>
+		<ul class="menu--dropdown dropdown depth--2" >
+			<li  id="menu-item-74202" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-74202 nav-item"><a href="/products/backups/quickbooks-online/" class="dropdown-item">Backups for QuickBooks Online</a></li>
+		</ul>
+</li>
+		<li  id="menu-item-90595" class="mega-menu-sub-menu menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-90595 nav-item"><a href="https://rewind.com/products/backups/productivity/" class="dropdown-item">Productivity</a>
+		<ul class="menu--dropdown dropdown depth--2" >
+			<li  id="menu-item-100024" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-100024 nav-item"><a href="https://rewind.com/products/backups/monday/" class="dropdown-item">Backups for monday.com</a></li>
+			<li  id="menu-item-75787" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-75787 nav-item"><a href="https://rewind.com/products/backups/trello/" class="dropdown-item">Backups for Trello</a></li>
+		</ul>
+</li>
+		<li  id="menu-item-96523" class="mega-menu-sub-menu menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown menu-item-96523 nav-item"><a href="#" class="dropdown-item">IT &#038; Security</a>
+		<ul class="menu--dropdown dropdown depth--2" >
+			<li  id="menu-item-96524" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-96524 nav-item"><a href="https://rewind.com/products/backups/okta/" class="dropdown-item">Backups for Okta</a></li>
+			<li  id="menu-item-98676" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-98676 nav-item"><a href="https://rewind.com/products/backups/ms-entra-id/" class="dropdown-item">Backups for MS Entra ID</a></li>
+		</ul>
+</li>
+	</ul>
+</li>
+	<li  id="menu-item-79746" class="mega-menu-sub-menu promo-integrations menu-item-promo menu-item menu-item-type-custom menu-item-object-custom menu-item-79746 nav-item"><div class="h-100 d-none d-xl-flex px-3 py-3 flex-column justify-content-center align-items-start bg-gradient-darkblue-new dark-background rounded-corners-md">
+    <p class="fw-bold mb-1">Future integrations</p>
+    <p class="text-smallest">Our mission is to back up the cloud. Don't see the integration you need? Explore upcoming integrations or suggest one from the link below!</p>
+    <div class="d-flex flex-column gap-1 w-100">
+        <a href="https://rewind.com/products/#upcoming" class="text-smallest btn btn-secondary btn-sm w-100">Explore more</a>
+        <a href="https://rewind.com/products/request-product/" class="text-smallest btn btn-outline-secondary text-white btn-sm w-100">Request integration</a>
+    </div>
+</div></li>
+</ul>
+</li>
+<li  id="menu-item-88064" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown menu-item-88064 nav-item"><a href="#" class="nav-link">Solutions</a>
+<ul class="menu--dropdown dropdown depth--0" >
+	<li  id="menu-item-102180" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-102180 nav-item"><a href="https://rewind.com/ai-resilience/" class="dropdown-item">AI Resilience</a></li>
+	<li  id="menu-item-101135" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-101135 nav-item"><a href="https://rewind.com/products/backups/enterprise/" class="dropdown-item">Enterprise</a></li>
+	<li  id="menu-item-88066" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88066 nav-item"><a href="https://rewind.com/products/backups/development/" class="dropdown-item">Development</a></li>
+	<li  id="menu-item-88067" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88067 nav-item"><a href="https://rewind.com/products/backups/ecommerce/" class="dropdown-item">Ecommerce</a></li>
+	<li  id="menu-item-88068" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88068 nav-item"><a href="https://rewind.com/products/backups/accounting/" class="dropdown-item">Accounting</a></li>
+	<li  id="menu-item-88069" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88069 nav-item"><a href="https://rewind.com/products/backups/productivity/" class="dropdown-item">Productivity</a></li>
+</ul>
+</li>
+<li  id="menu-item-69691" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-69691 nav-item"><a href="https://rewind.com/pricing/" class="nav-link">Pricing</a></li>
+<li  id="menu-item-71453" class="mega-menu menu--resources-new has-columns menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-71453 nav-item"><a href="https://rewind.com/resources/" class="nav-link">Resources</a>
+<ul class="menu--dropdown dropdown depth--0" >
+	<li  id="menu-item-99223" class="rw-menu-group pt-lg-2 menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown menu-item-99223 nav-item">
+	<ul class="menu--dropdown dropdown depth--1" >
+		<li  id="menu-item-71454" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-71454 nav-item"><a href="https://rewind.com/resources/" class="dropdown-item">Resource library</a></li>
+		<li  id="menu-item-89355" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-89355 nav-item"><a href="https://rewind.com/blog/resource_type/case-studies/" class="dropdown-item">Case studies</a></li>
+		<li  id="menu-item-95783" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-95783 nav-item"><a href="https://rewind.com/events/" class="dropdown-item">Events</a></li>
+		<li  id="menu-item-71452" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-71452 nav-item"><a href="https://rewind.com/blog/" class="dropdown-item">Blog</a></li>
+		<li  id="menu-item-80665" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-80665 nav-item"><a target="_blank" rel="noopener noreferrer" href="https://help.rewind.com/hc/en-us" class="dropdown-item">Help center</a></li>
+	</ul>
+</li>
+	<li  id="menu-item-99224" class="rw-menu-group pt-lg-2 menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children dropdown menu-item-99224 nav-item">
+	<ul class="menu--dropdown dropdown depth--1" >
+		<li  id="menu-item-90306" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-90306 nav-item"><a href="https://rewind.com/reviews/" class="dropdown-item">Reviews &#038; testimonials</a></li>
+		<li  id="menu-item-93294" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93294 nav-item"><a href="https://rewind.com/trust/" class="dropdown-item">Trust center</a></li>
+		<li  id="menu-item-77372" class="newtabicon d-block d-lg-none menu-item menu-item-type-custom menu-item-object-custom menu-item-77372 nav-item"><a target="_blank" rel="noopener noreferrer" href="https://calc.rewind.com/ecommerce-downtime" class="dropdown-item">Downtime cost calculator</a></li>
+		<li  id="menu-item-102512" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-102512 nav-item"><a href="https://rewind.com/launch-hub/" class="dropdown-item">Launch hub</a></li>
+		<li  id="menu-item-73913" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-73913 nav-item"><a href="https://rewind.com/press-releases/" class="dropdown-item">Press releases</a></li>
+		<li  id="menu-item-101967" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-101967 nav-item"><a href="https://saas.rewind.com/back-up-to-level-up-podcast/" class="dropdown-item">Podcast</a></li>
+	</ul>
+</li>
+	<li  id="menu-item-87611" class="promo-dtcalc d-none menu-item menu-item-type-custom menu-item-object-custom menu-item-87611 nav-item"><div class="py-0 h-100 d-block w-100">
+    
+    
+        <div class="h-100 d-flex px-3 py-3 flex-column justify-content-center bg-gradient-darkblue-new dark-background rounded-corners-md">
+        <p class="fw-bold mb-1">Cloud backup basics</p>
+        <p class="text-smallest mb-1">SaaS data resilience requires a backup plan.</p>
+        <hr class="d-block w-100 mt-1 mb-2" />
+        <div class="fundamental-links d-flex flex-column gap-1">
+                            <a
+                    style="white-space: unset;"
+                    href="https://rewind.com/shared-responsibility/"
+                    class="d-flex justify-content-between text-smallest text-start btn btn-link btn-sm ps-0 text-smaller">
+                    Shared Responsibility for SaaS data                </a>
+                            <a
+                    style="white-space: unset;"
+                    href="https://rewind.com/321-backup-rule/"
+                    class="d-flex justify-content-between text-smallest text-start btn btn-link btn-sm ps-0 text-smaller">
+                    The 3-2-1 SaaS backup rule                </a>
+                            <a
+                    style="white-space: unset;"
+                    href="https://rewind.com/blog/testing-disaster-recovery-plan-saas-data-checklist/"
+                    class="d-flex justify-content-between text-smallest text-start btn btn-link btn-sm ps-0 text-smaller">
+                    Cloud disaster recovery checklist                </a>
+                    </div>
+    </div>
+</div></li>
+</ul>
+</li>
+<li  id="menu-item-69708" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-69708 nav-item"><a target="_blank" rel="noopener noreferrer" href="https://help.rewind.com/hc/en-us" class="nav-link">Support</a></li>
+<li  id="menu-item-70983" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-70983 nav-item"><a href="https://rewind.com/partners/" class="nav-link">Partners</a>
+<ul class="menu--dropdown dropdown depth--0" >
+	<li  id="menu-item-93328" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93328 nav-item"><a href="https://rewind.com/solution-partners/" class="dropdown-item">Solution partners</a></li>
+	<li  id="menu-item-93327" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93327 nav-item"><a href="https://rewind.com/ecommerce-partner/" class="dropdown-item">Ecommerce agencies</a></li>
+</ul>
+</li>
+<li  id="menu-item-71214" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children dropdown menu-item-71214 nav-item"><a href="https://rewind.com/about-us/" class="nav-link">About</a>
+<ul class="menu--dropdown dropdown depth--0" >
+	<li  id="menu-item-69686" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-69686 nav-item"><a href="https://rewind.com/about-us/" class="dropdown-item">About us</a></li>
+	<li  id="menu-item-69685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-69685 nav-item"><a href="https://rewind.com/careers/" class="dropdown-item">Careers</a></li>
+	<li  id="menu-item-88618" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88618 nav-item"><a href="https://rewind.com/contact/" class="dropdown-item">Contact</a></li>
+</ul>
+</li>
+</ul></div>
+					
+					<div class="d-none d-xl-block additional-buttons">
+    <div class="button-group d-xl-flex align-items-center justify-content-center text-center">
+        <a href="/?s=" class="btn btn-sm btn-icon d-none d-xl-block">
+            <div class="visually-hidden">Search</div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+        </a>
+                <a href="https://app.rewind.com/users/sign_in" target="_self" class="nav-link text-smallest"  >Sign in</a>
+            <a href="https://app.rewind.com/users/sign_up" target="_self" class="btn btn-primary btn-sm text-smallest"  >Start your trial</a>
+        </div>
+</div>
+				</div>
+			</nav>
+							<div class="progress">
+					<div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+				</div>
+			
+					</section>
+
+		
+		
+    <section class="main-banner main-banner--simple bg-blue-light main-banner--blog" >
+
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 main-banner__content">
+
+                    <p id="breadcrumbs" class="mb-1 breadcrumbs text-smaller d-flex "><span><span><a href="https://rewind.com/">Home</a></span> / <span><a href="https://rewind.com/blog/">Blog</a></span> / <span><a href="https://rewind.com/category/engineering/">Engineering</a></span></span></p>
+                    
+        
+            <h1 >
+                Best Practices for Reviewing Pull Requests in GitHub            </h1>
+
+        
+    
+                    
+                                            <p class="main-baner__author mt-2 text-smaller">
+                            <span class="author-name"> <a href="https://rewind.com/blog/author/piero-borrelli/">Piero Borrelli</a></span>
+                            <span class="text-secondary">|</span>
+                            <span class="date">Last updated on August 28, 2024</span>
+                            <span class="text-secondary">|</span>
+                            <strong>9 minute read</strong>
+                        </p>
+                    
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+	</header>
+<div class="wrapper pb-0 pt-0" id="page-wrapper">
+    <main class="site-main" id="main">
+        <section class="post-single">
+            <div class="container mt-lg-3">
+                <article>
+                    <div class="row">
+                        
+                                                            <div class="col-12 col-xl-8">
+                                    
+            <figure class="post-single__thumbnail mb-3 mb-lg-4 rounded-corners-md" >
+            <img fetchpriority="high" width="780" height="252" src="https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png" class="img-fluid wp-post-image" alt="" decoding="async" srcset="https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png 780w, https://rewind.com/wp-content/uploads/2021/05/confusingcomment-300x97.png 300w, https://rewind.com/wp-content/uploads/2021/05/confusingcomment-768x248.png 768w, https://rewind.com/wp-content/uploads/2021/05/confusingcomment-420x136.png 420w, https://rewind.com/wp-content/uploads/2021/05/confusingcomment-32x10.png 32w" sizes="(max-width: 780px) 100vw, 780px" />        </figure>
+    
+
+
+
+    
+
+                                    <div class="body-text mb-2">
+                                        
+<p><em>Do not harm the project’s code.</em></p>
+
+
+
+<p>This was the crucial principle my seniors would stress every day when I started as a software developer. It was the same principle guiding them when they reviewed my pull requests, which would get rejected at least two or three times.</p>
+
+
+
+<p>I hated it. “They’re too demanding, too critical,” I would tell myself.</p>
+
+
+
+<p>But as I improved, I ended up becoming the reviewer of somebody else’s code. And I finally realized the responsibility of having to examine something written by another person.</p>
+
+
+
+<p>Being a reviewer is hard. How do you make sure that the new code will benefit the project? How do you communicate that something hasn’t been addressed well without offending anybody? What is an appropriate amount of time for reviewing?</p>
+
+
+
+<p>A pull request (or merge request) is the simple act of asking somebody to review your code before merging it into the working project’s base branch. But on the reviewer’s side, it can be a much more complex challenge.</p>
+
+
+
+<p>Let’s analyze some best practices for reviewing pull requests, so you can become an outstanding code reviewer to the benefit of yourself, your peers, and your project.</p>
+
+
+
+<h2 class="wp-block-heading">1. Respect people&#8217;s time</h2>
+
+
+
+<p>A good code review process starts with respecting time. Ideally, you want to start reviewing the code within two hours after its first submission. This is mainly to appreciate the work of the person who submitted the PR.</p>
+
+
+
+<p>For example, if one of your colleagues has asked you to review their work, they’ll probably wait for your review for some minutes. If the review isn’t done quickly, they’ll start working on something else.</p>
+
+
+
+<p>Your colleague will create a new feature branch and start writing code for a new task. If, after four hours, you review their first code and discover it’s faulty, your colleague will have to suspend what they’re doing now to make the changes. Context switches like that can be extremely time-consuming. Depending on how your colleague works best, it might take a lot for them to recover focus when coming back to the original task.</p>
+
+
+
+<p>The situation gets even worse if you let days or weeks pass by without reviewing the code. At this time, your colleague has probably even forgotten what the code was all about. There will be time wasted while they catch up with the old code, and your colleague will be more prone to introducing errors since they haven’t worked on that feature in a while.</p>
+
+
+
+<p>Always respect other people’s time and work, try to be the most timely reviewer you can be, and realize that those hours your peers are waiting for your review are worth a lot.</p>
+
+
+
+<h2 class="wp-block-heading">2. Always provide constructive feedback</h2>
+
+
+
+<p>Even if you’re reviewing code, remember there are humans behind it. Be careful about how you may trigger other people’s emotions, especially since you’re talking about their work.</p>
+
+
+
+<p>When giving feedback on an error in a pull request, adopt a constructive mindset and try to use positive language. Say <em>“I suggest”</em> or <em>“You could improve X by doing Y.”</em> Avoid <em>“Do this”</em> or <em>“This is just wrong, why don’t you do Z?”</em></p>
+
+
+
+<p>Expressing opinions with written words is very hard—be mindful of how somebody may misinterpret your suggestions and take them personally.</p>
+
+
+
+<p>Make improving the code of the project your mission, but still keep in mind that the humans behind the code need to receive encouragement. In addition to keeping the workplace environment positive, this can also go a long way toward ensuring the same errors won’t be part of the next pull requests.</p>
+
+
+
+<figure class="wp-block-image"><img decoding="async" src="https://rewind.com/wp-content/uploads/2021/05/badcomment.png" alt="A bad pull request comment on Github"/></figure>
+
+
+
+<p><em>A comment you don&#8217;t want to submit.</em></p>
+
+
+
+<figure class="wp-block-image"><img decoding="async" src="https://rewind.com/wp-content/uploads/2021/05/goodcomment.png" alt="A good pull request comment on GitHub"/></figure>
+
+
+
+<p><em>A comment that&#8217;s a lot better!</em></p>
+
+
+
+<h2 class="wp-block-heading">3. Keep your ego out of code reviews</h2>
+
+
+
+<p>Occasionally, you’ll find yourself in a position of disagreement with the submitter’s implementation of the code or the other reviewers of a PR. <em>Should we use this interface? Is this name appropriate for these variables?</em></p>
+
+
+
+<p>In cases like these, you and the engineering team should aim for a culture where the best argument wins.</p>
+
+
+
+<p>And remember, just because you’re a senior developer, it doesn’t mean that you’re necessarily right regarding some junior coder’s idea. Provide reasons, not feelings, to support your position to the other team members. Stay firm in your approach if you believe it’s the best one, but don’t forget to provide reasons behind everything you say. For example, link to articles or docs reinforcing your point.</p>
+
+
+
+<p>If an argument gets heated, try to schedule an immediate call and positively discuss your idea. In the end, either you’ll be right or you’ll come out of the discussion with fresh knowledge.</p>
+
+
+
+<h2 class="wp-block-heading">4. Be precise about what needs to be improved</h2>
+
+
+
+<p>I cannot stress this point enough, as I’ve run into this so often during my career. It’s important to be clear, not only in the words you use but also in the way you construct your sentences.</p>
+
+
+
+<p>Double-check every comment you write. A simple grammatical error could cause you problems.</p>
+
+
+
+<p>Consider:</p>
+
+
+
+<figure class="wp-block-image"><img decoding="async" src="https://rewind.com/wp-content/uploads/2021/05/confusingcomment.png" alt="a confusing Github comment"/></figure>
+
+
+
+<p><em>An example of confusing grammar.</em></p>
+
+
+
+<p>What is it that needs to be changed, the class or the function? To which does <span style="font-weight: bold;">it</span> refer? And why should one of your busy peers have to ask you clarifying questions about your grammar?</p>
+
+
+
+<p>Also, take care to specify the exact line you’re discussing. Don’t just mention the wrong usage of a function for adding students; what if there are two of them with very similar names, say, <code>`addStudent`</code> and <code>`addStudents`</code>?</p>
+
+
+
+<p>The same applies if you submit code in a comment. It doesn’t have to be perfect, but make sure it’s still clear what you’re trying to say. Otherwise, you’re introducing your peers to a lot of confusion and frustration.</p>
+
+
+
+<h2 class="wp-block-heading">5. Don&#8217;t just hope for the code to work</h2>
+
+
+
+<p>Expecting the code’s author to have tested the code is fair, but you should always try it by yourself, too. Two minds are still better than one, so check out the referring branch and pull down the code locally.</p>
+
+
+
+<p>Everything should build perfectly before you start testing the code. Check the functionality itself, but don’t limit yourself to simple tests. Try to cause errors. Come up with some edge cases and put the codebase to the test.</p>
+
+
+
+<h2 class="wp-block-heading">6. Reinforce code submission best practices</h2>
+
+
+
+<p>Remember to promote positive actions a code author can take. For example, you could enable support on <a href="https://docs.github.com/en/actions/guides/about-continuous-integration" rel="noopener">GitHub for continuous integration</a>&nbsp;in your project. This allows the platform to start your automated tests whenever a given event occurs (for example, whenever a PR is opened).</p>
+
+
+
+<p>Continuous integration by itself encourages developers to commit code more often, it makes it easier to detect errors when they open a PR, and reduces the amount of code that needs to be debugged if something goes wrong. Frequent code updates also make it effortless to merge changes made in a pull request, so you and your team can spend more time writing code instead of resolving annoying branch conflicts.</p>
+
+
+
+<p>Along the lines of running automated tests inside pull requests, don’t forget that GitHub also offers support for <a href="https://github.com/marketplace/codecov" rel="noopener">code coverage tools</a>. This way, you and the code submitters will always know how much of the running code is being checked by your test suite, streamlining the review process thanks to an immediate overview of how the app is performing.</p>
+
+
+
+<p>One particularly low-hanging fruit for encouraging best code submission practices is to provide your team with a <a href="https://embeddedartistry.com/blog/2017/08/04/a-github-pull-request-template-for-your-projects/" rel="noopener">well-written PR template</a>. This is a simple text that appears whenever someone is about to open a PR, reminding developers to specify what the PR is about and what type of change has been performed (eg, bug fix, hotfix, refactor). You could even add a section for submitters to request special things for reviewers to note.</p>
+
+
+
+<h2 class="wp-block-heading">7. Be strict about temporary code</h2>
+
+
+
+<p>Occasionally someone will submit code that’s considered temporary. You know, the one that goes by in commit messages like <em>hotfix</em> or <em>temporary refactoring for the component to work</em>.</p>
+
+
+
+<p>Don’t let the word <em>temporary </em>mislead you into being less strict when it comes to testing code. Short-term solutions have a magical power of becoming dirty legacy code very quickly. If you don’t want to find yourself dealing with a bigger problem in the future, always use the same discipline whether you’re reviewing a huge feature’s pull request or the tiniest of the most temporary code.</p>
+
+
+
+<h2 class="wp-block-heading">8. Check the project&#8217;s satellite files</h2>
+
+
+
+<p>Every medium to large-size project will bring with it hundreds of files gravitating around the code structure itself. I like to refer to them as satellite files. These include documentation, tests, and configuration files.</p>
+
+
+
+<p>Remember to check these files, as they’re usually updated as often as the code and just as important. For example, verify that tests have been added for a new feature if you have them in your application.</p>
+
+
+
+<p>If a function or class has been refactored, the documentation should be, too, if that’s your workflow. Similarly, build files should reflect the changes made to the project or the single files, and the changelog should always reflect the operations that have been performed on the product.</p>
+
+
+
+<h2 class="wp-block-heading">9. Visualize the bigger picture</h2>
+
+
+
+<p>This is the biggest lesson that those senior developers actually taught me. Code is not the line you write, but how the line integrates with and provides benefit to the application itself.</p>
+
+
+
+<p><em>Will this change benefit the project in terms of maintenance? Will we have to change it because it’s just not scalable? Will me and my peers be able to read this code six months from now?</em></p>
+
+
+
+<p>A pull request is never a stand-alone event. It’s one brick in a more extensive, complicated system. Keep the best practices in mind, and let them guide you toward deciding if this modification is a “approve” or “reject” one.</p>
+
+
+
+<h2 class="wp-block-heading">Summary</h2>
+
+
+
+<p>Reviewing somebody else’s code is a difficult task. You need to approach it efficiently, while keeping in mind that you’re a professional with responsibilities not only toward the project but toward your peers as well.</p>
+
+
+
+<p>It took me a while to understand why my colleagues were so picky when it came to performing code reviews, but once I found myself in their shoes, it all became clear. Since then, the principle of not harming the code has stayed with me, and it’s guided me toward some of the best decisions I could make for each project.</p>
+
+
+
+<p>Besides the nine best practices I touched on in this article, teams that are managing a lot of pull requests in GitHub should also think seriously about backing up their content. That’s where <a href="https://rewind.com/products/backups/github/" rel="noopener">a tool like Rewind&#8217;s Backups for GitHub</a> can help you ensure that even if GitHub goes down or a repository is mistakenly deleted, you can keep a record of your pull requests, reviews, and comments. Rewind allows you to restore deleted or altered repositories right back into GitHub, letting you get back to work faster.</p>
+
+
+
+<div id="rw-lead-magnet-block_33dfd57f41363ae4e84668a77833068b" class="rw-block rw-block--lead-magnet my-3">
+
+    
+<div id="rw-price-calc-block_627d55ea867a2" class="rw-block price-calc-block rw-block--price-calc-block my-3 is-style-negative-margin">
+
+            
+        <div data-scroll class="price-calc px-3 py-4 is-loading bg-secondary-light rounded-corners-lg"  data-internal-id="github"  data-enableperitem="true"  data-sliderstyle="github-style"  data-use-dropdown="" >
+
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-md-5 d-flex flex-column">
+
+                        <div class="price-calc__image mb-1">
+                            <img decoding="async" width="300" height="123" src="https://rewind.com/wp-content/uploads/2021/09/GitHub_Logo-300x123.png" class="img-fluid rounded-0" alt="github" srcset="https://rewind.com/wp-content/uploads/2021/09/GitHub_Logo-300x123.png 300w, https://rewind.com/wp-content/uploads/2021/09/GitHub_Logo-768x315.png 768w, https://rewind.com/wp-content/uploads/2021/09/GitHub_Logo-980x402.png 980w, https://rewind.com/wp-content/uploads/2021/09/GitHub_Logo-480x197.png 480w, https://rewind.com/wp-content/uploads/2021/09/GitHub_Logo.png 1000w" sizes="(max-width: 300px) 100vw, 300px" />                        </div>
+
+                        <h4 class="has-medium-font-size">How many GitHub users are in your organization?</h4>
+
+                                                    <input type="number" max="" value="50" data-afternumber="users/month" class="form-control">
+                        
+
+
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="price-calc__plans h-100 d-flex flex-column justify-content-center">
+                                                                                            
+                                    
+        <div id="platPlan1_0" class="platform-plan--simple plan--active" data-planrange="0,1" data-show-decimals="true">
+
+            <div class="platform-plan__name">
+
+                <h3 class="mb-lg-0">Individual plan</h3>
+
+                
+                
+            <div class="planinfo__price"  data-formula='default' data-annual-formula='default' data-peritem='[{"schedule_starting_num":"0","schedule_ending_num":"1","schedule_price_static":"14","schedule_price_multiplier":"2","show_in_dropdown":false}]' data-peritem-annual='[{"schedule_starting_num":"0","schedule_ending_num":"10","schedule_price_static":"400","schedule_price_multiplier":"24"}]' data-endNumText='' data-price-suffix-annual='USD / year' data-is-free='' data-is-custom=''>
+
+                
+                    <h4 class="planinfo__pricenum title-h3 position-relative">
+                        $14.00                    </h4>
+                
+                <p class="planinfo__suffix text-smaller"  data-monthly-suffix='USD / month' data-annual-suffix='USD / year'>USD / month</p>
+
+            </div>
+
+            <p class="planinfo__avg mb-0 ">
+
+                <strong>
+                                    </strong>
+
+                <small class="text-smaller planinfo__avg__suffix"  data-avg-monthly-suffix=''>
+                                    </small>
+
+            </p>
+
+            
+        
+                <a href="https://app.rewind.com/users/sign_up?platform=github" target="_self" class="btn btn-link btn-sm ps-0 pe-0 mt-0 mb-2"  >Start my trial</a>
+    
+
+            </div>
+
+        </div>
+
+    
+                                
+                                    
+        <div id="platPlan2_0" class="platform-plan--simple plan--active" data-planrange="0,3" data-show-decimals="true">
+
+            <div class="platform-plan__name">
+
+                <h3 class="mb-lg-0">Pro plan</h3>
+
+                
+                
+            <div class="planinfo__price"  data-formula='default' data-annual-formula='default' data-peritem='[{"schedule_starting_num":"0","schedule_ending_num":"3","schedule_price_static":"12","schedule_price_multiplier":"4","show_in_dropdown":false}]' data-peritem-annual='[{"schedule_starting_num":"0","schedule_ending_num":"10","schedule_price_static":"400","schedule_price_multiplier":"24"},{"schedule_starting_num":"11","schedule_ending_num":"15","schedule_price_static":"600","schedule_price_multiplier":""},{"schedule_starting_num":"16","schedule_ending_num":"25","schedule_price_static":"1000","schedule_price_multiplier":""},{"schedule_starting_num":"26","schedule_ending_num":"50","schedule_price_static":"2000","schedule_price_multiplier":""},{"schedule_starting_num":"51","schedule_ending_num":"100","schedule_price_static":"4000","schedule_price_multiplier":""},{"schedule_starting_num":"101","schedule_ending_num":"200","schedule_price_static":"7400","schedule_price_multiplier":""},{"schedule_starting_num":"201","schedule_ending_num":"300","schedule_price_static":"10500","schedule_price_multiplier":""},{"schedule_starting_num":"301","schedule_ending_num":"400","schedule_price_static":"13300","schedule_price_multiplier":""},{"schedule_starting_num":"401","schedule_ending_num":"500","schedule_price_static":"16100","schedule_price_multiplier":""},{"schedule_starting_num":"501","schedule_ending_num":"600","schedule_price_static":"18900","schedule_price_multiplier":""},{"schedule_starting_num":"601","schedule_ending_num":"800","schedule_price_static":"24500","schedule_price_multiplier":""},{"schedule_starting_num":"801","schedule_ending_num":"1000","schedule_price_static":"30100","schedule_price_multiplier":""},{"schedule_starting_num":"1001","schedule_ending_num":"1200","schedule_price_static":"35300","schedule_price_multiplier":""},{"schedule_starting_num":"1201","schedule_ending_num":"1400","schedule_price_static":"40500","schedule_price_multiplier":""},{"schedule_starting_num":"1401","schedule_ending_num":"1600","schedule_price_static":"45700","schedule_price_multiplier":""},{"schedule_starting_num":"1601","schedule_ending_num":"1800","schedule_price_static":"50900","schedule_price_multiplier":""},{"schedule_starting_num":"1801","schedule_ending_num":"2000","schedule_price_static":"56100","schedule_price_multiplier":""},{"schedule_starting_num":"2001","schedule_ending_num":"2250","schedule_price_static":"62600","schedule_price_multiplier":""},{"schedule_starting_num":"2251","schedule_ending_num":"2500","schedule_price_static":"69100","schedule_price_multiplier":""},{"schedule_starting_num":"2501","schedule_ending_num":"2750","schedule_price_static":"75100","schedule_price_multiplier":""},{"schedule_starting_num":"2751","schedule_ending_num":"3000","schedule_price_static":"81100","schedule_price_multiplier":""}]' data-endNumText='' data-price-suffix-annual='USD / year' data-is-free='' data-is-custom=''>
+
+                
+                    <h4 class="planinfo__pricenum title-h3 position-relative">
+                        $14.00                    </h4>
+                
+                <p class="planinfo__suffix text-smaller"  data-monthly-suffix='USD / month' data-annual-suffix='USD / year'>USD / month</p>
+
+            </div>
+
+            <p class="planinfo__avg mb-0 ">
+
+                <strong>
+                    $4.00                </strong>
+
+                <small class="text-smaller planinfo__avg__suffix"  data-avg-monthly-suffix='USD / user / month'>
+                    USD / user / month                </small>
+
+            </p>
+
+            
+        
+                <a href="https://app.rewind.com/users/sign_up?platform=github" target="_self" class="btn btn-link btn-sm ps-0 pe-0 mt-0 mb-2"  >Start my trial</a>
+    
+
+            </div>
+
+        </div>
+
+    
+                                
+                                    
+        <div id="platPlan3_0" class="platform-plan--simple plan--inactive plan--inactive-visible" data-planrange="4,100" data-showgreyed="1" data-greyrange="101,3000" data-show-decimals="true">
+
+            <div class="platform-plan__name">
+
+                <h3 class="mb-lg-0">Pro plan</h3>
+
+                
+                
+            <div class="planinfo__price"  data-formula='tier-pricing' data-annual-formula='default' data-peritem='[{"schedule_starting_num":"0","schedule_ending_num":"100","schedule_price_static":"400","schedule_price_multiplier":"4","show_in_dropdown":false},{"schedule_starting_num":"101","schedule_ending_num":"250","schedule_price_static":"","schedule_price_multiplier":"3.4","show_in_dropdown":false},{"schedule_starting_num":"251","schedule_ending_num":"1001","schedule_price_static":"","schedule_price_multiplier":"2.8","show_in_dropdown":false}]' data-peritem-annual='[{"schedule_starting_num":"0","schedule_ending_num":"10","schedule_price_static":"400","schedule_price_multiplier":""},{"schedule_starting_num":"11","schedule_ending_num":"15","schedule_price_static":"600","schedule_price_multiplier":""},{"schedule_starting_num":"16","schedule_ending_num":"25","schedule_price_static":"1000","schedule_price_multiplier":""},{"schedule_starting_num":"26","schedule_ending_num":"50","schedule_price_static":"2000","schedule_price_multiplier":""},{"schedule_starting_num":"51","schedule_ending_num":"100","schedule_price_static":"4000","schedule_price_multiplier":""},{"schedule_starting_num":"101","schedule_ending_num":"200","schedule_price_static":"7400","schedule_price_multiplier":""},{"schedule_starting_num":"201","schedule_ending_num":"300","schedule_price_static":"10500","schedule_price_multiplier":""},{"schedule_starting_num":"301","schedule_ending_num":"400","schedule_price_static":"13300","schedule_price_multiplier":""},{"schedule_starting_num":"401","schedule_ending_num":"500","schedule_price_static":"16100","schedule_price_multiplier":""},{"schedule_starting_num":"501","schedule_ending_num":"600","schedule_price_static":"18900","schedule_price_multiplier":""},{"schedule_starting_num":"601","schedule_ending_num":"800","schedule_price_static":"24500","schedule_price_multiplier":""},{"schedule_starting_num":"801","schedule_ending_num":"1000","schedule_price_static":"30100","schedule_price_multiplier":""},{"schedule_starting_num":"1001","schedule_ending_num":"1200","schedule_price_static":"35300","schedule_price_multiplier":""},{"schedule_starting_num":"1201","schedule_ending_num":"1400","schedule_price_static":"40500","schedule_price_multiplier":""},{"schedule_starting_num":"1401","schedule_ending_num":"1600","schedule_price_static":"45700","schedule_price_multiplier":""},{"schedule_starting_num":"1601","schedule_ending_num":"1800","schedule_price_static":"50900","schedule_price_multiplier":""},{"schedule_starting_num":"1801","schedule_ending_num":"2000","schedule_price_static":"56100","schedule_price_multiplier":""},{"schedule_starting_num":"2001","schedule_ending_num":"2250","schedule_price_static":"62600","schedule_price_multiplier":""},{"schedule_starting_num":"2251","schedule_ending_num":"2500","schedule_price_static":"69100","schedule_price_multiplier":""},{"schedule_starting_num":"2501","schedule_ending_num":"2750","schedule_price_static":"75100","schedule_price_multiplier":""},{"schedule_starting_num":"2751","schedule_ending_num":"3000","schedule_price_static":"81100","schedule_price_multiplier":""}]' data-endNumText='' data-price-suffix-annual='USD / year' data-is-free='' data-is-custom=''>
+
+                
+                    <h4 class="planinfo__pricenum title-h3 position-relative">
+                        $14.00                    </h4>
+                
+                <p class="planinfo__suffix text-smaller"  data-monthly-suffix='USD / month' data-annual-suffix='USD / year'>USD / month</p>
+
+            </div>
+
+            <p class="planinfo__avg mb-0 ">
+
+                <strong>
+                    $4.00                </strong>
+
+                <small class="text-smaller planinfo__avg__suffix"  data-avg-monthly-suffix='USD / user / month'>
+                    USD / user / month                </small>
+
+            </p>
+
+            
+        
+                <a href="https://app.rewind.com/users/sign_up?platform=github" target="_self" class="btn btn-link btn-sm ps-0 pe-0 mt-0 mb-2"  >Start my trial</a>
+    
+
+            </div>
+
+        </div>
+
+    
+                                
+                                    
+        <div id="platPlan4_0" class="platform-plan--simple plan--inactive plan--inactive-visible" data-planrange="100,3000" data-showgreyed="1" data-greyrange="2,99" data-show-decimals="true">
+
+            <div class="platform-plan__name">
+
+                <h3 class="mb-lg-0">Enterprise plan</h3>
+
+                
+                
+            <div class="planinfo__price"  data-formula='tier-pricing' data-annual-formula='default' data-peritem='[{"schedule_starting_num":"0","schedule_ending_num":"1","schedule_price_static":"400","schedule_price_multiplier":"400","show_in_dropdown":false},{"schedule_starting_num":"101","schedule_ending_num":"250","schedule_price_static":"","schedule_price_multiplier":"3.4","show_in_dropdown":false},{"schedule_starting_num":"251","schedule_ending_num":"1000","schedule_price_static":"","schedule_price_multiplier":"2.8","show_in_dropdown":false},{"schedule_starting_num":"1001","schedule_ending_num":"2500","schedule_price_static":"","schedule_price_multiplier":"2.6","show_in_dropdown":false},{"schedule_starting_num":"2501","schedule_ending_num":"7500","schedule_price_static":"","schedule_price_multiplier":"2.4","show_in_dropdown":false}]' data-peritem-annual='false' data-endNumText='' data-price-suffix-annual='USD / year' data-is-free='' data-is-custom=''>
+
+                
+                    <h4 class="planinfo__pricenum title-h3 position-relative">
+                        $400.00                    </h4>
+                
+                <p class="planinfo__suffix text-smaller"  data-monthly-suffix='USD / month' data-annual-suffix='USD / year'>USD / month</p>
+
+            </div>
+
+            <p class="planinfo__avg mb-0 ">
+
+                <strong>
+                    $4.00                </strong>
+
+                <small class="text-smaller planinfo__avg__suffix"  data-avg-monthly-suffix='USD / user / month'>
+                    USD / user / month                </small>
+
+            </p>
+
+            
+        
+                <a href="mailto:sales@rewind.io" target="_self" class="btn btn-link btn-sm ps-0 pe-0 mt-0 mb-2"  >Talk to sales</a>
+    
+
+            </div>
+
+        </div>
+
+    
+                                
+                                    
+        <div id="platPlan5_0" class="platform-plan--simple plan--inactive" data-planrange="3001,3001">
+
+            <div class="platform-plan__name">
+
+                <h3 class="mb-lg-0">Enterprise plan</h3>
+
+                
+                
+            <div class="planinfo__price"  data-formula='default' data-annual-formula='default' data-peritem='[{"schedule_starting_num":"3000","schedule_ending_num":"3001","schedule_price_static":"","schedule_price_multiplier":"400","show_in_dropdown":false}]' data-peritem-annual='false' data-endNumText='3K+ users' data-price-suffix-annual='' data-is-free='' data-is-custom=''>
+
+                
+                    <h4 class="planinfo__pricenum title-h3 position-relative">
+                        $400.00                    </h4>
+                
+                <p class="planinfo__suffix text-smaller"  data-monthly-suffix='USD / month' data-annual-suffix=''>USD / month</p>
+
+            </div>
+
+            <p class="planinfo__avg mb-0 ">
+
+                <strong>
+                    $4.00                </strong>
+
+                <small class="text-smaller planinfo__avg__suffix"  data-avg-monthly-suffix='USD / user / month'>
+                    USD / user / month                </small>
+
+            </p>
+
+            
+        
+                <a href="mailto:sales@rewind.io" target="_self" class="btn btn-link btn-sm ps-0 pe-0 mt-0 mb-2"  >Contact sales</a>
+    
+
+            </div>
+
+        </div>
+
+    
+                                
+                                                    </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    
+<div class="modal" id="enterprise-contact" tabindex="-1" aria-labelledby="enterprise-contactLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal--form modal--form-simple mt-xl-1 mt-xxxl-3 px-xl-3">
+        <div class="modal-content rounded-corners-lg">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 d-flex">
+                <div class="rounded-corners-lg bg-light px-3 pt-4 pt-lg-3 pt-xxxl-5 pb-4 is-rewind-styled  animation--fadeIn boomerang-loading-wrapper w-100">
+                    <div class="mx-auto mw-500 form rw-form-embed rw-form-embed--loading rw-form-embed--fw-button">
+                        <h3 class="text-center ">Get in touch</h3>
+                        <div class="hs-form-wrapper">
+                                        <script>
+                // window.hsFormsOnReady = window.hsFormsOnReady || [];
+                // window.hsFormsOnReady.push(function() {
+                //                     // });
+
+                if (window.addEventListener) {
+                    window.addEventListener('load', function() {
+                        hbspt.forms.create({onBeforeFormInit: rewindHubspotForms,target: "#enterprise-contact .rw-form-embed .hs-form-wrapper",
+            region: "na1",
+            portalId: "6865219",
+            formId: "799b6e65-a563-4021-895a-6b637ab735fd"
+          });                    });
+                }
+
+                if (window.attachEvent) {
+                    window.attachEvent('onload', function() {
+                        hbspt.forms.create({onBeforeFormInit: rewindHubspotForms,target: "#enterprise-contact .rw-form-embed .hs-form-wrapper",
+            region: "na1",
+            portalId: "6865219",
+            formId: "799b6e65-a563-4021-895a-6b637ab735fd"
+          });                    });
+                }
+            </script>
+                            </div>
+
+                    </div>
+
+                    <div class="boomerang-loading rounded-corners-lg">
+                        <svg id="boomerang_svg__Layer_1" width="50" height="50" x="0" y="0" viewBox="0 0 205 320" xml:space="preserve" class="boomerang">
+    <style>
+        .boomerang_svg__st0 {
+            fill: #f7c20f
+        }
+    </style>
+    <path class="boomerang_svg__st0" d="M171.1 270.2s-56.9-64.4-72.9-103.9c-12.9-31.7-19.7-65.5-20-99.7C-6.9 149-4.6 164.2 86 250.8c99.3 94.2 124.4 56.6 85.1 19.4z"></path>
+    <path class="boomerang_svg__st0" d="M188.8 22.9c0-17.9-38.9-18.8-72.3 7.5-6.3 4.9-22.1 20.3-22.1 20.3-.2 4.1-.4 8.5-.4 12.6-.1 27 4.2 53.9 12.6 79.6 14.7-34.9 36.3-66.5 63.6-92.8 13.9-13.1 18.6-17.8 18.6-27.2z"></path>
+</svg>                        <h4 class="text-center fs-6 text-dark pt-5">Loading&#8230;</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+</div>
+</div>                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 ps-xl-4 post-sidebar">
+                                    
+<aside class="py-3 px-2 rounded-corners-md post-sidebar__container dark-background bg-gradient-darkblue-new">
+    <div id="block-39" class="widget widget_block">
+<div class="mitigation-promo">
+    <div class="wheel-of-fortune-promo mb-2">
+        <a href="https://rewind.com/resources/risk-mitigation/#wheelOfFortune">
+            <img loading="lazy" decoding="async" width="300" height="300" src="https://rewind.com/wp-content/plugins/rewind-gutenblocks//img/wheel-of-fortune.png" alt="Wheel of fortune" />
+        </a>
+        <span class="wheel-of-fortune__indicator bg-primary"></span>
+    </div>
+    <div class="mitigation-promo__content">
+        <h3 class="title-p text-center text-white">How will you lose SaaS data?</h3>
+        <p class="text-center text-white text-smallest px-lg-2">Data loss in SaaS platforms is not an if proposition but a when. Get the knowledge you need to protect your organization’s most valuable digital assets.</p>
+        <a href="https://rewind.com/resources/risk-mitigation/" class="btn btn-secondary text-smaller btn-sm w-100">Download guide</a>
+    </div>
+</div></div></aside>                                </div>
+                            
+                        
+                        <div class="col-12">
+                                
+
+    
+<div class="social-sharing flex-wrap flex-lg-nowrap mt-2 justify-content-start mt-3 mt-lg-4">
+    <span class="social-sharing__title text-smaller text-dark me-2 mb-1 mb-lg-0">
+        Share on social media:    </span>
+    <a class="btn btn-outline-secondary" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Frewind.com%2Fblog%2Fbest-practices-for-reviewing-pull-requests-in-github%2F%3Frworig%3Dsocial" onclick="window.open(this.href, 'facebookwindow','left=20,top=20,width=600,height=700,toolbar=0,resizable=1'); return false;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook-f" class="svg-inline--fa fa-facebook-f fa-w-10" role="img" viewBox="0 0 320 512">
+    <path fill="currentColor" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+</svg>    </a>
+    <a class="btn btn-outline-secondary" href="http://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Frewind.com%2Fblog%2Fbest-practices-for-reviewing-pull-requests-in-github%2F%3Frworig%3Dsocial&title=Best+Practices+for+Reviewing+Pull+Requests+in+GitHub&source=rewind.com" onclick="window.open(this.href, 'liwindow','left=20,top=20,width=600,height=700,toolbar=0,resizable=1'); return false;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <g clip-path="url(#clip0)">
+        <path d="M4.56427 6.49853V20.0002H0.24827V6.49853H4.56427ZM4.83867 2.3302C4.83947 2.35437 4.84027 2.3827 4.84027 2.41187C4.84027 3.03603 4.58587 3.5977 4.17947 3.99103L4.17787 3.99187C3.74187 4.40687 3.15867 4.66103 2.51787 4.66103C2.47867 4.66103 2.43867 4.6602 2.39947 4.65853H2.40507H2.37867C2.34587 4.6602 2.30747 4.66103 2.26907 4.66103C1.64187 4.66103 1.07227 4.40603 0.64907 3.99103L0.64987 3.99187C0.24667 3.5852 -0.00292969 3.01687 -0.00292969 2.3877C-0.00292969 2.3677 -0.00292969 2.3477 -0.00212969 2.32687V2.3302C-0.00292969 2.3127 -0.00292969 2.2927 -0.00292969 2.2727C-0.00292969 1.6377 0.25627 1.06604 0.66987 0.665202L0.67147 0.664368C1.10667 0.251868 1.68827 -0.00146484 2.32587 -0.00146484C2.36267 -0.00146484 2.39867 -0.000631511 2.43547 0.00103516H2.43067C2.46507 -0.000631511 2.50427 -0.00146484 2.54507 -0.00146484C3.17307 -0.00146484 3.74507 0.251035 4.17227 0.663535L4.17067 0.661868C4.58267 1.07604 4.83867 1.65603 4.83867 2.29853V2.33353V2.33187V2.3302ZM20.0883 12.2635V20.0002H15.7859V12.7794C15.7899 12.7135 15.7915 12.6369 15.7915 12.5602C15.7915 11.8135 15.5923 11.116 15.2459 10.521L15.2555 10.5385C14.9139 10.0419 14.3619 9.7227 13.7387 9.7227C13.6907 9.7227 13.6427 9.72437 13.5947 9.72853H13.6011C13.5795 9.7277 13.5547 9.72687 13.5299 9.72687C13.0339 9.72687 12.5779 9.90437 12.2171 10.2019L12.2219 10.1985C11.8595 10.5044 11.5755 10.8952 11.3963 11.3444L11.3899 11.3635C11.2971 11.6594 11.2443 11.9994 11.2443 12.3527C11.2443 12.3927 11.2451 12.4327 11.2467 12.4727V12.4669V20.0019H6.94427C6.96187 16.378 6.97067 13.4396 6.97067 11.1869C6.97067 8.93409 6.9664 7.58992 6.95787 7.15437L6.94507 6.5002H11.2475V8.46187H11.2211C11.3923 8.17437 11.5691 7.9252 11.7635 7.69187L11.7571 7.69937C11.9819 7.44187 12.2235 7.20937 12.4835 7.00103L12.4963 6.99103C12.8195 6.73187 13.1987 6.52853 13.6099 6.40437L13.6339 6.39853C14.0643 6.26437 14.5595 6.18687 15.0715 6.18687H15.1347H15.1315C15.1883 6.18437 15.2547 6.1827 15.3211 6.1827C16.6659 6.1827 17.8771 6.7777 18.7259 7.72937L18.7283 7.7327C19.636 8.76381 20.0899 10.2738 20.0899 12.2627L20.0883 12.2635Z" fill="currentColor" />
+    </g>
+    <defs>
+        <clipPath id="clip0">
+            <rect width="20" height="20" fill="currentColor" />
+        </clipPath>
+    </defs>
+</svg>    </a>
+    <a class="btn btn-outline-secondary" href="https://reddit.com/submit?url=https%3A%2F%2Frewind.com%2Fblog%2Fbest-practices-for-reviewing-pull-requests-in-github%2F%3Frworig%3Dsocial&title=Best+Practices+for+Reviewing+Pull+Requests+in+GitHub" onclick="window.open(this.href, 'redditwindow','left=20,top=20,width=600,height=700,toolbar=0,resizable=1'); return false;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-reddit" viewBox="0 0 16 16">
+  <path d="M6.167 8a.831.831 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661zm1.843 3.647c.315 0 1.403-.038 1.976-.611a.232.232 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83.458 0 .83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.203.203 0 0 0-.153.028.186.186 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224c-.02.115-.029.23-.029.353 0 1.795 2.091 3.256 4.669 3.256 2.577 0 4.668-1.451 4.668-3.256 0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165z"/>
+</svg>    </a>
+</div>
+    <hr>
+
+    
+        <div class="author-box">
+
+        <div class="d-flex flex-wrap mt-md-3">
+            <figure class="block-avatar me-3">
+                <img src="https://secure.gravatar.com/avatar/3363b9640ba4e1f2ba6fa331b344b8dbcc410e30b7dc8ff83fa9c0c9d21ebf3d?s=80&d=identicon&r=g" alt="Profile picture of <a class="text-dark" href="https://rewind.com/blog/author/piero-borrelli/">Piero Borrelli</a>">
+            </figure>
+            <div class="author-info col-md-10">
+                <h5><a class="text-dark" href="https://rewind.com/blog/author/piero-borrelli/">Piero Borrelli</a></h5>
+                <div class="body-text">
+                    Software developer for the Wi-Fi industry. Coding educator for the Stackademic initiative. Burning keyboards with JavaScript code.                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="relatedPosts" class="related-posts mt-5 bg-blue-light py-3 py-lg-4">
+            <div class="container">
+                
+<div class="row">
+    <div class="mb-4 col-12">
+        <p class="fw-bold has-secondary-color has-text-color has-small-font-size">On the blog</p>
+        <h3>Read next on Engineering</h3>
+    </div>
+</div>
+
+
+    <ul class="list-unstyled row row-cols-lg-3 row-cols-1 row-cols-md-2">
+                    <li class="col mb-1 mb-lg-2">
+                        <a href="https://rewind.com/reviews/" target="_self" class="w-100 rounded-corners-md btn btn-outline-secondary py-lg-2 text-smaller"  >Reviews & testimonials</a>
+                </li>
+                    <li class="col mb-1 mb-lg-2">
+                        <a href="https://security.rewind.com/" target="_blank" class="w-100 rounded-corners-md btn btn-outline-secondary py-lg-2 text-smaller"  >Data & security portal</a>
+                </li>
+                    <li class="col mb-1 mb-lg-2">
+                        <a href="https://knowledge.rewind.com/s/" target="_blank" class="w-100 rounded-corners-md btn btn-outline-secondary py-lg-2 text-smaller"  >Documentation</a>
+                </li>
+                    <li class="col mb-1 mb-lg-2">
+                        <a href="https://rewind.com/blog/resource_type/case-studies/" target="_self" class="w-100 rounded-corners-md btn btn-outline-secondary py-lg-2 text-smaller"  >Case studies</a>
+                </li>
+                    <li class="col mb-1 mb-lg-2">
+                        <a href="https://rewind.com/pricing/" target="_self" class="w-100 rounded-corners-md btn btn-outline-secondary py-lg-2 text-smaller"  >Pricing information</a>
+                </li>
+                    <li class="col mb-1 mb-lg-2">
+                        <a href="https://rewind.com/legal/terms-of-service/" target="_self" class="w-100 rounded-corners-md btn btn-outline-secondary py-lg-2 text-smaller"  >Terms of service</a>
+                </li>
+            </ul>
+    <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-3 d-flex">
+                
+<div class="card card--posts w-100 " >
+
+        <a class="card-image" href="https://rewind.com/blog/vulnerability-triage-automation-how-nurse-betty-keeps-rewind-secure/">
+        <img width="1024" height="576" src="https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-1024x576.png" class="img-fluid wp-post-image" alt="" decoding="async" srcset="https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-1024x576.png 1024w, https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-300x169.png 300w, https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-768x432.png 768w, https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-1536x864.png 1536w, https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-2048x1152.png 2048w, https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-420x236.png 420w, https://rewind.com/wp-content/uploads/2025/09/Banner-1920x1080-1-32x18.png 32w" sizes="(max-width: 1024px) 100vw, 1024px" />
+        <div class="visually-hidden">
+            Click to read the post        </div>
+    </a>
+
+    <div class="card-body">
+
+        
+        <h2 class="card-title title-p"><a class="text-dark" href="https://rewind.com/blog/vulnerability-triage-automation-how-nurse-betty-keeps-rewind-secure/">Vulnerability triage automation: How Nurse Betty keeps Rewind secure</a></h2>
+
+        
+                <a href="https://rewind.com/blog/vulnerability-triage-automation-how-nurse-betty-keeps-rewind-secure/" target="_self" class="card-btn btn btn-link btn-sm"  >Read more</a>
+    
+        <div class="product-img-wrapper platform-wrapper">
+
+            
+        </div>
+
+
+    </div>
+</div>            </div>
+                    <div class="col-md-6 col-lg-4 mb-3 d-flex">
+                
+<div class="card card--posts w-100 " >
+
+        <a class="card-image" href="https://rewind.com/blog/how-we-removed-60-billion-objects-from-s3/">
+        <img width="1024" height="576" src="https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-1024x576.png" class="img-fluid wp-post-image" alt="" decoding="async" srcset="https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-1024x576.png 1024w, https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-300x169.png 300w, https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-768x432.png 768w, https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-1536x864.png 1536w, https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-2048x1152.png 2048w, https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-420x236.png 420w, https://rewind.com/wp-content/uploads/2025/06/BlogHeader-1920x1080@2x-32x18.png 32w" sizes="(max-width: 1024px) 100vw, 1024px" />
+        <div class="visually-hidden">
+            Click to read the post        </div>
+    </a>
+
+    <div class="card-body">
+
+        
+        <h2 class="card-title title-p"><a class="text-dark" href="https://rewind.com/blog/how-we-removed-60-billion-objects-from-s3/">How we removed 60 billion objects from S3 without breaking the bank (or S3)</a></h2>
+
+        
+                <a href="https://rewind.com/blog/how-we-removed-60-billion-objects-from-s3/" target="_self" class="card-btn btn btn-link btn-sm"  >Read more</a>
+    
+        <div class="product-img-wrapper platform-wrapper">
+
+            
+        </div>
+
+
+    </div>
+</div>            </div>
+                    <div class="col-md-6 col-lg-4 mb-3 d-flex">
+                
+<div class="card card--posts w-100 " >
+
+        <a class="card-image" href="https://rewind.com/blog/recovering-a-deleted-github-repository/">
+        <img width="1024" height="576" src="https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-1024x576.png" class="img-fluid wp-post-image" alt="Primarily decorative image that shows a simple graphical representation of the GitHub logo on a screen with cog icons and arrows surrounding it. Intended to convey the idea of recovering a deleted GitHub repository" decoding="async" srcset="https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-1024x576.png 1024w, https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-300x169.png 300w, https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-768x432.png 768w, https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-1536x864.png 1536w, https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-2048x1152.png 2048w, https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-420x236.png 420w, https://rewind.com/wp-content/uploads/2025/05/GithubRepoRecovery-Blog-1920x1080-1-32x18.png 32w" sizes="(max-width: 1024px) 100vw, 1024px" />
+        <div class="visually-hidden">
+            Click to read the post        </div>
+    </a>
+
+    <div class="card-body">
+
+        
+        <h2 class="card-title title-p"><a class="text-dark" href="https://rewind.com/blog/recovering-a-deleted-github-repository/">Recover a deleted GitHub repository</a></h2>
+
+        
+                <a href="https://rewind.com/blog/recovering-a-deleted-github-repository/" target="_self" class="card-btn btn btn-link btn-sm"  >Read more</a>
+    
+        <div class="product-img-wrapper platform-wrapper">
+
+            
+                                    <img width="40" height="40" src="https://rewind.com/wp-content/themes/rewind-theme/assets/img/logos/platform-icons/platform-icons-github.svg" alt="GitHub backups by Rewind" class="img-fluid icon-logo icon--github">
+                
+            
+        </div>
+
+
+    </div>
+</div>            </div>
+            </div>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+
+
+
+
+		<footer id="main-footer" class="main-footer">
+
+			<section id="footer-nav">
+				<div class="container-fluid container--footer overflow-hidden">
+					<div class="row justify-content-between row--footer-top">
+														<aside class="col-lg-auto col-6">
+									<div id="nav_menu-2" class="widget widget_nav_menu main-footer__col-1"><h4 class="widget__title">Products</h4><div class="menu-footer-products-container"><ul id="menu-footer-products" class="menu"><li id="menu-item-87690" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-87690"><a href="https://rewind.com/products/#integrations">All App Integrations</a></li>
+<li id="menu-item-79693" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79693"><a href="https://rewind.com/products/backups/shopify/">Backups for Shopify</a></li>
+<li id="menu-item-91161" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-91161"><a href="https://rewind.com/products/protection-suite/">Protection Suite for Shopify</a></li>
+<li id="menu-item-79694" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79694"><a href="https://rewind.com/products/backups/bigcommerce/">Backups for BigCommerce</a></li>
+<li id="menu-item-84300" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-84300"><a href="https://rewind.com/products/backups/quickbooks-online/">Backups for QuickBooks Online</a></li>
+<li id="menu-item-86970" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-86970"><a href="https://rewind.com/products/backups/github/">Backups for GitHub</a></li>
+<li id="menu-item-88168" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88168"><a href="https://rewind.com/products/backups/confluence/">Backups for Confluence</a></li>
+<li id="menu-item-100049" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-100049"><a href="https://rewind.com/products/backups/monday/">Backups for monday.com</a></li>
+<li id="menu-item-79696" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79696"><a href="https://rewind.com/products/backups/trello/">Backups for Trello</a></li>
+<li id="menu-item-86969" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-86969"><a href="https://rewind.com/products/backups/jira/">Backups for Jira</a></li>
+<li id="menu-item-88847" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88847"><a href="https://rewind.com/products/backups/bitbucket/">Backups for Bitbucket</a></li>
+<li id="menu-item-93658" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93658"><a href="https://rewind.com/products/backups/klaviyo/">Backups for Klaviyo</a></li>
+<li id="menu-item-93773" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-93773"><a href="https://rewind.com/products/backups/mailchimp/">Backups for Mailchimp</a></li>
+</ul></div></div>								</aside>
+														<aside class="col-lg-auto col-6">
+									<div id="nav_menu-3" class="widget widget_nav_menu main-footer__col-2"><h4 class="widget__title">Resources</h4><div class="menu-footer-resources-container"><ul id="menu-footer-resources" class="menu"><li id="menu-item-79683" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79683"><a href="https://rewind.com/resources/">Resource Library</a></li>
+<li id="menu-item-79684" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79684"><a target="_blank" href="https://calc.rewind.com/ecommerce-downtime">Downtime Cost Calculator</a></li>
+<li id="menu-item-79686" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79686"><a href="https://rewind.com/blog/resource_type/case-studies/">Case Studies</a></li>
+<li id="menu-item-95784" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-95784"><a href="https://rewind.com/events/">Events</a></li>
+<li id="menu-item-79687" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79687"><a href="https://rewind.com/blog/">Blog</a></li>
+<li id="menu-item-79688" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79688"><a href="https://rewind.com/pricing/">Pricing</a></li>
+<li id="menu-item-79689" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79689"><a target="_blank" href="https://help.rewind.com/hc/en-us">Help Center</a></li>
+</ul></div></div>								</aside>
+														<aside class="col-lg-auto col-6">
+									<div id="nav_menu-6" class="widget widget_nav_menu main-footer__col-3"><h4 class="widget__title">Company</h4><div class="menu-footer-company-container"><ul id="menu-footer-company" class="menu"><li id="menu-item-86352" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-86352"><a href="https://rewind.com/about-us/">About</a></li>
+<li id="menu-item-79675" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79675"><a href="https://rewind.com/about-us/#leadershipteam">Leadership</a></li>
+<li id="menu-item-79676" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79676"><a href="https://rewind.com/careers/">Careers</a></li>
+<li id="menu-item-79678" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79678"><a href="https://rewind.com/contact/">Contact us</a></li>
+<li id="menu-item-96723" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-96723"><a href="https://rewind.com/trust/">Trust center</a></li>
+<li id="menu-item-79679" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79679"><a target="_blank" href="https://status.rewind.com/">Status</a></li>
+<li id="menu-item-79680" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-79680"><a href="https://rewind.com/legal/compliance-resources/">Privacy and compliance</a></li>
+<li id="menu-item-88592" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88592"><a href="https://rewind.com/legal/cookie-policy/">Cookie policy</a></li>
+<li id="menu-item-79681" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79681"><a target="_blank" href="https://help.rewind.com/hc/en-us/articles/28787207671451-Product-Changelog">Product changelog</a></li>
+</ul></div></div>								</aside>
+														<aside class="col-lg-auto col-6">
+									<div id="block-2" class="widget widget_block main-footer__col-4">
+<h4 class="wp-block-heading widget__title text-dark" id="contact">Contact</h4>
+</div><div id="block-3" class="widget widget_block widget_text main-footer__col-4">
+<p>General: <a class="text-secondary" href="mailto:team@rewind.com">team@rewind.com</a></p>
+</div><div id="block-4" class="widget widget_block widget_text main-footer__col-4">
+<p><strong>Questions about our plans?<br></strong>Contact sales at:<br><a class="text-secondary" href="mailto:sales@rewind.com">sales@rewind.com</a></p>
+</div><div id="block-5" class="widget widget_block main-footer__col-4"><p><a class="ps-0 btn btn-link btn-sm" href="https://rewind.com/contact/">Contact us</a></p></div><div id="block-6" class="widget widget_block main-footer__col-4">
+<div id="rw-address-block-block_3e438c448b8f417f72992e0ad511e592" class="rw-block rw-block--address">
+    <p><strong>Ottawa:</strong> <br />
+333 Preston Street, Suite 200 <br />
+Ottawa, ON, K1S 5N4<br /><br />
+
+
+<strong>Toronto:</strong><br />
+214 King St W, Suite 504<br />
+Toronto, ON M5H 3S6<br /><br />
+
+<strong>Vancouver:</strong><br />
+675 West Hastings St, Suite 810<br />
+Vancouver, BC V6B 1N2
+</p>
+</div></div>								</aside>
+														<aside class="col-lg-auto col-6">
+									<div id="nav_menu-7" class="widget widget_nav_menu main-footer__col-5"><h4 class="widget__title">Support</h4><div class="menu-footer-help-support-container"><ul id="menu-footer-help-support" class="menu"><li id="menu-item-79701" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79701"><a target="_blank" href="https://knowledge.rewind.com/s/">Help for Backups</a></li>
+<li id="menu-item-79702" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79702"><a target="_blank" href="https://knowledge.rewind.com/s/topic/0TOJA00000000If4AI/shopify">Help for Protection Suite</a></li>
+<li id="menu-item-79703" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-79703"><a href="https://rewind.com/category/backups-faq/">FAQ</a></li>
+</ul></div></div>								</aside>
+											</div>
+					<div class="row row--footer-bottom justify-content-center justify-content-lg-between">
+						<div class="col-12 col-sm-8 col-lg-4 mb-3 mb-lg-0 d-flex justify-content-center d-lg-block">
+							<a rel="home" href="https://rewind.com/" itemprop="url" aria-label="Rewind Logo - Footer">        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="34" viewBox="0 0 120 34" fill="none">
+            <g clip-path="url(#clip0)" class="logotext">
+                <path class="logo-letter" d="M32.049 26.3445C32.0092 26.0922 31.9893 25.5488 31.9893 24.7142V15.7477C32.2879 15.2916 32.6512 14.9277 33.0792 14.656C33.5172 14.3745 33.9452 14.2338 34.3632 14.2338C35.4581 14.2338 36.1798 14.5347 36.5282 15.1363L36.5879 15.0926L36.8566 11.177C36.3191 10.9539 35.5826 10.8423 34.6469 10.8423C33.7212 10.8423 32.8353 11.3129 31.9893 12.2542C31.9893 12.2542 31.9893 12.438 31.9893 11.7857C31.9893 11.1334 31.2 11.1334 31.2 11.1334H27.3778C27.3778 11.3524 28.3313 11.1334 28.3313 13.6056C28.3313 16.0777 28.3313 26.3445 28.3313 26.3445H32.049Z" fill="#373F41"></path>
+                <path class="logo-letter" fill-rule="evenodd" clip-rule="evenodd" d="M38.5289 15.704C38.1307 16.6744 37.9316 17.7273 37.9316 18.8627C37.9316 21.114 38.7628 22.9627 40.425 24.4086C42.0773 25.8448 44.1676 26.5629 46.6959 26.5629C47.1537 26.5629 47.6315 26.5338 48.1292 26.4755C49.8213 26.2814 51.0456 25.9321 51.8021 25.4275L51.9664 23.1567C51.9962 22.7298 52.0211 22.3125 52.041 21.9049C51.8917 22.0311 51.6677 22.1669 51.3691 22.3125C50.2344 22.8656 48.8757 23.1422 47.2931 23.1422C45.7801 23.1422 44.5508 22.8559 43.6052 22.2834C42.6596 21.7011 42.0574 20.8908 41.7986 19.8525H47.0542C50.11 19.8525 52.1356 19.7166 53.1309 19.4449C53.2504 19.1635 53.3101 18.6395 53.3101 17.8729C53.3101 15.8738 52.678 14.2144 51.4139 12.8947C50.1299 11.5264 48.4278 10.8423 46.3077 10.8423C43.7993 10.8423 41.7688 11.6137 40.216 13.1567C39.4894 13.8845 38.927 14.7336 38.5289 15.704ZM45.8448 13.899C47.7659 13.899 48.9305 14.9422 49.3386 17.0286C49.0798 17.048 48.7861 17.0626 48.4577 17.0723L47.2334 17.1159C46.7456 17.1256 46.248 17.1305 45.7403 17.1305H44.8893C44.5508 17.1305 44.1975 17.1256 43.8292 17.1159H42.7243C42.376 17.1062 42.0823 17.0965 41.8434 17.0868C41.9728 16.621 42.157 16.1941 42.3959 15.8059C43.1822 14.5347 44.3319 13.899 45.8448 13.899Z" fill="#373F41"></path>
+                <path class="logo-letter" d="M54.4747 11.1334H58.491L61.2681 22.065L64.2542 11.1334H67.6882L70.7789 22.2979L73.5559 11.1334H77.1691L72.5705 26.3445H68.7035L65.7473 16.3736L63 26.3445H59.1629L54.4747 11.1334Z" fill="#373F41"></path>
+                <g class="logo-letter">
+                    <path d="M83.007 26.3445C82.9672 26.0922 82.9473 25.5488 82.9473 24.7142V11.1334H79.2146V26.3445H83.007Z" fill="#373F41"></path>
+                    <path d="M81.1556 8.83927C82.5302 8.83927 83.6445 7.7529 83.6445 6.4128C83.6445 5.0727 82.5302 3.98633 81.1556 3.98633C79.781 3.98633 78.6667 5.0727 78.6667 6.4128C78.6667 7.7529 79.781 8.83927 81.1556 8.83927Z" fill="#373F41"></path>
+                </g>
+                <path class="logo-letter" d="M91.0994 24.4813C91.0994 25.3353 91.1392 25.9564 91.2188 26.3445H87.4712V11.1334H91.0994V12.4289C92.4132 11.3711 93.8167 10.8423 95.3098 10.8423C96.9422 10.8423 98.2461 11.3857 99.2216 12.4725C100.197 13.5497 100.685 14.9713 100.685 16.7375V22.5308C100.685 24.1708 100.71 25.1558 100.759 25.4857C100.809 25.8157 100.874 26.0291 100.954 26.1262C101.043 26.2232 101.118 26.3106 101.177 26.3882L101.148 26.4464C100.341 26.3785 99.7541 26.3445 99.3858 26.3445H98.3407C98.0222 26.3445 97.5941 26.3591 97.0566 26.3882V18.4551C97.0566 15.6118 96.1708 14.1902 94.399 14.1902C93.0851 14.1902 91.9852 14.85 91.0994 16.1698V24.4813Z" fill="#373F41"></path>
+                <path class="logo-letter" fill-rule="evenodd" clip-rule="evenodd" d="M111.972 26.5629C113.236 26.5629 114.501 26.2184 115.765 25.5294C116.083 25.9467 116.501 26.2912 117.019 26.5629L119.826 24.1465C119.587 23.9816 119.388 23.8069 119.229 23.6225C119.079 23.4382 118.94 23.147 118.81 22.7492C118.691 22.3513 118.631 21.507 118.631 20.2164V4.65591H114.973V11.1334C114.237 10.9393 113.485 10.8423 112.719 10.8423C110.22 10.8423 108.17 11.6186 106.567 13.1712C104.975 14.7045 104.179 16.6259 104.179 18.9355C104.179 21.1674 104.865 22.9821 106.239 24.3794C106.906 25.0587 107.712 25.5925 108.658 25.9806C109.603 26.3688 110.708 26.5629 111.972 26.5629ZM114.973 22.7492C114.277 23.0597 113.51 23.215 112.674 23.215C111.071 23.215 109.842 22.7734 108.986 21.8904C108.19 21.0655 107.792 19.9592 107.792 18.5716C107.792 17.3003 108.23 16.2668 109.106 15.4711C109.524 15.0926 110.021 14.7967 110.599 14.5832C111.186 14.3697 111.888 14.2629 112.704 14.2629C113.52 14.2629 114.277 14.4037 114.973 14.6851V22.7492Z" fill="#373F41"></path>
+            </g>
+            <g clip-path="url(#clip1)" class="boomerang">
+                <path d="M17.1867 28.8514C17.1867 28.8514 10.8732 21.7116 9.09755 17.3275C7.69456 13.8829 6.92729 10.146 6.88345 6.26294C-2.54293 15.4069 -2.30179 17.0979 7.76032 26.7011C18.7651 37.1603 21.5491 32.985 17.1867 28.8514Z" fill="#F7C20F"></path>
+                <path d="M19.1597 1.41905C19.1597 -0.564224 14.8411 -0.668607 11.1363 2.25412C10.4348 2.79691 8.68105 4.50879 8.68105 4.50879C8.65913 4.96808 8.63721 5.44824 8.63721 5.90752C8.63721 8.97639 9.11949 11.9409 10.0402 14.7383C11.6624 10.8553 14.0738 7.36889 17.099 4.44616C18.6336 2.9848 19.1597 2.46288 19.1597 1.41905Z" fill="#F7C20F"></path>
+            </g>
+            <defs>
+                <clipPath id="clip0">
+                    <rect width="120" height="33.2773" fill="white"></rect>
+                </clipPath>
+                <clipPath id="clip1">
+                    <rect width="19.1597" height="33.2773" fill="white"></rect>
+                </clipPath>
+            </defs>
+        </svg>
+    </a>
+						</div>
+						<div class="col-12 col-sm-8 col-lg-4 mb-3 mb-lg-0">
+															<aside>
+									<div id="block-21" class="widget widget_block widget_text">
+<p class="has-text-align-center">© 2015-2026 Rewind Software Inc.<br><a href="https://rewind.com/legal/terms-of-service/">Terms of Service</a> / <a href="https://rewind.com/legal/privacy-notice/">Privacy Notice</a><br>Rewind is a registered trademark of Rewind Software Inc.</p>
+</div>								</aside>
+													</div>
+						<div class="col-12 col-sm-8 col-lg-4 mb-3 mb-lg-0">
+															<aside>
+									<div id="block-20" class="widget widget_block">
+<div id="rw-social-block-block_e79db20b8f9696bc1421dc409dac1932" class="rw-block rw-block--social social-icons">
+    <div class="d-flex justify-content-center justify-content-lg-end">
+                    <a href="https://www.facebook.com/rewind.backups" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" loading="lazy" src="https://rewind.com/wp-content/uploads/2020/11/facebook.svg" width="35" height="35" alt="facebook icon" class="alignnone size-medium">
+            </a>
+                    <a href="https://www.instagram.com/rewind.backups/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" loading="lazy" src="https://rewind.com/wp-content/uploads/2020/11/instagram.svg" width="35" height="35" alt="instagram icon" class="alignnone size-medium">
+            </a>
+                    <a href="https://www.linkedin.com/company/rewind.io/" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" loading="lazy" src="https://rewind.com/wp-content/uploads/2020/11/linkedin.svg" width="35" height="35" alt="linkedin icon" class="alignnone size-medium">
+            </a>
+                    <a href="https://www.youtube.com/channel/UCnkocd_3V3y5CSNzaBXJFzw/videos" target="_blank" rel="noopener noreferrer">
+                <img loading="lazy" decoding="async" loading="lazy" src="https://rewind.com/wp-content/uploads/2020/11/youtube.svg" width="35" height="35" alt="youtube icon" class="alignnone size-medium">
+            </a>
+            </div>
+</div></div>								</aside>
+													</div>
+					</div>
+				</div>
+			</section>
+
+
+		</footer> <!-- #main-footer -->
+
+
+
+
+<div class="modal-area">
+	</div>
+<!-- Pop-up forms codes -->
+
+<!-- Hubspot forms js -->
+<!--[if lte IE 8]>
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
+<![endif]-->
+<script data-cookieconsent="ignore" charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+<script data-cookieconsent="ignore">
+	! function(t, e) {
+		"use strict";
+		t = t || "docReady";
+		var n = [],
+			o = !1,
+			d = !1;
+
+		function a() {
+			if (!o) {
+				o = !0;
+				for (var t = 0; t < n.length; t++) n[t].fn.call(window, n[t].ctx);
+				n = []
+			}
+		}
+
+		function c() {
+			"complete" === document.readyState && a()
+		}(e = e || window)[t] = function(t, e) {
+			if ("function" != typeof t) throw new TypeError("callback for docReady(fn) must be a function");
+			o ? setTimeout(function() {
+				t(e)
+			}, 1) : (n.push({
+				fn: t,
+				ctx: e
+			}), "complete" === document.readyState || !document.attachEvent && "interactive" === document.readyState ? setTimeout(a, 1) : d || (document.addEventListener ? (document.addEventListener("DOMContentLoaded", a, !1), window.addEventListener("load", a, !1)) : (document.attachEvent("onreadystatechange", c), window.attachEvent("onload", a)), d = !0))
+		}
+	}("docReady", window);
+	! function(e, t) {
+		"object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : e.MicroModal = t()
+	}(this, function() {
+		"use strict";
+		var e, t, i, o, n, a = function(e, t) {
+				if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			},
+			r = function() {
+				function e(e, t) {
+					for (var i = 0; i < t.length; i++) {
+						var o = t[i];
+						o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, o.key, o)
+					}
+				}
+				return function(t, i, o) {
+					return i && e(t.prototype, i), o && e(t, o), t
+				}
+			}(),
+			s = function(e) {
+				if (Array.isArray(e)) {
+					for (var t = 0, i = Array(e.length); t < e.length; t++) i[t] = e[t];
+					return i
+				}
+				return Array.from(e)
+			};
+		return e = ["a[href]", "area[href]", "input:not([disabled]):not([aria-hidden])", "select:not([disabled]):not([aria-hidden])", "textarea:not([disabled]):not([aria-hidden])", "button:not([disabled]):not([aria-hidden])", "iframe", "object", "embed", "[contenteditable]", NaN], t = function() {
+			function t(e) {
+				var i = e.targetModal,
+					o = e.triggers,
+					n = void 0 === o ? [] : o,
+					r = e.onShow,
+					l = void 0 === r ? function() {} : r,
+					d = e.onClose,
+					c = void 0 === d ? function() {} : d,
+					u = e.openTrigger,
+					h = void 0 === u ? "data-micromodal-trigger" : u,
+					f = e.closeTrigger,
+					v = void 0 === f ? "data-micromodal-close" : f,
+					g = e.disableScroll,
+					m = void 0 !== g && g,
+					b = e.disableFocus,
+					y = void 0 !== b && b,
+					k = e.awaitCloseAnimation,
+					p = void 0 !== k && k,
+					w = e.debugMode,
+					E = void 0 !== w && w;
+				a(this, t), this.modal = document.getElementById(i), this.config = {
+					debugMode: E,
+					disableScroll: m,
+					openTrigger: h,
+					closeTrigger: v,
+					onShow: l,
+					onClose: c,
+					awaitCloseAnimation: p,
+					disableFocus: y
+				}, n.length > 0 && this.registerTriggers.apply(this, s(n)), this.onClick = this.onClick.bind(this), this.onKeydown = this.onKeydown.bind(this)
+			}
+			return r(t, [{
+				key: "registerTriggers",
+				value: function() {
+					for (var e = this, t = arguments.length, i = Array(t), o = 0; o < t; o++) i[o] = arguments[o];
+					i.forEach(function(t) {
+						t.addEventListener("click", function() {
+							return e.showModal()
+						})
+					})
+				}
+			}, {
+				key: "showModal",
+				value: function() {
+					this.activeElement = document.activeElement, this.modal.setAttribute("aria-hidden", "false"), this.modal.classList.add("is-open"), this.setFocusToFirstNode(), this.scrollBehaviour("disable"), this.addEventListeners(), this.config.onShow(this.modal)
+				}
+			}, {
+				key: "closeModal",
+				value: function() {
+					var e = this.modal;
+					this.modal.setAttribute("aria-hidden", "true"), this.removeEventListeners(), this.scrollBehaviour("enable"), this.activeElement.focus(), this.config.onClose(this.modal), this.config.awaitCloseAnimation ? this.modal.addEventListener("animationend", function t() {
+						e.classList.remove("is-open"), e.removeEventListener("animationend", t, !1)
+					}, !1) : e.classList.remove("is-open")
+				}
+			}, {
+				key: "scrollBehaviour",
+				value: function(e) {
+					if (this.config.disableScroll) {
+						var t = document.querySelector("body");
+						switch (e) {
+							case "enable":
+								Object.assign(t.style, {
+									overflow: "initial",
+									height: "initial"
+								});
+								break;
+							case "disable":
+								Object.assign(t.style, {
+									overflow: "hidden",
+									height: "100vh"
+								})
+						}
+					}
+				}
+			}, {
+				key: "addEventListeners",
+				value: function() {
+					this.modal.addEventListener("touchstart", this.onClick), this.modal.addEventListener("click", this.onClick), document.addEventListener("keydown", this.onKeydown)
+				}
+			}, {
+				key: "removeEventListeners",
+				value: function() {
+					this.modal.removeEventListener("touchstart", this.onClick), this.modal.removeEventListener("click", this.onClick), document.removeEventListener("keydown", this.onKeydown)
+				}
+			}, {
+				key: "onClick",
+				value: function(e) {
+					e.target.hasAttribute(this.config.closeTrigger) && (this.closeModal(), e.preventDefault())
+				}
+			}, {
+				key: "onKeydown",
+				value: function(e) {
+					27 === e.keyCode && this.closeModal(e), 9 === e.keyCode && this.maintainFocus(e)
+				}
+			}, {
+				key: "getFocusableNodes",
+				value: function() {
+					var t = this.modal.querySelectorAll(e);
+					return Object.keys(t).map(function(e) {
+						return t[e]
+					})
+				}
+			}, {
+				key: "setFocusToFirstNode",
+				value: function() {
+					if (!this.config.disableFocus) {
+						var e = this.getFocusableNodes();
+						e.length && e[0].focus()
+					}
+				}
+			}, {
+				key: "maintainFocus",
+				value: function(e) {
+					var t = this.getFocusableNodes();
+					if (this.modal.contains(document.activeElement)) {
+						var i = t.indexOf(document.activeElement);
+						e.shiftKey && 0 === i && (t[t.length - 1].focus(), e.preventDefault()), e.shiftKey || i !== t.length - 1 || (t[0].focus(), e.preventDefault())
+					} else t[0].focus()
+				}
+			}]), t
+		}(), i = null, o = function(e) {
+			if (!document.getElementById(e)) return 0
+		}, n = function(e, t) {
+			if (function(t) {
+					if (e.length <= 0);
+				}(), !t) return !0;
+			for (var i in t) o(i);
+			return !0
+		}, {
+			init: function(e) {
+				var i, o, a, r = Object.assign({}, {
+						openTrigger: "data-micromodal-trigger"
+					}, e),
+					l = [].concat(s(document.querySelectorAll("[" + r.openTrigger + "]"))),
+					d = (i = l, o = r.openTrigger, a = [], i.forEach(function(e) {
+						var t = e.attributes[o].value;
+						void 0 === a[t] && (a[t] = []), a[t].push(e)
+					}), a);
+				if (!0 !== r.debugMode || !1 !== n(l, d))
+					for (var c in d) {
+						var u = d[c];
+						r.targetModal = c, r.triggers = [].concat(s(u)), new t(r)
+					}
+			},
+			show: function(e, n) {
+				var a = n || {};
+				a.targetModal = e, !0 === a.debugMode && !1 === o(e) || (i = new t(a)).showModal()
+			},
+			close: function() {
+				i.closeModal()
+			}
+		}
+	}), docReady(function() {
+		MicroModal.init({
+			openTrigger: "data-micromodal-open",
+			closeTrigger: "data-micromodal-close",
+			disableScroll: !0,
+			disableFocus: !1,
+			awaitCloseAnimation: !1,
+			debugMode: !1
+		});
+	});
+</script>
+<!-- End of HubSpot code snippet -->
+
+
+<script>
+	window.adaSettings = {
+		handle: "rewind",
+		cluster: "maple",
+		chatterTokenCallback: (event) => {
+			// perform action after conversation has been ended by the chatter
+			const gtmDataToPush = {
+				event: "rewind-chat-started"
+			}
+
+			if (typeof window.dataLayer !== 'undefined') {
+				window.dataLayer.push(gtmDataToPush);
+			}
+		}
+	};
+</script>
+<script
+	id="__ada"
+	data-handle="rewind.maple"
+	src="https://static.ada.support/embed2.js"></script>
+
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/rewind-theme/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+			<script>
+				const lazyloadRunObserver = () => {
+					const lazyloadBackgrounds = document.querySelectorAll( `.e-con.e-parent:not(.e-lazyloaded)` );
+					const lazyloadBackgroundObserver = new IntersectionObserver( ( entries ) => {
+						entries.forEach( ( entry ) => {
+							if ( entry.isIntersecting ) {
+								let lazyloadBackground = entry.target;
+								if( lazyloadBackground ) {
+									lazyloadBackground.classList.add( 'e-lazyloaded' );
+								}
+								lazyloadBackgroundObserver.unobserve( entry.target );
+							}
+						});
+					}, { rootMargin: '200px 0px 200px 0px' } );
+					lazyloadBackgrounds.forEach( ( lazyloadBackground ) => {
+						lazyloadBackgroundObserver.observe( lazyloadBackground );
+					} );
+				};
+				const events = [
+					'DOMContentLoaded',
+					'elementor/lazyload/observe',
+				];
+				events.forEach( ( event ) => {
+					document.addEventListener( event, lazyloadRunObserver );
+				} );
+			</script>
+			<style id='rewind-blocks-risk-mitigation-promo-view-style-inline-css'>
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/risk-mitigation-promo/style.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+@keyframes spin {
+  0% {
+    transform: translatey(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translatey(-50%) rotate(360deg);
+  }
+}
+.mitigation-promo .wheel-of-fortune-promo {
+  height: 160px;
+  margin-top: -30px;
+  overflow: hidden;
+  position: relative;
+}
+.mitigation-promo .wheel-of-fortune-promo:hover img {
+  box-shadow: 0 0 20px rgba(60, 93, 243, 0.9);
+  filter: brightness(1.2);
+}
+.mitigation-promo img {
+  position: absolute;
+  transform: translatey(-50%);
+  left: 0;
+  right: 0;
+  margin: 0px auto;
+  animation: spin 120s linear infinite;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+.mitigation-promo .wheel-of-fortune__indicator {
+  aspect-ratio: 1.2/1;
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  content: "";
+  height: 30px;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/*# sourceMappingURL=style-index.css.map*/
+/*# sourceURL=https://rewind.com/wp-content/plugins/rewind-gutenblocks/build/risk-mitigation-promo/style-index.css */
+</style>
+<script src="https://rewind.com/wp-content/plugins/av-product-slider/assets/noUiSlider/nouislider.min.js?ver=4.2.0" id="noui-script-js"></script>
+<script src="https://rewind.com/wp-content/plugins/av-product-slider/assets/av-rewind-prices.js?ver=4.2.0" id="av-prices-script-js"></script>
+<script id="main-script-js-extra">
+var rwdata = {"ajax_url":"https://rewind.com/wp-admin/admin-ajax.php"};
+//# sourceURL=main-script-js-extra
+</script>
+<script src="https://rewind.com/wp-content/themes/rewind-theme/assets/js/main.min.js?ver=3.3.9" id="main-script-js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://rewind.com/wp-includes/js/wp-emoji-release.min.js?ver=6.9.4"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=https://rewind.com/wp-includes/js/wp-emoji-loader.min.js
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9863f78842b5f2',t:'MTc3ODQxMDMwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+</html>

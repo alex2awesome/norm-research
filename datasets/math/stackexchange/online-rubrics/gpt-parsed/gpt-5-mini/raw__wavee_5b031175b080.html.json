@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_5b031175b080.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17807,
+  "output_tokens": 3264,
+  "elapsed_s": 1410.7458189160097,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI planning researchers and system developers writing SHOP2/HTN domain descriptions (planning-competition participants)",
+    "subtask_short": "developing SHOP2 domain_descriptions",
+    "subtask_description": "Guidance and standards for designing HTN domain descriptions, operators, methods, axioms, and temporal/metric encodings for the SHOP2 planner, plus algorithmic features and optimization strategies used in planning competitions.",
+    "subtask_keywords": [
+      "htn",
+      "shop2",
+      "planning",
+      "domain_design",
+      "temporal_planning",
+      "optimization"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Plan steps in execution order",
+        "description": "SHOP2 generates the steps of each plan in the same order that those steps will later be executed, so it knows the current state at each step of the planning process.",
+        "guidance": "This reduces uncertainty about the world and makes it easy to incorporate expressive power (e.g., axioms, numeric computations, external calls). The planner must generate the leftmost branch fully down to ensure method preconditions are evaluated in the correct state."
+      },
+      {
+        "name": "Support partially-ordered subtasks (interleaving)",
+        "description": "Allow tasks and subtasks to be partially ordered so plans may interleave subtasks from different tasks.",
+        "guidance": "Use keywords :ordered and :unordered and nested combinations to express partial orderings. Partial ordering often makes it possible to specify domain knowledge more intuitively and can enable more efficient planning than total-order encodings."
+      },
+      {
+        "name": "Method structure and semantics",
+        "description": "Each method has a head (the task it decomposes), precondition expressions, and a (partially ordered) set of subtasks; multiple clauses act like an if-then-else sequence of alternatives.",
+        "guidance": "Methods may contain several alternative ways of accomplishing head(m): multiple methods with the same head, multiple satisfying bindings for pre(m), multiple orderings for sub(m), or multiple ways to accomplish subtasks, producing branches in search space. Label clauses for debugging/tracing."
+      },
+      {
+        "name": "Operator format and effects",
+        "description": "Operators are like PDDL operators: a head (name + parameters), a precondition expression, a delete list, and an add list; preconditions/effects may include logical connectives and quantifiers.",
+        "guidance": "Operators can do numeric computations and assignments to local variables. No two operators can have the same name. Operators may include an optional cost expression (default 1); plan cost is the sum of operator costs."
+      },
+      {
+        "name": "Axioms and negation handling",
+        "description": "Axioms are generalized Horn clauses ((:- head tail)) used to infer preconditions not explicitly in the state; negation in tails handled like Prolog (negation-as-failure).",
+        "guidance": "The tail may contain anything allowed in operator or method preconditions (conjunction, disjunction, quantifiers, implications, numeric computations, external calls). Use axioms to encode derived predicates (e.g., enough-fuel)."
+      },
+      {
+        "name": "Use external function calls for complex/numeric computations",
+        "description": "External function calls can be used for numeric evaluations and to access prewritten libraries (e.g., shortest-path graph algorithms).",
+        "guidance": "External functions run faster than encoding algorithms as methods and allow leveraging existing code; use them for computations like distances, fuel computations, and heuristics used in sort-by."
+      },
+      {
+        "name": "Sort variable bindings with :sort-by",
+        "description": "When a method precondition yields multiple variable-binding sets, use (:sort-by var comparator precond) to sort and try the most promising bindings first.",
+        "guidance": "Useful for guiding search and greedy heuristics, especially in optimization problems. Example: (:sort-by ?cost #'< (and ... (cost-of ?a ?c3 ?c1 ?cost))) causes SHOP2 to consider lowest-cost alternatives first."
+      },
+      {
+        "name": "Branch-and-bound optimization",
+        "description": "SHOP2 optionally supports branch-and-bound search to find least-cost plans, with an optional time limit.",
+        "guidance": "Enables improved plan quality at the expense of planning time; if time limit exceeded, returns best plan found so far. Best used when quick domain-specific heuristics are unavailable; may be less useful for well-tailored domains."
+      },
+      {
+        "name": "PDDL operator translation is a starting point, not a final domain",
+        "description": "Automated translation from PDDL to SHOP2 domain descriptions can provide a correct starting point but typically needs hand-modification.",
+        "guidance": "Translated domains are correct but not efficient: must add domain-specific HTN methods and heuristics by hand to achieve good performance and avoid incorrect solutions caused by hand-authoring mistakes."
+      },
+      {
+        "name": "Debugging: tracing methods/operators/axioms",
+        "description": "SHOP2 provides tracing facilities: name clauses and trace them so SHOP2 prints messages when entering/exiting clauses.",
+        "guidance": "Traces can include argument lists, the current state, and success/failure info. Use labels (e.g., Case1/Case2) for clauses to make traces informative during development."
+      },
+      {
+        "name": "Protected conditions and anti-interleaving (:immediate)",
+        "description": "SHOP2 supports protected conditions and an anti-interleaving feature: if a method's subtask ti begins with :immediate, it must be planned immediately after ti-1 without interleaving other tasks.",
+        "guidance": "Use :immediate to guarantee adjacency of subtasks; alternatively, use explicit flags (e.g., available-truck) to protect conditions. The protected-conditions feature exists but was not used in the competition."
+      },
+      {
+        "name": "Design domain-level problem-solving strategy first",
+        "description": "Start domain design by formulating abstract tasks and methods that constitute a reasonable problem-solving strategy (standard operating procedures).",
+        "guidance": "Implement abstract strategy as SHOP2 methods, operators, and axioms. The ability to hand-tailor methods (encode SOPs) can dramatically improve planner performance and sometimes change complexity class of problems."
+      },
+      {
+        "name": "Multi-Timeline Preprocessing (MTP) for temporal domains",
+        "description": "To handle durative/concurrent actions, translate PDDL durative operators into SHOP2 operators that maintain read-time and write-time bookkeeping for dynamic properties.",
+        "guidance": "MTP steps (per operator): add ?start and ?duration parameters; add duration formula assignment; set ?start to max of write-times of properties in preconditions and read-times of properties in effects; for each dynamic property p in effects update write-time(p) to ?start+?duration; for each dynamic property in operator update read-time(p) to max(read-time(p), ?start+?duration). Insert preconditions to prevent illegal overlaps (e.g., forbids overlapping read/write conflicts). Example operators illustrated (refuel, fly, zoom) and explanation of when actions may/cannot overlap."
+      },
+      {
+        "name": "Encoding concurrency/optimization-aware operator costs",
+        "description": "When objective involves minimizing total time under concurrency, operator cost should reflect its marginal effect on the current partial plan (not simply duration).",
+        "guidance": "Example: several boarding actions can be concurrent\u2014first boarding may add tb to total time (cost tb), subsequent concurrent boardings cost 0. A refuel concurrent with boarding has cost max(0, tr - tb). Carefully assign operator costs to capture concurrency effects when using branch-and-bound."
+      },
+      {
+        "name": "Three complementary optimization strategies",
+        "description": "Three approaches to obtaining low-cost plans: (1) structure HTN methods to lead to low-cost plans, (2) use sort-by heuristics to try promising alternatives first (greedy), (3) assign operator costs and use branch-and-bound search.",
+        "guidance": "Approach (1) works when a clear greedy choice exists (e.g., minimize fuel by preferring fly over zoom). (2) is a greedy extension; not guaranteed optimal but often near-optimal and effective in practice. (3) can find optimal solutions but may be computationally expensive; combining approaches is possible. In competition, (2) + good methods often sufficed; branch-and-bound rarely gave significant extra benefit."
+      },
+      {
+        "name": "Handle nondeterministic branching via heuristics",
+        "description": "At nondeterministic branching points (multiple bindings or methods), include heuristics in domain description to guide SHOP2's search toward promising branches.",
+        "guidance": "Heuristics may be encoded with sort-by, ranking/cost computations in preconditions, or by structuring methods. Use external computations if needed to compute heuristics efficiently."
+      },
+      {
+        "name": "Use flags/atoms to manage resource availability",
+        "description": "Model resource constraints and protections using explicit atoms/flags (e.g., (available-truck ?t)) that operators set/clear to prevent conflicting usages.",
+        "guidance": "Alternatively, use protected conditions or anti-interleaving, but flag-based encodings (reserve/free) were convenient and used in examples such as transporting packages with trucks."
+      }
+    ]
+  }
+}

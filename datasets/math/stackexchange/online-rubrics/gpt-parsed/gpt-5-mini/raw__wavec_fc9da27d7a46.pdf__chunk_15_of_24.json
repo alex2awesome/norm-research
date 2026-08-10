@@ -1,0 +1,311 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 15,
+  "n_chunks": 24,
+  "chunk_chars": 39984,
+  "model": "gpt-5-mini",
+  "elapsed_s": 207.14592275000177,
+  "input_tokens": 14753,
+  "output_tokens": 7319,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of PARI/GP (computational number theorists and mathematicians needing linear algebra and number-theory library routines)",
+    "subtask_short": "PARI/GP linear-algebra function reference",
+    "subtask_description": "Reference documentation for PARI/GP library functions (substitution, sums, Taylor, Thue solver, and a large collection of vector/matrix/linear-algebra utilities). Each entry describes purpose, allowed input types, flags/options, algorithmic notes and examples.",
+    "subtask_keywords": [
+      "pari",
+      "library",
+      "linear_algebra",
+      "matrix",
+      "vectors",
+      "number_theory"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "substpol(x, y, z)",
+        "description": "Replace the \u201cvariable\u201d y by the argument z in the polynomial expression x. y may be any polynomial; substitution is done by reducing components of x modulo y - t (t new variable) then substituting t by z.",
+        "guidance": "All types allowed for x; behaves like subst when y is a variable. Examples: substpol(x^4+x^2+1,x^2,y) -> y^2+y+1; substpol(x^4+x^2+1,x^3,y) -> x^2 + y*x + 1. Library syntax: GEN gsubstpol(GEN x, GEN y, GEN z). Note: gdeflate attempts to detect t(x^d) forms and may return NULL if fails."
+      },
+      {
+        "name": "substvec(x, v, w)",
+        "description": "Simultaneously replace each monomial-variable vi in expression x by wi, where v is a vector of degree-1 monomials (variables) and w is a vector of same length.",
+        "guidance": "Substitutions are simultaneous: vi first replaced by new variables, then replaced by wi. Examples: substvec([x,y],[x,y],[y,x]) -> [y,x]; substvec([x,y],[x,y],[y,x+y]) -> [y,x+y] (not [y,2*y]). Library syntax: GEN gsubstvec(GEN x, GEN v, GEN w)."
+      },
+      {
+        "name": "sumformal(f, {v})",
+        "description": "Return a polynomial F in v (vanishing at 0) such that F(b)-F(a)= sum_{v=a+1..b} f(v). If v omitted, sum with respect to main variable. Base ring assumed characteristic zero.",
+        "guidance": "Works by treating f as a polynomial function in v and returning an antiderivative polynomial F (polynomial discrete sum). Examples: sumformal(n) -> 1/2*n^2+1/2*n; sumformal(n^3+n^2+1) -> 1/4*n^4+5/6*n^3+3/4*n^2+7/6*n; library syntax: GEN sumformal(GEN f, long v = -1). Use subst to evaluate at bounds for numeric sums."
+      },
+      {
+        "name": "taylor(x, t, {d = seriesprecision})",
+        "description": "Taylor expansion of x around 0 with respect to variable t to precision d; x can be many types (e.g., rational function). Adds O(t^d) to components (unlike Ser which uses valuation).",
+        "guidance": "Contrasts with Ser (which enforces main-variable priority). Example: taylor(x/(1+y), y, 5) -> (y^4 - y^3 + y^2 - y + 1)*x + O(y^5). Library syntax: GEN tayl(GEN x, long t, long precdl). Be mindful of variable priority and precision-related errors (Ser may error if variable priority wrong)."
+      },
+      {
+        "name": "thue(tnf, a, {sol})",
+        "description": "Return all integer solutions (x,y) of P(x,y)=a where tnf was created by thueinit(P). If tnf computed assuming GRH, results may be conditional (except some cases).",
+        "guidance": "Input may be tnf or polynomial P (then thueinit(P,0) performed implicitly\u2014wasteful for multiple a). If infinite solutions exist, error issued. When tnf computed with GRH assumption, results conditional unless special cases (e.g., a=\u00b11 or reducible P). Examples and demonstration solving x^13-5y^13=-4. Library syntax: GEN thue(GEN tnf, GEN a, GEN sol = NULL). Note: conditionality criteria involve class number h and regulator R estimates."
+      },
+      {
+        "name": "thueinit(P, {flag = 0})",
+        "description": "Initialize the tnf (Thue number field data) for univariate integer polynomial P to be used by thue. flag non-zero requests unconditional certification (no GRH assumption).",
+        "guidance": "If flag=0, uses GRH (faster) and results may be conditional; flag non-zero attempts unconditional certification (slower). Reducible or many cases yield unconditional results even with flag=0. Library syntax: GEN thueinit(GEN P, long flag, long prec)."
+      },
+      {
+        "name": "algdep(x, k, {flag = 0})",
+        "description": "Given real/complex/p-adic x, find an integer-coefficient polynomial of degree \u2264k having x as approximate root (not necessarily irreducible or the 'correct' one).",
+        "guidance": "Internally uses lindep; flag modifies precision/truncation heuristics (flag>0 truncates input). Accuracy of input affects correctness and runtime. Examples show sensitivity to working precision; increasing precision yields correct results. Library syntax: GEN algdep0(GEN x, long k, long flag) or GEN algdep(GEN x, long k). Use subst or polroots to check closeness/roots."
+      },
+      {
+        "name": "charpoly(A, {v = x}, {flag = 5})",
+        "description": "Characteristic polynomial of A with respect to variable v (det(v*I - A)). If A not square, returns characteristic polynomial of multiplication-by-A map if A is scalar-like.",
+        "guidance": "flag selects algorithm: 0 Le Verrier (needs n! invertible, O(n^4)); 1 Lagrange interpolation (O(n^4)); 2 Hessenberg (requires field, O(n^3), prone to coefficient explosion); 3 Berkowitz (division-free, O(n^4), valid over any ring); 4 modular algorithm for integral x; 5 (default) auto-selects best method (Berkowitz generally, except Z or safe fields). Examples and alternate named functions (carhess/carberkowitz/caradj). Library syntax: GEN charpoly0(GEN A, long v = -1, long flag). Advice: stick to default flag."
+      },
+      {
+        "name": "concat(x, {y})",
+        "description": "Concatenate x and y horizontally (matrices) or treat non-vectors/matrices as 1-D vectors; if y omitted, concatenates elements of a row vector/list left-to-right.",
+        "guidance": "Matrices concatenated horizontally (rows unchanged); use transposition or matconcat for vertical concatenation. Empty matrix [;] compatible with any operation; empty vectors are not. Examples show concatenation behaviors and Mat/matconcat shortcuts. Library syntax: GEN concat(GEN x, GEN y = NULL); GEN concat1 as shortcut."
+      },
+      {
+        "name": "forqfvec(v, q, b, expr)",
+        "description": "Iterate expr over all integer vectors v with q(v) \u2264 b, where q is a positive-definite quadratic form (square symmetric matrix).",
+        "guidance": "Formal variable v runs through all such vectors; provides C-level interface variant allowing callback fun(E,v,m) returning 0 to continue or 1 to stop. Example prints vectors for q=[[3,2],[2,3]] and bound 3. Library syntax: void forqfvec0(GEN v, GEN q = NULL, GEN b) and void forqfvec(void *E, long (*fun)(void *, GEN, double), GEN q, GEN b)."
+      },
+      {
+        "name": "lindep(v, {flag = 0})",
+        "description": "Find a small non-trivial integer linear relation among components of vector v; returns empty vector if none found.",
+        "guidance": "For real/complex entries uses floating-point variable-precision LLL; flag=0 uses internal heuristic for accuracy, flag>0 sets accuracy in decimal digits (should be less than true input accuracy). For p-adic or matrix inputs behavior differs (p-adic uses lattice reduction; matrix returns kernel vector). For polynomial/power series inputs finds relation over base field; prefer t_POL inputs to avoid t-adic truncation issues. Example: lindep([sqrt(2),sqrt(3),sqrt(2)+sqrt(3)]) -> [-1,-1,1]. Library syntaxes: GEN lindep0, lindep, lindep2, padic_lindep, Xadic_lindep, deplin for matrices."
+      },
+      {
+        "name": "listcreate()",
+        "description": "Create an empty list (t_LIST).",
+        "guidance": "Obsolete: used to require argument but now ignored; function is redundant and will disappear\u2014use List() instead."
+      },
+      {
+        "name": "listinsert(L, x, n)",
+        "description": "Insert object x at position n in list L (t_LIST).",
+        "guidance": "Complexity O(#L - n + 1) due to shifting elements. Library syntax: GEN listinsert(GEN L, GEN x, long n)."
+      },
+      {
+        "name": "listkill(L)",
+        "description": "Obsolete routine retained for backward compatibility; previously removed list.",
+        "guidance": "Use L = List() instead; local variables cleared automatically on function return. Library syntax: void listkill(GEN L)."
+      },
+      {
+        "name": "listpop(list, {n})",
+        "description": "Remove the n-th element of list (t_LIST); if n omitted or > length, removes last element. Does nothing if list empty.",
+        "guidance": "Runs in time O(#L - n + 1). Library syntax: void listpop(GEN list, long n)."
+      },
+      {
+        "name": "listput(list, x, {n})",
+        "description": "Set n-th element of list to x; if n omitted or > length, append x. You may overwrite existing element (does not change length).",
+        "guidance": "Runs in O(#L) worst-case (reallocation), O(1) amortized; multiple successive listputs cost O(#L) overall. Library syntax: GEN listput(GEN list, GEN x, long n)."
+      },
+      {
+        "name": "listsort(L, {flag = 0})",
+        "description": "Sort a t_LIST in place using universal comparison cmp; ordering same as sets allowing setsearch on a sorted list.",
+        "guidance": "Faster than vecsort since done in-place (no copy); no return value. If flag non-zero, suppress repeated coefficients (deduplicate). Library syntax: void listsort(GEN L, long flag)."
+      },
+      {
+        "name": "matadjoint(M, {flag = 0})",
+        "description": "Compute adjoint matrix (matrix of cofactors) N satisfying M*N = det(M)*Id for square M; M need not be invertible.",
+        "guidance": "flag=0 uses Leverrier-Faddeev (assumes n! invertible); if it fails or flag=1, compute characteristic polynomial first and evaluate formula (\u22121)^{n-1}(T(x)-T(0))/x at M. Both algorithms O(n^4) in base ring; often slower than computing charpoly or inverse. Library syntax: GEN matadjoint0(GEN M, long flag); aliases adj/ adjsafe."
+      },
+      {
+        "name": "matcompanion(x)",
+        "description": "Return the left companion matrix of the (non-zero) polynomial x.",
+        "guidance": "Library syntax: GEN matcompanion(GEN x). No additional flags discussed."
+      },
+      {
+        "name": "matconcat(v)",
+        "description": "Build a matrix from entries of v: if v is t_VEC concatenate horizontally, t_COL vertically, t_MAT concatenate columns vertically; entries considered as matrices (scalars as 1\u00d71 matrices).",
+        "guidance": "Rules for block sizes: compute max row/column sizes of blocks to determine block dimensions; scalars expanded as scalar times identity of min(Hi,Lj); blocks extended by zeros as needed. Examples demonstrate horizontal, vertical, block and block-diagonal matrices. Library syntax: GEN matconcat(GEN v)."
+      },
+      {
+        "name": "matdet(x, {flag = 0})",
+        "description": "Determinant of square matrix x. Algorithm chosen depending on coefficient types and flag.",
+        "guidance": "flag=0 (default) selects method: integer entries -> modular Dixon/Pernet/Stein; real/p-adic -> Gaussian elimination with max pivot; intmod -> Gaussian with first non-zero pivot; else Gauss-Bareiss. flag=1 forces classical Gaussian elimination with pivoting (usually worse). Library syntax: GEN det0(GEN x, long flag) and variants GEN det, det2, ZM_det for integers."
+      },
+      {
+        "name": "matdetint(B)",
+        "description": "For integer m\u00d7n matrix B, compute determinant D of lattice generated by columns (sqrt(det(B^T B)) if B has full row rank, else 0).",
+        "guidance": "Uses Gauss-Bareiss to compute positive multiple of D; when B square returns |det B|. Useful with mathnfmod which needs such multiple. For large m or n (>20) prefer mathnf alternatives. Library syntax: GEN detint(GEN B)."
+      },
+      {
+        "name": "matdiagonal(x)",
+        "description": "Create diagonal matrix with diagonal entries from vector x (or block-diagonal when entries are matrices).",
+        "guidance": "Examples and use with matconcat to form block diagonal matrices. Library syntax: GEN diagonal(GEN x)."
+      },
+      {
+        "name": "mateigen(x, {flag = 0})",
+        "description": "Return eigenvectors of x as columns of a matrix (complex). If flag=1 return [L,H] (L eigenvalues, H eigenvectors).",
+        "guidance": "Algorithm: compute charpoly, approximate complex roots \u03bb_i, then compute kernels of x-\u03bb_i; ill-conditioned, may miss kernel vectors if roots are close or multiple. For symmetric use qfjacobi; for Hermitian build real and imag blocks and apply qfjacobi. Library syntax: GEN mateigen(GEN x, long flag, long prec); alias eigen(GEN x, long prec) (flag=0)."
+      },
+      {
+        "name": "matfrobenius(M, {flag}, {v = x})",
+        "description": "Return the Frobenius form of square M. flag=1 returns elementary divisors (vector of polynomials); flag=2 returns [F,B] with Frobenius form F and change-of-basis B (M = B^{-1} F B).",
+        "guidance": "Library syntax: GEN matfrobenius(GEN M, long flag, long v = -1)."
+      },
+      {
+        "name": "mathess(x)",
+        "description": "Return a matrix similar to x in upper Hessenberg form (zeros below first subdiagonal).",
+        "guidance": "Library syntax: GEN hess(GEN x). Useful as intermediate for eigen/computation reductions."
+      },
+      {
+        "name": "mathilbert(n)",
+        "description": "Create Hilbert matrix of order n (coeff (i,j) = 1/(i+j-1)).",
+        "guidance": "Library syntax: GEN mathilbert(long n)."
+      },
+      {
+        "name": "mathnf(M, {flag = 0})",
+        "description": "Compute Hermite Normal Form (HNF) over Euclidean ring R (Z or K[X]) of matrix M; returns upper triangular H such that columns form basis of module spanned by M's columns; flags control algorithms and output.",
+        "guidance": "Flag bits: 1 -> complete output [H,U] with transformation U (GL(R)); 2 deprecated (generic input polynomial assumption); flags >=4 choose different algorithms (4 uses LLL variant returning [H,U] with small U but slower; 5 uses Batut's algorithm returning [H,U,P] with permutation P, often faster). For dense large matrices, flag=4 fastest; when rank maximal, mathnfmod(M, matdetint(M)) can be faster and U recovered via M^{-1}H. Library syntax: GEN mathnf0(GEN M, long flag) and aliases hnf/hnfall. Notes about performance and large sparse matrices (hnfspec/hnfadd undocumented)."
+      },
+      {
+        "name": "mathnfmod(x, d)",
+        "description": "For integer-entry matrix x of maximal rank and d a multiple of determinant of lattice spanned by columns, compute upper triangular HNF of x using less memory (slower than mathnf).",
+        "guidance": "If rank equals number of rows result square; columns of result basis of column lattice. Use when memory is constrained. Library syntax: GEN hnfmod(GEN x, GEN d)."
+      },
+      {
+        "name": "mathnfmodid(x, d)",
+        "description": "Output HNF of x concatenated with diagonal matrix with diagonal d. If d integer, concatenate d times identity.",
+        "guidance": "Assumes x integer. Examples demonstrate both vector and scalar d. Library syntax: GEN hnfmodid(GEN x, GEN d)."
+      },
+      {
+        "name": "mathouseholder(Q, v)",
+        "description": "Apply sequence Q of Householder transforms (as returned by matqr(M,1)) to vector or matrix v.",
+        "guidance": "Useful because applying Householder sequence is more stable/faster than explicit multiplication by Q. Library syntax: GEN mathouseholder(GEN Q, GEN v)."
+      },
+      {
+        "name": "matid(n)",
+        "description": "Create n\u00d7n identity matrix.",
+        "guidance": "Library syntax: GEN matid(long n)."
+      },
+      {
+        "name": "matimage(x, {flag = 0})",
+        "description": "Return a basis for the image (column space) of matrix x as columns of a matrix. Works for various entry types.",
+        "guidance": "flag=0 uses standard Gauss pivot (default); flag=1 uses matsupplement (much slower). Library syntax: GEN matimage0(GEN x, long flag); alias image(GEN x)."
+      },
+      {
+        "name": "matimagecompl(x)",
+        "description": "Return vector of column indices not extracted by matimage(x), as a permutation t_VECSMALL.",
+        "guidance": "Number of components plus number of columns in matimage(x) equals number of columns of x. Library syntax: GEN imagecompl(GEN x)."
+      },
+      {
+        "name": "matindexrank(x)",
+        "description": "Given matrix x of rank r, return vector with two t_VECSMALL components y and z listing row and column indices (1-based) such that the extracted submatrix vecextract(x,y,z) is invertible.",
+        "guidance": "Useful to identify independent row/column sets. Library syntax: GEN indexrank(GEN x)."
+      },
+      {
+        "name": "matintersect(x, y)",
+        "description": "Given matrices x and y with same number of rows and independent columns, find basis of Q-vector space equal to intersection of column spaces of x and y.",
+        "guidance": "For fractional ideals use idealintersect (faster); for general ZK-modules use nfhnf (slower but general). Library syntax: GEN intersect(GEN x, GEN y)."
+      },
+      {
+        "name": "matinverseimage(x, y)",
+        "description": "Given matrix x and column vector/matrix y, return a preimage z such that x*z = y if one exists; otherwise return empty vector/matrix. Complete inverse image is z + Ker(x).",
+        "guidance": "Examples demonstrate solutions, no-solution cases, and multiple-column inputs. Use matker to get kernel basis. Library syntax: GEN inverseimage(GEN x, GEN y)."
+      },
+      {
+        "name": "matisdiagonal(x)",
+        "description": "Return true (1) if x is diagonal matrix, false (0) otherwise.",
+        "guidance": "Library syntax: GEN isdiagonal(GEN x)."
+      },
+      {
+        "name": "matker(x, {flag = 0})",
+        "description": "Return a basis for kernel of matrix x as columns of a matrix. Input entries can be any type compatible with +,*,/ operations.",
+        "guidance": "If x known to have integral entries set flag=1 for optimized behavior. Library syntax: GEN matker0(GEN x, long flag); aliases ker/keri."
+      },
+      {
+        "name": "matkerint(x, {flag = 0})",
+        "description": "Return an LLL-reduced Z-basis for kernel lattice of integer matrix x (rational entries not permitted).",
+        "guidance": "flag=0 uses integer LLL; flag=1 uses matrixqz(x,-2) (much slower; avoid). Library syntax: GEN matkerint0(GEN x, long flag); alias kerint. Implementation note: wraps ZM_lll routines; can remove outer LLL if not desired to save time."
+      },
+      {
+        "name": "matmuldiagonal(x, d)",
+        "description": "Multiply matrix x by diagonal matrix whose diagonal entries are in vector d; equivalent to x * matdiagonal(d) but much faster.",
+        "guidance": "Library syntax: GEN matmuldiagonal(GEN x, GEN d). Use when multiplying by diagonal matrices frequently."
+      },
+      {
+        "name": "matmultodiagonal(x, y)",
+        "description": "Compute product of matrices x and y assuming the result is diagonal; much faster than general multiplication but undefined if result non-diagonal.",
+        "guidance": "Use only when you know x*y is diagonal. Library syntax: GEN matmultodiagonal(GEN x, GEN y)."
+      },
+      {
+        "name": "matpascal(n, {q})",
+        "description": "Create lower-triangular Pascal (binomial coefficients) matrix of order n+1. If q given compute q-Pascal triangle (q-binomial coefficients).",
+        "guidance": "Library syntax: GEN matqpascal(long n, GEN q = NULL); alias mat-pascal variants available."
+      },
+      {
+        "name": "matqr(M, {flag = 0})",
+        "description": "Compute QR-decomposition [Q,R] of square invertible real matrix M with Q orthogonal and R upper-triangular. If flag=1 return Q as sequence of Householder transforms.",
+        "guidance": "If flag=1 the returned Householder sequence can be applied via mathouseholder; it is stabler and faster. Function errors on low precision or singularity. Library syntax: GEN matqr(GEN M, long flag, long prec). Relationship: mathouseholder(q, matid(#M)) == Q^T and mathouseholder(q, M) == R when q from matqr(M,1)."
+      },
+      {
+        "name": "matrank(x)",
+        "description": "Return rank of matrix x.",
+        "guidance": "Library syntax: long rank(GEN x). No further flags in this description."
+      },
+      {
+        "name": "matrix(m, n, {X}, {Y}, {expr = 0})",
+        "description": "Create m\u00d7n matrix whose coefficients are given by expression expr as function of formal parameters X (rows 1..m) and Y (cols 1..n). If last parameters omitted fill with zeros.",
+        "guidance": "Two formal parameters available: X (row index) and Y (column index). Useful for programmatic matrix construction. Library syntax reflected in examples."
+      },
+      {
+        "name": "matrixqz(A, {p = 0})",
+        "description": "Transform rational m\u00d7n matrix A to integral matrix B with same Q-column-space and GCD of n\u00d7n minors coprime to p (if p\u22650); other p values yield HNF bases of Zn\u2229ImZA (p=-1) or Zn\u2229ImQA (p=-2).",
+        "guidance": "If p\u22650 assume A has maximal rank (n\u2264m) and return integral B with minors' GCD coprime to p (p=0 gives GCD 1). Examples show conversion of rational minors to integral matrix with coprime minors. Library syntax: GEN matrixqz0(GEN A, GEN p = NULL). Useful to clear denominators while controlling minors' gcd."
+      },
+      {
+        "name": "matsize(x)",
+        "description": "Return row vector [#rows, #columns] for vector or matrix x (row vector has 1 row, column vector 1 column).",
+        "guidance": "Library syntax: GEN matsize(GEN x)."
+      },
+      {
+        "name": "matsnf(X, {flag = 0})",
+        "description": "Return elementary divisors (diagonal of Smith Normal Form) of matrix X normalized dn | ... | d1. flag bits control output and input types.",
+        "guidance": "Binary digits of flag: 1 -> complete output [U,V,D] with unimodular U,V; 2 -> allow polynomial entries (square); 4 -> cleanup (delete elementary divisors equal to 1 and shorten outputs). If cleanup set, X may be given as vector of elementary divisors or full [U,V,D]. Library syntax: GEN matsnf0(GEN X, long flag). Handles rectangular matrices by padding diagonal matrix with zeros as needed."
+      },
+      {
+        "name": "matsolve(M, B)",
+        "description": "Solve M X = B for X when M invertible; uses Dixon p-adic lifting if M,B integral, Gaussian elimination otherwise (equivalent to M^{-1} * B but faster).",
+        "guidance": "Library syntax: GEN gauss(GEN M, GEN B) and integral variant ZM_gauss. Use for exact/integer linear solves for performance."
+      },
+      {
+        "name": "matsolvemod(M, D, B, {flag = 0})",
+        "description": "Given integral matrix M, vector D of moduli, and integral B, find small integer solution x to congruence system \u03a3_i m_{i,j} x_j \u2261 b_i (mod d_i) if exists; shorthand allows scalar D/B.",
+        "guidance": "flag=0 returns small solution or zero if none; flag=1 returns all solutions as [x,u] where u columns give basis of homogeneous solutions. Examples provided. Library syntax: GEN matsolvemod0(GEN M, GEN D, GEN B, long flag); aliases gaussmodulo/gaussmodulo2."
+      },
+      {
+        "name": "matsupplement(x)",
+        "description": "Given matrix x with linearly independent columns, find square invertible matrix whose first columns are columns of x (supplement to a basis of full space).",
+        "guidance": "Raises error if x has 0 columns (design limitation). Example shows returned supplement. Library syntax: GEN suppl(GEN x). Use when completing a basis; matsupplement slower than matimage for some uses."
+      },
+      {
+        "name": "mattranspose(x)",
+        "description": "Transpose of x (also x~). Effect applies only to vectors and matrices.",
+        "guidance": "Library syntax: GEN gtrans(GEN x)."
+      },
+      {
+        "name": "minpoly(A, {v = x})",
+        "description": "Minimal polynomial of A with respect to variable v: monic polynomial P of minimal degree such that P(A)=0.",
+        "guidance": "Library syntax: GEN minpoly(GEN A, long v = -1). Useful to compute algebraic dependencies and as input to companion/matfrobenius routines."
+      },
+      {
+        "name": "norml2(x)",
+        "description": "Square of L2-norm of x: for scalar the square modulus; for polynomials/vectors/matrices defined recursively as sum of norml2 over components (gives usual |xi|^2 or |xi,j|^2).",
+        "guidance": "Examples: norml2([1,2,3])=14; norml2([1,2;3,4])=30; norml2(2*I + x) = 5. Real t_QUAD not supported for scalars. Library syntax: GEN gnorml2(GEN x)."
+      },
+      {
+        "name": "normlp(x, {p})",
+        "description": "Lp-norm of x; sup norm if p omitted. For scalar normlp(x,p)=abs(x); for polynomials/vectors/matrices norm defined recursively.",
+        "guidance": "Description truncated in chunk; general behavior: computes L^p norms with p parameter; for p omitted computes infinity norm (sup). Library syntax: implied GEN normlp(GEN x, GEN p)."
+      }
+    ]
+  }
+}

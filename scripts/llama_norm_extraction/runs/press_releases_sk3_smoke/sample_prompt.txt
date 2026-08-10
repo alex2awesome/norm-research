@@ -1,0 +1,452 @@
+You are an expert news editor analyzing how a press release was covered.
+
+# Your task
+
+You will read one news article covering a press release (the press release text is provided first, the news article second, separated by '---') and extract every quality judgment the article's makes about the original press release, then tag each judgment against a fixed list of canonical journalism norms.
+
+# Two levels of structure
+
+LEVEL 1 — PASSAGE: a paragraph or multi-sentence span where the article (and its author/outlet) is making a quality judgment. Each news article covering a press release (the press release text is provided first, the news article second, separated by '---') usually contains 3-10 passages.
+
+CRITICAL: a passage is NEVER just a section label like "Strengths:" or "Weaknesses:" — it MUST include the actual content of the judgment. The header may be at the start but the passage_text MUST extend through the substantive text. A passage_text of less than 50 characters is almost always wrong.
+
+LEVEL 2 — SIGNAL: a specific phrase INSIDE the passage that EVIDENCES a journalism norm (without necessarily BEING the journalism norm). For example, the phrase "the company provided no evidence for its 50% improvement claim" is a complaint evidencing an 'evidence sourcing' norm; the phrase "rival researchers contested the methodology" is observation evidencing a 'balance / counter-source' norm; an article paragraph that adds Parkland-shooting context the PR omitted is an observation evidencing a 'context completeness' norm.
+
+Each signal has:
+- signal_text: an exact substring of THE PASSAGE (not the full news article covering a press release (the press release text is provided first, the news article second, separated by '---')), 10-200 chars
+- signal_type: exactly one of `complaint`, `praise`, `observation`, `suggestion`
+- polarity: exactly one of `positive`, `negative`, `neutral`
+- rubric_matches: a list of 0-3 integer ids from the vocabulary below. Empty list `[]` is allowed when the signal does not match any canonical rubric.
+
+# Norm vocabulary
+
+Each item below has the format `[id] name — short description`. Multi-label tagging: a signal can match 0-3 rubrics. Be strict — only tag a rubric if the signal genuinely instantiates that rubric. Do not match by surface keyword alone.
+
+[1] Sponsorship, funding, and conflict‑of‑interest disclosure — Clearly identify the communicator and purpose; fully disclose sponsors, funding, relevant relationships, and conflicts of interest; label PR/paid materials to a
+[2] Source transparency, attribution, and justified anonymity — Attribute sources and speakers; prefer named sources; disclose conflicts and credentials; justify and explain any anonymity; rely on independently verifiable, m
+[3] Attribution and sourcing clarity (citations, links, credentials) — Cite and link sources clearly, provide accessible evidence paths, and include speaker credentials/bios; avoid vague sourcing and reliance solely on the press re
+[4] Content origin and AI transparency — Disclose and verify the origin of content (in‑house vs agency, AI‑generated, etc.); explain how/when AI was used and its limits; avoid covert PR/astroturfing; e
+[5] Evidence, sourcing, and methods transparency — Support claims with accurate, verifiable evidence; name/cite sources and link primary documents; disclose methods, data, assumptions, effect sizes, limitations,
+[6] Scientific rigor, accuracy, and uncertainty communication — Match claims to evidence; avoid causal overreach and novelty hype; quantify appropriately (e.g., effect sizes, probabilities); report safety/harms and replicati
+[7] Clear communication of uncertainty and preliminary status — State what is known vs unknown, acknowledge preliminary status and major caveats, include confidence levels when appropriate, and set expectations early; separa
+[8] Candor about uncertainty, limitations, and tradeoffs — Be candid about limits, open challenges, uncertainties, and tradeoffs; separate facts from speculation; situate findings within debate where relevant and disclo
+[9] Timely, frequent, transparent updates — Acknowledge issues quickly; disclose core facts promptly; admit uncertainty when present; coordinate messaging and maintain promised update cadence across chann
+[10] Crisis response speed and visibility — Respond rapidly and visibly via public channels with clear acknowledgment and credible spokespeople; avoid delays and silence that fuel speculation.
+[11] Crisis accountability, empathy, and corrective action — Acknowledge harm and accept responsibility; apologize appropriately; communicate promptly via senior leaders; implement concrete corrective and preventive actio
+[12] Message consistency and non‑contradiction — Convey a coherent, accurate narrative over time across channels, documents, and spokespeople; avoid conflicting statements and ensure framing matches situation 
+[13] Openness and media access/responsiveness — Provide access to information, documents, and experts; allow questioning and answer candidly; be responsive and non‑hostile; correct errors transparently to sup
+[14] Public‑safety and risk communication — Prioritize stakeholder safety; explain potential harms and tradeoffs; provide actionable protective guidance and credible resources; acknowledge/manage rumors; 
+[15] Public‑interest orientation and fairness to stakeholders — Prioritize genuine public/beneficiary impact and ethics over self‑promotion; treat stakeholders fairly; clearly state purpose and public benefit; help hold powe
+[16] Authenticity and alignment between values, messaging, and actions — Align communications, promises, DEI/cause messaging, and advertising with genuine commitments, operations, and data; avoid performative stunts or spin; ensure w
+[17] Concrete commitments and follow‑through — Make specific, credible commitments tied to values; explain oversight and revisions from feedback; show evidence of progress versus targets over time.
+[18] Two‑way stakeholder engagement, inclusion, and trust restoration — Identify affected audiences; listen and respond to concerns; respect public values and self‑identification; involve communities/partners; disclose engagement ac
+[19] Spokesperson and third‑party credibility (substantive quotes) — Feature credible, sufficiently senior spokespeople and independent experts appropriately; include substantive quotes and provide on‑the‑record access.
+[20] ESG/sustainability disclosure quality, comparability, and governance — Provide specific, decision‑useful ESG/sustainability disclosures linked to financials; substantiate environmental claims; use recognized frameworks for comparab
+[21] Investor communications clarity and compliance — Provide material, compliant disclosures on strategy, performance, risks, and deal terms; align market expectations with analyst‑grade clarity; integrate require
+[22] Investor communications readiness and accessibility — Maintain robust IR infrastructure/materials and communicate performance and strategy in plain, forward‑looking, investor‑oriented language.
+[23] Investor‑relations trust‑building and value story — Sustain investor confidence through clear, customized engagement and a coherent value narrative; integrate ESG where relevant; analyze operational drivers, anti
+[24] Ongoing transparency and progress reporting — Commit to ongoing public reporting of reviews, reforms, outcomes, and performance; publish corrective actions, culture metrics, repositories, and progress updat
+[25] PR origin disclosure and anti‑churnalism — Disclose when content derives from press releases/PR and the extent of PR input; avoid copy‑paste uptake; encourage independent scrutiny and original verificati
+[26] Truthfulness, substantiation, and non‑deception (no hype/manipulation) — Ensure all claims are accurate and verifiable; avoid spin, hype, and misleading or unsubstantiated assertions; forbid fabrication, fake content, undisclosed spo
+[27] Leadership visibility and accountability in crises — Ensure senior leaders are visible, take responsibility, and engage directly with stakeholders during crises to humanize the response and signal accountability.
+[28] Crisis response strategy and messaging coherence — Align posture with responsibility/history; maintain a consistent strategy; avoid blame‑shifting, premature promises, or aggressive legal retaliation; provide cl
+[29] Accuracy, evidence, and independent verifiability — All statements are correct and grounded in credible sources; provide citations/links (preferably to primary data) and enough detail for independent verification
+[30] Limitations and uncertainty communication — Clearly distinguish known vs. speculative; state study/report limitations, scope, external validity, and realistic timelines; include appropriate disclaimers; s
+[31] Truthfulness, correction, and non-suppression of material facts — Do not make false or misleading claims (by commission or omission); do not hide or obscure material facts; correct your own errors promptly and visibly; proacti
+[32] Claim restraint and non-sensational language — Keep wording specific and aligned with evidence; avoid exaggeration, implication leaps, clichéd superlatives, and sensational framings; ensure headlines/conclus
+[33] Journalistic, non-promotional orientation — Present information in a neutral, newsroom‑appropriate voice that prioritizes public interest and genuine news value over puffery; do not masquerade PR as indep
+[34] Impartial, nonpartisan presentation — Maintain objectivity and neutral wording; avoid partisan framing; attribute viewpoints and represent relevant sides fairly.
+[35] Specific corrective, preventive, and compensatory actions — In crises, detail concrete fixes and preventive steps (investigations, policy/training changes, reorganizations), direct remedies/reassurances, and plans to com
+[36] Empathy, apology, and ownership backed by action — Respond promptly with a culturally respectful, empathetic tone; clearly acknowledge harm, accept responsibility (avoid blame‑shifting/euphemisms), apologize spe
+[37] Crisis strategy selection and execution (SCCT/CERC‑aligned) — Select deny/diminish/rebuild strategies appropriate to crisis type and responsibility; communicate swiftly on the right channels with clear update cadence; acco
+[38] Social media engagement, listening, and amplification risk — Use social platforms for timely, conversational updates and listening; monitor and acknowledge backlash; manage narratives and recognize amplification risks fro
+[39] Authoritative, newsworthy quotes and available spokespeople — Include one or two substantive, attributable quotes from appropriate leaders/experts that add insight (including what’s unknown); ensure designated spokespeople
+[40] Authority, third-party credibility, and social proof — Build trust via credible senders, leadership voices, and independent third‑party validation; disclose credentials/affiliations; provide credible proof points an
+[41] Media access and follow-up — Remove access barriers and make follow‑up easy: no paywalls; clear, reachable contacts; boilerplate/mission; links to resources/background; and complete story p
+[42] Press assets and visual communication — Provide a complete, accessible media kit with clean, downloadable assets and proper branding; ensure scannable structure and include high‑quality, accurately la
+[43] Audience-centric messaging and engagement — Tailor content, tone, structure, and depth to audience needs and channels; make next steps obvious; respect journalists’ time while reassuring and explaining ch
+[44] Two-way stakeholder and community engagement — Invite input and sustain relationships with stakeholders/affected communities on and offline; manage hostility professionally; co‑produce responses to build tru
+[45] Risk and public-health communication with actionable guidance — Provide accessible, evidence‑based risk/benefit information and specific, feasible protective actions; explain rationales to motivate behavior change and manage
+[46] Inclusive, respectful representation and cultural sensitivity — Use inclusive, non‑stigmatizing language and authentic representation; respect culture and self‑identification; avoid discriminatory/inflammatory framing and to
+[47] Diverse voices and balanced perspectives — Represent multiple relevant perspectives and sources (community, policy, researchers); reflect diversity across voices/formats; ensure accessibility where appro
+[48] Clarity and plain language — Use simple, direct language and clear organization so diverse audiences can quickly understand key points.
+[49] Core news clarity, lede, and headlines — Use the inverted pyramid with a tight lede; state the announcement and why it matters upfront; cover the Five Ws; provide 2–3 specific key messages; write clear
+[50] Newsworthiness, angle, and context — Ensure the announcement is timely and meaningful beyond the issuer; frame a clear, compelling angle; explain implications and connect to industry trends; includ
+[51] Legal, safety, and disclaimer compliance — Include required legal notices and precise disclaimers; avoid unauthorized associations and unsafe encouragement; add necessary backgrounders/timelines.
+[52] Consumer-facing clarity and disclosures — Use precise naming/packaging language and disclose relevant costs (price, coverage, out‑of‑pocket) to prevent confusion and risk.
+[53] Public affairs/media relations roles and appropriate instruments — Define PA/PIO responsibilities and strategy; select the right vehicle (release, advisory, PSA, funding/company news); provide timely compliance alerts; clarify 
+[54] Investor communications quality and relevance — Communicate strategy, viability, and long‑term outlook to investors in concise, decision‑oriented formats that build confidence.
+[55] Science communication best practices and engagement — Translate findings accessibly using evidence‑based SciComm; balance rigor with journalistic usability; set goals that enable informed decisions and mutual learn
+[56] Substantiated environmental/ESG claims (no greenwashing) — Make environmental/ESG assertions only when specific, current, and independently verifiable; avoid vague aspirations, unverifiable “firsts,” or aspirational mis
+[57] Framing, media-ecosystem, and optics awareness — Recognize how media frames and incentives shape coverage and stakeholder perception; choose defensible frames strategically and anticipate scrutiny and optics b
+[58] Message–reality alignment and cross-channel consistency — Ensure messages and tone align with real actions and values; maintain a coherent narrative across internal/external channels and over time; update narratives as
+[59] Public- and beneficiary-focused framing — Emphasize public benefit and real‑world impact for beneficiaries rather than organizational self‑promotion; avoid boilerplate superlatives and canned quotes.
+[60] Partnership announcement essentials and credibility — Clearly state the collaboration’s purpose, each party’s contributions, and concrete benefits; ensure named partners add credibility and relevance.
+[61] Plain language, readability, and accessibility — Use clear, concise, jargon‑free language and reader‑friendly structure so intended audiences can understand on first pass; define terms, avoid idioms, and ensur
+[62] Neutral, non‑promotional newsroom tone — Write in an objective, journalism‑like voice; avoid hype, sales copy, superlatives, and sensationalism while fairly presenting facts and expertise.
+[63] Newsworthiness, timeliness, and angle strength — Anchor the release in a compelling, timely hook aligned to classic news values and audience/editorial fit; avoid vanity or inside‑baseball non‑news.
+[64] Audience targeting and relevance — Define priority publics and tailor content to their needs and culture; make personal stakes and practical value explicit.
+[65] Explain why it matters — Make the public/audience benefit clear and answer ‘so what?’ in plain terms.
+[66] Context and significance — Provide necessary background and rationale so readers can interpret importance, trends, and implications.
+[67] Support claims with relevant data and sourcing — Back assertions with pertinent, contextualized statistics and links; cite sources and provide enough methodological detail for credibility.
+[68] External expert/third‑party validation — Increase credibility via independent experts, reputable institutions, and other credible third‑party endorsements or corroboration.
+[69] Study limitations and caveats disclosed — Explicitly state design/measurement limits and generalizability so readers can gauge the strength and boundaries of findings.
+[70] Scientific accuracy, causality, and context — Communicate evidence precisely—situate findings among alternatives, avoid causal overreach, include baselines and counterfactuals, and frame clinical/practical 
+[71] Avoid overstatement and alarmism beyond evidence — Do not exaggerate significance or use hyperbolic language that exceeds what the data support.
+[72] Specific, measurable commitments and follow‑through — Replace vague pledges with concrete, time‑bound actions and metrics; report ongoing progress over promises.
+[73] Concrete corrective and preventive actions (crises) — When harm occurs, detail specific remedial steps, timelines, and systemic fixes that address root causes and prioritize safety.
+[74] Empathy and sensitivity in messaging — Acknowledge human impact with clear, compassionate language; avoid self‑centered or tone‑deaf phrasing.
+[75] Crisis acknowledgement, apology, and amends — Promptly acknowledge incidents, accept responsibility, offer specific apologies, and provide credible compensation/remediation mechanisms.
+[76] Headline/topline clarity and accuracy — Craft clear, accurate, specific headlines/decks that foreground the substantive news and match tone to the underlying results.
+[77] News‑first lede clarity — Deliver the core announcement (5Ws/impact) immediately in the lede, suitable for direct‑to‑public reading.
+[78] Lead with what matters (inverted pyramid) — Put the most newsworthy facts and implications first, followed by supporting detail in standard inverted‑pyramid order.
+[79] Press release structure and components — Use a clear, journalist‑friendly structure with strong lead, supporting proof points/methods, quotes, and essential details (5Ws/H, legal/background).
+[80] Wire‑ready professional format — Use AP style and consistent, publication‑ready formatting to reduce editing burden and signal professionalism.
+[81] Identification and complete media contacts — Clearly attribute the issuer and provide accurate, prominent media contact details and roles so the item is directly usable.
+[82] Boilerplate and background with links — Include concise organizational/author identity context and up‑to‑date links to official pages, newsroom, investor info, and helplines.
+[83] Clear next steps and where to get help/info — Provide explicit CTAs, instructions, and pointers to more information/resources tailored to the audience’s needs.
+[84] Visual/media assets quality and readiness — Supply high‑quality, appropriately credited visuals and press‑ready asset packs with honest, clear information design to enable immediate newsroom use.
+[85] Distribution, discoverability, and channel strategy — Optimize subject/keywords, SEO/voice, and routing; adapt for owned/earned/social channels; follow distribution hygiene to aid newsroom processing and search.
+[86] Journalist usability and information subsidy — Provide press‑ready materials and the elements reporters value (clear angles, proofs, quotable sources/contacts) while respecting newsroom independence and form
+[87] Quote quality, sourcing, and usefulness — Include a small set of quotable, role‑appropriate voices (internal and—when apt—independent) that add new insight and are easy to excerpt.
+[88] Human, humble spokesperson tone — Ensure spokesperson quotes sound natural, respectful, and unboastful rather than canned or grandiose.
+[89] Spokesperson credibility and authority — Use named representatives with clear ownership and relevant expertise; surface senior leadership when appropriate.
+[90] Partner/customer voices and social proof — Leverage partners, coalitions, and customer testimony to extend reach and substantiate claims via trusted intermediaries.
+[91] Funding announcement best practices — Lead with the substantive ‘what’s being built’ and the surprising fact; cite credible investors; include demos/beta access and structured quotes; avoid generic 
+[92] Brand identity coherence and authenticity — Align look, voice, and creative with authentic brand strategy and leadership voice; avoid forced tone shifts or superficial signal changes.
+[93] Rebrand/identity change communications — Communicate the rationale and manage change carefully—preserving or thoughtfully evolving distinctive cues and respecting existing equity and attachments.
+[94] Message framing and key‑point coherence — Lead with one clear primary angle and coherent frame; maintain alignment across headline/lead/quotes; foreground meaningful differentiation and answer ‘so what?
+[95] Press release types and event essentials — Use the correct release/asset type and, for events, provide clear logistics and speaker/agenda details to enable promotion.
+[96] Translate technical/scientific content for lay readers — Interpret complex advances in accessible language, define non‑common knowledge, and provide relevant context for non‑experts.
+[97] Enable audience scrutiny and data literacy — Help audiences interpret evidence and access/assess primary records by supplying datasets/source documents and interpretive guidance.
+[98] Specific, complete, checkable facts and claims — Provide concrete, verified details (5Ws/H, methods, metrics, partners, pricing/availability) so statements are specific and testable.
+[99] Multimedia assets: availability, quality, and usability — Provide high‑quality, rights‑cleared photos/video/graphics; optimize files for web; include captions/credits; link (don’t attach); ensure assets are downloadabl
+[100] Quote quality, authenticity, and value — Use named, authoritative speakers; quotes sound human (not PR/legalese) and add new, specific information or perspective.
+[101] Lede quality and completeness (5Ws and key news) — The opening immediately conveys the core news and why it matters, covering the Five Ws (and how/method when relevant) with key numbers/context.
+[102] Core news structure and hierarchy (inverted pyramid) — Craft a clear headline; prioritize the most newsworthy facts up top; use the inverted pyramid with logical flow that enables easy trimming.
+[103] Headline effectiveness and integrity — Headlines are brief and compelling, surface the key finding/impact, are SEO‑ and reader‑optimized, include required elements (e.g., dateline when applicable), a
+[104] Clarity, concision, and newsroom style — State the main point directly; keep prose tight, active, factual, and front‑loaded; follow newsroom style and correctness; avoid dense copy and wordiness.
+[105] Scannable, media‑friendly formatting — Use headers, bullets, short paragraphs, minimalist layouts, and visual highlights so journalists can quickly locate core facts and next steps.
+[106] Plain language and minimal jargon/clichés — Use clear, accessible language for intended audiences; avoid or define technical terms; drop insider buzzwords and clichés.
+[107] Audience and outlet understanding, targeting, and tailoring — Identify and segment priority publics and outlets; tailor messages, tone, framing, examples, and channels (incl. localization) to what each values while staying
+[108] Audience‑centric framing and value — Frame around public/service value rather than self‑promotion, showing practical or emotional benefits for intended readers.
+[109] Journalist‑centric targeting, personalization, and packaging — Match beats/outlets; personalize subject lines and openings with an original, reader‑valuable angle; write for reporter needs and target formats; avoid mass/pro
+[110] Journalist‑ready packaging and media facilitation — Anticipate editors’ questions; provide contacts and next steps; supply rights‑cleared, correctly formatted materials; respect media formats/deadlines; make kits
+[111] Boilerplate, company info, and publication metadata — Include a complete, up‑to‑date About section and essential footer elements (company overview, affiliations, publication metadata, links, expert contacts).
+[112] Clear calls to action and resource links — Make one clear ask and provide obvious next steps with links to resources, demos, samples, contacts, or subscriptions.
+[113] Related links, sources, and navigational coherence — Provide clear links to background, sources/citations, and follow‑ups; use subheads and coherent linking so readers can explore implications.
+[114] Truthful, evidence‑grounded claims — Stick to verifiable facts; avoid speculation; use careful, precise wording supported by defensible evidence.
+[115] Use credible authority and unique access as proof points — Support assertions with credible evidence and appropriately invoke named experts/founders/insiders to add context and credibility without overstating certainty.
+[116] Specific, meaningful metrics and performance context — Include concrete, credible numbers and meaningful KPIs that substantiate claims; add context (comparisons, drivers); avoid vanity metrics.
+[117] Original research/data as newsworthy content — Publish proprietary, novel, or industry‑defining data/reports to create inherent news hooks that earn coverage and backlinks.
+[118] Overall newsworthiness and clear hook — The item passes newsroom judgment with a compelling, outlet‑relevant angle; it’s substantive, novel/impactful, timely, clearly relevant, and avoids vanity annou
+[119] Timeliness and recency signaled — The announcement is genuinely new, pegged to a timely development, and clearly signals recency to audiences and editors.
+[120] Originality and substantive new information — Contains unique, useful information that enables differentiated coverage and delivers public importance or novelty; avoids duplication.
+[121] Apology and acceptance of responsibility (with corrective steps) — Promptly acknowledge the incident, accept responsibility without defensiveness or blame, offer a sincere, specific apology, and outline corrective actions.
+[122] Corrective and preventive actions to prevent recurrence — Detail investigations/reviews, safeguards, and organizational changes to ensure the issue does not recur.
+[123] Swift remediation and restitution — Act quickly to contain harm and make affected parties whole (e.g., recalls, fixes, compensation, interim support).
+[124] Customer impact and transition details — Clearly explain what changes for customers, what stays the same, timing, and support/transition arrangements.
+[125] Non‑promotional, journalistic news tone — Write in an informative, journalistic tone—not like an advertisement or hype copy.
+[126] Avoid tone‑deaf or trivializing language — Match tone and gravity to the issue; avoid wording or gestures that trivialize serious social issues or misread the moment.
+[127] SEO/discoverability for releases — Optimize releases for discoverability (descriptive anchors, alt text, structured metadata, newsroom‑hosted pages) for both search and AI; avoid forced keyword s
+[128] Event/advisory essentials — For event‑related releases, provide clear who/what/when/where logistics, notable guests/activities, and details that drive attendance and local interest.
+[129] Data visualization and infographic quality — Use clear, accurate charts/diagrams with visual hierarchy, concise explanatory text, and built‑in context so readers quickly grasp meaning.
+[130] Third‑party allies, coalitions, and opinion leaders — Identify and mobilize credible independent allies/opinion leaders to echo key points, offer contactable validation, and expand reach/credibility.
+[131] Earned media measurement and analytics — Define modern KPIs (EMV, mentions/citations/sentiment incl. social/influencer) and use tools to monitor and analyze coverage and outcomes.
+[132] Avoid deficit thinking and moralizing framings — Avoid stigmatizing frames, alarmist metaphors, or normative leaps from data that distort understanding or blame individuals/groups.
+[133] Inclusive, non‑discriminatory, bias‑aware language — Use inclusive, respectful language that avoids stigma, stereotypes, and biased idioms; apply people‑first/identity‑first per community preference and gender‑neu
+[134] Localization and cultural adaptation — Adapt language, tone, references, and examples for each market; go beyond literal translation by using local voices/data and explaining local references; provid
+[135] Cultural and historical sensitivity in messaging and creative — Ensure names, imagery, humor, and tone are appropriate to cultural/historical context; avoid objectification, stereotypes, or messages that could be framed as d
+[136] Quote inclusion, sourcing, and substance — Include quotable, attributable statements—ideally from authorized leaders or experts—that add new insight and specifics (often with numbers), avoid platitudes, 
+[137] Newsroom‑ready packaging and pickup readiness — Reduce newsroom friction with reusable copy, verified resources, and plug‑and‑play materials so editors can publish with minimal callbacks or rewrites.
+[138] Press kit completeness and distribution — Assemble/distribute a complete press kit with backgrounders, fact sheets, company history, sources, and links to assets in outlet‑preferred formats (including w
+[139] Lede effectiveness and inverted‑pyramid structure — Open with a concise, news‑first lede that answers the 5Ws/How and stakes; front‑load key facts and use an inverted pyramid flow, placing quotes/background later
+[140] Headline/subject line effectiveness — Craft clear, concise, news‑first headlines/subjects that summarize the core action, parties, and relevance; signal news value without sensationalism and drive o
+[141] Boilerplate inclusion and quality — Include a standard ‘About’ section that is current, accurate, and distinctive—succinctly covering mission, scope, credibility, and differentiators without gener
+[142] Calls‑to‑action (CTA) effectiveness — Provide clear, action‑oriented next steps matched to target audiences; use motivating, specific language to drive response or mobilization.
+[143] Audience understanding and tailoring — Demonstrate clear understanding of target segments and align content, tone, packaging, and channels to their needs and context.
+[144] Audience segmentation and targeting — Identify and prioritize audience segments; tailor key messages, formats, channels, and language to each segment’s needs and preferences.
+[145] Journalist‑centric targeting and pitching — Match topics, style, depth, and assets to outlet/reporter beats and their audience; personalize thoughtfully; meet media formatting/timing needs to earn coverag
+[146] Search and algorithmic discoverability — Optimize headlines, body, links, and asset metadata for search and emerging AI/aggregator surfaces; use relevant keywords, descriptive filenames/alt text, and d
+[147] Multimedia assets: quality, relevance, and storytelling — Provide high‑quality, relevant visuals/audio that are designed for clarity, easy reuse, and immediate storytelling impact without overwhelming the content.
+[148] Data visualization effectiveness — Select and design charts/infographics to highlight the key finding; follow data‑viz best practices for accuracy, hierarchy, color, and medium suitability.
+[149] Evidence‑backed, specific, quantified claims — Support assertions with specific, verifiable numbers and well‑sourced evidence; cite provenance so statistics survive editing and withstand scrutiny.
+[150] Customer proof and measurable outcomes — Use third‑party validation—named customers/partners, testimonials/logos, case outcomes—and concrete traction metrics to substantiate impact.
+[151] Plain, concise, engaging writing — Write in clear, jargon‑free prose with tight focus, varied yet controlled sentences, and high information density; every sentence advances the news.
+[152] Awards/milestones announcement effectiveness — State the achievement clearly, explain significance, present measurable results, follow required formats, and supply relevant ceremony/context details.
+[153] Event announcement essentials and media readiness — Highlight agenda, speakers, logistics, and why it’s must‑attend; ensure broadcast‑friendly talent/availability to boost coverage.
+[154] Use proprietary/original data to create news — Publish proprietary research or trend data that generates newsworthy, reusable content and positions the organization with unique insight.
+[155] Founder/CEO voice strategy — Use a distinct founder/executive voice intentionally to differentiate the brand, add credibility, and strengthen narrative cohesion.
+[156] Rebrand strategy and respect for brand equity — Rebrand only with clear strategic rationale; preserve iconic equity and public attachment where prudent, acknowledging identity’s cultural role.
+[157] News value and angle strength — Present a strong, timely, trend‑aligned angle that makes editors/audiences care and offers credible pickup potential.
+[158] Explain why it matters — Make the relevance to the intended audience explicit early—why it matters now and why readers should care; connect to trends where apt.
+[159] Local relevance and geographic context — Surface proximity and place: specify where programs/events occur, add geographic context, and frame community relevance for local outlets.
+[160] Social/digital platform optimization — Adapt content and assets to social platforms and their algorithms; produce platform‑native versions (e.g., short video), leverage partnerships, and drive reach/
+[161] Channel strategy and multi‑channel coordination — Select the right media/channels, adapt versions/lengths to each, and coordinate consistent core messaging across touchpoints while accounting for channel‑specif
+[162] Embeddability and reuse for media — Provide excerptable, embeddable assets and structure content for easy reuse (slides, pull quotes, carousels) across outlets and owned channels.
+[163] Explicit acknowledgment and sincere apology — State clearly what went wrong and who was harmed; accept responsibility; apologize unambiguously and promptly; remove/stop offending content where warranted.
+[164] Concrete corrective actions and prevention — Specify immediate steps taken and longer‑term safeguards to prevent recurrence; detail changes, investigations, and program improvements.
+[165] State limitations and caveats — Explicitly state study or claim limitations and appropriate caveats to guide accurate interpretation.
+[166] Value proposition and competitive differentiation — Translate capabilities into clear, compelling benefits; articulate distinctiveness vs competitors; ensure creative links directly to product value.
+[167] Active voice — Use active voice wherever possible for clarity, energy, and direct attribution.
+[168] Headline is concise and clearly summarizes the news — Provide a short, eye‑catching headline that immediately communicates the main announcement.
+[169] Headline and subhead effectiveness — Craft specific, news‑hooked headlines and subheads that succinctly summarize key outcomes (use numbers when helpful) and supply brief summaries when outlets req
+[170] Headline and lede effectiveness — Headlines and opening lines hook interest and deliver immediate value with an active, specific summary (tweetable headline, strong dek/lede, clear dateline), av
+[171] Lead with complete 5Ws and impact — Open with a lead that compresses who/what/when/where/why (with dateline where relevant), concrete details (names/dates/numbers), and audience impact.
+[172] Clarity and conciseness — Write clean, well‑structured copy that is brief yet complete, prioritizes clarity over style, and avoids filler.
+[173] Scannable formatting and layout — Make key points extractable at a glance with short paragraphs/sentences, subheads, bullets, white space, and mobile‑friendly structure.
+[174] Visual storytelling quality and integration — Use high‑quality, purposeful visuals (photos/video/charts/UX) integrated with text to clarify complex points, advance the narrative, and add appropriate emotion
+[175] Data visualization and infographic design — Choose and design charts/infographics for clarity and impact: appropriate chart types, disciplined content, readable hierarchy/typography, effective layout/colo
+[176] Interactive and animated explainers — Employ interactive/animated formats (e.g., step‑throughs, dashboards) to explain complex data, mechanisms, or processes.
+[177] Cultural sensitivity, representation, and harm avoidance — Anticipate cultural readings and current debates; avoid stereotypes/appropriation and prohibited or harmful content; engage authentically and mitigate misinterp
+[178] Accessibility for media — Provide accessible formats and language support—captions/subtitles/transcripts, alt text, and multi‑language tracks—so content works for diverse audiences and a
+[179] Broadcast‑ready B‑roll/VNR assets — Supply professional, timely B‑roll and VNR packages with shot variety, stabilization, edit‑ready clips, spokesperson/interview options, and usable soundbites to
+[180] Multimedia included (avoid text‑only) — Include high‑quality, rights‑cleared visuals (photos, video, infographics, audio) to strengthen the story and avoid text‑only releases.
+[181] Assets pre‑attached to the release — Upload and pre‑attach photos, video, and other media with the press release to reduce journalist effort and increase pickup.
+[182] Press‑release SEO optimization — Apply on‑page SEO best practices (structure, metadata, copy, rich media) so the release is discoverable in search and Google News.
+[183] Keywords and tags for SEO — Use relevant searchable keywords in headlines/summaries and natural copy (including boilerplate when appropriate) and apply correct topical tagging.
+[184] Audience and channel targeting and tailoring — Define the primary audience and tailor message, tone, and format to that audience and to outlet/beat and channel norms.
+[185] Local relevance and market targeting — Localize content and variants to increase community/regional news value; highlight concrete local/practical relevance and market‑specific angles.
+[186] Newsworthiness, novelty, and hook/angle selection — Anchor the story in strong, timely hooks and the most newsworthy angle; demonstrate real impact/novelty, cultural fit, continuity potential, and clear audience 
+[187] Quote strategy, quality, and execution — Include early, substantive, authentic quotes from appropriate voices that add new information/context/emotion, are concise and quotable, and are placed/packaged
+[188] Company boilerplate completeness — Provide a concise ‘About’ section with mission, history/scale, locations, key metrics, and relevant organizational context.
+[189] Body provides supporting detail with clear flow — After the lede, expand logically with background, data, and quotes that substantiate the news and explain the ‘why.’
+[190] Format and genre fit to news conventions — Match document type and objective news style to newsroom conventions (e.g., release vs advisory/alert) so copy is editor‑ready.
+[191] Visual design for readability and contrast — Use layout, grid, typography, and color/contrast to ensure legibility, clear hierarchy, and appropriate tone.
+[192] Clear, singular, effective call to action — Present one unambiguous, benefit‑oriented action aligned to the content, with easy next steps that motivate meaningful response.
+[193] Pitch personalization and outlet fit — Personalize outreach by referencing the journalist/outlet’s recent work and voice, targeting the right venues, and tailoring the angle/opening to their beat.
+[194] Pitch construction and distribution strategy — Craft concise, value‑driven pitches (include crisp methodology when relevant) and use tier‑appropriate distribution, angle selection, and calendar alignment.
+[195] Owned newsroom hub with topical navigation — Present releases on branded hubs with topical tags, categories, and filters to aid discovery and navigation.
+[196] Packaging design effectiveness and shelf recognition — Ensure packages are easy to find and choose with distinctive, validated designs that retain expected brand cues while balancing innovation.
+[197] Rebrand strategy coherence and naming/usability — Ground rebrands in strategy and consumer insight; preserve valuable equities and align naming/UX with entrenched semantics and user expectations.
+[198] Concrete evidence of value and impact — Back claims with specific, comprehensible evidence—quantified benefits, clear stats/examples, and features‑to‑benefits translation.
+[199] Concrete quantitative detail — Anchor the story with specific numbers and monetary figures, ideally early in the lede and reinforced in the body.
+[200] Comparative context and benchmarks — Provide benchmarks and peer/baseline comparisons and situate the product/idea against alternatives, including advantages and trade‑offs.
+[201] Professional newsroom style and consistency — Follow AP/newsroom style with correct grammar and usage, applying a consistent style guide; write objectively and copy‑ready.
+[202] Writing clarity, mechanics, and voice quality — Favor concrete, energetic prose with strong verbs; ensure grammatical correctness, eliminate redundancy, and maintain a conversational, authentic voice.
+[203] Tone and voice alignment — Maintain a courteous, professional tone aligned to brand and audience while remaining human and readable.
+[204] Lead‑first inverted pyramid and information hierarchy — Prioritize the most important information first with a strong lede; make relationships clear and structure for skimmability and human/machine parsing.
+[205] Press kit and background resources for journalists — Provide a journalist‑friendly kit/dossier bundling the release with key facts, backgrounders, images, and other reusable assets.
+[206] Press-ready multimedia asset package — Embedded and/or downloadable press-ready images, video, audio, and documents are provided (woven into the copy or as a media kit) so newsrooms can use them imme
+[207] Broadcast-usable B‑roll provided — Supply ready-to-air B‑roll clips (and related video/photography) prepared for broadcast use.
+[208] Subject line effectiveness — Email subject lines are compelling, specific, and personalized (without clickbait), include concrete entities/numbers where useful, and are tested or iterated f
+[209] Outlet/beat targeting and personalization — The angle and materials are tightly matched to the outlet/section and reporter’s beat and audience, with individualized references and appropriate tailoring.
+[210] Tailored versions for outlets/segments — Create tailored versions of the release/pitch for different outlets, sections, journalists, and audience segments.
+[211] Local/regional angle and proximity — Clearly articulate locally relevant angles, impacts, or identity hooks for the target market/outlet.
+[212] Headline effectiveness — Headline is captivating, concise, specific, and format-appropriate; it captures the key claim/angle and follows newsroom conventions.
+[213] Subheadline (dek) — presence, function, and SEO — A one- to two-sentence subhead (dek) appears under the headline, adds new context/teaser or key facts, bridges to the lede, and incorporates secondary keywords 
+[214] Information architecture and scannability — Use clear headings/subheads, bullets, and descriptive links to structure topical chunks and make content quickly scannable.
+[215] Lede summarizes the news concisely — The first paragraph crisply delivers the core who/what/when/why and principal result in one clear sentence.
+[216] Opening hook effectiveness — The opening uses a strong hook (e.g., vivid image, quote, question) that quickly signals what’s newly possible and draws readers into the inverted‑pyramid struc
+[217] Specificity and concreteness — Claims are supported with concrete, specific facts and examples; abstract statements are clarified with tangible details.
+[218] Situate findings within prior evidence — Explain whether the work is new or a replication and how it fits within existing studies/consensus so readers grasp novelty vs. confirmation.
+[219] Mobile optimization and performance — Design and test pages/assets for mobile-first consumption with responsive layouts, legible graphics, and fast-loading, optimized media.
+[220] Appropriate data visualization — type selection and usage — Choose visualization types matched to data and goals (e.g., line/scatter/timeline/maps), applying visual channels appropriately to make complex information easy
+[221] Launch/re‑launch campaign category — Work created to launch or relaunch a product or service.
+[222] AI content transparency and integrity — Clearly disclose AI‑generated or AI‑assisted content and endorsements; do not present synthetic media as real; maintain fact‑checking and editorial safeguards.
+[223] Clear separation and labeling of sponsored/native, opinion, and VNR content — Paid/native/sponsored and opinion/analysis content are conspicuously labeled and kept distinct from news; VNR/PR‑provided video segments are identified to audie
+[224] Evidence, methods, and source transparency — Supply verifiable sources and methods with direct links to primary documents/data, protocols/analysis plans, methodology details (incl. sample/scope/demographic
+[225] Authorship/source identification and authority signaling — Make the sender/author evident at first glance, disclose who created the content, and include verifiable credentials/roles to signal authority; credit original 
+[226] Media/investor contact availability and credibility — Provide prominent, complete, and correct contact details (names/roles/email/phone) and make qualified spokespeople/SMEs available for timely follow‑up.
+[227] Funding, sponsors, and conflicts of interest disclosure — Prominently disclose funding sources/sponsors, roles of funders, and relevant financial or personal conflicts; include required acknowledgments/wording and dono
+[228] Event IP, sponsorship, and placement compliance — Respect rights‑holder rules on protected marks/properties, sponsorship/placement restrictions, and avoid ambush marketing or unauthorized associations.
+[229] Media rights, licensing, and eligibility compliance — Clear rights and provide proper attribution for all third‑party media; ensure assets are eligible for distribution (no prohibited stock/AI unless allowed) and c
+[230] Accessibility and inclusive access for press materials and multimedia — Ensure accessible, machine‑readable materials across formats: alt text, captions/transcripts, sufficient contrast, screen‑reader compatibility, global language 
+[231] Embargo clarity, labeling, and access discipline — State embargo status and lift time clearly (or ‘For Immediate Release’), place labels prominently, control access to embargoed materials, and ensure compliance.
+[232] Journalistic tone, style, and newswriting conventions — Use neutral, AP‑style, newsroom‑ready writing (dateline, inverted pyramid, objective voice) and maintain tone discipline across headline/lead/body without promo
+[233] Headline clarity, specificity, SEO, and risk control — Use concise, publishable headlines with strong verbs and relevant keywords; state actors/amounts precisely; avoid sensationalism and unverified superlatives.
+[234] Clear calls‑to‑action and media facilitation — Include a clear, well‑placed CTA with a concrete destination (URL/contact) and essential link affordances (site, press room, newsletter/RSS, social).
+[235] Distribution‑readiness, pressroom UX, and discoverability — Optimize releases for reuse and discovery: structured formatting/metadata, newsroom landing pages, ungated downloads, embeddables/social sharing, and platform/S
+[236] Legal and regulatory compliance of public communications — Content undergoes appropriate legal/regulatory review and complies with sectoral and platform rules (e.g., FTC/FDA/HIPAA/SEC), including endorsements/disclosure
+[237] Truthful, substantiated claims and endorsements — Do not misrepresent affiliations, metrics, or capabilities; substantiate all claims (incl. endorsements/testimonials), avoid cherry‑picking and deceptive demos,
+[238] Scientific/medical evidence quality and reporting transparency — Match claims to evidence quality; disclose study design/limitations, uncertainty and harms; avoid over‑extrapolation; provide methods/data access and clear regu
+[239] Issuer identification and organizational branding presence — Make the issuing authority unmistakable with consistent branding (logo/letterhead/masthead), attribution lines, and correct organizational/mission identificatio
+[240] Brand identity and logo usage compliance — Apply official brand assets consistently (names, logos, colors, typography) and follow logo/mark rules across regions, channels, and event/competition contexts.
+[241] Required disclaimers and notices — Include all mandated legal/policy disclaimers and acknowledgments (e.g., external links, program/funder notices, limitations).
+[242] Forward‑looking statements safe harbor compliance — Include meaningful cautionary language for forward‑looking statements, identify key assumptions/risks, and state update obligations per law.
+[243] Consistency and parity across investor communications — Ensure parity and alignment across releases, calls, and decks; avoid tone or content gaps and Reg FD risks.
+[244] Earnings/investor disclosure completeness and analyst usefulness — Provide decision‑useful earnings context: key KPIs/definitions, comparative periods, guidance, operating metrics, and links/call logistics—organized for rapid a
+[245] Reg FD–compliant social media disclosure — If using social channels for disclosure, ensure open access, notify the market of channels, and follow organizational/Reg FD policies.
+[246] Financing round disclosure clarity and investor context — State round type/size, use of proceeds, investors, and concrete context (e.g., runway implications), consistent with filings and investor data.
+[247] M&A/SPAC transaction disclosure essentials — State deal type/structure, financing details, key pro forma facts, and (for SPACs) redemption/voting context and expected impacts.
+[248] Publication timing, dates, and timestamps clarity — Display clear issue/update dates and archival status; ensure timing information is accurate and prominent.
+[249] Quote inclusion and attribution quality — Include on‑the‑record quotes from authorized principals with clear names/titles that add substance and adhere to disclosure discipline.
+[250] Medium‑appropriate source attribution and citation — Follow medium‑specific attribution norms (e.g., broadcast lead‑ins/actualities; platform‑appropriate verbs) and provide clear source links.
+[251] Environmental claim substantiation and greenwashing avoidance — Make environmental/ESG claims specific and evidence‑backed; avoid misleading labels/offset implications and restricted terminology usage.
+[252] Funder/partner visibility, acknowledgments, and co‑branding compliance — Apply required funder/partner branding and acknowledgment language across channels (logo placement/hierarchy, mandated funding lines/emblems, localized co‑brand
+[253] Media‑ready visual assets quality and integrity — Provide press‑quality photos/video in standard formats, uphold captioning and photographic integrity standards, and avoid forcing technical fixes.
+[254] Reg G/Item 10(e) non‑GAAP presentation compliance — Present GAAP with equal or greater prominence, label non‑GAAP appropriately, provide reconciliations/definitions, justify metrics, and disclose changes for cons
+[255] Securities offering/quiet‑period communications discipline — During offerings/quiet periods, limit statements to permitted factual content aligned with filed materials; avoid guidance, selective, or expansive disclosures;
+[256] Clinical trial registration, identification, and methodological transparency — Identify and register trials (e.g., NCT), disclose approvals/eligibility, methods/protocols/changes with reasons, and report results/adverse events; link to pro
+[257] Metric changes disclosure and comparability — When KPIs/segment definitions change, disclose differences vs. prior periods, reasons/effects, bridges, and peer comparability context.
+[258] Publish‑ready multimedia assets provided — Supply high‑quality, publishable multimedia (logos, photos, headshots, B‑roll/demos) suitable for direct reuse and sharing.
+[259] Legal/enforcement and litigation disclosure transparency — Clearly disclose material legal/enforcement matters: identify parties/amounts, summarize remedies/settlement terms, include case captions, and note settlement l
+[260] MD&A disclosure quality and completeness — Provide decision‑useful MD&A: explain material increases/decreases and firm‑specific trends/uncertainties; quantify component drivers (price/volume/mix/currency
+[261] Non‑GAAP measures — compliance and presentation — Present non‑GAAP/KPIs per SEC/Reg G: reconcile to the most directly comparable GAAP, avoid individually tailored adjustments, explain usefulness/management use,
+[262] Standard press‑release structure and required elements — Follow a conventional news release layout and order: clear headline, dateline, lead/lede with 5Ws+H, body in inverted pyramid, quotes, data/support, boilerplate
+[263] Lead quality and inverted‑pyramid execution — Lead with the news and a complete 5Ws+H; avoid weak/company‑name‑first leads; attribute responsibility (people/institutions) and timing; maintain descending‑imp
+[264] Dateline placement and completeness — Clearly indicate where and when the release is issued and follow placement/convention rules for location/date in the lede/dateline.
+[265] AP style compliance and newsroom formatting — Adhere to AP Stylebook conventions (punctuation, capitalization, numbers, titles, attribution/quotes, names/libel usage) and present copy in newsroom‑ready form
+[266] Editorial style and mechanics — Maintain editorial quality beyond AP basics: correct grammar/usage, list and punctuation rules, standardized names/acronyms/nomenclature, consistent units and s
+[267] Media (and author, where applicable) contact completeness — Provide clear, complete, accurate follow‑up contacts: media/press office (name, title, email, phone, time zone; agency/social/URL where relevant) and, where app
+[268] Publication dating and currency labeling — Clearly label item type and display publication date/time plus last‑updated/reviewed date to indicate currency/version control.
+[269] Structured data and metadata for discoverability (SEO/OG/AI) — Implement NewsArticle/structured data and Open Graph/Twitter metadata correctly (key fields like headline/description/date/author), with AI/search‑friendly mark
+[270] Digital press kit and multimedia readiness — Provide an easy‑to‑access press kit/landing page with downloadable assets; embedded, mobile‑optimized multimedia; and broadcast‑ready B‑roll/sound bites, with c
+[271] Image/figure permissions and attribution compliance — Use only licensed or permitted images/figures/tables; secure necessary permissions for print/online; and include required captions, owner/photographer credits, 
+[272] Brand identity and logo usage compliance — Apply brand system rules consistently (logos/lockups, colors, fonts, iconography, control boxes/holding shapes); use only approved marks; respect restrictions/a
+[273] Major event IP usage and no implied association — Respect protected event properties (e.g., IOC/FIFA/Recording Academy): editorial‑only permissible uses, no contests/look‑and‑feel/program naming, no logos in br
+[274] EU funding visibility and emblem requirements — For EU‑funded activities, display required EU emblem(s) with prescribed wording and funding statements; ensure on‑site visibility and that emblem/statement appe
+[275] Boilerplate/footer completeness — Include a concise About/boilerplate at the end with mission, scale/impact, office/contact details, and any required standard statements.
+[276] Inclusive and respectful language — Use person‑first, culturally respectful, and up‑to‑date identity terminology (including pronouns/capitalization), avoiding outdated or pejorative terms.
+[277] Source citations and verifiable references — Support claims with precise, verifiable citations and/or anchor‑text links to primary sources (studies, filings, official reports), providing enough detail (e.g
+[278] Peer‑reviewed source linkage and registration (DOI/trial ID) — Base research‑related releases on peer‑reviewed work and link directly (DOI/URL); include trial/registry identifiers to document provenance and support verifica
+[279] Clinical research reporting standards adherence — Follow appropriate reporting guidelines (e.g., CONSORT and extensions, STROBE, TRIPOD/others as applicable), with sufficient methodological detail for reproduci
+[280] Accessibility compliance and device compatibility — Meet accessibility standards (Section 508/WCAG), ensure mobile‑friendly rendering, and provide formats suitable for distribution and archival (HTML/PDF/plain‑te
+[281] Visual/data visualization clarity and brand alignment — Ensure charts/graphics use accurate, accessible encodings and proportional geometry, with clear labels and legends; align with brand style without obscuring dat
+[282] High‑resolution, multi‑format asset provision — Supply suitable, high‑quality images and media in multiple resolutions, formats, and aspect ratios for web, print, and broadcast use.
+[283] TCFD/IFRS S2 pillars coverage — Disclose climate governance, strategy, risk management, metrics/targets, and scenario analysis (e.g., 2°C or lower) aligned with TCFD/IFRS S2.
+[284] Sustainability/climate framework alignment and materiality — Align sustainability/climate disclosures with recognized frameworks/standards (e.g., IFRS S1/S2, GRI incl. sector standards, SASB, CDSB/ESRS/CSRD/TCFD), apply a
+[285] Benchmarking with authoritative external metrics — Contextualize performance using credible indices, industry benchmarks, and analyst‑verified ratings/scorecards to substantiate claims.
+[286] Recall and safety‑incident communication essentials — For recalls/safety incidents, lead with customer protection and accountability; clearly state urgency, hazards, scope, remedies/advisories, and impacts of fixes
+[287] Byline/authorship accuracy and timestamp — Credit true authors appropriately (no honorary authors); include byline/role as relevant and display a clear publication date/time.
+[288] SEC Form 8‑K triggers and item characterization — Recognize events requiring 8‑K filings and file the correct item(s) (e.g., earnings releases, material agreements/restructuring); properly characterize furnishe
+[289] Lead completeness — Five Ws — The opening paragraph succinctly answers who, what, when, where, and why (and impact/how if relevant) within 2–3 sentences.
+[290] Dateline completeness (city and date of issuance) — Include a dateline at the start of the body that states the originating city and the release date; use “FOR IMMEDIATE RELEASE” when appropriate.
+[291] AP style adherence (grammar, usage, and format) — Consistently follow Associated Press style for grammar, capitalization, numerals, titles, and journalistic formatting.
+[292] Effect size and benefit quantification (relative and absolute) — Report treatment/main effects with both relative and absolute measures and provide clear quantitative context for readers.
+[293] Absolute effect sizes reported — Provide absolute effect measures (e.g., absolute risk, risk difference, counts, NNT), not only relative percentages/risks.
+[294] Confidence intervals reported — Include confidence intervals or equivalent uncertainty bounds for quantitative results to convey precision and uncertainty.
+[295] Effect sizes with confidence intervals — Present effect size estimates accompanied by confidence intervals (or equivalent) for each group/comparison to convey magnitude and precision.
+[296] Trial design clearly specified — State the study design and exact trial type (e.g., randomized parallel/factorial/cluster; non‑inferiority/equivalence) and key design descriptors.
+[297] Randomization methods and restrictions reported — Describe sequence generation, allocation ratio, and any restrictions (e.g., blocking, block size, stratification) used in randomization.
+[298] Participant flow diagram (CONSORT) — Provide a CONSORT‑style flow diagram showing enrolment, allocation, follow‑up, and analysis with numbers and reasons for losses/exclusions.
+[299] CONSORT adherence (core and extensions) — Adhere to CONSORT core guidance and applicable extensions (e.g., Abstracts, Equity, AI, Pragmatic, cluster/crossover/factorial, surrogate, SPI, ROUTINE) and com
+[300] Cite and link peer‑reviewed source (DOI) — Identify the underlying peer‑reviewed article and include a direct link/DOI to the full publication (or preprint where appropriate).
+[301] Recall communications completeness and owner support — Provide clear recall reasons, scope, remedies/processes (refund/repair/replacement), cadence, FAQs, step‑by‑step logistics, accessibility, and interim safety wo
+[302] New‑hire announcement essentials — Lead with the hire’s full name and title; include relevant background/accomplishments, near‑term priorities/long‑term objectives, reporting line, and a clear, a
+[303] Crisis timeline with precise timestamps — Provide a clear, time‑stamped chronology of key events and responses so readers can follow the sequence.
+[304] Battery system safety: monitoring, containment, and thermal‑runaway mitigation — Design to prevent/contain/mitigate internal shorts and thermal events; monitor at appropriate granularity, detect precursors, and prevent/limit cascade thermal 
+[305] Primary outcomes: effect sizes and precision reported — Report pre‑specified primary outcomes with quantitative effect estimates (absolute/relative as applicable) and their precision (e.g., confidence intervals).
+[306] GHG emissions consolidation aligned with financial reporting — Disclose required Scope 1/2 metrics and apply a consolidation approach for GHG emissions consistent with financial reporting consolidation/equity accounting.
+[307] Interpretation discipline — avoid overstatement and include caveats — Match claims/advice to the strength of evidence; avoid overstating mechanisms/benefits; balance benefits with risks/limitations and include explicit caveats abo
+[308] Explicit caveats/justifications for causal claims or advice — Qualify any causal statements or advice with explicit caveats or justifications (limits of inference, need for more research, non‑definitive findings).
+[309] Causal interpretation accuracy (association vs causation) — Ensure claims match study design and evidentiary strength; clearly distinguish association from causation (including genetic determinism), label correlational f
+
+# Worked examples
+
+## Example 1 (echoes_pr_adds_context)
+
+INPUT (unit_id=pair_50131_450594):
+PRESS RELEASE (id=50131):
+The Keyword
+ Skip to Main Content 
+ The Keyword 
+ {[ result.headline ]} 
+ About 
+ Press Corner 
+ RSS Feed 
+x The Keyword The Keyword
+ {[ result.headline ]} 
+Public Policy Supporting election integrity through greater advertising transparency Kent Walker Senior Vice President Published May 4, 2018 Related Articles
+ Help fight the opioid epidemic this National Prescription Drug Take Back Day 
+ 2018 Google North America Public Policy Fellowship now accepting applications 
+ Updating our "right to be forgotten" Transparency Report 
+ Extending domain opt-out and AdWords API tools 
+ New government removals and National Security Letter data 
+ Update on the Global Internet Forum to Counter Terrorism 
+Last year, Google committed to make political advertising more transparent. This week, we're rolling out new policies for U.S. election ads across our platforms as we work to meet those commitments.As a first step, we'll now require additional verification for anyone who wants to purchase an election ad on Google in the U.S. and require that advertisers confirm they are a U.S. citizen or lawful permanent resident, as required by law. That means advertisers will have to provide a government-issued ID and other key information. To help people better understand who is paying for an election ad, we're also requiring that ads incorporate a clear disclosure of who is paying for it. There's more to come. This summer, we'll also release a new Transparency Report specific... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "pair_50131_450594", "passages": [{"passage_text": "Google will begin requiring those who buy ads related to federal elections in the United States through its sprawling advertising network to prove that they are citizens or lawful residents of the country.", "passage_polarity": "positive", "signals": [{"signal_text": "Google will begin requiring those who buy ads related to federal elections in the United States", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [4, 222]}, {"signal_text": "to prove that they are citizens or lawful residents of the country", "signal_type": "observation", "polarity": "positive", "rubric_matches": [1, 98]}]}, {"passage_text": "In October,\n Google disclosed \nthat the Internet Research Agency, a Russian company accused of meddling in the 2016 presidential election, had spent nearly $5,000 buying online advertising during the election cycle.Laws in the United States restrict foreign entities from running election-related ads.", "passage_polarity": "neutral", "signals": [{"signal_text": "the Internet Research Agency, a Russian company accused of meddling in the 2016 presidential election, had spent nearly $5,000 buying online advertising during the election cycle", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [66, 70]}, {"signal_text": "Laws in the United States restrict foreign entities from running election-related ads", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [66]}]}, {"passage_text": "The new policies pertain to advertisements featuring candidates for federal office or current office holders. The rules do not apply to candidates for state or local offices. The policies also do not apply to advertisements on politically charged issues -- the types of topics that foreign agents used to sow division in the American electorate ahead of the 2016 elections.", "passage_polarity": "negative", "signals": [{"signal_text": "The rules do not apply to candidates for state or local offices", "signal_type": "observation", "polarity": "negative", "rubric_matches": [8, 165, 307]}, {"signal_text": "The policies also do not apply to advertisements on politically charged issues -- the types of topics that foreign agents used to sow division in the American electorate ahead of the 2016 elections", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [8, 165, 50]}]}]}
+
+## Example 2 (drops_pr_reframes_critical)
+
+INPUT (unit_id=pair_148798_199598):
+PRESS RELEASE (id=148798):
+Skip to Content 
+Savage Arms News 
+New Savage 110 Bear Hunter Delivers Superior Stopping Power on the Toughest Big Game  
+Open image as high-res.   WESTFIELD, Massachusetts - April 16, 2018 -  The new 110 Bear Hunter from Savage delivers steadfast performance and superior stopping power against tough game and even tougher conditions. Shipments of these firearms are currently being delivered to dealers. The 110 Bear Hunterâs revolutionary AccuFit system lets shooters easily customize the length-of-pull and comb height for a personalized fit, while the user-adjustable AccuTrigger system offers a crisp, clean pull and prevents the firearm from discharging if jarred or dropped.  Together with the AccuStock, which cradles the action three-dimensionally along its entire length, the 110 Bear Hunter provides the fit and function of a custom rifleâright out of the box. Plus, its 23-inch stainless steel fluted barrel is button-rifled, fitted with an adjustable muzzle brake and cradled securely inside a Mossy Oak Break-Up Country synthetic stock. Features & Benefits â¢ AccuFit system lets shooters quickly adjust comb height and length-of-pull â¢ User-adjustable AccuTrigger â¢ AccuStock rail system secures the action three-dimensionally along its entire length â¢ Mossy Oak Break-Up Country synthetic stock â¢ 23-inch, stainless steel barrel with straight fluting and button rifling â¢ Adjustable muzzle brake â¢ Hinged floorplate magazine â¢ Soft grip ... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "pair_148798_199598", "passages": [{"passage_text": "Vista Outdoor, among the largest producers of ammunition in the United States and one of just a few publicly held firearms companies, said on Tuesday that it plans to sell its gun-making business. Vista said it would \"explore strategic options\" for the Savage and Stevens firearms brands as part of a broader \"business transformation plan.\"", "passage_polarity": "neutral", "signals": [{"signal_text": "it plans to sell its gun-making business", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [94]}, {"signal_text": "Vista said it would \"explore strategic options\" for the Savage and Stevens firearms brands as part of a broader \"business transformation plan.\"", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [2, 3]}]}, {"passage_text": "Gun makers across the country have been under increasing pressure since the fatal shooting of 17 people at Marjory Stoneman Douglas High School in Parkland, Fla., in February. The rampage spurred a fast-moving push to boycott companies associated with the National Rifle Association and the firearms industry, which was already dealing with a slump in sales after the election of President Trump. In March, the firearms manufacturer Remington filed for bankruptcy.", "passage_polarity": "negative", "signals": [{"signal_text": "Gun makers across the country have been under increasing pressure since the fatal shooting of 17 people at Marjory Stoneman Douglas High School in Parkland, Fla., in February", "signal_type": "observation", "polarity": "negative", "rubric_matches": [50, 66, 70]}, {"signal_text": "The rampage spurred a fast-moving push to boycott companies associated with the National Rifle Association and the firearms industry", "signal_type": "observation", "polarity": "negative", "rubric_matches": [50, 66, 132]}, {"signal_text": "which was already dealing with a slump in sales after the election of President Trump", "signal_type": "observation", "polarity": "negative", "rubric_matches": [66, 200]}, {"signal_text": "In March, the firearms manufacturer Remington filed for bankruptcy", "signal_type": "observation", "polarity": "negative", "rubric_matches": [200, 66]}]}, {"passage_text": "Vista's share price fell by as much as 17 percent in early trading on Tuesday, before rebounding slightly to end the day down about 13 percent. The company has lost more than 65 percent of its market value in the past two years.", "passage_polarity": "negative", "signals": [{"signal_text": "Vista's share price fell by as much as 17 percent in early trading on Tuesday", "signal_type": "observation", "polarity": "negative", "rubric_matches": [116, 98]}, {"signal_text": "The company has lost more than 65 percent of its market value in the past two years", "signal_type": "observation", "polarity": "negative", "rubric_matches": [116, 200]}]}, {"passage_text": "After the shooting in Florida, which involved an AR-15 rifle, REI, a major seller of outdoor goods, suspended orders of Vista bike helmets and water bottles because of the company's production of assault-style firearms. Halley Knigge, a spokeswoman for REI, said on Tuesday that the retailer had not changed its relationship with Vista. Mr. Metz said on the conference call on Tuesday that although some retailers had joined REI in backing away from Vista, others had ordered even more of the company's products.", "passage_polarity": "negative", "signals": [{"signal_text": "REI, a major seller of outdoor goods, suspended orders of Vista bike helmets and water bottles because of the company's production of assault-style firearms", "signal_type": "observation", "polarity": "negative", "rubric_matches": [47, 66]}, {"signal_text": "Halley Knigge, a spokeswoman for REI, said on Tuesday that the retailer had not changed its relationship with Vista", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [2, 47]}, {"signal_text": "Mr. Metz said on the conference call on Tuesday that although some retailers had joined REI in backing away from Vista, others had ordered even more of the company's products", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [47, 2]}]}]}
+
+# Hard constraints (failures we have seen)
+
+1. **passage_text MUST be at least 50 chars** and MUST include the actual quality-judgment content, not just a section label. If a passage starts with "Strengths:", "Weaknesses:", "Pros:", "Cons:", etc., extend it to include the body text.
+
+2. **signal_text MUST be an exact substring of passage_text** — copy character-by-character, including punctuation, whitespace, and quotes. Do NOT paraphrase. If you can't find an exact span, skip that signal.
+
+3. **passage_text MUST be an exact substring of the news article covering a press release (the press release text is provided first, the news article second, separated by '---') text** — copy character-by-character.
+
+   - Do NOT add or remove whitespace anywhere — preserve ALL spacing, newlines, and tabs exactly as they appear in the source.
+   - Do NOT add spaces between CJK characters (Chinese / Japanese / Korean) and adjacent Latin characters. If the source is `这个group`, your passage_text contains `这个group`, NOT `这个 group`.
+   - Do NOT collapse markdown separators like `---` or `===` or `***`. If the source contains `---` between two paragraphs, the separator MUST appear inside your passage_text verbatim.
+   - When in doubt, copy a slightly longer span — the snap-to-source post-processor handles minor cases but cannot recover from character substitutions.
+
+4. **JSON escaping (CRITICAL — this is the #1 cause of broken output)**: the text often contains LaTeX commands like `\bullet`, `\mathcal`, `\theta`, `\alpha`. Inside a JSON string, a single backslash `\` followed by certain letters IS A CONTROL CHARACTER, not a literal backslash. So:
+
+   - Source has: `\bullet` (literal) → JSON string MUST contain `\\bullet` (escaped). Writing `\bullet` will produce a backspace character (0x08) in the output, NOT the LaTeX command.
+   - Source has: `\mathcal{O}` → JSON MUST be `\\mathcal{O}`.
+   - Source has: `\theta_0` → JSON MUST be `\\theta_0`.
+   - Source has: `\n` (literal backslash + n) → JSON MUST be `\\n`. Don't use `\n` because that produces an actual newline.
+
+   Every literal backslash in the source MUST be doubled in your JSON output. There are NO exceptions. If you are unsure, double the backslash — over-escaping is fine, under-escaping breaks parsing.
+
+5. **HIGH RECALL on signals**: aim 3-10 per passage. Don't miss quality judgments.
+
+6. **Capture both criticism and praise.** News coverage skews neutral-to-positive on average (outlets that wholesale critique a PR rarely cover it). The norm-adjacent signal often lives in WHAT GETS DROPPED from the PR vs WHAT GETS ADDED by the article. Extract both: (a) passages where the article echoes, qualifies, or contests a PR claim, and (b) passages where the article adds context, counter-sources, or material facts the PR omitted. All passages MUST be exact substrings of the input (which contains the PR followed by the article).
+
+7. **Empty rubric_matches `[]` is fine** — that signals a taxonomy gap, which is useful to surface.
+
+# Output format
+
+Output STRICT JSON on a SINGLE LINE. No markdown fences. No prose before or after. Schema:
+
+```
+{"unit_id": "<from input>", "passages": [
+  {"passage_text": "<exact substring of input, >=50 chars>",
+    "passage_polarity": "positive|negative|mixed",
+    "signals": [
+      {"signal_text": "<exact substring of passage_text>",
+        "signal_type": "complaint|praise|observation|suggestion",
+        "polarity": "positive|negative|neutral",
+        "rubric_matches": [<int>, ...]}
+    ]}
+]}
+```
+
+# Now process this news article covering a press release (the press release text is provided first, the news article second, separated by '---')
+
+unit_id: pair_38568_92500
+
+text:
+PRESS RELEASE (id=38568):
+Subscribe 
+Home / 
+Reviews / 
+Software / 
+Social Networking / 
+Zuckerberg Meets Pope Francis in Rome 
+Zuckerberg Meets Pope Francis in Rome 
+By  
+Chloe Albanesius 
+August 29, 2016 11:39am EST 
+10 Comments 
+Zuckerberg and wife Priscilla Chan presented Pope Francis with a model of its Internet drone Aquila.
+Facebook chief Mark Zuckerberg is in Rome this week, where he and wife Priscilla Chan met with Pope Francis at the Vatican. 
+" We told him how much we admire his message of mercy and tenderness, and how he's found new ways to communicate with people of every faith around the world," Zuckerberg wrote in a  Facebook post . 
+" We also discussed the importance of connecting people, especially in parts of the world without internet access," Zuckerberg continued. "We gave him a model of Aquila, our solar-powered aircraft that will beam internet connectivity to places that don't have it. And we shared our work with the  Chan Zuckerberg Initiative   to help people around the world." 
+The Pope has tried his hand at social media; he's on the Facebook-owned  Instagram  and  Twitter . He has  called the Internet  " a gift from God," though he warned people not to " barricade themselves behind sources of information which only confirm their own wishes and ideas, or political and economic interests." 
+Aquila is one tool in Facebook's arsenal of experimental Internet access delivery methods, which also include,  satellites ,  lasers , and  cellular access points . During a  June test flight , Aquila remained in the air for 96 minutes, but it will eventually fly for weeks at a time, beaming Internet signals up to 60 miles away. 
+Related 
+Pope's Old iPad Sells for $35,500 at Auction 
+Pope's Old iPad Sells for $35,500 at Auction 
+The Holy See press office  confirmed  that Pope Francis and Zuckerberg " spoke about how to use communication technologies to alleviate poverty, encourage a culture of encounter, and help deliver a message of hope, especially to th
+
+Output rules:
+- Do NOT think aloud. Do NOT explain your reasoning.
+- Do NOT preface with "Let me", "The user", "First I'll", "The paper concerns", or any meta-text.
+- Do NOT summarize the input news article covering a press release (the press release text is provided first, the news article second, separated by '---'). Skip the introduction. Go DIRECTLY to identifying quality-judgment passages.
+- Begin your response with the character `{` and end with `}`.
+- Output exactly ONE JSON object on ONE line. Nothing else before or after.

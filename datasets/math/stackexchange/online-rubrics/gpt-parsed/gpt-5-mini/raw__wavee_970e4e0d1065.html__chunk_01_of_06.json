@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_970e4e0d1065.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_970e4e0d1065.html",
+  "chunk_idx": 1,
+  "n_chunks": 6,
+  "chunk_chars": 39392,
+  "model": "gpt-5-mini",
+  "elapsed_s": 73.77579570799571,
+  "input_tokens": 10686,
+  "output_tokens": 3685,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI planning researchers, planner implementers, and domain modellers using PDDL/PDDL2.1",
+    "subtask_short": "pddl2.1 temporal planning semantics",
+    "subtask_description": "Specification and modelling guidance for durative actions, concurrency, numeric fluents, and continuous vs discrete effects in the PDDL2.1 planning language. Focuses on semantic constraints required for correct plan validity and for modelling domains.",
+    "subtask_keywords": [
+      "pddl2.1",
+      "temporal_planning",
+      "durative_actions",
+      "concurrency",
+      "numeric_fluents"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Invariant conditions and (over all)",
+        "description": "Invariant conditions in a durative action are required to hold over an interval that is open at both ends and are expressed using the (over all) construct.",
+        "guidance": "If a fact p must hold over the closed interval of a durative action, include (at start p), (over all p) and (at end p). The designers deliberately chose that (over all) does not apply to the start and end points to allow expression of conditions that are only required over the open interior (example: loading a truck where location must hold only during the interior)."
+      },
+      {
+        "name": "Distinguish start/end pre/postconditions from invariants",
+        "description": "Actions can have pre- and postconditions local to the start and end points and separate invariant conditions that hold over the interval.",
+        "guidance": "This distinction enables greater concurrency because planners may exploit effects at the start or end independently of invariants. Example: making (holding ?c ?o) a start effect and an end precondition but not an invariant allows temporary cessation during the interval."
+      },
+      {
+        "name": "Point-based view of time; half-open intervals",
+        "description": "Time is modelled point-based: logical state changes occur instantaneously at action start or end points. Propositions are true over half-open intervals that are closed on the left and open on the right.",
+        "guidance": "All discrete happenings occur at finite time points; actions may begin at any real time but state changes are at time points. This underpins rules about preconditions and assertions relative to instants."
+      },
+      {
+        "name": "No simultaneous assertion and negation at same instant",
+        "description": "For a plan to be valid, no logical condition can be both asserted and negated at the same instant.",
+        "guidance": "This prevents ill-defined contradictory updates at a single time point."
+      },
+      {
+        "name": "No requirement to hold and be asserted at same instant",
+        "description": "No logical condition can both be required to hold and be asserted at the same instant; an action with precondition P starting at time t requires a half-open interval immediately preceding t in which P holds.",
+        "guidance": "This is a conservative rule to avoid relying on unstable values at the instant of change (mathematically inconsistent with P being asserted at the same instant)."
+      },
+      {
+        "name": "No moving targets rule",
+        "description": "No two actions can simultaneously make use of a value if one is accessing the value to update it \u2014 the value is a 'moving target' for the other action.",
+        "guidance": "This rule disallows simultaneous read/write access at the same instant and makes proposition behaviour similar to shared-memory variables protected by mutex; it prevents ill-defined simultaneous dependent uses (example with actions A and B where one negates and asserts related atoms)."
+      },
+      {
+        "name": "Numeric access/update constraints",
+        "description": "No numeric value may be accessed and updated simultaneously at the start or end point of a durative action.",
+        "guidance": "For discretised durative actions numeric change is modelled with step functions and numeric values can be accessed or updated during another action's interval provided updates are consistent with invariants. For continuous durative actions values can be simultaneously accessed and updated during the continuous process. Multiple simultaneous updates are allowed provided the update operations are commutative."
+      },
+      {
+        "name": "Mutual exclusion and non-zero separation of conflicting end points",
+        "description": "To implement mutual exclusion, non-zero separation is required between mutually exclusive action end points.",
+        "guidance": "When end points are non-conflicting they may be treated as simultaneous for plan plausibility; when they are mutually exclusive the planner should buffer the co-occurrence explicitly by separating them by a non-zero amount so concurrency is at least plausible in the world."
+      },
+      {
+        "name": "Modeller responsibility for assign and discontinuous updates",
+        "description": "When assign constructs are used (discrete updates), it is the modeller's responsibility to ensure correct behaviour and to avoid concurrent accesses that would make the model flawed.",
+        "guidance": "The language allows modelling discontinuous updates (e.g., deposit that updates balance at end of 3 days) so forbidding concurrent access is not desirable; the modeller must ensure that no concurrent activity affects the same numeric value during the interval when assigns are used (example: water heating using assign should not have concurrent changes to temperature)."
+      },
+      {
+        "name": "Conservative resource updating for discretised actions",
+        "description": "When modelling continuous production/consumption with discrete durative actions, resource updating is conservative: consumption is modelled as if it happens at the start of an action and production as if it happens at the end.",
+        "guidance": "This conservative convention prevents invalid concurrency (e.g., concurrent consumers cannot use energy that is only produced at the end of a recharge action). The modeller must consider capacity constraints separately (see separate-resource modelling)."
+      },
+      {
+        "name": "Separate resource modelling when capacity matters",
+        "description": "If there is a capacity constraint on a resource, model two resources: the resource itself and the storage/space available for it.",
+        "guidance": "Example: dig action consumes energy at start and produces space at end; recharge consumes space at start and produces charge at end. This ensures plans cannot consume resource or storage before it's actually available."
+      },
+      {
+        "name": "Conditional effects must be temporally consistent",
+        "description": "Durative actions can have temporally annotated conditional effects; well-formedness requires that the condition is not checked after the effect has been asserted.",
+        "guidance": "Antecedents and consequents of a conditional effect are annotated (at start/at end) so the condition must be checked before the effect point. Conditional effects appear in all PDDL2.1 variants and their interpretation in discretised durative actions is addressed elsewhere (Section 8.1)."
+      },
+      {
+        "name": "Duration inequalities and additional requirements flag",
+        "description": "PDDL2.1 allows duration inequalities enabling actions to have variable durations; duration inequalities introduce additional semantic requirements and are associated with an extra requirements flag.",
+        "guidance": "Duration inequalities increase expressiveness versus fixed-duration actions (examples: match-burning with upper bound, heat-water with variable duration). They allow planners to exploit start effects and adapt durations to concurrent activity, but require extra validation (e.g., verifying duration constraints against concurrent updates)."
+      },
+      {
+        "name": "Continuous durative actions and #t",
+        "description": "Continuous durative actions specify continuous change using #t (time since start) so numeric variables can be expressed as functions of #t and evaluated at arbitrary points during the action.",
+        "guidance": "This allows correct calculation of values during overlapping continuous processes (example: fuel-level decreased as (* #t (consumption-rate ?p))). #t is local to each durative action. Continuous effects differ from discrete end-point decreases because they permit consultation of intermediate values."
+      },
+      {
+        "name": "Limit continuous effects to linear first-order for discretised checking",
+        "description": "If continuous effects are restricted to linear first-order forms (no continuous effects affecting rates of change of other continuous expressions) and invariants are linear, it is sufficient to check only the happening sequence and finitely many mid-points to validate plans.",
+        "guidance": "Non-linear or higher-order continuous effects can violate invariants between checked points, so they require more complex validation. The restriction keeps validation decidable by focusing on finite happening sequences."
+      },
+      {
+        "name": "Discrete vs continuous modelling trade-offs",
+        "description": "Discrete durative actions abstract continuous change with step-function effects at end points, while continuous durative actions model change throughout an interval.",
+        "guidance": "Discrete modelling is simpler but may require encapsulations for combinations of behaviours (e.g., fly-and-refuel) and forces small separations (no moving targets); continuous modelling is more expressive (e.g., mid-flight refuelling) but requires #t semantics and careful handling of interacting continuous effects."
+      },
+      {
+        "name": "Using duration inequalities to approximate continuous behaviour",
+        "description": "Duration inequalities in discrete durative actions can approximate continuous interactions by splitting an activity into multiple intervals whose total duration equals the desired continuous effect.",
+        "guidance": "This approximation is possible but results in end-point separations (small non-zero gaps) because of the no-moving-targets rule; continuous actions avoid these artificial gaps."
+      },
+      {
+        "name": "Restrict interior-time references to keep language simple",
+        "description": "The language restricts access to only action end points (start and end) rather than arbitrary interior points to keep PDDL2.1 simpler while preserving expressive power.",
+        "guidance": "Referencing finitely many interior time points could be syntactically possible but adds complexity without increasing expressive power, since sequences of linked durative actions can emulate such references."
+      },
+      {
+        "name": "No modelling of exogenous events in continuous actions",
+        "description": "Continuous durative actions do not support modelling of exogenous events; therefore the planner need only consider action endpoints and a finite set of mid-points for invariant checking.",
+        "guidance": "Because exogenous events are not modelled, arbitrary interior time points need not be considered for validity beyond those associated with the plan's actions and required invariant checks."
+      }
+    ]
+  }
+}

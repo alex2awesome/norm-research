@@ -1,0 +1,290 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 60,
+  "n_chunks": 92,
+  "chunk_chars": 39964,
+  "model": "gpt-5-mini",
+  "elapsed_s": 394.25583108299907,
+  "input_tokens": 14587,
+  "output_tokens": 8960,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users of GAP (computational algebraists, mathematicians/programmers using GAP) working with algebras",
+    "subtask_short": "GAP algebra API",
+    "subtask_description": "Reference manual entries describing functions, categories, properties, and conventions for constructing, inspecting, and manipulating algebras (structure-constants algebras, matrix algebras, Lie algebras, ideals, homomorphisms, gradings, etc.) in GAP.",
+    "subtask_keywords": [
+      "gap",
+      "algebra",
+      "structure_constants",
+      "homomorphism",
+      "computational_algebra"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "StructureConstantsTable",
+        "description": "Let B be a basis of a free left module R that is also a ring. StructureConstantsTable(B) returns a structure constants table T in sparse representation as used for structure-constants algebras. If B has length n then T is a list of length n+2. T[n+1] is one of 1, -1, or 0 indicating known symmetry (1 = symmetric, -1 = antisymmetric, 0 = other). T[n+2] is the zero element of the coefficient domain. The coefficients of the product of the i-th and j-th basis vector are stored in T[i][j] as a list of length 2: first the list of positions of nonzero coefficients, second the list of these coefficients.",
+        "guidance": "Multiplication is determined by structure matrices M_k with viv_j = sum_k m_{i j k} v_k; use the provided sparse format. Examples show output for QuaternionAlgebra. T encodes efficient representation and symmetry flags."
+      },
+      {
+        "name": "EmptySCTable",
+        "description": "EmptySCTable(dim, zero[, flag]) returns a structure constants table for an algebra of dimension dim describing trivial multiplication. zero must be the zero of the coefficient domain. Optional flag may be \"symmetric\" or \"antisymmetric\" to indicate known (anti)commutativity.",
+        "guidance": "Use SetEntrySCTable to fill entries. Provide the correct zero element. Examples demonstrate creating antisymmetric table."
+      },
+      {
+        "name": "SetEntrySCTable",
+        "description": "SetEntrySCTable(T, i, j, list) sets the entry of structure constants table T describing the product of i-th with j-th basis element to list. If T is known symmetric/antisymmetric then T[j][i] is also set accordingly.",
+        "guidance": "list must be of form [ck1_i_j, k1, ck2_i_j, k2, ...] where odd positions are positions (indices) and even positions are coefficients; odd-position indices must be compatible with zero element stored in T. Rational numbers in entries may be automatically converted to appropriate prime-field elements in finite characteristic. Examples show usage and resulting T."
+      },
+      {
+        "name": "GapInputSCTable",
+        "description": "GapInputSCTable(T, varname) returns a string describing structure constants table T in terms of EmptySCTable and SetEntrySCTable assignments to the variable varname.",
+        "guidance": "Useful to obtain GAP input code that reconstructs the table (e.g., for saving or reproducibility). Example shows the string generated."
+      },
+      {
+        "name": "TestJacobi",
+        "description": "TestJacobi(T) tests whether the structure constants table T satisfies the Jacobi identity v_i*(v_j*v_k) + v_j*(v_k*v_i) + v_k*(v_i*v_j) = 0 for all basis vectors v_i with i <= j <= k. Antisymmetry is assumed.",
+        "guidance": "Returns true if Jacobi identity is satisfied, otherwise returns a failing triple [i,j,k]. Use EmptySCTable(..., \"antisymmetric\") when appropriate. Example demonstrates success on a simple antisymmetric table."
+      },
+      {
+        "name": "IdentityFromSCTable",
+        "description": "IdentityFromSCTable(T) returns either fail or the vector of length n containing the coefficients of the multiplicative identity of the algebra described by T with respect to the table's basis.",
+        "guidance": "If algebra has no identity, fail is returned. Example shows constructing a table and retrieving identity coefficients [1,0]."
+      },
+      {
+        "name": "QuotientFromSCTable",
+        "description": "QuotientFromSCTable(T, num, den) returns either fail or the vector of length n of coefficients of the quotient x solving num = x * den (expressed in the basis of T).",
+        "guidance": "Solves the linear system num = x M where M_{j k} = sum_i c_i j k c_i (with ci_jk structure constants); if no solution exists returns fail. Example shows solution [0,1]."
+      },
+      {
+        "name": "QuaternionAlgebra constructor and semantics",
+        "description": "QuaternionAlgebra(F[, a, b]) returns a quaternion algebra over field F with parameters a and b: a 4-dimensional associative F-algebra with basis (e,i,j,k) satisfying ee=e, ei=ie=i, ej=je=j, ek=ke=k, ii = a e, i j = - j i = k, i k = - k i = a j, j j = b e, k j = - j k = b i, k k = -a b e. Default a=b=-1 in F.",
+        "guidance": "GeneratorsOfAlgebra and CanonicalBasis of quaternion algebras are [e,i,j,k]. QuaternionAlgebra results are cached (QuaternionAlgebraData) so family membership (same parameters) can be compared. Embeddings of certain fields (like Gaussian rationals) may not be uniquely determined; user can specify embeddings via vector space homomorphisms."
+      },
+      {
+        "name": "ComplexificationQuat",
+        "description": "ComplexificationQuat(vector) / ComplexificationQuat(matrix) converts vectors or matrices over a quaternion algebra A = eF \u2295 iF \u2295 jF \u2295 kF into corresponding representations over a complexified/block matrix form: for vector v = v1 + v2 j with v1= e w1 + i w2 and v2 = e w3 + i w4, returns concatenation of w1+E(4)w2 and w3+E(4)w4. For matrices returns a 2x2 block matrix with specified block formulas.",
+        "guidance": "Preserves multiplication in the sense ComplexificationQuat(v) * ComplexificationQuat(M) = ComplexificationQuat(v*M). Examples and block formulas given to guide construction."
+      },
+      {
+        "name": "OctaveAlgebra",
+        "description": "OctaveAlgebra(F) returns the algebra of octonions over the field F (an algebra of dimension 8 over F).",
+        "guidance": "Example shows OctaveAlgebra(Rationals) producing dimension 8 algebra."
+      },
+      {
+        "name": "FullMatrixAlgebra / MatrixAlgebra / MatAlgebra",
+        "description": "FullMatrixAlgebra(R, n) (alias MatrixAlgebra/MatAlgebra) constructs the full n x n matrix algebra over ring R (nonnegative integer n).",
+        "guidance": "Matrix algebras are finite-dimensional; examples show Dimension(FullMatrixAlgebra(Rationals,20)) = 400."
+      },
+      {
+        "name": "NullAlgebra",
+        "description": "NullAlgebra(R) is the zero-dimensional algebra over R (an algebra of dimension 0).",
+        "guidance": "Example demonstrates Dimension(NullAlgebra(Rationals)) == 0."
+      },
+      {
+        "name": "Subalgebra",
+        "description": "Subalgebra(A, gens[, \"basis\"]) returns the F-algebra generated by gens with parent algebra A, where F is the left acting domain of A. Being a subalgebra means: be an algebra, be contained in A, and have the same left acting domain as A.",
+        "guidance": "Optional \"basis\" argument indicates gens are already a basis: skips checks for linear independence and containment. Examples compare Subalgebra results and dimensions."
+      },
+      {
+        "name": "SubalgebraNC",
+        "description": "SubalgebraNC(A, gens[, \"basis\"]) is like Subalgebra but does not check whether elements in gens lie in A.",
+        "guidance": "Use when you know gens lie in A to skip checks; example shows constructing subalgebra with IdentityMat and specifying \"basis\"."
+      },
+      {
+        "name": "SubalgebraWithOne",
+        "description": "SubalgebraWithOne(A, gens[, \"basis\"]) returns the algebra-with-one generated by gens with parent algebra A.",
+        "guidance": "Optional \"basis\" skips checking linear independence and membership. Example compares dimensions of SubalgebraWithOne vs Subalgebra when identity presence changes dimension."
+      },
+      {
+        "name": "SubalgebraWithOneNC",
+        "description": "SubalgebraWithOneNC(A, gens[, \"basis\"]) is like SubalgebraWithOne but does not check membership of gens in A.",
+        "guidance": "Use when you know gens are contained to speed up construction. Example demonstrates constructing algebra-with-one from random matrix."
+      },
+      {
+        "name": "TrivialSubalgebra",
+        "description": "TrivialSubalgebra(A) returns the zero-dimensional subalgebra of algebra A.",
+        "guidance": "Example shows TrivialSubalgebra(QuaternionAlgebra(Rationals)) has Dimension 0."
+      },
+      {
+        "name": "Ideals in algebras (general guidance)",
+        "description": "For constructing and working with ideals in algebras, the same functions as for ideals in rings are available (see Chapter 56). Quotient algebras construction references the user's tutorial.",
+        "guidance": "Examples show use of Ideal(A,[m]), LeftIdeal(A,[m]), Dimension of ideal, GeneratorsOfIdeal, and BasisVectors. For ideals in matrix algebras, examples show left-ideal constructions and dimensions."
+      },
+      {
+        "name": "IsFLMLOR",
+        "description": "IsFLMLOR(obj) is the category test for a FLMLOR (free left module left operator ring): a ring that is also a free left module. Note this is not a property a ring can 'get' since rings are usually not represented as external left sets.",
+        "guidance": "Examples: FullMatrixAlgebra(Rationals,2) returns true. Use to classify objects that are simultaneously rings and free left modules."
+      },
+      {
+        "name": "IsFLMLORWithOne",
+        "description": "IsFLMLORWithOne(obj) tests whether obj is a ring-with-one that is also a free left module (a FLMLOR-with-one).",
+        "guidance": "Examples: FullMatrixAlgebra(Rationals,2) returns true. Similar caveats about representation apply."
+      },
+      {
+        "name": "IsAlgebra",
+        "description": "IsAlgebra(obj) is true when obj is a ring that is also a left vector space (i.e., an algebra in GAP sense).",
+        "guidance": "Example: MatAlgebra(Rationals,3) returns true. Being an algebra is a category/test, not necessarily a mutable property of an arbitrary ring object."
+      },
+      {
+        "name": "IsAlgebraWithOne",
+        "description": "IsAlgebraWithOne(obj) is true when obj is a ring-with-one that is also a left vector space (an algebra-with-one).",
+        "guidance": "Example: MatAlgebra(Rationals,3) returns true."
+      },
+      {
+        "name": "IsLieAlgebra",
+        "description": "IsLieAlgebra(A) is a filter: A is a Lie algebra if a * a = 0 for all a in A and (a*(b*c)) + (b*(c*a)) + (c*(a*b)) = 0 for all a,b,c in A (Jacobi identity).",
+        "guidance": "Examples: FullMatrixLieAlgebra(Rationals,3) returns true. TestJacobi on structure constants tables assumes antisymmetry and checks Jacobi in that representation."
+      },
+      {
+        "name": "IsSimpleAlgebra",
+        "description": "IsSimpleAlgebra(A) is true if algebra A is simple and false otherwise. Implementation only exists for associative algebras and for Lie algebras (the Lie-algebra case only for ground fields of characteristic zero).",
+        "guidance": "Example: FullMatrixLieAlgebra(Rationals,3) returns false; MatAlgebra(Rationals,3) returns true. Be aware of implementation restrictions (associative/Lie and char 0 limit)."
+      },
+      {
+        "name": "IsFiniteDimensional (matrix algebras)",
+        "description": "IsFiniteDimensional(matalg) returns true for a matrix algebra matalg, since matrix algebras are always finite-dimensional.",
+        "guidance": "Intended primarily as a method specialized for matrix algebra objects; example returns true for MatAlgebra(Rationals,3)."
+      },
+      {
+        "name": "IsQuaternion / IsQuaternionCollection / IsQuaternionCollColl",
+        "description": "IsQuaternion checks elements constructed by QuaternionAlgebra; IsQuaternionCollection and IsQuaternionCollColl classify collections of quaternions and collections of quaternion collections (e.g., a matrix of quaternions).",
+        "guidance": "Examples show IsQuaternion(basis_element) true and IsQuaternionCollColl([...]) true for nested lists of quaternion elements."
+      },
+      {
+        "name": "GeneratorsOfAlgebra",
+        "description": "GeneratorsOfAlgebra(A) returns a list of elements that generate A as an algebra. For a free algebra each generator can also be accessed using the . operator (GeneratorsOfDomain).",
+        "guidance": "Example shows GeneratorsOfAlgebra on an AlgebraWithOne returns list including identity and algebra generator(s)."
+      },
+      {
+        "name": "GeneratorsOfAlgebraWithOne",
+        "description": "GeneratorsOfAlgebraWithOne(A) returns a list of elements of A that generate A as an algebra-with-one.",
+        "guidance": "For free algebra-with-one, generators can be accessed via . operator. Example demonstrates a single generator list returned."
+      },
+      {
+        "name": "ProductSpace",
+        "description": "ProductSpace(U, V) is the vector space spanned by {u * v | u in U, v in V} where U and V are subspaces of the same algebra.",
+        "guidance": "If U=V known to be an algebra then ProductSpace is an algebra and an ideal in U. If U and V are ideals in A then ProductSpace is an algebra and an ideal in A. Example: ProductSpace(A,B) yields expected dimension in quaternion algebra case."
+      },
+      {
+        "name": "PowerSubalgebraSeries",
+        "description": "PowerSubalgebraSeries(A) returns a list of subalgebras of A: first term is A; each next term is the product space of the previous term with itself.",
+        "guidance": "Used to examine closure under multiplication. Example shows trivial series for QuaternionAlgebra."
+      },
+      {
+        "name": "AdjointBasis",
+        "description": "AdjointBasis(B) returns the basis of the F-vector space of matrices corresponding to the adjoint maps ad(x) (left multiplication by x) for x running over the basis B = (x1,...,xn). The returned basis consists of matrices for ad(x1),...,ad(xn).",
+        "guidance": "Useful for representing left multiplication as matrices; example shows the 4x4 matrices for quaternion algebra adjoint basis."
+      },
+      {
+        "name": "IndicesOfAdjointBasis",
+        "description": "IndicesOfAdjointBasis(B) where B is the basis returned by AdjointBasis(B) returns a list of indices i such that ad_{x_i} is a basis vector of the matrix space spanned by ad(A).",
+        "guidance": "Example: for FullMatrixLieAlgebra(3) IndicesOfAdjointBasis returns complete index list [1..8]."
+      },
+      {
+        "name": "AsAlgebra",
+        "description": "AsAlgebra(F, A) returns the algebra over F generated by A (viewing A's elements as vectors over F to form an algebra).",
+        "guidance": "Example: AsAlgebra(Rationals, VectorSpace(...IdentityMat...)) returns an algebra of expected dimension."
+      },
+      {
+        "name": "AsAlgebraWithOne",
+        "description": "AsAlgebraWithOne(F, A) views algebra A (if it has an identity) as an algebra-with-one over F and returns that algebra-with-one.",
+        "guidance": "Example: create A via AsAlgebra then AsAlgebraWithOne(Rationals,A) yields algebra-with-one with generator identity included."
+      },
+      {
+        "name": "AsSubalgebra",
+        "description": "AsSubalgebra(A, B) views B as a subalgebra of A if all elements of B are contained in A and returns that subalgebra.",
+        "guidance": "Use to coerce/convert algebra objects when containment is known. Example demonstrates embedding 1-dimensional algebra into full matrix algebra."
+      },
+      {
+        "name": "AsSubalgebraWithOne",
+        "description": "AsSubalgebraWithOne(A, B) views B (an algebra-with-one) as a subalgebra-with-one of A if all elements of B are contained in A and returns that algebra-with-one.",
+        "guidance": "Example demonstrates converting simple algebra-with-one into subalgebra-with-one of a full matrix algebra."
+      },
+      {
+        "name": "MutableBasisOfClosureUnderAction",
+        "description": "MutableBasisOfClosureUnderAction(F, Agens, from, init, opr, zero, maxdim) returns a mutable basis of the F-free left module generated by init and their images under action of Agens from side(s) 'from' which is one of \"left\", \"right\", \"both\". zero is zero of module; maxdim is upper bound for closure dimension (or infinity if unknown).",
+        "guidance": "Can compute basis of associative algebra generated by Agens (use from='left' or 'right', opr = multiplication *, init containing identity or algebra generators). Note: if algebra has identity it may not be sufficient to take algebra-with-one generators as init; Agens need not contain identity. Also useful for ideals and modules by choosing appropriate Agens, init and opr. Use MutableBasisOfNonassociativeAlgebra for nonassociative cases where multiplying by generators may be insufficient. Example shows computing quaternion basis."
+      },
+      {
+        "name": "MutableBasisOfNonassociativeAlgebra",
+        "description": "MutableBasisOfNonassociativeAlgebra(F, Agens, zero, maxdim) returns a mutable basis of the (not necessarily associative) F-algebra generated by Agens, with zero element zero and maximum dimension maxdim (infinity if unknown).",
+        "guidance": "Difference to ClosureUnderAction: in general it is not sufficient to multiply just with algebra generators (except special cases like many Lie algebras). Example shows computing mutable basis for a Lie algebra."
+      },
+      {
+        "name": "MutableBasisOfIdealInNonassociativeAlgebra",
+        "description": "MutableBasisOfIdealInNonassociativeAlgebra(F, Vgens, Igens, zero, from, maxdim) returns a mutable basis of the ideal generated by Igens under action of the (not necessarily associative) F-algebra with vector-space generators Vgens. zero is zero element, from in {\"left\",\"right\",\"both\"}, maxdim upper bound or infinity.",
+        "guidance": "In general multiplying only by algebra generators may be insufficient (exceptions for many Lie algebras). Example demonstrates creating ideal basis from specified generators."
+      },
+      {
+        "name": "DirectSumOfAlgebras",
+        "description": "DirectSumOfAlgebras(A1,A2) or DirectSumOfAlgebras(list) returns the direct sum of the given algebras. All involved algebras must have the same left acting domain.",
+        "guidance": "If all involved algebras are associative the result is associative; if all are Lie algebras the result is Lie. Default representation is a structure-constants algebra. If all inputs are matrix algebras and either both are Lie or both are associative then result is also a matrix algebra of the appropriate type. Example: DirectSumOfAlgebras([A,A,A]) yields algebra of dimension triple."
+      },
+      {
+        "name": "FullMatrixAlgebraCentralizer",
+        "description": "FullMatrixAlgebraCentralizer(F, lst) where lst is a nonempty list of square matrices of same dimension n over field F returns the (pointwise) centralizer of all matrices in lst inside the full n x n matrix algebra over F.",
+        "guidance": "Use to compute centralizers of lists of matrices; example shows centralizer of adjoint matrices of quaternion basis is quaternion algebra-with-one of dimension 4."
+      },
+      {
+        "name": "RadicalOfAlgebra",
+        "description": "RadicalOfAlgebra(A) returns the maximal nilpotent ideal (the radical) of an associative algebra A.",
+        "guidance": "Example shows computing radical dimension for an AlgebraWithOneByGenerators. Only defined/meaningful for associative algebras."
+      },
+      {
+        "name": "CentralIdempotentsOfAlgebra",
+        "description": "CentralIdempotentsOfAlgebra(A) for an associative algebra A (which must have an identity) returns a list of central primitive idempotents whose sum is the identity element of A. (Synonym: CentralIdempotentsOfSemiring.)",
+        "guidance": "Used to decompose associative algebras into direct sums via central idempotents. Example shows CentralIdempotentsOfAlgebra applied to a direct-sum-of-quaternions algebra."
+      },
+      {
+        "name": "DirectSumDecomposition",
+        "description": "DirectSumDecomposition(L) returns a list of ideals of algebra L such that L equals their direct sum. Currently implemented for semisimple associative algebras and for Lie algebras (semisimple or not).",
+        "guidance": "Example: GroupRing(Rationals, G) yields a list of two-sided ideals whose dimensions sum to the algebra dimension; List(dd, Dimension) demonstrates decomposition sizes."
+      },
+      {
+        "name": "LeviMalcevDecomposition",
+        "description": "LeviMalcevDecomposition(L) returns a list [S, R] where S is a Levi\u2013Malcev (semisimple) subalgebra complementary to the radical of L and R is the radical. Implemented for associative and Lie algebras.",
+        "guidance": "Use to separate semisimple part and radical; examples show returned dimensions for simple upper-triangular algebra example and for full matrix Lie algebra."
+      },
+      {
+        "name": "Grading",
+        "description": "Grading(A) returns a record describing a grading of algebra A over an Abelian group G. The record contains at least: source (the Abelian group), hom_components (a function assigning to each g in source a subspace Ag), min_degree and max_degree (for integer gradings).",
+        "guidance": "There are no general methods to compute gradings; some algebras get natural gradings during construction (e.g., JenningsLieAlgebra). An optional component non_zero_hom_components (subset of source for which hom_components is nonzero) may be present for efficiency. Examples show inspecting hom_components and nonexisting degrees returning zero-dimension spaces."
+      },
+      {
+        "name": "AlgebraGeneralMappingByImages",
+        "description": "AlgebraGeneralMappingByImages(A, B, gens, imgs) constructs a general mapping from F-algebra A to F-algebra B by mapping elements in gens (elements of A) to imgs (elements of B) and taking the F-linear and multiplicative closure.",
+        "guidance": "gens need not generate A; if mapping does not define a linear and multiplicative map the result may be multivalued. For linear maps not preserving multiplication see LeftModuleHomomorphismByImages. Example shows using basis vectors of quaternion algebra mapping to basis of full matrix algebra; images can be multivalued/additive cosets."
+      },
+      {
+        "name": "AlgebraHomomorphismByImages",
+        "description": "AlgebraHomomorphismByImages(A, B, gens, imgs) returns the algebra homomorphism from A to B defined by mapping the list gens of generators of A to imgs in B. If gens do not generate A or the homomorphism does not exist (i.e., mapping defines only a multivalued mapping) then fail is returned.",
+        "guidance": "To skip checks use AlgebraHomomorphismByImagesNC. For multi-valued mappings use AlgebraGeneralMappingByImages. Example demonstrates constructing homomorphism between structure-constants algebra and matrix algebra."
+      },
+      {
+        "name": "AlgebraHomomorphismByImagesNC",
+        "description": "AlgebraHomomorphismByImagesNC(A,B,gens,imgs) is the unchecked operation called by AlgebraHomomorphismByImages. Its methods may assume gens generate A and the mapping defines an algebra homomorphism; results are unpredictable otherwise.",
+        "guidance": "Use only when the caller guarantees generators and homomorphism existence; example shows creating homomorphism without checks."
+      },
+      {
+        "name": "AlgebraWithOneGeneralMappingByImages",
+        "description": "AlgebraWithOneGeneralMappingByImages(A, B, gens, imgs) is analogous to AlgebraGeneralMappingByImages but the identity of A is automatically mapped to identity of B.",
+        "guidance": "Use when mapping should respect multiplicative identities. Example demonstrates constructing mapping sending algebra-with-one identity appropriately."
+      },
+      {
+        "name": "AlgebraWithOneHomomorphismByImages",
+        "description": "AlgebraWithOneHomomorphismByImages(A, B, gens, imgs) returns the algebra-with-one homomorphism mapping gens of A to imgs in B, assuming gens generate A as an algebra-with-one. If gens do not generate A as an algebra-with-one or the mapping does not exist then fail is returned.",
+        "guidance": "To avoid checks use AlgebraWithOneHomomorphismByImagesNC. For multi-valued mapping use AlgebraWithOneGeneralMappingByImages. Example shows mapping matrix idempotents to structure-constants basis elements mapping identity to identity."
+      },
+      {
+        "name": "AlgebraWithOneHomomorphismByImagesNC",
+        "description": "AlgebraWithOneHomomorphismByImagesNC(A,B,gens,imgs) is the unchecked operation counterpart to AlgebraWithOneHomomorphismByImages; methods may assume gens generate A and mapping defines a homomorphism (including mapping identity to identity).",
+        "guidance": "Use only when preconditions are satisfied to avoid unpredictable results otherwise. Example usage mirrors checked version but without safety checks."
+      }
+    ]
+  }
+}

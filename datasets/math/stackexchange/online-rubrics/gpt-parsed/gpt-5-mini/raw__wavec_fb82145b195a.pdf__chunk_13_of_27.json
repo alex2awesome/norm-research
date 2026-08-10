@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fb82145b195a.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fb82145b195a.pdf",
+  "chunk_idx": 13,
+  "n_chunks": 27,
+  "chunk_chars": 39580,
+  "model": "gpt-5-mini",
+  "elapsed_s": 106.28784754200024,
+  "input_tokens": 12068,
+  "output_tokens": 4241,
+  "extracted": {
+    "orientation": "academic_page",
+    "intended_audience": "undergraduate discrete mathematics instructors and students (and students implementing classroom projects)",
+    "subtask_short": "classroom_discrete_math_projects",
+    "subtask_description": "A collection of classroom-tested projects and worksheets for undergraduate discrete mathematics and introductory computer science courses, with instructor notes, student instructions, and concrete algorithmic projects (e.g., LZ'77 compression, Knuth\u2013Plass line-breaking, graph-complexity measures).",
+    "subtask_keywords": [
+      "discrete_mathematics",
+      "undergraduate",
+      "classroom_project",
+      "algorithms",
+      "pedagogy"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "LZ'77 compression triple format",
+        "description": "Rather than storing the uncompressed suffix Sn+1, store three pieces of information: (1) a pointer to the prior substring Si+1 (the beginning of Si+1), (2) the length L of the longest common prefix between Sn+1 and Si+1, and (3) the next character following that common prefix (the next bit).",
+        "guidance": "This is often more efficient (provably so for Markov sources). Implementation note: find i that gives the longest common prefix; store pointer, length, next char. Use suffix trees to find matching Si efficiently; examples illustrate compressing blocks by copying Xi+1..Xi+L and then writing next char."
+      },
+      {
+        "name": "Selecting match by longest common prefix",
+        "description": "To compress the next block Sn+1, consider all prior suffixes Si+1 (0 <= i < n) and choose i where Sn+1 and Si+1 have the longest prefix in common; denote that length L.",
+        "guidance": "This is the fundamental matching criterion for LZ'77-style compression; the chosen match yields L characters that can be encoded by pointer+length+next-character. Drawing suffix trees is helpful: the uncompressed string's parent in the suffix tree will be an ancestor of appropriate Si used for compression."
+      },
+      {
+        "name": "Use of suffix trees for matching",
+        "description": "Construct a suffix tree on S1, S2, ..., Sn to identify candidate Si with long common prefixes to the current uncompressed suffix.",
+        "guidance": "Suffix trees make the relationship between sibling suffixes visible; ex: S7 and S13 being siblings explains why S7 is a good match for S13. Drawing relevant suffix trees illustrates candidate selection and ancestry relationships."
+      },
+      {
+        "name": "LZ'77 decompression procedure",
+        "description": "Decompression proceeds block-by-block from the start of the file; in the compressed file each block is represented by a triple (pointer, length, next bit).",
+        "guidance": "For each triple, copy Xi+1..Xi+L into the next L positions of the output and append the next bit; repeat to reconstruct the original file. This mirrors the compression representation and must be implemented to recover the original stream exactly."
+      },
+      {
+        "name": "Multiplicity-based error-correction opportunities (Mn)",
+        "description": "When multiple valid pointer choices i exist for compressing a given block, the number of valid i's is called the multiplicity matching parameter Mn; this multiplicity provides extra bits that can be used (at no extra cost) for embedding error-detection/correction information.",
+        "guidance": "Up to floor(log2 Mn) extra bits can be embedded by choosing among the Mn pointers; e.g., when Mn=2 a single parity bit can be embedded by choosing the first pointer for a required '1' and the second pointer for a '0'. Use cases: parity checks over compressed bits, warnings on inconsistencies, or recovery actions. Many error-correction schemes are possible; the author notes his Ph.D. thesis studied this in depth."
+      },
+      {
+        "name": "When multiple pointers exist, allow creative error recovery",
+        "description": "If multiple pointers are valid at a compression stage, select among them to encode error-check data (parity, checksums) or to provide redundancy for later recovery.",
+        "guidance": "Examples: choose pointers to encode parity of bits compressed so far; on error detection, issue warnings or attempt recovery. Students are encouraged to devise object-oriented implementations and experiment with embedding schemes and image embedding techniques; published implementations with ECC extensions exist (see references)."
+      },
+      {
+        "name": "Feasible breakpoints (Knuth\u2013Plass)",
+        "description": "Feasible breakpoints are places where the algorithm will consider breaking a line; they are chosen so that the badness of the resulting line never exceeds a predefined tolerance.",
+        "guidance": "Tolerance is a user-set parameter (default 200, maximum 10,000). Lines with badness exceeding the tolerance are not considered feasible and are excluded from the graph. Increasing the tolerance increases the number of feasible breakpoints."
+      },
+      {
+        "name": "Badness metric (line-level)",
+        "description": "Badness measures whether the words on a line are too close together or too far apart (i.e., how much interword spacing deviates from the ideal for justification).",
+        "guidance": "Badness is computed per line and compared to the tolerance; lines with badness > tolerance are excluded. Intuitively: low badness = good spacing; high badness = too stretched or too squeezed. (Precise formulas are omitted in this simplified treatment; references give full formulas.)"
+      },
+      {
+        "name": "Demerits metric (paragraph-level)",
+        "description": "Demerits measure how well a given line fits with the other lines in the paragraph (readability and aesthetic continuity).",
+        "guidance": "Demerits are assigned per edge (line break) and include contributions from badness and penalties (e.g., hyphenation penalties, penalties for large differences between adjacent lines). The algorithm minimizes the sum of demerits along a path through the feasible-breakpoint graph to find the optimal paragraph. Example values in the text illustrate how different paths lead to different total demerits."
+      },
+      {
+        "name": "Penalties usage in demerits",
+        "description": "Penalties are additional quantities included in the demerits formula to discourage undesirable breaks, such as breaking at hyphens or having lines with very different spacing adjacent to each other.",
+        "guidance": "In the TeX diagnostic listing, p=... indicates penalty contributions for a given break. Penalties combine with badness to produce the demerits value for an edge. The simplified project omits full penalty handling but notes their aesthetic purpose."
+      },
+      {
+        "name": "Graph modeling for line breaking (Knuth\u2013Plass graph)",
+        "description": "Model the paragraph as an acyclic graph whose vertices are feasible breakpoints (arranged in levels corresponding to line numbers) and whose edges connect feasible breaks with weights equal to the demerits of the intervening line.",
+        "guidance": "Find the shortest path (minimum total demerits) from start to end to choose the breakpoints for the paragraph. The algorithm is implemented dynamically as the paragraph is read, maintaining feasible breakpoints and updating accumulated demerits\u2014techniques similar to Dijkstra and dynamic programming are used. The TeX diagnostic listing provides a compact textual representation of this graph."
+      },
+      {
+        "name": "Interpreting TeX diagnostic listings for the KP graph",
+        "description": "TeX's diagnostic listing encodes the feasible breakpoints and edges: lines beginning with @@ mark feasible breakpoints (vertices), and lines beginning with a single @ mark edges describing how a breakpoint can be reached, including badness (b=), penalty (p=), and demerits (d=).",
+        "guidance": "Decoding this listing recovers the graph: '@ via @@k b=BB p=PP d=DD' means there is an edge from @@k to the current @@ vertex with badness BB, penalty PP, and demerits DD. Use this to draw the graph and compute paths. The listing also shows t= (total demerits to that vertex) and arrows indicating parent vertices."
+      },
+      {
+        "name": "Dynamic paragraph-level optimization (KP algorithm behavior)",
+        "description": "Although the graph model considers the entire paragraph, the KP algorithm is implemented dynamically: as the paragraph is read, feasible breakpoints and their demerits are continually updated so that the algorithm builds the shortest path incrementally.",
+        "guidance": "This dynamic approach limits storage and computation while achieving a global optimum for the paragraph (as opposed to greedy line-by-line approaches used by many word processors)."
+      },
+      {
+        "name": "Student project work expectations (How to Work on Your Project)",
+        "description": "Expected workflow and deliverables for students: begin early and work daily; read the entire project; list unfamiliar words/concepts; seek additional sources; answer project questions with complete sentences and supporting equations/tables/diagrams; identify difficult questions early and seek help; obtain feedback; produce a written paper addressing all issues and connections to modern techniques.",
+        "guidance": "Instructor may assign parts or the entire project, monitor progress, and use the project as a significant portion of the grade (about 20%); the final solution should be a coherent written paper; be prepared to interpret historical language and verify claims with calculations or experiments."
+      },
+      {
+        "name": "Graph Complexity project deliverables",
+        "description": "For the graph-complexity project students must: (1) define a complexity measure assigning a nonnegative real number to each graph such that higher numbers indicate 'more complex', (2) motivate the measure and give examples computing or approximating values for several graphs, and (3) state and attempt to prove at least one conjecture about properties of the measure (e.g., monotonicity with subgraphs).",
+        "guidance": "Students are encouraged to use known complexity notions (number of spanning trees, genus, crossing number, chromatic number, sample variance of degrees, linear complexity, Boolean-construction complexity, average runtime of a fixed algorithm, minimum number of complete graphs to construct the graph), compare measures, and justify theoretical properties. Instructor notes suggest two class periods for presentations and that the project can be expanded into research."
+      },
+      {
+        "name": "Presentation and documentation standards for projects",
+        "description": "Student answers should use complete sentences and modern mathematical notation, include diagrams/tables as needed, discuss connections between the historical source and present-day techniques, and produce a written paper suitable as a substantial assignment.",
+        "guidance": "The instructor may require partial submissions or a single final paper; projects should reflect careful reading and verification of historical sources and may be used in place of an in-class exam."
+      },
+      {
+        "name": "Administrative/project-scoping guidance for instructors",
+        "description": "Project implementation notes for instructors: allow several weeks per project (2\u20136 weeks depending on depth), set aside class time for work and presentations, adapt questions to course level, provide instructor notes, and make project worth a significant portion of the grade (~20%).",
+        "guidance": "Instructors should work through projects beforehand, decide which parts suit their course, provide context for historical sources, and monitor student progress. Source files may be downloaded and edited for classroom use."
+      }
+    ]
+  }
+}

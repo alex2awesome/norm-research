@@ -1,0 +1,99 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_b0cd4d2ec42d.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10997,
+  "output_tokens": 3097,
+  "elapsed_s": 1619.6991707920097,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "legal NLP researchers, legal scholars, and practitioners interested in applying LLMs for semantic annotation of legal texts",
+    "subtask_short": "zero-shot legal semantic annotation",
+    "subtask_description": "Assign short legal text snippets (sentences / clause-level spans) to semantic types using a general-purpose LLM in a zero-shot setting, and compare performance to standard baselines and supervised models. The focus is on practical prompt construction, evaluation, and trade-offs (cost, token limits, training-data requirements).",
+    "subtask_keywords": [
+      "legal_nlp",
+      "semantic_annotation",
+      "zero_shot",
+      "gpt-3.5",
+      "contract_and_case_texts"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use compact one-sentence semantic type definitions",
+        "description": "The GPT model\u2019s annotations are based on compact one sentence long semantic type definitions provided to the model as a prompt.",
+        "guidance": "Provide concise definitions for each semantic type (single-sentence) and include them in the prompt template (Figure 2). Note that extremely compact definitions may limit the model's ability to capture nuanced types."
+      },
+      {
+        "name": "Batch prediction prompt template and prompt construction",
+        "description": "Embed document type, semantic type names, their definitions, and analyzed text snippets into a batch prompt template that primes the model to generate semantic type predictions.",
+        "guidance": "Replace template placeholders (e.g., {{document_type}}, {{category_n_name}}, {{category_n_definition}}, {{text_snippet_n}}) and return the list of predicted labels as the completion. Construction should maximize cost-effectiveness but may somewhat limit performance."
+      },
+      {
+        "name": "Batch size limited by token budget (4097 tokens)",
+        "description": "Make batches as large as possible to achieve cost effectiveness; batch size is determined by evaluated text snippets that can fit into the prompt (4,097 tokens), leaving space for the completion.",
+        "guidance": "Batch sizes used: 50 for BVA sentences, 20 for CUAD clauses, 10 for PHASYS provisions. Choose batch size by balancing prompt token usage and desired completion tokens."
+      },
+      {
+        "name": "GPT generation settings (temperature, max_tokens, top_p, penalties)",
+        "description": "Set temperature to 0.0, max_tokens to 500, top_p to 1, frequency_penalty to 0, and presence_penalty to 0 for deterministic, factual outputs.",
+        "guidance": "Temperature 0.0 avoids randomness; higher temperature increases creativity but may reduce factuality. max_tokens controls maximum output length. frequency/presence penalties set to 0 allow necessary repetition (important when outputting labels)."
+      },
+      {
+        "name": "Evaluation metric: micro-F1",
+        "description": "Report performance of systems using micro-F1 scores (and provide confusion matrices for class-level analysis).",
+        "guidance": "Compare micro-F1 across datasets (e.g., .73 BVA, .86 CUAD, .54 PHASYS) and use confusion matrices to diagnose systematic errors and class confusions."
+      },
+      {
+        "name": "Baseline: Jaccard similarity (tokens as sets)",
+        "description": "Use Jaccard similarity between snippet tokens and type-definition tokens as a simple baseline: assign the label whose definition has greatest token-set similarity with the snippet.",
+        "guidance": "Baseline tests exact-word overlap; expect LLM semantic understanding to outperform this when semantics rather than exact wording matter."
+      },
+      {
+        "name": "Supervised ML benchmarking (random forest with grid search)",
+        "description": "Benchmark against a traditional supervised statistical model (random forest) evaluated with 10-fold cross-validation at the document level, using grid search for hyperparameter selection.",
+        "guidance": "Grid search space considered n-gram type, number of estimators, and maximum tree depth. Random forest often requires large labeled training sets (often close to 1,000) to match GPT performance."
+      },
+      {
+        "name": "Supervised LLM benchmarking (fine-tuned RoBERTa)",
+        "description": "Fine-tune a base RoBERTa model for comparison: fine-tune for 10 epochs, batch size 16, sequence length 512, optimizer Adam with initial learning rate 4e-5.",
+        "guidance": "Use same cross-validation splits as random forest. RoBERTa requires several hundred training examples to match zero-shot GPT performance on many tasks."
+      },
+      {
+        "name": "Learning-curve analysis via varied training set sizes",
+        "description": "Train supervised systems on training sets of varying sizes (20, 50, 100, 250, 500, 1,000, @Max) to determine how many labeled documents are needed to match/exceed GPT-3.5.",
+        "guidance": "Use random sampling of documents per cross-validation fold; identify the point where supervised models catch up (light-blue/light-green cells in Table 1 indicate parity points)."
+      },
+      {
+        "name": "Cost-effectiveness trade-off in prompt/batch design",
+        "description": "Maximize batch size to reduce API cost, recognizing that cost-driven prompt compression may limit model performance.",
+        "guidance": "Design prompts and batch sizes with awareness of token limits and desired output quality; cost minimization can reduce available context and thus labeling accuracy."
+      },
+      {
+        "name": "Dataset selection and preprocessing: use manually annotated short snippets",
+        "description": "Use existing manually annotated datasets that attach expert labels to short pieces of text; filter and process data to produce suitable short snippets for annotation (often sentences or clause-level spans).",
+        "guidance": "Datasets used: BVA (rhetorical roles in BVA decisions), CUAD (contract clause types), PHASYS (statutory/regulatory provisions). Some spans may be non-contiguous and referenceable with citations."
+      },
+      {
+        "name": "Account for dataset-specific characteristics (imbalance, definition clarity)",
+        "description": "Consider class imbalance, clarity/quality of semantic-type definitions, and reliance on annotator informal expertise as factors affecting model performance.",
+        "guidance": "PHASYS performance was low due to Response type imbalance (62.4%), less clear type definitions, and nuanced distinctions; these properties can reduce zero-shot effectiveness."
+      },
+      {
+        "name": "Use confusion matrices to identify problematic classes",
+        "description": "Produce confusion matrices (true labels by predicted labels) to analyze systematic misclassifications and classes that are difficult to distinguish.",
+        "guidance": "Examples: large number of Evidence sentences misclassified as Reasoning in BVA; Emergency Response labeled as Preparedness in PHASYS; some CUAD clause types are easily confused (Minimum Commitment, Profit Sharing, Volume Restrictions)."
+      },
+      {
+        "name": "Human-expert QA and hybrid workflow recommendation",
+        "description": "When low tolerance for annotation errors exists, subject zero-shot LLM predictions to human-expert quality assurance, potentially producing a labeled dataset suitable for fine-tuning domain-adapted LLMs.",
+        "guidance": "A human-in-the-loop process can convert LLM outputs into high-quality training data that enables supervised fine-tuning and higher overall accuracy."
+      },
+      {
+        "name": "Interpretability of baseline vs model: semantics vs word-overlap",
+        "description": "Recognize that simple baselines (Jaccard) rely on word overlap whereas LLMs leverage broader semantic information, explaining substantial performance differences.",
+        "guidance": "Use this distinction when judging feasibility of zero-shot annotation: tasks requiring semantic generalization favor LLMs over token-overlap baselines."
+      }
+    ]
+  }
+}

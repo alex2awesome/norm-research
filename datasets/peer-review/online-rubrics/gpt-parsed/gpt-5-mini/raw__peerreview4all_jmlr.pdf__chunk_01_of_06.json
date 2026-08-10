@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peerreview4all_jmlr.pdf",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "peerreview4all_jmlr.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 6,
+  "chunk_chars": 39905,
+  "model": "gpt-5-mini",
+  "elapsed_s": 58.85949875000006,
+  "input_tokens": 12897,
+  "output_tokens": 4124,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference/program chairs designing or analyzing reviewer-assignment algorithms for peer review (machine-learning / CS venues) ",
+    "subtask_short": "peer-reviewer assignment fairness",
+    "subtask_description": "Designing and evaluating algorithms that assign reviewers to papers to maximize a fairness objective (max-min over per-paper summed transformed similarities) while respecting reviewer/paper load constraints and providing statistical guarantees for downstream tasks (e.g., top-k recovery).",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "fairness",
+      "similarity_matrix",
+      "conference_program_chairs"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Max-min fairness objective (\u0393_S^f)",
+        "description": "Fairness objective is the per-paper worst-case measure: for each paper compute the sum (over its assigned reviewers) of f(s_ij) (where f is a monotonically increasing transform of similarities) and the fairness \u0393_S^f(A) is the minimum of these per-paper sums across all papers; the goal is to maximize this minimum.",
+        "guidance": "The PeerReview4All algorithm optimizes this objective (or approximates its optimum). All approximation and statistical guarantees in the paper are stated relative to this fairness objective. Use f to reflect how similarity translates to utility (e.g., f(s)=s or f=1\u2212h)."
+      },
+      {
+        "name": "Subroutine: maximize minimum similarity via incremental flow construction",
+        "description": "The subroutine constructs a 4-layer flow network (source \u2192 reviewers \u2192 papers \u2192 sink) and incrementally adds unit-capacity reviewer\u2192paper edges in decreasing order of similarity until a max-flow of size |M|\u00b7\u03ba is feasible; when feasible, the assignment using only added edges maximizes the minimum similarity among assigned (reviewer,paper) pairs for that \u03ba.",
+        "guidance": "Edges are added one at a time in order of decreasing sij; after each edge addition check for feasibility (max-flow). This guarantees the output assignment maximizes the lowest similarity in the assignment for the given \u03ba. Integer capacities ensure polynomial-time integer max-flow."
+      },
+      {
+        "name": "Choice among multiple max-flows (heuristics)",
+        "description": "If multiple max-flows exist when the flow of size |M|\u03ba is reached, the PC can choose any arbitrarily or use heuristics such as selecting the max-flow with maximum cost.",
+        "guidance": "Selecting max-flow with maximum total cost (where costs are similarities) combines fairness with higher average assignment quality; Appendix C describes an alternative choice that helps with topic coverage. Theoretical approximation guarantees hold for any max-flow chosen."
+      },
+      {
+        "name": "Construct candidate assignments for all \u03ba \u2208 [\u03bb] and choose highest fairness",
+        "description": "For each integer \u03ba \u2208 [\u03bb], construct an assignment where each paper has \u03ba 'strong' reviewers (via subroutine) and then complement it with \u03bb\u2212\u03ba additional reviewers; produce \u03bb candidate assignments and pick the one with highest fairness (including the assignment from prior iterations).",
+        "guidance": "This step ensures a worst-case fairness guarantee (as in Theorem 1) and lets the algorithm adapt to structure in the similarity matrix (e.g., when some papers have only \u03b7 strong reviewers)."
+      },
+      {
+        "name": "Recursive fixing of most disadvantaged papers (beyond worst-case)",
+        "description": "After choosing the best candidate assignment in an iteration, identify the most disadvantaged papers (those achieving the minimum per-paper sum) and permanently fix their reviewer assignments; then repeat the procedure on remaining papers to optimize the second worst-off, third worst-off, etc.",
+        "guidance": "Fixing disadvantaged papers prevents later iterations from worsening their allocation and ensures the algorithm optimizes fairness recursively across all papers (Corollary 2)."
+      },
+      {
+        "name": "Approximation guarantee (Theorem 1) \u2014 multiplicative bound",
+        "description": "PeerReview4All guarantees a provable lower bound on \u0393_S^f(APR4A) relative to the optimal \u0393_S^f(A_HARD) given by expressions (7a)/(7b); in particular, the algorithm achieves at least a 1/\u03bb multiplicative approximation in the worst case.",
+        "guidance": "Interpret the formal fraction in (7a) as a tighter bound depending on s*_\u03ba values; when \u03bb=1 the algorithm is exact. The multiplicative nature ensures a non-trivial guarantee even when optimal fairness is small (unlike some additive guarantees)."
+      },
+      {
+        "name": "Early stopping guarantee",
+        "description": "The intermediate assignment produced the first time Step 3 is executed already satisfies the fairness guarantee of Theorem 1.",
+        "guidance": "Program chairs can stop the algorithm after the first outer iteration to save computation while still retaining the same fairness guarantees and associated statistical results."
+      },
+      {
+        "name": "Computational complexity consideration",
+        "description": "A na\u00efve implementation of PeerReview4All has computational complexity O(\u03bb (m + n) m^2 n) (details and implementation notes in Appendix B).",
+        "guidance": "Consider optimized max-flow implementations and practical engineering (Appendix B) to reduce runtimes for large conferences."
+      },
+      {
+        "name": "Variable reviewer and paper loads support",
+        "description": "Algorithm supports specifying different maximum loads \u00b5(i) per reviewer and different paper loads \u03bb(j); when using \u03ba as a per-iteration target, set paper\u2192sink capacity to min{\u03ba, \u03bb(j)}.",
+        "guidance": "This generality allows real-world constraints (e.g., reviewers with varying capacities or papers requiring variable numbers of reviewers) to be encoded directly into the flow network."
+      },
+      {
+        "name": "Incorporating conflicts of interest",
+        "description": "Conflicts of interest are encoded by setting the corresponding similarity sij to \u2212\u221e (effectively forbidding that reviewer-paper edge).",
+        "guidance": "Simple and direct way to ensure certain reviewer\u2192paper assignments are impossible within the flow construction."
+      },
+      {
+        "name": "Topic coverage modification",
+        "description": "After ensuring fairness, techniques (e.g., Long et al., 2013) can be used to pick among approximately fair assignments the one that approximately maximizes the number of distinct topics covered.",
+        "guidance": "Appendix C and referenced methods discuss integrating topic-coverage objectives as a secondary criterion without violating the fairness guarantees."
+      },
+      {
+        "name": "Avoiding LP-relaxation rounding pitfalls (comparison to ILPR / TPMS)",
+        "description": "LP-relaxation and rounding approaches (e.g., ILPR) can split reviewer capacity fractionally in relaxation and produce poor rounded assignments (e.g., assigning reviewers with zero similarity), whereas the sequential edge-addition prevents assigning papers to weak reviewers and is crucial for the fairness objective.",
+        "guidance": "The paper gives examples and analysis (Section 5.3 and Appendix A.1) showing ILPR can return arbitrarily bad fairness; PeerReview4All's construction avoids such bottlenecks."
+      },
+      {
+        "name": "Objective-score statistical model (scores and noise)",
+        "description": "Assume each paper j has true quality \u03b8*_j and each reviewer i's score y_ij ~ N(\u03b8*_j, \u03c3^2_ij) with \u03c3^2_ij = h(s_ij) where h is a known monotonically decreasing function mapping similarity to variance.",
+        "guidance": "This model captures reviewer competence varying by reviewer\u2013paper similarity; h can be learned from past data. The model omits reviewer bias (can be handled separately via calibration/post-processing)."
+      },
+      {
+        "name": "Estimator: Maximum Likelihood Estimator (MLE)",
+        "description": "\u03b8^MLE_j = (\u03a3_{i\u2208R_A(j)} y_ij / \u03c3^2_ij) / (\u03a3_{i\u2208R_A(j)} 1/\u03c3^2_ij) \u2014 a weighted average with weights 1/\u03c3^2_ij; under the Gaussian model it is the minimum-variance linear unbiased estimator.",
+        "guidance": "Prefer MLE when model assumptions (noise variances tied to similarities via h) are believed correct; this gives more weight to reviewers expected to be less noisy (higher similarity)."
+      },
+      {
+        "name": "Estimator: Mean score (MEAN)",
+        "description": "\u03b8^MEAN_j = (1/\u03bb) \u03a3_{i\u2208R_A(j)} y_ij \u2014 the simple average across assigned reviewers.",
+        "guidance": "MEAN is model-agnostic and empirically robust to model mismatch; often predictive of acceptance decisions and useful when h is unknown or model assumptions are suspect."
+      },
+      {
+        "name": "k-separation threshold (\u0394_k) for top-k recovery",
+        "description": "Define \u0394_k = \u03b8*_(k) \u2212 \u03b8*_(k+1). This gap between the k-th and (k+1)-th true qualities quantifies difficulty of exactly recovering top-k papers.",
+        "guidance": "Larger \u0394_k makes recovery easier; statistical recovery bounds (Theorem 3) are stated in terms of \u0394_k, m, \u03bb, q, \u03c4_q and h."
+      },
+      {
+        "name": "Similarity-class S(q) (feasibility of good fairness)",
+        "description": "Define family S(q) of similarity matrices S such that \u0393_S^{1\u2212h}(A_HARD) \u2265 q (i.e., the optimal fairness, under f=1\u2212h, is at least q); used to parameterize recovery guarantees.",
+        "guidance": "Constrains the analysis to regimes where satisfactory reviewer coverage exists; q typically lies in [\u03bb(1\u2212h(0)), \u03bb]."
+      },
+      {
+        "name": "Approximation quality \u03c4_q",
+        "description": "\u03c4_q := inf_{S\u2208S(q)} \u0393_S^{1\u2212h}(A_PR4A) / \u0393_S^{1\u2212h}(A_HARD) captures the (worst-case over S in S(q)) approximation ratio of PeerReview4All relative to optimal under f=1\u2212h.",
+        "guidance": "Theorem 1 provides lower bounds on \u03c4_q (e.g., \u22651/\u03bb in worst case); \u03c4_q quantifies how algorithmic approximation affects statistical recovery thresholds."
+      },
+      {
+        "name": "Exact top-k recovery condition (Theorem 3)",
+        "description": "Under bounded h \u2208 [0,1], for q in an appropriate range and given \u03c4_q, there is an explicit sufficient condition on \u0394_k (gap) \u2014 scaling with (\u03bb \u2212 q \u03c4_q), ln m, and other factors \u2014 guaranteeing that using PeerReview4All plus either MLE or MEAN recovers the true top-k with high probability; a matching converse lower bound is provided.",
+        "guidance": "Use the provided inequalities (Theorem 3 parts (a) and (b)) to evaluate whether the combination of assignment algorithm, estimator, and problem difficulty (\u0394_k, similarity structure) suffice for reliable top-k recovery."
+      },
+      {
+        "name": "Bounded-noise assumption for analysis",
+        "description": "For parts of the statistical analysis the paper assumes h: [0,1]\u2192[0,1] (noise variances bounded by 1) which encodes that every reviewer provides at least some minimum competence even at zero similarity.",
+        "guidance": "This normalization simplifies constants; in practice one can rescale h to meet this assumption or handle more general bounded ranges as noted."
+      }
+    ]
+  }
+}

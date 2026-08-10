@@ -1,0 +1,162 @@
+[
+{
+"review_id": "iclr_MLJ5TF5FtXH_r0",
+"paper_id": "iclr_MLJ5TF5FtXH",
+"review_text": "This paper describes a method of training a classifier based on a pretrained syntax tree extractor called a structured LM. The structured LM produces contextualized representations of each node through a learned composition function applied to the node's children. They then apply an MLP and softmax to produce label probabilities for each node. The authors also define a yield function to gather task-relevant node labels based on the tree structure and node labeling.\n\nHowever, I don't understand how the optimization objective is supposed to work. The authors mention Tau as representing a \"gold label set\" associated with a single example, suggesting Tau is supposed to be a set of gold labels on the level of individual nodes / words. However, the authors apply their method to datasets that (to my knowledge) don't have such fine-grained labels, such as CoLA.\n\nThe authors say the objective is to \"maximize the probability summation of {t_hat | yield(t_hat) = Tau}\". I do not understand what this means. What's the probability we're summing up, and how is it computed? Later text mentions how to compute per-node label probabilities, but those seem like different things than what's being summed here. In fact, I don't even understand how there's anything here to sum over. It seems like t_hat is a specific set of possible labels for a specific parse tree, and Tau is either another set of labels for that specific parse tree, or a single label for the entire sentence. Either way, I don't see how there's a space to sum over.\n\nWhat does it mean for t_hat to be conditioned on yield(t_hat) = Tau? I'd assume it means that we're restricting the space from which we're drawing t_hat to only include elements whose yield is equal to Tau. However, the previous text just called t_hat one of the possible label trees associated with the best syntax tree of a sentence, with no indication that t_hat is at all restricted. \n\n**summary_of_the_review:**\nI tentatively recommend rejecting this paper. My top issues with this paper are its lack of clarity (particularly regarding the optimization objective, which is its primary contribution) and the weakness of its experimental protocol. \n\nLack of clarity:\n- I was unable to follow key aspects of the paper.\n- There seem to be many opportunities to improve the explanation of the paper's technical contribution, as I highlighted in the summary section.\n\nExperimental weakness: \n- I described my concerns with the interpretability experiment in the weaknesses section.\n- I am concerned about the lack of detail provided in the training process of the BERT baseline, and the lack of comparison to the publicly available BERT model, as mentioned in the weaknesses section."
+},
+{
+"review_id": "iclr_MLJ5TF5FtXH_r1",
+"paper_id": "iclr_MLJ5TF5FtXH",
+"review_text": "In this paper, the authors propose a Symbolic-Neural (SN) interpretable model for text classification that uses a structured language model Fast-R2D2 as the backbone and during training, maximizes the probability summation of all potential trees whose extracted labels are consistent with a gold label set via dynamic programming with linear complexity.  Given a sentence and parse tree, the model generates a labeled tree which explain constituent spans in the sentence.  The authors conduct experiments on 6 datasets and compare different representation architectures ( uninterpretable dense Sentence Representation and their interpretable Symbolic Neural constituent representation ) showing their method matches or surpasses dense non-interpretable methods.  Additionally, they conduct a quantitative analysis comparing the interpretability of SN to Integrated Gradients and Multi-instance learning by designing a constituent-level attribution task to see how close the results learned by the models in an unsupervised fashion are to human-annotated results.\n\n**summary_of_the_review:**\nThe empirical results of their method are impressive and thorough as is the analysis of explainability from a quantitive standpoint. My biggest qualms is with clarity of writing and keeping the paper self contained.\n"
+},
+{
+"review_id": "iclr_MLJ5TF5FtXH_r2",
+"paper_id": "iclr_MLJ5TF5FtXH",
+"review_text": "[REVISED]\n\nTask: The paper considers the relatively unexplored task of making multi-label text classification interpretable by learning a model that induces implicit labeled spans given only sentence-level labels as supervision.\n\nModel: The paper assumes a \"backbone\" model for unsupervised parsing that gives an embedding $e_{i,j}$ for each span $(i,j)$. A conditional label distribution $P(l|n_{i,j})$ is defined at every considered node $n_{i,j}$ based on $e_{i,j}$. In experiments, the embeddings are augmented to incorporate top-down information.\n\nTraining: The model is trained by optimizing $L + L^t$ where $L$ is the usual loss for the backbone model and $L^t$ is the new loss. The new loss fixes the predicted tree from the backbone model $t$ (which changes dynamically during training), then computes the likelihood of $t$ yielding labels that are consistent with the ground-truth labels. Naively, this requires summing over all possible label configurations of $t$ which is exponential in the label size. The paper makes conditional independence assumptions to derive a dynamic programming to approximate this loss. \n\nExperiments: The paper considers multiple single-/multi-label text classification datasets (SST-2, ATIS, etc.). The paper shows that (1) the proposed model works as well as conventional models and (2) the model recovers gold spans and labels in slot-filling/NER tasks.\n\n[OLD REVIEW]\n\nThe paper proposes using a structured language model for interpretable classification. The method is based on Fast-R2D2. It proposes a variant of the inside algorithm to compute marginal probabilities of subtrees with gold labels and adds the resulting classification loss to the original objective of Fast-R2D2. Experiments on single- and multi-label classification datasets show that the method is competitive in performance but can yield meaningful trees.\n\n**summary_of_the_review:**\n[REVISED]\n\nThe paper considers a relatively unexplored problem of interpretable text classification and a new model and training scheme. However, the paper is quite vague and confusing in communicating the model and the training scheme, which makes it very difficult to appreciate these contributions. Even after revising and appreciating the submission much more than before, I think the paper needs substantial restructuring before publication.\n\n\n[OLD REVIEW]\n\nThe paper proposes using a structured language model for interpretable classification, but the method is not surprising and relies on existing structured LMs. "
+},
+{
+"review_id": "iclr_hsSYDdZTIsl_r2",
+"paper_id": "iclr_hsSYDdZTIsl",
+"review_text": "*Disclaimer: I am a vision person and an emergency reviewer*\n\nThis manuscript studies the problem of named entity recognition (similar to object detection) and relation extraction (similar to human object interaction detection) from French texts transcripted by off-the-shelf OCR models. The method firstly classifies text tokens into pre-defined entity categories then classifies relationships which is quite similar to the two-stage methods we used in human-object interaction detection. A data augmentation method based upon context free parse tree is proposed, but not ablated. Evaluations are done on a newly collected dataset (provided in the supp) and reports improved results on entity F1, relation F1 and combined F1. Codes are not provided or promised.\n\n**summary_of_the_review:**\nI fail to understand the core methodology improvement, why evaluating on public datasets is not possible and where the large performance improvement comes from."
+},
+{
+"review_id": "iclr_hsSYDdZTIsl_r3",
+"paper_id": "iclr_hsSYDdZTIsl",
+"review_text": "This paper aims to extract \"contextual entities\" (or fine-grained entities as refered in the paper) from specialized documents, which is Family History Records written in French.\n\nFor that, the paper first proposes a heavily cutomized data augmentation method that consists of complex rules and dictionaries.\n\nThen a model for joint extraction of entities and relations is applied, which mostly follows an existing work PURE, only without markers.\nThe model predicts both entities and relations, based on which fine-grained entities can be identified. Actually, what refered to as fine-grained entites here are entities with adjective relations ahead, such as \"FatherAge\", \"MotherAge\", \"SpouseAge\" etc.\n\n**summary_of_the_review:**\nThe method is of little novelty; the experiments and comparison are not justifiedly conducted; the task is very specialized and might be of limited interest to the entire community; and the presentation is not well.\n\nAlso, the template is not even for ICLR, but ACL instead. I wonder whether this incurs desk rejection.\n\nTherefore, I recommand reject."
+},
+{
+"review_id": "iclr_hsSYDdZTIsl_r4",
+"paper_id": "iclr_hsSYDdZTIsl",
+"review_text": "This paper proposes semi-connected joint entity recognition and relation extraction of contextual entities in family history records ER task. By jointly training NER and RE to improve the fine-grained NER task.\n\n**summary_of_the_review:**\nThe motivation is unclear. The novelty is so limited. The experiments are insufficient. The experimental results in Table 3 are not comparable and convincing."
+},
+{
+"review_id": "iclr_eDLwjKmtYFt_r0",
+"paper_id": "iclr_eDLwjKmtYFt",
+"review_text": "This paper proposes an equivariance regularizer as a modification to the usual invariance-inducing self-supervised losses. This is an interesting approach to enabling equivariance as there is no need to have a special architecture as prior work. The authors are able to train multiple self-supervised losses on a standard ResNet-50 and show good linear probe improvements over invariant baselines. \n\n**summary_of_the_review:**\nGiven the overall novelty and clean/simple idea which seems to work well, I recommend acceptance."
+},
+{
+"review_id": "iclr_eDLwjKmtYFt_r1",
+"paper_id": "iclr_eDLwjKmtYFt",
+"review_text": "This paper presented a new module to improve self-supervised contrastive visual representation learning. Specifically, the proposed module focused on equivariance in the leaned latent space. Experimental analysis on two public datasets showed that when applying the proposed module to existing methods (SimCLR, BYOL and Barlow Twins) the performance was improved. The main contribution of this paper is the proposed equivariance module.\n\n**summary_of_the_review:**\nThe main idea of this work about the equivariance in latent space is interesting and may have the potential to explore and contribute to the community. The shown experiments also suggested the effectiveness of the proposed method to some extent. But some technical design was not clearly presented without sufficient evidence to back them up. There are also several unclear claims and statements. The experiments are also insufficient to validate the claims. As a result, I would suggest the authors revise their paper accordingly for a future submission."
+},
+{
+"review_id": "iclr_eDLwjKmtYFt_r2",
+"paper_id": "iclr_eDLwjKmtYFt",
+"review_text": "Proposes a modification of the data-augmentation approach to self-supervised learning where the parameters of the transformation used in data-augmentation can be used by the network to predict the latent variables of the un-augmented input.  This is advantageous when there exists a set of input features (such as color histogram) which would potentially cause the network to converge to bad local minima (shortcut solutions), yet could still be useful for classification.  Previous approaches would use data augmentations to enforce invariance to those features, which avoids the bad local minima but at the cost of losing the ability to use those features for classification.  Equimod therefore improves performance by combining a loss that encourages invariance to data augmentations and a loss that encourages the learning of a representation that is equivariant to data augmentations.  This is hypothesized to allow the network to avoid bad local minima without becoming totally invariant to useful features that are perturbed by data augmentations.  Experimental results show improved performance of SSL methods by modifying them to include the Equimod sub-network for predicting the effect of data augmentations on the latent space.\n\n**summary_of_the_review:**\nThe paper presents a very interesting method for the field of SSL, and after rebuttal, provides more clarity and insight into the proposed method.  While a better evaluation (e.g. on problems such as flowers or trees) might allow the work to have a greater impact, I  think in its present form it will be useful for SSL researchers."
+},
+{
+"review_id": "iclr_GOEpRos3w0L_r0",
+"paper_id": "iclr_GOEpRos3w0L",
+"review_text": "This paper proposes a topology-guided sampling strategy (TGSS) to mitigate the gap between sampled data within a mini-batch and global data. The proposed model, which is called TopoZero, consists of a topology alignment module (TAM) and a distribution alignment module. TAM is capable of preserving multidimensional geometric structures in each of the latent visual and semantic spaces. Experimental results show that TopoZero performs well on standard ZSL benchmark datasets.\n\n**summary_of_the_review:**\nAlthough the proposed method, called TGSS, has a certain degree of novelty and shows improvement in performance from the baselines, it is not considered to have reached the stage of publishing at this time due to a lack of experiments and insufficient explanation due to the low quality of the writing."
+},
+{
+"review_id": "ANCH-2",
+"paper_id": "ANCH-2",
+"review_text": "This submission provides a rigorous theoretical analysis; the proofs appear correct and the assumptions are clearly stated. My main concern is reproducibility: no code is provided and several hyperparameters are unreported. The related-work coverage is adequate. Overall the significance for the broader community seems modest."
+},
+{
+"review_id": "iclr_GOEpRos3w0L_r1",
+"paper_id": "iclr_GOEpRos3w0L",
+"review_text": "This paper proposes a topology-guided sampling strategy as a parallel pipeline to CADA-VAE. Empirical and theoretical analysis of the topology property is provided. The method is evaluated on the three common benchmarks of CUB SUN and AWA and achieves promising performance.\n\n**summary_of_the_review:**\nOverall, this work meets the standard expected by ICLR. However, the model design contains duplication and redundancy which normally indicates risks in \"hyper-parameter overfitting\". The evaluation of hyperparameters in the appendix is very contradictory and needs further elaboration."
+},
+{
+"review_id": "iclr_GOEpRos3w0L_r2",
+"paper_id": "iclr_GOEpRos3w0L",
+"review_text": "The paper proposesa Topology-guided Sampling Strategy (TGSS) to mitigate the distribution gap between sampled and global data points for Zero-Shot Learning. In addition, a Topology Alignment Module (TAM) is proposed to perserve multi-dimensional geometry structure in latent visual and semantic space. The proposed method is evaluated on several benchmark datasets for ZSL and generalised ZSL and achieves superior performance.\n\n**summary_of_the_review:**\nThe authors aim to design an approach to facilitating topology preserving in ZSL from a novel perspective. The proposed method is proved to be effective when combined with a classic ZSL framework CADA-VAE which, however, is a relatively old technique for ZSL. The authors fail to compare with more advanced ZSL approaches."
+},
+{
+"review_id": "iclr_GOEpRos3w0L_r3",
+"paper_id": "iclr_GOEpRos3w0L",
+"review_text": "This paper proposes a TopoZero framework to improve structure alignment for common space learning methods. Based on two weaknesses of HSVA (trains model with local structure and loses some high-dimensional structure information), the authors propose a Topology-guided sampling strategy and a Topology Alignment Module. Extensive experiments show the effectiveness of the proposed approach.\n\n**summary_of_the_review:**\nThe proposed approach aims to preserve the global topology of training samples to train the models, which seems novel. However,  the framework is too complicated, which ensembles CADA-VAE. It is difficult to judge which part improves the performance. Moreover, the compared methods are not recent state-of-the-arts and there is no qualitative analysis of the proposed approach."
+},
+{
+"review_id": "iclr_YfUICnZMwk7_r0",
+"paper_id": "iclr_YfUICnZMwk7",
+"review_text": "This paper studies event streams and proposes a neural-network-based method that learns weighted clock logic to model temporal point process. Compared to traditional combinatorial optimization approaches, this method is more expressive in terms of representing weighted clock logic formulas as neural network activation function; easier to learn through gradient descent. \n\n**summary_of_the_review:**\nThis paper proposes a novel approach to learn temporal point processes using neural networks which learn weighted clock logic formulas. Though the presentation is clear, the major concerns of this paper are the lack of motivation and competitive empirical results. I am not an expert on this topic, but I think the authors can improve this paper by providing clear motivation/theoretical insights, or detailed explanation/verification of all the claims (such as interpretability and effectiveness)."
+},
+{
+"review_id": "iclr_YfUICnZMwk7_r1",
+"paper_id": "iclr_YfUICnZMwk7",
+"review_text": "This paper introduces a method for learning models of multivariate event streams, which are time series of events that may be may occur irregularly and synchronously at points in continuous time.  Specifically, they introduce clock logic neural networks (CLNNs), which model temporal point processes using formulas to represent conditional intensity rates.  Learning in this context involves a relaxation of the satisfiability predicate on formulae and then gradient-based maximum likelihood optimization.  \n\n**summary_of_the_review:**\n- Well-motivated and interesting problem\n- Sound approach but unclear the relevance of the result.  I'm willing to be convinced otherwise\n- I\u2019d suggest focusing on the core claims and providing more evidence"
+},
+{
+"review_id": "iclr_YfUICnZMwk7_r2",
+"paper_id": "iclr_YfUICnZMwk7",
+"review_text": "This paper proposes an approach for learning interpretable logical rules for event data, where each event is represented by a timestamp and a discrete event type.\nThe main idea of the proposed approach is to represent the logical rules and their combinations as nodes in a neural network. By optimizing the weights of the neural network with gradient descent, the relevant logical rules are learned from the data. This is a significant improvement compared to earlier works, where the rules are learned using combinatorial optimization tools.\n\n**summary_of_the_review:**\nThe paper advances the state of the art in the problem of learning interpretable logic rules from multivariate event streams.\nThe proposed approach offers a clear improvement over existing methods both in terms of expressivity and runtime."
+},
+{
+"review_id": "iclr_YfUICnZMwk7_r3",
+"paper_id": "iclr_YfUICnZMwk7",
+"review_text": "The paper introduces a framework of 'clock logic neural networks', which use a special neural network architecture to train temporal process models that can then be interpreted in terms of weighted clock logic formulae.  The paper provides a detailed overview of weighted clock logic, and proves that the network architecture enforces the desired properties necessary for this interpretation.  Training can be achieved directly through projected gradient descent.  The experimentation on synthetic and real datasets shows that the CLNN learns more informative rules (incorporating interval duration information) than alternative SOTA approaches, and achieves competitive performance in terms of the out-of-sample log-likelihood.\n\n**summary_of_the_review:**\nAn interesting neuro-symbolic approach for training NN models with interpretability in terms of temporal logic.  The paper will be of interest to those working in logic, deep-learning and model interpretability."
+},
+{
+"review_id": "iclr_tKMLGb7MWC_r0",
+"paper_id": "iclr_tKMLGb7MWC",
+"review_text": "This paper proposes a reinforcement learning based algorithm to estimate long-term effect for a class of nonstationary problems. Empirical results in both synthetic and real datasets show the potential of the proposed algorithm.\n\n**summary_of_the_review:**\nAs mentioned above, this paper attempts to tackle an important practical problem. Though the theoretical and empirical results justify the potential of the proposed algorithm, I think the linear assumptions are strong. If possible, I hope the authors could say or show something on generalized linear models and I would be happy to increase my score."
+},
+{
+"review_id": "iclr_tKMLGb7MWC_r1",
+"paper_id": "iclr_tKMLGb7MWC",
+"review_text": "The paper adopts a reinforcement learning framework to estimate the long-term treatment effects in nonstationary environments. The main contributions lies in the development of a practical algorithm to estimate causal effect under nonstationarity. The algorithm is justified via both theoretical results, synthetic environments and a real-world online store dataset. \n\n**summary_of_the_review:**\nAs I mentioned earlier, the paper contains some interesting ideas on dealing with nonstationarity. Nonetheless, it needs to be heavily revised to better highlight the contribution, relax the linearity assumption, justify the use of reinforcement learning, formulate the problem based on hypothesis testing, provide rigorous uncertainty quantification and conduct more detailed theoretical and numerical analysis. However, it has the potential to become a high-impact paper if all the aforementioned weaknesses can be overcomed. I am very keen to increase my score if shall these comments be addressed."
+},
+{
+"review_id": "ANCH-1",
+"paper_id": "ANCH-1",
+"review_text": "The paper tackles an interesting problem. However, the novelty is limited: the proposed method is a straightforward combination of two existing techniques. The writing is also difficult to follow in Sections 3-4, with undefined notation. On the positive side, the experimental evaluation is thorough, covering five datasets with proper ablations."
+},
+{
+"review_id": "iclr_tKMLGb7MWC_r2",
+"paper_id": "iclr_tKMLGb7MWC",
+"review_text": "The paper leverage the variant of the OPE estimator to estimate the average treatment effects in non-stationary dynamics. The problem is interesting and challenging, however, the method proposed in the paper might be limited for practical use. \n\n\n**summary_of_the_review:**\nIn summary, solving estimating treatment effects in non-stationary dynamics is challenging and interesting. However, this work does not provide a rigorous step for solving the problem and requires some additional assumptions. "
+},
+{
+"review_id": "iclr_tKMLGb7MWC_r3",
+"paper_id": "iclr_tKMLGb7MWC",
+"review_text": "This work proposes a non-stationary RL framework to make long-term predictions on treatment effects.  The proposed algorithm shows better results performed in two synthetic datasets and one online store dataset.\n\n**summary_of_the_review:**\nThe paper deals with a real problem in medicine trials.  The proposed algorithm is theoretically sound.  The empirical results so show good effects.  The remaining question is that can the algorithm really make practical impact to clinical trials, or this is just an experimental method of many possibilities.  If the authors can specify how realistic to collect sufficient training data to learn model parameters of such high-complexity model and how realistic that the model variances can be tracked and modeled would be helpful."
+},
+{
+"review_id": "iclr_6QkjC_cs03X_r0",
+"paper_id": "iclr_6QkjC_cs03X",
+"review_text": "This paper mainly proposed the nonparametric variational autoencoder (NVAE) by 'combining' VAEs and the transformer.\nFurther, the transformer encoder and decoder are used in the VAEs framework.\nDifferent from VAEs whose prior is the standard Gaussian distribution, the proposed NVAE applied the nonparametric variational information bottleneck (NVIB) regulariser for the latent embedding.\nFinally, the experiment shows NVAE could do reconstruction, generation, and regularisation tasks. The interpolation further explored the meaningfulness of the learned representation.\n\n**summary_of_the_review:**\nAs above, my main concern is about the experiment, and the second is the motivation."
+},
+{
+"review_id": "iclr_6QkjC_cs03X_r1",
+"paper_id": "iclr_6QkjC_cs03X",
+"review_text": "This paper presents a probabilistic mixture model representation of the attention mechanism in transformers. The probabilistic representation  allows the authors to define priors and posteriors over the mixture distributions and ultimately redefine the transformer as a nonparametric variational autoencoder. They show experimental results for the reconstruction of input sentences, generation by sampling from the prior, regularize the size of the latent space, and interpolate.\n\n**summary_of_the_review:**\nThe paper is promising although it could be reworked to be stronger with a more clear focus and motivation. "
+},
+{
+"review_id": "iclr_6QkjC_cs03X_r2",
+"paper_id": "iclr_6QkjC_cs03X",
+"review_text": "In this manuscript authors embedding space of Transformer encoders as mixture distributions and as such are able to formulate transformer encoder - decoder as a VAE model. Number of mixture distributions is variable to authors decide to use Bayesian nonparametrics to solve the modeling issue, namely they use bounded Dirichlet prior. \n\n**summary_of_the_review:**\nAll in all, I find the paper quite interesting and potentially very useful. I think the way how transformer is reformulated as a VAE model is quite neat. More large-scale experiments obviously would make the paper much better as authors also state in the Conclusions. "
+},
+{
+"review_id": "iclr_6QkjC_cs03X_r3",
+"paper_id": "iclr_6QkjC_cs03X",
+"review_text": "This paper proposes a VAE framework for that formulates attentions in transformers as a mixture of gaussians, where variational inference can be used to learn the framework. The proposed VAE with transformers as the encoder and decoder is used in text reconstruction and generation tasks. \n\n**summary_of_the_review:**\nThe idea of the paper is interesting but I feel the technical depth is not enougth."
+},
+{
+"review_id": "iclr_JX1OCjfABRj_r0",
+"paper_id": "iclr_JX1OCjfABRj",
+"review_text": "This paper proposes a new method for searching for optimal perturbation radii for adversarial training, which is shown to be more efficient than existing works.  \n\n**summary_of_the_review:**\nPersonally I appreciate the approach proposed by the authors, but the performance is not that significant. Thus I suggest weak acceptance. "
+},
+{
+"review_id": "iclr_JX1OCjfABRj_r1",
+"paper_id": "iclr_JX1OCjfABRj",
+"review_text": "The paper advocate assigning adaptive perturbation constraint $\\epsilon$ to adversarial examples, during the inner maximization in adversarial training. Experiment results show that the SAAT method can improve the adversarial robustness compared with several existing methods.\n\n**summary_of_the_review:**\nThe contribution is limited, and the empirical comparisons are not convincing to me."
+},
+{
+"review_id": "iclr_JX1OCjfABRj_r2",
+"paper_id": "iclr_JX1OCjfABRj",
+"review_text": "This paper proposes a method to perform adversarial training with adaptive epsilon per training sample. Several heuristics are proposed to determine epsilon per sample. The benefit is improved accuracy-robustness trade-off.\n\n**summary_of_the_review:**\nThis paper is addressing a meaningful problem. However, the proposed method is a crude heuristic and may need improvement, and there are some questionable numbers in the experimental results."
+},
+{
+"review_id": "iclr_1fZd4owfJP6_r0",
+"paper_id": "iclr_1fZd4owfJP6",
+"review_text": "This paper proposes a new masked image modelling (MIM) method, conMIM, to develop better visual representation learning models. The proposed method introduces intra-image inter-patch contrastive learning design to enhance the self-learning network to predict masked patches, which could be quite useful when the training data is limited. This method also develops asymmetric design to promote the training pipeline so that the model is able to learn better. Extensive experiments demonstrate that the proposed backbone can be utilized in many downstream applications well. \n\n**summary_of_the_review:**\nIn summary, this paper has demonstrated three techniques, patch-level dynamic dictionary and denoising contrastive learning and asymmetric design to enhance a backbone network to learn better image representations. The paper is clearly written and the details and explanations of the key contributions are clearly presented. However, it requires some more in-depth analysis of these techniques beyond the quantitative ablation study. It would be better to introduce the intuitive motivation behind the choice of these techniques. "
+},
+{
+"review_id": "iclr_1fZd4owfJP6_r1",
+"paper_id": "iclr_1fZd4owfJP6",
+"review_text": "This paper proposes to combine contrastive learning with masked image modeling in order to provide strong pre-text tasks. As opposed to conventional contrastive learning and masked image modeling (MIM) approaches, the authors cast masked image modeling as denoising contrastive learning for an effective vision dictionary look-up. It was validated that the proposed method, ConMIM, competes favorably on downstream tasks (e.g., image classification, semantic segmentation).\n\n**summary_of_the_review:**\nThe authors proposed a reasonable approach to take the advantage of the two pre-training approaches, but there are some concerns related to novelty, evaluation and method details, as mentioned in \u2018Strength and Weaknesses\u2019. Nevertheless, if these comments are well-addressed, the initial rating can be adjusted."
+}
+]

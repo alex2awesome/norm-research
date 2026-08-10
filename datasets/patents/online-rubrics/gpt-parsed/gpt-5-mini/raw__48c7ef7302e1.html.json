@@ -1,0 +1,149 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/48c7ef7302e1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15508,
+  "output_tokens": 4020,
+  "elapsed_s": 3511.13799345796,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP and AI researchers, practitioners, and engineers working on LLM-based patent-document generation and evaluation; patent analytics researchers",
+    "subtask_short": "patent abstract generation with LLMs",
+    "subtask_description": "Evaluating and generating patent abstracts from the first claim using large language models (LLMs) under controlled prompting, perturbation, and downstream-task evaluations. The benchmark focuses on measuring semantic fidelity, robustness, stylistic properties, and domain utility across CPC subclasses.",
+    "subtask_keywords": [
+      "patent",
+      "abstract_generation",
+      "llm",
+      "benchmark",
+      "patent_classification"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Task formulation: abstract from first claim",
+        "description": "Generate the patent abstract given the first claim of the patent. The benchmark's main objective is generating abstract given the first claim.",
+        "guidance": "The first claim is used as the input because it \u2018defines the scope of protection\u2019 and concisely summarizes the invention\u2019s key elements; framework can be extended to other inputs/outputs."
+      },
+      {
+        "name": "Zero-shot prompting",
+        "description": "Provide the model only a task description without any examples to test the model's generalization based on pretraining.",
+        "guidance": "Example prompt: 'You are a patent expert. Given the following patent claim, write an informative abstract that captures the key invention, technical purpose, and functionality.' Measures baseline generalization ability."
+      },
+      {
+        "name": "Few-shot prompting",
+        "description": "Include a small number of input-output examples to condition the model on desired output format and content.",
+        "guidance": "Use three claim-abstract pairs as examples (chosen with varying lengths and performance levels: high, medium, low NLP scores) to improve coherence, structure, and adherence to domain-specific language."
+      },
+      {
+        "name": "Chain-of-thought (CoT) prompting",
+        "description": "Explicitly instruct the model to reason step-by-step before producing the final abstract.",
+        "guidance": "Prompt asks the model to 'first analyze it step by step to identify the key invention, its technical purpose, and how it functions. Then, based on this reasoning, write a formal abstract.' Helps tasks needing reasoning and yields higher ROUGE/BLEU in experiments."
+      },
+      {
+        "name": "Input perturbation techniques",
+        "description": "Apply realistic perturbations to input claims to simulate noisy/imperfect user inputs.",
+        "guidance": "Techniques used: (i) Typographical errors via simulated keyboard typos; (ii) BERT-based contextual substitutions that replace words with contextually appropriate alternatives; (iii) Random swaps of adjacent words. Examples provided in Appendix A.2."
+      },
+      {
+        "name": "Robustness under perturbations",
+        "description": "Measure consistency and stability of generated abstracts when input claims are perturbed (typos, contextual replacements, word swaps).",
+        "guidance": "Evaluate whether model outputs produce only modest drops in NLP metrics (BLEU, ROUGE) and maintain semantic quality (BERTScore/Cosine). Strong models should be resilient to realistic minor disturbances."
+      },
+      {
+        "name": "BERTScore (semantic similarity)",
+        "description": "Use BERTScore to evaluate semantic similarity between generated text and reference abstract using contextual embeddings.",
+        "guidance": "Treated as the major evaluation measure to preserve context accuracy, coherence, and preciseness. In experiments, BERTScore >= 0.85 indicates strong alignment."
+      },
+      {
+        "name": "ROUGE-L (longest common subsequence)",
+        "description": "Use ROUGE-L to assess longest common subsequence (LCS) between generated and reference text, computing precision, recall, and F1.",
+        "guidance": "Captures sequence-level overlap and some semantic coherence; CoT prompting increased ROUGE in experiments."
+      },
+      {
+        "name": "BLEU (n-gram overlap)",
+        "description": "Measure n-gram overlap between generated and reference text to assess surface-level similarity.",
+        "guidance": "Originally for MT; correlates to some extent with human judgment but is weaker for semantic evaluation. Useful to capture literal overlap differences."
+      },
+      {
+        "name": "Cosine similarity (vector similarity)",
+        "description": "Compute cosine similarity between vector representations of generated and reference texts.",
+        "guidance": "Measures global embedding-based similarity; used alongside BERTScore to capture semantic alignment."
+      },
+      {
+        "name": "Domain-based evaluation \u2014 Patent classification",
+        "description": "Test usefulness of generated abstracts by classifying them into CPC subclasses and comparing classifier performance against original abstracts.",
+        "guidance": "Simplify multi-label CPC classification to single-label per-experiment setting for comparison. Fine-tune a transformer-based classifier and report accuracy, precision, recall, F1 to identify disparities between original and generated abstracts."
+      },
+      {
+        "name": "Classification evaluation metrics",
+        "description": "When evaluating classification downstream task, report accuracy, precision, recall, and F1.",
+        "guidance": "Fine-tune a Sentence-Transformer encoder (e.g., all-MiniLM-L12-v2) with fixed hyperparameters (example: LR=2e-5, batch_size=16, epochs=4) and use those standard metrics to compare generated vs original abstracts."
+      },
+      {
+        "name": "Domain-based evaluation \u2014 Patent retrieval",
+        "description": "Evaluate whether generated abstracts retrieve a similar set of patents as the original abstracts when used as queries.",
+        "guidance": "Embed abstracts with Sentence-BERT (all-MiniLM-L6-v2), compute cosine similarities, rank documents, and quantify overlap using overlap@k (k=5,10,25) and Spearman rank correlation; include a randomized baseline to measure beyond-chance performance."
+      },
+      {
+        "name": "Retrieval evaluation metrics",
+        "description": "Measure retrieval similarity using overlap@k and Spearman rank correlation, comparing generated and original abstract retrieval results.",
+        "guidance": "Also compare against a random/shuffled baseline. High overlap@k and Spearman indicate good semantic alignment in retrieval behavior."
+      },
+      {
+        "name": "Qualitative measure \u2014 abstract length (verbosity)",
+        "description": "Compute abstract length (in tokens) to assess verbosity and structural compactness.",
+        "guidance": "Longer abstracts may capture more detail but risk redundancy; generated abstracts were longer on average (e.g., GPT-4o > Llama3 > human) and correlate more strongly with claim length."
+      },
+      {
+        "name": "Qualitative measure \u2014 readability score",
+        "description": "Use readability metrics to evaluate linguistic complexity of generated text.",
+        "guidance": "Higher scores indicate more intricate sentence structures typical of technical writing; humans scored higher variability and higher mean readability than some LLM outputs in the study."
+      },
+      {
+        "name": "Qualitative measure \u2014 passive voice usage",
+        "description": "Compute percentage of passive voice usage as a stylistic feature common in patent writing.",
+        "guidance": "Measure distribution and mean; human abstracts showed higher and more variable passive-voice use compared to more uniform LLM outputs."
+      },
+      {
+        "name": "Stylistic analysis and variability",
+        "description": "Assess stylistic properties such as repetitiveness, templated phrasing, tone, and variability across outputs and compared to human-written abstracts.",
+        "guidance": "Look for indicators that LLM outputs are more uniform, more repetitive, longer, and less readable than human texts; use this to argue for domain-specific fine-tuning to better replicate expert style."
+      },
+      {
+        "name": "Dataset construction and balancing",
+        "description": "Build the benchmark dataset from PatentsView: U.S. patents granted in 2022, extracting claim-abstract pairs and CPC subclass labels; retain CPC subclasses with >=1000 instances and sample ~1,000 instances per subclass for balanced coverage.",
+        "guidance": "Include patent ID, title, abstract, and CPC label. Focus classes in the study: A61, G06, H04 and their relevant subclasses; resulting dataset ~21,000 records."
+      },
+      {
+        "name": "Experimental control: compare generated vs original abstracts",
+        "description": "Always evaluate generated abstracts against the original human-written abstracts using the same downstream pipelines and metrics.",
+        "guidance": "The goal is to measure alignment and functional equivalence (classification/retrieval behavior), not to improve absolute task performance."
+      },
+      {
+        "name": "Inference time and computational cost",
+        "description": "Measure and report model inference times and resource requirements as part of practical evaluation.",
+        "guidance": "Report hardware and runtime (e.g., LLaMA 3 took ~39 hours on NVIDIA H200 for full dataset; GPT-4o mini and GPT-4.1 were faster). Use these measurements to weigh trade-offs between speed, cost, and quality."
+      },
+      {
+        "name": "Embedding and model choices for downstream tasks",
+        "description": "Specify encoder/embedding models and training hyperparameters used for classification and retrieval experiments.",
+        "guidance": "Examples from the paper: all-MiniLM-L12-v2 for classification (fine-tuned with LR=2e-5, batch 16, 4 epochs); all-MiniLM-L6-v2 for retrieval (max seq len 256, batch size 32). Document these choices to ensure reproducibility."
+      },
+      {
+        "name": "Prompt example selection criteria",
+        "description": "Select few-shot examples with diversity in length and performance level to better condition the model.",
+        "guidance": "Use three examples chosen with varying lengths and varying NLP performance levels (high, medium, low) to teach desired output format and robustness across styles."
+      },
+      {
+        "name": "Domain utility criterion",
+        "description": "Generated abstracts should preserve class-specific information and be functionally useful in patent analytics pipelines (classification, retrieval).",
+        "guidance": "Empirically validate by showing generated abstracts lead to comparable or improved downstream task metrics relative to originals (as in classification and retrieval experiments)."
+      },
+      {
+        "name": "Ethical and legal constraints",
+        "description": "Acknowledge that patent generation should not be fully automated and must comply with legal requirements and regulations of patent laws.",
+        "guidance": "Include human supervision in any patent-generation workflow and consider the legal/ethical implications of using LLM-generated patent text in filings."
+      }
+    ]
+  }
+}

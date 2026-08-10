@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_01755d73cc24.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_01755d73cc24.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39950,
+  "model": "gpt-5-mini",
+  "elapsed_s": 81.22919845899742,
+  "input_tokens": 14632,
+  "output_tokens": 3548,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on LLM-based formal theorem proving, autoformalization, and benchmark design (Lean4 / theorem-prover developers)",
+    "subtask_short": "evaluating LLM-based theorem provers",
+    "subtask_description": "Benchmarks and evaluation criteria for LLM-based automated theorem provers and autoformalization pipelines (focused on Lean4). Covers decoding strategies, success metrics (Pass@K, perplexity), error taxonomies, dataset composition, and autoformalization quality checks.",
+    "subtask_keywords": [
+      "formal_theorem_proving",
+      "lean4",
+      "llm_eval",
+      "autoformalization",
+      "error_analysis"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pass@K accuracy",
+        "description": "Measure of prover success via Pass@K (for varying K, e.g., 32 to 3200).",
+        "guidance": "Report Pass@K across multiple K values; compare decoding strategies (naive CoT, NL-augmented CoT, vanilla). Example: DeepSeek-V1.5-SFT at K=3200: CoT 50.6%, NL-augmented CoT 49.2%, vanilla 47.0%."
+      },
+      {
+        "name": "Decoding strategy ranking (CoT vs NL-augmented vs vanilla)",
+        "description": "Empirical ordering of decoding/prompting strategies by effectiveness: naive Chain-of-Thought (CoT), NL-augmented CoT, and vanilla decoding.",
+        "guidance": "Across SFT and RL configurations naive CoT tended to achieve highest Pass@K, NL-augmented CoT intermediate, and vanilla lowest. Evaluate strategies consistently and report counterintuitive outcomes (e.g., NL-augmented CoT increasing perplexity and failing to improve success)."
+      },
+      {
+        "name": "Perplexity under prompting strategies",
+        "description": "Measure model uncertainty (perplexity) distributions across prompting strategies.",
+        "guidance": "Compare mean perplexity for strategies (example: NL-augmented CoT increases mean perplexity from 1.93 to 5.07 across Lean4 problems). Use perplexity trends to interpret why NL guidance may hurt CoT success."
+      },
+      {
+        "name": "Alignment of NL guidance with tactic-level obligations",
+        "description": "The natural-language outline must materialize essential parameters, case distinctions, and low-level constraints required by tactic-based provers.",
+        "guidance": "Assess whether NL solutions produce the concrete have ... = const hypotheses and case splits that tactics require. Anti-pattern: high-level semantic sketch that omits explicit numeric constraints, causing tactics to fail due to missing hypotheses (Example 4.3)."
+      },
+      {
+        "name": "Proof completeness (no unresolved subgoals / witnesses constructed)",
+        "description": "Proof attempts must construct required witnesses and discharge all subgoals rather than leaving critical subgoals unresolved.",
+        "guidance": "Flag incomplete proofs that rely on placeholder tactics or ignore side-conditions (e.g., introducing wrong witness a = 0 and using simp to close goals). Ensure constructive proofs build witnesses when required."
+      },
+      {
+        "name": "Explicit case-splitting and tactic-level detail",
+        "description": "Proofs should interleave strategic choices with explicit tactic calls and per-branch hypotheses (e.g., explicit modulus choice, residue-case splits producing concrete hypotheses).",
+        "guidance": "Prefer reconstructions that create low-level hypotheses (have h : x3 % 13 = 5 := by ...) and then discharge branches (e.g., with omega). Naive CoT often did this automatically and succeeded where NL-augmented did not."
+      },
+      {
+        "name": "Appropriate use (and avoidance of misuse) of automation tactics",
+        "description": "Automation tactics (aesop, simp, linarith, nlinarith, omega, etc.) should be used when sound and applicable; over-invocation or misconfiguration is an error mode.",
+        "guidance": "Evaluate whether tactics expand the search space, cause nontermination/timeouts, transform goals into irrelevant forms, or bypass constructive requirements. Example anti-patterns: relying on simp to hide missing case analyses; invoking nlinarith prematurely on high-degree rational expressions without normalization."
+      },
+      {
+        "name": "Handling of complex inequalities",
+        "description": "Provers should handle inequalities that involve high-degree polynomials, rational functions, cyclic/symmetric structure, or require domain-specific lemmas.",
+        "guidance": "Assess whether the prover performs intermediate deductive steps (clear denominators, apply AM\u2013GM or rearrangement lemmas, normalize with ring/field) before invoking automated solvers. Anti-pattern: invoking nlinarith directly on degree-9 expanded denominators leading to failure."
+      },
+      {
+        "name": "Avoidance of redundant hypothesis manipulation",
+        "description": "Proofs should avoid introducing structurally redundant hypotheses or unnecessary revert/reintro sequences that obscure logic.",
+        "guidance": "Check for tactics that merely generalize and reintroduce the same variables (e.g., revert; rintro) without purpose; simplify proofs by removing redundant steps to improve readability and maintainability."
+      },
+      {
+        "name": "Appropriate justification for analytical/theoretical steps",
+        "description": "When applying theorems (e.g., Dominated Convergence Theorem, monotone convergence, limit interchange), provers must establish prerequisites like domination, integrability, or bounds, not just call tactics that trivially remove goals.",
+        "guidance": "Detect proofs that trivialize or skip rigorous analytical justification (e.g., misusing integral_mono_on without verifying domination), and mark as incomplete if central analytical prerequisites are unestablished."
+      },
+      {
+        "name": "Error taxonomy for failed proofs",
+        "description": "Classify failures into common error patterns: incomplete proofs, inability to handle complex inequalities, improper use of automation tactics, redundant hypothesis introduction.",
+        "guidance": "Use two-stage diagnosis: (1) extract salient verbalized features, (2) assign error labels; allow multiple labels per proof. Table 4 summarizes percentages by prover. Human experts should review and correct LLM-extracted labels."
+      },
+      {
+        "name": "Per-prover error pattern distribution",
+        "description": "Report percentages of different error types per prover (e.g., Table 4 entries for DeepSeek-SFT, DeepSeek-RL, Goedel, STP, Kimina).",
+        "guidance": "Present per-prover breakdowns so stakeholders can see which systems suffer from which failure modes (e.g., high incomplete-proof rates or misuse-of-auto-tactics rates). Note that a single attempt may have multiple errors."
+      },
+      {
+        "name": "Domain-wise evaluation and domain bias",
+        "description": "Evaluate prover performance across mathematical domains (algebra, number theory, calculus, discrete math, etc.) since models exhibit domain biases.",
+        "guidance": "Report domain-specific success rates; highlight domains where models excel (e.g., algebra) and struggle (e.g., calculus). Use domain distribution (FormalMATH-Lite) to interpret coverage and bias."
+      },
+      {
+        "name": "Sampling-budget constrained performance",
+        "description": "Measure prover performance under practical sampling budgets and report best-achieved accuracy given those limits.",
+        "guidance": "E.g., even top performer only reached 16.46% accuracy under practical budgets. Include experiments varying sample sizes (K) and report scalability trends."
+      },
+      {
+        "name": "Autoformalization pipeline quality / pre-verification preservation",
+        "description": "Quality of the human-in-the-loop autoformalization pipeline measured by preservation rates and error filtering (reported pre-verification preservation rate = 72.09%).",
+        "guidance": "Evaluate each pipeline component: specialized LLMs for initial formalization, multi-LLM semantic verification for fidelity, negation-based disproof strategy for filtering invalid statements, and subsequent human expert review. Report preservation and error rates after each stage."
+      },
+      {
+        "name": "Autoformalization error-category frequencies",
+        "description": "Track frequencies of specific autoformalization error categories (e.g., Condition Error 83.3%, Expression Error 9.6%, Definition Error 3.3%, etc.).",
+        "guidance": "Use the taxonomy in Table 7 to prioritize corrective methods. Provide examples for each category and measure per-source/dataset rates."
+      },
+      {
+        "name": "Autoformalization correctness of syntactic and semantic elements",
+        "description": "Formalized statements must preserve mathematical meaning: correct variable types, correct quantifier scoping, meaningful definitions, and faithful constraint conditions.",
+        "guidance": "Detect mismatched variable types (e.g., natural numbers vs positive integers), misplaced existential/universal quantifiers, meaningless or undefined definitions (e.g., totient at n=0), and omitted or added constraints not matching the original problem. Use concrete examples (omni_theorem_66, omni_theorem_401, omni_theorem_219) to illustrate."
+      },
+      {
+        "name": "Quality of examples and illustrative counterexamples",
+        "description": "When diagnosing failures, provide fully worked examples showing success/failure modes (e.g., naive CoT success proof vs NL-augmented CoT failure), including the tactic-level script and commentary.",
+        "guidance": "Use side-by-side example transcripts to illustrate why one approach succeeds (explicit modulus choice, hypothesis production) and another fails (high-level outline without required tactics). These examples serve as evaluation evidence and debugging aids."
+      },
+      {
+        "name": "Prompt-setting and generation-mode distinctions",
+        "description": "Different generation prompts (Vanilla, CoT, NL-Augmented CoT) are distinct evaluation conditions and should be treated as separate axes.",
+        "guidance": "Provide and reuse standard prompts for each generation mode (paper includes prompts in Appendix I). Evaluate and compare results under the same prompts and sampling/regeneration settings."
+      },
+      {
+        "name": "Two-stage LLM-driven error diagnosis with human correction",
+        "description": "Use LLMs to (1) extract salient verbalized features from failed proofs and (2) assign error labels, followed by human expert manual review and correction.",
+        "guidance": "This pipeline is recommended for scalable error analysis: random sample of failed proofs, automated feature extraction and labeling, and human verification to produce the final error taxonomy (as applied to 100 failed proofs per prover)."
+      },
+      {
+        "name": "Dataset provenance and coverage metrics",
+        "description": "Report dataset sources, domain counts, sizes, and how many samples were formalized per source (e.g., Omni-math, AIME-Math, U-Math, Hardmath, DEMIMATH; FormalMATH comprises 5,560 statements).",
+        "guidance": "Provide table of sources (Table 6), domain distributions, and counts of formalized samples (#S.Formal) to contextualize evaluation results and identify under- or over-represented areas."
+      }
+    ]
+  }
+}

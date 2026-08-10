@@ -1,0 +1,155 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 14,
+  "n_chunks": 37,
+  "chunk_chars": 39590,
+  "model": "gpt-5-mini",
+  "elapsed_s": 279.06554725000024,
+  "input_tokens": 13065,
+  "output_tokens": 5732,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "authors and typesetters using (plain) TeX to prepare mathematical manuscripts; people writing TeX macros and formatting displayed mathematics",
+    "subtask_short": "plain_tex_display_and_macros",
+    "subtask_description": "Guidance and low-level rules for typesetting displayed mathematics (one-line, multi-line, alignment displays, breaking long formulas) and for defining/using macros in plain TeX. Covers TeX's internal placement/penalty logic, macro parameter parsing, and typographic best practices.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "mathematical_typesetting",
+      "displayed_equations",
+      "macros"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Displayed formula packaging and squeeze routine",
+        "description": "If the natural width w0 of the displayed formula plus the space for the equation number q satisfies w0 + q \u2264 z, the formula is packaged in an hbox of width w0. If w0 + q > z, TeX attempts to shrink the formula: if e \u2260 0 and there is enough shrinkability to reduce the width to z \u2212 q then the formula is packaged in an hbox of width z \u2212 q; otherwise e is set to zero and the formula is packaged in an hbox of width min(w0, z) (possibly overfull).",
+        "guidance": "Explains TeX's exact behavior when a display is too wide; informs authors that TeX will try to shrink if possible but may produce an overfull box or set e=0 to alter later positioning logic."
+      },
+      {
+        "name": "Centering vs proximity to equation number (displacement d rules)",
+        "description": "TeX computes a displacement d for centering by first setting d = 1/2 (z \u2212 w). If e > 0 and d < 2e, then d is reset to 1/2 (z \u2212 w \u2212 e) or to zero; zero is chosen if the list h begins with glue.",
+        "guidance": "This implements the rule that a centered display should not be 'too close' to its equation number (i.e., space between them less than e). If the display begins with glue, TeX assumes the glue was placed to control spacing precisely and may force the display as far as possible from the number (d = 0)."
+      },
+      {
+        "name": "Glue and penalty insertion around displays (predisplay/postdisplay behavior)",
+        "description": "Before a display TeX inserts a penalty item whose cost is \\predisplaypenalty, then either \\abovedisplayskip/\\belowdisplayskip glue or the 'short' versions depending on overlap (predisplaysize). If e = 0 with \\leqno, the equation number is appended as an hbox with an infinite penalty to prevent a page break between the number and the display; otherwise a glue item is placed. After the display TeX appends either the equation number or a \\postdisplaypenalty followed by glue.",
+        "guidance": "Plain TeX sets \\predisplaypenalty=10000 to avoid displays at the top of a page; authors can change \\predisplaypenalty and \\postdisplaypenalty to encourage/discourage page breaks. Example: setting \\postdisplaypenalty negative can force a page break to put a formula at the bottom\u2014preferred to using \\eject which can leave unwanted glue."
+      },
+      {
+        "name": "Combining formula and equation-number boxes (kerns and ordering)",
+        "description": "If e \u2260 0, TeX computes a kern k of width z \u2212 w \u2212 e \u2212 d and combines the formula box b and the number box a: in \\eqno case b is replaced by hbox (b, k, a); in \\leqno case by (a, k, b) and d is set to zero. The combined box is appended shifted right by s + d.",
+        "guidance": "Specifies how TeX physically composes number and formula boxes so authors can predict order and spacing effects; relevant when forcing special placements."
+      },
+      {
+        "name": "Forcing an equation number on a line by itself (e = 0 trick)",
+        "description": "You can force an equation number to appear on a line by itself by making its width zero, e.g. '\\eqno\\llap{$hformulai$}' or '\\leqno\\rlap{$hformulai$}'; this makes e = 0 and triggers TeX's e = 0 positioning logic (infinite penalties, separate placement).",
+        "guidance": "Useful when you want the number alone on a line; remember e=0 changes TeX's normal centering/penalty behavior."
+      },
+      {
+        "name": "Alignment displays processed as halign in vertical mode",
+        "description": "Alignment displays of the form $$...\\halign{...}...$$ are not processed in math mode; the \\halign is processed exactly as if in vertical mode and constructs a vertical list v with each row shifted right by \\displayindent. After the alignment, TeX inserts \\predisplaypenalty, \\abovedisplayskip, v, \\postdisplaypenalty, and \\belowdisplayskip. \\displaywidth and \\predisplaysize do not affect an alignment display's processing.",
+        "guidance": "Alignment displays behave like ordinary alignments embedded in glue/penalties and are considered three lines long for \\prevgraf. Authors can use \\displaywidth in the \\halign but it doesn't change halign's treatment as an alignment display."
+      },
+      {
+        "name": "Use of \\eqalign for multi-line aligned equations",
+        "description": "\\eqalign constructs multi-line displays with alignment markers & and \\cr. General pattern: \\eqalign{left1 & right1\\cr left2 & right2\\cr ...}. Each right-hand side starts with the symbol on which alignment occurs (often '='). The equations are typeset in display style and \\eqalign produces a vertically centered box no wider than necessary.",
+        "guidance": "Recommended for aligning equations by '=' or other symbols. Multiple \\eqalign boxes can be used in a display because each is a centered vcenter box."
+      },
+      {
+        "name": "Adjusting spacing within alignments with \\noalign{\\vskip...}",
+        "description": "After any \\cr inside an alignment, '\\noalign{\\vskip<hdimeni>}' inserts that extra vertical glue just after that particular line (and can be used before the first line to change the space above it).",
+        "guidance": "Use \\noalign{\\vskip...} to fine-tune vertical spacing between specific lines in an alignment (e.g., \\noalign{\\vskip3pt})."
+      },
+      {
+        "name": "Numbered aligned displays: \\eqalignno and \\leqalignno usage",
+        "description": "\\eqalignno works like \\eqalign but lines that should be numbered include an extra '&<equation number>' before the \\cr. \\leqalignno places numbers at the left (but you still input them at the right). Both macros center the set of equations without regard to equation-number widths.",
+        "guidance": "Omit the second & unless there's an equation number. Caution: if equations or numbers are too wide they can overlap without error messages. Use \\leqalignno input style '\\leqalignno{...&(4)\\cr...}' to get left-numbered output."
+      },
+      {
+        "name": "Distinction: \\eqalign (vcenter) vs \\eqalignno (halign to\\displaywidth)",
+        "description": "\\eqalign is an abbreviation for \\vcenter{\\halign{...}} producing a vertically centered box only as wide as needed; \\eqalignno is an abbreviation for \\halign to\\displaywidth{...} producing a full-width 'alignment display'.",
+        "guidance": "Consequences: (1) \\eqalign cannot be broken across pages, but \\eqalignno can (use \\noalign{\\break} to force a break or set \\interdisplaylinepenalty=10000 or enclose in \\vbox to prohibit breaks). (2) You can insert a line of text between equations in a \\eqalignno without losing alignment by using \\noalign{\\hbox{...}} and adjusting spacing with \\vskip if needed. Only one \\eqalignno should appear in a display, while \\eqalign can appear multiple times."
+      },
+      {
+        "name": "Using \\displaylines for unaligned multi-line displays and \\hfill precedence",
+        "description": "\\displaylines{formula1\\cr formula2\\cr ...} centers each formula by putting \\hfil left and right of each line; you can override centering to flush-left or flush-right by inserting \\hfill (\\hfill takes precedence over \\hfil).",
+        "guidance": "\\displaylines is for arbitrary stacking of formulas without alignment. Plain TeX's \\displaylines, \\eqalignno, and \\leqalignno begin with '\\\\openup1\\\\jot'; cancel with '\\\\openup-1\\\\jot' if you don't want extra open-up spacing."
+      },
+      {
+        "name": "Adjusting baseline spacing with \\openup and \\jot",
+        "description": "Using '\\\\openup1\\\\jot' increases \\baselineskip (and \\lineskip, \\lineskiplimit) so that multi-line displays have larger baseline separation; plain TeX sets \\jot=3pt so '\\\\openup1\\\\jot' increases baselineskip by 3pt.",
+        "guidance": "When using \\openup inside a display group (e.g., '$$\\\\openup1\\\\jot \\\\halign{...}$$') the effect is local to the display. Changing openup affects the vertical distances between the preceding line and the display and between the display and the following line; \\eqalignno and \\displaylines compensate by saying '\\\\noalign{\\\\vskip -d}' before their first lines where d is the net opening-up amount."
+      },
+      {
+        "name": "TeX does not break long displayed formulas automatically",
+        "description": "TeX never attempts to decide where to break an overwide displayed formula; the author must choose breakpoints and structure multi-line formulas manually because automatic rules cannot capture exposition subtleties.",
+        "guidance": "The author is usually best judge of break positions; use alignment and spacing macros to reflect mathematical structure and improve readability."
+      },
+      {
+        "name": "Rule of thumb: break displayed formulas before binary operations/relations",
+        "description": "While formulas within a paragraph break after binary operations and relations, displayed formulas should break before binary operations and relations (e.g., end first line with '(...)' and start next line with '+').",
+        "guidance": "Helps readability and consistent visual rhythm in multi-line displays; ensures each new line begins with a clearly binary operator."
+      },
+      {
+        "name": "Rule of thumb: indent second line relative to subformula",
+        "description": "When an equation is broken before a binary operation, the second line should start at least two quads to the right of where the innermost subformula containing that binary operation begins on the first line (so the operator appears visually to the right of the matching open delimiter).",
+        "guidance": "Ensures the binary operator appears sufficiently separated from the matching bracket or left delimiter so alignment looks natural; use \\qquad or alignment markers to achieve the necessary indentation."
+      },
+      {
+        "name": "Handling \\left and \\right across broken lines (choose delimiter sizes manually)",
+        "description": "\\left and \\right delimiters cannot be used separated across lines (you can't have \\left on one line and the corresponding \\right on the next). Delimiters that span broken lines should be sized explicitly (e.g., \\bigg) and alignment markers can be used to place them correctly.",
+        "guidance": "When breaking around big delimiters, choose delimiter size yourself and use alignment (e.g., with \\eqalign and '&' markers) so both delimiters match visually even on different lines."
+      },
+      {
+        "name": "Two-line form using \\displaylines and \\hfill (almost flush left/right)",
+        "description": "A 'two-line' break places the first part almost flush left and the second almost flush right (one quad away). Use \\displaylines with \\hfill and \\hfil to get the effect; useful when the left-hand side is long and the break should come before '='.",
+        "guidance": "Example: wrap left portion with \\quad and right portion with \\hfill and a trailing \\quad to achieve the 'one-quad' inset on both lines. Insert '{}' before a '+' if needed to indicate it's binary."
+      },
+      {
+        "name": "Guidance for huge fractions in narrow columns (break numerator)",
+        "description": "When a huge fraction (large numerator) must fit in a narrow column, you may need to break up the numerator and typeset pieces on multiple lines or rearrange into several stacked fractions so the expression fits.",
+        "guidance": "Authors should break numerator/denominator manually and choose an appropriate representation for narrow columns; no automatic TeX rule will do this for you."
+      },
+      {
+        "name": "Typographic best practice: break at natural 'phrase' boundaries and signal breakpoints",
+        "description": "Long, complicated formulas should be broken at the end of a natural 'phrase' (e.g., after major brackets) rather than at inner symbols; the author should indicate convenient fracture points to the compositor. Copy editors may run complicated expressions into text to avoid bad breaks or suggest displays for expressions run into text.",
+        "guidance": "Follow established typographic practice: choose breakpoints that preserve mathematical intelligibility and, when appropriate, suggest running material into text rather than overdisplaying."
+      },
+      {
+        "name": "Use macros to reduce typing errors and ensure consistency",
+        "description": "Define control sequences (macros) with \\def to represent often-repeated constructions (e.g., \\def\\xvec{(x_1,\\ldots,x_n)}). Macros expand to their replacement text, potentially containing other macros or primitives.",
+        "guidance": "Macros save keystrokes and reduce inconsistency; put frequently used macros in a macros.tex and \\input it. Avoid enormous macro files (memory/time tradeoffs). Use formats for large, stable macro collections."
+      },
+      {
+        "name": "Macro parameters: positional #1..#9 and local scope of definitions",
+        "description": "Macros can have up to nine parameters referenced as #1..#9. The parameter tokens in the parameter text must be numbered sequentially (first #1, then #2, etc.). Macro definitions are local to the current group; redefining a control sequence replaces the previous definition until the group ends and old definitions are restored.",
+        "guidance": "When designing macros, number parameters in order in the parameter specification. Use grouping to limit macro scope and avoid accidental global redefinitions."
+      },
+      {
+        "name": "Delimited vs undelimited parameters and argument scanning rules",
+        "description": "A delimited parameter is followed in the definition's parameter text by non-parameter tokens; its argument is the shortest (possibly empty) token sequence with properly nested {...} groups that is followed by that delimiter sequence. An undelimited parameter is followed immediately by a parameter token or the end of parameter text; its argument is the next nonblank token or the following {...} group (outer braces are stripped). Delimiters enclosed in braces do not terminate arguments.",
+        "guidance": "This governs how TeX reads arguments for complex macros (e.g., '\\def\\cs #1. #2\\par{...}'). Use braces to hide delimiters when appropriate. Remember outermost braces are removed from arguments that are seen as groups."
+      },
+      {
+        "name": "Precautions when writing parameterized macro definitions",
+        "description": "Do not put blank spaces before the '{' that begins the replacement text in a simple-parameter \\def (e.g., '\\def\\row #1 #2{...}' behaves differently than '\\def\\row#1#2{...}'). Spaces after control words are disregarded, and when invoking a macro you may place spaces between arguments (e.g., '\\row x n').",
+        "guidance": "Be mindful of spaces in the parameter text because they become literal delimiters; use explicit bracing or carefully written parameter specs to avoid unexpected scanning behavior."
+      },
+      {
+        "name": "Designing document-level macros for style-independence",
+        "description": "By defining higher-level macros (e.g., \\proclaim) to format theorem-like enunciations, you can change the formatting of all such items by altering the macro's replacement text, enabling style-independent documents that can be set in many styles without changing the document text.",
+        "guidance": "Example: \\proclaim #1. #2\\par{...} delimits arguments by '. ' and \\par, sets title bold and text slanted; adjust replacement text (fonts, punctuation) to change overall style consistently."
+      },
+      {
+        "name": "Role of parameter tokens and token types in macros",
+        "description": "For macro rules, TeX's notion of token includes control sequences and (character code, category code) pairs; parameter tokens (#1..#9) are a special token class that can only appear in macro parameter lists. During definition, matching requires category and character codes as well as control sequence names.",
+        "guidance": "When writing sophisticated token-delimited macros, remember matching is exact on category code and character code; mismatched category codes or characters will prevent delimiter recognition and lead to 'doesn't match its definition' errors."
+      }
+    ]
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/d4c976021752.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "d4c976021752.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 17,
+  "chunk_chars": 39999,
+  "model": "gpt-5-mini",
+  "elapsed_s": 82.59484770800191,
+  "input_tokens": 13554,
+  "output_tokens": 4428,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "users of Isabelle/Isar (proof engineers, researchers, and advanced students writing formal proofs in Isabelle/HOL)",
+    "subtask_short": "Isar proof writing",
+    "subtask_description": "Guidance and conventions for writing structured, human-readable proofs in the Isabelle/Isar proof language (Isabelle/Pure and object-logics such as Isabelle/HOL). Covers proof block structure, context elements, elimination/case rules, calculational chains, and proof-method usage.",
+    "subtask_keywords": [
+      "isabelle",
+      "isar",
+      "formal_proofs",
+      "isabelle_hol",
+      "proof_language"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use have/show for intermediate and final claims",
+        "description": "Use have to state intermediate goals and show to refine pending subgoals; have states an intermediate goal and show refines a pending subgoal (often inside a nested proof).",
+        "guidance": "Examples: \"have A \u2227 B ...\", \"show B\". The two dots \"..\" refer to a complete proof using indicated facts and a canonical rule. \"have states an intermediate goal.\" Use show within subproofs to discharge a pending goal. The text contrasts forwards (have/then) and backwards (proof ... assume ... show ...) styles."
+      },
+      {
+        "name": "Augment context with assume",
+        "description": "assume augments the proof context with a local hypothesis which may be used subsequently.",
+        "guidance": "Example: \"assume x \u2208 A and x \u2208 B then have x \u2208 A \u2229 B ..\". The default inference for assume is export (i.e. assume produces A \u27f9 A locally). Use then to immediately use the assumed fact. The included inference may be used later to discharge the assumption."
+      },
+      {
+        "name": "Introduce arbitrary parameters with fix",
+        "description": "Declare arbitrary-but-fixed local parameters using fix x :: \u03b1; in exported results x may become any term.",
+        "guidance": "Example: \"fix a assume a \u2208 A show x \u2208 a ... q.e.d.\" The exported result from a block with fix becomes a universally quantified rule, e.g. (\u03bbx. ...). Use fix in nested subproofs for backward-style proofs."
+      },
+      {
+        "name": "Structured subproofs with proof ... qed",
+        "description": "Use a nested proof block (proof ... qed) to create local contexts and to derive rules that refine an outer goal.",
+        "guidance": "Typical pattern: \"have X proof (rule r) fix x assume ... show ?thesis qed\". Subproofs implement the fix-assume-show outline. Block structure can also be indicated by { ... }. Use next to jump to the next section of a block."
+      },
+      {
+        "name": "Forward reasoning and chaining with then/from/with/this",
+        "description": "Chain facts in forward style using from, then, with and the special fact this (refers to last result).",
+        "guidance": "Abbreviations: \"from a \u2261 note a then\"; \"with a \u2261 from a and this\". Example: \"from \u2039A\u203a and \u2039B\u203a show C x y\". Use these to feed results into subsequent steps; they interact with methods (then have ... proof (rule r))."
+      },
+      {
+        "name": "Use of methods and 'by' for applying rules",
+        "description": "Apply proof methods to the current goal via by/method: default method is standard; rules may be applied explicitly with by (rule r).",
+        "guidance": "Methods take facts indicated by then or using. Basic methods: \"-\" (leave goal unchanged), \"this\" (apply facts as rules), \"rule\" (apply facts to another rule then to goal). Abbreviations: \"by method1 method2\" for \"proof method1 qed method2\"; \".\" is shorthand for \"by this\"; \"..\" is shorthand for \"by standard\"."
+      },
+      {
+        "name": "Declare and use attributes on facts ([OF], [intro], [symmetric], [trans], etc.)",
+        "description": "Facts and theorems can be given attributes to modify how they are used (e.g., resolution ordering, introduction/elimination markers, symmetry/transitivity collections).",
+        "guidance": "Examples: \"a [OF b]\" composes facts according to resolution; \"a [intro]\" declares a fact as an introduction rule; declare transitivity rules in the context and use [symmetric] to get symmetric variants. The system will pick args from elim/dest/intro lists when method arguments are omitted."
+      },
+      {
+        "name": "Generalized elimination and case rules format",
+        "description": "Elimination rules are structured with a prefix of assumptions (major premises) and one or more cases, each enabling the main conclusion in an augmented context.",
+        "guidance": "Typical names: exE (local parameter), conjE (local premises), disjE (split into cases). The general scheme: prefix assumptions, then case rules like ((\u03bbx y. B1 x y \u21d2 C1 x y \u21d2 R) \u21d2 ...), then R as main conclusion. Use proof (rule r) to apply such eliminations, producing subproofs for each case."
+      },
+      {
+        "name": "Use cases/case-splitting via cases and case branches",
+        "description": "Use cases/case and the proof method cases to split goals into named branches and work inside each branch with the augmented local context.",
+        "guidance": "Example: \"proof (cases x = y rule: tertium_non_datur) ... case T ... next case F ... q.e.d.\". The method cases recovers structure in a sub-proof; use next to move between cases. Isar also supports datatype-derived cases (proof (cases x))."
+      },
+      {
+        "name": "Use obtain/obtains for elimination and to inline cases",
+        "description": "Use obtain to inline a single case branch into Isar text and to conservatively extend the local context with parameters and assumptions; use obtains in top-level statements to define multi-branch elimination theorems.",
+        "guidance": "Pattern: \"then obtain A where x \u2208 A and A \u2208 A ..\". Semantics: obtain proves ((\u03bbx. A x \u21d2 thesis) \u21d2 thesis) and then introduces a local fixed parameter and assumptions. Important constraint: \"Conclusions from this context may not mention x again!\" (i.e., obtained local parameters cannot be referenced outside the scope). obtains at the statement level represents multi-case elimination rules."
+      },
+      {
+        "name": "Exporting results from local blocks with note",
+        "description": "Use note to export the result of a local block as a fact available in the outer context (often universally quantified).",
+        "guidance": "Examples: after { fix x have B x ... } note \u2039(\u03bbx. B x)\u203a exports the local proof as a general fact; similarly define x where x \u2261 a exports the expanded form. Note is how Isar indicates exported results from nested proofs."
+      },
+      {
+        "name": "Structured theorem statements (fixes / assumes / shows / obtains)",
+        "description": "State the outer structure of theorems using fixes, assumes, shows (and obtains) to lay out local context elements and conclusions explicitly for clearer proofs.",
+        "guidance": "Canonical pattern: \"fixes x and y assumes A x and B y shows C x y\" then proof uses local facts directly. For obtains: \"obtains x and y where A x and B y\" specifies multi-branch elimination rules. Presenting statements in this open format simplifies subsequent proofs."
+      },
+      {
+        "name": "Proof-machine model: alternate forward/backward modes and use of next",
+        "description": "Understand that Isar/VM alternates modes between forward (state) and backward (prove) reasoning; next closes an implicit block and opens another section (not tied to subgoals).",
+        "guidance": "State mode accepts fix/assume/have/show. A goal statement switches to prove mode to refine the problem. Qed returns to the outer state mode. Use next to separate block sections; there is no direct connection to subgoals."
+      },
+      {
+        "name": "Use of the special abbreviations '.' and '..' in terminal proof steps",
+        "description": "Use '.' as shorthand for 'by this' and '..' as shorthand for 'by standard' to conclude proof steps concisely.",
+        "guidance": "Examples: \"have x \u2208 A \u2229 B ..\" uses standard method; \"assume ... then show \u22a5 ..\". Use these for concise forward-style finishing steps."
+      },
+      {
+        "name": "Calculational reasoning with also / finally / calculation",
+        "description": "Use the calculational mechanism for chains of transitivity: start with also (sets calculation to current result), chain also ... have ... updates calculation via trans rules, and finish with finally to expose the final result.",
+        "guidance": "Canonical pattern: \"have a = b ... also have ... = c ... also have ... = d ... finally have a = d .\" The literal ellipsis '...'(\". . .\") refers to the right-hand side of the previous statement. Declare appropriate trans rules in the context; Isar will combine calculation and this. Use symmetry rules or simp-based unfolding as appropriate. Avoid over-reliance on ad-hoc substitution\u2014prefer Simp or proper transitivity setup when possible."
+      },
+      {
+        "name": "Declare and use primitive inferences and derived rules sensibly",
+        "description": "Recognize primitive introduction/elimination rules of the object-logic (e.g., conjI, conjD1/D2, IntI, InterI) and derive convenient combined rules (conjE) for practical proof use.",
+        "guidance": "Example: derive a simultaneous elimination conjE from conjD1 and conjD2 to avoid immediate projection decisions. Use object-logic axioms as named theorems and refer to them in proofs (by (rule IntI), etc.)."
+      },
+      {
+        "name": "Resolution and assumption composition via re\ufb01nement",
+        "description": "Compose subproofs via the re\ufb01nement rule: a subproof with its fix/assume/show structure must fit the pending subgoal modulo unification; assumptions may be a subset of subgoal premises.",
+        "guidance": "Isar uses a combined re\ufb01nement inference (composition of resolution and assumption). This allows re-ordering of parameters and omission of unused context elements; subproofs need only fit modulo unification, offering flexibility in structuring proofs for readability."
+      },
+      {
+        "name": "Use elimination rules that introduce local parameters carefully",
+        "description": "Elimination rules that introduce local parameters (e.g., exE) require nested subproofs with parameters and assumptions; alternatively use obtain to perform the same elimination more conveniently in forward style.",
+        "guidance": "Example: \"assume x \u2208 (\u22c3) A then have C proof fix A assume x \u2208 A and A \u2208 A show C qed\". The obtain form simplifies this: \"then obtain A where x \u2208 A and A \u2208 A ..\" The rule involved is the same; choose obtain where it improves readability."
+      },
+      {
+        "name": "Naming facts for dual access (name and literal proposition)",
+        "description": "When you write have a: A the result becomes accessible both by the name (a) and by the literal proposition \u2039A\u203a.",
+        "guidance": "This lets you reference facts either by label or by proposition text. Use this to clarify intent and to feed facts into methods like [OF] or as explicit arguments to rule."
+      },
+      {
+        "name": "Use unfolding and simplification methods for equational reasoning",
+        "description": "Prefer using unfolding and the simplifier (simp) to normalize equational problems rather than manual substitutions where possible.",
+        "guidance": "Example: use \"unfolding left_inv ..\" or \"by (simp only: left_inv)\" to normalize terms. The Simpli\ufb01er is the main automated tool for equational reasoning in Isabelle; use it rather than verbose ad-hoc replacements."
+      },
+      {
+        "name": "Reorder and omit context elements to reflect natural flow",
+        "description": "Rearrange fix and assume declarations in the text according to the natural flow of reasoning; Isar's unification and Hereditary Harrop normal forms permit reordering and omission of unused context elements.",
+        "guidance": "Examples show different permutations of fix/assume orders that still discharge the same rule. This fine-tuning improves readability without changing exported meaning."
+      },
+      {
+        "name": "Be explicit about elimination/intro directions when necessary (intro/dest/elim attributes)",
+        "description": "Classify rules as intro/dest/elim as appropriate so automatic selection of rules by methods works as intended.",
+        "guidance": "The system picks rules declared as elim or dest first, then intro, when automatically selecting arguments for rule application. Tagging theorems with [intro], [elim], [dest] and other attributes helps automation and clarity."
+      }
+    ]
+  }
+}

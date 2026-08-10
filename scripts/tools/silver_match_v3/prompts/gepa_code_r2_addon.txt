@@ -1,0 +1,67 @@
+Code-review exact-leaf contrast addendum (GEPA round 2)
+
+This addendum was derived only from blind errors on the predeclared train
+panel. First identify the human's normative center: the requested remedy,
+design decision, or trade-off. A question about a possible bug is often the
+evidence for a narrower criterion; do not default to broad functional
+correctness merely because the statement is phrased as an edge-case question.
+Ignore candidate rank and lexical trigger words when definitions disagree.
+
+Broad functional correctness (a67) is a fallback only when correctness across
+behavior or edge cases is itself the criterion. Prefer a directly expressed
+narrower leaf when the statement centers on:
+
+- deleting unused state, parameters, or unreachable ceremony (a1);
+- preventing or handling a possible missing/null/error value (a30);
+- which values or return types a public API admits and how easy it is to use
+  correctly (a11 or, for the exported/public surface itself, a44);
+- evolving an API to add an explicit capability such as async callbacks (a84);
+- whether an optimization is justified by measured benefit and acceptable
+  worst-case behavior (a6).
+
+Use these exact boundary tests for recurrent near-siblings:
+
+- a1 versus a36: unused variables, fields, parameters, and unreachable or
+  needless branches select a1 when the requested remedy is simple removal.
+  Select a36 only when the human invokes a broader structural smell and a
+  behavior-preserving catalogued refactoring.
+- a22 versus a1: a direct rewrite of one Boolean/expression/statement for
+  clarity selects a22; broader needless design or control-flow machinery
+  selects a1.
+- a11 versus a44: parameters, accepted values, defaults, and the simple usage
+  path select a11. An exported constructor/type mismatch or the usability,
+  safety, size, or stability of the public surface selects a44.
+- a35 versus a92: hiding an implementation decision, keeping a value local,
+  or avoiding dependence on implementation details selects a35. Package/module
+  layout, class boundaries, and access-modifier organization select a92.
+- a17 versus a62: when the stated harm is widespread call-site edits or failure
+  to localize future change, select a17. Select a62 when limiting collaborator
+  knowledge or reach-through chains is itself the criterion.
+- a6 versus a67: a request to justify a performance shortcut with gain,
+  profiling, worst case, or safety trade-offs selects a6 even if a possible
+  failure motivates the concern.
+- a89 versus a30: a test assertion should target general observable behavior
+  rather than one implementation-specific literal selects a89. Runtime input,
+  null, exception, or fail-fast protection selects a30.
+- a42 versus a110: recommending a linter, static analyzer, auto-fixer, or CI
+  enforcement tool selects a42. Merely requiring compliance with a project
+  style or standard selects a110.
+
+Resolve misleading surface words by the operational object:
+
+- "deprecated" selects dependency hygiene/removal (a20) when a deprecated
+  component or dependency should be killed; it selects API evolution (a106)
+  only for compatibility guarantees, deprecation planning, and client impact.
+- Reflection or an adapter being brittle because callers depend on its
+  implementation details selects stable abstraction/information hiding (a35).
+  Select avoid-magic (a23) only when surprising metaprogramming itself is the
+  stated objection.
+- "What is this variable for?" selects naming (a70) only when the variable is
+  useful but its name obscures intent. If the context says it is unused, select
+  removal/simplicity (a1).
+
+The testing and API regions contain partially redundant leaves. If the quoted
+words do not satisfy a unique boundary after applying the tests above, return
+MATCH_FAMILY_ONLY rather than guessing. Exact MATCH with high confidence means
+the quoted criterion, its operational object, and its requested consequence
+all favor the same leaf over every visible sibling.

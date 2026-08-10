@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Verification</title>
+	<link href="styles/site-bootstrap.css" rel="stylesheet" />
+	<style>
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: linear-gradient(135deg, #f4f7fb 0%, #e8eef7 100%);
+			font-family: Arial, Helvetica, sans-serif;
+			color: #1f2d3d;
+		}
+
+		.robot-card {
+			width: 100%;
+			max-width: 520px;
+			background: #ffffff;
+			border-radius: 14px;
+			box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+			padding: 28px;
+		}
+
+		.robot-brand {
+			display: block;
+			max-width: 420px;
+			max-height: 152px;
+			margin: 0 auto 16px auto;
+		}
+
+		.robot-title {
+			margin: 0 0 10px 0;
+			font-size: 20px;
+			font-weight: 700;
+			text-align: center;
+		}
+
+		.robot-subtitle {
+			margin: 0 0 24px 0;
+			text-align: center;
+			color: #5f6b7a;
+			font-size: 14px;
+			line-height: 1.6;
+		}
+
+		.robot-box {
+			border: 1px solid #d9e2ec;
+			border-radius: 12px;
+			background: #fafcff;
+			padding: 18px;
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			transition: all 0.2s ease;
+			cursor: pointer;
+		}
+
+			.robot-box:hover {
+				border-color: #8bb7ff;
+				box-shadow: 0 0 0 4px rgba(65, 132, 255, 0.08);
+			}
+
+		.robot-checkbox {
+			width: 24px;
+			height: 24px;
+			accent-color: #2f80ed;
+			cursor: pointer;
+			flex-shrink: 0;
+		}
+
+		.robot-label {
+			font-size: 22px;
+			font-weight: 500;
+			cursor: pointer;
+			margin: 0;
+			flex: 1;
+		}
+
+		.robot-badge {
+			width: 52px;
+			height: 52px;
+			border-radius: 10px;
+			background: #eef4ff;
+			color: #2f80ed;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 22px;
+			font-weight: bold;
+			flex-shrink: 0;
+		}
+
+		.robot-status {
+			margin-top: 18px;
+			padding: 12px 14px;
+			border-radius: 10px;
+			font-size: 14px;
+			display: none;
+		}
+
+			.robot-status.success {
+				display: block;
+				background: #e9f9ef;
+				color: #18794e;
+				border: 1px solid #b9e7c9;
+			}
+
+		.robot-footer {
+			margin-top: 16px;
+			text-align: center;
+			color: #7b8794;
+			font-size: 12px;
+		}
+	</style>
+</head>
+<body>
+	<div class="robot-card">
+		<img class="robot-brand" src="/images/logo.png" alt="National Academy of Engineering" />
+		<h1 class="robot-title">Verification</h1>
+		<p class="robot-subtitle">Welcome to the National Academy of Engineering. Please confirm below to continue to the requested page.</p>
+
+		<label class="robot-box" for="robotCheck">
+			<input type="checkbox" id="robotCheck" class="robot-checkbox" />
+			<span class="robot-label">Continue to the NAE website</span>
+			<span class="robot-badge">✓</span>
+		</label>
+
+		<div id="robotStatus" class="robot-status">
+			Thank you. Redirecting you now.
+		</div>
+
+		<div class="robot-footer">
+			National Academy of Engineering
+		</div>
+	</div>
+
+	<script type="text/javascript">
+    (function () {
+        var checkbox = document.getElementById("robotCheck");
+        var status = document.getElementById("robotStatus");
+        var cookieName = "RobotVerified";
+
+        function setCookie(name, value, hours) {
+            var expires = "";
+            if (hours) {
+                var date = new Date();
+                date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/; SameSite=Lax";
+        }
+
+        function getCookie(name) {
+            var nameEq = name + "=";
+            var parts = document.cookie.split(";");
+            for (var i = 0; i < parts.length; i++) {
+                var c = parts[i].trim();
+                if (c.indexOf(nameEq) === 0) {
+                    return decodeURIComponent(c.substring(nameEq.length));
+                }
+            }
+            return null;
+        }
+
+        function getRedirectUrl() {
+            var params = new URLSearchParams(window.location.search);
+            return params.get("redirectUrl");
+        }
+
+        function updateUi(isVerified) {
+            checkbox.checked = isVerified;
+            status.className = isVerified ? "robot-status success" : "robot-status";
+        }
+
+        checkbox.addEventListener("click", function () {
+            if (checkbox.checked) {
+				setCookie(cookieName, "true", 24 * 7);
+
+                var redirectUrl = getRedirectUrl();
+                if (redirectUrl) {
+                    window.location.href = redirectUrl;
+                    return;
+                }
+
+				window.location.href = "/";
+            }
+        });
+
+        updateUi(getCookie(cookieName) === "true");
+    })();
+</script>
+</body>
+</html>

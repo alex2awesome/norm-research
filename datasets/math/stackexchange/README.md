@@ -1,0 +1,201 @@
+# math-stackexchange
+
+Math Stack Exchange answer-quality task for the norm-research project. The label
+proxies community judgment of mathematical answer quality (acceptance + upvotes).
+
+## Task
+
+Binary classification on Math.SE answers:
+
+- **Positive (label=1):** answer was *accepted* by the question asker **and** has
+  Score ≥ 3 (upvotes minus downvotes).
+- **Negative (label=0):** answer has Score ≤ 0.
+
+The ambiguous middle (unaccepted positives at score 1–2, accepted-but-low-score,
+etc.) is dropped to create a clean signal gap between classes. Trivial answers
+(< 50 chars) are filtered as stubs.
+
+A model trained on the input column `text = "Question: …\n\nAnswer: …"` learns
+to score how the Math.SE community would react to an answer. Per
+`project_math_elegance_research.md`, much of this signal is hypothesised to be
+**clarity of exposition** (good LaTeX, step-by-step) plus correctness, rather
+than mathematical elegance per se — useful as a community-quality proxy but
+should not be over-interpreted as "elegance."
+
+## Sources
+
+Single source: the official **Math Stack Exchange data dump** on Archive.org:
+
+- `https://archive.org/download/stackexchange/math.stackexchange.com.7z`
+- Used files: `Posts.xml` (questions = `PostTypeId=1`, answers = `PostTypeId=2`,
+  question's accepted answer in `AcceptedAnswerId`).
+- `Votes.xml` and `Comments.xml` are intentionally **not** used as model input.
+  Per `notes/dataset_leakage_audit.md`, comment text would directly state
+  quality and is reserved for a future `_with_reasoning` variant only.
+
+## Collection scripts
+
+All under `/Users/spangher/Projects/stanford-research/norm-research/datasets/math/stackexchange/`:
+
+| Script | Purpose |
+|---|---|
+| `build_math_se_dataset.py` | Downloads the 7z dump, extracts `Posts.xml`, and builds **pairwise** preference rows (highest- vs. lowest-score answer per multi-answer question). Earliest exploration; not used for the canonical pointwise dataset. |
+| `build_binary_dataset.py` | Builds the **pointwise binary** dataset from `Posts.xml`. Labels via `pos_min_score=3 + accepted` vs. `neg_max_score=0`; enforces a question-disjoint filter, then balances per-tag with joint (question_len × answer_len) length-matched downsampling. Writes `splits/{train,eval,test}.csv.gz`. |
+| `build_150k_focused.py` | Downsamples the per-tag balanced output to **150K rows** while keeping 100 % of priority-tag rows (`proof-writing`, `proof-verification`, `proof-explanation`, `alternative-proof`, `solution-verification`, `intuition`, `soft-question`) for elegance/quality signal. 50/50 class balance, 80/10/10 train/eval/test split. Writes `splits_150k/`. |
+| `judge_correctness.py` | Optional LLM filter (gpt-5-mini) that judges whether `score ≤ 0` answers are mathematically *correct* vs. wrong, so the negative class can be sharpened past low-engagement to true-error. Output: `correctness_judgments.jsonl`. |
+
+## File layout
+
+```
+datasets/math/stackexchange/
+├── README.md                      (this file)
+├── build_math_se_dataset.py       pairwise build (historical)
+├── build_binary_dataset.py        pointwise binary build
+├── build_150k_focused.py          150K priority-tag-focused build
+├── judge_correctness.py           LLM correctness judge for score<=0 negatives
+├── math_se_modeling.csv.gz        CANONICAL modeling dataset (≈750K rows)
+└── online-rubrics/                norm-extraction sources (parallel track)
+    ├── raw/                       3,490 scraped HTML/PDF expert essays
+    ├── claude-parsed/             122 Claude-parsed rubric markdowns
+    │                              (e.g. aigner_ziegler_proofs_from_the_book.md,
+    │                              gowers_two_cultures_of_mathematics.md,
+    │                              atiyah_response_to_jaffe_quinn.md, …)
+    ├── gpt-parsed/                1 file (early experiment)
+    ├── urls-visited.csv           crawl bookkeeping
+    └── waveh{3..6}_{log.csv,seen.txt}  scrape-wave bookkeeping
+```
+
+The intermediate `raw_dump/`, `splits/`, and `splits_150k/` directories produced
+by the build scripts are not checked in — they live on sk3 (see
+`reference_sk3_paths.md`).
+
+## Canonical dataset file
+
+**`math_se_modeling.csv.gz`** (≈ 79 MB, 750,008 data rows + header).
+
+| Column | Type | Description |
+|---|---|---|
+| `text` | string | `"Question: <title>\n\n<question body>\n\nAnswer: <answer body>"` with HTML stripped and whitespace collapsed. |
+| `judgement` | int | Binary label, 0 or 1, per the rule above. |
+
+Per `reference_v2_task_datasets.md` and `reference_sk3_v2_datasets.md`, this is
+the v2 canonical file referred to by the task ID **`math-stackexchange`** /
+**`math`**; the sk3 mirror is
+`/lfs/skampere3/0/alexspan/norm-research/datasets/math/stackexchange/math_se_modeling.csv.gz`.
+
+Per-tag balancing, length matching, and question-disjoint filtering are baked
+into the build, so this file can be consumed directly. Random splits are
+generated by downstream code — but see the open question below about question-
+level grouping.
+
+## Dataset lineage (v3 → v3.2, 2026-06-10)
+
+| Version | File (sk3) | Adds | Status |
+|---|---|---|---|
+| v3 | `math_se_v3_position_matched.csv.gz` | position+length+tag matching, group split, metadata cols | superseded (year confound, audit §below) |
+| v3.1 | `math_se_v3_1_posyear_matched.csv.gz` | 3-year buckets in matching key (year AUC was 0.598) | built |
+| v3.2 | `math_se_v3_2_topic_balanced.csv.gz` | balance within question-topic clusters (K=100) via `topic_balance_v3_2.py` | **FAILED gate**: floor 0.665→0.640 only — signal is finer than topics |
+| v3.3 | `math_se_v3_3_propensity_balanced.csv.gz` | **balance within cross-fitted question-propensity deciles × year** via `propensity_balance_v3_3.py` (5-fold OOF TF-IDF+LR, AUC 0.669) | **CANONICAL** — output floor **0.461** (gate ≤0.55 passed); 99,722 rows 50/50 |
+
+Audit: `v3_leakage_audit/REPORT.md`; each balancer's manifest self-reports the
+question-only TF-IDF+LR floor on its input and output. v3.3 kills the floor
+(0.461 — slightly below chance = mild in-family overcorrection, acceptable).
+Rule going forward: report every metric/judge AUC against the question-only
+floor of the dataset version used; only the margin above it is evidence of
+answer-quality measurement. Note the v3.3 guarantee is relative to the
+TF-IDF+LR family — a stronger question-side model (e.g. an LLM) may recover
+some floor; re-check when judges enter the picture.
+
+## Modeling state
+
+Dense reward-model data-scaling sweep with Llama-8B pointwise: results live in
+`/Users/spangher/Projects/stanford-research/norm-research/runs/math_se_sweep_llama8b/subset_<frac>/validation_metrics.csv`.
+
+Best per-subset validation AUC (final epoch row, single trial per subset):
+
+| Subset | val AUC |
+|---|---|
+| 0.1 | 0.785 |
+| 0.2 | 0.806 |
+| 0.3 | 0.811 |
+| 0.4 | 0.811 |
+| 0.5 | 0.821 |
+| 0.6 | 0.825 |
+| 0.7 | header only — incomplete |
+| 0.8 | header only — incomplete |
+| 0.9 | header only — incomplete |
+| 1.0 | header only — incomplete |
+
+Pattern: monotonic gain from 0.1 → 0.6, climbing past 0.82 AUC with the curve
+not obviously flat yet. **subsets 0.7–1.0 never wrote metrics** and need a
+rerun — same failure mode noted for `code_review` subset 1.0 in
+`project_dense_model_sweeps.md`. AUC is already among the strongest of any
+task in the project (peer_review plateau ≈ 0.78, press_release ≈ 0.71).
+
+## Key decisions
+
+- **Binarization with a signal gap.** Positive = accepted ∧ score ≥ 3; negative
+  = score ≤ 0; the middle is dropped. This gives a much cleaner label than
+  e.g. score-median splits or pairwise preferences. Cost: throws away most of
+  the data, but Math.SE is huge so 150K balanced rows remain after filtering.
+- **Question-disjoint filter at the answer-pair level.** In
+  `build_binary_dataset.py::make_question_disjoint`, if a question has both a
+  positive and a negative answer, the whole question is dropped, preventing the
+  model from learning question-text → label associations across the train/test
+  boundary. (See open questions below for the residual concern.)
+- **Per-tag + length-matched downsampling.** `balanced_downsample` groups by
+  primary tag, then joint-bins by (question_len, answer_len) and downsamples
+  the larger class to match the smaller's bin distribution. Removes "long
+  answers are better" as a length shortcut and "this tag has higher acceptance
+  rate" as a tag-prior shortcut.
+- **Priority-tag retention in the 150K subset.** All rows tagged
+  `proof-writing`, `proof-verification`, `proof-explanation`, `alternative-proof`,
+  `solution-verification`, `intuition`, `soft-question` are kept; others are
+  downsampled to fill quota. This concentrates the dataset on
+  proof-quality-relevant questions for the elegance / norm-extraction angle.
+- **Stub filter.** Answers < 50 characters dropped — link-only and "me too"
+  responses are dominated by their length feature and add noise.
+- **Comments excluded from input.** Per the leakage audit, comments directly
+  state quality and are not used as model input; they may eventually feed a
+  separate `_with_reasoning` variant.
+
+## Open questions / next steps
+
+1. **Question-level grouping is not yet enforced in the canonical file.** Per
+   `notes/dataset_leakage_audit.md` row 1, "build the modeling dataset with
+   question-level grouping baked in from the start" is the action item.
+   `build_binary_dataset.py` enforces *class-disjoint* questions but
+   `math_se_modeling.csv.gz` doesn't carry `question_id` (only `text` +
+   `judgement`), so downstream train/eval/test splits cannot do
+   group-by-question splits without rejoining to the intermediate files. The
+   dense sweep above therefore may overestimate AUC by sharing question context
+   across splits. Action: re-emit a canonical file that carries `question_id`
+   and switch to group-aware splits.
+2. **Time / topic drift not audited** (audit row 2). Math.SE has > 15 years of
+   posts; tag prevalence and norms shift over time.
+   **Quantified 2026-06-10 (within-question time-order confound)**: on the 411,604
+   pairwise rows in `preference_pairs.jsonl.gz` (sk3), the *earlier-posted* answer wins
+   **67.3%** of pairs (post IDs are globally sequential, so `chosen_id < rejected_id` ⟺
+   posted first), rising to **76.4%** when `score_diff ≥ 5`. Length is much weaker than
+   assumed: longer answer wins only 52.9%. This mirrors the LeetCode finding (82%
+   top-quartile = oldest-quartile) — time, not length, is THE confound. Mitigations:
+   (a) pairwise: keep only pairs where the *later* answer won (it overcame first-mover
+   advantage — concentrated quality signal, ~33% of pairs survive); (b) pointwise:
+   re-emit the canonical file with `question_id`, answer position, and age-gap columns,
+   then bin-match on position the way we already bin-match on length.
+3. **Sweep subsets 0.7–1.0 never finished.** Rerun and confirm whether AUC
+   continues to climb past 0.82.
+4. **Correctness-sharpened negatives** (`judge_correctness.py` output) are
+   produced but not yet wired into a `*_correct_negatives_only` variant.
+5. **Elegance signal vs. clarity signal** (per
+   `project_math_elegance_research.md` §"Concern"). Tag-stratified evaluation
+   on `proof-writing` / `proof-verification` subsets vs. e.g. `calculus` would
+   help separate "clean LaTeX, step-by-step" from "elegant argument".
+6. **Norm-commentary track (`online-rubrics/`).** 3,490 raw essays scraped from
+   expert sources (AoPS proof-writing wiki, Gowers, Atiyah, Aigner–Ziegler,
+   Avigad, Bourbaki, Bradshaw, Cellucci, Detlefsen–Arana, Engel,
+   Greiffenhagen, …); only 122 Claude-parsed into rubric markdown so far. Next
+   step is to push the rest through the parser and use them as seed metrics
+   for the V/A/T pipeline on this task (parallel to coding's editorial-similarity
+   pivot, see `reference_math_editorial_sites_inventory.md` and
+   `project_leetcode_push_2026_06_02.md`).

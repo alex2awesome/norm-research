@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/rej_9aeb5a7aaa3f.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10849,
+  "output_tokens": 4557,
+  "elapsed_s": 2067.8018090419937,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners building/using datasets of withdrawn papers, scientific-integrity researchers, NLP/dataset engineers, and developers of automated scientific verification systems",
+    "subtask_short": "arXiv withdrawal dataset creation",
+    "subtask_description": "Creating and evaluating a large-scale dataset of withdrawn/withdrawn-version arXiv papers including comment extraction, taxonomy development, automatic categorization, and responsible data release for research on retractions and scientific feasibility.",
+    "subtask_keywords": [
+      "arxiv",
+      "dataset",
+      "retractions",
+      "withdrawn_papers",
+      "scientific_integrity",
+      "nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Factual/methodological/other critical errors in manuscript",
+        "description": "Retractions due to significant mistakes in the research process or results (e.g., flawed experimental designs, incorrect data analysis, proof/lemma errors) that potentially invalidate the study's conclusions.",
+        "guidance": "Examples include explicit statements like 'error in the proof of the main theorem' or 'mistake in lemma'. This category is the largest (approx. 40% of cases) and can be further clustered into themes such as errors in proofs, gaps in arguments, flawed methodologies, calculation errors, incorrect assumptions, and issues in experiment design or figures (see SciFy themes)."
+      },
+      {
+        "name": "Incomplete exposition or more work in progress",
+        "description": "Authors withdraw articles they deem incomplete or requiring substantial additional work; the submission was premature and needs further development or refinement.",
+        "guidance": "Representative comments indicate the work is restricted in scope or not generalizable; these should be distinguished from fatal errors (category A) and commonly account for a substantial portion (~19%) of withdrawals."
+      },
+      {
+        "name": "Typos in manuscript",
+        "description": "Retractions due to typographical errors which, in some cases, alter critical information or data in the paper making the submission untenable.",
+        "guidance": "Examples include corrupted/misprinted formulas or symbols (e.g., 'R%n +. (sic)' vs expected 'Rn'); although minor-seeming, typos that materially change results can justify withdrawal."
+      },
+      {
+        "name": "Self-identified as \u201cnot novel\u201d",
+        "description": "Authors withdraw work upon realizing findings or ideas have already been published or are not as original as initially thought.",
+        "guidance": "Example: 'withdrawn by the author because it is a corollary of a well-known result'. This category may be confused by classifiers with 'subsumed by another publication'\u2014distinguish 'not novel' (lack of originality) from 'subsumed' (incorporated elsewhere)."
+      },
+      {
+        "name": "Administrative or legal issues",
+        "description": "Retractions caused by non-scientific reasons, such as authorship disputes, copyright infringements, awaiting authorization to reproduce figures, or other institutional/legal constraints.",
+        "guidance": "Example: 'withdrawn waiting for the authorization from APS to reproduce two pictures'. Treat these separately from scientific-quality reasons."
+      },
+      {
+        "name": "ArXiv policy violation",
+        "description": "Withdrawals due to non-adherence to arXiv submission guidelines or ethical standards, often enacted by arXiv administrators.",
+        "guidance": "Examples include admin removal notes like 'removed by arXiv administrators due to unprofessional personal attack.' These are administrative actions rather than author-initiated corrections."
+      },
+      {
+        "name": "Subsumed by another publication",
+        "description": "Authors retract an arXiv preprint because the material has been incorporated into another preprint or publication to prevent redundancy or self-plagiarism.",
+        "guidance": "Example: 'Most of the (correct) portion of this paper has been incorporated into the paper ... (arXiv:1208.4032)'. Differentiate from 'not novel'\u2014here content is incorporated rather than simply non-original."
+      },
+      {
+        "name": "Plagiarism",
+        "description": "Retractions involving copying significant portions of others' work without proper attribution\u2014a serious breach of academic ethics.",
+        "guidance": "Example: admin note 'withdrawn due to excessive unattributed and verbatim overlap on pre-existing article'. Rare on arXiv compared to journals but still present; automated detection mechanisms may help identify such cases."
+      },
+      {
+        "name": "Personal reasons",
+        "description": "Authors choose to withdraw for personal circumstances unrelated to quality or content (e.g., collaborator disagreements, embarrassment).",
+        "guidance": "Examples include first-person statements like 'my collaborator would prefer it not to be posted at this time' or 'I am ashamed to have written this paper'. The paper excludes rows in this category from public release to protect authors' privacy."
+      },
+      {
+        "name": "Reason not specified",
+        "description": "Withdrawals where authors or administrators provide no clear explanation for the withdrawal; reasons may be undisclosed for privacy or other reasons.",
+        "guidance": "Comments may be blank or cryptic (e.g., 'clarifications/corrections, if any, may follow later'). Treat as an explicit category for analysis; may require different handling in release/analysis."
+      },
+      {
+        "name": "Step 1: Harvesting Withdrawn ArXiv ids",
+        "description": "Collect all withdrawn arXiv article IDs (including withdrawn versions) with provenance (version numbers) and date-bounds (dataset collected as of Sep 19, 2024).",
+        "guidance": "The authors worked with arXiv to obtain the list (16,460 article IDs, sometimes including multiple withdrawn versions of the same article); collecting this information independently requires either cooperating with arXiv or heavy filtering of the full dump. Represent withdrawn versions separately (e.g., arXiv:2309.11721v3 and v5). Note ~11% of identifiers are different versions of the same paper."
+      },
+      {
+        "name": "Step 2: Comment Extraction & PII scrubbing",
+        "description": "Crawl arXiv abstract pages for target identifiers and extract 'comment' text, subject areas, and version URLs; scrub personally identifiable information (PII) before further processing.",
+        "guidance": "Parse HTML to extract fields (see Fig.1). Use automated PII scrubbing tools (authors used 'scrubadubdub') to replace PII with placeholders like [RETRACTED_NAME] and [RETRACTED_EMAIL]. Even if PII is rare, this step is required for responsible release."
+      },
+      {
+        "name": "Step 3: Comment Clustering (embeddings + K-means)",
+        "description": "Embed withdrawal comments using a text embedding model, cluster embeddings (authors used K-means with K=100), then manually review clusters to derive categories and hard test cases.",
+        "guidance": "Use a large number of clusters to preserve nuance (K=100 was used), then manually inspect clusters to identify category labels and difficult examples. This pipeline yielded the 10-category taxonomy after manual consolidation of clusters."
+      },
+      {
+        "name": "Step 4: Zero-shot Comment Categorization (prompting LLMs)",
+        "description": "Classify comments into the taxonomy using a zero-shot LLM setup (authors used GPT-4) with a deterministic prompt asking for JSON output {'category': <category>}.",
+        "guidance": "Design and test prompts on hard cases derived from manual clustering. The paper reports that the prompt passed identified hard cases and achieved high performance (weighted average F1 \u2248 0.96). Return formats should be machine-parsable (JSON)."
+      },
+      {
+        "name": "Annotation sampling for evaluation",
+        "description": "Create a human-annotated evaluation set via stratified sampling across categories: select 10% of comments in each category, or 50 if 10% < 50, or all if category total < 50.",
+        "guidance": "This produced 1,620 hand-labeled comments for evaluation. Use stratified sampling to ensure coverage of all categories and sufficient support for per-category metrics."
+      },
+      {
+        "name": "Evaluation metrics & analyses (confusion matrix, per-category F1, weighted F1)",
+        "description": "Report per-category F1-scores, a confusion matrix, and a weighted-average F1 to assess automatic categorization performance; include error bars derived from categorization error rates.",
+        "guidance": "Be transparent about per-category strengths/weaknesses (e.g., perfect F1 for 'personal reasons' due to explicit first-person language; low F1 for 'not novel' due to confusion with 'subsumed'). Provide sample confusion matrix and per-category F1 table to show classifier behavior."
+      },
+      {
+        "name": "WITHDRARXIV-SCIFY: parsed full-text PDFs & scripts",
+        "description": "Provide an enriched subset (WITHDRARXIV-SCIFY) that includes scripts for producing parsed full-text PDFs to enable scientific feasibility studies, claim verification, and automated theorem proving.",
+        "guidance": "Parsed full text and scripts enable tasks like detecting proof errors, verifying claims, and comparing figures/tables vs text. Release code/scripts with reproducible parsing pipelines."
+      },
+      {
+        "name": "Ethical data-release measures",
+        "description": "Practical measures to responsibly release withdrawal comments while protecting authors: (1) exclude rows categorized as 'personal reasons'; (2) scrub all PII from comments; (3) release dataset via gated access (HuggingFace 'gated access'); (4) implement a 'right to be forgotten' to allow authors to request exclusion of specific arXiv IDs.",
+        "guidance": "Combine automated detection (high F1 for 'personal reasons') with manual PII scrubbing and gated distribution to balance openness and privacy. Clearly document and operationalize removal requests and access controls."
+      },
+      {
+        "name": "Distribution & subject-category analysis guidance",
+        "description": "When analyzing retractions by subject area, count cross-listed preprints in each applicable category and compare absolute retraction counts with retraction rates (withdrawals/total submissions) for context.",
+        "guidance": "Absolute counts may be dominated by large categories (e.g., cs.CV, cs.LG); retraction rates reveal different patterns (e.g., some math subfields have higher relative retraction rates). Drilldowns per subject area provide more nuanced insights."
+      },
+      {
+        "name": "SciFy theme: Errors in Proofs",
+        "description": "A major theme within 'factual/methodological errors' where authors cite errors specifically in the proofs of theorems, lemmas, or propositions.",
+        "guidance": "Examples: 'error in the proof of the main theorem'. These can range from minor technical mistakes to fundamental flaws invalidating results; useful training data for theorem-proving/verification systems."
+      },
+      {
+        "name": "SciFy theme: Misconceptions in Theoretical Foundations",
+        "description": "Withdrawals due to conceptual/theoretical misunderstandings such as misinterpreting assumptions or using incorrect mathematical models.",
+        "guidance": "Example phrases: 'misconception about the monodromy argument' or 'crucial logic error'. Distinguish from calculation errors or implementation mistakes."
+      },
+      {
+        "name": "SciFy theme: Issues in Experiment Design or Data Analysis",
+        "description": "Problems related to experimental setup, data preprocessing, or incorrect application of methodologies that undermine empirical claims.",
+        "guidance": "Statements like 'error in experimental results' or 'incorrect data analysis' indicate these issues. These examples are useful for building automated checks of experimental pipelines."
+      },
+      {
+        "name": "SciFy theme: Calculation and Numerical Errors",
+        "description": "Errors in calculations or numerical procedures that lead to incorrect results or conclusions.",
+        "guidance": "This includes miscomputed equations, wrong constants, or algorithmic numeric bugs. These are often detectable with targeted numeric or symbolic checks."
+      },
+      {
+        "name": "SciFy theme: Gaps in Mathematical Arguments",
+        "description": "Withdrawals citing gaps in logical/mathematical arguments that authors were unable to resolve, rendering parts of the work incomplete or incorrect.",
+        "guidance": "Phrases like 'gap in the proof' or 'unfixable flaw' denote this. Distinguish from 'errors in proofs'\u2014gaps may be missing steps or unresolved lemmas rather than explicit incorrect derivations."
+      },
+      {
+        "name": "SciFy theme: Flawed Methodologies",
+        "description": "Withdrawals due to flawed approaches or methodological limitations that require major revisions.",
+        "guidance": "Examples: 'error in the methodology section' or 'method limitations for the application'. These indicate the approach itself may be inappropriate or inapplicable."
+      },
+      {
+        "name": "SciFy theme: Incorrect Assumptions or Misinterpretations",
+        "description": "Authors identify incorrect assumptions or misreadings that undermine results (e.g., misreading primary sources or wrong model assumptions).",
+        "guidance": "Statements like 'misreading of the primary source' or 'incorrect assumptions in the model' highlight the need to verify foundational assumptions in automated checking."
+      },
+      {
+        "name": "SciFy theme: Errors in Figures or Visual Data",
+        "description": "Withdrawals referring to erroneous figures, charts, or visual representations that mislead or contradict conclusions.",
+        "guidance": "Examples: 'wrong figures' or 'error in illustration'. Useful for tasks that detect discrepancies between visual artifacts and reported results or text."
+      }
+    ]
+  }
+}

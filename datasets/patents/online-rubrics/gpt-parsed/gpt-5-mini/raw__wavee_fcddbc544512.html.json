@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_fcddbc544512.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10269,
+  "output_tokens": 4211,
+  "elapsed_s": 3240.583842291031,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers working on patent text and patent practitioners (patent examiners, IP researchers)",
+    "subtask_short": "patent edit prediction",
+    "subtask_description": "Building and using a dataset (PatentEdits) to predict sentence-level edit outcomes (Kept/Edited/Deleted) for patent claim sentences given draft text and examiner-cited prior art; includes dataset construction, automatic/human labeling rules, retriever fine-tuning, and classification experiments (including an entailment framing).",
+    "subtask_keywords": [
+      "patent",
+      "claims",
+      "edit_prediction",
+      "dataset",
+      "nlp",
+      "entailment"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patentability requirements (novelty & non-obviousness)",
+        "description": "A patent must be deemed novel and non-obvious in order to be granted by the US Patent Office (USPTO). Examiner rejections for novelty and non-obviousness correspond to 35 U.S.C. 102 and 35 U.S.C. 103.",
+        "guidance": "If a claim is not novel or is obvious, a USPTO examiner will cite prior work (prior art) and issue a rejection; PatentEdits focuses on modeling how those citations influence claim edits."
+      },
+      {
+        "name": "Focus on claim sentences",
+        "description": "The dataset and experiments focus specifically on the claim sentences of the draft, cited, and final patents.",
+        "guidance": "Claims are the critical legal section and primary focus during USPTO review; all edit labeling and prediction in PatentEdits operates at the sentence-level for claims."
+      },
+      {
+        "name": "Dataset inclusion & alignment criteria",
+        "description": "PatentEdits consists of 105k utility patents from 2007\u20132014, aligned so that draft claims, final granted claims, and examiner-cited reference text are available for each example.",
+        "guidance": "Aligned from multiple USPTO sources (Patent Examination Research Dataset and Patent Claims Research Datasets). Only examples with both draft and final text and where full citation context is found are kept. The authors filtered for patents with 1\u20132 cited references (48% of original examples) to make inventive overlap attribution easier."
+      },
+      {
+        "name": "Edit label taxonomy (Kept / Edited / Deleted)",
+        "description": "Each draft claim sentence is labeled as Kept, Edited, or Deleted to characterize revision outcomes.",
+        "guidance": "Labels are algorithmically assigned via sentence matching and thresholds, and grounded with human evaluation (annotators matched sentences and marked Edited vs Kept on pairs). The taxonomy is central to downstream prediction tasks."
+      },
+      {
+        "name": "Kept label rule",
+        "description": "A draft sentence is labeled Kept if it is matched to a final patent sentence and its similarity score is above a Kept threshold.",
+        "guidance": "Kept threshold was determined with human validation; the authors found BLEU-4 with a Kept threshold of 0.88 produced best agreement (Kept F1 = 0.97 in their study)."
+      },
+      {
+        "name": "Edited label rule",
+        "description": "A draft sentence is labeled Edited if it is matched to a final patent sentence and its similarity score is below the Kept threshold.",
+        "guidance": "Edited/Kept distinction for matched pairs was determined via human study: mark as Edited if substantial conceptual difference; the BLEU-4 Kept threshold gave Edited F1 = 0.91 for their validation subset."
+      },
+      {
+        "name": "Deleted label rule",
+        "description": "A draft sentence is labeled Deleted if there is no final sentence with sufficient similarity above a Deleted threshold.",
+        "guidance": "In their best matching algorithm (final-side greedy with Rouge-L), they used a Deleted threshold of 0.45. If no edge exceeds this threshold, the draft sentence is considered Deleted."
+      },
+      {
+        "name": "Sentence matching constraints (no splits, single outgoing edge)",
+        "description": "When constructing matches between draft and final sentences, the number of outgoing edges is limited to one per draft sentence and sentence splits (one draft splitting into multiple final sentences) are not considered.",
+        "guidance": "To allow many drafts to map to one final, they implement a match-and-cover procedure (final-side greedy) that exhaustively finds multiple draft matches to the remaining final sentence by removing the LCS after a match. Parameters include matching threshold \u03c4 and fraction limit \u03f5."
+      },
+      {
+        "name": "Matching algorithms / strategies",
+        "description": "Explore draft-side greedy, final-side greedy, and match-and-cover procedures to find edges between draft and final sentences.",
+        "guidance": "Draft-side greedy matches each draft sentence to the final sentence with the highest similarity; final-side greedy assigns each final sentence to its best draft(s). Match-and-cover removes matched subsequences (LCS) to find multiple draft matches per final. Final-side greedy with match-and-cover + Rouge-L performed best (F1 90.3 against human annotations)."
+      },
+      {
+        "name": "Sentence similarity scoring metrics",
+        "description": "Use automatic similarity metrics to score potential draft-final matches: BLEU-4, BLEU-1, METEOR, CHRF, BERTScore, ROUGE-L, ROUGE-1, and embedding-based scores (e.g., RoBERTa/DeBERTa embeddings).",
+        "guidance": "The authors evaluated many metrics; final-side greedy with Rouge-L achieved top sentence matching performance (F1 90.3). BLEU-4 was effective for choosing the Kept threshold (0.88). They compared lexical, n-gram, and embedding methods and selected metrics based on alignment with human annotations."
+      },
+      {
+        "name": "Human annotation matching guidance",
+        "description": "Annotators match a draft sentence to a granted sentence if they have substantial overlap in meaning, even with paraphrasing; if there is no substantial conceptual overlap or it is unclear, do not match.",
+        "guidance": "For distinguishing Kept vs Edited on matched pairs: mark as Edited if there is substantial conceptual difference; mark as Kept only if sentences are exactly the same except for numbering or typos. Use these human judgments to set algorithmic thresholds and validate matching."
+      },
+      {
+        "name": "Retriever fine-tuning procedure (triplet-loss recipe)",
+        "description": "Procedure to adapt semantic retrievers to the patent domain: use an LLM to produce the cited sentence most related to a draft (positive), treat the draft sentence as anchor, and the final sentence as negative, then fine-tune a sentence encoder (SBERT) with triplet loss.",
+        "guidance": "Steps: (1) extract 2k Edited sentences from training split; (2) prompt an LLM (GPT4o) to copy the cited sentence the draft is likely infringing; (3) use (cited, draft, final) as (P, A, N) to train encoder with triplet loss L(A,P,N)=max(0,d(A,P)-d(A,N)+\u03b1); (4) use fine-tuned SBERT to retrieve top cited sentence(s) for the rest of the dataset. Rationale: finals tend to be semantically distanced from drafts and act as good negatives."
+      },
+      {
+        "name": "Edit prediction context scenarios",
+        "description": "Define three prediction contexts: Sentence-only (draft sentence alone), Sentence+Citation (draft + most semantically similar cited sentence concatenated), and Window (previous, current, next draft sentences as context).",
+        "guidance": "For Sentence+Citation they concatenate with token delimiters '[claim]' and '[cited]'. Window experiments used a context window of three sentences to predict the edit of the center sentence. Increasing context size can improve performance."
+      },
+      {
+        "name": "Entailment framing for edit prediction",
+        "description": "Re-frame edit prediction as a textual entailment task: treat the cited sentence as the premise and draft sentence as the hypothesis; map entailment class to edit outcome.",
+        "guidance": "Mapping used: Contradiction -> Kept, Neutral -> Edited, Entailment -> Deleted. They fine-tuned entailment models (RoBERTa-Large-MNLI, BART-Large-MNLI) and observed a statistically significant association between predicted entailment labels and edit labels (Chi-squared p = 2.6e-22). Entailment framing improved overall weighted F1 and especially Kept-class performance, though it performed worse on Deleted class."
+      },
+      {
+        "name": "Class imbalance mitigation",
+        "description": "Handle class imbalance during model training by under-sampling the majority class in the training dataset.",
+        "guidance": "Authors under-sampled to equalize number of examples per edit class for training; this is part of the experimental set-up across context scenarios."
+      },
+      {
+        "name": "Model training hyperparameters / practical training constraints",
+        "description": "Recommended/used training hyperparameters for RoBERTa experiments and pragmatic settings for large models given hardware limits.",
+        "guidance": "For RoBERTa-base: batch size 32, 6 epochs, learning rate 2e-5. For RoBERTa-large: batch size 16 (to fit 40GB GPU), 3 epochs, learning rate 2e-5. Use learning rate warm-up of 500 steps. Larger models outperform smaller ones; windowed contexts outperform single-sentence contexts."
+      },
+      {
+        "name": "Evaluation metrics for edit prediction",
+        "description": "Evaluate models using per-class F1 (Kept, Edited, Deleted) and aggregated F1 (weighted/micro/macro).",
+        "guidance": "Report that entailment-based approaches gave the strongest weighted F1 and notably improved Kept-class F1. Provide detailed F1 scores per configuration (see paper Table 3). Use human-labeled matches as ground truth for matching F1 evaluation (sentence matching F1 = 90.3 for best method)."
+      },
+      {
+        "name": "Selection of examiner-cited references for novelty/non-obviousness",
+        "description": "Filter the USPTO Office Action Citations Dataset for citations associated with 35 U.S.C. 102 and 35 U.S.C. 103 to obtain references relevant to novelty and non-obviousness rejections.",
+        "guidance": "Use those specialized filters because 102/103 correspond to novelty and non-obviousness objections; then query for full text using the provided identifiers to extract cited sentences for retrieval and entailment experiments."
+      },
+      {
+        "name": "Limitations & need for expert validation",
+        "description": "Limitations: edit actions are determined by automatic rules and metrics validated with non-expert human annotators; expert (patent agent / USPTO examiner) evaluation could further improve quality. The dataset does not predict 'Added' claims and does not exploit claim dependency (independent-dependent claim relations).",
+        "guidance": "Be explicit about these limitations when using PatentEdits for downstream tasks; consider expert review or extended labels to capture added claims and claim-dependency structure when necessary."
+      },
+      {
+        "name": "Privacy & risk guidance",
+        "description": "Patents are public record, so dataset aggregation poses limited privacy risk; however, the Office Action dataset may contain personal identifiers for patent agents and examiners.",
+        "guidance": "PatentEdits only collects examiner-cited references (not personally identifying metadata) but users should be aware of the source datasets and handle any personal data according to appropriate policies."
+      },
+      {
+        "name": "Compute & reproducibility requirements",
+        "description": "Processing and modeling require substantial compute and specific libraries: BigQuery for extraction, TPUs/GPUs for processing and fine-tuning, and use of GPT-4 for some annotation/alignment steps.",
+        "guidance": "Authors used Google Colab TPU (334GB), Google BigQuery, and NVIDIA V100 (40GB) for fine-tuning; GPT4 usage incurred costs (~$25 in experiments). Use HuggingFace Transformers, SBERT, NLTK, scikit-learn, bert-score, rouge for experiments and evaluation. Reproducibility requires similar compute and access to original USPTO bulk sources."
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_f88aee70a943.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_f88aee70a943.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 38,
+  "chunk_chars": 39925,
+  "model": "gpt-5-mini",
+  "elapsed_s": 98.93533999999636,
+  "input_tokens": 12051,
+  "output_tokens": 4822,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Users of the PARI/gp calculator (people writing gp scripts, debugging gp code, and configuring gp)",
+    "subtask_short": "PARI gp scripting and debugging",
+    "subtask_description": "Guidance for writing, debugging, and configuring PARI/gp scripts: how arguments are interpreted, how errors are reported and trapped, use of metacommands/defaults/gprc, readline features, and interfacing with other languages.",
+    "subtask_keywords": [
+      "pari",
+      "gp",
+      "scripting",
+      "debugging",
+      "configuration"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "String vs keyword argument contexts",
+        "description": "Some function arguments are processed in string context and others as keywords; the manual enumerates which functions use which context.",
+        "guidance": "Reference lists: arguments processed in string context include Str, addhelp (second argument), default (second argument), error, extern, plotstring (second argument), plotterm (first argument), read and readvec, system, all printxxx functions, all writexxx functions. Arguments processed as keywords include alias, default (first argument), install (all arguments but the last), trap (first argument), whatnow. Be aware that the second argument to default is subject to string context expansion (you can use run-time values)."
+      },
+      {
+        "name": "Use of Str to build strings and eval for programmatic expressions",
+        "description": "The function Str converts its arguments into strings and concatenates them; coupled with eval it is powerful for programmatic construction of expressions (e.g., generic matrices).",
+        "guidance": "Example: genmat(u,v,s=\"x\") = matrix(u,v,i,j, eval( Str(s,i,j) )) then genmat(2,3) + genmat(2,3,\"m\") yields symbolic matrix entries like x11 + m11. Use Str when you need to build identifiers or expressions at runtime and evaluate them with eval."
+      },
+      {
+        "name": "Two kinds of errors: syntax vs runtime",
+        "description": "There are two kinds of errors: syntax errors from the compiler, and runtime errors from the PARI library or evaluator; both are fatal to the computation.",
+        "guidance": "Syntax errors are reported at compile time (caret indicates error location); runtime errors occur during evaluation (e.g., undefined function or mathematical failure) and may carry more mathematical content. By default gp returns to the prompt after errors; turning the recover option off makes untrapped errors fatal (useful for batch mode)."
+      },
+      {
+        "name": "Syntax error messages give context with caret/arrow",
+        "description": "When reporting a syntax error, gp copies part of the expression and indicates where the error occurred with a caret ^- or an arrow showing context.",
+        "guidance": "Examples shown: factor() missing argument, 1+ with unexpected $end, and missing parenthesis examples. Error messages may differ because parsing context differs; the caret/arrow points at the location gp detected the problem but gp cannot guess the user's intent."
+      },
+      {
+        "name": "Runtime errors include evaluation context and call chain frames",
+        "description": "Runtime/library errors are reported with the operator/function context and can include a call-chain showing nested frames (top-level, function bodies, loops) to help locate the fault.",
+        "guidance": "Examples: calling an undefined function siN(x) yields 'not a function in function call' with caret; attempting 1/Mod(2,4) reports '_/_: impossible inverse in Fp_inv: Mod(2, 4).' The debugger prints nested frames for deeper errors (in function g:..., in function f:...). This extra context is helpful for debugging math-related failures."
+      },
+      {
+        "name": "Default error recovery behaviour and 'recover' option",
+        "description": "By default gp returns to its prompt after reporting an error and cleaning up; if the recover option is off then gp exits immediately on untrapped errors (useful for batch mode).",
+        "guidance": "Understand the default so you know whether intermediate state is preserved. The break loop and iferr mechanisms provide alternate ways to trap and recover from errors interactively or programmatically."
+      },
+      {
+        "name": "Break loop debugging mode: entry, prompt, and use cases",
+        "description": "A break loop is entered on user interrupt (Control-C) or runtime error (not syntax errors); it freezes gp state, prevents cleanup until exiting the loop, and provides a break> prompt to run gp commands in that frozen context.",
+        "guidance": "While in break loop you can inspect and modify gp state (variables, debugging level, logs). If entered by Control-C, an empty line resumes the interrupted computation; for fatal errors empty line does nothing (to avoid losing debugging data). Exit the break loop with next, break, return, or C-d (C-d twice exits gp entirely). Useful for inspecting variables and changing state mid-computation."
+      },
+      {
+        "name": "Debugger commands available inside break loop",
+        "description": "Several gp commands are provided to navigate and inspect frames and error context during a break loop.",
+        "guidance": "Commands include dbg_up(n) to go up n frames, dbg_down(n) to go down, dbg_x(t) to examine t, and dbg_err() to return the current error context t_ERROR. The error object ERR can be inspected (Vec(ERR), component(ERR,i)). Example used: E = dbg_err(); Vec(E) returns vector of error components."
+      },
+      {
+        "name": "Break loop is enabled by default and can be disabled",
+        "description": "The debugger fires by default on runtime errors; you can disable it by setting default breakloop to 0 (in gprc). In non-interactive mode the break loop is automatically disabled.",
+        "guidance": "If you don't want gp to drop into break loop on runtime errors (e.g., automated runs), set breakloop default appropriately or run gp with standard input not attached to a terminal."
+      },
+      {
+        "name": "Protecting code with iferr(...) exception handler",
+        "description": "The iferr(statements, ERR, recovery[, predicate]) construct evaluates statements and returns its value, but if an error occurs it returns recovery; ERR is a lexically-scoped variable set to the exception object for the recovery code to inspect.",
+        "guidance": "Use iferr to make code fault-tolerant. Example inv(x) = iferr(1/x, ERR, \"oo\") returns \"oo\" on division by zero. Use predicate or check errname(ERR) inside recovery to only catch specific exceptions and rethrow unexpected ones (pattern shown in inv2 and simplified in inv3). Protected codes can be nested. Prefer trapping specific errors rather than catching everything."
+      },
+      {
+        "name": "ERR contains structured error information accessible programmatically",
+        "description": "The ERR (t_ERROR) object carries components (error name and additional info) accessible via component(ERR,i) or Vec(ERR); errname(ERR) returns the error name.",
+        "guidance": "Use errname(ERR) to decide whether to handle or rethrow an exception. Vec(ERR) returns vector of components for deeper inspection. See Section 3.1.23 for list of exception types and contents."
+      },
+      {
+        "name": "Advice: trap specific errors, not everything",
+        "description": "Rather than trapping all exceptions and rethrowing undesired ones, it is advised to only trap errors of a specific kind when possible.",
+        "guidance": "Use the predicate form of iferr or check errname(ERR) to ensure recovery code only handles expected exceptions. Examples include checking errname(ERR) == \"e_INV\" before returning \"oo\" for division-by-zero recovery."
+      },
+      {
+        "name": "Using install and interfacing PARI with other languages",
+        "description": "The PARI library was meant to be interfaced with C programs; gp provides install to import foreign functions for use under gp. Scripts are convenient for prototyping before coding speed-critical parts in C; the GP2C compiler can help.",
+        "guidance": "You can code critical parts in C and use install to import them into gp. The manual also notes third-party packages: SAGE (Python-based), Math::Pari (Perl module), and PARI in CLISP (Common Lisp) as interfaces maintained outside the manual. These provide language bindings to gp functions."
+      },
+      {
+        "name": "Defaults mechanism: default(def, value) and available defaults",
+        "description": "Many internal variables define gp's behaviour; default(def, value) sets these defaults. Typing default by itself lists all defaults and values; \\\\d is shortcut for default().",
+        "guidance": "Important defaults include parisizemax; numeric defaults accept suffixes k, M, G (multiplying by 10^3, 10^6, 10^9). The second argument to default is subject to string context expansion so you can use runtime values (e.g., a=3; default(logfile, \"file\" a \".log\")). Some defaults (prompt, logfile) also undergo time expansion (strftime) and environment expansion ($VAR, ~)."
+      },
+      {
+        "name": "Special expansions in defaults: time (%) and environment ($, ~)",
+        "description": "Some default values (file names and prompts) undergo time expansion via strftime (e.g., %H, %M) and environment expansion ($SOMEVAR or ~user).",
+        "guidance": "Example: default(prompt,\"(%H:%M) ? \") will display current hour:minute in the prompt. Environment expansion substitutes $HOME and ~ with appropriate paths. Be mindful when setting prompt/logfile names in gprc or at runtime."
+      },
+      {
+        "name": "Simple metacommands are interactive shortcuts (not for scripts) and are case-sensitive",
+        "description": "Metacommands (mostly starting with \\) are shortcuts meant for interactive use; they should not be used in GP scripts. They are case sensitive and accept number or name arguments, with optional braces indicating optional arguments.",
+        "guidance": "Whitespace between metacommand and arguments is optional; when filenames start with digits or contain spaces quote them. Metacommands provide quick access to help, defaults, history actions, file read/write, debugging toggles, etc. Examples and detailed behaviour are given in subsections."
+      },
+      {
+        "name": "Online help metacommands: ?, ??, ??? and their behaviour",
+        "description": "?n lists functions in Section 3.n; ?function gives short help; ?? keyword yields extended help (manual entry), possibly specifying chapter with @n; ??? pattern lists sections in Chapter 3 related to query.",
+        "guidance": "Use ?? without argument to open a dvi previewer of the full manual; ??tutorial and ??refcard open tutorial and reference card. Extended help recognizes operators and keywords; when using dangerous characters enclose query in quotes. You can force a chapter search with @chapter and use trailing @ to browse entire manual."
+      },
+      {
+        "name": "Comment syntax",
+        "description": "Block comments are /*...*/ and one-line comments begin with \\\\; block comments can span lines.",
+        "guidance": "Use /*...*/ for multi-line comments and \\\\ for single-line comments in gprc or interactive input (note gprc preprocessing removes comments before execution)."
+      },
+      {
+        "name": "Catalogue of common metacommands and their meanings",
+        "description": "A number of single-letter/bang metacommands are described for common tasks (printing objects, listing functions, toggling modes, debugging, file operations, etc.).",
+        "guidance": "Examples include: \\a {n} prints object n raw; \\c prints list of hardcoded functions; \\d prints defaults; \\e {n} switches echo on/off; \\g {n} sets debugging level; \\gf, \\gm set file/mem debug levels; \\h prints hashtable info; \\l {logfile} toggles log mode; \\m pretty matrix; \\o {n} output mode; \\p, \\pb, \\ps set precisions; \\q quits; \\r {filename} reads file into gp; \\s prints PARI stack/heap; \\t prints internal longword format; \\u, \\um print user functions; \\v prints version; \\w write object to file; \\x prints internal tree of object; \\y toggles simplify; # toggles timer; ## prints last computation time. See subsections for exact semantics and pitfalls (quoting filenames, compressed file support, etc.)."
+      },
+      {
+        "name": "Preferences file (gprc): syntax, preprocessor directives, and commands",
+        "description": "gprc customizes defaults and loads common user functions/aliases on startup. The file is read line-by-line with a simple preprocessor handling comments and #if boolean conditionals. After preprocessing remaining lines are executed as expressions: either default = value or read \"some GP file\".",
+        "guidance": "Preprocessor tests include EMACS, READL, VERSION comparisons, and BITS IN LONG. #if can apply to next line if the rest is empty. Use gprc to set prompt, read scripts, set new defaults. Examples provided (self-modifying prompt, conditional settings). The file must use terminating ; when using multiline constructs. A sample misc/gprc.dft is provided."
+      },
+      {
+        "name": "gprc location search order",
+        "description": "When gp starts it looks for gprc in several places (only the first found is loaded): $GPRC, $HOME/.gprc (Unix) or $HOME\\gprc.txt (Windows), /etc/gprc (system-wide), then pari's datadir (.gprc or gprc.txt).",
+        "guidance": "If GPRC env var is set it overrides others. On Unix default name starts with dot and is hidden (use ls -a to list). Command-line switches override values read from gprc. This matters when deploying consistent startup behaviour across machines/users."
+      },
+      {
+        "name": "Using readline for line editing, history, and completion",
+        "description": "Readline provides line editing, history, incremental search, kill/yank, undo, vi-mode toggle, and contextual completion; gp integrates readline for an interactive experience.",
+        "guidance": "Basic keybindings described (C-a/C-e, M-b/M-f, Up/Down for history, C-r/C-s for search, C-k, C-y, M-y, undo). Configure .inputrc to modify bindings; conditionally customize for Pari-GP. Completion is context-dependent: after ~ expect user/path, after default( expect a default keyword, after '.' a member keyword; when a single completion exists gp appends a comma for defaults or parentheses for functions (TAB again gives argument list). TAB once more lists alternatives. M-h gives short online help; M-H extended help. For some readline versions convert-meta/output-meta settings recommended to avoid accented output."
+      },
+      {
+        "name": "PariEmacs integration for Emacs users",
+        "description": "PariEmacs package allows running gp as a subprocess in Emacs; add autoload lines to .emacs and associate .gp files with gp-script-mode.",
+        "guidance": "Example lines provided: (autoload 'gp-mode \"pari\" nil t) ... and (setq auto-mode-alist (cons '(\"\\\\.gp$\" . gp-script-mode) auto-mode-alist)) so files with .gp suffix open in gp-script-mode. See Appendix A for installing PariEmacs."
+      }
+    ]
+  }
+}

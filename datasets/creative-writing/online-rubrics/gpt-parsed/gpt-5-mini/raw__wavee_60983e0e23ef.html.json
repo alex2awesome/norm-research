@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_60983e0e23ef.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17333,
+  "output_tokens": 4629,
+  "elapsed_s": 1155.88691341714,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/ML researchers and engineers working on reinforcement learning and reward modeling for creative story generation (LLM researchers, ML practitioners building evaluators and story generators)",
+    "subtask_short": "RL-based story evaluation & reward modeling",
+    "subtask_description": "Designing and training a generative reward model (GenRM) and an RL pipeline (RLCS) to evaluate and optimize creative story generation, including data construction, chain-of-thought distillation, and entropy-based training stability methods.",
+    "subtask_keywords": [
+      "creative_writing",
+      "reward_modeling",
+      "reinforcement_learning",
+      "story_evaluation",
+      "llm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Generative Reward Model with Explicit Reasoning",
+        "description": "GenRM provides multi-dimensional analysis and explicit reasoning about story preferences rather than scalar scores.",
+        "guidance": "GenRM should generate structured, multi-dimensional feedback and articulate why one story is preferred. It is trained via a two-stage pipeline (SFT cold-start then GRPO refinement) and is intended to achieve high alignment with human judgments (reported 68% agreement for the best model)."
+      },
+      {
+        "name": "Structured multi-dimensional evaluation dimensions",
+        "description": "Decompose story quality into interpretable dimensions including narrative coherence, creative originality, emotional engagement, and context-dependent criteria such as outline adherence and character consistency.",
+        "guidance": "GenRM must produce reasoning that evaluates across these dimensions (and task-specific dimensions) rather than returning a single scalar; these dimensions are used to synthesize a justified preference judgment."
+      },
+      {
+        "name": "Preference output with chain-of-thought",
+        "description": "Given context c and two candidate continuations s1 and s2, GenRM must generate a chain-of-thought analysis d and a preference judgment y \u2208 {s1 \u227b s2, s2 \u227b s1}.",
+        "guidance": "The model's output should explicitly explain why one continuation is superior based on the identified quality dimensions, i.e., both reasoning (d) and final preference (y) are required for supervision and downstream use."
+      },
+      {
+        "name": "Two-stage training pipeline (SFT cold-start then GRPO refinement)",
+        "description": "First perform supervised fine-tuning (SFT) on demonstrations with reasoning chains to establish task-following and structured output generation, then refine judgment accuracy through GRPO reinforcement learning on expanded preference data.",
+        "guidance": "SFT maximizes likelihood of generating reasoning chains and the correct preference; GRPO refines judgment accuracy via on-policy group rollouts and advantage optimization. Both stages are required for a robust GenRM."
+      },
+      {
+        "name": "Chain-of-Thought Distillation using teacher models",
+        "description": "Use a strong teacher model (e.g., Gemini-2.5-Pro) to generate detailed reasoning chains (di) and preference predictions (\u02c6yi) for each story pair to build SFT training data.",
+        "guidance": "Perform CoT generation, mitigate position bias by generating judgments for both original and swapped story orders, and use consistency filtering to retain only samples where the teacher model is consistent across orders and aligned with human annotations. After filtering, DSFT contains high-quality samples (\u22481,400 reported)."
+      },
+      {
+        "name": "Position bias mitigation and consistency filtering",
+        "description": "Generate teacher judgments for both original and swapped presentation orders and retain only samples where predictions are consistent across orders and aligned with human annotations.",
+        "guidance": "This step reduces position bias in LLM judges; samples failing consistency checks are used separately for RL rather than SFT cold-start."
+      },
+      {
+        "name": "Human annotation standard for preference data",
+        "description": "Use professional screenwriters to produce pairwise preference labels for story pairs; annotations provide only final judgments (no reasoning chains).",
+        "guidance": "Dhuman initially contains >4,000 story pairs, with a subset filtered into DSFT for SFT and the remainder used for RL. Expert annotations are treated as gold labels for evaluation and SFT alignment."
+      },
+      {
+        "name": "Multi-model consensus for synthetic preference construction",
+        "description": "Construct synthetic preference data by obtaining judgments from multiple strong LLMs {M1,...,MK} for both original and swapped orders, and retain only samples where all models agree and are position-invariant.",
+        "guidance": "This yields high-agreement synthetic pairs (Dsyn_RL) to expand RL training data while maintaining annotation quality via consensus."
+      },
+      {
+        "name": "Group Relative Policy Optimization (GRPO)",
+        "description": "Optimize rewards by computing relative advantages of responses within a group of responses to the same query and using a GRPO objective with importance ratios, advantage normalization, clipping, and KL regularization.",
+        "guidance": "Compute group-relative advantage A(g) = (r(g) \u2212 mean(r))/std(r) across G responses; use importance ratio \u03c1 and clip(\u03c1, 1-\u03f5, 1+\u03f5) in the objective; include \u03b2 \u00b7 E[KL(\u03c0\u03b8 \u2225 \u03c0_SFT)] regularization. GRPO bypasses the need for a value model and is used in both GenRM and policy optimization."
+      },
+      {
+        "name": "Entropy-Based Reward Shaping (adaptive weighting by confidence and correctness)",
+        "description": "Apply reward shaping that considers output entropy (confidence) and response correctness, classifying samples into four categories and assigning different weight multipliers to shaped rewards.",
+        "guidance": "Compute trajectory-level entropy H and use batch median \u03c4_H as threshold. Weight multipliers: low_confidence incorrect (H > \u03c4_H, r = \u22121): w = 1.0; high_confidence incorrect (H \u2264 \u03c4_H, r = \u22121): w = 1.5; low_confidence correct (H > \u03c4_H, r = +1): w = 1.5; high_confidence correct (H \u2264 \u03c4_H, r = +1): w = 0.5. Shaped reward r' = w \u00b7 r. This prioritizes confident errors and uncertain correct predictions while preventing overfitting on confident correct patterns."
+      },
+      {
+        "name": "Binary reward labeling and pointwise conversion",
+        "description": "During GRPO training each output receives a binary reward r \u2208 {\u22121,+1} based on whether its judgment matches the ground truth; pairwise judgments are converted to pointwise rewards using a random pivot/reference.",
+        "guidance": "For group rollouts, randomly choose a pivot response and assign R(\u03c4_i) = 0 for pivot and R(\u03c4_i) = RM(\u03c4_i, \u03c4_pivot) for others; in pairwise-to-pointwise conversion assign +1 to responses preferred over reference and \u22121 to inferior ones."
+      },
+      {
+        "name": "Rollout group size and diversity guidance (G)",
+        "description": "Choose a moderate number of rollout samples per query; reported results show performance saturates around G = 8 with diminishing returns beyond 8\u201316.",
+        "guidance": "Use G \u2248 8 as default to balance signal for advantage estimation with computational cost; moderate diversity (8\u201316) is recommended."
+      },
+      {
+        "name": "Advantage normalization across group",
+        "description": "Compute group-relative advantage by subtracting the group's mean reward and dividing by the group's standard deviation before optimization.",
+        "guidance": "This normalization stabilizes learning by making advantages comparable across groups and is part of the GRPO advantage computation A(g)_i = (r'(g)_i \u2212 mean({r'}))/std({r'})."
+      },
+      {
+        "name": "Policy optimization stability constraints (clipping and KL regularization)",
+        "description": "Use clipping of importance ratios (clip(\u03c1, 1 \u2212 \u03f5, 1 + \u03f5)) and a KL penalty term \u03b2 \u00b7 E[KL(\u03c0\u03b8 \u2225 \u03c0_SFT)] to prevent large updates and maintain stability.",
+        "guidance": "Tune \u03f5 and \u03b2 to control update magnitude and preserve the SFT initialization during GRPO refinement; these are explicit hyperparameters in the GRPO objective."
+      },
+      {
+        "name": "Story generation training instance composition",
+        "description": "Each story generation training instance consists of: (1) Story Background (context/premise), (2) Story Outline (high-level plot), (3) Character Profiles (traits), and (4) Target Story (up to 2,000 characters).",
+        "guidance": "Construct these instances (\u22485,000 reported) by reverse-engineering authentic literary works via strong teacher models to distill background, outline, and character profiles; ensure coverage of diverse genres and narrative styles."
+      },
+      {
+        "name": "Expert-annotated evaluation set and annotation practice",
+        "description": "Use an expert-annotated test set of high-quality pairwise preferences (500 pairs reported) labeled by professional screenwriters, including binary preferences plus detailed qualitative rationales.",
+        "guidance": "Evaluate reward models by measuring accuracy (percentage agreement with experts) on this set; for story generation, use human head-to-head comparisons (win rates) and absolute ratings for Coherence, Creativity, and Engagement."
+      },
+      {
+        "name": "Evaluation metrics for reward models and generation",
+        "description": "Measure GenRM performance by Accuracy (%) on expert-annotated preference pairs; measure story generation by human head-to-head Win Rate (%) and absolute ratings (1\u201312 scale) for Coherence, Creativity, and Engagement.",
+        "guidance": "Report SFT-only and SFT+GRPO gains, and compare to discriminative baselines and commercial judge models; use win/tie/lose breakdowns in head-to-head human evaluations."
+      },
+      {
+        "name": "Synthetic Preference Annotation Template (judging procedure)",
+        "description": "Evaluator process: (1) analyze core dramatic purpose and key dramatic tasks; (2) create task-specific evaluation criteria; (3) apply general criteria (plot consistency/completeness, character consistency, story logic and flow, pacing); (4) produce detailed analysis per story; (5) output final scores in format {{score1,score2}} on a 10-point scale.",
+        "guidance": "Use the provided prompt template to ensure judges produce task-specific criteria plus general standards, detailed rationales, and final numeric scores in the exact required format for downstream training or evaluation."
+      },
+      {
+        "name": "Preventing training instability and reward hacking",
+        "description": "Design reward modeling and optimization to avoid policy collapse and reward hacking in text-generation's large action space by using articulated rewards and targeted optimization strategies.",
+        "guidance": "Combine multi-dimensional articulated feedback (GenRM) with entropy-based shaping and GRPO-relative advantage to reduce exploitation of superficial patterns and maintain exploration (entropy). Monitor and adjust reward shaping to task specifics."
+      },
+      {
+        "name": "Risk mitigation and deployment guidance",
+        "description": "Acknowledge risks: GenRM may inherit dataset/model biases, produce stereotypes, culturally insensitive or factually incorrect content, or be misused to create deceptive narratives.",
+        "guidance": "Recommend mandatory human review before deployment and consider annotator diversity and additional safeguards to mitigate bias and harmful outputs."
+      }
+    ]
+  }
+}

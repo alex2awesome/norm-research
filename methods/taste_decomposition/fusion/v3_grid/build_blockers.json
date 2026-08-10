@@ -1,0 +1,14 @@
+{
+  "aops_curation": {
+    "reason": "The AoPS V+A bank population (5,202 rows, 606 problems) IS exactly the dense arm's HELD-OUT rows: datasets/math/aops/va/population_manifest.json records T_provenance = 'grouped Llama-3.1-8B LoRA arm trained upstream on runs/aops_same_approach_dense_llama8b/split_full/train.csv; these are its held-out rows' (dense_split column: eval 2,510 / test 2,692, TRAIN 0). The cell therefore has ZERO bank-covered rows in its own dense TRAIN split, so a V3 arm cannot be trained on the cell's own splits without Gemma-judging the ~22,725 split_full train rows (new judging = out of scope).",
+    "decoy_warning": "datasets/math/aops/va/dense_standard/split/ exists (10,457/1,307/1,307) but is a STALE ORPHAN of a superseded 13,071-row draw -- no rm_out_seed*, no eval_pass_results.json, nothing was ever trained on it. It shares the sha1(problem|body)[:20] id scheme with the bank, so a naive merge on row_id silently matches 2,307/5,202 bank rows and mislabels 1,933 of them 'train'. DO NOT USE.",
+    "what_would_unblock": "Either (a) score the AoPS dense-train rows with the frozen Gemma-4-31B A-bank, or (b) redefine the cell with a fresh grouped 80/10/10 split over the 5,202 scored rows and retrain the raw dense control at matched n (a NEW cell, not the registry cell).",
+    "recorded_utc": "2026-08-08T09:22:32Z"
+  },
+  "code_v3": {
+    "reason": "The code_v3 A-bank was only ever scored on the dense arm's EVAL+TEST rows: closure/code_v3/abank_rescore/score_meta.json records text_source = 'datasets/code-review/dense_standard_v3/split/{eval,test}.csv' and the 16 scores_shard*.npz stack to exactly 11,452 rows = eval 5,822 + test 5,630. The dense TRAIN split (47,659 rows / 973 repos) has ZERO scored rows, and the split is repo-grouped with 0 repo overlap across buckets, so no train-row criterion scores can be borrowed. A V3 arm cannot be trained on this cell's own splits, and the importance ranking (which must be TRAIN-fold-only) cannot be computed at all.",
+    "secondary_deviations": "code_v3's own dense chain also deviates from the frozen recipe (--max_length 2048 and --class_weight_auto ON, methods/dense/run_pr_dense_v3.sh on sk3), so even a rebuilt arm would not be recipe-matched to the other 12 cells.",
+    "what_would_unblock": "Gemma-4-31B-score the 47,659 dense-train rows with the same 83-criterion A bank (new judging = out of scope), or define a new cell on the 11,452 scored rows with a fresh repo-grouped 80/10/10 split plus a matched-n raw-text control.",
+    "recorded_utc": "2026-08-08T09:22:32Z"
+  }
+}

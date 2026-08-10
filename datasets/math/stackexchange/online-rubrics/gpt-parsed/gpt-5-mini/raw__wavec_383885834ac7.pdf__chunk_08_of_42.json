@@ -1,0 +1,185 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_383885834ac7.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_383885834ac7.pdf",
+  "chunk_idx": 8,
+  "n_chunks": 42,
+  "chunk_chars": 39845,
+  "model": "gpt-5-mini",
+  "elapsed_s": 89.81940604199917,
+  "input_tokens": 14965,
+  "output_tokens": 6197,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, macro writers, and typesetters (people implementing fine control over TeX paragraph/page breaking)",
+    "subtask_short": "TeX paragraph and page breaking",
+    "subtask_description": "Rules, parameters, and idioms for controlling how TeX breaks paragraphs into lines and assembles lines into pages, including parameter semantics, penalties, special macros, and recommended practices.",
+    "subtask_keywords": [
+      "tex",
+      "typesetting",
+      "paragraph_breaking",
+      "page_makeup",
+      "macro_writing"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Parameters used for line breaking are those current at paragraph end",
+        "description": "TeX looks at the parameters that affect line breaking only when it is breaking lines. The relevant values of \\hyphenpenalty, \\rightskip, \\hsize, and so on, are the ones that are current at the end of the paragraph.",
+        "guidance": "Do not change such parameters in the middle of a paragraph if you intend the change to affect particular words; indentation width contributed by \\parindent is determined when the indentation is contributed (not at paragraph end)."
+      },
+      {
+        "name": "\\leftskip and \\rightskip (line-level glue)",
+        "description": "\\leftskip and \\rightskip specify glue to be inserted at the left and right of every line in a paragraph; this glue is taken into account when badnesses and demerits are computed. Plain TeX normally keeps them zero.",
+        "guidance": "\\narrower increases both by \\parindent (useful when quoting). Be careful using \\rightskip with infinite stretchability to produce ragged-right: infinite stretch gives zero badness to very short lines and is a poor way to get ragged-right."
+      },
+      {
+        "name": "\\narrower macro",
+        "description": "Plain TeX provides a \\narrower macro that increases both \\leftskip and \\rightskip by the current \\parindent.",
+        "guidance": "When using \\narrower inside a group, end the paragraph before ending the group; otherwise its effect will disappear before TeX chooses line breaks."
+      },
+      {
+        "name": "centerline/leftline/rightline/line macros ignore \\leftskip/\\rightskip",
+        "description": "The \\centerline, \\leftline, \\rightline and \\line macros of plain TeX don't take \\leftskip and \\rightskip into account.",
+        "guidance": "If you need those macros to respect \\leftskip/\\rightskip you must modify them (the book poses this as an exercise)."
+      },
+      {
+        "name": "Ragged-right implementation guidance",
+        "description": "Using \\rightskip with infinite stretchability makes every line fill with space at the right, but that assigns zero badness to very short lines (undesirable).",
+        "guidance": "To make decent ragged-right, set \\rightskip so it will stretch enough to make line breaks possible but not so much that short lines are considered good; also fix interword glue so spaces between words don't stretch/shrink. See definition of \\raggedright in Appendix B."
+      },
+      {
+        "name": "\\parshape (arbitrary paragraph shapes)",
+        "description": "You can specify an essentially arbitrary paragraph shape by saying \\parshape={number} followed by 2n {dimen} specifications: \\parshape=n i1 l1 i2 l2 ... in ln where each of the first n lines has width li and is indented from the left by ii.",
+        "guidance": "If paragraph has fewer than n lines additional specs are ignored; if more than n lines the nth spec is repeated ad infinitum. Cancel with \\parshape=0."
+      },
+      {
+        "name": "Hanging indentation: \\hangindent and \\hangafter",
+        "description": "\\hangindent=(dimen) specifies a hanging indentation and \\hangafter=(number) specifies its duration. If x=\\hangindent and n=\\hangafter and h is \\hsize, then lines to which hanging indentation applies have width h-|x| and are indented left if x>=0 or right if x<0.",
+        "guidance": "Example: \\hangindent=3pc and \\hangafter=-2 gives a hanging indentation of 3 picas that lasts for two lines (negative \\hangafter has convention). Plain TeX uses hanging indentation in its \\item macro."
+      },
+      {
+        "name": "\\item and \\itemitem behavior (hanging indentation for lists)",
+        "description": "Plain TeX's \\item macro produces a paragraph in which every line has the same indentation as a normal \\indent; \\item takes a parameter that is placed into the position of the indentation on the first line. \\itemitem does the same with double indentation.",
+        "guidance": "Blank lines are not needed before \\item or \\itemitem since those macros begin with \\par. It is customary to put \\medskip before and after a group of itemized paragraphs and \\noindent before any closing remarks applying to all cases."
+      },
+      {
+        "name": "Precedence: \\parshape takes precedence over \\hangindent",
+        "description": "If \\parshape and hanging indentation have both been specified, \\parshape takes precedence and \\hangindent is ignored.",
+        "guidance": "TeX will restore normal paragraph shape automatically at end of every paragraph and when entering internal vertical mode (local definitions)."
+      },
+      {
+        "name": "\\prevgraf (tracking partial paragraph lines)",
+        "description": "\\prevgraf is an internal integer variable that records the number of lines in the most recent paragraph that has been completed or partially completed.",
+        "guidance": "You can set \\prevgraf inside a {number} context to make TeX think it's in some particular part of the current \\parshape; useful when displays occur and TeX assumes displays take up exactly three lines."
+      },
+      {
+        "name": "\\looseness (adjust paragraph length)",
+        "description": "If you set \\looseness=1 TeX will try to make the current paragraph one line longer than its optimum length (if possible without exceeding tolerances); \\looseness=2 tries for two lines longer, negative values make it shorter.",
+        "guidance": "TeX first finds breakpoints as usual then chooses final breakpoints so the final number of lines is as close as possible to n+\\looseness without exceeding tolerance, minimizing total demerits. Useful to avoid a lonely 'club' or 'widow' line; best applied to paragraphs that are already fairly full. \\looseness is reset to zero with \\hangindent, \\hangafter and \\parshape."
+      },
+      {
+        "name": "\\parskip insertion when starting paragraphs",
+        "description": "Just before switching to horizontal mode to begin scanning a paragraph, TeX inserts the glue specified by \\parskip into the vertical list that will contain the paragraph unless that vertical list is empty so far.",
+        "guidance": "Plain TeX sets \\parskip=0pt plus1pt (gives a little stretchability, but usually no extra space)."
+      },
+      {
+        "name": "Interline glue parameters: \\baselineskip, \\lineskip, \\lineskiplimit",
+        "description": "After line breaking TeX appends the lines to the current vertical list inserting interline glue that depends on \\baselineskip, \\lineskip and \\lineskiplimit currently in force.",
+        "guidance": "TeX also inserts penalties before each glob of interline glue to help control page breaks (club/widow/broken penalties)."
+      },
+      {
+        "name": "Interline penalties calculation (\\interlinepenalty + additions)",
+        "description": "The penalty between lines j and j+1 (1 <= j < n) is the value of \\interlinepenalty plus additional charges made in special cases: add \\clubpenalty if j=1 (just after first line); add \\displaywidowpenalty or \\widowpenalty if j=n-1 (just before last line) depending on whether the lines precede a display; add \\brokenpenalty if the jth line ended at a discretionary break.",
+        "guidance": "Plain TeX sets \\clubpenalty=150, \\widowpenalty=150, \\displaywidowpenalty=50 and \\brokenpenalty=100; \\interlinepenalty is normally zero but increased to 100 within footnotes so long footnotes tend not to be broken between pages."
+      },
+      {
+        "name": "\\vadjust (inserting vertical material inside paragraph)",
+        "description": "If you say \\vadjust{(vertical list)} within a paragraph, TeX inserts the specified internal vertical list into the enclosing vertical list immediately after the line that contained the position of the \\vadjust.",
+        "guidance": "Examples: \\vadjust{\\kern1pt} to increase space between lines; \\vadjust{\\eject} to force a page break after that line. Inserted vertical material does not influence interline glue."
+      },
+      {
+        "name": "Migration of \\insert and \\mark material",
+        "description": "When commands such as \\insert and \\mark appear within a paragraph they are removed from whatever horizontal lines contain them and placed into the enclosing vertical list together with vertical material from \\vadjust commands.",
+        "guidance": "In the final vertical list each horizontal line is an hbox preceded by interline glue and followed by migrated vertical material (left-to-right order preserved), then by interline penalty if nonzero."
+      },
+      {
+        "name": "\\everypar (tokens executed at paragraph start)",
+        "description": "When TeX enters horizontal mode it will read tokens predefined by \\everypar before reading the token that triggered the new paragraph.",
+        "guidance": "You can use \\everypar for macros that insert content at the start of every paragraph (e.g., to implement bullet indentation for a group of paragraphs)."
+      },
+      {
+        "name": "Empty paragraph produced by \\noindent\\par",
+        "description": "A paragraph of zero lines is formed if you say \\noindent\\par. If \\everypar is null such a paragraph contributes nothing except \\parskip glue to the current vertical list.",
+        "guidance": "Useful for contributing only vertical glue without content."
+      },
+      {
+        "name": "Macro technique: conditional line-break via \\penalty (example: \\signed)",
+        "description": "The \\signed macro example uses \\penalty50, \\hskip2em, an empty \\hbox and glue so that TeX will try both a one-line and two-line solution and choose the one with lowest total demerits.",
+        "guidance": "If a break occurs at \\penalty50 the \\hskip2em disappears and an empty \\hbox starts the next line followed by \\hfil glue giving two zero-badness lines but a penalty of 50 on the first; if no break occurs glue of 2em plus 2fil separates review and name yielding one zero-badness line; TeX chooses the cheaper alternative."
+      },
+      {
+        "name": "\\finalhyphendemerits usage",
+        "description": "\\finalhyphendemerits can be set to affect the demerits for final-line hyphenation choices (example sets it to 0 in the \\signed macro).",
+        "guidance": "Setting \\finalhyphendemerits=0 prevents hyphen-related demerits from influencing the choice in the particular macro context (see exercises for details)."
+      },
+      {
+        "name": "Avoid infinite tolerance; prefer \\emergencystretch",
+        "description": "Setting \\tolerance or \\pretolerance to 10000 (infinite tolerance) allows arbitrarily bad lines but is a bad idea because TeX doesn't distinguish between 'terribly bad' and 'preposterously horrible' and will concentrate badness in one line.",
+        "guidance": "Instead use \\emergencystretch (a positive dimension added to each line's assumed stretchability) so TeX can make a third pass and scale down badnesses; by setting \\emergencystretch high enough you can avoid overfull boxes without encouraging truly awful lines."
+      },
+      {
+        "name": "Hyphenation penalty parameter behavior",
+        "description": "Parameters such as \\hyphenpenalty are evaluated at the end of the paragraph and are used in deciding hyphenation and penalties during line-breaking.",
+        "guidance": "Do not attempt to change \\hyphenpenalty mid-paragraph to penalize hyphens in particular words; change it before paragraph end or alter words instead."
+      },
+      {
+        "name": "Page make-up is local, not global",
+        "description": "TeX breaks lists of lines into pages by computing badness ratings and penalties, but pages are made one at a time and removed from memory; TeX chooses each page break locally rather than attempting global optimization for the whole document.",
+        "guidance": "Because of limited lookahead, you might need to rewrite or use spacing controls (\\smallskip, \\medskip, \\bigskip, \\filbreak, etc.) to get desired page makeup."
+      },
+      {
+        "name": "Types of items in the main vertical list",
+        "description": "Everything contributed to pages is placed on the main vertical list; each item is one of: a box (hbox/vbox/rule), a whatsit, a mark, an insertion, a glob of glue (or leaders), a kern, or a penalty. Glue, kern, and penalty are 'discardable' items.",
+        "guidance": "This classification governs where page breaks may occur and how glue/kern/penalty are treated during page-breaking."
+      },
+      {
+        "name": "Permissible page breakpoints (where TeX may break a page)",
+        "description": "Page breaks can occur only: a) at glue provided that glue is immediately preceded by a nondiscardable item (box/whatsit/mark/insertion); b) at a kern provided that this kern is immediately followed by glue; c) at a penalty.",
+        "guidance": "Interline glue is usually inserted automatically between boxes of a vertical list, so there is usually a valid breakpoint between boxes."
+      },
+      {
+        "name": "Meaning of penalty numeric thresholds for page breaks",
+        "description": "A penalty is high for undesirable breakpoints and negative for desirable ones. A penalty of 10000 or more inhibits breaking; -10000 or less forces breaking. Negative penalties act as bonuses to encourage breaks.",
+        "guidance": "Use explicit penalties to indicate preferred breaking points (e.g., \\penalty-100 to encourage a break)."
+      },
+      {
+        "name": "\\smallbreak, \\medbreak, \\bigbreak macros",
+        "description": "\\smallbreak, \\medbreak, and \\bigbreak specify increasingly desirable places to break with respective penalties -50, -100, and -200; they also insert a \\smallskip, \\medskip or \\bigskip of space if a break is not taken.",
+        "guidance": "They do not increase existing glue unnecessarily (e.g., no extra skip after a display if display already supplies glue). Useful around theorem statements; \\medbreak\\medbreak is equivalent to a single \\medbreak."
+      },
+      {
+        "name": "\\goodbreak macro",
+        "description": "\\goodbreak is an abbreviation for \\par\\penalty-500.",
+        "guidance": "Insert when proofreading to encourage breaking here (stretch previous page a little) without the drastic effect of \\eject; if it no longer appears near the bottom of a page it has no effect."
+      },
+      {
+        "name": "\\filbreak semantics (fill-and-break idiom)",
+        "description": "\\filbreak means roughly 'Break the page here and fill the bottom with blank space unless there is room for more copy that is itself followed by \\filbreak.' Precisely, \\filbreak = \\vfil\\penalty-200\\vfilneg.",
+        "guidance": "If break at penalty -200 is taken, preceding \\vfil fills bottom of page and \\vfilneg is discarded; if no break at that penalty, \\vfil and \\vfilneg cancel. Putting \\filbreak at paragraph ends helps fit as many paragraphs as possible on each page."
+      },
+      {
+        "name": "\\raggedbottom (allow ragged bottom margins)",
+        "description": "\\raggedbottom tells TeX to permit a small amount of variability in bottom margins on different pages to make other spacing uniform.",
+        "guidance": "Use when uniform spacing is more important than perfectly aligned bottom margins."
+      },
+      {
+        "name": "Page cost calculation (b, p, q and conditional formula)",
+        "description": "TeX figures the 'cost' of a page break using b (badness of the page if broken here), p (penalty at current breakpoint) and q (\\insertpenalties, sum of penalties for split insertions). There is a piecewise formula combining b, p, q and thresholds (10000, -10000, 1000) to produce cost c.",
+        "guidance": "Vertical badness is computed like horizontal badness (0..10000) except overfull boxes yield infinity; this cost directs TeX's local page-break choice."
+      }
+    ]
+  }
+}

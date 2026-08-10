@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/peerreview4all_jmlr.pdf",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "peerreview4all_jmlr.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 6,
+  "chunk_chars": 39897,
+  "model": "gpt-5-mini",
+  "elapsed_s": 51.088106625000364,
+  "input_tokens": 15306,
+  "output_tokens": 3474,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and conference organizers designing or evaluating reviewer-assignment algorithms (peer-review / program chairs / algorithm designers)",
+    "subtask_short": "reviewer assignment evaluation",
+    "subtask_description": "Evaluation and design criteria for conference reviewer-assignment algorithms: measuring fairness, total sum similarity, runtime, and downstream decision accuracy; and constraints (loads, conflicts) that assignments must satisfy. Used to compare algorithms (PeerReview4All, TPMS, ILPR, FairIr, FairFlow, AHARD, etc.).",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "fairness",
+      "sum_similarity",
+      "conference"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Fairness \u0393S(A)",
+        "description": "The fairness metric \u0393S(A) (referred to as (3) in the paper) that captures the quality received by the worst-off papers under assignment A; used as the primary objective of PeerReview4All (algorithm aims at optimizing fairness).",
+        "guidance": "Fairness guarantees of Theorem 1 are achieved after the first iteration of Steps 2 to 7; subsequent iterations improve fairness for the next worst-off papers. PeerReview4All significantly increases fairness compared to TPMS; FairIr and ILPR have related fairness guarantees (may become vacuous under heterogeneous similarity). Fairness can be lower-bounded/upper-bounded analytically (used to derive approximation guarantees)."
+      },
+      {
+        "name": "Total (cumulative / mean) sum similarity GS(A)",
+        "description": "The total (or mean) sum of similarities of assigned reviewer-paper pairs (referred to as (2) or GS(A)); a conventional objective measuring overall match quality of an assignment.",
+        "guidance": "PeerReview4All does not directly optimize GS(A) but can heuristically improve it via the max-cost heuristic in Step 6. There is a tradeoff between maximizing fairness and maximizing sum similarity; algorithms are compared on both axes. Table 3/4 report mean sum similarity; higher values indicate better global match quality."
+      },
+      {
+        "name": "Running time / computational feasibility",
+        "description": "Wall-clock running time of the assignment algorithm (seconds reported in experiments), and computational scalability to large instances (number of papers/reviewers).",
+        "guidance": "PeerReview4All's naive implementation is significantly slower than competitors; for large instances often only a single iteration is feasible. Nevertheless, first iteration suffices for fairness guarantees. Example: first iteration on >5,000 papers took under three hours, which is feasible in conference timelines."
+      },
+      {
+        "name": "Competitiveness (normalized fairness and sum-similarity)",
+        "description": "Per-experiment normalization: competitiveness in fairness = (fairness achieved by algorithm)/(max fairness across algorithms); similarly for total sum similarity. Each algorithm is represented as a point in 2D (fairness competitiveness, sum-similarity competitiveness).",
+        "guidance": "Closeness of the point to the top-right corner indicates superior joint performance on fairness and sum similarity. Used to visualize and compare tradeoffs across algorithms and conferences."
+      },
+      {
+        "name": "Accuracy of final decisions (error fraction)",
+        "description": "Fraction of papers/questions whose final estimated decisions (accept/reject or answer) are incorrect under the assignment and aggregation procedure (e.g., majority vote). In MTurk experiment this is the fraction of questions whose final answers are estimated incorrectly; ties counted as mistakes.",
+        "guidance": "Used to directly measure downstream impact of assignments on decision accuracy. Observed that AHARD (optimally fair) can incur larger error fraction than approximations (APR4A, AILPR) because maximizing the worst-off paper can hurt global accuracy. TPMS showed increased error versus APR4A in MTurk."
+      },
+      {
+        "name": "Feasibility constraints: paper/reviewer load (\u03bb, \u03bc)",
+        "description": "Standard assignment feasibility constraints: each paper must be assigned exactly \u03bb reviewers and each reviewer can review at most \u03bc papers (and possibly lower/upper bounds). Assignments must respect these load constraints.",
+        "guidance": "Experiments and theoretical bounds assume these constraints. Some competing algorithms (FairIr, FairFlow) optionally allow specifying a lower bound on reviewer load (ensuring each reviewer reviews at least some number of papers); PeerReview4All as described does not enforce reviewer lower-bound constraints."
+      },
+      {
+        "name": "No-conflict constraint",
+        "description": "Assignments must ensure that no paper is assigned to a conflicting reviewer.",
+        "guidance": "In experiments the authors require that no paper is assigned to any conflicting reviewer in addition to load constraints; conflicts are filtered out before matching (standard operational constraint in conference peer-review)."
+      },
+      {
+        "name": "Approximation ratio relative to AHARD (theoretical guarantee)",
+        "description": "The worst-case approximation guarantee of PeerReview4All compared to the optimal fairness assignment AHARD: \u0393S(APR4A)/\u0393S(AHARD) \u2265 1/\u03bb (Theorem 1).",
+        "guidance": "In practice the approximation factor can be much better than the worst-case bound (e.g., empirical lower bound \u2265 0.98 on ICLR\u201918 similarity matrix when dropping reviewer loads). The proof uses bounds on s*_\u03ba and monotonicity of transformation functions f."
+      },
+      {
+        "name": "Max-cost heuristic selection (design/heuristic criterion)",
+        "description": "Choice of heuristic in Step 6 (max-cost heuristic) when multiple suitable similarity matrices are available; used to heuristically optimize total sum similarity while preserving fairness.",
+        "guidance": "Using the max-cost heuristic helps PeerReview4All maintain high cumulative similarity, keeping GS(A) only marginally below optimal while achieving higher fairness. Heuristic choice is an explicit design lever to balance objectives."
+      },
+      {
+        "name": "Early-stopping / iteration sufficiency",
+        "description": "Empirical and theoretical observation that fairness guarantees can be achieved after a single iteration of Steps 2\u20137; further iterations improve fairness for subsequent worst-off papers.",
+        "guidance": "For large instances computing only the first iteration is feasible and sufficient to obtain the fairness guarantee of Theorem 1; additional iterations refine assignment for more papers (e.g., second worst-off, third worst-off)."
+      },
+      {
+        "name": "Balance between fairness and total sum similarity (multi-objective desideratum)",
+        "description": "Desideratum that an assignment algorithm should achieve a good tradeoff between improving quality for worst-off papers (fairness) and maintaining high overall match quality (sum similarity).",
+        "guidance": "PeerReview4All explicitly targets fairness but can be tuned (via heuristics) to maintain high sum similarity. Comparative experiments evaluate algorithms on both axes; an ideal algorithm would be simultaneously competitive on both metrics."
+      },
+      {
+        "name": "Lower bound on reviewer load as a capability (optional constraint)",
+        "description": "Some algorithms (FairIr, FairFlow) allow specifying a lower bound on reviewer load to ensure each reviewer reviews at least some number of papers.",
+        "guidance": "This is a design/constraints difference between algorithms; PeerReview4All does not support lower bounds on reviewer load 'as is' in the presented work, so comparisons excluded instances where lower bounds were enforced."
+      },
+      {
+        "name": "Per-paper (ordered) sum-similarity and worst-off paper analysis",
+        "description": "Per-paper analysis: compute sum similarity for each paper, sort papers by increasing sum similarity, plot values for the most disadvantaged papers (e.g., 100 worst-off) and plot ratios (PeerReview4All to TPMS) across ordered papers.",
+        "guidance": "Used to show how PeerReview4All improves quality for worst-off papers while decreasing quality for best-off papers; helps visualize balance and distributional effects across papers rather than only aggregate means."
+      },
+      {
+        "name": "Empirical evaluation protocol for objective accuracy measurement",
+        "description": "Design of an experiment (MTurk) to obtain ground-truth-like conditions: define gold-standard questions, compute similarities from gold answers, execute multiple assignment algorithms under identical constraints, aggregate assigned reviewers' answers (majority vote), and measure decision error.",
+        "guidance": "Provides a reproducible methodology to evaluate how assignment algorithms affect final decision accuracy. Includes details: split questions into gold/unresolved sets, compute similarities as fraction correct on gold, choose n workers uniformly at random, enforce \u03bb and \u03bc, iterate many times to average results; ties treated as mistakes."
+      }
+    ]
+  }
+}

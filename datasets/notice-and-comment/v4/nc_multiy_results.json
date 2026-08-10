@@ -1,0 +1,176 @@
+{
+  "design": "verbatim port of ../../peer-review/vat_3y/aggregate_3y.py; GroupKFold(5) group=docket, StandardScaler+LogisticRegression(C=1,max_iter=2000), clean_cols degeneracy guard (<5 off-modal or zero-var dropped), NA->median.",
+  "a_bank": "pre-GEPA, 198 rubrics, Gemma-4-31B (nc_scores_shard0..4.npz)",
+  "inventory": {
+    "scored_matched_n": 7439,
+    "scored_unmatched_n": 2082,
+    "matched_unmatched_id_overlap_dropped": 34,
+    "per_y": [
+      {
+        "y": "outcome-majority",
+        "n_valid_labeled_and_scored": 7084,
+        "pos_rate": 0.3986448334274421
+      },
+      {
+        "y": "agree-vs-disagree",
+        "n_valid_labeled_and_scored": 5046,
+        "pos_rate": 0.5281411018628617
+      },
+      {
+        "y": "responded-or-not",
+        "n_valid_labeled_and_scored": 9521,
+        "pos_rate": 0.7813254910198508
+      }
+    ],
+    "pairwise_strict_common_n": {
+      "outcome-majority & agree-vs-disagree": 4764,
+      "outcome-majority & responded-or-not": 7084,
+      "agree-vs-disagree & responded-or-not": 5046
+    },
+    "triple_strict_common_n": 4764,
+    "caveat": "responded-or-not is defined over a DIFFERENT item universe (matched U unmatched) than outcome-majority/agree-vs-disagree (matched-labeled only, a subset of 'matched'). Any strict-common set built against responded-or-not therefore only pulls from the matched side, where responded-or-not is constant y=1 -> AUC is undefined there (single class); reported as such below, not tuned away."
+  },
+  "full_pool": {
+    "outcome-majority": {
+      "n": 7084,
+      "pos": 0.3986448334274421,
+      "V": 0.5910172199390868,
+      "A": 0.5947229647953823,
+      "VA": 0.5937209066485789,
+      "A_minus_V": 0.0037057448562954898
+    },
+    "agree-vs-disagree": {
+      "n": 5046,
+      "pos": 0.5281411018628617,
+      "V": 0.6002187423418511,
+      "A": 0.5236177115106854,
+      "VA": 0.5509982483277164,
+      "A_minus_V": -0.07660103083116576
+    },
+    "responded-or-not": {
+      "n": 9521,
+      "pos": 0.7813254910198508,
+      "V": 0.5958576440931875,
+      "A": 0.624302056340658,
+      "VA": 0.6350046016276604,
+      "A_minus_V": 0.02844441224747052
+    }
+  },
+  "sanity_gates": {
+    "outcome-majority": {
+      "V": {
+        "prior": 0.595,
+        "observed": 0.5910172199390868,
+        "delta": -0.003982780060913127,
+        "verdict": "PASS"
+      },
+      "A": {
+        "prior": 0.592,
+        "observed": 0.5947229647953823,
+        "delta": 0.0027229647953823655,
+        "verdict": "PASS"
+      }
+    },
+    "agree-vs-disagree": {
+      "A": {
+        "prior": 0.612,
+        "observed": 0.5236177115106854,
+        "delta": -0.08838228848931462,
+        "verdict": "FAIL"
+      },
+      "V": {
+        "prior": 0.612,
+        "observed": 0.6002187423418511,
+        "delta": -0.011781257658148858,
+        "verdict": "PASS"
+      }
+    },
+    "responded-or-not": {
+      "A": {
+        "prior": 0.636,
+        "observed": 0.624302056340658,
+        "delta": -0.011697943659341958,
+        "verdict": "PASS"
+      },
+      "VA": {
+        "prior": 0.646,
+        "observed": 0.6350046016276604,
+        "delta": -0.010995398372339649,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "apples_to_apples": {
+    "outcome-majority & agree-vs-disagree": {
+      "common_n": 4764,
+      "outcome-majority": {
+        "n": 4764,
+        "pos": 0.43807724601175485,
+        "V": 0.6159995016913676,
+        "A": 0.5968433472665248,
+        "VA": 0.594558090275124,
+        "A_minus_V": -0.019156154424842864
+      },
+      "agree-vs-disagree": {
+        "n": 4764,
+        "pos": 0.5350545759865659,
+        "V": 0.5986641953158278,
+        "A": 0.5885134435050439,
+        "VA": 0.6048745712699266,
+        "A_minus_V": -0.010150751810783953
+      }
+    },
+    "outcome-majority & responded-or-not": {
+      "common_n": 7084,
+      "responded-or-not": {
+        "n": 7084,
+        "pos": 1.0,
+        "V": NaN,
+        "A": NaN,
+        "VA": NaN,
+        "A_minus_V": NaN,
+        "note": "single-class (degenerate y within this subset)"
+      }
+    },
+    "agree-vs-disagree & responded-or-not": {
+      "common_n": 5046,
+      "responded-or-not": {
+        "n": 5046,
+        "pos": 1.0,
+        "V": NaN,
+        "A": NaN,
+        "VA": NaN,
+        "A_minus_V": NaN,
+        "note": "single-class (degenerate y within this subset)"
+      }
+    }
+  },
+  "triple_common": {
+    "common_n": 4764,
+    "note": "identical to outcome-majority & agree-vs-disagree common set restricted further by responded-or-not's (trivially-satisfied, matched-only) universe -> same n as the pairwise outcome&agree common set whenever pair_out_agr subset of matched."
+  },
+  "selection_effect_audit": {
+    "pos_rate_outcome_majority_full_pool": 0.3986448334274421,
+    "pos_rate_outcome_majority_in_common_with_agree": 0.43807724601175485,
+    "pos_rate_agree_full_pool": 0.5281411018628617,
+    "pos_rate_agree_in_common_with_outcome": 0.5350545759865659
+  },
+  "secondary_gepa": {
+    "outcome-majority": {
+      "n": 7084,
+      "pos": 0.3986448334274421,
+      "V": 0.5910172199390868,
+      "A": 0.6144253148731862,
+      "VA": 0.6123817978693692,
+      "A_minus_V": 0.023408094934099344
+    },
+    "agree-vs-disagree": {
+      "n": 5046,
+      "pos": 0.5281411018628617,
+      "V": 0.6002187423418511,
+      "A": 0.5761463682546236,
+      "VA": 0.5951588285307464,
+      "A_minus_V": -0.02407237408722751
+    }
+  }
+}

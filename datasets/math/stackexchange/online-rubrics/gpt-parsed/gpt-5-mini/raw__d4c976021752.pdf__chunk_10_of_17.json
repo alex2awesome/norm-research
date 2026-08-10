@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/d4c976021752.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "d4c976021752.pdf",
+  "chunk_idx": 10,
+  "n_chunks": 17,
+  "chunk_chars": 39806,
+  "model": "gpt-5-mini",
+  "elapsed_s": 83.9386395420006,
+  "input_tokens": 12929,
+  "output_tokens": 4408,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users and developers of Isabelle/Isar and Isabelle/ML (proof engineers writing proofs, simprocs, and configuring the Simplifier)",
+    "subtask_short": "isabelle_simplifier_usage",
+    "subtask_description": "Guidance and configuration rules for using and extending Isabelle's Simplifier and related automated proof tools (simp/simp_all, simprocs, congruence/split rules, tracing, solvers, loopers) in proofs and ML extensions.",
+    "subtask_keywords": [
+      "isabelle",
+      "simplifier",
+      "simproc",
+      "rewriting",
+      "proof_methods"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Simplifier purpose and rewriting strategy",
+        "description": "The Simplifier performs conditional and unconditional rewriting and uses contextual information: rule declarations in the background theory or local proof context, chained facts and subgoal premises. The rewriting strategy is strictly bottom-up except for congruence rules (which are applied while descending into a term). Conditions of conditional rewrite rules are solved recursively before application.",
+        "guidance": "The Simplifier has hooks to modify strategy or incorporate other proof tools. Default setups for major object logics (HOL, HOLCF, FOL, ZF) make it ready for immediate use, focusing on equational reasoning. Be aware of the bottom-up semantics and special handling of congruence rules when designing rules or analyzing behavior."
+      },
+      {
+        "name": "simp method semantics",
+        "description": "The Isar 'simp' proof method invokes the Simplifier on the first subgoal after inserting chained facts as additional goal premises; the method fails if the subgoal remains unchanged after simplification.",
+        "guidance": "Original goal premises and chained facts are themselves subject to simplification, while theorems added via 'simp add:' follow object-logic policies for extracting rewrite rules without further simplification. This can cause differing behavior (which may be required for certain boundary cases)."
+      },
+      {
+        "name": "simp_all method semantics",
+        "description": "The 'simp_all' method is similar to 'simp' but acts on all goals, working backwards from the last to the first; chained facts are inserted into all subgoals. The method fails if all subgoals remain unchanged after simplification.",
+        "guidance": "Order is irrelevant for goals without schematic variables; simplification might in practice be parallel. Use simp_all when you intend to simplify every subgoal."
+      },
+      {
+        "name": "simp_depth_limit",
+        "description": "Option to limit the number of recursive invocations of the Simplifier during conditional rewriting.",
+        "guidance": "Use to prevent excessive recursion in conditional rewriting; controls termination/resource usage of simplification."
+      },
+      {
+        "name": "Local assumptions handling modes (no_asm / no_asm_simp / no_asm_use / asm_lr / default)",
+        "description": "Different simp options control how local assumptions are treated: (simp (no_asm)) ignores assumptions completely; (simp (no_asm_simp)) uses assumptions to simplify the conclusion but does not simplify the assumptions themselves; (simp (no_asm_use)) assumptions are simplified but not used to simplify each other or the conclusion; (simp) uses assumptions both for simplifying the conclusion and to simplify other assumptions; (simp (asm_lr)) compatibility mode where an assumption is only used for simplifying assumptions to its right.",
+        "guidance": "These modes correspond to ML tactics (simp_tac, asm_simp_tac, full_simp_tac, asm_full_simp_tac, asm_lr_simp_tac). Choose a mode to avoid nontermination or unwanted instantiation from assumptions; e.g., ignore malicious assumptions that make rewriting nonterminating with (no_asm)."
+      },
+      {
+        "name": "Declaring rewrite rules with 'simp' attribute",
+        "description": "'simp' declares rewrite rules by adding or deleting them from the simpset in the theory or proof context. Rewrite rules are theorems expressing equalities (including conditional rewrites). Internally all are translated into Pure equalities lhs \u2261 rhs.",
+        "guidance": "Conditions of conditional rewrites can be arbitrary formulas. Theorems and local assumptions are treated uniformly when extracting equalities. Use 'simp add/del' to tune which theorems act as rewrites; be mindful that declaring a theorem as simp may make the Simplifier loop if it is nonterminating."
+      },
+      {
+        "name": "Accepted left-hand-side (lhs) formats for rewrite rules",
+        "description": "The Simplifier accepts (1) first-order patterns (application of constants to variable operands, no lambdas/function variables), (2) higher-order patterns (\u03b2-normal form with each unknown of the form ?F x1...xn), and (3) physical first-order patterns over raw \u03bb-term structure (abstractions and bound vars treated as quasi-constants).",
+        "guidance": "Examples and conversion tricks: problematic lhs like ?f ?x can be turned into an acceptable conditional rule by introducing a fresh variable and a condition (?y = ?f ?x =\u21d2 ?y \u2208 range ?f = True). Pick the proper pattern class when declaring rules to ensure matching succeeds where intended."
+      },
+      {
+        "name": "split attribute and split rules",
+        "description": "'split' declares case split rules (for the Splitter). Split rules add/delete rules for the Splitter and only work if the Simplifier is configured to include the Splitter.",
+        "guidance": "The '!' (bang) option makes split rules aggressive: after applying a split rule in the conclusion, the safe tactic of the classical reasoner is applied to the new goal, effectively splitting the goal into different cases. Use split for single-step case splitting or emulate repeated splits via '(simp only: split: thms)'."
+      },
+      {
+        "name": "cong attribute (congruence rules)",
+        "description": "'cong' declares congruence rules to the Simplifier context. Congruence rules are equalities that control how arguments of a function f are simplified and can supply contextual information about bound variables or assumptions.",
+        "guidance": "Use congruence rules to (a) allow simplifying certain arguments under local assumptions, (b) supply contextual information for bound variables (e.g., for bounded quantifiers), or (c) prevent simplification of some arguments to speed up processing. Conditional congruence rules should have their premises provable; otherwise they are ignored."
+      },
+      {
+        "name": "print_simpset and verbosity",
+        "description": "'print_simpset' prints the collection of rules declared to the Simplifier (the simpset); the '!' option indicates extra verbosity.",
+        "guidance": "Inspect simpsets to debug which rules are active; remember implicit simpsets are propagated from imported theories."
+      },
+      {
+        "name": "Designing good simpsets",
+        "description": "Good simpsets contain rules that obviously normalize terms (e.g., ?n + 0 \u2261 ?n). More specific rules that duplicate terms (e.g., distributive laws) should be added only for specific proof steps. Frequent additions/deletions may indicate a poorly designed simpset.",
+        "guidance": "Be conservative when adding rules to the implicit simpset. If ancestors of a new theory deleted certain rules, the naive union from imports may reintroduce unwanted rules \u2014 consider deleting them explicitly. Tailor simpsets to local proof needs to avoid loops or inefficiencies."
+      },
+      {
+        "name": "Permutative rules and ordered rewriting",
+        "description": "Permutative rewrite rules (lhs and rhs equal up to renaming \u2014 e.g., commutativity) are treated specially: only applied if the rewriting step decreases the redex with respect to a term ordering (default: lexicographic).",
+        "guidance": "This avoids looping for commutativity-like rules. The default term ordering can be changed via Simplifier.set_term_ord in ML. Use ordered rewriting to safely include permutative rules."
+      },
+      {
+        "name": "Rewriting with associative-commutative (AC) operators",
+        "description": "When dealing with AC operators, associativity must be oriented left-to-right (f (f x y) z = f x (f y z)); include associativity (A), commutativity (C), and a derived left-commutativity (LC) rule to complete the rule set, allowing ordered rewriting to normalize permutations of subterms.",
+        "guidance": "The combination of A, C, and LC lets the Simplifier sort terms lexicographically (imitating bubble-sort). Use a coherent set of AC rules (e.g., AC_rules) to normalize permutations; inappropriate orientations may cause looping."
+      },
+      {
+        "name": "Re-orienting equalities",
+        "description": "A derived rule eq_commute (?a = ?b) = (?b = ?a) can be used to reverse equations to re-orient local assumptions according to the term ordering when other mechanisms fail.",
+        "guidance": "Use re-orientation to align equations with the term ordering to enable ordered rewriting and avoid failures from mismatched orientations."
+      },
+      {
+        "name": "Simplifier tracing and debugging controls",
+        "description": "Attributes/options control tracing: simp_trace (output internal operations and rewrite steps), simp_trace_depth_limit (limit depth traced), simp_debug (extra information about internal operations and simproc invocations), simp_trace_new (PIDE/jEdit hierarchical tracing and interactive control), and simp_break (declare term or theorem breakpoints).",
+        "guidance": "Normal verbosity shows only breakpoint-matching rule applications; full verbosity logs all rule applications. Interactive mode interrupts simplification to ask the user via GUI. Use simp_trace_new with term/theorem breakpoints (declare [simp_break ...]) to diagnose problems, especially in PIDE."
+      },
+      {
+        "name": "Simpli\ufb01cation procedures (simprocs)",
+        "description": "A simproc is an ML function that produces proven rewrite rules on demand, guarded by patterns matching the current redex. simproc_setup defines named simprocs; attributes [simproc add:/del:] manage activity. proc_kind can be congproc or weak_congproc to produce congruence rules.",
+        "guidance": "Simprocs must return SOME proven rewrite rule (cterm -> thm option) or NONE to fail. They bypass automatic preprocessing and must be fast in their failure check since they run frequently. Declare simprocs passive to define them without activating. Examples include unit_eq simproc in HOL; provide identifiers to distinguish instances in locales."
+      },
+      {
+        "name": "Configurable subgoaler",
+        "description": "The subgoaler is a tactic used to solve subgoals arising from conditional rewrite rules or congruence rules; default is simplification itself. Simplifier.set_subgoaler and Simplifier.prems_of manage the subgoaler and retrieval of current premises.",
+        "guidance": "Change the subgoaler when default behavior loops (e.g., when a premise of a rule is an instance of its conclusion). Custom subgoalers can try assumption/resolve before invoking asm_simp to avoid loops or expensive paths."
+      },
+      {
+        "name": "Solver configuration and safe vs unsafe solvers",
+        "description": "A solver is a tactic that attempts to solve a subgoal after simplification (trivial goals like True or t = t); solvers are abstractly created with Simplifier.mk_solver. A simpset contains a safe and an unsafe solver; the standard strategy uses the unsafe solver.",
+        "guidance": "Unsafe solvers may instantiate unknowns; safe solvers avoid instantiation and are used when instantiation must be prevented. Solvers will be invoked with full goal and context; ensure they try reflexivity early and can handle goals like t = ?x. Use set_/add_safe_solver and set_/add_unsafe_solver to configure appropriate tactics for your application."
+      },
+      {
+        "name": "Looper and Splitter configuration",
+        "description": "The looper is a list of tactics applied after simplification when the solver fails; if a looper succeeds it restarts simplification. Typical loopers include case splitting (Splitter). Simplifier.set_loop/add_loop/del_loop and Splitter.add_split / add_split_bang / del_split configure these components.",
+        "guidance": "Loopers can be expensive and should be used sparingly. Splitter.add_split handles whether a rule splits conclusion vs premises; add_split_bang creates aggressive split rules. Beware: using Splitter.split_asm_tac may split subgoals and change the expected number of subgoals in tactic scripts."
+      },
+      {
+        "name": "Forward simplification via 'simplified' attribute",
+        "description": "The attribute 'simplified a1 ... an' causes a theorem to be simplified (including assumptions and conclusion) either by specified rules or the implicit simpset if no arguments are given; options (no_asm etc.) tune behavior.",
+        "guidance": "Forward simplification restricts the Simplifier to term rewriting only; solver and looper are not involved. This attribute is rarely required under normal circumstances."
+      },
+      {
+        "name": "Classical Reasoner: generic automated proof tools and sequent calculus",
+        "description": "Isabelle's classical reasoner is a generic package that accepts logic-specific information and provides automatic proof tools based on classified and declared rules. It often uses the sequent calculus representation \u0393 (\u22a2) \u2206 (assumptions and alternative goals), with sequent rules classified as left or right.",
+        "guidance": "The classical reasoner is generic (not limited to first-order logic) and can be traced. Use the reasoner's automatic tactics (e.g., blast) where appropriate; understand the sequent calculus viewpoint to reason about automated rule application and automation limits."
+      }
+    ]
+  }
+}

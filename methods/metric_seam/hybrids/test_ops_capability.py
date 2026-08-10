@@ -1,16 +1,28 @@
 """Smoke tests for ops_capability.py (E2L capability-ops library, VERSION 'e2l-v1').
 
-Not a pytest suite (no pytest convention elsewhere in methods/metric_seam) -- a plain
-script that runs every op against real corpus text (via battery_common.load_ctx, the
-same loader every E2L crew uses) plus the specific constructed kill-case probes named in
-the E2L pre-registration (notes/2026-07-10__seam-agentic-program-runbook.md), and prints
-PASS/FAIL per check. Exit code is nonzero if anything fails.
+This is a standalone historical battery, not a pytest suite.  It runs every op against
+real corpus text (via battery_common.load_ctx, the same loader every E2L crew uses) plus
+the specific constructed kill-case probes named in the E2L pre-registration
+(notes/2026-07-10__seam-agentic-program-runbook.md), and prints PASS/FAIL per check. Exit
+code is nonzero if anything fails.  Pytest collection skips this module; the canonical
+CPU runner executes it separately so the 43 checks still run.
 
-Usage: python3 test_ops_capability.py
+Usage: python -m methods.metric_seam.hybrids.test_ops_capability
 """
 import sys
 import time
 import pathlib
+
+# This legacy battery intentionally executes at module scope and terminates with
+# ``sys.exit``.  Fail closed at pytest collection before any of those side effects.  It
+# is exercised as a standalone subprocess by ``methods.metric_seam.run_cpu_tests``.
+if __name__ != "__main__" and "pytest" in sys.modules:
+    import pytest
+
+    pytest.skip(
+        "standalone 43-check historical battery; run by the canonical CPU test runner",
+        allow_module_level=True,
+    )
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent / "battery"))

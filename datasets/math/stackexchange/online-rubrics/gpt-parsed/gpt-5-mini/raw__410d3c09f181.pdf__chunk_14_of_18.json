@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/410d3c09f181.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "410d3c09f181.pdf",
+  "chunk_idx": 14,
+  "n_chunks": 18,
+  "chunk_chars": 39985,
+  "model": "gpt-5-mini",
+  "elapsed_s": 197.04730387499876,
+  "input_tokens": 12535,
+  "output_tokens": 5216,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "PARI developers and contributors writing C extensions and integrating them with the GP front-end",
+    "subtask_short": "writing PARI C extensions",
+    "subtask_description": "Guidelines and requirements for implementing, documenting, and integrating C-level functions for the PARI library and exposing them to the GP interpreter, plus low-level API usage and memory-management conventions.",
+    "subtask_keywords": [
+      "pari",
+      "c_extension",
+      "gp_integration",
+      "parser_code",
+      "memory_management"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Notify maintainers of modifications",
+        "description": "If you modify PARI, the maintainers would like to know about it so everyone can benefit and there's a good chance your modifications will be incorporated into the next release.",
+        "guidance": "Contact via pari@math.u-bordeaux.fr or the project mailing lists. Do not redistribute modified PARI binaries without prior approval."
+      },
+      {
+        "name": "Acceptable types of modifications",
+        "description": "Modifications to PARI fall into four broad types: documentation improvements; configuration/portability improvements; modifications to existing mathematical code; and addition of new functions.",
+        "guidance": "Documentation improvements include typo fixes, accuracy fixes, tutorials and example code. Configuration improvements target Configure script and config/ subdirectory to enable or simplify compilation on new OSes and remove portability idiosyncrasies. Code modifications may fix bugs, add functionality, or improve efficiency. Adding new functions should follow the integration procedures so they can be called from GP."
+      },
+      {
+        "name": "Parser code format and atoms",
+        "description": "A parser code is a character string describing what the GP parser must know about a function prototype: syntax separators, mandatory argument atoms, optional atoms, automatic atoms and return-type atoms.",
+        "guidance": "Use the documented atoms (e.g. G, &, L, S, V, n, I, E, r, s, GEN, *GEN, long, symbol) for mandatory args; optional atoms (s*, s*p, s*t, Dxxx) for optional args; 'Dvalue,type,' format for defaults; special optional forms DG/D&/DV/DI/Dn mapping to NULL or -1 when omitted; automatic atoms f/p/P for fake long / real precision / series precision; return-type tokens l (long) and v (void) may appear anywhere. No more than 8 (actual) arguments are currently supported."
+      },
+      {
+        "name": "Default-value syntax in parser codes",
+        "description": "Optional arguments with defaults are encoded as atoms starting with D and having the format 'Dvalue,type,' where type is a code for a mandatory atom and the trailing comma is mandatory.",
+        "guidance": "Example: 'D0,L,' means the optional argument is converted to a long and defaults to 0. If the user supplies an expression (e.g. 1+3) that evaluates to 4, (long)4 is sent; if omitted, (long)0 is sent. Use the trailing comma exactly as specified."
+      },
+      {
+        "name": "Special optional-argument encodings (NULL / -1 semantics)",
+        "description": "Use special D-forms to encode optional arguments that map to special sentinel values when omitted: DG, D&, DV, DI, Dn.",
+        "guidance": "DG: optional GEN \u2192 send NULL if omitted. D&: optional *GEN \u2192 NULL if omitted. DV: optional *entree \u2192 NULL. DI: optional *char \u2192 NULL. Dn: optional variable number \u2192 -1 if omitted. Use these when the library function expects NULL or -1 for omitted parameters."
+      },
+      {
+        "name": "Automatic arguments (precision and fake long)",
+        "description": "Parser codes can request automatic arguments that are filled transparently by the parser: 'f' (fake *long), 'p' (real precision), 'P' (series precision).",
+        "guidance": "These are inserted without user-visible input; 'f' is used when a pointer-required long is not actually used, 'p' and 'P' supply the current real/series precision (library default variables)."
+      },
+      {
+        "name": "Return type tokens and argument limit",
+        "description": "By default a function returns GEN; the parser-code string can contain 'l' to indicate returning a long or 'v' to indicate void. At most 8 arguments (excluding syntax tokens and return types) are permitted in the parser code (hardcoded).",
+        "guidance": "The eight-argument limit is enforced by the current argvec definition in anal.c:identifier() and can be changed by modifying that code, but be aware of the hardcoded restriction."
+      },
+      {
+        "name": "Parser scanning semantics",
+        "description": "When GP calls a function, the prototype is scanned: mandatory atoms consume a user argument (error if missing), optional atoms insert defaults when omitted, and automatic atoms supply current values transparently.",
+        "guidance": "Use the parser code to ensure the correct conversion of user input to the expected C types; test with \\h function in GP to inspect parser codes of existing functions for examples and verification."
+      },
+      {
+        "name": "Undocumented 'entree' type: inspect source",
+        "description": "Some complex control statements require knowledge of the 'entree' type which is not documented in the manual.",
+        "guidance": "Check the comment before the function list at the end of language/init.c and examine language/sumiter.c source to understand and implement behavior relying on 'entree'."
+      },
+      {
+        "name": "Coding location and structure",
+        "description": "Implement each new function in its own source file and use other functions in PARI sources as a guide for structure and style.",
+        "guidance": "Declare public functions in paridecl.h so they are visible outside the library; non-public functions should be declared static within their source file."
+      },
+      {
+        "name": "Stack cleanup and gerepile usage",
+        "description": "Always clean the PARI stack before exiting your main function (usually using gerepile), otherwise successive calls will clutter the stack leading to earlier stack overflow.",
+        "guidance": "If your function returns a GEN intended for GP, ensure it is suitable for gerepileupto (see Section 4.4). Use cgiv only when you are certain you are freeing the last-created object; misuse can cause 'disaster'. Prefer gerepile for general cleanup."
+      },
+      {
+        "name": "Error handling conventions",
+        "description": "Use the general error handling routine err for generating error messages; warn variants exist but err does not return (it ends with a longjmp).",
+        "guidance": "Do not use bare printf/fprintf for user-visible messages \u2014 use pariputs to write to GP output stream and fprintferr (encapsulated error output) for error messages. Remember that err performs a longjmp and control does not return to the caller."
+      },
+      {
+        "name": "Naming rules for GP-visible identifiers",
+        "description": "The GP name of a function must be a valid GP identifier: alphabetic first character, then letters, digits, and underscore only.",
+        "guidance": "GP name need not match the library function name, but consistency is recommended. Choose names that fit GP naming conventions to avoid parser errors."
+      },
+      {
+        "name": "Installing a shared module with install()",
+        "description": "If the install facility is available on your OS, create a GP script calling install(name, code, gpname, library) and (optionally) addhelp(gpname, \"help text\") to inform GP about the function and make it available under GP sessions.",
+        "guidance": "Read that file from your GP session or include in your preferences file so the function becomes accessible as gpname. addhelp is not mandatory but highly recommended to make the module discoverable and usable by others."
+      },
+      {
+        "name": "Hardcoded integration method (when install is unavailable)",
+        "description": "When install is not available, you must hardcode the function into the GP binary: add an entry to functions basic (language/init.c) and a help message in language/helpmessages.c, then recompile GP.",
+        "guidance": "Add the functions-basic entry in exact alphabetical order: { \"gpname\",V,(void*)libname,secno,\"code\" , } where V indicates whether zero-argument call is allowed (0) or at least one argument required (non-zero). Add a single-line help message (no '\\n') in exact alphabetical order; show optional args between braces. Recompile GP after changes."
+      },
+      {
+        "name": "Help-message formatting rules",
+        "description": "Help messages added in language/helpmessages.c must be a single line and should not contain '\\n'; optional arguments should be shown between braces.",
+        "guidance": "GP will insert necessary newlines in online help; follow the format of existing messages for consistency and alphabetical ordering."
+      },
+      {
+        "name": "Use of NULL to distinguish default vs explicit empty inputs",
+        "description": "When an optional GEN argument is encoded to yield NULL if omitted, the function must interpret NULL as 'argument omitted' (e.g., treat as empty vector) so the caller can distinguish between omission and an explicitly-supplied empty object.",
+        "guidance": "Because NULL is never a valid GEN pointer, this convention allows the function to know whether the user supplied an explicit empty vector or simply omitted the argument."
+      },
+      {
+        "name": "Prefer shared libraries but integration still required",
+        "description": "Compiling your function as a shared library is recommended, but creating the shared library alone does not make the function available in GP; you must perform the GP-side integration (install or hardcode).",
+        "guidance": "Follow the install/addhelp procedure when possible. If you only compile a shared lib without registering it with GP, GP cannot call it."
+      },
+      {
+        "name": "Caution using low-level/private functions",
+        "description": "Many undocumented private functions exist in the source; they are often faster but perform less argument checking and damage-control.",
+        "guidance": "Use private functions 'at your own risk' and prefer documented public low-level functions unless you understand the kernel internals and accept maintenance/portability risks."
+      },
+      {
+        "name": "Use settyp/setlg/setlgef with extreme care",
+        "description": "Functions that set internal object fields (settyp, setlg, setlgef, etc.) should be used only with extreme care since changing type or length without matching the underlying data layout can corrupt objects.",
+        "guidance": "These operations bypass normal invariants; only use them when you fully understand the internal representation and consequences (they can be efficient ways to truncate vectors/polynomials but risk joining unrelated memory words)."
+      },
+      {
+        "name": "Memory-allocation and freeing conventions on PARI stack",
+        "description": "Use cgetg/cgeti/cgetr to allocate PARI objects on the PARI stack; cgiv frees an object only if it is the last created object; gerepile is the general garbage-collector routine for stack cleanup.",
+        "guidance": "Misuse of cgiv (freeing non-last objects) leads to corruption. Prefer gerepile for general cleanup; review Section 4.4 for examples on correct usage. When creating permanent heap objects, use malloc and free manually as appropriate."
+      },
+      {
+        "name": "Behavioral preconditions for low-level numeric operations",
+        "description": "Some low-level kernel primitives have strict preconditions (e.g., shif tl/shif tlr require 1 \u2264 y \u2264 BIL and y\u22600; divll signals error if quotient doesn't fit in ulong).",
+        "guidance": "Callers are responsible for testing and satisfying preconditions. Follow documented ranges and error behavior to avoid undefined results."
+      },
+      {
+        "name": "Naming and prototype conventions for low-level operator wrappers",
+        "description": "Low-level unary and binary operator wrappers follow consistent naming schemes (e.g., mpop/ops/i/r/\u2026 and gadd/gaddsg/gaddgs/gaddz etc.), with z-variants assigning into preexisting objects to avoid stack growth.",
+        "guidance": "Follow the naming and prototype conventions to enable reuse and macros; where z-variants exist, prefer them to avoid unnecessary stack allocation when assigning into a supplied result object."
+      }
+    ]
+  }
+}

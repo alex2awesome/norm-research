@@ -17,6 +17,19 @@ Label: first_draft_approved = True iff a Notice of Allowance occurred AND no
 office action event occurred before it.
 
 Grant status comes from application_data.patent_number (not transactions).
+
+LABEL-LOGIC CAVEATS (dual audit Codex+Fable 2026-07-13 — outputs frozen, documented here):
+- CTAV (advisory action: exists only if the applicant files after final = applicant-strategy
+  event) and CTEQ (Quayle: substance already allowable) are counted as office actions. This
+  distorts first_draft_approved and inflates n_office_actions; events are also counted as raw
+  rows with no (code, date) dedup. Corrected, dated, risk-set-conditioned outcomes live in
+  scripts/patents_event_panel.py (n_oa_rounds counts CTNF/CTFR only).
+- Abandonment = ANY historical ABN*/MABN* event; status_pending is computed but ignored in
+  final_outcome — a revived, currently-pending app can be labeled abandoned. ~3.3% of
+  abandoned apps in the outcome cohort had a Notice of Allowance BEFORE abandoning.
+- No examiner/art-unit fields are read here (or anywhere downstream of this file before
+  2026-07-13) — examiner-leniency variance is uncontrolled in every consumer. The event
+  panel joins examiner_full_name/examiner_art_unit and computes LOO leniency rates.
 """
 import argparse
 import json

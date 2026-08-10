@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_7c1b6b912a89.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18268,
+  "output_tokens": 4344,
+  "elapsed_s": 3151.082947040908,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on patent NLP, information retrieval, and automated patent novelty/examination (LLM & IR practitioners)",
+    "subtask_short": "patent novelty prediction via retrieval",
+    "subtask_description": "Evaluate and model patent claim novelty by retrieving feature-level passages from a closest prior-art document, identifying which claim features are novel, and predicting claim-level novelty. The page defines dataset construction, evaluation protocols, LLM workflows, baselines, and mitigation of spurious correlations.",
+    "subtask_keywords": [
+      "patent",
+      "novelty_prediction",
+      "passage_retrieval",
+      "feature_level",
+      "llm",
+      "dataset"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Passage Retrieval \u2014 feature-level",
+        "description": "For each claim feature f_i (in the model's segmentation \u02c6S(C)), retrieve passages p_j from the prior art document D that disclose f_i. The gold set is P(f_i, C, D) = {p_j \u2208 D | p_j discloses f_i} and the model's set is \u02c6P(f_i, C, D).",
+        "guidance": "Evaluate by computing precision (P), recall (R), F1, and nDCG between P(f_i, C, D) and \u02c6P(f_i, C, D) after mapping features in \u02c6S(C) to gold features via minimal edit distance. Retrieval metrics at the feature level are considered a core sub-task and are computed only for rejected (not-novel) claims."
+      },
+      {
+        "name": "Passage Retrieval \u2014 claim-level",
+        "description": "Aggregate passages across all features P(C, D) = \u22c3_{f_i \u2208 S(C)} P(f_i, C, D) and evaluate retrieval of passages that disclose at least one feature of the claim.",
+        "guidance": "Compute precision, recall, F1, and nDCG between aggregated gold passages and predicted aggregated passages. This provides a claim-level retrieval signal complementary to the feature-level evaluation."
+      },
+      {
+        "name": "Soft precision / recall / F1 via ROUGE-L (soft scoring)",
+        "description": "Because absence of a citation does not imply non-disclosure (negatives may not be true negatives), report soft variants of P, R, and F1 (\u02dcP, \u02dcR, \u02dcF1) computed via ROUGE-L overlap between predicted and cited passages.",
+        "guidance": "For each predicted passage p_j compute max_{p_k \u2208 P} ROUGE-L(p_j, p_k) and average to obtain soft precision; symmetrically compute soft recall by scoring each ground-truth passage by its maximum overlap with any predicted passage. This gives partial credit for lexical overlap and is motivated by consistent terminology within a single prior-art document."
+      },
+      {
+        "name": "Feature segmentation at inference",
+        "description": "Do not assume access to the gold segmentation S(C) at inference time: models must produce their own segmentation \u02c6S(C) of the claim into features.",
+        "guidance": "Models may segment via a dedicated LLM call or heuristics (e.g., split at semicolons/newlines). For evaluation, map predicted features to gold features using minimal edit distance before computing feature-level retrieval and novelty metrics."
+      },
+      {
+        "name": "Mapping predicted features to gold via minimal edit distance",
+        "description": "To align predicted features \u02c6S(C) with gold segmentation S(C), map each \u02c6f_i \u2208 \u02c6S(C) to the feature in S(C) with minimal edit distance.",
+        "guidance": "This mapping is used to pair model predictions with ground-truth feature-level passage references and novelty labels for metric computation."
+      },
+      {
+        "name": "Novel Feature Identification",
+        "description": "Identify which features of a claim are novel (binary \u02c6N(f_i, C, D) \u2208 {0,1}). Extract character ranges of features predicted as novel and compare them to the character ranges actually added during prosecution (between A1 and B1).",
+        "guidance": "Report precision, recall, and F1. Since added-feature ground truth is only available for granted claims, compute these scores only for claims labelled as novel."
+      },
+      {
+        "name": "Claim Novelty Prediction (binary)",
+        "description": "Predict whether the claim C is novel over prior art document D: \u02c6N(C, D) \u2208 {Novel, Not Novel}.",
+        "guidance": "Report fraction of claims predicted novel, accuracy, and macro F1. Note that claim-level labels are susceptible to spurious correlations, so additional checks (adversarial test sets) are recommended."
+      },
+      {
+        "name": "LLM structured output and label schema",
+        "description": "Models (especially LLM workflows) should output (i) relevant prior-art passage identifiers for each claim feature, (ii) a novelty prediction per feature with labels like \"Fully Disclosed\", \"Partially Disclosed\", \"Not Disclosed\", and (iii) an overall claim-level novelty label \"Novel\" or \"Not Novel\".",
+        "guidance": "Workflows can be single-step (one call producing segmentation, passage references, and claim prediction) or hierarchical (segment claim, analyze each feature separately against full prior-art doc, then aggregate). Hierarchical examination may improve feature-level reasoning at higher token cost."
+      },
+      {
+        "name": "Evaluation subset constraints (which samples to compute which metrics on)",
+        "description": "Certain metrics are defined only on appropriate subsets: retrieval scores are computed only for claims labelled as not novel (rejected samples), while novel feature identification is computed only for claims labelled as novel (granted claims where added spans exist).",
+        "guidance": "Follow these subset constraints to avoid spurious measurement errors; e.g., retrieval evaluation uses ESOP-cited passages which always refer to initially filed claims."
+      },
+      {
+        "name": "Soft-match threshold baselines (ROUGE-L and embedding thresholds)",
+        "description": "Baseline heuristics: consider a feature disclosed if any passage has ROUGE-L similarity > 0.4; consider a feature disclosed if any passage has embedding cosine similarity > 0.5.",
+        "guidance": "These thresholds are used for simple ROUGE-L and embedding-similarity baselines and serve as comparators for LLM-based workflows."
+      },
+      {
+        "name": "Use of nDCG as retrieval metric",
+        "description": "nDCG is included among retrieval metrics to account for ranking quality of retrieved passages.",
+        "guidance": "Compute nDCG at the feature and claim levels along with P/R/F1 to capture ranking performance."
+      },
+      {
+        "name": "Negatives are not guaranteed true negatives (interpretation caveat)",
+        "description": "The absence of a citation in ESOP does not necessarily imply non-disclosure in the prior art \u2014 negatives may not be true negatives.",
+        "guidance": "Mitigate by reporting soft metrics (ROUGE-L based) and interpreting hard recall/precision cautiously."
+      },
+      {
+        "name": "Dataset inclusion and seed selection criteria",
+        "description": "Seed patent applications are retrieved from the EPO in CPC classes G06, G10L, H04L, and H04N from 2012 onwards; focus is on first claims because they are broad and frequently examined in ESOPs.",
+        "guidance": "Filter to applications that were finally granted, require availability of ESOP documents with feature-level prior-art references, and only include samples where prior-art documents are retrievable (EPO/USPTO)."
+      },
+      {
+        "name": "ESOP parsing / ground-truth extraction requirements",
+        "description": "Extract feature-level prior-art references from ESOP documents (which provide precise passage references per feature) by parsing ESOP PDFs into structured format.",
+        "guidance": "The paper uses a VLM (Qwen3-VL-235B) with image-based input for end-to-end parsing after pre-filtering ESOPs with OCR (MinerU 2.5) and regexes. ESOP parsing is costly but provides superior fine-grained supervision compared to ESRs."
+      },
+      {
+        "name": "Prior-art retrieval jurisdiction limitation",
+        "description": "For each cited prior-art document in ESOP, retrieve full text from EPO Publication Server API or USPTO bulk data.",
+        "guidance": "The dataset limits prior art to EPO and USPTO patents; other jurisdictions and non-patent literature are excluded in this work."
+      },
+      {
+        "name": "Newly added character spans as proxy for novel features",
+        "description": "Use character spans added between the initial (A1) and granted (B1) claim versions (computed via character-level Levenshtein diff) as a proxy for novel features added during prosecution.",
+        "guidance": "Compare model-predicted novel-feature character ranges to these added spans to compute precision/recall/F1 for novel feature identification (only for granted claims)."
+      },
+      {
+        "name": "Filtering pipeline and sample discard criteria",
+        "description": "The dataset creation pipeline discards samples at multiple stages: non-granted apps, missing full text, missing ESOP, ESOPs without feature breakdown, failed parsing, rejections not due to lack of novelty, unavailable prior-art documents, or unlocatable references.",
+        "guidance": "Be explicit about filtering rates and the multi-step pipeline when constructing similar datasets to avoid selection biases (the paper documents counts at each step)."
+      },
+      {
+        "name": "Length stratification to mitigate spurious correlations",
+        "description": "Claim length provides a strong shortcut for novelty (applicants add limitations). To mitigate this, stratify the dataset into 100 bins by claim length and sub-sample the majority class so that each bin contains equal numbers of novel and not-novel samples.",
+        "guidance": "This stratification balances length distributions across classes and reduces the model's ability to exploit claim-length shortcuts."
+      },
+      {
+        "name": "Removal of obvious lexical shortcuts (reference numerals & patent numbers)",
+        "description": "Reference numerals and patent-number references are often added during prosecution and form easy-to-detect shortcuts; remove them from claims in the dataset (and be aware of description content if included).",
+        "guidance": "Remove numerals (e.g., device references) from claims via regex; note that description-level patent-number references are more prevalent in granted patents but the description is not provided to models in this setup."
+      },
+      {
+        "name": "Adversarial test set construction (adversarial filtering)",
+        "description": "Create an adversarial test set by keeping only samples misclassified by a classifier trained on claim text alone (e.g., a BERT-base model), then balance the set by removing samples from the majority class.",
+        "guidance": "Use this small adversarial subset to detect whether models exploit spurious correlations; large drops in accuracy on this set indicate overfitting to shortcuts."
+      },
+      {
+        "name": "Data contamination analysis",
+        "description": "Search large indexed pre-training corpora (using infini-gram) for dataset phrases and claim texts to detect leakage into pretraining data.",
+        "guidance": "The paper searches phrases like \"The subject-matter of claim\" and samples claim prefixes; none were found in the indexed dataset they probed. Recommend additional analyses (e.g., time-based splits) for closed pretraining corpora."
+      },
+      {
+        "name": "Baselines & modeling constraints for fair comparison",
+        "description": "Implement baseline models (Random, ROUGE-L, Embedding Similarity, Logistic Regression, BERT classifier) and constrain some baselines to use claim text only to expose spurious correlations.",
+        "guidance": "Use interpretable features for logistic regression (word counts, feature counts, IPC classes, top TF-IDF features) to analyze shortcuts. Compare LLM workflows to these baselines on the defined retrieval and novelty metrics."
+      },
+      {
+        "name": "Prompting / workflow token and runtime considerations",
+        "description": "Single-step examination prompts may be very long (average ~17k tokens). Hierarchical examination analyzes each feature separately and can require ~129k prompt tokens per claim (\u22487\u00d7 more) but can be parallelized and, with prefix caching, run \u22482.5\u00d7 longer than single-step on a dedicated vLLM.",
+        "guidance": "Consider trade-offs: hierarchical decomposition yields better novel-feature identification and retrieval performance for some models, but increases token cost and engineering complexity; ordering inputs to maximize prefix cache hits is recommended."
+      }
+    ]
+  }
+}

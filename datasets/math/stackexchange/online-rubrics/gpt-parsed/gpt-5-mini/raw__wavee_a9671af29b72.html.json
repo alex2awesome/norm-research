@@ -1,0 +1,149 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_a9671af29b72.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10818,
+  "output_tokens": 4010,
+  "elapsed_s": 1409.1135115840007,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "Web developers (React/Next.js) who want to build interactive mathematical animations in the browser (intermediate React knowledge assumed).",
+    "subtask_short": "manim-web React tutorial",
+    "subtask_description": "A hands-on tutorial for building interactive Manim-style mathematical animations in React/Next.js using a JavaScript Manim port (Manim-Web pattern). Covers setup, scene construction, interactivity, performance, accessibility, and deployment.",
+    "subtask_keywords": [
+      "manim-web",
+      "react",
+      "nextjs",
+      "webgl",
+      "interactive_math"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Scaffold Next.js with TypeScript and install dependencies",
+        "description": "Scaffold a Next.js project with TypeScript and install the Manim-Web port, KaTeX, and Three.js as dependencies.",
+        "guidance": "Use npx create-next-app@latest with --typescript --app --tailwind. Install your chosen JS Manim port (placeholder name 'manim-web' in examples) plus katex, three, and @types/three. If you prefer MathJax instead of KaTeX, install mathjax-full."
+      },
+      {
+        "name": "Disable server-side rendering for canvas components",
+        "description": "Disable server-side rendering for any component that touches the WebGL canvas using dynamic imports or the \"use client\" directive.",
+        "guidance": "Either put \"use client\" at the top of the file or use Next.js dynamic imports with ssr: false. Example dynamic import includes a loading placeholder UI. This prevents server-side bundling of window/WebGL-dependent code."
+      },
+      {
+        "name": "Next.js configuration to avoid server bundling of canvas/node-only modules",
+        "description": "Update next.config.js to transpile the Manim package and ensure canvas-related packages aren't bundled server-side by setting webpack fallbacks for canvas and fs to false when isServer is true.",
+        "guidance": "Example next.config.js shows transpilePackages:['manim-web'] and in webpack fallback set canvas:false and fs:false. Ensures server build doesn't try to require browser-only modules."
+      },
+      {
+        "name": "Use client components for scenes",
+        "description": "Any component that renders a Manim scene must be a client component.",
+        "guidance": "Add \"use client\" or import the component dynamically with SSR disabled. This is repeated guidance to ensure code that depends on window or WebGL runs only in the browser."
+      },
+      {
+        "name": "Define scene construct functions that create mobjects and sequence animations with async/await",
+        "description": "Define scene construct functions that create mobjects (polygons, squares, Tex labels) and sequence animations using async/await.",
+        "guidance": "The construct function is async because scene.play() returns a Promise that resolves when the animation completes\u2014this mirrors Python Manim's blocking self.play() but uses JavaScript async/await. Structure sequences (e.g., steps) as arrays of async functions that receive a scene handle."
+      },
+      {
+        "name": "Wrap scene in a React component and manage renderer in useEffect",
+        "description": "Wrap the scene in a React component, initializing the WebGL renderer inside useEffect and disposing of GPU resources on unmount.",
+        "guidance": "Create renderer and Scene in useEffect when canvasRef.current exists. Return a cleanup function that calls scene.dispose() and renderer.dispose() and nulls refs. Use refs (sceneRef, rendererRef) to keep stable references across renders."
+      },
+      {
+        "name": "Guard awaits / handle unmount during active animations",
+        "description": "Guard each await call in construct/animation code with a boolean ref (mountedRef.current) or an AbortController to avoid running code after a component unmounts.",
+        "guidance": "If the component unmounts during an active animation await chain, guard each await with mountedRef.current or wire up an AbortController. The tutorial demonstrates mountedRef and shows early returns after checking it."
+      },
+      {
+        "name": "Dispose GPU resources & respect browser WebGL context limits",
+        "description": "Call dispose() on Scene and WebGLRenderer on unmount to release GPU memory; browsers typically allow around 8 to 16 active contexts before evicting older ones.",
+        "guidance": "The cleanup function in useEffect should call scene.dispose() and renderer.dispose(). Avoid creating many renderer instances; reuse where possible. Failure to dispose leads to silent context loss."
+      },
+      {
+        "name": "Expose imperative controls (play/pause/seek) via scene handle",
+        "description": "Expose play/pause/seek and similar controls from your React component by calling sceneRef.current.pause(), .resume(), .seekTo(t), etc.",
+        "guidance": "Provide handler wrappers (handlePause, handleResume, handleSeek) which call the corresponding methods on the scene ref. This makes integration with external UI easy."
+      },
+      {
+        "name": "Bind React state to scene parameters and rebuild when values change",
+        "description": "Bind React state (sliders, step buttons) to scene parameters, rebuilding mobjects when values change and guarding controls during playback.",
+        "guidance": "On dimension or parameter changes, clear the scene, rebuild mobjects (e.g., via buildProofSteps(config)), and reset step state. Disable controls (e.g., sliders) while animations are playing to avoid inconsistent state where mobjects reference stale positions."
+      },
+      {
+        "name": "Step navigation: prefer replay-from-scratch for backward stepping",
+        "description": "When stepping backward, replay steps from scratch instead of trying to reverse each animation.",
+        "guidance": "Replaying from scratch is simpler and more reliable; reversing individual Transforms is error-prone because intermediate state may be lost. Tradeoff: adds small latency (e.g., ~200ms for a five-step scene), but users typically don't notice."
+      },
+      {
+        "name": "Memoize scene construction to improve performance",
+        "description": "Memoize scene construction and expensive geometry calculations with React.useMemo to avoid re-creating mobjects on every render.",
+        "guidance": "Wrap buildProofSteps in useMemo keyed on parameters (e.g., sideA, sideB). Also use React.memo on canvas wrapper components and keep mobject references in refs instead of state."
+      },
+      {
+        "name": "Avoid re-creating mobjects on every render; use refs",
+        "description": "Keep mobject references stable via refs rather than state to avoid unnecessary recreation and re-renders.",
+        "guidance": "Create mobjects once per parameter set and reuse them. Recreating mobjects on every React render is expensive and harms frame rate."
+      },
+      {
+        "name": "Handle WebGL context loss and restoration",
+        "description": "Listen for webglcontextlost and webglcontextrestored on the canvas and implement recovery handlers that reinitialize renderer and scene.",
+        "guidance": "Prevent default in the lost handler, log a warning, and restore state on webglcontextrestored. Add and remove event listeners in useEffect cleanup."
+      },
+      {
+        "name": "Respect prefers-reduced-motion for accessibility",
+        "description": "Respect the prefers-reduced-motion media query by auto-pausing animations or setting animation durations to 0 when reduce is requested.",
+        "guidance": "Check window.matchMedia('(prefers-reduced-motion: reduce)') client-side and set a duration variable (0 when prefer-reduced-motion). This preserves content while honoring user preferences."
+      },
+      {
+        "name": "Make canvas accessible: aria-label, parallel DOM description, noscript fallback",
+        "description": "Canvas content is opaque to screen readers; provide an updating aria-label, a parallel DOM description expanding on each step, and a <noscript> fallback with a static image.",
+        "guidance": "The example sets role=\"img\" and an aria-label describing the current step and geometry. For production edtech visualizations, include richer DOM descriptions and static fallbacks for non-JS environments."
+      },
+      {
+        "name": "Use KaTeX for LaTeX rendering unless you need MathJax features",
+        "description": "KaTeX is significantly faster than MathJax for initial render; prefer KaTeX unless you need MathJax's broader LaTeX command coverage.",
+        "guidance": "Configure the Tex bridge (configureTex) to select engine:'katex' or 'mathjax' and set macros. Ensure KaTeX CSS is loaded (import 'katex/dist/katex.min.css'). MathJax supports more packages (amsmath, physics) but has slower first render due to font loading/layout."
+      },
+      {
+        "name": "Ensure KaTeX fonts/CSS are bundled and cacheable for deployment",
+        "description": "When deploying, ensure KaTeX fonts and CSS are included in the bundle and served with appropriate Cache-Control headers (long TTLs).",
+        "guidance": "Import 'katex/dist/katex.min.css' in layout or component. Set long TTL cache headers for static font assets. Verify static export bundling behavior (Next.js output:'export')."
+      },
+      {
+        "name": "Deploy as a static Next.js export and verify dynamic imports",
+        "description": "Deploy as a static Next.js export to Vercel or Netlify, ensuring dynamic imports with { ssr: false } still behave correctly in the exported output.",
+        "guidance": "Note: next export was removed in Next.js 13.3+ in favor of output: 'export' in next.config.js. Run next build and test locally (npx serve out) before deploying."
+      },
+      {
+        "name": "Know current library feature coverage and limitations",
+        "description": "Understand what's supported by current JS Manim ports and what's not: most ports cover 2D geometry primitives, LaTeX rendering, basic camera movements, and standard animations; advanced 3D, shader-based effects, and some niche mobject types are often missing.",
+        "guidance": "Check the specific library README and GitHub issues for supported features and roadmap items before committing. You may need to adapt import paths and API details to match the implementation you choose."
+      },
+      {
+        "name": "Structure project to separate scene logic from UI",
+        "description": "Keep scene logic (construct functions) separate from React UI wrappers so scenes are testable and reusable across UI contexts.",
+        "guidance": "Recommended folder layout: src/scenes for pure scene definitions, src/components for wrapper components and UI controls, lib/manim for shared helpers and theme config. Export construct functions from scene files and import them into React components that pass them into <ManimScene>."
+      },
+      {
+        "name": "Sequence animations using AnimationGroup and step functions",
+        "description": "Orchestrate multi-step visuals by building arrays of async step functions and using AnimationGroup or sequential await scene.play(...) calls.",
+        "guidance": "Example proof is broken into five step functions (draw triangle, grow squares, show area labels, highlight relationship, reveal equation). Use scene.add(...), await scene.play(new FadeIn(...)), and AnimationGroup to coordinate parallel animations."
+      },
+      {
+        "name": "Geometry placement and rotation guidance for mobjects",
+        "description": "Position and rotate mobjects carefully (e.g., square on the hypotenuse requires rotation to match the hypotenuse angle and correct outward offset).",
+        "guidance": "Compute hypotenuse length and angle (Math.sqrt and Math.atan2), rotate the square to the hypotenuse angle, and offset its center outward from the triangle using sine/cosine math. Adjust anchor/rotation APIs to match your chosen library."
+      },
+      {
+        "name": "Use small practical patterns for lifecycle robustness",
+        "description": "Use patterns like mountedRef to gate work during async sequences, early returns after checking mounted state, and explicit scene.clear() before rebuilding steps.",
+        "guidance": "The tutorial demonstrates mountedRef usage and explicit scene.clear() when reconstructing steps. These patterns reduce race conditions and stale-state bugs in interactive scenes."
+      },
+      {
+        "name": "Performance: prefer memoization, minimize allocations, and measure",
+        "description": "To keep frame rates smooth, minimize allocations per frame: memoize construction, reuse mobjects, and avoid creating new renderers frequently.",
+        "guidance": "Use useMemo for buildProofSteps, React.memo for canvas wrapper, refs for mobject storage, and measure performance (FPS) if necessary. Consider the cost of rebuilding for live parameter changes and balance with UX expectations."
+      }
+    ]
+  }
+}

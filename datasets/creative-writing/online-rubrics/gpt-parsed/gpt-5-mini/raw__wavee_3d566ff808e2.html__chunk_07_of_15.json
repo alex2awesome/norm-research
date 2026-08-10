@@ -1,0 +1,111 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_3d566ff808e2.html",
+  "task": "creative-writing",
+  "source_dir": "raw",
+  "source_file": "wavee_3d566ff808e2.html",
+  "chunk_idx": 7,
+  "n_chunks": 15,
+  "chunk_chars": 39663,
+  "model": "gpt-5-mini",
+  "elapsed_s": 41.46892883300097,
+  "input_tokens": 11158,
+  "output_tokens": 3160,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI/ML researchers, model developers, and evaluators working on large language models and evaluation methodologies",
+    "subtask_short": "evaluating LLM truthfulness and generation",
+    "subtask_description": "Guidelines and evaluation criteria for measuring truthfulness and generation quality of large language models (LLMs), including limitations of standard metrics, use of LLMs as judges, prompting strategies, and types of generation tasks that expose model weaknesses.",
+    "subtask_keywords": [
+      "llm",
+      "truthfulness",
+      "evaluation",
+      "generation",
+      "planning",
+      "metrics"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Standard similarity-metric truthfulness check",
+        "description": "To check if a generated answer is truthful, each response is compared with the provided reference (\u201cgold\u201d) answer using standard similarity metrics: ROUGE, BLEU, and BLEURT. If the score (from any of these metrics) is above a pre-determined threshold, the completion is considered truthful and matching the reference.",
+        "guidance": "Repeat across all questions and calculate the percentage of truthful answers. Note that thresholds must be set beforehand; the approach treats high lexical/syntactic similarity as a proxy for truthfulness."
+      },
+      {
+        "name": "Shortcomings of lexical overlap metrics (ROUGE/BLEU)",
+        "description": "ROUGE/BLEU and similar metrics primarily capture word- or sentence-level (syntactic/lexical) similarity and therefore can fail to capture semantic equivalence between a model response and a short reference.",
+        "guidance": "Be aware that long, hedging, or more detailed model answers can be penalized despite containing the relevant information. Manual inspection is recommended for low-scoring samples to check whether the degradation is due to length/hedging rather than inaccuracy."
+      },
+      {
+        "name": "Use of model-based judging (Judge GPT-4)",
+        "description": "Use an LLM (GPT-4) itself to determine which of two candidate responses is more similar to a reference answer, asking the judge model to provide pros and cons for each candidate and then pick the best.",
+        "guidance": "Leverage chain-of-thought style prompts to elicit similarities/differences and rationales. Judge GPT-4 was found to pick the GPT-4-generated answer far more often and can rely on semantic and conceptual similarity regardless of response length."
+      },
+      {
+        "name": "Structured instruction for pairwise sentence-judging",
+        "description": "Instructions used for Judge GPT-4: (1) For the given STATEMENT and OPTION1/OPTION2, first state similarities and differences between each option and the statement in 'EXPLANATION1' and 'EXPLANATION2'. (2) Using those, state which option captures the information in STATEMENT as 'BEST: OPTIONX' followed by a brief justification. (3) You can only pick one option.",
+        "guidance": "Follow the exact three-step format; requiring a single pick can bias the judge toward forcing a choice, so consider whether 'neither' should be permitted depending on evaluation setup."
+      },
+      {
+        "name": "Human evaluation criterion (presence of claim)",
+        "description": "Human reviewers check whether the claim in the reference is present in either model-generated answer; if so they pick that option. If no option contains the claim, they pick 'neither'.",
+        "guidance": "Humans may create categories outside the constrained ontology and can be biased by experience; inter-rater agreement should be measured. If humans are constrained to pick one option, results align more with constrained model judges."
+      },
+      {
+        "name": "Calibrate judge instructions to human-like behavior",
+        "description": "Judge models' justifications and selection criteria do not necessarily mirror human reasoning; instructions and allowed choices (e.g., permitting 'neither' or 'both') influence outcomes.",
+        "guidance": "To make model judges more human-calibrated, provide nuanced and informative instructions and consider allowing the same set of choices humans have (including 'neither'/'both')."
+      },
+      {
+        "name": "Need for external retrieval for fact-checking (RAG)",
+        "description": "For queries where model parametric knowledge is insufficient (e.g., specific people/places), fact-checking may require inputs from a verified external corpus; Retrieval-Augmented Generation (RAG) methods are recommended.",
+        "guidance": "Do not rely solely on the model's internal knowledge for well-known entities/locations; incorporate retrieval pipelines when high factual accuracy is required."
+      },
+      {
+        "name": "Distinguish closed-domain vs open-domain hallucinations",
+        "description": "Closed-domain hallucinations are errors made relative to given content or constraints and can often be checked for consistency; open-domain hallucinations require broader searches and are harder to detect.",
+        "guidance": "Address closed-domain hallucinations using consistency checks (including LLM-based checks). For open-domain hallucinations, use more extensive information-gathering and external verification; accept higher tolerance of hallucination in creative contexts where veracity is less critical."
+      },
+      {
+        "name": "Prompting for step-by-step reasoning to mitigate arithmetic/working-memory errors",
+        "description": "Asking the model to 'let\u2019s think step by step' or to list intermediate steps dramatically improves accuracy on arithmetic and other tasks requiring working memory.",
+        "guidance": "Use chain-of-thought style prompts to force intermediate computations; this raises accuracy substantially (examples: 100% on certain ranges when asked to write intermediate steps). However, this is a partial mitigation and may not solve deeper planning failures."
+      },
+      {
+        "name": "Assessment of planning/inner-dialogue limitations",
+        "description": "Autoregressive next-word prediction architecture lacks an explicit 'inner dialogue' or scratchpad, limiting the model's ability to plan ahead or implement iterative procedures, which leads to failures on tasks requiring global planning.",
+        "guidance": "Evaluate tasks for their planning demands: require explicit step-by-step prompts for problems that need iteration; but recognize some failures arise from architectural constraints and may need different model designs or external scratchpads."
+      },
+      {
+        "name": "Handling of local vs global textual constraints",
+        "description": "Local constraints (e.g., rhymes, acrostics, prescribing the first letter/word of each sentence) are handled well by the model because they can be satisfied sequentially. Global constraints (e.g., first and last sentences must be reverses) require long-range planning and the model often fails.",
+        "guidance": "When evaluating generation under constraints, categorize constraints as local or global; for global constraints, provide planning prompts or auxiliary mechanisms (planning stage, templates, or post-editing) to improve success."
+      },
+      {
+        "name": "Categorize tasks as incremental vs discontinuous",
+        "description": "Incremental tasks (can be built word-by-word/sentence-by-sentence toward a solution) are well-suited to autoregressive generation. Discontinuous tasks require a conceptual leap/'Eureka' and the model struggles with these.",
+        "guidance": "Use this taxonomy to predict when simple prompting will suffice (incremental) versus when task redesign, planning scaffolds, or different architectures may be necessary (discontinuous: jokes, novel hypotheses, new genres)."
+      },
+      {
+        "name": "Beware of hedging/verbosity affecting metric-based judgments",
+        "description": "Long, hedging model outputs (intended to handle ambiguity) can be penalized by similarity metrics even when semantically correct, because of length and lexical divergence from short references.",
+        "guidance": "When using lexical metrics, control for length differences or use semantics-aware evaluators; consider human review or model-based semantic judges to account for valid hedging."
+      },
+      {
+        "name": "Evaluation design: allow reporting of 'neither' and 'both' options",
+        "description": "Constraining evaluators (human or model) to choose exactly one option can force spurious decisions; allowing 'neither' or 'both' better reflects the true relationship between responses and references.",
+        "guidance": "Decide before annotation whether 'neither'/'both' are permitted and interpret comparisons accordingly (table shows human (constrained) choices differ from unconstrained human choices)."
+      },
+      {
+        "name": "Caveat on human annotations: potential biases and inter-rater agreement",
+        "description": "Human annotators may be biased by their own experiences and the study did not check inter-rater agreement; annotation decisions can therefore vary and affect evaluation outcomes.",
+        "guidance": "Measure and report inter-rater agreement, train annotators, and account for annotator bias when interpreting human vs model judge comparisons."
+      },
+      {
+        "name": "Deployment guidance: monitor societal influences and mitigate harms",
+        "description": "When deploying LLMs, consider societal influences (disinformation, job displacement, bias amplification, privacy/provenance concerns). Uncertainties about impacts require continuous monitoring and establishment of norms/guardrails.",
+        "guidance": "Perform deeper analyses, continuous monitoring, and proactive/ reactive mitigation strategies for harmful applications; tailor verification stringency to the application domain (e.g., lower requirements for creative fiction vs higher for healthcare)."
+      }
+    ]
+  }
+}

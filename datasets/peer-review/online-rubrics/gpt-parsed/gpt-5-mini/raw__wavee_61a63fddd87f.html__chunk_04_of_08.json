@@ -1,0 +1,90 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_61a63fddd87f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_61a63fddd87f.html",
+  "chunk_idx": 4,
+  "n_chunks": 8,
+  "chunk_chars": 40000,
+  "model": "gpt-5-mini",
+  "elapsed_s": 31.453372125000897,
+  "input_tokens": 15425,
+  "output_tokens": 3467,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and theoreticians studying peer-review algorithm design and analysis (algorithms SUPER*, SIM, BID, RAND) under the noiseless community model",
+    "subtask_short": "peer-review paper-ordering algorithm analysis",
+    "subtask_description": "Formal/theoretical analysis of paper-ordering policies for sequential reviewers under a combined objective (expected paper-side gain + \u03bb \u00d7 expected reviewer-side gain), specialized to the noiseless community model and a specified class of gain/bidding functions.",
+    "subtask_keywords": [
+      "peer_review",
+      "paper_ordering",
+      "algorithm_analysis",
+      "noiseless_community_model",
+      "gain_functions"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Combined expected gain objective",
+        "description": "The performance metric for any algorithm ALG is the expected combined gain: E[G_ALG] = E[G_p^{ALG}] + \u03bb E[G_r^{ALG}], where \u03bb \u2265 0 is a trade-off parameter.",
+        "guidance": "E[G_p^{ALG}] is the expected paper-side gain (sum over papers of E[\u03b3_p(g_j)] where g_j is number of bids on paper j). E[G_r^{ALG}] is the expected reviewer-side gain (sum over reviewers and shown papers of \u03b3_r(position, similarity)). This combined objective is used throughout to compare OPT, SUPER*, SIM, BID, and RAND."
+      },
+      {
+        "name": "Paper-side gain evaluation (\u03b3_p properties)",
+        "description": "Paper-side gain is the sum over papers of a strictly concave function \u03b3_p of the number of bids on the paper (for this result \u03b3_p(x)=\u221ax).",
+        "guidance": "Because \u03b3_p is strictly concave (diminishing returns), the paper-side gain is maximized by distributing bids evenly across papers. The maximum attainable number of bids equals the number of reviewers (n = mq) almost surely under the bidding model, so the paper-side gain is maximized when each paper gets exactly one bid, yielding sum_j \u03b3_p(1)=mq."
+      },
+      {
+        "name": "Reviewer-side gain evaluation (\u03b3_r position dependence)",
+        "description": "Reviewer-side gain decomposes into a position-dependent factor \u03b3^\u03c0_r(position)=1/log2(position+1) multiplied by a similarity-dependent scalar (2S_{i,j}-1); thus \u03b3_r(position, S_{i,j})=(2S_{i,j}-1)\u03b3^\u03c0_r(position).",
+        "guidance": "\u03b3^\u03c0_r is decreasing in position on domain R_{>0}; therefore, to maximize reviewer-side gain for a given reviewer, papers with higher similarity (those on the block diagonal D_i) should be shown earlier (i.e., before off-diagonal papers c_i)."
+      },
+      {
+        "name": "Policy to maximize paper-side gain (min-bid-top rule)",
+        "description": "The expected paper-side gain is maximized by any policy that shows, in the top position to each reviewer i, a paper chosen from the set of papers in D_i that currently have the minimum number of bids.",
+        "guidance": "Because only the top position can generate a bid (under the bidding model used), and because \u03b3_p is concave, choosing a top paper with the fewest existing bids balances bids across papers and attains the maximum paper-side gain equal to mq."
+      },
+      {
+        "name": "Policy to maximize reviewer-side gain (D_i-before-c_i rule)",
+        "description": "For each reviewer i the expected reviewer-side gain is maximized by showing all papers in D_i (block-diagonal papers with similarity s) before any papers in c_i (off-diagonal papers).",
+        "guidance": "This follows from \u03b3^\u03c0_r being decreasing in position; placing D_i papers earlier increases reviewer-side contribution (and the similarity structure ensures D_i papers have strictly larger similarity than c_i papers)."
+      },
+      {
+        "name": "Overall optimal policy (OPT)",
+        "description": "OPT concurrently maximizes both paper-side and reviewer-side gains by, for each reviewer i, placing a paper among the D_i with the minimum number of bids in the top position and showing the remaining papers in D_i (in any order) before papers in c_i.",
+        "guidance": "Because the two objectives decouple in this model and satisfy the min-bid-top and D_i-before-c_i properties simultaneously, OPT attains the joint optimum for the combined objective."
+      },
+      {
+        "name": "SUPER* with zero heuristic equivalence to OPT",
+        "description": "SUPER* with zero heuristic shows, for each reviewer i, a paper among the set with the minimum number of bids from D_i in the top position, and then shows remaining papers from D_i ahead of c_i (in arbitrary order), and thus is equivalent to OPT under the noiseless community model and chosen gain/bidding functions (Lemma 8).",
+        "guidance": "SUPER* is designed to maximize the immediate expected gain conditioned on history; under the stated model/assumptions, the immediate expected paper-side and reviewer-side gains are both individually maximized by the min-bid-top and D_i-before-c_i ordering, so SUPER* with zero heuristic attains OPT."
+      },
+      {
+        "name": "SIM policy and tie-breaking for optimality",
+        "description": "SIM orders papers for each reviewer in decreasing similarity; ties between a pair of papers are broken in favor of the paper with fewer bids and remaining ties uniformly at random.",
+        "guidance": "For the noiseless community model, SIM shows each D_i paper before c_i and uses tie-breaking to prefer fewer-bid papers in top positions, making SIM equivalent to the OPT policy and therefore optimal for the combined objective."
+      },
+      {
+        "name": "BID policy: behavior, strengths, and failure mode",
+        "description": "BID presents papers in increasing order of current number of bids; ties are broken in favor of the paper with higher similarity score.",
+        "guidance": "BID maximizes the expected paper-side gain (it almost surely shows a D_i paper with zero bids in top position and thus attains the paper-side maximum mq). However, because BID largely ignores similarity except for tie-breaking, it can be suboptimal for the combined objective: showing papers with fewer bids closer but not in top position cannot improve paper-side gain but reduces reviewer-side gain. The analysis provides explicit lower bounds on how much OPT exceeds BID in expected combined gain (dependent on \u03bb, m, q)."
+      },
+      {
+        "name": "RAND policy suboptimality (intuition and bound)",
+        "description": "RAND (random paper ordering) cannot obtain higher expected gain than SUPER* (which is optimal for the final reviewer) and is shown to be significantly suboptimal compared to SUPER* and OPT; lower-bound gaps are derived (e.g., comparisons with SUPER* show constant/proportional losses).",
+        "guidance": "The proof constructs problem instances (including padding with zero-similarity papers and bids) to lower-bound RAND's expected combined gain relative to SUPER*; randomness and the reliance on similarity structure cause RAND to perform worse."
+      },
+      {
+        "name": "Bidding model assumptions that affect evaluation",
+        "description": "The bidding model used: each reviewer i's bid on paper j is a Bernoulli random variable whose probability depends on whether the paper is shown in the top position and on S_{i,j} (threshold behavior such that reviewers almost surely bid on top position D_i papers and almost never on others). Consequently, each reviewer bids on at most one paper almost surely and a paper is bid on with positive probability only when shown in the top position to an on-block reviewer.",
+        "guidance": "These structural assumptions (thresholded bidding, block-diagonal similarity matrix, at-most-one-bid-per-reviewer) are central to the derived optimality/suboptimality results and to why policies that place certain papers in top position obtain nonzero paper-side reward."
+      },
+      {
+        "name": "Required properties of gain/bidding functions for the analysis",
+        "description": "The analysis assumes specific classes/forms: \u03b3_p strictly concave (e.g., \u221ax), \u03b3^\u03c0_r(position)=1/log2(position+1) (decreasing), reviewer-side gain factor (2S_{i,j}-1), and the Bernoulli bidding rule of (66).",
+        "guidance": "The optimality proofs, equivalence results, and bounds rely on these functional properties (concavity, monotonicity, thresholded bidding). Deviations from these properties would change which policies are optimal."
+      }
+    ]
+  }
+}

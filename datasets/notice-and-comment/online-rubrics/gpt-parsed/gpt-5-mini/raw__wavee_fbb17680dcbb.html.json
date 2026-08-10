@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_fbb17680dcbb.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16558,
+  "output_tokens": 4064,
+  "elapsed_s": 1668.6552684169728,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / computational argument mining researchers and ML practitioners evaluating LLMs on argument detection, extraction, and relation classification in online comments",
+    "subtask_short": "LLM argument mining evaluation",
+    "subtask_description": "Evaluation framework for using and assessing large language models on three argument-mining tasks (binary detection of pre-defined arguments, span extraction, and support/attack relationship classification) in noisy online comments across polarizing topics.",
+    "subtask_keywords": [
+      "argument_mining",
+      "llm",
+      "evaluation",
+      "online_comments",
+      "span_extraction"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Task 1: Binary Argument Detection",
+        "description": "Given an argument A and a comment C, the task is to classify, in binary fashion, whether C makes use of A.",
+        "guidance": "Run on both YRU and COMARG across all six topics. For COMARG consider all comment-argument pairs labeled as exhibiting any form of argumentative relationship as present (1). For YRU, project sentence-level argument labels to comment-level (present=1). Use a negative label for 'makes no use of an argument' (0). Evaluate with macro-averaged F1."
+      },
+      {
+        "name": "Task 2: Argument Span Extraction",
+        "description": "Given an argument A and a comment C, the goal is to extract the span within C that expresses A.",
+        "guidance": "Evaluate only where manually annotated spans are available (COMARG dataset). Format the task equivalent to extractive question-answering where arguments serve as the 'question' and relevant spans as the 'answer'. Evaluate using ROUGE-L between predicted and gold spans (and consider complementary semantic metrics such as BERTScore and manual inspection because ROUGE-L penalizes lexical variation). Prompt guidance: structured step-by-step instructions with explicit role assignment performed best for span extraction."
+      },
+      {
+        "name": "Task 3: Argument Relationship Classification (binary and 4-way)",
+        "description": "Given an argument A and a comment C, determine whether C supports or attacks A. Two formulations: (a) binary classification (support vs attack); (b) 4-way classification distinguishing explicit/implicit support and explicit/implicit attack.",
+        "guidance": "Evaluate binary and 4-way variants (YRU provides 4-way labels). Use macro-averaged F1 for evaluation. Note that performance drops substantially when moving from binary to 4-way. Prompting guidance: structured step-by-step instructions combined with explicit role assignment worked best for relationship classification."
+      },
+      {
+        "name": "Dataset selection and suitability",
+        "description": "Use datasets that pair controversial topics with pre-defined arguments and provide annotations for presence, spans, and relationship (support/attack).",
+        "guidance": "Paper uses COMARG (Procon.org/Idebate.org sourced) and YRU (createdebate.com) covering six polarizing topics; choose datasets that support the specific tasks being evaluated (e.g., COMARG supports span extraction; YRU has sentence-level annotations projected to comment-level). Consider topical coverage, annotation year (datasets here are from 2014) and whether argument lists remain relevant."
+      },
+      {
+        "name": "Annotation schema and quality",
+        "description": "Annotations should mark whether a comment uses a pre-defined argument, the exact span of usage (where available), and whether usage is explicit/implicit support or explicit/implicit attack.",
+        "guidance": "Resolve annotator disagreements via majority vote, and exclude cases with no majority. Report inter-annotator agreement (the paper notes moderate to high agreement for tasks). When projecting sentence-level labels to comment-level, clearly document mapping rules."
+      },
+      {
+        "name": "Pre-processing and label conflation rules",
+        "description": "Specify how original dataset labels are pre-processed to fit task formulations (e.g., conflating multi-way labels into binary labels).",
+        "guidance": "For Task 1: treat any form of argumentative relationship as present (1) and 'makes no use' as negative (0). For Task 3: define subtask 3a as conflating labels into binary support/attack, and subtask 3b as retaining the original 4-way labeling. Document projection from sentence- to comment-level and any label merges required for fine-tuning due to small per-topic sample sizes."
+      },
+      {
+        "name": "Evaluation metrics for classification",
+        "description": "Use macro-averaged F1 as the primary metric for binary detection and relationship classification tasks.",
+        "guidance": "Report performance per topic and on a combined dataset; include baseline comparisons (majority, fine-tuned RoBERTa). When dataset labels are imbalanced, macro-averaged F1 helps reflect per-class performance. Report standard deviations across runs for few-shot experiments to capture robustness."
+      },
+      {
+        "name": "Evaluation metrics for extraction",
+        "description": "Use ROUGE-L to measure lexical overlap between predicted and gold spans, and use semantic measures (e.g., BERTScore) as complementary evidence.",
+        "guidance": "ROUGE-L tends to be a lower-bound since it penalizes semantically equivalent but lexically different spans. BERTScore often yields higher similarity but may over-estimate extractive performance. Use both metrics and manual inspection to get a fuller picture. Report mean and std across cross-validation folds."
+      },
+      {
+        "name": "Baselines and model comparisons",
+        "description": "Compare LLM prompting/fine-tuning results against standard baselines such as the majority class baseline and a fine-tuned RoBERTa model.",
+        "guidance": "Fine-tune RoBERTa across combined data where per-topic data is insufficient for per-topic fine-tuning. For span extraction, format data for QA fine-tuning. Use consistent cross-validation folds and report baseline metrics alongside LLM variants."
+      },
+      {
+        "name": "Model configuration and decoding settings",
+        "description": "Fix generation settings to reduce non-determinism when prompting LLMs.",
+        "guidance": "Set temperature to 0 and top_p to 1 (and for Llama3-8b-Instruct set top_k=1). Document any model-specific constraints (some models do not allow manual top_k configuration). These settings were followed to minimize output variability."
+      },
+      {
+        "name": "Prompt design dimensions",
+        "description": "Vary prompts along structure (unstructured vs structured step-by-step), specificity (level of detail), and role assignment (e.g., 'you are an expert in argument analysis'), and select prompt variants empirically.",
+        "guidance": "For Task 1 a structured prompt with detailed instructions but without role assignment performed best. For Task 2 and Task 3 prompts combining structured step-by-step instructions with explicit role assignment achieved superior performance. Release full prompts for reproducibility."
+      },
+      {
+        "name": "Few-shot experimental protocol",
+        "description": "Evaluate zero-shot, 1-shot and 5-shot prompting, and account for example-set variability.",
+        "guidance": "Run each few-shot experiment five times with randomly sampled, non-overlapping instruction examples. Manually verify that few-shot examples are instructive and cover all classes (the paper ensured five-shot example sets covered all classes). Average results across runs and report standard deviations."
+      },
+      {
+        "name": "Fine-tuning and parameter-efficient fine-tuning (PEFT) guidelines",
+        "description": "When fine-tuning LLMs, consider parameter-efficient methods (e.g., LoRA) and disclose hyperparameters and training regimen.",
+        "guidance": "Example LoRA hyperparameters: r=16; target modules q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj; lora_alpha=16; lora_dropout=0. Use training batch sizes, epochs, warmup steps, weight decay, optimizer, learning rate and evaluation strategies as reported (e.g., 5-fold cross-validation, 3 epochs for classification, 10 epochs for span extraction for RoBERTa). Document hardware (single NVIDIA V100) and environmental/training cost considerations."
+      },
+      {
+        "name": "Data splitting and cross-validation protocol",
+        "description": "Use stratified splits and cross-validation to ensure balanced label distributions and robust evaluation.",
+        "guidance": "The paper used five stratified folds for cross-validation, and for PEFT used a data split of 60-20-20 for train-dev-test with test splits covering the whole dataset. For classification tasks ensure stratified splits to preserve class balance per fold."
+      },
+      {
+        "name": "Output formatting and task constraints when prompting",
+        "description": "When prompting models for automated annotation, enforce strict output schemas and label encodings to ease automatic evaluation.",
+        "guidance": "Example constraints from prompts: Task 1 requires valid JSON of form {\"id\":\"id\",\"label\":label_value} with label 1 or 0; Task 2 requires verbatim extracted spans and exact JSON schema { \"id\": \"{id}\", \"span\": \"exact_text_from_comment\" } and critical requirements like 'Extract EXACT text only (no paraphrasing)'; Task 3 binary requires specific label encodings (paper's prompt used 'Label = 5' for support and 'Label = 1' for attack for binary; full scale used labels 1,2,4,5). Enforce 'Return VALID JSON only' and 'Do NOT quote or repeat input texts' as needed."
+      },
+      {
+        "name": "Error analysis dimensions and reporting",
+        "description": "Perform detailed qualitative and quantitative error analyses to identify systematic model weaknesses.",
+        "guidance": "Inspect false positive vs false negative rates (the paper found FPs significantly outnumbered FNs), analyze per-topic and per-stance (Pro vs Con) error asymmetries, measure effect of comment length on accuracy and ROUGE-L (report correlations and statistical significance), and manually inspect stratified random samples of misclassifications to identify failure modes (e.g., sensitivity to strong/emotional language, difficulty distinguishing implicit vs explicit usage). Report representative examples and per-topic error breakdowns."
+      },
+      {
+        "name": "Interpreting and augmenting evaluation metrics",
+        "description": "Recognize metric limitations and augment automatic metrics with semantic measures and manual inspection.",
+        "guidance": "ROUGE-L penalizes semantically-equivalent but lexically-different spans; BERTScore provides token-level semantic similarity but can over-estimate performance. Use both and complement with manual inspection to avoid false conclusions about extractive performance."
+      },
+      {
+        "name": "Robustness and variability reporting",
+        "description": "Report model robustness to prompt/example selection and experimental variance across runs.",
+        "guidance": "Provide standard deviations for few-shot runs (paper reported \u00b10.01\u2013\u00b10.05 depending on model and task). Note that larger models showed lower variance and more robustness to example selection; present variance per model and per-shot setting."
+      },
+      {
+        "name": "Environmental and computational cost disclosure",
+        "description": "Acknowledge and report the environmental/computational cost of model fine-tuning and large-scale experiments.",
+        "guidance": "The paper highlights that fine-tuned LLMs outperformed others 'albeit at a significant environmental cost.' Report compute used, whether PEFT was used to reduce costs, and trade-offs between fine-tuning and prompting for practical deployments."
+      },
+      {
+        "name": "Reporting baselines, per-topic performance and combined results",
+        "description": "Report both per-topic results and combined-dataset (aggregated) performance, and always include simple baselines.",
+        "guidance": "Present results in tables for each topic and combined dataset (the paper reports per-topic macro-F1/ROUGE-L and combined columns). Bold best scores per dataset, report majority baseline and RoBERTa and LLM variants, and discuss variance across topics (e.g., some topics easier/harder)."
+      }
+    ]
+  }
+}

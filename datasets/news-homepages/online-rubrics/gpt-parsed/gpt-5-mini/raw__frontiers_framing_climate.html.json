@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/news-homepages/online-rubrics/raw/frontiers_framing_climate.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16077,
+  "output_tokens": 4145,
+  "elapsed_s": 703.1942013329826,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and students in communication, political science, and climate/ environmental communication interested in media framing and automated content analysis",
+    "subtask_short": "content analysis of climate news frames",
+    "subtask_description": "Empirical content-analysis methodology and coding schema for identifying frames in U.S. mainstream news coverage of climate change (1988\u20132014), including supervised ML procedures, dictionary measures, and operational definitions of frames.",
+    "subtask_keywords": [
+      "climate_change",
+      "news_media",
+      "frame_analysis",
+      "content_analysis",
+      "supervised_ml"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Economic cost frame (presence/absence)",
+        "description": "Code whether (1) or not (0) a news article had mention of possible costs of climate change mitigation to the economy.",
+        "guidance": "Includes discussion of higher taxes, higher energy prices, reduced employment or economic growth, or reduced competitiveness vis-\u00e0-vis developing countries. These dimensions are coded together because they are often discussed together and use similar language; can appear as substantial discussion or short rhetorical passages from political elites. Example: Republican attacks on Kyoto described as \u2018stick America with lost jobs.\u2019 Trained classifier: 80% accurate; average recall/precision 0.76/0.80. Use supervised ML (SVM) after hand-coding."
+      },
+      {
+        "name": "Economic benefit frame (presence/absence)",
+        "description": "Code whether (1) or not (0) a news article referenced economic benefits for climate change mitigation.",
+        "guidance": "Frame features discussion of win-win aspects of mitigation (green jobs, lower energy/gas bills through increased energy efficiency, increased profits for green-friendly corporations). Excludes references to costs of climate inaction. Energy efficiency mention alone is not sufficient\u2014there must be mention of how efficiency benefits consumers or companies in the long run. Example: Wal\u2011Mart reducing waste to save money. Trained classifier: 80% accurate; average recall/precision 0.74/0.78. Use supervised ML (SVM)."
+      },
+      {
+        "name": "Conservative/free-market ideology frame (presence/absence)",
+        "description": "Code whether (1) or not (0) an article contains arguments stressing opposition to climate action on ideological grounds.",
+        "guidance": "Specifically: arguments that such policies empower bureaucrats, undermine American sovereignty, serve a \u2018big government\u2019 agenda, redistribute wealth, increase regulation, restrict freedom, or violate free-market principles. Exclude conservative frames that support climate action (these were too rare). Often found in op-eds or elite quotes. Trained classifier: 85% accurate; average recall/precision 0.70/0.80. Use supervised ML (SVM)."
+      },
+      {
+        "name": "Uncertainty/balance coding (scale \u22121 to 1 and collapsed binary)",
+        "description": "Articles coded \u22121 if there was no presence of discussion casting uncertainty on the IPCC consensus; 0 if even balance between supporters and rejecters; 1 if complete rejection of the IPCC consensus; intermediate \u22120.5/0.5 for slanted balance.",
+        "guidance": "The \u22121..1 scale captures degree and direction of slant toward or against IPCC consensus (that climate change is happening, manmade, and will result in harm). Due to few instances in some categories, for algorithm training the scale was collapsed: articles scored 1 if they had any discussion casting doubt on IPCC consensus (uncertainty frame) and 0 if they had no such discussion. Example: Bush quote \u2018I don't think we know the solution...\u2019 counted as uncertainty. Trained classifier (collapsed): 77% accurate; average recall/precision 0.70/0.68."
+      },
+      {
+        "name": "Binary presence/absence coding for frames",
+        "description": "For the primary frames (economic cost, economic benefit, conservative ideology, uncertainty) articles are coded as 1 (frame present) or 0 (frame absent).",
+        "guidance": "This binary operationalization was used for supervised machine learning classification. Hand-coded examples used to train/test classifiers. Rationale: clear distinction in language helps reliable supervised classification; some finer-grained balance measures kept separately (see balance coding)."
+      },
+      {
+        "name": "Exclude passing mentions (sample inclusion criterion)",
+        "description": "Exclude articles that mentioned climate change only in passing to ensure examination of relevant news reports.",
+        "guidance": "This was applied during corpus construction to focus analysis on articles substantively about climate change. Articles with only incidental mentions were removed prior to analysis."
+      },
+      {
+        "name": "Selection of news sources as representative mainstream outlets",
+        "description": "Focus on New York Times, Wall Street Journal, Washington Post, and the Associated Press as the corpus for analysis.",
+        "guidance": "Rationale: these are top\u2011circulation papers and influential 'agenda-setters' with large online presence; AP has broad distribution. The selection intentionally targets mainstream print/newswire outlets rather than partisan broadcast or social media sources to provide a longitudinal view starting in 1988."
+      },
+      {
+        "name": "Temporal stratification of hand-coded sample",
+        "description": "Ensure hand-coded training/testing sample was stratified across three periods: 1988\u20131996, 1997\u20132005, and 2006\u20132014.",
+        "guidance": "Stratification intended to ensure algorithm performance would not fluctuate as climate change salience and language changed over time. Used when drawing the hand-coded sample for training/testing."
+      },
+      {
+        "name": "Hand-coding sample sizes and train/test split",
+        "description": "Randomly divide hand-coded sets into a training set (80%) and a testing set (20%).",
+        "guidance": "Specific hand-coded sizes reported: economic cost 1,878; economic benefit 864; conservative ideology 405; uncertainty balance 1,179 (combined training+testing set sizes). The 80/20 split is used to train the algorithm and evaluate performance on held-out data."
+      },
+      {
+        "name": "Use of Support Vector Machines (SVM) for frame classification",
+        "description": "Apply supervised machine learning (specifically SVM) to classify articles for economic, ideological, and uncertainty frames.",
+        "guidance": "SVM used to find hyperplane differentiating classes in n-dimensional space. Supervised ML was chosen because it allowed full classification of large corpus where manual coding would be impractical; dictionaries were less successful for these complex frames."
+      },
+      {
+        "name": "Handling class imbalance in training data",
+        "description": "Improve classifier performance by adjusting class balance in hand-coded training sets so that articles with a given frame represented one-third of the overall set.",
+        "guidance": "Implemented by randomly removing articles without the given frame until the desired balance was reached. Rationale: SVM and other supervised algorithms are vulnerable to imbalanced classes; increasing share of positive cases improved predictive performance. This reduced overall number of articles in the hand-coding set for training/testing."
+      },
+      {
+        "name": "Classifier evaluation metrics and reporting",
+        "description": "Assess reliability with accuracy, precision, and recall; present both precision and recall and sometimes the average of precision and recall.",
+        "guidance": "Accuracy is percent agreement on testing set but can be misleading when classes are imbalanced. Precision indicates proportion of selected items that are relevant (minimizing false positives). Recall indicates proportion of relevant items that are selected (minimizing false negatives). The authors average precision and recall because they want these to be approximately equal to present unbiased estimates of proportions (they care about both presence and absence). Reported examples: economic cost classifier 80% accuracy, avg recall/precision 0.76/0.80; economic benefit classifier 80% accuracy, avg recall/precision 0.74/0.78; conservative classifier 85% accuracy, avg recall/precision 0.70/0.80; uncertainty classifier 77% accuracy, avg recall/precision 0.70/0.68."
+      },
+      {
+        "name": "Use of dictionary methods (LIWC) for simpler language features",
+        "description": "Use dictionary-based automated content analysis (LIWC) to measure simpler linguistic aspects such as risk-related language and verb tense.",
+        "guidance": "Rationale: aspects like risk and tense are straightforward to capture with pre-assembled/verified dictionaries (LIWC). Dictionaries were less successful for complex frames, so supervised ML was used for those. LIWC categories used to assess presence of risk language and present-tense usage in articles."
+      },
+      {
+        "name": "Operationalization of risk language and temporal/spatial proximity",
+        "description": "Measure language related to risk/danger and the temporal or spatial proximity of climate impacts.",
+        "guidance": "Risk frames emphasize severity/danger and can motivate action; psychological proximity (spatial or temporal) makes impacts feel more tangible and may influence support. The study used LIWC/dictionary measures for risk words and present-tense indicators and discussed theoretical implications (e.g., local framing increases propensity to support mitigation)."
+      },
+      {
+        "name": "Corpus construction and sources (collection method and size)",
+        "description": "Collect articles from LexisNexis and Factiva between 1988 and 2014; exclude passing mentions; final corpus includes 14,141 stories with source breakdowns (AP 5,457; NYT 4,015; WaPo 3,469; WSJ 1,200).",
+        "guidance": "Start year 1988 chosen (Hansen congressional testimony). Corpus composition and source proportions reported and used as the population to be classified by the trained algorithms."
+      },
+      {
+        "name": "Definition of economic cost elements (detailed list)",
+        "description": "Economic cost frame includes mentions of higher taxes, higher energy prices, reduced employment or economic growth, and reduced competitiveness vis-\u00e0-vis developing countries.",
+        "guidance": "These specific elements are grouped and coded together because they frequently co-occur and share similar rhetoric. Short elite quotes or extensive discussion both count if they reference these elements."
+      },
+      {
+        "name": "Definition of economic benefit elements (detailed list and exclusion)",
+        "description": "Economic benefit frame includes win\u2011win features like green jobs, lower energy and gas bills through increased energy efficiency, and increased profits for green-friendly corporations.",
+        "guidance": "Must explicitly mention how such measures benefit consumers or companies in the long run. Do not code when article only references costs of climate inaction. Energy efficiency mention alone is insufficient."
+      },
+      {
+        "name": "Definition of conservative ideological frame elements (detailed list and exclusion)",
+        "description": "Conservative ideological frame comprises arguments that climate mitigation empowers bureaucracy, undermines sovereignty, represents \u2018big government\u2019, redistributes wealth, increases regulation, restricts freedom, or violates free-market principles.",
+        "guidance": "These ideological elements are coded distinct from economic cost frames. Conservative pro-climate arguments were excluded from this coding because they were too rare to train classifiers reliably."
+      },
+      {
+        "name": "Granularity limits and pragmatic collapsing of categories",
+        "description": "When fine-grained categories had too few instances for reliable algorithmic training, collapse categories pragmatically (e.g., collapsing balance scale into a binary indicator of any doubt vs none).",
+        "guidance": "The balance scale had too few instances in some categories, so for algorithm training all categories above \u22121 were collapsed into a single 'any doubt' category. This is a methodological guideline balancing theoretical nuance with practical classifier reliability."
+      },
+      {
+        "name": "Reliability expectations / reported performance as benchmark",
+        "description": "Report classifier performance as part of methodological validation and use these as benchmarks for acceptability.",
+        "guidance": "Authors report accuracies and precision/recall values for each classifier to demonstrate satisfactory performance (examples given above). Researchers should present these metrics and consider averaging precision and recall when proportion estimation is the goal."
+      }
+    ]
+  }
+}

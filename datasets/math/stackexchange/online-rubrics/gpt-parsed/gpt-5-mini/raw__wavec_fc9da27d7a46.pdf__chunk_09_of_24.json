@@ -1,0 +1,164 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 9,
+  "n_chunks": 24,
+  "chunk_chars": 39783,
+  "model": "gpt-5-mini",
+  "elapsed_s": 88.8329651669992,
+  "input_tokens": 14451,
+  "output_tokens": 5925,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "users of PARI/GP (mathematicians and computational number theorists) who work with elliptic curves, genus 2 curves, and general number-field data structures",
+    "subtask_short": "PARI/GP elliptic+numberfield reference",
+    "subtask_description": "Reference documentation for PARI/GP library routines related to elliptic curves, genus-2 curves, and general number-field data structures: syntax, accepted inputs, return formats, algorithmic limitations, and usage notes/examples.",
+    "subtask_keywords": [
+      "pari_gp",
+      "elliptic_curves",
+      "number_fields",
+      "library_reference"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "ellinit input formats and domain argument D",
+        "description": "ellinit(x, {D = 1}) accepts E given as (i) a 5-component vector [a1,a2,a3,a4,a6] (general Weierstrass), (ii) a 2-component vector [a4,a6] (short Weierstrass), or (iii) a Cremona notation string like \"11a1\" (curve retrieved from elldata if available). The optional D describes the domain: default t_INT 1 (Q), t_INT p (finite field Fp), t_INTMOD Mod(a,p) (Fp), t_FFELT (finite field Fq), t_PADIC O(p^n) (Qp; inputs with t_PADIC coefficients are lifted to Q), or t_REAL x (complex field with precision determined by precision(x)).",
+        "guidance": "If curve coefficients are inconsistent with D, D may be changed and an error raised on inconsistent moduli (example: ellinit([1+O(5),1],O(7)) fails). If coefficients are too general for domain categories, only basic operations (e.g., point addition) are supported. If the curve is singular over D, ellinit fails and returns []. The returned value is an ell structure containing at least a1,a2,a3,a4,a6,b2,b4,b6,b8,c4,c6,\u2206,j accessible via member functions (e.g., E.j, E.disc). Domain-specific data are computed lazily and cached."
+      },
+      {
+        "name": "ellidentify output format",
+        "description": "ellidentify(E) looks up an elliptic curve E over Q in the elldata database and returns [[N, M, G], C].",
+        "guidance": "N is the curve name in Cremona's database, M is the minimal model, G is a Z-basis of the free part of E(Q), and C is the change of coordinates suitable for ellchangecurve."
+      },
+      {
+        "name": "ellisoncurve behavior on imprecise coefficients and vector inputs",
+        "description": "ellisoncurve(E, z) returns 1 if z is on E, 0 otherwise; imprecise coefficients trigger an imprecise equality check. z may be a vector of points, returning a corresponding vector.",
+        "guidance": "An integer-only variant int oncurve(E, z) exists but does not accept vectors of points."
+      },
+      {
+        "name": "ellj (elliptic j-invariant) domain requirement",
+        "description": "ellj(x) requires x to be a complex number with positive imaginary part, or convertible into a power series or a p-adic number with positive valuation.",
+        "guidance": "Library syntax GEN jell(GEN x, long prec)."
+      },
+      {
+        "name": "elllocalred return format and Kodaira coding",
+        "description": "elllocalred(E, p) returns [f, kod, v, c] describing local fiber reduction at prime p for E with integral ai in Z. f is exponent of p in arithmetic conductor, kod encodes Kodaira type (1 = good/I0, 2=II,3=III,4=IV, 4+\u03bd = I\u03bd, negative values for starred types), v = [u,r,s,t] are coordinate changes (u=1 iff equation was minimal at p), and c is local Tamagawa number cp.",
+        "guidance": "Library syntax GEN elllocalred(GEN E, GEN p). Kodaira type encoding and the interpretation of v and c are essential for understanding local reduction and conductor contributions."
+      },
+      {
+        "name": "elllog discrete logarithm assumptions and parameter o",
+        "description": "elllog(E,P,G,{o}) returns discrete log n with P = [n]G in E(Fq). It assumes G generates the curve if o omitted and that P is a multiple of G.",
+        "guidance": "o, if given, should represent the order of G; preferred format is [N, factor(N)]. See znlog for algorithmic limitations of underlying discrete log; example over F_{2^8} shows usage with ord = [N, factor(N)]."
+      },
+      {
+        "name": "elllseries algorithmic complexity and A parameter",
+        "description": "elllseries(E,s,{A=1}) computes the L-series of elliptic curve E at complex s using an O(N^{1/2}) algorithm where N is the conductor.",
+        "guidance": "Optional cutoff parameter A fixes an integral cutoff and is best left omitted; the result must be independent of A up to realprecision, so varying A can be used as an accuracy check."
+      },
+      {
+        "name": "ellminimalmodel uniqueness and format of change vector v",
+        "description": "ellminimalmodel(E,{&v}) returns the standard minimal integral model for rational elliptic curve E; if &v provided it is set to change-of-variables vector [u,r,s,t] with rational components. The resulting model has integral coefficients, is everywhere minimal, with constraints a1 \u2208 {0,1}, a2 \u2208 {0,1,\u22121}, a3 \u2208 {0,1}. Such a model is unique; v is unique if u is specified positive.",
+        "guidance": "Return value is identical to ellchangecurve(E,v)."
+      },
+      {
+        "name": "ellmodulareqn requirements, return and types",
+        "description": "ellmodulareqn(N,{x},{y}) returns [eqn,t] where eqn is modular equation of level N and t indicates type (0 canonical, 1 Atkin). Requires package seadata and is limited to N < 500, N prime.",
+        "guidance": "The function returns an equation P(f(\u03c4), j(\u03c4))=0 with different functional equations depending on t (canonical: P(N^s/f(\u03c4), j(N\u03c4)) = 0 with s=12/gcd(12,N\u22121); Atkin: P(f(\u03c4), j(N\u03c4))=0). A helper classicaleqn(N, X, Y) eliminates f to compute classical modular polynomial for certain N \u2264 31 or specified primes {41,47,59,71}."
+      },
+      {
+        "name": "ellmul domain of exponent n and CM restrictions",
+        "description": "ellmul(E,z,n) computes [n]z. Exponent n is in Z or may be a complex quadratic integer if the curve has complex multiplication by n; otherwise an error is issued.",
+        "guidance": "CM-case algorithm assumes characteristic 0 and quadratic order with small discriminant. Examples show use with quadgen(-4) and errors when CM assumptions fail."
+      },
+      {
+        "name": "ellorder semantics over Q and parameter o (obsolete)",
+        "description": "ellorder(E,z,{o}) returns the order of point z on E defined over Q or a finite field; over Q it returns 0 to denote infinite order. Optional parameter o (kept for backward compatibility) represents a non-zero multiple of order of z and preferred format [ord, factor(ord)].",
+        "guidance": "Parameter o is mostly useless now. PARI caches curve cardinality so specifying o provides no speedup in examples."
+      },
+      {
+        "name": "ellordinate output",
+        "description": "ellordinate(E,x) returns a 0-,1- or 2-component vector containing the y-coordinates of points on E having x as x-coordinate.",
+        "guidance": "Library syntax accepts precision argument when needed."
+      },
+      {
+        "name": "ellperiods normalization and flag for quasi-periods",
+        "description": "ellperiods(w,{flag=0}) returns normalized periods [W1,W2] of a complex lattice so that \u03c4=W1/W2 has positive imaginary part and lies in standard fundamental domain for SL2(Z). If flag=1 returns [[W1,W2],[\u03b71,\u03b72]] with quasi-periods satisfying \u03b71 W2 \u2212 \u03b72 W1 = 2i\u03c0.",
+        "guidance": "Output is intended as input to ellwp, ellzeta, ellsigma, elleisnum; quasi-periods are needed only by ellzeta and ellsigma. Syntax: GEN ellperiods(GEN w, long flag, long prec)."
+      },
+      {
+        "name": "ellpointtoz and p-adic/Tate curve behavior",
+        "description": "ellpointtoz(E,P) maps point P on complex elliptic curve E \u2245 C/\u039b to z modulo \u039b such that P = [\u2118\u039b(z), \u2118'\u039b(z)] for normalization y^2 = 4x^3 \u2212 g2 x \u2212 g3. If E/Qp has multiplicative reduction, outputs depend on split vs non-split: split returns \u03c6(P) \u2208 Qp (t_PADIC), non-split returns \u03c6(P) \u2208 K (t_POLMOD) where K is unramified quadratic extension.",
+        "guidance": "For E defined over R and P \u2208 E(R) there are more precise bounds for z. Examples include p-adic expansions with O(p^n) and demonstration of liftint to convert to Mod form."
+      },
+      {
+        "name": "elltaniyama assumptions and output",
+        "description": "elltaniyama(E,{d=seriesprecision}) computes modular parametrization of strong Weil elliptic curve E/Q returning [u,v] power series to d terms such that (u,v) satisfies curve equation and pullback of N\u00e9ron differential equals 2i\u03c0 f(z) dz assuming Manin constant = 1.",
+        "guidance": "Algorithm assumes E is a strong Weil curve and Manin constant 1; f(x) = \u03a3_{n>0} ellan(E,n) x^n. Variable x is implicitly exp(2i\u03c0 z)."
+      },
+      {
+        "name": "elltatepairing and ellweilpairing input constraints",
+        "description": "elltatepairing(E,P,Q,m) computes Tate pairing; P must be an m-torsion point. ellweilpairing(E,P,Q,m) computes Weil pairing for m-torsion points P,Q.",
+        "guidance": "Library syntax GEN elltatepairing(GEN E, GEN P, GEN Q, GEN m) and GEN ellweilpairing(GEN E, GEN P, GEN Q, GEN m)."
+      },
+      {
+        "name": "elltors returns torsion subgroup format and flag methods",
+        "description": "elltors(E,{flag=0}) for E/Q returns torsion subgroup as [t,v1,v2] where t = torsion order, v1 = product structure (elementary divisors), v2 = generators. E must be ell structure from ellinit over Q.",
+        "guidance": "flag=0 finds rational roots of division polynomials (default, fast); flag=1 uses Lutz\u2013Nagell (much slower); flag=2 uses Doud's algorithm (bound torsion via #E(Fp) for small primes then search), but requires E to be an ell (specific structure). Example: E = ellinit([-1,0]); elltors(E) returns [4,[2,2],[[0,0],[1,0]]]."
+      },
+      {
+        "name": "ellwp/ellzeta/ellsigma usage and flags",
+        "description": "ellwp(w,{z},{flag=0}) computes Weierstrass \u2118 function at z for lattice w (or ellinit E); flag 0 computes \u2118(z) only, flag 1 computes [\u2118(z), \u2118'(z)]. ellzeta and ellsigma compute \u03b6 and \u03c3 respectively; passing quasi-periods (flag in ellperiods) avoids recomputing them per z. Series expansions around z=0 are supported.",
+        "guidance": "ellsigma(flag=1) computes determination of log(\u03c3(z)). Examples show series outputs and calls with implicit variable 'x' at default seriesprecision. Syntaxs: GEN ellwp0, GEN ellwp, GEN ellwpseries, GEN ellzeta, GEN ellsigma with precision arguments."
+      },
+      {
+        "name": "ellrootno global/local behavior and performance note",
+        "description": "ellrootno(E,{p}) computes local root number of L-series at p (p = 0 for infinite place); omitting p returns global root number. Global root number is sign of functional equation and conjecturally parity of Mordell\u2013Weil rank. Model need not be minimal at p, but computation is faster if it is.",
+        "guidance": "Library syntax long ellrootno(GEN E, GEN p = NULL)."
+      },
+      {
+        "name": "ellsearch return formats and selection semantics",
+        "description": "ellsearch(N) finds curves in elldata matching constraint N where N may be a string (e.g., \"11a1\",\"11a\",\"11\"), a vector of integers using ellconvertname correspondence, or an integer (select curves with conductor N). If N is a full curve name, return [N,[a1..a6],G], otherwise returns vector of such entries for all matches.",
+        "guidance": "Examples show ellsearch(\"11a3\") returning a single entry and ellsearch(\"11a\") returning all isogeny class members. ellsearchcurve accepts only complete curve names (t_STR)."
+      },
+      {
+        "name": "genus2red return format, caveats and V-component structure",
+        "description": "genus2red(Q,P,{p}) determines reduction at p>2 (or all odd primes dividing discriminant if p omitted) of genus 2 curve y^2+Qy=P. Returns [N, FaN, T, V] where N is (local or global) conductor, FaN its factorization, T a minimal model polynomial, and V describes reduction type(s). Caveat: function incomplete for p=2 and may return only odd part of conductor (indicated by factorization containing 2^{-1}).",
+        "guidance": "When p specified, V = [p, stable, red] with stable = [type, vecj] (type codes 1\u20137 indicate geometric stable reduction types described in manual) and red = [NUtype, neron] where NUtype is Namikawa\u2013Ueno reduction symbol (string plus page reference) and neron is component group of N\u00e9ron model given as finite abelian group. Notes on notation: indices in braces, equivalences between Kodaira notations, and special handling of forms like [2I0-m]."
+      },
+      {
+        "name": "number-field structures: nf, bnf, bnr definitions and expected contents",
+        "description": "Three PARI structures: nf (output of nfinit) contains basic arithmetic data of number field K = Q[X]/(T): signature, maximal order basis nf.zk, discriminant, defining polynomial T, etc.; bnf (output of bnfinit) augments nf with deeper invariants: units U(K), class group Cl(K) and data for discrete log problems; bnr (output of bnrinit) is ray number field structure containing bnf, modulus f, ray class group Cl_f(K), and data for discrete logs.",
+        "guidance": "Functions expecting nf may accept bnf as substitution; functions requiring bnf will not automatically run bnfinit and will error if not provided (bnfinit is costly). The types are ordered nf \u2264 bnf \u2264 bnr and substitution of larger types for smaller expected types is permitted."
+      },
+      {
+        "name": "representations of algebraic numbers and ideals",
+        "description": "An algebraic number in K = Q[X]/(T) may be represented as a t_INT, t_FRAC, t_POL (mod T), t_POLMOD, or a t_COL v of dimension N = [K:Q] expressing element in integral basis nf.zk; a t_VEC is not recognized. Ideals may be input as a principal ideal (via algebraic number), a prime ideal (5-component vector as output by idealprimedec/idealfactor), a t_MAT in HNF whose columns are a Z-basis, or an extended ideal [I,t] where t is algebraic number representing (t)I.",
+        "guidance": "Use idealhnf to convert ideals to preferred HNF matrix form. Extended ideals keep principal part t for multiplicative ideal operations and are silently discarded where nonsensical (e.g., idealadd). The principal part t may be a factorization matrix (famat) to avoid coefficient explosion; use nffactorback to expand famats if necessary. Many functions accept famats directly (e.g., ideallog)."
+      },
+      {
+        "name": "finite abelian group representation and character input",
+        "description": "A finite abelian group G is given in Smith Normal Form as [h,d] or [h,d,g] where h is cardinality, d is vector of elementary divisors, g is vector of generators: G \u2245 \u2295_i (Z/diZ) g_i with dn | ... | d1 and product(di) = h. A character on G is given by row vector \u03c7 = [a1,...,an] with \u03c7((g_i)^{n_i}) = exp(2i\u03c0 \u03a3 a_i n_i/di). Subgroups are input as square matrices in HNF whose columns express subgroup generators in terms of g_i; determinant equals index (G:H).",
+        "guidance": "Member fields G.no, G.cyc, G.gen available to access cardinality, cycle structure, and generators."
+      },
+      {
+        "name": "relative extensions and pseudo-matrix/pseudo-basis conventions",
+        "description": "rnf denotes a relative number field (output of rnfinit) associated to extension L/K with rnf.nf the base field nf. A relative matrix has entries in K; an ideal list is a row vector of fractional ideals. A pseudo-matrix (A,I) with A an m\u00d7n relative matrix and I an ideal list of length n defines a torsion-free projective Z_K-module. An integral pseudo-matrix w(A,I,J) (A m\u00d7n, I length m, J length n) defines modules with torsion.",
+        "guidance": "A pseudo-basis (A,I) is valid if a_j \u2260 0 and columns Aj are K-linearly independent; determinant of pseudo-basis is ideal equal to det(A) times product of ideals in I. Many rnf routines return Z_L-ideals via pseudo-basis (A,I) where A expresses elements in fixed basis rnf.zk[1]."
+      },
+      {
+        "name": "class field theory inputs: moduli, bids and bnr representations",
+        "description": "A modulus in class field theory is an ideal I (no Archimedean part) or [I,a] where a is a vector with r1 {0,1}-components indicating infinite part ramification. A bid (big ideal) is output by idealstar to compute in (Z_K/I)^*. Ray number fields (bnr) are specified by triple forms [bnr], [bnr, subgroup], [bnf, mod], or [bnf, mod, subgroup] (last two kept for backward compatibility).",
+        "guidance": "bnf (from bnfinit) or bnr (from bnrinit) supply ground field K; mod is modulus f; subgroup is input as square matrix expressing subgroup generators of ray class group on given generators. The bnr returned is the subfield of ray class field fixed by the subgroup. Examples show bnrinit(K,13) and bnrdisc usage; calling bnrdisc(K,13) is allowed but internally will call bnrinit."
+      },
+      {
+        "name": "general use: prefix conventions and type substitution rules",
+        "description": "Functions specific to relative extensions, number fields, Buchmann's nf/bnf/bnr share prefixes rnf, nf, bnf, bnr respectively and expect the corresponding structure as first argument. It is permissible to pass a larger-type structure (e.g., bnf) when a smaller-type (nf) is expected, but not vice versa; functions that require bnf will not auto-initialize it and will error.",
+        "guidance": "Type order: nf \u2264 bnf \u2264 bnr. Member functions permit retrieving components (e.g., bnr.bnf.nf.zk). A catalog of member names (disc, zk, roots, r1, r2, clgp, etc.) is provided. Deprecated member functions (futu, tufu, etc.) exist but should not be used in new scripts."
+      }
+    ]
+  }
+}

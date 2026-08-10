@@ -1,0 +1,166 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/wavee_ca53ce81865f.html",
+  "task": "peer-review",
+  "source_dir": "raw",
+  "source_file": "wavee_ca53ce81865f.html",
+  "chunk_idx": 3,
+  "n_chunks": 7,
+  "chunk_chars": 39788,
+  "model": "gpt-5-mini",
+  "elapsed_s": 36.27034008299961,
+  "input_tokens": 12330,
+  "output_tokens": 4374,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners designing automatic reviewer-assignment systems; conference chairs, journal editors, and grant managers",
+    "subtask_short": "reviewer_assignment_for_conferences",
+    "subtask_description": "Designing and evaluating automatic paper/proposal-to-reviewer assignment algorithms and procedures (the Reviewer Assignment Problem, RAP) for conferences, journals, or grant organizations, with attention to objectives (quality, fairness, strategyproofness), constraints (COIs, workload, demand), and algorithmic/operational tradeoffs.",
+    "subtask_keywords": [
+      "peer_review",
+      "reviewer_assignment",
+      "conference",
+      "algorithm",
+      "fairness",
+      "conflict_of_interest"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Reviewer workload",
+        "description": "Each reviewer should get no more than a certain number of proposals.",
+        "guidance": "Operational constraint often encoded as an upper bound w on reviewer assignments (e.g., \u2211_i x_ij \u2264 w). Important to impose to avoid overloading reviewers and to achieve load balance; some models include both upper and lower workload limits to balance load."
+      },
+      {
+        "name": "Proposal demand",
+        "description": "Each proposal should be assigned to a certain number of reviewers.",
+        "guidance": "Encoded as a required number d of reviewers per proposal (e.g., \u2211_j x_ij = d); in two-stage systems separate d(1) and d(2) for each stage. Ensures sufficient independent assessments per submission."
+      },
+      {
+        "name": "Conflict-of-interest (COI) avoidance",
+        "description": "A reviewer should not be assigned to a proposal if there is any sort of conflict of interest between them.",
+        "guidance": "Common modelling: set binary assignment variable x_ij = 0 for pairs with COIs, or use indicator variables c_ij. COIs can be author-reviewer (COIV), institutional (COID), coauthorship distance, adviser-advisee, affiliation relationships, competitor relationships, project-level collaborations, etc. Detection methods include network-based heuristics, supervised learning, and interactive extraction systems (e.g., PISTIS)."
+      },
+      {
+        "name": "Cycle/Loop-free constraint (no collusion rings)",
+        "description": "The reviewer assignment should guarantee that there are no cycles of reviewers reviewing each other's proposals (collusion rings), e.g., prevent k-cycle reviewers.",
+        "guidance": "Formulate k-loop-free constraints (e.g., l(g) \u2265 k for each subgraph g) or no-2-cycles constraints; can add penalty/slack variables for bidding cycles. Algorithms detect cycles via topological sort/DFS; greedy and ILP approaches exist. Note: preventing same-venue cycles does not eliminate cross-venue reciprocal favors."
+      },
+      {
+        "name": "Strategyproofness",
+        "description": "No reviewer can change the outcome of a proposal with which they have a conflict of interest or otherwise manipulate assignment/bidding to benefit their own submission.",
+        "guidance": "Achieved via partitioning methods (assign reviewers only outside their subgroup), Reviewer Round Robin variants, or specially designed assignment mechanisms. Some algorithms provide polynomial-time, strategyproof assignments with theoretical guarantees on assignment quality."
+      },
+      {
+        "name": "Torpedo reviewing avoidance",
+        "description": "The reviewer assignment should make it difficult for reviewers to be assigned to rival proposals they intend to reject (torpedo reviewing).",
+        "guidance": "Mitigations include strategyproof partitioning, randomized assignments that limit the probability a reviewer-reviewee pair is allocated, and maximizing similarity with randomness. Partitioning prevents reviewers from affecting their own submission's fate; randomized optimization reduces chance of targeted malicious pairs."
+      },
+      {
+        "name": "Expertise of reviewers / similarity maximization",
+        "description": "The reviewers assigned to a proposal should have the necessary knowledge to evaluate it; assignments often maximize similarity/expertise scores between reviewers and proposals.",
+        "guidance": "Global objective commonly: maximize sum of similarity scores \u2211_i \u2211_j s_ij x_ij. Similarity computation methods include text-based, network-based, manual bidding, neural embedding models, and hybrids. Pre-trained transformer models (XLNet, RoBERTa, T5) and hybrid word/semantic approaches are promising but require domain data."
+      },
+      {
+        "name": "Max-min fairness / worst-off proposal maximization (lexi-min, rank-maximal)",
+        "description": "Optimize fairness by maximizing the utility (similarity coverage) of the worst-off proposal (max-min fairness), e.g., lexi-min or rank-maximal assignments.",
+        "guidance": "Formulations aim to make the minimal per-proposal quality as high as possible (e.g., \u0393_S(A) = min_i \u2211_{j\u2208RA(i)} s_ij). Such problems are often NP-hard beyond two equivalence classes; algorithms (e.g., PeerReview4All) provide approximations and statistical guarantees for identifying top proposals."
+      },
+      {
+        "name": "Local fairness constraints (per-proposal threshold)",
+        "description": "Ensure that the overall similarity score for each proposal must be at least a threshold T (local fairness).",
+        "guidance": "Add constraints \u2211_j s_ij x_ij \u2265 T \u2200i to ensure collective reviewer expertise per proposal. This can improve fairness but may make assignment infeasible if thresholds are too strict; must be balanced with workload and coverage constraints."
+      },
+      {
+        "name": "Load balance across reviewers (upper and lower limits)",
+        "description": "Impose both upper and lower limits on reviewer workloads to avoid situations where some reviewers receive many assignments and others very few.",
+        "guidance": "Inclusion of both upper and lower bounds in integer programs promotes equitable reviewer workloads. Some fairness approaches that maximize worst-off proposals neglect load balance, producing highly uneven reviewer loads; combined constraints address this."
+      },
+      {
+        "name": "Envy-freeness up to one item (EF1)",
+        "description": "Aim for assignments where no proposal envies another proposal's assigned reviewers more than up to one reviewer (EF1), adapted for indivisible reviewer assignments.",
+        "guidance": "Standard round-robin yields EF1 in conventional allocation but is not EF1 in RAP due to constraints (e.g., a reviewer cannot review the same proposal twice). Specialized mechanisms like Reviewer Round Robin extend round-robin to accommodate RAP constraints."
+      },
+      {
+        "name": "Statistical accuracy / robustness for identifying best proposals",
+        "description": "Provide statistical guarantees that the assignment allows correctly identifying the best proposals (not just optimizing deterministic similarity).",
+        "guidance": "Algorithms such as PeerReview4All use incremental max-flow and are analyzed for both fairness and statistical assurances. Consider tradeoffs between assignment fairness/objectives and the power to detect top proposals."
+      },
+      {
+        "name": "Min-similarity threshold tradeoff (feasibility risk)",
+        "description": "Constraining the minimum allowable similarity for valid matches can improve quality but often makes the assignment problem infeasible.",
+        "guidance": "Be cautious when setting hard minimum similarity thresholds; consider soft constraints or approximate/relaxed formulations to avoid infeasibility."
+      },
+      {
+        "name": "Cost of the panel / budget constraint",
+        "description": "A panel's cost should not exceed a pre-determined budget.",
+        "guidance": "In MIP formulations include cost constraints to restrict total monetary/resource cost of assigned reviewers (e.g., travel, honoraria). Cost interacts with quality and diversity objectives."
+      },
+      {
+        "name": "Size of the panel",
+        "description": "The size of a panel should not exceed a pre-determined number.",
+        "guidance": "Hard constraints on panel size or number of reviewers per venue; impacts capacity constraints and assignment feasibility."
+      },
+      {
+        "name": "Authority balance / seniority distribution",
+        "description": "The authority (seniority/experience) of reviewers should be balanced for each proposal, and experienced reviewers should be distributed relatively across proposals.",
+        "guidance": "Include seniority as a soft desideratum or constraint to avoid assigning all senior or all junior reviewers to the same proposals; Leyton-Brown et al. include seniority per proposal as a soft objective."
+      },
+      {
+        "name": "Reviewer de-anonymization avoidance",
+        "description": "No reviewer's identity can be determined with high certainty for each proposal; assignments should prevent easy de-anonymization.",
+        "guidance": "Design assignment randomness or constraints to reduce likelihood of deanonymization; randomized assignments and limiting deterministic predictable pairings help protect anonymity."
+      },
+      {
+        "name": "Geographic diversity",
+        "description": "The reviewers assigned to the same proposal must not be from the same geographical region.",
+        "guidance": "Include geographic diversity as a constraint or soft objective to increase geographic heterogeneity of reviewer panels."
+      },
+      {
+        "name": "Position constraints for multi-position evaluation",
+        "description": "If several positions of reviewers can be assigned to each proposal, (i) each proposal must be evaluated only once by each position, and (ii) each reviewer must serve the same number of times in each of the different positions.",
+        "guidance": "Useful for structured panels with roles (e.g., primary, secondary reviewers); enforce equal distribution of role-assignments across reviewers."
+      },
+      {
+        "name": "Group-based / group-to-group assignment strategies",
+        "description": "Rather than assigning proposals one-on-one to reviewers, group proposals by research area and assign sets of reviewers to groups, or assign reviewer groups to proposal groups.",
+        "guidance": "Grouping can improve consistency for similar-subject proposals and reduce assignment time when many proposals exist. Variants: group-to-reviewer (choose best reviewers per proposal within group), group-to-group (assign groups of proposals to groups of reviewers). Often solved via fuzzy ILP or multipurpose MIP with greedy heuristics."
+      },
+      {
+        "name": "Two-stage reviewing strategy",
+        "description": "Use a two-stage review process where a subset of proposals (e.g., borderline or promising ones) are assigned additional reviewers in a second stage to use reviewer resources effectively and improve evaluation quality.",
+        "guidance": "Design must select subsets R2 (reviewers) and P2 (proposals) possibly without prior knowledge of P2; random splitting is a simple strategy. Formulate two-stage RAP to maximize cumulative similarity across stages with stage-specific demands d(1), d(2) and workload constraints; row/column generation can make stage-wise MIP solvable."
+      },
+      {
+        "name": "Randomized assignment to mitigate manipulation",
+        "description": "Introduce randomness in assignments so that any given proposal-reviewer pair has only a small chance of being allocated, reducing opportunities for targeted manipulation (torpedoing, deanonymization).",
+        "guidance": "Optimize expected similarity subject to randomness to keep quality while limiting manipulable deterministic pairings; tradeoff between randomness (security) and expected similarity (quality)."
+      },
+      {
+        "name": "COI-aware objective balancing (MinCOI-PRA)",
+        "description": "Formulate assignment objectives that balance maximizing topic similarity and minimizing COIs (e.g., COI(A) = \u03b3 * COIV + (1-\u03b3) * COID).",
+        "guidance": "Use coupling parameter \u03b3 \u2208 [0,1] to trade off author-level vs institutional COIs. Multi-objective or equilibrium assignment formulations can incrementally optimize relevance while minimizing COIs; co-authorship distance can be used to compute COI values."
+      },
+      {
+        "name": "Similarity score computation quality",
+        "description": "The quality of similarity scores between proposals and reviewers is crucial \u2014 methods include word/semantic hybrids, network-based models using implicit relationships, and neural-network-based language models.",
+        "guidance": "Neural pre-trained transformers and hybrid methods show promise but require domain-specific training data; integrating text-based, network-based, and manual information may improve speed, accuracy, and fairness. Lack of large ground-truth datasets hinders supervised COI/similarity learning; calls for shared datasets."
+      },
+      {
+        "name": "Reviewer candidate pool completeness and freshness",
+        "description": "Maintain a large, up-to-date pool of reviewer candidates; reviewer databases should be constructed and kept current to avoid shortages in expertise and incorrect availability assumptions.",
+        "guidance": "Recruit reviewers via IR techniques from external sources (OpenReview, DBLP) and consider reviewer freshness metrics (e.g., impact factors of journals where reviewers publish) to avoid stale/overcommitted candidates."
+      },
+      {
+        "name": "Measure and incorporate reviewers' historical evaluation performance",
+        "description": "Measure reviewers' past evaluation accuracy/quality and incorporate these metrics into assignment decisions to improve assignment accuracy.",
+        "guidance": "Develop empirical metrics (evaluation accuracy, review quality) and use them in scoring or weighting reviewer assignments; requires collecting reliable historical review-performance data."
+      },
+      {
+        "name": "COI detection completeness (multiple relationship types)",
+        "description": "Detect COIs using a wide set of relationships beyond co-authorship/citation: academic/advisor-advisee, competitor relations, project collaborations, shared advisors, institutional ties.",
+        "guidance": "Supervised learning models may predict COI scores but need ground-truth datasets; interactive extraction systems can supplement automated detection with self-declared subjective COIs."
+      }
+    ]
+  }
+}

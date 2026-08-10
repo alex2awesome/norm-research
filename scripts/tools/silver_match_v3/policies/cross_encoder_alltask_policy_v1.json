@@ -1,0 +1,93 @@
+{
+  "schema_version": "silver-match-v3-cross-encoder-alltask-policy-v1",
+  "status": "FROZEN_BEFORE_CLEAN_SELECT_TRUTH_WAS_SCORED",
+  "frozen_date": "2026-07-12",
+  "scope": [
+    "code-review",
+    "creative-writing",
+    "humor",
+    "legal-outcome-prediction",
+    "math-stackexchange",
+    "notice-and-comment",
+    "peer-review",
+    "press-releases"
+  ],
+  "role_contract": {
+    "train": "previously audited task teacher_train plus newly resolved optimize-role truth",
+    "dev": "newly resolved select-role truth",
+    "test": "unavailable to training and model selection",
+    "blind": "uniform final-production match and false-abstention audits only",
+    "split_unit": "canonical source_group",
+    "cross_role_source_group_overlap_allowed": false,
+    "mi_or_outcome_fields_allowed": false
+  },
+  "base_model": {
+    "path": "/lfs/skampere3/0/shared_hf_cache/models--BAAI--bge-reranker-base/snapshots/2cfc18c9415c912f9d8155881c133215df768a70",
+    "snapshot_revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+    "file_sha256": {
+      "config.json": "289adf7ada1eb6b4afa7589a48a032d45a076cf2e46dcdb3b4cabc33be14f708",
+      "model.safetensors": "ced967c45fd1902eb92716c9ceeca7c95a936770ea9db611f5a841b926e33fbd",
+      "sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+      "special_tokens_map.json": "d5469a60db23249c7f8945013d78df30b44b6bf686c6bb4740f4223f77b1b535",
+      "tokenizer.json": "9eb652ac4e40cc093272bbbe0f55d521cf67570060227109b5cdc20945a4489e",
+      "tokenizer_config.json": "a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b"
+    }
+  },
+  "fixed_training": {
+    "epochs": 2,
+    "batch_size": 32,
+    "eval_batch_size": 512,
+    "max_length": 512,
+    "warmup_ratio": 0.1,
+    "negatives_per_positive": 4,
+    "negatives_per_abstain": 4,
+    "strong_positive_repeats": 2,
+    "weak_forced_top3_positive_repeats": 1,
+    "weak_forced_top3_equivalent_ids_are_not_negatives": true,
+    "candidate_depth": 50,
+    "task_specific_model": true
+  },
+  "predeclared_variants": [
+    {
+      "name": "seed94117-lr1e5",
+      "seed": 94117,
+      "learning_rate": 0.00001
+    },
+    {
+      "name": "seed94123-lr1e5",
+      "seed": 94123,
+      "learning_rate": 0.00001
+    },
+    {
+      "name": "seed94129-lr2e5",
+      "seed": 94129,
+      "learning_rate": 0.00002
+    }
+  ],
+  "dev_gate": {
+    "minimum_exact_match_precision": 0.9,
+    "minimum_exact_match_precision_wilson_95_lower": 0.8,
+    "minimum_retained_predictions": 30,
+    "minimum_exact_f_beta_0_5_gain_over_frozen_base": 0.01,
+    "thresholds_selected_on": "dev_only",
+    "thresholds_may_be_lowered_after_observation": false
+  },
+  "variant_selection_order": [
+    "eligible_before_ineligible",
+    "higher_exact_match_precision_wilson_95_lower",
+    "higher_exact_f_beta_0_5",
+    "higher_exact_match_precision",
+    "higher_exact_match_recall",
+    "lexicographically_smaller_variant_name"
+  ],
+  "production_contract": {
+    "cross_encoder_output_is_final_by_itself": false,
+    "automatic_ce_proposal_requires_two_independently_trained_eligible_variants": true,
+    "automatic_ce_proposal_requires_same_exact_metric_id": true,
+    "automatic_ce_proposal_requires_each_variant_to_pass_its_frozen_score_and_margin_gate": true,
+    "all_other_rows_flow_to_llm_or_full_bank_rescue": true,
+    "typed_abstention_cannot_be_inferred_from_ce_score_alone": true,
+    "uniform_blind_final_match_precision_audit_required": true,
+    "uniform_blind_false_abstention_audit_required": true
+  }
+}

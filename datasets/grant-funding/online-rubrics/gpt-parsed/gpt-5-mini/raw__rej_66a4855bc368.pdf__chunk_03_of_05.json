@@ -1,0 +1,121 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/grant-funding/online-rubrics/raw/rej_66a4855bc368.pdf",
+  "task": "grant-funding",
+  "source_dir": "raw",
+  "source_file": "rej_66a4855bc368.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 5,
+  "chunk_chars": 39992,
+  "model": "gpt-5-mini",
+  "elapsed_s": 64.70535129199561,
+  "input_tokens": 12043,
+  "output_tokens": 4077,
+  "extracted": {
+    "orientation": "academic_page",
+    "intended_audience": "NIH-style grant reviewers and researchers in immunology / antibody engineering and computational modeling",
+    "subtask_short": "grant_proposal_research_strategy",
+    "subtask_description": "Research-strategy and methods section of an NIH-style grant proposing computational and experimental studies to map IgG\u2013Fc\u03b3R regulation, predict in vivo effector responses, and validate synergistic antibody combinations in murine and humanized models.",
+    "subtask_keywords": [
+      "grant",
+      "research_strategy",
+      "immunology",
+      "antibody",
+      "computational_modeling",
+      "preclinical_in_vivo"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Comprehensive combinatorial simulation design",
+        "description": "Will simulate every possible combination of cell population (eosinophils, NK cells, dendritic cells, neutrophils, classical monocytes, and non-classical monocytes based on their Fc\u03b3R expression), valency (1\u201326), concentration (log-scaled, 1 fM\u20131 \u00b5M), and IgG composition (combinations of 1:1, 1:2, 1:5, and 1:10 mixtures).",
+        "guidance": "Start with selected effector cell populations with existing Fc\u03b3R abundance measurements; results can be updated with new measurements (e.g., macrophages, dendritic cell subsets). This yields ~100,000 values per species capturing variation in predicted effector function; designed to exhaustively map parameter space for downstream factorization and prediction."
+      },
+      {
+        "name": "Tensor factorization (CP decomposition) to map effector response",
+        "description": "Utilize canonical polyadic (CP) decomposition to visualize these data, a data reduction technique similar to principal component analysis, representing the variation in effector response in a reduced dimensionality space.",
+        "guidance": "Determine the number of factors necessary to capture >95% of the variance in predicted response for each cell population upon reconstruction. Parallel plots of each factor and variables provide a map of variation. With sufficient factors the original tensor can be perfectly reconstructed, preserving information."
+      },
+      {
+        "name": "Choice and interpretation of factorization method",
+        "description": "CP decomposition is expected to be most useful and easily interpretable; however, other factorization methods (e.g., Tucker decomposition) may have benefits depending on data variation.",
+        "guidance": "Consider tradeoffs: Tucker may require fewer components but is harder to visualize due to a core tensor. Both CP and Tucker can be constrained to non-negative components to improve interpretability (separating balanced negative and positive effects). Apply an appropriate toolbox to create an effective map of IgG\u2013Fc\u03b3R regulation."
+      },
+      {
+        "name": "Cross-species component correlation testing",
+        "description": "Correlate each component of the cell population factorization between species to identify conserved regulation in which cell populations are activated coordinately.",
+        "guidance": "Identify significant correlations using Pearson correlation, with family-wise error rate correction through cell population randomization. Expect one-to-one correspondence between human and murine components; if not found, use targeted composition searches to find matching murine profiles."
+      },
+      {
+        "name": "Regression model for predicting in vivo cell killing (exponential survival model)",
+        "description": "To predict cell killing, regress predicted Fc\u03b3R activities for each cell population against fractional reduction in cell number using y = 1 \u2212 exp(\u2212X p\u00b7), corresponding to an exponential survival distribution where each cell is at uniform risk of clearance.",
+        "guidance": "Structure of regression is unchanged by mixed-composition ICs; fit parameters using panels of pre-existing experiments. Quantify model prediction via leave-one-out (LOO) and leave-one-isotype-out crossvalidation; estimate significance and distribution of derived quantities by bootstrap."
+      },
+      {
+        "name": "Crossvalidation and model-evaluation procedures",
+        "description": "Model prediction will be quantified through leave-one-out (LOO) and leave-one-isotype-out crossvalidation; derived quantities' significance/distribution estimated by bootstrap.",
+        "guidance": "Use panels of pre-existing experimental results (different isotypes, glycosylation variants, Fc\u03b3R knockouts) to parameterize model. Assess predictive accuracy (e.g., crossvalidation R2) and perform LOO/LOO-isotype checks to detect overfitting."
+      },
+      {
+        "name": "Synergy definition and selection criterion (Bliss independence)",
+        "description": "Synergy will be calculated according to the Bliss independence rule: in the absence of synergy, assume each antibody has an independent, proportional decrease in cell number. IgG combinations with the greatest predicted reduction over that from an additive effect will be selected.",
+        "guidance": "Bliss is chosen for simplicity and compatibility with the probabilistic model of in vivo effect; consider disease/manufacturing relevance when prioritizing combinations (e.g., fucose/non-fucose). Alternative definitions (e.g., Lowe synergy) can be explored if informative; be aware Lowe has no closed-form solution and other practical differences."
+      },
+      {
+        "name": "Experimental validation strategy for predicted synergy",
+        "description": "Verify predicted synergistic combinations in vivo using passive mouse models (ITP and CD20 B cell depletion); compare mixtures vs matched single-IgG treatments.",
+        "guidance": "Evaluate platelet and B cell depletion before, 4 hours after, and 24 hours after injection (platelets) or before, 6 and 24 hours (B cells) by FACS; use 8 mice per treatment (32 total for control, each IgG alone, and the combination) to provide power (0.8). Test (1) correlation between predicted and actual depletions (Pearson), (2) that deviation with combination is toward the predicted synergy, and (3) that synergy is statistically significant (mixed effects model with bootstrap)."
+      },
+      {
+        "name": "Mechanistic hypothesis taxonomy for synergy/antagonism",
+        "description": "Broadly, four mechanistic sources of synergy/antagonism are considered: (1) at the level of binding to an individual effector cell population, (2) not in binding but in the resultant response of an individual cell population, (3) additivity on previous levels but two IgGs target differing complements of cell populations, (4) additivity across cell populations with emergent interactions through cell communication.",
+        "guidance": "Design experiments to distinguish these: TNP-BSA binding studies with separated effector populations to test mechanism (1); isobologram ADCC/ADCP assays per cell population for mechanism (2); additive-model checks for mechanism (3); and evaluate cell-communication/emergent effects if depletion of populations has larger-than-expected effects."
+      },
+      {
+        "name": "In vitro mechanistic assays and additivity testing",
+        "description": "Use TNP-BSA binding studies with primary effector cell populations and isobologram assays (ADCC/ADCP) to quantify whether interactions arise from binding differences or cell response differences; quantify significant interactions through deviation from additivity.",
+        "guidance": "For B cells, incubate target B cells with effector populations and anti-CD20 IgG mixtures and quantify remaining B cells after 72 hours by B220 staining. For platelets, incubate with effector populations and 6A6 antibodies and quantify remaining platelets at 24, 36, and 72 hours using calcein staining and flow cytometry. Use isobolograms to assess interactions."
+      },
+      {
+        "name": "Translation to humanized models using homology mapping",
+        "description": "Translate murine-identified mixtures to human IgG compositions using homology model from Aim 2 and test these in humanized mouse models.",
+        "guidance": "Test the same single and mixture conditions in humanized mice (3 interventions for B cell or platelet targeting) and quantify depletion at same timepoints. Evaluate significant correlation between C57BL/6 and humanized model results (Pearson) to partially validate human\u2013mouse translation."
+      },
+      {
+        "name": "Use of alternate survival distributions and sensitivity to survival-model choice",
+        "description": "Propose using an exponential distribution for the survival function (uniform per-cell risk) but note alternatives (Gompertz, Weibull) correspond to multiplicative/additive differences in per-cell risk.",
+        "guidance": "Choice of survival function affects how activities of effector populations relate to depletion outcomes. Consider alternative distributions if platelets and B cells differ in underlying 'ease' of clearance for reasons unrelated to antigen availability."
+      },
+      {
+        "name": "Experimental sample-size justification and statistical power",
+        "description": "Use 8 mice per treatment (32 total for control, each IgG alone, and the combination) to provide sufficient power (0.8) for each test.",
+        "guidance": "Design experiments to use common controls where feasible to reduce animal numbers while maintaining statistical power; apply bootstrap and mixed-effects models for significance testing. If different comparisons require different power, adjust sample size accordingly."
+      },
+      {
+        "name": "Animal welfare and minimization of pain and distress",
+        "description": "Make every effort to use the absolute minimal number of mice, optimize experimental design to reuse common controls, perform daily monitoring, and have criteria for immediate euthanasia if animals show listed signs (e.g., lethargy, >15% weight loss over 72 hr, trouble breathing, bloodstained discharge).",
+        "guidance": "Provide weekend/holiday/emergency care; notify veterinarians for any health problems; use an Emergency Response Plan reviewed annually. Euthanasia methods: carbon dioxide or cervical dislocation under prior isoflurane anesthesia, following applicable rules and AVMA guidelines."
+      },
+      {
+        "name": "Vertebrate animal procedural requirements and justifications",
+        "description": "Describe mouse strains, housing, generation of bone marrow chimeras and humanized mice, surgical/irradiation procedures, and justify no alternative models for functional analyses of IgG/immune complex activity.",
+        "guidance": "Use specified strains (C57BL/6 and Fc\u03b3R-deficient variants), irradiation doses for chimeras (6 Gy or 1.2 Gy for newborn NSG), HSC transplantation timing and sourcing with written consent, and selective depletions (clodronate liposomes, NK/neutrophil-depleting antibodies) as appropriate. Ensure minimal numbers consistent with statistical power."
+      },
+      {
+        "name": "Use of pre-existing experimental panels for parameterization",
+        "description": "Parameterize and fit the binding and regression models using panels of pre-existing experimental results where different IgG isotypes, glycosylation variants, and Fc\u03b3R knockouts have been evaluated.",
+        "guidance": "A wider panel for ITP and CD20-depletion models aids exact parameterization and accurate predictions. Verify model by reproducing previously observed relationships (e.g., crossvalidation R2 > 0.8 for platelet depletion)."
+      },
+      {
+        "name": "Model-based identification and prioritization of synergistic combinations",
+        "description": "Identify predicted cases of synergistic interaction between IgG isotypes and/or glycosylation variants for each target cell; prioritize combinations that are disease- and manufacturing-relevant.",
+        "guidance": "Calculate predicted synergy (Bliss), select combinations with greatest predicted reduction beyond additive expectation, expect many top hits to involve efficacious isotypes (e.g., mIgG1, mIgG2c) and consider manufacturability (e.g., fucose status) when prioritizing for in vivo validation."
+      },
+      {
+        "name": "Assessing contribution of individual cell populations to in vivo effect",
+        "description": "Assess which effector cell populations drive in vivo depletion by predicting activities per cell type and regressing those against observed effectiveness; validate by selectively depleting or generating chimeric animals to isolate contributions.",
+        "guidance": "Use removal analyses (e.g., leave-one-cell-type-out) to see change in R2 or effectiveness; selectively deplete bone-marrow-derived monocytes (clodronate liposomes) or create bone-marrow chimeras to map activating Fc\u03b3R expression to tissue-resident vs bone-marrow-derived cells. If depleting single populations has larger effects than predicted, interpret as evidence of cell communication or emergent behavior."
+      }
+    ]
+  }
+}

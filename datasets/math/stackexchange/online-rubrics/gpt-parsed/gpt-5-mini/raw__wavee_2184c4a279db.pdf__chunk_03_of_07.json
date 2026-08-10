@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_2184c4a279db.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_2184c4a279db.pdf",
+  "chunk_idx": 3,
+  "n_chunks": 7,
+  "chunk_chars": 39402,
+  "model": "gpt-5-mini",
+  "elapsed_s": 57.8065480419973,
+  "input_tokens": 14982,
+  "output_tokens": 4739,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners developing or applying physics-informed neural networks (PINNs), e.g., computational scientists, applied mathematicians, and ML-for-PDE engineers",
+    "subtask_short": "designing_and_evaluating_PINNs",
+    "subtask_description": "Practical and methodological criteria for building, training, validating, and deploying Physics-Informed Neural Networks (PINNs) for solving forward/inverse PDE/SPDE problems, including data selection, loss design, architectures, optimization, software choices, and evaluation metrics. Emphasizes best practices, common pitfalls, and software features seen in the literature.",
+    "subtask_keywords": [
+      "pinn",
+      "pde",
+      "scientific_ml",
+      "training_and_evaluation",
+      "software_tools"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Training loss composition (initial, boundary, PDE residual, data)",
+        "description": "The training objective should include losses enforcing initial conditions, boundary conditions, and the PDE residual (collocation points); an optional data loss term can be included when supervised data are available (LB, LF, Ldata).",
+        "guidance": "Raissi et al. framework: explicitly minimize LB (initial+boundary) and LF (PDE residual on collocation points). Example: Ldata = 0 for a surrogate model trained only on initial data; design weights \u03c9 for combining multiple loss terms and monitor their relative magnitudes."
+      },
+      {
+        "name": "Distribution and number of training points",
+        "description": "Training/collocation points may be arbitrarily distributed in the spatio-temporal domain; both the number and spatial/temporal placement of points strongly influence approximation quality.",
+        "guidance": "Increasing total points generally improves approximation, but location can be crucial. Sampling strategies discussed include equispaced (lattice-like), quasi-random Sobol sequences, and Latin hypercube sampling (Latin Hypercube used in examples). Example counts: N0 = 50 initial, Nb = 50 boundary, Nc = 20,000 collocation in the NLS benchmark."
+      },
+      {
+        "name": "Boundary condition enforcement: hard vs soft constraint",
+        "description": "Decide whether to enforce boundary/initial conditions by embedding them directly in the network architecture (hard constraint/PCNN/trial function) or by penalizing violations via loss terms (soft constraint).",
+        "guidance": "Hard constraints can eliminate boundary loss terms but may be incompatible with arbitrary boundaries; soft constraints require appropriate weighting and complicate hyperparameter tuning. NeuroDiffEq enforces explicit constraints (PCNN) but may be inadequate for arbitrary boundaries."
+      },
+      {
+        "name": "Scaling, non-dimensionalization and normalization of inputs/parameters",
+        "description": "Address disparate magnitudes of physical parameters and inputs via non-dimensionalization and normalization to improve training and stability.",
+        "guidance": "Kissas et al. used non-dimensionalization/normalization to mitigate issues arising from different parameter scales; perform preprocessing to make learning feasible."
+      },
+      {
+        "name": "Adaptive residual-based refinement (RAR) of collocation points",
+        "description": "Iteratively add collocation points in regions where the PDE residual is large until a mean-residual threshold is achieved.",
+        "guidance": "RAR is analogous to FEM adaptive refinement: identify high-residual regions during training and concentrate collocation points there to improve local accuracy (supported in DeepXDE)."
+      },
+      {
+        "name": "Optimizer selection and training schedule",
+        "description": "Choose optimizers and schedules (e.g., Adam for initial training then L-BFGS for fine-tuning), appropriate learning rates, and possible learning-rate annealing or weight-adaptation schemes.",
+        "guidance": "Typical strategy: Adam with lr=1e-3 followed by L-BFGS fine-tune. Modulus uses global learning-rate annealing; TensorDiffEq implements Self-Adaptive PINN to increase weights for larger loss components. Monitor convergence and consider hybrid optimizer schemes."
+      },
+      {
+        "name": "Loss weighting and dynamic/adaptive weighting strategies",
+        "description": "Because multiple loss terms are combined (PDE residual, BCs, data), weights must be chosen or adapted during training to balance objectives and avoid domination by one term.",
+        "guidance": "Use global annealing or adaptive weight-update rules (e.g., self-adaptive PINN) to increase weights corresponding to larger losses. Improper weighting complicates hyperparameter tuning and can hinder convergence."
+      },
+      {
+        "name": "Evaluation metrics and error reporting (MSE, MAE, relative L2, training loss)",
+        "description": "Report standard error metrics such as mean squared error (MSE), mean absolute error (MAE), and relative L2 norm, alongside training losses, to quantify approximation quality.",
+        "guidance": "Provide spatial/temporal error maps and snapshot comparisons to benchmarks; the paper reports MSE/MAE and local peak errors (e.g., MSE ~5.17e-04 in an example). Use multiple metrics for a full picture."
+      },
+      {
+        "name": "Validation against high-fidelity benchmark solutions",
+        "description": "Validate PINN predictions by comparison to high-resolution numerical solutions (e.g., spectral solvers, Chebfun) or experimental data where available.",
+        "guidance": "Generate reference solutions with trusted numerical methods and compare spatially and temporally (snapshots, error maps) to detect systematic failures (e.g., difficulty around symmetric peaks)."
+      },
+      {
+        "name": "Network architecture design appropriate to the PDE",
+        "description": "Choose network inputs, outputs, depth, width, and activation functions in accordance with problem structure (e.g., real+imaginary outputs for complex-valued PDEs, periodic BCs).",
+        "guidance": "Example: for 1D NLS use 2 inputs (t,x), output length 2 (real and imaginary parts), 5 layers \u00d7 100 neurons, tanh activation. Explore architectures and report how MAE/MSE change across configurations."
+      },
+      {
+        "name": "Choice of function representation / specialized architectures",
+        "description": "Select architectures tailored for the task: Fourier networks for oscillatory solutions, DGM/LSTM-like for certain PDEs, DeepONet/DeepM&Mnet for operator learning and multiscale problems, encoder\u2013decoder for image-to-field inversion.",
+        "guidance": "Modulus supports Fourier Networks and DGM; DeepONet is suited for operator approximation across parameterized families and multi-physics/multi-scale tasks. Match architecture to feature types (periodicity, multiscale, operator mapping)."
+      },
+      {
+        "name": "Formulation of PDE residual/loss: strong vs weak forms and integral vs summation",
+        "description": "Decide whether to enforce PDEs in their strong form (pointwise residuals) or weak/variational form and whether to compute losses via pointwise summation or integral formulations.",
+        "guidance": "Modulus implements an integral formulation rather than pointwise summation and supports strong or weak forms; choice affects numerical properties and solver capabilities."
+      },
+      {
+        "name": "Sampling strategy selection (equispaced, Sobol, Latin Hypercube)",
+        "description": "Select a sampling method for collocation and data points that suits the problem (regular grids, quasi-random low-discrepancy sequences, or Latin hypercube).",
+        "guidance": "Pang et al. studied lattice/equispaced sampling; Sobol and Latin hypercube sequences are common quasi-random choices; Latin Hypercube was used in several examples to generate training points."
+      },
+      {
+        "name": "Capability to infer latent/unobserved state variables",
+        "description": "Use PINNs to recover unobserved or latent state variables from partial/noisy measurements by incorporating the governing PDE constraints into learning.",
+        "guidance": "Zhang et al. observed that PINNs can accurately predict missing variables; design training to leverage available measurements plus physics to infer latent fields."
+      },
+      {
+        "name": "Extrapolation and temporal projection robustness",
+        "description": "Assess the PINN's ability to project solutions beyond the time window used during training; vanilla PINNs may perform poorly on temporal extrapolation.",
+        "guidance": "Test extrapolation explicitly (projecting in time) since many PINNs fail to generalize beyond training time. Consider specialized architectures or training approaches for extrapolation tasks (Kim et al. provide alternatives)."
+      },
+      {
+        "name": "Handling noisy measurements and uncertainty quantification",
+        "description": "When data are noisy, incorporate noise-aware methods and perform uncertainty quantification (e.g., approximate Bayesian computation, sequential Monte Carlo) to obtain posterior distributions over model parameters or fields.",
+        "guidance": "Cavanagh et al. used KDE to convert embeddings to PDFs and then fitted a Fokker\u2013Planck model with PINNs, using ABC-SMC to obtain posterior parameter densities; embed noise models and UQ where relevant."
+      },
+      {
+        "name": "Multi-fidelity and surrogate modeling for computational efficiency",
+        "description": "Exploit multi-fidelity data (few high-fidelity simulations + many cheap approximations) to build efficient surrogate PINNs that generalize across parameter spaces.",
+        "guidance": "MPINN estimated nano-fluid viscosity using a small number of molecular dynamics simulations; design multi-fidelity architectures to leverage scarce expensive data."
+      },
+      {
+        "name": "Loss design aligned to measurement/observation space",
+        "description": "Define loss functions consistent with how measurements are obtained (e.g., compute loss in scatter space for scattering-image inversion rather than object space), and add auxiliary losses (e.g., binary loss) to enforce physical constraints.",
+        "guidance": "Stielow & Scheel compute scatter-space MSE and apply binary loss to enforce physical binary nature; tailor losses to the measurement transform for better reconstruction."
+      },
+      {
+        "name": "Software/toolbox feature checklist for PINN development",
+        "description": "Evaluate PINN libraries by feature support: boundary-condition handling (hard/soft), geometry capabilities (CSG, tessellated geometry), adaptive residual refinement, supported NN architectures, scalability/distributed computing, optimizer integrations, and active maintenance/community.",
+        "guidance": "Examples: DeepXDE supports RAR and CSG; Modulus supports integral loss formulations, CSG/TG, many NN types and global learning-rate annealing; NeuroDiffEq enforces hard BCs; TensorDiffEq targets distributed computing and self-adaptive weighting. Consider available example problems and ongoing development when selecting a package."
+      },
+      {
+        "name": "Visualization and diagnostic practices",
+        "description": "Use spatial/temporal error maps, snapshots at multiple times, and pointwise error analyses to diagnose where the PINN succeeds or fails.",
+        "guidance": "Plot predicted vs benchmark solutions at key time slices, error heatmaps, and track how error grows over time; identify local peak errors and symmetry/failure patterns (e.g., difficulty mapping central peak or symmetric intervals)."
+      },
+      {
+        "name": "Awareness of PINN limitations and appropriate problem selection",
+        "description": "Recognize problem classes where PINNs may struggle (multi-scale, chaotic, turbulent, or specially-tailored PDEs) and compare against traditional numerical methods which may be superior for certain PDEs.",
+        "guidance": "Authors caution that PINNs can fail to learn complex physical phenomena and may be outperformed by PDE-specific numerical solvers; perform feasibility checks and consider hybrid or problem-specific alternatives."
+      }
+    ]
+  }
+}

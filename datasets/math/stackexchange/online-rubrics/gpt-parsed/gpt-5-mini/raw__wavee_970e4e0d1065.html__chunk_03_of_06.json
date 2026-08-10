@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavee_970e4e0d1065.html",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavee_970e4e0d1065.html",
+  "chunk_idx": 3,
+  "n_chunks": 6,
+  "chunk_chars": 39872,
+  "model": "gpt-5-mini",
+  "elapsed_s": 92.97192733299744,
+  "input_tokens": 11440,
+  "output_tokens": 4789,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI planning researchers, PDDL language designers, and implementers of planners/plan validators (e.g., competition participants)",
+    "subtask_short": "temporal PDDL plan validation",
+    "subtask_description": "Semantics and validation criteria for plans in PDDL2.1, including rules for transforming durative actions to simple actions, handling conditional and continuous effects, invariants, and pragmatic numeric/tolerance considerations for automated validation.",
+    "subtask_keywords": [
+      "pddl2.1",
+      "temporal_planning",
+      "durative_actions",
+      "plan_validation",
+      "continuous_change"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Induced Simple Plan construction",
+        "description": "The induced simple plan simplify(P) is formed from a plan P by (1) keeping (t,a) for simple actions, (2) replacing each durative pair (t,a[t0]) by (t, astart[?duration:=t0]) and (t+t0, aend[?duration:=t0]), and (3) inserting ((ti+ti+1)/2, ainv) monitoring actions for each happening ti between t and t+t0.",
+        "guidance": "The happening sequence is the ordered set of times {t | (t,a) \u2208 P or (t,a[t0]) \u2208 P or (t\u2212t0,a[t0]) \u2208 P}. Duration parameters (?duration) must be substituted with numeric values. Monitoring actions are interleaved midway between successive happenings to avoid the 'no moving targets' problem. The transformation introduces actions to represent end points and to check invariants so that the original plan is judged valid only if invariants remain true after the start and after each happening through the durative action's duration."
+      },
+      {
+        "name": "Executability of a Plan (discrete/durative)",
+        "description": "A plan P is executable if its induced simple plan simplify(P) is executable, producing a trace {Si=(ti,si,vi)}i=0...k.",
+        "guidance": "Executability for plans with durative actions is defined by executability of their induced simple plan; for plans with continuous durative actions, executability additionally requires that the induced continuous plan's trace is defined and that the plan is invariant safe (see Invariant Safe)."
+      },
+      {
+        "name": "Validity of a Plan",
+        "description": "A plan P is valid if it is executable and the goal specification is satisfied in the final state produced by its induced simple (or continuous) plan.",
+        "guidance": "For continuous plans, validity requires executability and that the final state Sk+1 satisfies the problem goal. The paper adopts the stance that all durative action start and end points must be explicit in the plan for it to be considered valid."
+      },
+      {
+        "name": "Temporal annotation accumulation and restriction to conjunction",
+        "description": "Temporally annotated conditions and effects distribute through logical conjunction and therefore can be accumulated; logical connectives other than conjunction are not allowed in temporally annotated propositions.",
+        "guidance": "Reduce conditional effects to simple conjunctions containing at most one at start condition, at most one at end condition and at most one over all condition. Similarly, durative action effects reduce to at most one at start effect and at most one at end effect. Allowing other connectives would create significant complexity and potential paradoxes (communication from future states to earlier states)."
+      },
+      {
+        "name": "Disallow reversed-causality conditional effects",
+        "description": "Conditional effects that have effects at the start but whose conditions depend on the state at the end or over the duration are considered meaningless.",
+        "guidance": "Such constructs reverse the expected behaviour of causality (cause precedes effect) and create paradoxes: one cannot determine initial effects until observing later conditions, nor later effects until knowing initial effects. Therefore these forms are rejected in the semantics."
+      },
+      {
+        "name": "Transformation using memory propositions for start\u2192end conditional effects",
+        "description": "A conditional effect of the form (when (and (at start ps) (at end pe)) (at end q)) is transformed by adding (when ps (Mps)) to the start simple action and (when (and pe (Mps)) q) to the end simple action, where Mps is a fresh memory proposition.",
+        "guidance": "Mps is a special new proposition unique to that conditional effect instance and ensures an isolated memory of whether ps held at the start. Uniqueness prevents interference by other actions. If an effect lacks at end conditions, apply the same transformation ignoring pe."
+      },
+      {
+        "name": "Monitoring actions for 'over all' conditions (Mpi) and their conditional effect",
+        "description": "To remember that a proposition pi held throughout a durative action, add an effect (Mpi) to the start action and insert monitoring simple actions that have no precondition but a single conditional effect: (when (and (Mpi) (not pi)) (not (Mpi))).",
+        "guidance": "Monitoring actions are added at all intermediate points used for invariant monitoring (midpoints between happenings). If pi becomes false at any time between start and end, Mpi will be deleted; otherwise Mpi holds at the end iff pi held over the entire duration. Monitoring actions themselves cannot have effects (other than on the unique memory propositions) that influence the rest of the plan."
+      },
+      {
+        "name": "Placement of monitoring actions to avoid 'moving targets'",
+        "description": "Monitoring actions should be interleaved with updating actions by inserting them midway between pairs of successive happenings in the interval over which each durative action is executed.",
+        "guidance": "Placing monitors at the same time as updating actions would require accessing values while they might be being updated, violating the 'no moving targets' rule. Using midpoints prevents this timing conflict."
+      },
+      {
+        "name": "Memory propositions must be unique to action instance",
+        "description": "Memory propositions (e.g., Mps, Mpi) introduced to carry information from start to end must be unique to the particular conditional effect instance of the durative action being transformed.",
+        "guidance": "Uniqueness prevents any other action in the plan from interfering with the memory proposition, thereby representing an isolated memory of the status checked at the start and used at the end."
+      },
+      {
+        "name": "Continuous durative action definition and continuous update function",
+        "description": "A continuous durative action is a durative action with at least one continuous effect (an effect expression that includes the symbol #t). Continuous effects combine into a system of simultaneous differential equations; the continuous update function fC : R \u2192 R^n is defined by dfC/dt = g with fC(0)=X, where g is generated from continuous effects.",
+        "guidance": "Continuous effects from several actions active over an interval are combined to form C, the set of ground continuous effects. The continuous update function defines how numeric state components evolve across the interval; solving these ODEs is required to compute the state at the end of the interval. If fC is undefined for any element in Cts, then the plan's trace is undefined."
+      },
+      {
+        "name": "Induced Continuous Plan components (S, Invs, Cts)",
+        "description": "For a plan P with continuous durative actions, the induced continuous plan is the triple (S, Invs, Cts) where S = simplify(P), Invs is the set of invariant constraints (Q, t, t+d) for each durative action with an over all invariant Q, and Cts is the set of active continuous effect systems (C, ti, ti+1) for each interval between consecutive happenings.",
+        "guidance": "Active continuous effects over (ti, ti+1) are those durative actions whose intervals cover (ti, ti+1). Separating invariants and continuous effects allows correct application of continuous updates and verification that invariants hold in the presence of continuous change."
+      },
+      {
+        "name": "Trace definition for continuous plans",
+        "description": "The trace {Si} is defined by: if no (C,ti,ti+1) \u2208 Cts then Si+1 is result of applying happening at ti to Si; if (C,ti,ti+1) \u2208 Cts let Ti be the state formed by substituting f(ti+1\u2212ti) for numeric part of Si (f is continuous update function); then Si+1 is the result of applying happening at ti to Ti. If f is unde\ufb01ned for any element in Cts then the trace is unde\ufb01ned.",
+        "guidance": "Continuous updates are applied by solving the simultaneous differential equations over each active interval to update numeric values before applying discrete happenings. This establishes the interplay between continuous evolution and discrete transitions."
+      },
+      {
+        "name": "Invariant Safe for continuous plans",
+        "description": "P is invariant safe if for each continuous update function fi that is defined and for each invariant (Q,t,u) \u2208 Invs such that [(ti,ti+1)] = I \u2286 (t,u), then \u2200x \u2208 I, Num(s,Q)(fi(x)), where s is the logical state in Si.",
+        "guidance": "In other words, invariants must hold at every point in any interval where they are active, evaluated against the numeric evolution fi(x). If any fi is undefined or invariants fail at some point, the plan is not invariant safe and therefore not executable."
+      },
+      {
+        "name": "Invariants must be checked at every point of their interval",
+        "description": "From a semantic point of view, invariants must be checked at every point in the interval over which they apply.",
+        "guidance": "When intervals contain only finitely many discrete changes, checking the finite set of change points suffices. Under continuous change, one must examine possible roots of the functions describing continuous change to ensure invariants hold everywhere; finding those roots can be difficult. Imposing constraints on the forms of differential equations can make validation tractable."
+      },
+      {
+        "name": "Plan must include explicit start and end points for durative actions",
+        "description": "A pddl2.1 plan is valid only if all action start and end points are explicit within the plan.",
+        "guidance": "Although some planners (e.g., Sapa) may terminate while events remain queued, requiring explicit end points avoids cases where omitted end points could introduce inconsistencies into the plan. This design choice simplifies validation by ensuring the induced trace is finite and checkable."
+      },
+      {
+        "name": "Happenings must be mutex-free during validation",
+        "description": "Having identified all happenings (including those introduced by durative-action conversion), validation proceeds by confirming that all happenings within the plan are mutex-free.",
+        "guidance": "Mutex (mutual exclusion) checks ensure concurrent happenings do not interfere in a way that invalidates preconditions or effects. This is part of the simulation-based validation process for PDDL plans."
+      },
+      {
+        "name": "Decidability and tractability constraints for plan validation",
+        "description": "Plan validation is decidable because plans induce finite traces; validation is tractable for domains without continuous effects and, under constraints, for domains with continuous effects.",
+        "guidance": "Continuous effects can make validation computationally hard (requiring solving ODEs and possibly polynomials). Tractability is achievable if continuous effects are restricted to simple linear or quadratic functions without interactions between concurrent continuous effects. Validation of more complex continuous expressions is an area of ongoing exploration."
+      },
+      {
+        "name": "Numeric representation and tolerance (finite-precision floats)",
+        "description": "Practical validation uses finite-precision floating point representations for times and numeric values and therefore numeric conditions must be evaluated to a certain tolerance (\u03b5).",
+        "guidance": "The syntax restricts planners to expressing times as finite precision floats. Validators accept plans as valid subject to an epsilon tolerance; validators may use \u03b5 both for numeric condition checking and as the minimum separation of conflicting end points. The paper suggests it may be better to allow domain designers to specify an appropriate \u03b5. Strict semantic equality is impractical given floating-point representations."
+      },
+      {
+        "name": "Pragmatic mapping between semantic and syntactic plans; robustness vs. tractability",
+        "description": "There is a pragmatic mapping from theoretical semantic plan objects to describable syntactic plan objects used by automated validators; validators operate subject to tolerance and cannot implement robust/fuzzy-tube semantics in general because checking fuzzy tubes is intractable.",
+        "guidance": "While robust automata concepts (accepting a tube of traces within distance \u03b4) provide a semantics closer to real-world imprecision, they are intractable to check. The pragmatic compromise is to validate syntactic plans using a fixed tolerance \u03b5, accepting the resulting loss of some theoretical distinctions between semantic plans."
+      },
+      {
+        "name": "Language restriction: no temporal connectives beyond conjunction",
+        "description": "Temporally annotated propositions are not allowed to combine using logical connectives other than conjunction.",
+        "guidance": "This restriction avoids significant additional complexity and paradoxical opportunities for communication from future states to earlier states. All temporal annotations distribute through conjunction only."
+      },
+      {
+        "name": "Transformation of conditional effects when condition and effect share temporal annotation",
+        "description": "Any effect of the form (when (at t p) (at t q)), where the condition and the effect bear the same temporal annotation (start or end), can be transformed into a simple conditional effect (when p q) attached to the corresponding start or end simple action.",
+        "guidance": "This straightforward case requires no additional machinery; it is handled by mapping the temporally annotated conditional effect to a simple-time conditional effect on the corresponding simple action (start or end)."
+      }
+    ]
+  }
+}

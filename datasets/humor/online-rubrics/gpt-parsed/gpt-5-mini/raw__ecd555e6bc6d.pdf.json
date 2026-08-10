@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/humor/online-rubrics/raw/ecd555e6bc6d.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17194,
+  "output_tokens": 3625,
+  "elapsed_s": 1304.3137590840925,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / multimodal AI researchers and practitioners building/evaluating models for humor understanding, captioning, and explanation",
+    "subtask_short": "new_yorker_caption_benchmarks",
+    "subtask_description": "A suite of three evaluation tasks (matching, quality ranking, explanation generation) built on 14 years of New Yorker caption contests to measure multimodal and language-only models' ability to recognize relevant captions, rank caption quality, and explain why a caption is funny.",
+    "subtask_keywords": [
+      "humor",
+      "multimodal",
+      "caption_contest",
+      "new_yorker",
+      "benchmark",
+      "explanation_generation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Matching (multiple-choice relevance)",
+        "description": "Can a model recognize when a caption is appropriate for a given cartoon? Five choices are given, only one of which truly corresponds (the correct caption is a finalist for the cartoon). Negative choices are randomly selected finalists from other contests.",
+        "guidance": "Task is 5-way multiple choice. Distractors are finalists from other contests and are balanced across instances so that a model that only examines the answer choices cannot achieve better than chance accuracy. Some instances require object matching, others require indirect associations or external knowledge (e.g., references to Jane Goodall). Evaluation metric: accuracy."
+      },
+      {
+        "name": "Quality ranking (finalist vs non-finalist)",
+        "description": "Can a model identify highly rated captions? For each finalist, sample a caption that was not selected as a finalist (but was written for the given cartoon), and ask models to identify which one was rated as higher quality.",
+        "guidance": "Preprocessing: run text-only filtering to discard submissions that are easily identifiable as low quality, and perform semantic deduplication. Evaluation uses accuracy; two reported measures are NYAcc (average accuracy over instances where the finalist was an official New Yorker finalist) and CrowdAcc (where the 'finalist' was selected by the crowd as high quality)."
+      },
+      {
+        "name": "Explanation generation (why a caption is funny)",
+        "description": "Can a model generate as good an explanation as a human for why a caption-and-image combination is funny? Free-form explanations were written; rough annotation guidance: 'In a few sentences, explain the joke as if to a friend who doesn\u2019t \u201cget it\u201d yet.'",
+        "guidance": "Human evaluation: pairwise comparisons where crowd-workers choose between (unlabeled) author/machine-generated explanations; majority vote determines a winner. Success criterion: a model is considered to succeed if human judges do not show a preference for the author-generated ones. Complementary automatic metrics reported: BLEU-4 + ROUGE-L and word-level perplexity. Error analysis of generated explanations should check for inaccurate image interpretation and hallucination."
+      },
+      {
+        "name": "From Pixels vs From Description settings",
+        "description": "Two experimental settings: From Pixels (FP) \u2014 at test time models are given only the cartoon image; From Description (FD) \u2014 models are provided human-authored annotations of the cartoon (simulating a human-level vision system).",
+        "guidance": "FD factors out visual processing and lets language-only models be evaluated; FP tests multimodal vision+language capability. Results and model choices should be reported separately by setting."
+      },
+      {
+        "name": "Annotation types & content requirements",
+        "description": "For each cartoon, collect: (i) a phrase describing the scene setting (2 per cartoon); (ii) a literal 1\u20133 sentence description of the scene (3 per cartoon); (iii) a 1\u20133 sentence description of what makes the scene unusual (3 per cartoon); (iv) 2\u20133 English Wikipedia links relevant to the image (2 per cartoon).",
+        "guidance": "Annotations serve as inputs in FD and as training-time information in FP. Uncanny descriptions guidance: 'Highlight/explain any unusual/out-of-place elements in 1\u20132 sentences.' Use qualification rounds and quality control (e.g., $15/hr pay, special treatment for low-resolution images) to ensure annotation quality."
+      },
+      {
+        "name": "Distractor selection & balancing",
+        "description": "Negative choices for matching are randomly selected finalists from other contests; distractors are balanced across instances.",
+        "guidance": "Design distractors so that surface-level cues in the set of answer choices alone do not allow above-chance performance. For matching, ensure negatives are strong captions for some other image to make the task non-trivial."
+      },
+      {
+        "name": "Preprocessing for quality ranking (filtering & deduplication)",
+        "description": "Before forming ranking pairs, perform a round of text-only filtering to discard clearly low-quality submissions and perform semantic deduplication among captions.",
+        "guidance": "This helps create meaningful finalist vs non-finalist pairs where differences reflect quality rather than trivial issues (spam, duplication). Details (e.g., specific filters) are in Appendix C."
+      },
+      {
+        "name": "Evaluation metrics: accuracy, NYAcc, CrowdAcc",
+        "description": "Matching and quality ranking are evaluated with accuracy. Quality ranking additionally reports NYAcc (average accuracy when finalist was an official New Yorker finalist) and CrowdAcc (accuracy when the 'finalist' was selected by crowd as high quality).",
+        "guidance": "Reporting both NYAcc and CrowdAcc allows evaluation relative to different audience tastes (editors vs crowd). For matching and ranking report averages over cross-validation splits."
+      },
+      {
+        "name": "Human evaluation protocol for explanations",
+        "description": "Collect judgments from 3 crowd-workers per test instance by asking which of a pair of explanations they prefer; take majority vote to determine a winner.",
+        "guidance": "Report per-instance agreement (e.g., Gwet\u2019s \u03b3). Use pairwise comparisons (author vs machine) and analyze preferences across model variants (e.g., zero-shot vs few-shot, model size effects)."
+      },
+      {
+        "name": "Success criterion for explanation task",
+        "description": "Define model success as human judges not showing a preference for the author-generated explanations when presented with unlabeled author/machine pairs.",
+        "guidance": "Use majority-vote pairwise human judgments to determine parity; supplement with automatic metrics but prioritize human preference as primary signal of quality."
+      },
+      {
+        "name": "Cross-validation and held-out-contest evaluation",
+        "description": "Split the 704 cartoons into 5 cross-validation splits such that entire contests are held out at test time.",
+        "guidance": "Holding out whole contests tests generalization across new contests/images rather than overfitting to contest-specific idiosyncrasies. Report averages over the 5 splits."
+      },
+      {
+        "name": "Human performance estimation baseline",
+        "description": "Estimate human performance by having annotators (three people in this work) each attempt randomly sampled instances from matching and quality ranking; annotators saw images but not descriptions (akin to FP setting).",
+        "guidance": "Human estimates serve as a point of comparison but are not an absolute upper bound because labels reflect editor/crowd preferences and taste varies across individuals."
+      },
+      {
+        "name": "Automatic metrics for explanation (BLEU-4, ROUGE-L, perplexity)",
+        "description": "Complement human pairwise evaluations with automatic metrics: BLEU-4 (using Post) + ROUGE-L for overlap; report word-level perplexity.",
+        "guidance": "These metrics capture surface-level overlap with human-authored references and fluency but may not correlate perfectly with human judgment; use them as supplementary diagnostics."
+      },
+      {
+        "name": "Relevant predictive features from prior work",
+        "description": "Features that have been found useful for identifying funniest captions include: perplexity, match to image setting and uncanniness description, readability, proper nouns, overlap with WordNet 'person' and 'relative' synsets, lexical centrality among submissions, and sentiment.",
+        "guidance": "Incorporate these features as baselines or additional signals in ranking models; they summarize prior empirical findings on what correlates with perceived funniness in caption contests."
+      },
+      {
+        "name": "Annotation quality-control & low-resolution handling",
+        "description": "Use Mechanical Turk with qualification rounds, pay workers a minimum of $15/hr, and apply special treatment for low-resolution images (additional pay and author annotation for some cases).",
+        "guidance": "Document HIT screenshots and qualification criteria (Appendix A). Ensure at least one author annotates problematic low-res images to maintain dataset quality."
+      },
+      {
+        "name": "Model training / task-specific modeling choices (examples)",
+        "description": "Modeling choices include: fine-tuning CLIP for matching with InfoNCE; OFA\u2192T5 composition for FP\u2192FD pipeline; formulating multiple-choice as text-to-text for T5; few-shot and zero-shot prompting with chain-of-thought for GPT-3.5/GPT-4.",
+        "guidance": "Report these architectural/training choices because they materially affect performance. For CLIP multiple-choice use InfoNCE to encourage higher cosine similarity for the correct pair. For LLMs, compare zero-shot, few-shot, and fine-tuned variants."
+      }
+    ]
+  }
+}

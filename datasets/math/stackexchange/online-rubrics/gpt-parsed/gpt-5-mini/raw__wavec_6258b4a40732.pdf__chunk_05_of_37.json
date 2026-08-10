@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_6258b4a40732.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_6258b4a40732.pdf",
+  "chunk_idx": 5,
+  "n_chunks": 37,
+  "chunk_chars": 39921,
+  "model": "gpt-5-mini",
+  "elapsed_s": 71.75972404100321,
+  "input_tokens": 12617,
+  "output_tokens": 4652,
+  "extracted": {
+    "orientation": "textbook_excerpt",
+    "intended_audience": "TeX users, macro writers, and technical typists (readers of The TeXbook / plain TeX programmers)",
+    "subtask_short": "plain_tex_typesetting_glue_modes",
+    "subtask_description": "Guidance for using glue, boxes, spacing, and modes in plain TeX: how to specify infinite glue (fil/fill/filll), how TeX computes/interprets interword and interline spacing, how to construct hboxes/vboxes/vtop, use \\\\rlap/\\\\llap/\\\\strut, and how TeX's modes and paragraph boundaries work.",
+    "subtask_keywords": [
+      "tex",
+      "plain_tex",
+      "typesetting",
+      "glue",
+      "modes"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of fil / fill / filll units for infinite glue",
+        "description": "You may use the special units \u2018fil\u2019, \u2018fill\u2019, and \u2018filll\u2019 in the hdimeni parts of a stretchability or shrinkability component to specify orders of infinity (first, second, third order).",
+        "guidance": "Prefer the first-order infinity (fil) whenever possible; use fill only when you really need something extremely infinite, and filll only as a last resort. Examples: \\vfil \u2248 0pt plus 1fil; \\vfill \u2248 0pt plus 1fill; \\vss \u2248 0pt plus 1fil minus 1fil; \\vfilneg \u2248 0pt plus -1fil. You can use fractional multiples like '3.25fil' provided you stay under 16384 fil units; TeX computes using integer multiples of 2^-16 fil units, so extremely tiny fractional filll may be effectively 0 while slightly larger values are infinite compared to finite glue."
+      },
+      {
+        "name": "Plain TeX's extra sentence spacing and variable stretch/shrink after punctuation",
+        "description": "Plain TeX puts extra space at the end of a sentence; it automatically increases the stretchability (and decreases the shrinkability) of the interword glue after certain punctuation marks.",
+        "guidance": "Typical behavior examples: glue after a comma stretches at 1.25\u00d7 the ordinary interword glue; glue after a period/exclamation/question mark stretches at 3\u00d7. For shrinking, glue after a comma shrinks only 80% as much as ordinary interword glue; after period/exclamation/question it shrinks to one third. This yields more space after sentence-final punctuation when lines are expanded and less shrink when contracted."
+      },
+      {
+        "name": "Use \\ldots (math mode) for properly spaced ellipsis",
+        "description": "Typing three periods in text gives '...' with dots too close together; using \\ldots in math mode produces properly spaced ellipsis.",
+        "guidance": "Example: Hmmm $\\ldots$ I wonder why? produces 'Hmmm . . . I wonder why?'. Math formulas are exempt from normal text spacing rules, which makes \\ldots suitable for ellipses in running text."
+      },
+      {
+        "name": "Prevent TeX mis-detecting sentence boundaries with tie (~) or control space (\\ )",
+        "description": "Periods in abbreviations (e.g., 'Mr.', 'Dr.', 'Fig.') can be mistaken for sentence-ending full stops; use a tie (~) or control space (\\ ) to indicate non-breaking / normal space and to prevent sentence-end detection.",
+        "guidance": "Use ~ after common abbreviations within names or mid-sentence (e.g., 'Mr.~Drofnats', 'cf.~Fig.~5'). Use '\\ ' (control space) in bibliographic contexts where a line break after the abbreviation might be acceptable (e.g., 'Proc.\\ Amer.\\ Math.\\ Soc.'). ~ prevents line breaks and tells TeX not to treat the previous period as sentence-ending; '\\ ' inserts a normal interword space but allows line breaks."
+      },
+      {
+        "name": "Use \\frenchspacing / \\nonfrenchspacing to change sentence spacing behavior",
+        "description": "\\frenchspacing makes all interword spaces identical (no extra sentence-end spacing); \\nonfrenchspacing restores TeX's sophisticated sentence spacing.",
+        "guidance": "Invoke \\frenchspacing at the start of a manuscript or locally (grouped) if you want uniform spacing\u2014useful for bibliographies. Use \\nonfrenchspacing to go back to TeX's default punctuation-aware spacing."
+      },
+      {
+        "name": "Space factor mechanism (spacefactor, sfcode) determines interword glue modification",
+        "description": "TeX keeps an integer 'space factor' f (normally 1000) that modifies interword glue: when f \u2265 2000 extra space is added; stretch is multiplied by f/1000 and shrink by 1000/f. Each character has a space factor code (sfcode) which normally becomes the new space factor when that character is added.",
+        "guidance": "INITEX defaults sfcode to 1000 for most characters and 999 for uppercase letters, explaining why periods after uppercase letters are not treated as sentence endings. Plain TeX redefines sfcodes (e.g., \\sfcode`)=0 to make right parentheses transparent; \\sfcode`.=3000 to triple stretch after periods). \\frenchspacing resets \\sfcode`. to 1000. Note: if a character's sfcode is zero, the space factor is not changed; if f < 1000 < g then f is set to 1000 rather than jumping across 1000."
+      },
+      {
+        "name": "Override font spacing with \\spaceskip and \\xspaceskip",
+        "description": "TeX will use \\xspaceskip if f \u2265 2000 and \\xspaceskip is nonzero; otherwise if \\spaceskip is nonzero, that glue is used (with stretch/shrink multiplied by f/1000 and 1000/f).",
+        "guidance": "These parameters let you override the normal font spacing values when desired; macros like \\raggedright use \\spaceskip and \\xspaceskip to suppress stretching and shrinking of interword spaces."
+      },
+      {
+        "name": "Glue set algorithm for hbox/vbox: compute glue set order and ratio",
+        "description": "When forming an hbox (or vbox) whose natural width x is not equal to desired width w, TeX computes a 'glue set ratio' r and a 'glue set order' i based on available stretchability/shrinkability decomposed by orders (y0 + y1 fil + y2 fill + y3 filll).",
+        "guidance": "If x < w (stretching), i is the highest order with yi \u2260 0 and r = (w \u2212 x)/yi. If x > w (shrinking), i is the highest order with zi \u2260 0 and r = (x \u2212 w)/zi, except r is set to 1.0 if i = 0 and x \u2212 w > z0 (don't exceed maximum shrink). Each glue item is adjusted only if its order equals i: new width = u + r*y if stretching and glue's order j = i; otherwise stays u. Similarly for shrinking using z and k. Stretch/shrink occurs only at the highest noncanceled order."
+      },
+      {
+        "name": "Construct hboxes using \\hbox, \\hbox to<hdim>, and \\hbox spread<hdim>",
+        "description": "Use \\hbox{...} for a box at its natural width; use \\hbox to<wd>{...} to force width wd; use \\hbox spread<dim>{...} to make a box whose width is natural width plus the given spread.",
+        "guidance": "Example: the \\line macro is an abbreviation for \\hbox to\\hsize{...}. Example: \\hbox spread 5pt{\u2018\u2018Oh, oh!\u2019\u2019 ... laughed.} produces a box spread 5pt wider than natural. When you want the natural width, simply use \\hbox{...}."
+      },
+      {
+        "name": "Baseline, height, depth of an hbox; width can be negative",
+        "description": "The baseline of a constructed hbox is the common baseline of the boxes inside; height and depth are the maximum extents above and below the baseline. The result of \\hbox never has negative height or depth, but the width can be negative.",
+        "guidance": "Be aware that height/depth computation uses interior boxes' relative positions; glue and kerns influence width but height/depth are nonnegative. Negative widths can occur if you use negative glue or kerns inside a zero-width box."
+      },
+      {
+        "name": "Use \\baselineskip, \\lineskip, \\lineskiplimit to control interline glue",
+        "description": "\\baselineskip specifies the intended distance between baselines; \\lineskip is used instead whenever the computed interline glue would make the top of the new box closer than \\lineskiplimit to the bottom of the previous box.",
+        "guidance": "Interpretation: normally the interline glue makes adjacent baseline separation equal \\baselineskip; but if that would bring boxes closer than \\lineskiplimit (ignoring stretch/shrink), TeX uses \\lineskip instead. Explicit vertical glue (\\vskip, \\smallskip, \\parskip, etc.) acts independently of this decision. Recommendation: for multi-page documents, define \\baselineskip without stretch/shrink to keep uniform page appearances; for one-page documents, allowing some stretchability can help fit text."
+      },
+      {
+        "name": "Exact interline glue computation using \\prevdepth sentinel",
+        "description": "TeX uses \\prevdepth (depth of most recent box, or -1000pt sentinel) to decide whether to insert interline glue; the precise rule: if p \u2264 -1000pt no interline glue; else if b - p - h \u2265 l append (b - p - h) plus y minus z; otherwise append \\lineskip. Then set \\prevdepth to the depth of the new box.",
+        "guidance": "Use \\nointerlineskip (implemented as \\prevdepth=-1000pt) to suppress the next interline glue. Understanding these exact rules helps in fine control of vertical lists and for debugging spacing anomalies."
+      },
+      {
+        "name": "Rules for vbox natural depth and \\boxmaxdepth",
+        "description": "When wrapping up a vertical list into a \\vbox, the natural depth is determined by rules: (1) if no boxes, depth = 0; (2) if at least one box but final item is followed by kern/glue/penalties, depth = 0; (3) otherwise depth = depth of final box; (4) if this computed depth exceeds \\boxmaxdepth, the depth becomes \\boxmaxdepth and the excess depth is added to the box's natural height (reference point moved down).",
+        "guidance": "Plain TeX sets \\boxmaxdepth to the largest possible dimension by default, so rule (4) generally does not apply unless you set a smaller \\boxmaxdepth. Remember that \\vbox's dimension argument refers to final height (not depth), and glue inside a vbox is set as in an hbox using glue set order/ratio logic."
+      },
+      {
+        "name": "Use \\vtop to get a box with baseline of the top box inside",
+        "description": "\\vtop produces a box like \\vbox but with the same baseline as the top box inside, implemented by forming a vbox and then moving the reference point so the result has height x (zero unless the very first item is a box) and depth h+d-x.",
+        "guidance": "Example: \\hbox{Here are \\vtop{\\hbox{two lines}\\hbox{of text.}}} produces 'Here are two lines' over 'of text.'; know when to use \\vtop vs \\vbox depending on which internal box's baseline you want to align with the surrounding horizontal list."
+      },
+      {
+        "name": "Use \\strut to stabilize interline spacing inside large vboxes",
+        "description": "\\strut is an invisible zero-width box that extends above and below the baseline so that, if every line contained a strut, no interline glue would be needed; plain TeX's \\strut is 8.5pt high and 3.5pt deep.",
+        "guidance": "Place struts at the top and bottom lines inside large vboxes so boxes can butt together and still produce correct spacing; e.g., \\footnote macro places struts at beginning and end so multiple footnotes at the bottom of a page have correct spacing."
+      },
+      {
+        "name": "Use \\rlap and \\llap (zero-width overlapping boxes) and their implementation",
+        "description": "\\rlap{...} creates a box of width 0 with its contents to the right (appearing but taking no horizontal space); \\llap{...} does the symmetric left overlap. They can be defined elegantly as \\def\\rlap#1{\\hbox to 0pt{#1\\hss}} and similarly for \\llap.",
+        "guidance": "Because the hbox has width 0, the \\hss glue inside must shrink; \\hss has infinite shrinkability so it can shrink to a negative amount (backing up). Practical uses: create composite symbols like '/=' via \\rlap/= or /\\llap=, typeset marginal material, or create overlapping effects without changing the horizontal allocation."
+      },
+      {
+        "name": "Paragraph and mode rules: six TeX modes and mode switching behavior",
+        "description": "TeX has six modes: vertical, internal vertical, horizontal, restricted horizontal, math mode (inline), and display math mode. Mode switches occur both implicitly (e.g., typing a character in vertical mode begins horizontal mode) and explicitly (e.g., \\indent/\\noindent).",
+        "guidance": "Vertical modes build vertical lists for pages/vboxes; horizontal modes build paragraphs; math modes parse formulas. The first token of a new paragraph in vertical/internal vertical mode changes mode to horizontal and inserts paragraph indentation. Use \\indent to explicitly begin a paragraph (it also inserts an empty box of width \\parindent), and \\noindent to begin without indentation. Plain TeX sets \\parindent=20pt by default. If you get errors like 'You can't do such-and-such in restricted horizontal mode', examine current mode."
+      },
+      {
+        "name": "Paragraph termination rules (\\par, blank line, or incompatible vertical token)",
+        "description": "A paragraph ends when you type \\par or insert a blank line (blank line is converted to \\par). A paragraph also ends when TeX encounters a token incompatible with horizontal mode (e.g., \\vskip introduces vertical glue and terminates the paragraph).",
+        "guidance": "Be aware that some commands implicitly end the paragraph; explicit use of \\par or blank lines is the standard way to separate paragraphs. Beginning a paragraph with an \\hbox in vertical mode requires attention (see exercise references) because \\hbox behaves differently in different modes."
+      }
+    ]
+  }
+}

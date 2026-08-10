@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_14a11c225de1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 16290,
+  "output_tokens": 4488,
+  "elapsed_s": 3084.3204936671536,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "empirical researchers, patent scholars, and NLP/machine-learning practitioners studying patent outcomes and gender disparities",
+    "subtask_short": "textual_analysis_of_patent_applications",
+    "subtask_description": "An empirical study using NLP and machine\u2011learning on patent application abstracts (2013\u20132020) to (1) predict inventor gender from text, (2) predict grant outcomes from textual and topical features, and (3) analyze whether female\u2011dominated subject clusters have higher rejection rates.",
+    "subtask_keywords": [
+      "patents",
+      "text_analysis",
+      "machine_learning",
+      "gender",
+      "empirical_research",
+      "nlp"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Dataset inclusion criteria (timeframe, fields, and required fields)",
+        "description": "The dataset includes approximately 270,000 published applications filed between 2013 and 2020 inclusive; each entry included the application number, the abstract, and the filing year. The dataset ultimately analyzed (after cleaning) contained 255,728 records with 37 columns.",
+        "guidance": "Only entries for which an abstract could be identified were included. The study focused on utility patent applications (excluding design, plant, provisionals, reissues, etc.), restricted to filings that did not claim priority to an earlier filing (except priority claims to national stage entries or provisional applications), and used USPTO-assigned examination group to sort technological field. These scope choices were adopted to reduce noise and focus on direct links between inventor gender, patent attributes, and outcomes."
+      },
+      {
+        "name": "Single-inventor and U.S.-based inventor restriction",
+        "description": "To focus on direct links between inventor gender and patent attributes and outcomes, applications were limited to those naming a single United States inventor.",
+        "guidance": "This avoids confounding from mixed-gender teams and cultural differences among foreign inventors. The authors note this may bias the dataset (e.g., single inventors may concentrate in certain areas) but accept that limitation to assure direct linkage between inventor gender and outcomes."
+      },
+      {
+        "name": "Priority and duplicate-application handling",
+        "description": "Applications that made priority claims (other than claims to a provisional or foreign application) were removed to avoid double counting inventions; duplicates (repeated abstracts) found post-filtering were also removed.",
+        "guidance": "Keeping the first application in a family and excluding later priority filings reduces over-representation of inventions appearing multiple times. The authors removed a small percentage of repeated abstracts (2,489 / 272,401 = 0.91%)."
+      },
+      {
+        "name": "Gender coding threshold (Gender API >= 70%)",
+        "description": "Inventor gender was estimated using Gender API and coded if the service identified gender with at least a 70% certainty. Inventors who did not satisfy this threshold were coded with a zero for both Male and Female and removed from analysis.",
+        "guidance": "Using this threshold, of 272,401 applications, 234,100 were coded as men, 26,718 as women, and 11,583 were excluded for insufficient certainty (95.7% of applications were coded). The Gender API source and the 70% certainty threshold are treated as an explicit inclusion rule."
+      },
+      {
+        "name": "Outcome coding date and categories",
+        "description": "Application outcomes were coded using USPTO data as patented, abandoned, or pending as of June 22, 2022.",
+        "guidance": "These three mutually exclusive status flags (one_if_patented, one_if_abandoned, one_if_pending) form the dependent variable for grant\u2011rate analysis and classifiers."
+      },
+      {
+        "name": "Text preprocessing steps",
+        "description": "Text preprocessing converted all text to lowercase, removed English stopwords (e.g., 'the', 'this', 'it'), eliminated numbers and punctuation marks, and applied lemmatization. Results were stored in a new column named 'clean_abstract'.",
+        "guidance": "These steps standardize text, reduce noise, and prepare data both for bag\u2011of\u2011words style features (TFIDF) and transformer models. Analysis was reported on both original and clean abstracts."
+      },
+      {
+        "name": "USPC class normalization and cleaning",
+        "description": "USPC class values were normalized to strings with leading zeros where necessary to resolve mixed data types (integers and strings). After cleaning, 429 unique USPC classes remained.",
+        "guidance": "Anomalies (e.g., '072' vs '72') were corrected by a custom function to ensure consistent class identifiers for field-level analysis."
+      },
+      {
+        "name": "Readability and textual metrics to quantify textual choices",
+        "description": "The study used Python's Readability package and the Flesch\u2011Kincaid readability grade to quantify reading difficulty. Additional word-based statistics were calculated for each abstract: word count, character count, median word length, average word length, word length asymmetry distribution degree (skewness), average characters per word, average words per sentence, number of syllables and sentences, type-token ratio (unique words / word count), number of long words, and number of complex words.",
+        "guidance": "Flesch\u2011Kincaid output estimates grade level required to understand the text (lower score = easier readability). These features quantify 'textual choices' (vocabulary diversity, word/sentence complexity) that the classifiers used as predictors of gender and grant outcome."
+      },
+      {
+        "name": "Definition of 'long words' and 'complex words' (feature thresholds)",
+        "description": "In the data-prep description the authors define long words as length over 7 characters and complex words as more than 3 syllables. (Appendix C later reports 'Long Words' defined as six or more characters, indicating an inconsistency.)",
+        "guidance": "Users of these metrics should note the paper's explicit operational thresholds (over 7 characters; >3 syllables) but also the noted inconsistency in appendix; when reproducing, verify which threshold is used in code (the authors provide code/data on GitHub)."
+      },
+      {
+        "name": "N-gram analysis (unigrams, bigrams) and top-50 comparison",
+        "description": "Unigrams (single tokens) and bigrams (two-word sequences) were analyzed. The paper lists N\u2011grams that only appear in the top 50 most common N\u2011grams for male or female inventors (i.e., gender\u2011unique Ngrams).",
+        "guidance": "Comparing top N\u2011grams by gender helps identify candidate gender\u2011identifying terms; overlapping N\u2011grams are excluded from the gender-unique lists. The approach underlies feature selection for TFIDF and interpretable model analysis."
+      },
+      {
+        "name": "Classification models for gender prediction (TFIDF logistic regression and DeBERTa)",
+        "description": "Two classifiers were used to predict inventor gender: Logistic Regression on a TFIDF matrix and a DeBERTa transformer model. The TFIDF-based classifier is predominantly influenced by specific word choices; the DeBERTa classifier is more sensitive to topics and underlying meanings.",
+        "guidance": "Training converts text into numerical representations (TFIDF vectors or transformer embeddings). The distinction allows assessing whether predictions arise from lexical choices or from substantive topics. Classifier success criterion: accuracy above 50% supports Hypothesis 1."
+      },
+      {
+        "name": "Class imbalance mitigation (under-sampling)",
+        "description": "Because the dataset was highly imbalanced (\u22489 male inventors per female inventor), an under-sampling approach was adopted to ensure analysis was conducted on equal numbers of male and female applications.",
+        "guidance": "Under-sampling prevents overfitting on the majority class and allows classifiers to learn patterns for both genders. It is an explicit methodological rule used before training gender classifiers."
+      },
+      {
+        "name": "Grant-prediction model and feature-importance analysis (Random Forest)",
+        "description": "A Random Forest classifier was used to predict whether an application will be granted. The model can identify features that particularly influence grant rates (e.g., textual choices, inventor gender, subject matter keywords).",
+        "guidance": "Hypothesis 2 is supported if classifier accuracy exceeds random guess (>50%). The Random Forest's feature-importance outputs directed attention to type-token ratio, average sentence/word characteristics, vocabulary diversity, and subject-matter clusters as leading predictors."
+      },
+      {
+        "name": "Clustering approach for subject-matter grouping (HDBSCAN) and cluster labeling",
+        "description": "An HDBSCAN clustering algorithm was applied to group abstracts describing similar subject matter and to extract subject-matter keywords. Clusters with disproportionately high rates of male or female inventors were identified; a 'female-dominated cluster' is described as over 50% women inventors.",
+        "guidance": "Clusters were used to test Hypothesis 3 (whether technological fields common in female applications have higher rejection rates). The paper reports that 85% of female-dominated clusters (over 50% women inventors) have abnormally high rejection rates (vs. 45% for male-dominated groupings)."
+      },
+      {
+        "name": "Evaluation metrics and classifier performance reporting",
+        "description": "Classifier performance was reported using accuracy and confusion-matrix components: true positives, false positives, true negatives, false negatives. Performance was also reported broken down by technological class (Mechanical Engineering vs Transportation) and by inventor gender.",
+        "guidance": "Examples reported: gender classifiers achieved 57\u201368% accuracy; mechanical eng. gender-classification accuracy 68.282% with TP/FP/TN/FN breakdowns; transportation 64.814%. Grant-prediction classifier reporting similarly used overall accuracy and class-level confusion rates. Type-token ratio was highlighted as most important in predicting grant outcome."
+      },
+      {
+        "name": "Operational test rules / success thresholds for hypotheses",
+        "description": "For both gender prediction (Hypothesis 1) and grant prediction (Hypothesis 2), the study sets a success threshold that classifier accuracy above 50% (random guess) supports the hypothesis.",
+        "guidance": "This explicit binary benchmark (>'random guess') is the study's stated standard for demonstrating predictive ability of textual and topical features."
+      },
+      {
+        "name": "Interpretive caution about anonymized examination",
+        "description": "The paper argues that anonymized patent examination may not fully address gendered outcomes because inventor gender can often be identified from textual attributes\u2014even without knowing the inventor's name (classifier could identify gender over two\u2011thirds of the time).",
+        "guidance": "This functions as a normative implication/constraint on proposed policy interventions: because textual cues (e.g., words like 'bra' or 'breast') disproportionately identify female inventors, anonymization by name alone may be insufficient to eliminate gender bias in patent prosecution."
+      }
+    ]
+  }
+}

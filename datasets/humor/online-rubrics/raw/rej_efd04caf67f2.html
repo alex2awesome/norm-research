@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security Check | Ranker</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: rgb(242, 243, 245);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      text-align: center;
+      padding: 52px 44px;
+      max-width: 440px;
+      width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+    .logo {
+      margin-bottom: 36px;
+    }
+    .logo img {
+      height: 36px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: rgb(51, 51, 51);
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: rgb(100, 100, 100);
+      margin-bottom: 32px;
+    }
+    .error-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+    .error-box p {
+      color: rgb(184, 21, 7);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .cf-turnstile {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .footer {
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgb(160, 160, 160);
+    }
+    form { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <img src="/img/brand/ranker-logo.svg" alt="Ranker" height="40" style="height:40px;width:auto">
+      <img src="/img/brand/wordmark.svg" alt="Ranker" height="22" style="height:22px;width:auto;margin-top:8px;display:block;margin-left:auto;margin-right:auto">
+    </div>
+    <h1>Verifying you're human</h1>
+    <p class="subtitle">This quick check helps us keep Ranker safe.</p>
+    
+    <noscript>
+      <div class="error-box" style="margin-bottom:20px"><p>JavaScript is required to complete this verification. Please enable JavaScript in your browser and reload this page.</p></div>
+    </noscript>
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAACsCDstzlv-gPCaw" data-callback="onSuccess" data-error-callback="onTurnstileError" data-expired-callback="onTurnstileExpired"></div>
+    <form id="challengeForm" method="POST">
+      <input type="hidden" name="cf-turnstile-response" id="cfResponse">
+    </form>
+    <p class="footer">Powered by Cloudflare Turnstile</p>
+    
+    <style>
+      @keyframes altReveal {
+        0% { opacity: 0; transform: translateY(-16px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes altBtnPulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(252,2,2,0); border-color: #e5e7eb; }
+        50% { box-shadow: 0 0 0 8px rgba(252,2,2,0.15); border-color: rgb(252,2,2); }
+      }
+      .altVerify-reveal { animation: altReveal 0.5s ease-out; }
+      .altVerify-reveal #startCaptchaBtn { animation: altBtnPulse 1.6s ease-in-out 3; }
+    </style>
+    <div id="altVerify" style="display:none;margin-top:32px;border-top:1px solid #eee;padding-top:28px">
+      <button id="startCaptchaBtn" type="button" style="background:none;border:2px solid #e5e7eb;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:500;color:rgb(51,51,51);cursor:pointer;transition:border-color 0.2s;margin-bottom:20px">
+        Try alternative verification
+      </button>
+      <p style="font-size:13px;color:rgb(100,100,100);margin-bottom:0">
+        Having trouble? <a id="altSupportLink" role="link" tabindex="0" style="color:rgb(252,2,2);text-decoration:underline;cursor:pointer">Contact support</a>
+      </p>
+    </div>
+    <div id="captchaWidget" style="display:none;margin-top:24px;border-top:1px solid #eee;padding-top:20px">
+      <p style="font-size:16px;font-weight:600;color:rgb(51,51,51);margin-bottom:4px">Rotate the Ranker Logo</p>
+      <p style="font-size:13px;color:rgb(100,100,100);margin-bottom:16px">Drag to spin the card until the logo faces you right-side up</p>
+      <canvas id="captchaCanvas" width="280" height="280" style="border:1px solid #e5e7eb;border-radius:12px;cursor:grab;touch-action:none;display:block;margin:0 auto 12px;max-width:100%;height:auto;transition:border-color 0.3s,box-shadow 0.3s;background:#f2f3f5"></canvas>
+      <p id="captchaStatus" style="font-size:13px;min-height:20px;margin-bottom:12px">&nbsp;</p>
+      <button id="captchaSubmit" type="button" disabled style="background:none;border:2px solid #e5e7eb;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:600;color:rgb(160,160,160);cursor:not-allowed;transition:all 0.2s">
+        Verify
+      </button>
+      <form id="captchaForm" method="POST" style="display:none">
+        <input type="hidden" name="rc-t" value="0942fcf3d282eaa2|6a010532|-0.583604,-0.341978,0.680294,-0.282237|ed23bc5c3a590b69">
+        <input type="hidden" name="rc-a" id="captchaFront" value="">
+        <input type="hidden" name="rc-b" id="captchaUp" value="">
+        <input type="hidden" name="rc-c" id="captchaDrag" value="">
+        <input type="hidden" name="rc-d" id="captchaTime" value="">
+        <input type="hidden" name="rc-e" id="captchaBehavior" value="">
+        <input type="hidden" name="rc-f" id="captchaPath" value="">
+      </form>
+    </div>
+    <script>
+    (function(){
+      window._captchaLaunched=false;
+      window._altTimer=setTimeout(function(){ if(window._captchaLaunched)return; var e=document.getElementById('altVerify'); if(e){ e.style.display='block'; e.classList.add('altVerify-reveal'); } }, 10000);
+      document.getElementById('altSupportLink').addEventListener('click',function(){ window.location.href=atob('aHR0cHM6Ly9yYW5rZXJoZWxwLmZyZXNoZGVzay5jb20vc3VwcG9ydC90aWNrZXRzL25ldw=='); });
+      var startBtn=document.getElementById('startCaptchaBtn');
+      startBtn.addEventListener('mouseover',function(){ this.style.borderColor='#112D6D'; });
+      startBtn.addEventListener('mouseout',function(){ this.style.borderColor='#e5e7eb'; });
+      function launchCaptcha(){
+        window._captchaLaunched=true;
+        clearTimeout(window._altTimer);
+        var hide=['.cf-turnstile','.footer','.error-box','.subtitle','#rateMsg'];
+        hide.forEach(function(s){ var el=document.querySelector(s); if(el) el.style.display='none'; });
+        var h1=document.querySelector('h1'); if(h1) h1.textContent='Alternative Verification';
+        var av=document.getElementById('altVerify'); if(av) av.style.display='none';
+        document.getElementById('captchaWidget').style.display='block';
+        var s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        s.onload=initCaptcha3D;
+        document.head.appendChild(s);
+      }
+      startBtn.addEventListener('click',launchCaptcha);
+      
+    })();
+    function initCaptcha3D(){
+      var c=document.getElementById('captchaCanvas'),W=280,H=280;
+      var scene=new THREE.Scene();
+      scene.background=new THREE.Color(0xf2f3f5);
+      var cam=new THREE.PerspectiveCamera(45,1,0.1,100);
+      cam.position.set(0,0,4.5); cam.lookAt(0,0,0);
+      var ren=new THREE.WebGLRenderer({canvas:c,antialias:true});
+      ren.setSize(W,H); ren.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+      ren.setClearColor(0xf2f3f5,1);
+      ren.render(scene,cam); // immediate render to show grey bg, prevents black flash
+      scene.add(new THREE.AmbientLight(0x888888));
+      var dl=new THREE.DirectionalLight(0xffffff,0.7); dl.position.set(3,4,5); scene.add(dl);
+      var dl2=new THREE.DirectionalLight(0xffffff,0.3); dl2.position.set(-2,-1,3); scene.add(dl2);
+
+      // Load Ranker logo SVG as texture
+      var grp=new THREE.Group();
+      scene.add(grp);
+      var img=new Image();
+      img.crossOrigin='anonymous';
+      // Load logo + wordmark, draw both onto card texture
+      var logo=new Image(), wordmark=new Image(), loaded=0;
+      function onAssetLoad(){
+        loaded++;
+        if(loaded<2) return;
+        var tc=document.createElement('canvas');
+        tc.width=512; tc.height=384;
+        var ctx=tc.getContext('2d');
+        ctx.fillStyle='#ffffff';
+        ctx.fillRect(0,0,512,384);
+        // Draw logo centered in upper portion
+        var sc=Math.min(300/logo.naturalWidth,180/logo.naturalHeight);
+        var lw=logo.naturalWidth*sc, lh=logo.naturalHeight*sc;
+        ctx.drawImage(logo,(512-lw)/2,(384-lh)/2-40,lw,lh);
+        // Draw wordmark below logo (larger)
+        var wsc=Math.min(320/wordmark.naturalWidth,70/wordmark.naturalHeight);
+        var ww=wordmark.naturalWidth*wsc, wh=wordmark.naturalHeight*wsc;
+        ctx.drawImage(wordmark,(512-ww)/2,(384-lh)/2-40+lh+16,ww,wh);
+        var tex=new THREE.CanvasTexture(tc);
+        tex.minFilter=THREE.LinearFilter;
+
+        // Card: thin box with logo on front, navy on back, red edges
+        var mats=[
+          new THREE.MeshPhongMaterial({color:0xfc0202}),
+          new THREE.MeshPhongMaterial({color:0xfc0202}),
+          new THREE.MeshPhongMaterial({color:0xfc0202}),
+          new THREE.MeshPhongMaterial({color:0xfc0202}),
+          new THREE.MeshPhongMaterial({map:tex}),
+          new THREE.MeshPhongMaterial({color:0x112D6D})
+        ];
+        var card=new THREE.Mesh(new THREE.BoxGeometry(2.0,1.5,0.12),mats);
+        grp.add(card);
+
+        // Apply server-generated starting rotation from token via intro spin animation
+        var tkn=document.querySelector('[name="rc-t"]').value;
+        var qStr=tkn.split('|')[2];
+        var qp=qStr.split(',').map(Number);
+        var targetQ=new THREE.Quaternion(qp[0],qp[1],qp[2],qp[3]);
+        // Intro spin: rotate around targetQ's own axis, adding 1 full extra rotation.
+        // Extra rotation MUST be a whole multiple of 2π so it cancels and lands at targetQ.
+        var qw=Math.min(1,Math.abs(targetQ.w));
+        var targetAngle=2*Math.acos(qw);
+        var qs=Math.sqrt(1-qw*qw);
+        var spinAxis=qs>0.001
+          ? new THREE.Vector3(targetQ.x/qs,targetQ.y/qs,targetQ.z/qs)
+          : new THREE.Vector3(0,1,0);
+        if(targetQ.w<0) spinAxis.negate();
+        // Total angle = 1 full extra rotation (2π) + the target's own angle (~π)
+        // Gives ~1.5 visual rotations total. Must be N*2π extra to land exactly at targetQ.
+        var totalAngle=Math.PI*2+targetAngle;
+        var spinFrames=75,prevEase=0;
+        introSpinning=true;
+        var introFrame=0;
+        function introStep(){
+          introFrame++;
+          var t=introFrame/spinFrames;
+          var ease=t*t*(3-2*t); // smoothstep: fast start, smooth decel
+          var delta=totalAngle*(ease-prevEase);
+          prevEase=ease;
+          grp.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(spinAxis,delta));
+          ren.render(scene,cam);
+          if(introFrame<spinFrames){ requestAnimationFrame(introStep); }
+          else { grp.quaternion.copy(targetQ); introSpinning=false; } // correct float drift
+        }
+        requestAnimationFrame(introStep);
+      }
+      logo.onload=onAssetLoad; wordmark.onload=onAssetLoad;
+      logo.src='/img/brand/ranker-logo.svg';
+      wordmark.src='/img/brand/wordmark.svg';
+
+      // Drag state + behavior tracking
+      var introSpinning=false;
+      var dragging=false,px=0,py=0,td=0,t0=Date.now();
+      var dragPts=[];
+
+      // Magnetic snap: when close to correct on release, animate into place
+      var identity=new THREE.Quaternion();
+      function applySnap(){
+        var front=new THREE.Vector3(0,0,1).applyQuaternion(grp.quaternion);
+        var up=new THREE.Vector3(0,1,0).applyQuaternion(grp.quaternion);
+        if(front.z>0.85&&up.y>0.85){
+          // Animate snap over ~300ms
+          var steps=15,step=0;
+          function snapFrame(){
+            step++;
+            grp.quaternion.slerp(identity,0.25);
+            ren.render(scene,cam); chk();
+            if(step<steps) requestAnimationFrame(snapFrame);
+          }
+          requestAnimationFrame(snapFrame);
+        }
+      }
+
+      function sS(x,y){if(introSpinning)return;dragging=true;px=x;py=y;c.style.cursor='grabbing';}
+      function sM(x,y){
+        if(!dragging)return;
+        var dx=x-px,dy=y-py; td+=Math.abs(dx)+Math.abs(dy);
+        dragPts.push({x:x,y:y,t:Date.now()});
+        if(dragPts.length>2000) dragPts=dragPts.slice(-1500);
+        var sp=0.012;
+        grp.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),dy*sp));
+        grp.quaternion.premultiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),dx*sp));
+        px=x;py=y; ren.render(scene,cam); chk();
+      }
+      function sE(){
+        dragging=false;c.style.cursor='grab';
+        applySnap();
+        ren.render(scene,cam); chk();
+      }
+
+      c.addEventListener('mousedown',function(e){sS(e.clientX,e.clientY);});
+      window.addEventListener('mousemove',function(e){sM(e.clientX,e.clientY);});
+      window.addEventListener('mouseup',sE);
+      var trackId=null;
+      c.addEventListener('touchstart',function(e){e.preventDefault();if(trackId!==null)return;var t=e.changedTouches[0];trackId=t.identifier;sS(t.clientX,t.clientY);},{passive:false});
+      window.addEventListener('touchmove',function(e){if(!dragging)return;e.preventDefault();for(var i=0;i<e.changedTouches.length;i++){if(e.changedTouches[i].identifier===trackId){sM(e.changedTouches[i].clientX,e.changedTouches[i].clientY);break;}}},{passive:false});
+      window.addEventListener('touchend',function(e){for(var i=0;i<e.changedTouches.length;i++){if(e.changedTouches[i].identifier===trackId){trackId=null;sE();break;}}});
+
+      var btn=document.getElementById('captchaSubmit');
+      var st=document.getElementById('captchaStatus');
+
+      function chk(){
+        var front=new THREE.Vector3(0,0,1).applyQuaternion(grp.quaternion);
+        var up=new THREE.Vector3(0,1,0).applyQuaternion(grp.quaternion);
+        var fOk=front.z>0.92, uOk=up.y>0.92;
+        if(fOk&&uOk){
+          btn.disabled=false;btn.style.background='rgb(34,197,94)';btn.style.borderColor='rgb(34,197,94)';btn.style.color='#fff';btn.style.cursor='pointer';
+          st.textContent='Logo is aligned! Click Verify.';st.style.color='rgb(34,197,94)';
+          c.style.borderColor='rgb(34,197,94)';c.style.boxShadow='0 0 20px rgba(34,197,94,0.3)';
+        }else{
+          btn.disabled=true;btn.style.background='';btn.style.borderColor='';btn.style.color='';btn.style.cursor='not-allowed';
+          c.style.borderColor='#e5e7eb';c.style.boxShadow='none';
+          if(fOk&&!uOk){ st.textContent='Almost! Tilt to make it upright.';st.style.color='rgb(217,119,6)'; }
+          else if(!fOk&&uOk){ st.textContent='Spin to find the logo side.';st.style.color='rgb(100,100,100)'; }
+          else{ st.innerHTML='&nbsp;'; }
+        }
+      }
+
+      // Analyze drag behavior: detect bot-like straight lines
+      function analyzeBehavior(){
+        if(dragPts.length<10) return '0,'+dragPts.length;
+        var changes=0,segs=0;
+        for(var i=2;i<dragPts.length;i++){
+          var dx1=dragPts[i-1].x-dragPts[i-2].x, dy1=dragPts[i-1].y-dragPts[i-2].y;
+          var dx2=dragPts[i].x-dragPts[i-1].x, dy2=dragPts[i].y-dragPts[i-1].y;
+          var l1=Math.sqrt(dx1*dx1+dy1*dy1), l2=Math.sqrt(dx2*dx2+dy2*dy2);
+          if(l1>0.5&&l2>0.5){
+            var cross=Math.abs(dx1*dy2-dy1*dx2)/(l1*l2);
+            if(cross>0.08) changes++;
+            segs++;
+          }
+        }
+        var ratio=segs>0?(changes/segs):0;
+        return ratio.toFixed(3)+','+dragPts.length;
+      }
+
+      btn.addEventListener('click',function(){
+        if(btn.disabled)return;
+        var front=new THREE.Vector3(0,0,1).applyQuaternion(grp.quaternion);
+        var up=new THREE.Vector3(0,1,0).applyQuaternion(grp.quaternion);
+        document.getElementById('captchaFront').value=[front.x.toFixed(4),front.y.toFixed(4),front.z.toFixed(4)].join(',');
+        document.getElementById('captchaUp').value=[up.x.toFixed(4),up.y.toFixed(4),up.z.toFixed(4)].join(',');
+        document.getElementById('captchaDrag').value=Math.round(td);
+        document.getElementById('captchaTime').value=Date.now()-t0;
+        document.getElementById('captchaBehavior').value=analyzeBehavior();
+        var maxPts=100,pts=dragPts,step=pts.length>maxPts?pts.length/maxPts:1,path=[];
+        for(var pi=0;pi<pts.length&&path.length<maxPts;pi+=step){ var pp=pts[Math.floor(pi)]; path.push(pp.x.toFixed(1)+','+pp.y.toFixed(1)+','+(pp.t-t0)); }
+        document.getElementById('captchaPath').value=path.join(';');
+        var form=document.getElementById('captchaForm');
+        var u=new URL(window.location.href);
+        u.searchParams.set('_rcv','1');
+        form.action=u.pathname+u.search;
+        form.submit();
+      });
+    }
+    </script>
+  </div>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script>
+    // Passive automation detection — runs once before Turnstile, posts signals fire-and-forget.
+    // Obfuscated key names; silent — never blocks user, just records.
+    (function(){try{
+      var r={a:0,b:0,c:0,d:0,e:0,f:0};
+      // a: CDP Runtime.enable side-channel via error stack getter
+      try{var er=new Error();var _t=0;Object.defineProperty(er,'stack',{get:function(){_t=1;return'';}});console.debug(er);if(_t)r.a=1;}catch(_){}
+      // b: navigator.webdriver
+      try{if(navigator.webdriver===true)r.b=1;}catch(_){}
+      // c: permissions.query notifications vs Notification.permission mismatch (headless tell)
+      try{if(typeof Notification!=='undefined'&&navigator.permissions&&navigator.permissions.query){navigator.permissions.query({name:'notifications'}).then(function(p){if(p.state==='prompt'&&Notification.permission==='denied'){r.c=1;_send();}}).catch(function(){});}}catch(_){}
+      // d: window.chrome.runtime missing on Chrome UA
+      try{var ua=navigator.userAgent||'';if(/Chrome\//.test(ua)&&!/Edg\/|OPR\//.test(ua)){if(!window.chrome||!window.chrome.runtime)r.d=1;}}catch(_){}
+      // e: zero plugins on Chrome (real Chrome ships PDF plugins)
+      try{var ua2=navigator.userAgent||'';if(/Chrome\//.test(ua2)&&navigator.plugins&&navigator.plugins.length===0)r.e=1;}catch(_){}
+      // f: languages array empty (real browsers populate)
+      try{if(!navigator.languages||navigator.languages.length===0)r.f=1;}catch(_){}
+      var _sent=0;
+      function _send(){if(_sent)return;_sent=1;try{var x=new XMLHttpRequest();x.open('POST','/ct',true);x.setRequestHeader('Content-Type','application/x-www-form-urlencoded');x.send('a='+r.a+'&b='+r.b+'&c='+r.c+'&d='+r.d+'&e='+r.e+'&f='+r.f);}catch(_){}}
+      // Fire after small delay so async permission check can land
+      setTimeout(_send,300);
+    }catch(_){}})();
+    function onSuccess(token) {
+      clearTimeout(window._altTimer);
+      document.getElementById('cfResponse').value = token;
+      document.getElementById('challengeForm').submit();
+    }
+    function onTurnstileError() {
+      // Turnstile failed — show alt verification section (unless 3D captcha already launched)
+      if (window._captchaLaunched) return;
+      var el = document.getElementById('altVerify');
+      if (el) { el.style.display = 'block'; el.classList.add('altVerify-reveal'); }
+    }
+    function onTurnstileExpired() {
+      // Token expired — refresh the page to get a new challenge
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>

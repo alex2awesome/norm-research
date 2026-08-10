@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/sigmod_blog_coi_management.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 4956,
+  "output_tokens": 3483,
+  "elapsed_s": 1074.826871749945,
+  "extracted": {
+    "orientation": "blog_post",
+    "intended_audience": "program committee chairs, conference and journal editors/associate editors, RMS developers, and members of academic societies concerned with peer review",
+    "subtask_short": "automating COI management in peer review",
+    "subtask_description": "Guidelines and criteria for detecting, reporting, and managing conflicts of interest (COI) in peer-reviewed venues, with emphasis on automated tools and policy design to supplement/replace manual checking. Targets conference and journal review management workflows, detection algorithms, and reporting/visualization for decision-making.",
+    "subtask_keywords": [
+      "coi",
+      "peer_review",
+      "automation",
+      "program_chairs",
+      "rms",
+      "conference_and_journal"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of Conflict of Interest (COI)",
+        "description": "A COI is a set of circumstances that creates a risk that professional judgement or actions regarding a primary interest will be unduly influenced by a secondary interest. Primary interest refers to the principal goals of the profession or activity (e.g., unbiased review); secondary interest includes personal benefits such as financial gain, professional advancement, favors for family, friends, or collaborators.",
+        "guidance": "Use this operational definition as the baseline for determining COI. Note: hiding or falsifying a stated COI is a violation of the ACM Code of Ethics. The definition emphasizes risk of undue influence rather than proven misconduct."
+      },
+      {
+        "name": "Recognized COI types (explicit criteria)",
+        "description": "Typical COI exists if people wrote a paper together in the past x years, are at the same institution currently or in the near past/near future, are close relatives or friends, are advisor and (former) advisee, or worked together closely on a project in the past y years.",
+        "guidance": "Treat these categories as the standard checklist of explicit ties that create COI under most venue policies. Implement automated checks for co-authorship and institutional co-affiliation first, and allow policy configuration for year thresholds (x,y)."
+      },
+      {
+        "name": "Author self-reporting of COI",
+        "description": "Authors are typically required to self-report COI with potential program committee (PC) members in current practice.",
+        "guidance": "Self-reporting is necessary but insufficient: PC chairs cannot realistically double-check all declarations across many submissions, and manual systems miss unreported COI. Automated validation should complement self-reports rather than replace them."
+      },
+      {
+        "name": "Completeness: detection of unreported COI",
+        "description": "Systems must detect COI that authors did not report; manual checking misses non-negligible numbers of unreported COI (e.g., post-facto checks found violations in ICDE 2021).",
+        "guidance": "Measure success by the number of unreported COI detected and by reductions in post-facto discoveries. Integrate automated detection into assignment workflows so undeclared ties are flagged early for PC chair review."
+      },
+      {
+        "name": "Robust name and affiliation matching",
+        "description": "COI detection needs to handle free-form names and affiliations in RMS and bibliographic sources; authors and reviewers may not follow the same naming conventions, and homonymous names (namesakes) create ambiguity.",
+        "guidance": "Implement fuzzy matching, canonicalization, and disambiguation algorithms; account for variations (initials, ordering, diacritics). Antipattern: naive string-equality checks that miss matches or create false positives due to homonyms."
+      },
+      {
+        "name": "Validation of bibliographic identifiers and input data",
+        "description": "Some venues demand explicit bibliographic identifiers (e.g., DBLP ids), but users may enter invalid or incorrect links to DBLP or Google Scholar.",
+        "guidance": "Validate user-supplied identifiers and links; build checks for plausibility and cross-reference with other sources. Treat user-provided identifiers as helpful hints but not authoritative without validation."
+      },
+      {
+        "name": "Use of multiple bibliographic and data sources",
+        "description": "To mitigate single-source errors and missing data, COI detection should leverage multiple data sources (e.g., DBLP plus RMS records and other bibliographies).",
+        "guidance": "Aggregate and reconcile data from multiple sources to improve recall and precision. Guidance: avoid over-dependence on one source because DBLP or others can have misattributions or missing entries."
+      },
+      {
+        "name": "Explainability and justification for flagged COI",
+        "description": "Automated tools must generate explanations to justify why a specific author-reviewer pair is marked as COI.",
+        "guidance": "Provide human-readable evidence (e.g., co-authored papers, shared affiliations, dates) so PC chairs can assess and act; make explanations prominent in reports. Antipattern: black-box flags with no supporting evidence that PC chairs cannot verify."
+      },
+      {
+        "name": "Graph-based visualization of relationships",
+        "description": "Provide graph-views of co-authorship relationships between authors, reviewers, and meta-reviewers for each conflict paper to make results accessible to PC chairs.",
+        "guidance": "Use visualizations to summarize connection paths (direct coauthor, two-hop links, shared institution) and help chairs reason about whether a tie constitutes a policy violation or a borderline case."
+      },
+      {
+        "name": "Policy-based violation detection and configurable thresholds",
+        "description": "The system should generate reports on 'possible COI violations based on a venue's COI policy' (e.g., co-authorship within last x years).",
+        "guidance": "Make the policy parameters configurable (x, y, what counts as 'worked together closely') so venues can enforce their own rules. Also expose which policy rule triggered a violation."
+      },
+      {
+        "name": "Generic integration and RMS-independence",
+        "description": "COI detection tooling should be orthogonal to the RMS's 'secret sauce' for reviewer assignment, making it generic and extensible to any RMS.",
+        "guidance": "Design APIs or adapters to ingest reviewer assignments and submission metadata from multiple RMS platforms. Avoid tight coupling to any single RMS so the tool can be reused across venues."
+      },
+      {
+        "name": "Support for journal workflows and AE-reviewer discussions",
+        "description": "Journal review systems often lack COI management frameworks and even lacking reviewer-AE discussion infrastructure; automated COI tools should extend to journals (e.g., J-CLOSET).",
+        "guidance": "Provide workflows suitable for journals: AE-level checks during reviewer assignment, facilities for private AE-reviewer discussion about COI, and integration with editorial systems."
+      },
+      {
+        "name": "Revisit and rationalize COI policy thresholds (evidence-based policy)",
+        "description": "Common rules (e.g., co-authorship-based COI limited to last x years) are ad hoc and lack scientific basis; COI may persist beyond arbitrary year cutoffs and should be consistent across venues.",
+        "guidance": "Encourage communities to re-evaluate thresholds and pursue evidence-based or uniform policies. Provide analytics to study historical co-authorship patterns to inform policy choices."
+      },
+      {
+        "name": "Detect submarine COI (indirect/contextual ties)",
+        "description": "Submarine COI: bias between two people that is not captured by explicit ties like co-authorship or same institution (contextual/dynamic relationships).",
+        "guidance": "Research and develop methods (possibly leveraging contextual signals or content analysis) to identify less explicit relationships; surface borderline cases for human review. Acknowledge that fully automatic detection is hard and such cases may need human input."
+      },
+      {
+        "name": "Detect torpedo COI (antagonistic bias)",
+        "description": "Torpedo COI: antagonistic relationships or topic-based antagonism that may lead to unfavorable (or favorable) biased reviews.",
+        "guidance": "Complement explicit COI detection with review-content or historical-behavior signals where appropriate; prioritize human adjudication for suspected antagonistic bias."
+      },
+      {
+        "name": "Analytic features for oversight (bid analytics, publication profiles, PC diversity)",
+        "description": "Provide additional analytics such as bid analytics to find interesting patterns, publication profiles of PC members, and analysis of PC diversity.",
+        "guidance": "Use analytics to detect anomalies or systemic patterns (e.g., repeated assignments between close collaborators) and to support fairness/diversity goals. Present findings in actionable reports for chairs."
+      },
+      {
+        "name": "Scalability to PC size and submission volume",
+        "description": "Manual double-checking of COI is impractical at typical conference scales (PC lists up to ~200 and many submissions); COI management must scale.",
+        "guidance": "Ensure the automated system can process large numbers of submissions and reviewers efficiently and produce prioritized, digestible outputs for chairs rather than unmanageable long lists of flags."
+      }
+    ]
+  }
+}

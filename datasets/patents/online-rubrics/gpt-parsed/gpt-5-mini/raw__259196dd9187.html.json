@@ -1,0 +1,169 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/259196dd9187.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17207,
+  "output_tokens": 5143,
+  "elapsed_s": 6946.266936584143,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "machine-learning researchers and engineers building or evaluating domain-specific LLMs for the intellectual-property / patent domain; IP practitioners interested in automated patent tools",
+    "subtask_short": "training IP-domain LLMs",
+    "subtask_description": "Procedures, dataset design, alignment, and evaluation criteria for developing large language models specialized for intellectual property (patent) tasks, plus a domain benchmark (PatentBench) and evaluation protocols. Targets both model developers and evaluators in the IP/ML intersection.",
+    "subtask_keywords": [
+      "ip",
+      "llm",
+      "pretraining",
+      "alignment",
+      "benchmark"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pretraining data diversity and composition",
+        "description": "Pretraining data must be diverse and cover a wide range of types, domains, and tasks relevant to the IP domain, including legal knowledge and engineering/technical knowledge from various disciplines. The dataset used comprised publicly available internet resources (websites, wikis, books, exam databases, code repositories, news), non-public internal sources (patents, file wrappers, annotated datasets, litigation records), third-party research papers/books/reports, and internally generated data; training used >240B tokens in English and Chinese (37% Chinese).",
+        "guidance": "Design the pretraining corpus to support the model's need to contextualize patent specifications and compare patents; explicitly include both legal/regulatory texts and technical/engineering sources to ensure coverage of domains encountered in patent drafting, examination, and comparison."
+      },
+      {
+        "name": "Data filtering (toxicity and low-quality removal)",
+        "description": "Use a hybrid approach of rule-based and machine-learning-based techniques to remove toxicity and low-quality data, including data feature filtering logic set by business experts, binary classification mini-models, black/white list keyword filters, and other internal data cleansing tools.",
+        "guidance": "Apply multi-stage filters to ensure safety and quality of pretraining text; involve domain experts in setting filter rules to avoid discarding domain-relevant phrasing."
+      },
+      {
+        "name": "Deduplication (exact and fuzzy)",
+        "description": "Remove repeated documents using both exact match and approximate match deduplication. For exact matches match substrings and attributes (DOI, patent family info). For fuzzy duplicates use MinHash during preprocessing.",
+        "guidance": "Deduplicate at document and substring levels, leveraging metadata (e.g., DOIs, patent families) to avoid over-representation of duplicated content in pretraining."
+      },
+      {
+        "name": "Rewriting / up-sampling domain sources",
+        "description": "Up-sample data from books with IP-oriented knowledge by rewriting original documents into various expressions (summarization, conversation) to inject IP-oriented terminology and regulations efficiently.",
+        "guidance": "Use controlled rewriting / paraphrasing to increase coverage of rare but important domain expressions while preserving factual/legal content; leverage rewriting to generate instruction-style or conversational variants useful for downstream SFT."
+      },
+      {
+        "name": "Synthesis of combined patent and file-wrapper data (synthetic examples)",
+        "description": "Construct synthetic pretraining data by concatenating claims of a patent under examination with full text of comparative/public patents and adding file wrapper documents to reveal connections between patents; recombine patents that share X-file relationships to teach the model relationships between related patents.",
+        "guidance": "Create synthetic paired/comparative examples (claims + public patent + file wrapper notes; X-file pairs) to help the model learn patent-difference signals, infringement cues, and how examiners describe comparisons."
+      },
+      {
+        "name": "Two-stage pretraining",
+        "description": "A two-stage pretraining pipeline where stage 1 consumes the bulk of tokens (226B) to inject basic knowledge (Web, News, Patent, Paper) and stage 2 consumes a smaller token set (~20B) focusing on Research Reports, Exams, Books, Chats, Codes, File Wrappers, and Supervised Data to inject IP-oriented knowledge and task abilities.",
+        "guidance": "Distribute data categories non-randomly across stages so stage 1 provides broad base knowledge and stage 2 concentrates domain-specific and task-oriented signals (including longer contexts where needed)."
+      },
+      {
+        "name": "Long-context extending strategy",
+        "description": "Train on shorter context lengths in stage 1 and extend to long context (e.g., 16k) in stage 2. For one model, modify rotary/base frequency (from 10k to 100k) when extending context to reduce performance regression.",
+        "guidance": "Progressively extend context length rather than train from scratch at long contexts; adjust positional/rotary frequency parameters to maintain performance when changing context window size."
+      },
+      {
+        "name": "Multilingual tokenizer and vocabulary resizing",
+        "description": "Train a new BPE tokenizer on pretraining data and merge with base tokenizer to improve token compression for Chinese and IP text; new vocabulary size was 55,296 (added 23,296 tokens to LLaMA2 tokenizer); resized embedding and output layers by appending new rows and training additional parameters in further pretraining.",
+        "guidance": "Adopt a tokenizer optimized for the domain and languages involved; resize and initialize embeddings carefully (append to keep original embeddings unchanged) and fine-tune additional embeddings in subsequent pretraining."
+      },
+      {
+        "name": "Training optimization and hyperparameter choices for pretraining",
+        "description": "Use optimized autoregressive transformer, AdamW optimizer, BFloat16 mixed precision, cosine learning rate schedule decaying to 10% of peak, batch tokens per batch set to 4M, and Megatron-LM with flash attention modules. Specific per-model LR, warmup, context lengths and tokens were provided in Table 1.",
+        "guidance": "Follow stable training recipes (AdamW, mixed precision, appropriate LR schedules) and tailor context lengths and warmups per model size; document per-stage token budgets and hyperparameters for reproducibility."
+      },
+      {
+        "name": "Alignment via Supervised Fine-Tuning (SFT) and RLHF",
+        "description": "Apply supervised fine-tuning (SFT) using instruction-response data, then apply reinforcement learning from human feedback (RLHF) to further align model outputs with human preferences and instruction following.",
+        "guidance": "Combine SFT and RLHF sequentially; collect domain-specific annotated instructions and human preference data to guide both SFT and reward modeling for RLHF."
+      },
+      {
+        "name": "SFT dataset composition and usage",
+        "description": "SFT used 30,000 general instructions (D_gen) sampled from public instruction datasets and 13,000 IP-specific instructions (D_exp) annotated by patent examiners and experts. D_SFT = D_gen \u222a D_exp. For some models, only sequences shorter than 4096 tokens were used for SFT.",
+        "guidance": "Mix large-scale general instruction data with domain-expert instructions; consider sequence-length limits per model when selecting SFT data; include data tailored to targeted downstream tasks (RAG-supporting supervised data, technical summaries, patent comparisons)."
+      },
+      {
+        "name": "SFT training objective weighting and token loss masking",
+        "description": "Use a weighted autoregressive objective and zero out loss on tokens from user instructions. Weight alpha = 1 for D_exp (domain data) and alpha = 0.1 for D_gen (general data) so domain-specific outputs contribute more to loss.",
+        "guidance": "Increase the relative loss weight for domain-specific supervised examples to prioritize domain behaviors; mask out user instruction tokens when computing loss to focus learning on model outputs."
+      },
+      {
+        "name": "Reward model (RM) data collection and construction",
+        "description": "Collect 100k human-preference data samples for reward modeling: 20k expert annotations (human rankers constructing comparison pairs) and 80k AI-generated annotations (ranked by GPT-4 under RLAIF). RM initialized from PatentGPT-1.0-Dense and augmented with two MLP layers to emit scalar scores; end tokens aligned via left-padding.",
+        "guidance": "Gather both high-quality expert annotations and synthetic AI-annotated preferences to scale RM training; initialize RM from a domain-pretrained model for better alignment; design RM output heads and input alignment consistently."
+      },
+      {
+        "name": "Reward model training objective",
+        "description": "Optimize RM with a binary ranking loss: L_ranking = -log(\u03c3(r_\u03b8(x,y_c) - r_\u03b8(x,y_r))) where y_c is preferred response and y_r is rejected response.",
+        "guidance": "Use pairwise ranking losses for preference learning; ensure RM produces meaningful scalar comparisons to guide RL."
+      },
+      {
+        "name": "RLHF training procedure and PPO setup",
+        "description": "Use PPO for RLHF with RM-provided reward signal. Initialize actor and reference models from SFT models; critic initialized with RM. At each step actor generates four responses for a prompt; the response with highest RM score is selected to optimize actor. Use AdamW (\u03b21=0.9, \u03b22=0.95, eps=1e-5), batch size 64, KL coefficient 0.01, top-p=0.9; actor and critic follow cosine LR schedules with small peak LR (e.g., 1e-6 decaying to 1e-7).",
+        "guidance": "Stabilize RL with PPO, KL penalties, conservative learning rates, and reference models; sample multiple responses per prompt and select the highest-scoring one for optimization."
+      },
+      {
+        "name": "PatentBench: Patent_QA",
+        "description": "A dataset to evaluate if an LLM understands IP-related concepts and regulations. Instructions collected from product experts, top sellers, IP office FAQs, and IP education sites. Each instance has a prompt (one or two questions) and reference answers. 250 Chinese and 250 English questions.",
+        "guidance": "Include both English and Chinese instances; collect real-world FAQ-style questions and authoritative reference answers to test regulatory/legal concept understanding."
+      },
+      {
+        "name": "PatentBench: Patent_Writing",
+        "description": "Dataset to evaluate LLM ability to draft patent texts: drafting specifications from technical disclosures, rewriting/refining description sections, and supplementing claims. Instances constructed manually by annotators with LLM-assisted tools using patent specs in English or Chinese. Total 300 instances.",
+        "guidance": "Assess practical drafting ability across different sections of patent specs; include human-constructed gold outputs to judge quality."
+      },
+      {
+        "name": "PatentBench: Patent_Classification",
+        "description": "Classification according to International Patent Classification (IPC) sections and classes. Selected 1,180 patents across 118 IPC categories; instructions require the LLM to generate correct categories from abstract and claims.",
+        "guidance": "Use standardized IPC labels; evaluate on balanced coverage across classes to assess taxonomy mapping capability."
+      },
+      {
+        "name": "PatentBench: Patent_Summary (technical effects/problems/means/abstracts)",
+        "description": "Four sub-tasks (technical effects, technical problems, technical means, and patent abstracts), each with 300 instances. Extract paragraphs about technical effects/problems/means, feed them with prompts into GPT-4 to produce summaries, then manually refine GPT-4 outputs as references.",
+        "guidance": "Use extraction then summarization pipeline for gold data; evaluate model's ability to distill technical points and produce concise, accurate summaries."
+      },
+      {
+        "name": "PatentBench: Patent_Reasoning",
+        "description": "Dataset to evaluate reasoning capabilities including patent infringement judgment, logical relations, and mathematical/logical reasoning. Semi-manually constructed in English and Chinese with GPT-4 assistance. Total 247 instances.",
+        "guidance": "Include multi-hop and legal-reasoning style tasks relevant to patent adjudication and infringement analysis."
+      },
+      {
+        "name": "PatentBench: Patent_Correction",
+        "description": "Task to correct transcription errors in patent specifications: 300 test samples where each sentence contains only one incorrect Chinese character or English word. Responses must exactly match annotators' corrected versions to be counted correct.",
+        "guidance": "Use precise exact-match evaluation for minor edit/correction tasks; small single-error samples to test fine-grained textual correction."
+      },
+      {
+        "name": "PatentBench: Patent_Translation",
+        "description": "Dataset of 1,000 translation instances built from user feedback on incorrect translations; 500 Chinese->English and 500 English->Chinese. Each instance is a prompt plus expected output translation.",
+        "guidance": "Focus on translations of patent text (which can be technical/legal); evaluate with appropriate MT metrics and domain-aware references."
+      },
+      {
+        "name": "Evaluation protocol using GPT-4 as judge (pairwise comparison)",
+        "description": "For summarization, writing, and conversational tasks use GPT-4 as an automatic judge: input prompt asking GPT-4 to compare outputs from two assistants and generate scores based on guidelines. Each pair evaluated twice with reversed positions and averaged to mitigate position bias; count wins/loses/ties.",
+        "guidance": "Use strong LLM judges and control for position bias by reversing order; average repeated judgements to stabilize comparisons for subjective tasks."
+      },
+      {
+        "name": "Task-specific automatic metrics mapping",
+        "description": "Use standard NLP metrics per task: classification measured by F1 scores; examination ability measured by accuracy; translation quality by BLEU scores; reasoning and text correction by EM (exact match) scores.",
+        "guidance": "Select metrics appropriate to task nature (classification vs generation vs exact-match). Where subjective judgments exist (drafting/summarization), complement automatic metrics with LLM/human judges."
+      },
+      {
+        "name": "MoZIP benchmark tasks and use",
+        "description": "MoZIP is an IP-oriented benchmark with three tasks: IPQuiz (IP multiple-choice), IPQA (IP question answering), and PatentMatch (patent matching). Use MoZIP alongside PatentBench for external validation.",
+        "guidance": "Evaluate models on both internal (PatentBench) and public benchmarks (MoZIP) to demonstrate generalization across IP testbeds."
+      },
+      {
+        "name": "Patent agent examination as external evaluation and PPA considerations",
+        "description": "Use the 2019 China Patent Agent Qualification Examination (200 multiple-choice questions). Simplified scoring: each correct answer = 0.5 points (perfect 100). Also evaluate Preferred Position Augmentation (PPA) and mitigate option-order interference via data augmentation; improved PPA was used to show model robustness to option order.",
+        "guidance": "Use real-world professional certification exams to measure domain competence; account for option-order artifacts and measure/eliminate them (PPA) via augmentation to reveal true capabilities."
+      },
+      {
+        "name": "Inference/resource consumption evaluation",
+        "description": "Measure inference resource usage (GPU memory, response latency) as a function of input sequence length under 4-bit quantization using Text-Generation-Inference (TGI)-1.4 on A100 80GB. Observe memory scales with model size and input length; SMoE architecture shows smaller memory growth and often lower latency than dense models.",
+        "guidance": "Include inference efficiency and long-context scaling in evaluation for production suitability; test quantized models and measure both memory footprint and latency across realistic long-context inputs."
+      },
+      {
+        "name": "Wins/loses/ties and averaging to reduce position bias",
+        "description": "When using LLM judges to compare model outputs, evaluate each pair twice with positions reversed and average scores to reduce position bias. Aggregate results as counts of wins, losses, and ties.",
+        "guidance": "Always randomize and reverse ordering when using pairwise judges and average repeated evaluations to mitigate systematic ordering effects."
+      },
+      {
+        "name": "Use of model architecture (SMoE) for long-text cost-performance tradeoff",
+        "description": "Consider sparse Mixture-of-Experts (SMoE) architectures because they can reduce KV cache memory and improve throughput for long-text processing; PatentGPT-1.0-MoE achieved comparable IP performance to dense models with better cost-performance on long-text tasks.",
+        "guidance": "For long-document IP tasks prefer architectures or techniques (SMoE, attention sharing, reduced KV dimensions) that reduce inference memory growth vs context length; evaluate cost-performance tradeoffs explicitly."
+      }
+    ]
+  }
+}

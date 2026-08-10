@@ -1,0 +1,151 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_fc9da27d7a46.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_fc9da27d7a46.pdf",
+  "chunk_idx": 21,
+  "n_chunks": 24,
+  "chunk_chars": 39675,
+  "model": "gpt-5-mini",
+  "elapsed_s": 188.86952308299806,
+  "input_tokens": 16298,
+  "output_tokens": 3903,
+  "extracted": {
+    "orientation": "how_to",
+    "intended_audience": "developers and system administrators compiling, configuring, testing, and installing PARI/GP (C programmers linking to PARI)",
+    "subtask_short": "installing_and_testing_PARIGP",
+    "subtask_description": "Guidance for configuring, compiling, testing, debugging, installing, and optionally building parallel/threaded or statically linked versions of the PARI/GP system, plus related packaging and runtime configuration notes.",
+    "subtask_keywords": [
+      "pari_gp",
+      "installation",
+      "compilation",
+      "testing",
+      "configuration",
+      "linux_unix"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Choice of timing function for benchmarks",
+        "description": "Use getrusage, clock_gettime, times or ftime as timing functions.",
+        "guidance": "The first three (getrusage, clock_gettime, times) give timings in terms of CPU usage of the current task (approximate algorithm complexity). ftime gives wall-clock time. clock_gettime is more precise but much slower (at the time of writing) than getrusage or times. Not all timing functions are available on all platforms."
+      },
+      {
+        "name": "Parallelism engine (--mt=engine) selection",
+        "description": "--mt=engine: specify the engine used for parallel computations; supported values are single, pthread, mpi.",
+        "guidance": "single: default, no parallelism. pthread: use POSIX threads; well-suited for multi-core systems; implies --enable-tls and requires the pthread library; for benchmarking with threads, set --time=ftime to report wall-clock rather than summed thread CPU. mpi: use MPI interface for clusters; requires an MPI library and usually setting CC to mpicc."
+      },
+      {
+        "name": "Enable thread-local storage (--enable-tls)",
+        "description": "--enable-tls: build the thread-safe version of the library.",
+        "guidance": "Implied by --mt=pthread. Building with TLS tends to slow down the shared library libpari.so by about 15%, so you may prefer to use the static library libpari.a instead when performance matters."
+      },
+      {
+        "name": "Basic compilation targets and commands",
+        "description": "To compile the gp binary and build the documentation, type 'make all'. To only compile the gp binary, type 'make gp'.",
+        "guidance": "If make supports parallel builds, run from the build directory or use make -jN (e.g., make -j4) to speed compilation. You can also run the specialized make targets in subdirectories (e.g., make gp in .dbg/.prf)."
+      },
+      {
+        "name": "Basic automated tests (make bench / make dobench)",
+        "description": "To test the binary, type 'make bench' (runs quick series of tests). To test only the default binary immediately, use 'make dobench'.",
+        "guidance": "make bench may build and test multiple binaries (gp-sta, gp-dyn) to compare configurations; if a [BUG] message appears, consult the diff files produced to decide whether it is a real bug and report it if appropriate."
+      },
+      {
+        "name": "Cross-compiling runtime testing (RUNTEST)",
+        "description": "When cross-compiling, set environment variable RUNTEST to a program that can run target binaries (e.g., an emulator).",
+        "guidance": "RUNTEST is used both for Configure tests and make bench so the test suite can exercise the target binaries."
+      },
+      {
+        "name": "Interactive Configure fallback (Configure -a)",
+        "description": "If a default Configure run fails, try './Configure -a' (interactive mode) and answer the ~30 questions.",
+        "guidance": "Defaults are provided, but accepting all defaults may still fail, so use interactive mode to adjust problematic settings and report configuration bugs to the BTS with relevant information."
+      },
+      {
+        "name": "Install directory defaults and override options",
+        "description": "Default destinations: gp binary and scripts to $prefix/bin; pari library to $prefix/lib; include files to $prefix/include/pari; architecture-independent files to $share_prefix (defaults to $prefix/share).",
+        "guidance": "You may override locations directly with --bindir, --libdir, --includedir, --mandir, --datadir, and --sysdatadir, or set --share-prefix to change $share_prefix."
+      },
+      {
+        "name": "Environment variables that override Configure defaults",
+        "description": "Configure lets certain environment variables override defaults if set: CC (C compiler), DLLD (dynamic library linker), LD (static linker).",
+        "guidance": "You can compare benches with different compilers by setting env CC=cc Configure. If using C++ and g++ is fussy, try g++ -fpermissive. The contents of CFLAGS, CPPFLAGS, and LDFLAGS are appended to Configure values; C_INCLUDE_PATH and LIBRARY_PATH are prepended to search lists."
+      },
+      {
+        "name": "Disabling inlining and volatile keyword",
+        "description": "You may disable inlining by adding -DDISABLE_INLINE to CFLAGS and prevent the use of the volatile keyword with -DDISABLE_VOLATILE.",
+        "guidance": "Useful for debugging or working around problematic compilers/architectures."
+      },
+      {
+        "name": "Debugging and profiling build options",
+        "description": "Use 'Configure -g' to create Oxxx.dbg for debugging (special Makefile) and 'Configure -pg' to create Oxxx.prf for profiling.",
+        "guidance": "The Oxxx.dbg and Oxxx.prf directories contain suitable builds; you can cd there and run make gp, or invoke make gp.dbg or make gp.prf from toplevel. The normal gp binary built by make all or make gp is optimized."
+      },
+      {
+        "name": "Multiprecision kernel selection (--kernel)",
+        "description": "--kernel=fully_qualified_kernel_name selects Level 0 (word ops) and Level 1 (multi-precision integers/reals) kernels, of the form Level0-Level1; default is auto-auto.",
+        "guidance": "Level0 options: auto, none (portable C), or assembler micro-kernels (e.g., ia64, x86_64, ppc64, ...). Level1 options: auto, none, or gmp. Names without a dash are aliases for name-none; 'gmp' stands for auto-gmp."
+      },
+      {
+        "name": "Readline detection and Configure options for readline",
+        "description": "Configure does not try very hard to find readline; use --with-readline, --with-readline-lib, or --with-readline-include to point it to the library and header.",
+        "guidance": "Examples: --with-readline[=prefix], --with-readline-lib=path_to_libreadline.xx, --with-readline-include=path_to_readline.h. If readline and headers are not in standard locations, explicitly provide paths."
+      },
+      {
+        "name": "Known readline/platform problems",
+        "description": "On Linux you need both readline and readline-devel packages (and possibly ncurses-devel) to compile gp with readline support. On macOS, the system 'fake' readline is insufficient.",
+        "guidance": "If Configure complains about missing readline, install distribution's readline and -devel packages. For macOS, consult PARI FAQ for step-by-step installation of a real readline."
+      },
+      {
+        "name": "Interpreting [BUG] messages from make bench",
+        "description": "If a [BUG] message appears during make bench, the testing utility creates files with differences between test output and expected results.",
+        "guidance": "Examine the dif files to determine whether the difference indicates a real bug. Some causes of spurious BUG messages include missing GP functions on the platform, an older installed libpari.so conflicting with local build, or different diff implementations that print 'No differences encountered'."
+      },
+      {
+        "name": "Additional test targets and their purposes",
+        "description": "Optional tests: make test-compat (compatibility mode), make test-ploth (graphics tests), make test-kernel (low-level kernel diagnostics), make test-all (all suites), make test-io (file I/O), make test-time (timers).",
+        "guidance": "make test-ploth requires user interaction (clicking images). make test-all is thorough but slow and may require extra packages; to test extra packages before install, set env GP_DATA_DIR=$PWD/data. make test-time can fail on heavily loaded machines or when timer granularity >2ms\u2014retry before reporting a problem."
+      },
+      {
+        "name": "Installation procedure and permission caveat",
+        "description": "When ready, run 'make install' (may require superuser privileges).",
+        "guidance": "To avoid running unnecessary commands as root, run 'make all' first and then 'make install' (or use sudo). Be aware that umask affects installed file permissions; using sudo may change umask\u2014ensure files are readable by intended users."
+      },
+      {
+        "name": "Static vs dynamic binaries and installation targets",
+        "description": "By default the installed gp binary is dynamic (gp-dyn) linked to libpari.so; you can build static libpari.a and statically linked gp.",
+        "guidance": "To create the static library use make install-lib-sta; to install a statically linked gp use make install-bin-sta. Static binaries may be slightly faster (\u22485%, up to 20% with pthreads), use more disk space, take longer to compile, and are harder to upgrade (require recompilation of dependent programs), but they avoid breakage from installing a new dynamic pari library."
+      },
+      {
+        "name": "Installing optional extra packages",
+        "description": "Optional packages (elldata, galdata, seadata, galpol) extend PARI with extra databases and capabilities and must be fetched as separate archives (pack.tgz).",
+        "guidance": "To install a package pack, download pack.tgz from the pari server, copy into PARI toplevel directory, extract to data/pack/, then 'make install' installs all such packages. Each package description specifies what functions/features require it (e.g., elldata for elliptic-curve databases used by ellidentify, ellsearch; galdata for Galois groups >7 up to <11; seadata for modular polynomials for primes >1020)."
+      },
+      {
+        "name": "User GPRC configuration file",
+        "description": "Copy misc/gprc.dft (or gprc.dos for GP.EXE) to $HOME/.gprc and modify as desired (prompt, colors, reading gpalias).",
+        "guidance": "If providing system-wide defaults, copy customized .gprc to /etc/gprc. Ensure paths in gprc point to the correct datadir/share locations; if gp cannot find gphelp, check gprc for explicit paths and correct them."
+      },
+      {
+        "name": "Linking C programs to PARI and example usage",
+        "description": "After libraries and include files are installed, you can link C programs to the PARI library; examples/Makefile illustrates use of various libraries.",
+        "guidance": "Running make all in examples builds statically linked extgcd-sta, dynamically linked extgcd-dyn, and shared libextgcd usable from gp. If extgcd-dyn prints 'DLL not found', prefer static linking or adjust system/library paths (e.g., on Windows put libpari.dll in PATH)."
+      },
+      {
+        "name": "GP example scripts and educational resources",
+        "description": "The examples directory contains sample GP programs (SQUFOF, Pollard rho, Lucas-Lehmer, class group/unit algorithm) and an EXPLAIN file with explanations.",
+        "guidance": "Study examples to learn how to write GP scripts and port algorithms into PARI/GP."
+      },
+      {
+        "name": "Bug reporting and community channels",
+        "description": "Report bugs to the Bug Tracking System (BTS) on the PARI home page; include relevant *.dif files and pari.cfg for configuration problems.",
+        "guidance": "PARI maintains mailing lists (pari-announce read-only, pari-dev for development discussions and patches, pari-users for general questions). Subscription instructions and BTS link are on the PARI site; you may also email pari@math.u-bordeaux.fr but individual replies are not guaranteed."
+      },
+      {
+        "name": "How to cite PARI in publications (BibTeX format)",
+        "description": "If you used PARI in a paper, cite it with the provided BibTeX entry (organization = \"{The PARI~Group}\", title = \"{PARI/GP version 2.7.7}\", year = 2016, address = \"Bordeaux\", note = \"available from \\url{http://pari.math.u-bordeaux.fr/}\").",
+        "guidance": "Include the provided @preamble and @manual fields to ensure proper formatting and URL availability."
+      }
+    ]
+  }
+}

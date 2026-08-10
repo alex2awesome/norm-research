@@ -1,0 +1,264 @@
+<!-- URL: https://www.hhmi.org/news -->
+<!-- HTTP: 200 SIZE: 35850 -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# ">
+  <head>
+    <meta charset="utf-8" />
+<noscript><style>form.antibot * :not(.antibot-message) { display: none !important; }</style>
+</noscript><meta name="description" content="The latest in research, education, and our organization. Explore HHMI&#039;s news and stories." />
+<meta name="keywords" content="@HHMINEWS,HHMI news,news,articles,stories" />
+<link rel="shortlink" href="https://www.hhmi.org/node/2740" />
+<link rel="canonical" href="https://www.hhmi.org/news" />
+<link rel="icon" href="/themes/hhmi/hhmi_theme/assets/favicon/favicon.ico" />
+<link rel="mask-icon" href="/themes/hhmi/hhmi_theme/assets/favicon/safari-pinned-tab.svg" color="#1B8757" />
+<link rel="icon" sizes="16x16" href="/themes/hhmi/hhmi_theme/assets/favicon/favicon-16x16.png" />
+<link rel="icon" sizes="32x32" href="/themes/hhmi/hhmi_theme/assets/favicon/favicon-32x32.png" />
+<link rel="apple-touch-icon" href="/themes/hhmi/hhmi_theme/assets/favicon/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/themes/hhmi/hhmi_theme/assets/favicon/apple-touch-icon.png" />
+<meta property="og:url" content="https://www.hhmi.org/news" />
+<meta property="og:title" content="News &amp; Stories | HHMI" />
+<meta property="og:image" content="https://www.hhmi.org/sites/default/files/2023-06/newscards-update_green-2.png" />
+<meta property="og:image:width" content="400" />
+<meta property="og:image:height" content="400" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="photo" />
+<meta name="twitter:image" content="https://www.hhmi.org/sites/default/files/2023-06/newscards-update_green-2.png" />
+<meta name="theme-color" content="#ffffff" />
+<link rel="manifest" href="/themes/hhmi/hhmi_theme/assets/favicon/site.webmanifest" crossorigin="use-credentials" />
+<meta name="msapplication-config" content="/themes/hhmi/hhmi_theme/assets/favicon/browserconfig.xml" />
+<meta name="msapplication-tileimage" content="/themes/hhmi/hhmi_theme/assets/favicon/mstile-150x150.png" />
+<meta name="Generator" content="Drupal 10 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>div#sliding-popup, div#sliding-popup .eu-cookie-withdraw-banner, .eu-cookie-withdraw-tab {background: #000000} div#sliding-popup.eu-cookie-withdraw-wrapper { background: transparent; } #sliding-popup h1, #sliding-popup h2, #sliding-popup h3, #sliding-popup p, #sliding-popup label, #sliding-popup div, .eu-cookie-compliance-more-button, .eu-cookie-compliance-secondary-button, .eu-cookie-withdraw-tab { color: #ffffff;} .eu-cookie-withdraw-tab { border-color: #ffffff;}</style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>HHMI News &amp; Stories | Research, Education &amp; Our Organization</title>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WRC3MJ');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Crazy Egg -->
+    <script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0022/6525.js" async="async"></script>
+    <!-- End Crazy Egg -->
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_J0eCpRp2tB_tvUF02Vog94hrwUtZM8i80jr2nTUE2Is.css?delta=0&amp;language=en&amp;theme=hhmi&amp;include=eJxtiFsOAjEIRTdUw5IIMlenkQ5NoSbdvUbjl_N1Hpis7o-KN1q3KoeCcDJ5w02mZdn3Vkl94GPc4d3AtXUfSf-rmCyfyVsN9SfGIj-gbiVScgY3RMgdQd--_LrEikSjqwReaalCBQ" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_dIY7IRdpke031hPSzp4MPpO8cY25rgLwsO4mvNLpAzo.css?delta=1&amp;language=en&amp;theme=hhmi&amp;include=eJxtiFsOAjEIRTdUw5IIMlenkQ5NoSbdvUbjl_N1Hpis7o-KN1q3KoeCcDJ5w02mZdn3Vkl94GPc4d3AtXUfSf-rmCyfyVsN9SfGIj-gbiVScgY3RMgdQd--_LrEikSjqwReaalCBQ" />
+<link rel="stylesheet" media="all" href="/themes/hhmi/hhmi_theme/dist/original/assets.css?teoa16" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_WrZybdRjjK3Qvnd2vas7JuLDVgCbM9APzn80CjM16z0.css?delta=3&amp;language=en&amp;theme=hhmi&amp;include=eJxtiFsOAjEIRTdUw5IIMlenkQ5NoSbdvUbjl_N1Hpis7o-KN1q3KoeCcDJ5w02mZdn3Vkl94GPc4d3AtXUfSf-rmCyfyVsN9SfGIj-gbiVScgY3RMgdQd--_LrEikSjqwReaalCBQ" />
+
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"","currentPath":"node\/2740","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"dataLayer":{"defaultLang":"en","languages":{"en":{"id":"en","name":"English","direction":"ltr","weight":0}}},"news_signup":{"heading":"Get the latest HHMI and program news in your inbox","button":"Sign up for emails","emailPlaceholder":"Email address","emailAddress":"","socialHeading":"Stay connected","links":[{"label":"Instagram","ariaLabel":"Instagram","href":"https:\/\/www.instagram.com\/hhmi_science","target":"_blank","external":true,"active":false},{"label":"Bluesky","ariaLabel":"Bluesky","href":"https:\/\/bsky.app\/profile\/hhmi-science.bsky.social","target":"_blank","external":true,"active":false},{"label":"Linkedin","ariaLabel":"Linkedin","href":"https:\/\/www.linkedin.com\/company\/howard-hughes-medical-institute","target":"_blank","external":true,"active":false},{"label":"X","ariaLabel":"X","href":"https:\/\/x.com\/hhmi_science","target":"_blank","external":true,"active":false},{"label":"Facebook","ariaLabel":"Facebook","href":"https:\/\/www.facebook.com\/HowardHughesMed","target":"_blank","external":true,"active":false},{"label":"Youtube","ariaLabel":"Youtube","href":"https:\/\/www.youtube.com\/c\/HHMI","target":"_blank","external":true,"active":false}]},"eu_cookie_compliance":{"cookie_policy_version":"1.0.0","popup_enabled":true,"popup_agreed_enabled":false,"popup_hide_agreed":false,"popup_clicking_confirmation":false,"popup_scrolling_confirmation":false,"popup_html_info":"\u003Cdiv aria-labelledby=\u0022popup-text\u0022  class=\u0022eu-cookie-compliance-banner eu-cookie-compliance-banner-info eu-cookie-compliance-banner--opt-in\u0022\u003E\n  \u003Cdiv class=\u0022popup-content info eu-cookie-compliance-content\u0022\u003E\n        \u003Cdiv id=\u0022popup-text\u0022 class=\u0022eu-cookie-compliance-message\u0022 role=\u0022document\u0022\u003E\n      This site uses cookies and similar technologies. To learn more, please review our \u003Ca href=\u0022\/privacy-policy\u0022\u003EPrivacy Policy and Cookie Notice\u003C\/a\u003E. By browsing this site, you agree to these uses.\n          \u003C\/div\u003E\n\n    \n    \u003Cdiv id=\u0022popup-buttons\u0022 class=\u0022eu-cookie-compliance-buttons\u0022\u003E\n            \u003Cbutton type=\u0022button\u0022 class=\u0022agree-button eu-cookie-compliance-secondary-button\u0022\u003ECLOSE\u003C\/button\u003E\n              \u003Cbutton type=\u0022button\u0022 class=\u0022decline-button eu-cookie-compliance-default-button\u0022\u003ENo thanks\u003C\/button\u003E\n          \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E","use_mobile_message":false,"mobile_popup_html_info":"\u003Cdiv aria-labelledby=\u0022popup-text\u0022  class=\u0022eu-cookie-compliance-banner eu-cookie-compliance-banner-info eu-cookie-compliance-banner--opt-in\u0022\u003E\n  \u003Cdiv class=\u0022popup-content info eu-cookie-compliance-content\u0022\u003E\n        \u003Cdiv id=\u0022popup-text\u0022 class=\u0022eu-cookie-compliance-message\u0022 role=\u0022document\u0022\u003E\n      \n          \u003C\/div\u003E\n\n    \n    \u003Cdiv id=\u0022popup-buttons\u0022 class=\u0022eu-cookie-compliance-buttons\u0022\u003E\n            \u003Cbutton type=\u0022button\u0022 class=\u0022agree-button eu-cookie-compliance-secondary-button\u0022\u003ECLOSE\u003C\/button\u003E\n              \u003Cbutton type=\u0022button\u0022 class=\u0022decline-button eu-cookie-compliance-default-button\u0022\u003ENo thanks\u003C\/button\u003E\n          \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E","mobile_breakpoint":768,"popup_html_agreed":false,"popup_use_bare_css":false,"popup_height":"auto","popup_width":"100%","popup_delay":1000,"popup_link":"\/privacy-policy","popup_link_new_window":false,"popup_position":false,"fixed_top_position":true,"popup_language":"en","store_consent":false,"better_support_for_screen_readers":true,"cookie_name":"","reload_page":false,"domain":"","domain_all_sites":false,"popup_eu_only":false,"popup_eu_only_js":false,"cookie_lifetime":100,"cookie_session":0,"set_cookie_session_zero_on_disagree":0,"disagree_do_not_show_popup":false,"method":"opt_in","automatic_cookies_removal":true,"allowed_cookies":"","withdraw_markup":"\u003Cbutton type=\u0022button\u0022 class=\u0022eu-cookie-withdraw-tab\u0022\u003E\u003C\/button\u003E\n\u003Cdiv aria-labelledby=\u0022popup-text\u0022 class=\u0022eu-cookie-withdraw-banner\u0022\u003E\n  \u003Cdiv class=\u0022popup-content info eu-cookie-compliance-content\u0022\u003E\n    \u003Cdiv id=\u0022popup-text\u0022 class=\u0022eu-cookie-compliance-message\u0022 role=\u0022document\u0022\u003E\n      \n    \u003C\/div\u003E\n    \u003Cdiv id=\u0022popup-buttons\u0022 class=\u0022eu-cookie-compliance-buttons\u0022\u003E\n      \u003Cbutton type=\u0022button\u0022 class=\u0022eu-cookie-withdraw-button \u0022\u003E\u003C\/button\u003E\n    \u003C\/div\u003E\n  \u003C\/div\u003E\n\u003C\/div\u003E","withdraw_enabled":false,"reload_options":null,"reload_routes_list":"","withdraw_button_on_info_popup":false,"cookie_categories":[],"cookie_categories_details":[],"enable_save_preferences_button":false,"cookie_value_disagreed":"0","cookie_value_agreed_show_thank_you":"1","cookie_value_agreed":"2","containing_element":"body","settings_tab_enabled":false,"olivero_primary_button_classes":"","olivero_secondary_button_classes":"","close_button_action":"close_banner","open_by_default":true,"modules_allow_popup":true,"hide_the_banner":false,"geoip_match":true,"unverified_scripts":[]},"elf":{"links":["https:\/\/web-hhmi-master.sc.hhmi.org","https:\/\/wwwprod.hhmi.org","http:\/\/wwwprod.hhmi.org","https:\/\/www.hhmi.org","http:\/\/www.hhmi.org","https:\/\/hhmi.org","http:\/\/hhmi.org","mailto:"]},"statusMessages":null,"user":{"uid":0,"permissionsHash":"1b5c27ffaa6cedaf463511929376c42492fb7e109bb9657fa63a5c1b115a2c70"}}</script>
+<script src="/sites/default/files/js/js_zyxOssH2lgKKUZxfKs8WDa0weR7eAE-JTn16ps-Grp8.js?scope=header&amp;delta=0&amp;language=en&amp;theme=hhmi&amp;include=eJxti0EOwjAMBD9k5CdFJlnVFgmuYpeqvweEegFOqxnNNknpcmDyFSoP8xmErVT3m-E1Y-0m9wr-J0l1GFefoFU9vSBCjrJbW5D8qyi6NYT6fjbfgiIltyjjfVsQ_OHLyU_9tUYq"></script>
+<script src="/themes/hhmi/hhmi_theme/dist/original/index.js?teoa16"></script>
+<script src="/themes/hhmi/hhmi_theme/js/theme.js?teoa16"></script>
+
+    <!-- Mailchimp -->
+    <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/3c8034ebf5d74492b5c8ef8c9/6f565acea353f2ab891f1d0aa.js");</script>
+    <!-- End Mailchimp -->
+  </head>
+  <body class="page-node-landing_page"><a href="https://www.hhmi.org/cdn-cgi/content?id=1L9ezvwr0sdQ_46bYyOse4.7Osn4iOssu0KQJQi_VvM-1778408886.2710428-1.0.1.1-PYdVpGdXYS7qW6eFWYUvDb6EYB3WjgfUu0r0NDyKxdI" aria-hidden="true" rel="nofollow noopener" style="display: none !important; visibility: hidden !important"></a>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRC3MJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+        <a href="#block-hhmi-content" class="visually-hidden focusable">
+      Skip to main content
+    </a>
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    <hhmi-lightbox></hhmi-lightbox>
+<hhmi-global-header-module>  <div>
+    <div id="block-hhmiblocksheaderblock">
+  
+    
+      <hhmi-header data-primary='{&quot;name&quot;:&quot;Hhmi-primary-nav&quot;,&quot;display&quot;:&quot;navbar&quot;,&quot;mode&quot;:&quot;responsive&quot;,&quot;anchors&quot;:[{&quot;label&quot;:&quot;Our Approach&quot;,&quot;ariaLabel&quot;:&quot;Our Approach&quot;,&quot;href&quot;:&quot;\/our-approach&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Becoming an HHMI Scientist&quot;,&quot;ariaLabel&quot;:&quot;Becoming an HHMI Scientist&quot;,&quot;href&quot;:&quot;\/programs&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Research&quot;,&quot;ariaLabel&quot;:&quot;Research&quot;,&quot;href&quot;:&quot;\/research&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Science Education&quot;,&quot;ariaLabel&quot;:&quot;Science Education&quot;,&quot;href&quot;:&quot;\/science-education&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false}]}' data-utility='{&quot;name&quot;:&quot;Hhmi-utility-nav&quot;,&quot;display&quot;:&quot;navbar&quot;,&quot;mode&quot;:&quot;responsive&quot;,&quot;anchors&quot;:[{&quot;label&quot;:&quot;About&quot;,&quot;ariaLabel&quot;:&quot;About&quot;,&quot;href&quot;:&quot;\/about&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Careers&quot;,&quot;ariaLabel&quot;:&quot;Careers&quot;,&quot;href&quot;:&quot;\/careers&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;News &amp; Stories&quot;,&quot;ariaLabel&quot;:&quot;News &amp; Stories&quot;,&quot;href&quot;:&quot;\/news&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;AI@HHMI&quot;,&quot;ariaLabel&quot;:&quot;AI@HHMI&quot;,&quot;href&quot;:&quot;https:\/\/ai.hhmi.org\/&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false}]}' data-explore='{&quot;name&quot;:&quot;Hhmi-explore-nav&quot;,&quot;display&quot;:&quot;navbar&quot;,&quot;mode&quot;:&quot;responsive&quot;,&quot;anchors&quot;:[{&quot;label&quot;:&quot;About&quot;,&quot;ariaLabel&quot;:&quot;About&quot;,&quot;href&quot;:&quot;\/about&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Careers&quot;,&quot;ariaLabel&quot;:&quot;Careers&quot;,&quot;href&quot;:&quot;\/careers&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;People Search&quot;,&quot;ariaLabel&quot;:&quot;People Search&quot;,&quot;href&quot;:&quot;\/search\/people&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Scientific Research&quot;,&quot;ariaLabel&quot;:&quot;Scientific Research&quot;,&quot;href&quot;:&quot;\/research&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false}]}' palette='CREAM_GREY_1' hideBanner ></hhmi-header>
+  </div>
+
+  </div>
+</hhmi-global-header-module>
+<hhmi-help>
+  <hhmi-container>
+  
+  </hhmi-container>
+</hhmi-help>
+<div class="content-region">
+  <div>
+    <div data-drupal-messages-fallback class="hidden"></div><div id="block-hhmi-content">
+  
+    
+      <article about="/news">
+
+  
+    
+
+  
+  <div>
+      <div class="layout layout--onecol">
+    <div  class="layout__region layout__region--content">
+      <div>
+  
+    
+      
+  </div>
+<div>
+  
+    
+      
+  </div>
+<div>
+  
+    
+      
+      <hhmi-featured-news-banner
+        heading='News &amp; Stories'
+        description='The latest in research, education, and our organization.'
+        body='&lt;p&gt;Visit HHMI&#039;s &lt;a href=&quot;/press-room&quot;&gt;Press Room&lt;/a&gt; for news resources.&lt;/p&gt;'
+      >
+      <hhmi-featured-news-item
+        heading='Stuart Orkin Awarded the 2026 Breakthrough Prize'
+        subHeading='HHMI Investigator Stuart Orkin honored for research that paved the way for new treatments for sickle cell disease and debilitating blood disorders affecting millions of people worldwide.'
+        imgSrc='/sites/default/files/2026-04/stuart-orkin-swee-lay-thein-breakthrough-prize-2026-meta.jpg'
+        imgAlt='Two people in formal attire hold a metallic lattice trophy at the Breakthrough Prize ceremony, both wearing blue Breakthrough Prize lanyards.'
+        linkUrl='/news/stuart-orkin-awarded-2026-breakthrough-prize'
+        linkTarget='_blank'
+        linkAlt=''
+        caption='HHMI Investigator Stuart Orkin (left) received the 2026 Breakthrough Prize in Life Sciences for pioneering research on hemoglobin regulation that led to revolutionary new treatments for blood disorders. He shares the prize with Swee Lay Thein (right).'
+        credit='Credit: Getty Images for Breakthrough Prize'
+      >
+      </hhmi-featured-news-item>
+    </hhmi-featured-news-banner>
+    <hhmi-cards-grid label='Featured news' seeAllText='' seeAllUrl='' variant='TWO_COLUMN' palette='CREAM_GREY_1' padding='DESKTOP_TOP_MOBILE_BOTH' cardsProps='[]' limit='0'>
+        <hhmi-card
+          heading='Gilliam Fellow Research: Flipping Gene Switches; Breast Cancer’s Environmental Drivers '
+          label='May 04, 2026'
+          subtitle='HHMI Gilliam Fellows are PhD students and postdoctoral researchers who are pursuing innovative science that&rsquo;s helping shape their careers. These highlights from Izaiah Ornelas and Destiny Tiburcio offer a glimpse into the breadth of their work, showcasing the wide-ranging questions they&rsquo;re exploring and the discoveries they&rsquo;re beginning to uncover. '
+          imgAlt='Side-by-side portraits of two smiling people: one in glasses and a plaid shirt outdoors, the other in a white lab coat against a leafy background.'
+          imgSrc='/sites/default/files/2026-04/gilliam-fellow-research-may26.png'
+          linkAlt=''
+          linkTarget=''
+          linkUrl='/news/chromatin-regulators-gene-switches-phthalates-breast-cancer-gilliam-fellows'
+          mode='LIGHT'
+          size='LARGE'
+          variant=''
+        >
+        </hhmi-card>
+      
+        <hhmi-card
+          heading='Chill Out and Live Longer: What Hibernating Animals Know About Longevity That We Don’t'
+          label='April 27, 2026'
+          subtitle='HHMI Freeman Hrabowski Scholar Sini&scaron;a Hrvatin studies how animals hibernate &mdash; and what that state reveals about the biology of survival and aging. '
+          imgAlt='A small brown-and-white mouse curled up hibernating in shredded paper bedding.'
+          imgSrc='/sites/default/files/2026-04/hibernating-mouse-sinisa-hrvatin-meta.png'
+          linkAlt=''
+          linkTarget=''
+          linkUrl='/news/hibernation-aging-longevity-body-temperature'
+          mode='LIGHT'
+          size='LARGE'
+          variant=''
+        >
+        </hhmi-card>
+      </hhmi-cards-grid><hhmi-container padding='BOTH'><hhmi-search-form heading='All News' action='/search/news' parameter='kw' variant='TWO_COLUMN'></hhmi-search-form></hhmi-container><hhmi-container padding='BOTTOM'><hhmi-striped-group variant='DEFAULT'><hhmi-content-item heading='Gilliam Fellow Research: Flipping Gene Switches; Breast Cancer’s Environmental Drivers ' label='May 4, 2026' linkUrl='/news/chromatin-regulators-gene-switches-phthalates-breast-cancer-gilliam-fellows' imgSrc='/sites/default/files/2026-04/gilliam-fellow-research-may26.png' imgAlt='Side-by-side portraits of two smiling people: one in glasses and a plaid shirt outdoors, the other in a white lab coat against a leafy background.'>HHMI Gilliam Fellows are PhD students and postdoctoral researchers who are pursuing innovative science that&rsquo;s helping shape their careers. These highlights from Izaiah Ornelas and Destiny Tiburcio offer a glimpse into the breadth of their work, showcasing the wide-ranging questions they&rsquo;re exploring and the discoveries they&rsquo;re beginning to uncover. </hhmi-content-item><hhmi-content-item heading='Chill Out and Live Longer: What Hibernating Animals Know About Longevity That We Don’t' label='Apr 27, 2026' linkUrl='/news/hibernation-aging-longevity-body-temperature' imgSrc='/sites/default/files/2026-04/hibernating-mouse-sinisa-hrvatin-meta.png' imgAlt='A small brown-and-white mouse curled up hibernating in shredded paper bedding.'>HHMI Freeman Hrabowski Scholar Sini&scaron;a Hrvatin studies how animals hibernate &mdash; and what that state reveals about the biology of survival and aging. </hhmi-content-item><hhmi-content-item heading='Stuart Orkin Awarded the 2026 Breakthrough Prize' label='Apr 18, 2026' linkUrl='/news/stuart-orkin-awarded-2026-breakthrough-prize' imgSrc='/sites/default/files/2026-04/stuart-orkin-swee-lay-thein-breakthrough-prize-2026-meta.jpg' imgAlt='Two people in formal attire hold a metallic lattice trophy at the Breakthrough Prize ceremony, both wearing blue Breakthrough Prize lanyards.'>HHMI Investigator Stuart Orkin honored for research that paved the way for new treatments for sickle cell disease and debilitating blood disorders affecting millions of people worldwide.</hhmi-content-item><hhmi-content-item heading='HHMI Announces Partnership with National Rural Education Association' label='Apr 16, 2026' linkUrl='/news/hhmi-partnership-national-rural-education-association' imgSrc='/sites/default/files/2026-04/biointeractive-nrea-partnership-april-2026.jpg' imgAlt='Teachers and students lean over a table examining a tray of material during a hands-on workshop, with more participants visible in the background.'>The new collaboration will bring BioInteractive&rsquo;s free, high-quality life science resources and professional learning to rural educators across the country.</hhmi-content-item><hhmi-content-item heading='In or Out? Researchers Uncover New Controls on the Brain’s ‘Bouncer’ ' label='Apr 9, 2026' linkUrl='/news/blood-brain-barrier-proteins-drug-delivery' imgSrc='/sites/default/files/2026-03/diver-meta.png' imgAlt='A scuba diver shines a light while swimming through a cave-like tunnel that looks like the inside of a blood vessel.'>A team led by HHMI Janelia Research Campus Group Leader Jiefu Li identified proteins that help control how the blood-brain barrier opens and closes, findings that could help researchers design drug delivery strategies for neurological conditions such as Alzheimer&rsquo;s disease and Parkinson&rsquo;s disease that more effectively reach the brain. </hhmi-content-item><hhmi-content-item heading='AI@HHMI: AI Takes Imaging to the Molecular Level ' label='Apr 3, 2026' linkUrl='/news/how-ai-is-advancing-cryo-electron-tomography' imgSrc='/sites/default/files/2026-03/gouaux-rosen-cryo-et-meta.jpg' imgAlt='HHMI Investigator Eric Gouaux talks with fellow Investigator Michael Rosen and a colleague in a gallery space'>HHMI Investigators Eric Gouaux and Michael Rosen are using AI to transform cryo-electron tomography into a molecular detective. 
+
+<br><br><em>This story is part of <a href="/news/ai-hhmi-transforming-science-ai-driven-biomedical-research-projects">a series exploring AI@HHMI projects</a>.</em></hhmi-content-item><hhmi-content-item heading='What a Tiny Primate Reveals About the Human Heart’s Pacemaker ' label='Mar 12, 2026' linkUrl='/news/mouse-lemur-genetics-magnesium-heart-rhythm-pacemaker' imgSrc='/sites/default/files/2026-03/krasnow-mouse-lemur-meta.jpg' imgAlt='A small mouse lemur with large golden eyes peeks from behind the trunk of a tree in a green forest, its tiny paws gripping the bark as it looks alertly to the side.'>By studying mouse lemur families, HHMI Investigator Mark Krasnow uncovered an important role for magnesium in human heart health and disease. </hhmi-content-item><hhmi-content-item heading='A Spatial Cell Atlas of the Spinal Cord Reveals New Clues to Chronic Pain' label='Mar 3, 2026' linkUrl='/news/spinal-cord-cell-atlas-chronic-neuropathic-pain' imgSrc='/sites/default/files/2026-03/shan_meltzer_meta_pic.png' imgAlt='Fluorescent cross-section of the spinal cord filled with multicolored dots, each representing individual cell types mapped to show their spatial distribution.'>A team led by HHMI Hanna Gray Fellow Shan Meltzer has created a detailed, cell-by-cell map of the spinal cord that offers a new framework for understanding chronic pain and provides a powerful new resource for the field.</hhmi-content-item><hhmi-content-item heading='The Cells That Never Sleep: How Slumber Lets Neurons Clean Up and Stay Healthy ' label='Feb 18, 2026' linkUrl='/news/sleep-secrets-how-slumber-protects-brain-cells' imgSrc='/sites/default/files/2026-02/meta_og_image.png' imgAlt='Illustration of a blue mosquito sleeping peacefully on a glowing yellow oval, with “Z” symbols above its head. The background is purple with small leaves and tiny flying insects scattered around.'>By probing the cellular and molecular processes that drive sleep, HHMI Investigator Amita Sehgal and her team are uncovering how snoozing helps ensure there&rsquo;s a source of clean energy to power brain cells.</hhmi-content-item><hhmi-content-item heading='David Clapham: A Life in Science Chasing Ion Channels ' label='Feb 9, 2026' linkUrl='/news/david-clapham-ion-channels-life-in-science' imgSrc='/sites/default/files/2026-02/untitled_design_6.png' imgAlt='Man in a light blue button-down shirt standing in a research lab, resting one hand on a workbench with laboratory instruments and shelves behind him.'>Over a 50-year career, former HHMI scientist and leader David Clapham reshaped our understanding of ion channels by relentlessly pursuing experimental evidence across scientific disciplines.</hhmi-content-item></hhmi-striped-group></hhmi-container><hhmi-container padding='BOTTOM' variant='default' palette='TRANSPARENT'><div class="grid justify-center"><hhmi-button mode='LIGHT' variant='PILL_LG' palette='TRANSPARENT' href='/search/news?items_per_page=96' ariaLabel='All News'>All News</hhmi-button></div></hhmi-container>
+  </div>
+
+    </div>
+  </div>
+
+  </div>
+
+</article>
+
+  </div>
+
+  </div>
+
+</div>
+<div class="footer-region">  <div>
+    <div id="block-hhmiblocksfooterblock">
+  
+    
+      
+      <hhmi-footer
+        data-primary='{&quot;name&quot;:&quot;Hhmi-footer-nav-primary&quot;,&quot;display&quot;:&quot;navbar&quot;,&quot;mode&quot;:&quot;responsive justify-end&quot;,&quot;anchors&quot;:[{&quot;label&quot;:&quot;Doing Business with HHMI&quot;,&quot;ariaLabel&quot;:&quot;Doing Business with HHMI&quot;,&quot;href&quot;:&quot;\/about\/doing-business-with-hhmi&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;For Host Institutions&quot;,&quot;ariaLabel&quot;:&quot;For Host Institutions&quot;,&quot;href&quot;:&quot;\/about\/for-host-institutions&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Policies&quot;,&quot;ariaLabel&quot;:&quot;Policies&quot;,&quot;href&quot;:&quot;\/about\/policies&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false}]}'
+        data-secondary='{&quot;name&quot;:&quot;Hhmi-footer-nav-socail&quot;,&quot;display&quot;:&quot;navbar&quot;,&quot;mode&quot;:&quot;responsive&quot;,&quot;anchors&quot;:[{&quot;label&quot;:&quot;Instagram&quot;,&quot;ariaLabel&quot;:&quot;Instagram&quot;,&quot;href&quot;:&quot;https:\/\/www.instagram.com\/hhmi_science&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false},{&quot;label&quot;:&quot;Bluesky&quot;,&quot;ariaLabel&quot;:&quot;Bluesky&quot;,&quot;href&quot;:&quot;https:\/\/bsky.app\/profile\/hhmi-science.bsky.social&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false},{&quot;label&quot;:&quot;Linkedin&quot;,&quot;ariaLabel&quot;:&quot;Linkedin&quot;,&quot;href&quot;:&quot;https:\/\/www.linkedin.com\/company\/howard-hughes-medical-institute&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false},{&quot;label&quot;:&quot;X&quot;,&quot;ariaLabel&quot;:&quot;X&quot;,&quot;href&quot;:&quot;https:\/\/x.com\/hhmi_science&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false},{&quot;label&quot;:&quot;Facebook&quot;,&quot;ariaLabel&quot;:&quot;Facebook&quot;,&quot;href&quot;:&quot;https:\/\/www.facebook.com\/HowardHughesMed&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false},{&quot;label&quot;:&quot;Youtube&quot;,&quot;ariaLabel&quot;:&quot;Youtube&quot;,&quot;href&quot;:&quot;https:\/\/www.youtube.com\/c\/HHMI&quot;,&quot;target&quot;:&quot;_blank&quot;,&quot;external&quot;:true,&quot;active&quot;:false}]}'
+        data-tertiary='{&quot;name&quot;:&quot;Hhmi-footer-nav-tertiary&quot;,&quot;display&quot;:&quot;navbar&quot;,&quot;mode&quot;:&quot;responsive justify-end&quot;,&quot;anchors&quot;:[{&quot;label&quot;:&quot;Careers&quot;,&quot;ariaLabel&quot;:&quot;Careers&quot;,&quot;href&quot;:&quot;\/careers&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Contact Us&quot;,&quot;ariaLabel&quot;:&quot;Contact Us&quot;,&quot;href&quot;:&quot;\/contact-us&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Privacy Policy &amp; Cookie Notice&quot;,&quot;ariaLabel&quot;:&quot;Privacy Policy &amp; Cookie Notice&quot;,&quot;href&quot;:&quot;\/privacy-policy&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false},{&quot;label&quot;:&quot;Terms of Use&quot;,&quot;ariaLabel&quot;:&quot;Terms of Use&quot;,&quot;href&quot;:&quot;\/terms-of-use&quot;,&quot;target&quot;:&quot;&quot;,&quot;external&quot;:false,&quot;active&quot;:false}]}'
+        copyright='© Howard Hughes Medical Institute 2026'
+      ><div class="mailchimp-signup-subscribe-form" data-drupal-selector="mailchimp-signup-subscribe-block-news-signup-form" id="block-mailchimpsubscriptionformnewssignup">
+  
+    
+      <div class="hidden">
+
+<div class="container">
+  <form action="/news" method="post" id="mailchimp-signup-subscribe-block-news-signup-form" accept-charset="UTF-8" class="form-inline">
+    Get HHMI News in your inbox<div id="mailchimp-newsletter-8f2808e1d6-mergefields" class="mailchimp-newsletter-mergefields"><div class="js-form-item form-item js-form-type-email form-item-mergevars-email js-form-item-mergevars-email">
+      <label for="edit-mergevars-email" class="js-form-required form-required">Email Address</label>
+        <input autocomplete="email" data-drupal-selector="edit-mergevars-email" type="email" id="edit-mergevars-email" name="mergevars[EMAIL]" value="" size="25" maxlength="254" class="form-email required" required="required" aria-required="true" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-item-mergevars-mmerge2 js-form-item-mergevars-mmerge2">
+      <label for="edit-mergevars-mmerge2">First Name</label>
+        <input data-drupal-selector="edit-mergevars-mmerge2" type="text" id="edit-mergevars-mmerge2" name="mergevars[MMERGE2]" value="" size="25" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-item-mergevars-mmerge3 js-form-item-mergevars-mmerge3">
+      <label for="edit-mergevars-mmerge3">Last Name</label>
+        <input data-drupal-selector="edit-mergevars-mmerge3" type="text" id="edit-mergevars-mmerge3" name="mergevars[MMERGE3]" value="" size="25" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-item-mergevars-mmerge5 js-form-item-mergevars-mmerge5">
+      <label for="edit-mergevars-mmerge5">Institution</label>
+        <input data-drupal-selector="edit-mergevars-mmerge5" type="text" id="edit-mergevars-mmerge5" name="mergevars[MMERGE5]" value="" size="25" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-item-mergevars-mmerge1 js-form-item-mergevars-mmerge1">
+      <label for="edit-mergevars-mmerge1">Lead Acq. Source</label>
+        <input data-drupal-selector="edit-mergevars-mmerge1" type="text" id="edit-mergevars-mmerge1" name="mergevars[MMERGE1]" value="" size="25" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-item-mergevars-mmerge6 js-form-item-mergevars-mmerge6">
+      <label for="edit-mergevars-mmerge6">Lead Acq. Subsource</label>
+        <input data-drupal-selector="edit-mergevars-mmerge6" type="text" id="edit-mergevars-mmerge6" name="mergevars[MMERGE6]" value="" size="25" maxlength="128" class="form-text" />
+
+        </div>
+</div><input autocomplete="off" data-drupal-selector="form-gj-yctgx2qrvzch-n-q3jkpicbbttzriwzitenlyqmc" type="hidden" name="form_build_id" value="form-gJ_yCTgX2qrvzCh_N-q3jKpiCBbtTzrIWzitENlyQmc" />
+<input data-drupal-selector="edit-mailchimp-signup-subscribe-block-news-signup-form" type="hidden" name="form_id" value="mailchimp_signup_subscribe_block_news_signup_form" />
+<div data-drupal-selector="edit-actions" class="form-actions form-group" id="edit-actions">
+  <input data-drupal-selector="edit-submit" type="submit" id="edit-submit" name="op" value="Sign Up" class="button js-form-submit form-submit" />
+
+</div>
+
+  </form>
+</div>
+</div><div class="my-5">
+      <hhmi-email-signup
+        variant = 'DEFAULT'
+        mode = 'DARK'
+        textAlign = 'LEFT'
+        heading = 'Get the latest HHMI and program news in your inbox'
+        buttonUrl = '/email'
+        buttonLabel = 'Sign up for emails'
+        buttonArrow
+        socialHeading = 'Stay connected'
+        links = '[]'
+      >
+      </hhmi-email-signup>
+    </div>
+  </div>
+</hhmi-footer>
+    
+  </div>
+
+  </div>
+</div>
+
+  </div>
+
+    <script>window.dataLayer = window.dataLayer || []; window.dataLayer.push({"drupalLanguage":"en","drupalCountry":"US","siteName":"HHMI","entityCreated":"1678800229","entityLangcode":"en","entityStatus":"1","entityUid":"19","entityUuid":"0d9bbd2e-587a-4690-8260-af43a8094f70","entityVid":"18030","entityName":"brom","entityType":"node","entityBundle":"landing_page","entityId":"2740","entityTitle":"News \u0026 Stories","userUid":0,"news_keywords_1":"@HHMINEWS","news_keywords_@HHMINEWS":"true","news_keywords_2":"HHMI news","news_keywords_HHMI news":"true","news_keywords_3":"news","news_keywords_news":"true","news_keywords_4":"articles","news_keywords_articles":"true","news_keywords_5":"stories","news_keywords_stories":"true","news_keywords":"@HHMINEWS,HHMI news,news,articles,stories"});</script>
+
+    <script src="/sites/default/files/js/js_29sIRjEyeGXK5bW6PjzFOrhggI2iSyrGOo8XudZM9-0.js?scope=footer&amp;delta=0&amp;language=en&amp;theme=hhmi&amp;include=eJxti0EOwjAMBD9k5CdFJlnVFgmuYpeqvweEegFOqxnNNknpcmDyFSoP8xmErVT3m-E1Y-0m9wr-J0l1GFefoFU9vSBCjrJbW5D8qyi6NYT6fjbfgiIltyjjfVsQ_OHLyU_9tUYq"></script>
+
+  </body>
+</html>

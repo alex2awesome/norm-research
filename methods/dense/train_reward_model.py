@@ -32,6 +32,16 @@ FIXED_EVAL_FRACTION = 0.1
 FIXED_TEST_FRACTION = 0.1
 EVALS_PER_EPOCH = 5
 
+# Tolerance on the observed 80/10/10 fractions of an EXISTING on-disk split.
+# Default 2e-2 = the frozen behaviour; every existing caller leaves the env unset
+# and is therefore unaffected (same opt-in-override pattern as DENSE_SCORE_MAXLEN
+# in methods/dense/score_eval_dense_v4.py). The override exists for cells whose
+# canonical split is a STABLE HASH of the grouping unit rather than a ratio-
+# targeted draw, so the realised fractions land slightly off 80/10/10 and must
+# NOT be reshuffled to hit them (feedback_stable_hash_splits). First user:
+# cw_royalroad_verdict, md5("split::"+fiction_id)%1000, realised 77.8/11.1/11.1.
+SPLIT_FRACTION_ATOL = float(os.environ.get("DENSE_SPLIT_FRACTION_ATOL", "2e-2"))
+
 
 # ─────────────────────────────────────────────
 # 1. CONFIGURATION
@@ -186,6 +196,15 @@ def parse_args():
         help="Optuna storage URL. Defaults to sqlite in output_dir.",
     )
 
+    parser.add_argument(
+        "--selection_split",
+        type=str,
+        choices=["test", "eval"],
+        default="test",
+        help="Split used for per-epoch checkpoint selection. Default 'test' preserves legacy "
+        "behavior; pass 'eval' for honest held-out reporting (score test once, post hoc).",
+    )
+
     # Output
     parser.add_argument(
         "--output_dir", type=str, default="./reward_model_output", help="Output directory"
@@ -316,14 +335,14 @@ def get_or_create_fixed_split(df: pd.DataFrame, args) -> tuple[pd.DataFrame, pd.
         observed_eval_fraction = len(eval_df) / total
         observed_test_fraction = len(test_df) / total
         if (
-            not np.isclose(observed_train_fraction, FIXED_TRAIN_FRACTION, atol=2e-2)
-            or not np.isclose(observed_eval_fraction, FIXED_EVAL_FRACTION, atol=2e-2)
-            or not np.isclose(observed_test_fraction, FIXED_TEST_FRACTION, atol=2e-2)
+            not np.isclose(observed_train_fraction, FIXED_TRAIN_FRACTION, atol=SPLIT_FRACTION_ATOL)
+            or not np.isclose(observed_eval_fraction, FIXED_EVAL_FRACTION, atol=SPLIT_FRACTION_ATOL)
+            or not np.isclose(observed_test_fraction, FIXED_TEST_FRACTION, atol=SPLIT_FRACTION_ATOL)
         ):
             raise RuntimeError(
                 "Existing split ratios do not match expected train/eval/test 80/10/10 "
                 f"(observed train={observed_train_fraction:.4f}, eval={observed_eval_fraction:.4f}, "
-                f"test={observed_test_fraction:.4f}) in {split_dir}."
+                f"test={observed_test_fraction:.4f}, atol={SPLIT_FRACTION_ATOL}) in {split_dir}."
             )
         return train_df, eval_df, test_df
 
@@ -567,7 +586,7 @@ def train(args):
             "Bradley-Terry mode requires both label classes in train split. "
             "Current train split has one class after subsetting."
         )
-    selection_split_name = "eval" if getattr(args, "is_optuna_trial", False) else "test"
+    selection_split_name = "eval" if getattr(args, "is_optuna_trial", False) else args.selection_split
     selection_df = eval_df if selection_split_name == "eval" else test_df
     logger.info("Model-selection split: %s (eval reserved for Optuna trials)", selection_split_name)
 

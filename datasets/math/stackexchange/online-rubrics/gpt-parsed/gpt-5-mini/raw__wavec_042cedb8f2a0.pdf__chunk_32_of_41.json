@@ -1,0 +1,154 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_042cedb8f2a0.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_042cedb8f2a0.pdf",
+  "chunk_idx": 32,
+  "n_chunks": 41,
+  "chunk_chars": 39986,
+  "model": "gpt-5-mini",
+  "elapsed_s": 299.6069322500043,
+  "input_tokens": 14730,
+  "output_tokens": 5334,
+  "extracted": {
+    "orientation": "tutorial",
+    "intended_audience": "mathematicians and advanced Magma users performing computational group theory and matrix-group computations",
+    "subtask_short": "matrix_group_code_in_magma",
+    "subtask_description": "Guidance and reference for constructing, manipulating, and analysing matrix groups in the Magma computer algebra system, including algorithms, function semantics, limitations and recommended workflows.",
+    "subtask_keywords": [
+      "magma",
+      "matrix_groups",
+      "computational_group_theory",
+      "documentation"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Classification into three classes of matrix groups",
+        "description": "Matrix groups are usefully divided into three classes: (1) those for which a Structure Normal Form (SNF) can be constructed (permutation-like groups using BSGS representation); (2) matrix groups defined over finite fields (Aschbacher-based computational approach); (3) matrix groups for which SNF cannot be constructed (includes infinite matrix groups and finite groups of large degree not in class 1).",
+        "guidance": "The available computations and algorithms depend on which class the group belongs to: the first supports wide range of structural computations via BSGS; the second uses Aschbacher/Leedham-Green machinery (orders and composition factors up to degree ~200 or more); the third supports element operations but not subgroup-membership-dependent operations."
+      },
+      {
+        "name": "Creating the General Linear Group (GL(n,R))",
+        "description": "GeneralLinearGroup(n, R) (GL(n,R)) creates a shell structure representing GL(n,R). It does not construct actual generators except when R is a finite field GF(q).",
+        "guidance": "If subsequent operations require generators and R is a finite field, Magma will automatically create generators; for other coefficient rings the user must supply generators."
+      },
+      {
+        "name": "Representation of matrices",
+        "description": "Elements of matrix groups are created by building a sequence of entries listed in row-major order and coercing the sequence into the group (G! [ ... ]). The function Eltseq or ElementToSequence returns the sequence of entries for a matrix.",
+        "guidance": "Do not attempt to modify a matrix by redefining entries directly; convert to a sequence using Eltseq, modify the sequence, then coerce back into the group. Identity matrix can be constructed as Identity(G) or G!1."
+      },
+      {
+        "name": "Arithmetic on matrices",
+        "description": "Standard multiplicative operators (*) and exponentiation (^) apply to matrix-group elements. Inverse is found via exponentiation to the power -1. Entries and rows can be accessed via g[i,j] or g[i].",
+        "guidance": "Multiplication is permitted when matrices are elements (or coercible into) a common matrix group, or when coefficient rings are compatible and dimensions match; multiplication of a group element with a matrix from a matrix ring or action on a vector space/module is supported as instances of group actions."
+      },
+      {
+        "name": "Order(g) semantics and limitations",
+        "description": "Order(g) returns the order of an element g. If g has infinite order, Order may not detect this and may never return.",
+        "guidance": "For matrix groups over finite fields Magma uses Leedham-Green's efficient algorithm (degree up to ~1000). FactoredOrder(g) returns a factorization when required. Because integer factorization can be hard, use the boolean parameter Proof to avoid expensive factorizations: then the returned value may be a multiple of the true order and a second boolean indicates whether the order is known to be correct (true) or may be a multiple (false)."
+      },
+      {
+        "name": "Projective order functions",
+        "description": "ProjectiveOrder and FactoredProjectiveOrder compute the least positive integer n such that g^n = \u03bb I (I identity). Both return the scalar \u03bb as a second return value.",
+        "guidance": "Use these when scalar multiples of identity are relevant (projective computations)."
+      },
+      {
+        "name": "Matrix invariants and canonical forms",
+        "description": "Many matrix-ring operations apply to matrix-group elements (e.g., JordanForm, Adjoint, CharacteristicPolynomial, MinimalPolynomial, Determinant, Eigenspace, Eigenvalues, HessenbergForm, InvariantFactors, RationalForm, Transpose, Trace). MinimalPolynomial works for any field and ZZ; canonical forms require a field.",
+        "guidance": "Operations such as Adjoint and Transpose return elements of the ambient matrix ring, not necessarily as group elements. See table references for the full list."
+      },
+      {
+        "name": "Constructing subgroups (sub< G | generator specification >)",
+        "description": "The sub-constructor sub< G | ... > builds a subgroup of G from a generator specification where each generator may be: an element of G, an element of Matn(R) belonging to G, a sequence defining a matrix of G, a subgroup of G, or a set/sequence containing any of the above.",
+        "guidance": "Including subgroups within a generator list is powerful for experimentation (e.g., generate subgroups from pairs of conjugate Sylow subgroups). Use sub< G | S, S^x > idiom for such investigations."
+      },
+      {
+        "name": "MatrixGroup constructor (MatrixGroup< n, R | ... >)",
+        "description": "MatrixGroup< n, R | generator specification > builds the desired subgroup of GL(n,R) in one step from provided generators.",
+        "guidance": "When constructing generators via intermediate operations that may produce singular matrices, build those singular intermediates as elements of MatrixAlgebra(R) and let sub-constructor coerce non-singular elements into the group."
+      },
+      {
+        "name": "Generic(G) returns embedding GL(n,R)",
+        "description": "Generic(G) returns the generic (ambient) group GL(n,R) where n and R are chosen so G is a subgroup of GL(n,R).",
+        "guidance": "Use Generic(G) to test or obtain the ambient general linear group of a matrix group."
+      },
+      {
+        "name": "Normal subgroups and quotient construction (ncl and quo)",
+        "description": "Constructors ncl and quo build the normal closure and quotient. At time of writing quotients are returned as permutation groups (may change in future).",
+        "guidance": "Magma can compute the normal closure when it can find the order of the group. A quotient is computable only if a coset table for the group over the normal subgroup (relative to defining generators) can be computed; the permutation quotient arises from columns of the coset table."
+      },
+      {
+        "name": "Classical families construction and restrictions",
+        "description": "Functions create concise generating sets for families of classical groups over finite fields (GL, SL, GU, SU, Sp, GO+, GO-, SO+, SO-, Omega groups, Suzuki groups). Each function supports arguments (n,K), (n,q), (V) where appropriate, but there are restrictions on dimensions and fields (e.g., symplectic groups only even dimension >=4; unitary groups defined over GF(q^2); two distinct quadratic forms in even dimension >=4 for orthogonal groups).",
+        "guidance": "Projective versions (PGL, PSL, PGammaL, PSigmaL, ProjectiveSymplecticGroup, etc.) return projective/permutation group forms. Check dimension/field restrictions before invoking constructors."
+      },
+      {
+        "name": "Product constructions (DirectProduct, TensorProduct, WreathProduct)",
+        "description": "Functions exist for standard product constructions: DirectProduct(G,H), DirectProduct(Q), TensorProduct(G,H) (tensor with permutation group H), WreathProduct(G,H) (wreath product with permutation group H).",
+        "guidance": "Note: TensorProduct and WreathProduct expect the second argument to be a permutation group rather than a matrix group."
+      },
+      {
+        "name": "Access functions for matrix-group facts",
+        "description": "Functions such as Degree(G), CoefficientRing(G)/BaseRing(G), Generic(G) return general facts about a matrix group (degree n, coefficient ring R, ambient GL(n,R)).",
+        "guidance": "Use these accessors when writing generic code that must inspect the ambient degree or coefficient ring."
+      },
+      {
+        "name": "Converting between matrix groups and matrix rings",
+        "description": "group2ring and ring2group convert between the matrix-group context and the corresponding matrix-ring context (MatrixRing(CoefRing(G), Degree(G) | Generators(G))).",
+        "guidance": "Ring will contain non-invertible elements; coercion of elements common to both works via the ! operator; attempting to coerce a non-invertible ring element into a group will raise a runtime error (Matrix is not invertible)."
+      },
+      {
+        "name": "Requirement of SNF/BSGS for many algorithms",
+        "description": "Most group structure algorithms require a Structure Normal Form (SNF), and in matrix groups this commonly means a base and strong generating set (BSGS). BSGS construction requires that G be finite and defined over a Euclidean ring R.",
+        "guidance": "When BSGS is available, many algorithms from permutation/group theory apply. For large degree or groups where BSGS is impractical, alternative Aschbacher-based methods may be used (see later sections)."
+      },
+      {
+        "name": "Base and Strong Generating Set (BSGS) construction considerations",
+        "description": "A base B is a sequence of vectors/subspaces such that only the identity fixes B pointwise; the orbit lengths chosen for base points should generally be less than a million. BSGS is constructed by variants of the Schreier\u2013Sims algorithm; ToddCoxeterSchreier(G) is the standard deterministic method.",
+        "guidance": "As degree increases, BSGS cost grows rapidly. The user may prefer to control construction. Use ToddCoxeterSchreier for verification; RandomSchreier provides a fast randomized probable BSGS but cannot prove correctness unless order is known or Verify is called."
+      },
+      {
+        "name": "RandomSchreier algorithm semantics and parameters",
+        "description": "RandomSchreier(G) attempts to construct a BSGS via a randomized procedure that terminates when m randomly chosen elements fail to enlarge the group defined by the current BSGS. Default m = 40 (parameter Run).",
+        "guidance": "RandomSchreier gives a probable lower bound on order; use SetVerbose(\"RandomSchreier\",1) to monitor progress. If order is subsequently verified (Verify), Todd-Coxeter can be used to complete; if the user knows the order n, communicate it via AssertAttribute(G, \"Order\", n) or supply a factorization sequence to make RandomSchreier guaranteed to be correct. Asserting IsVerified incorrectly can lead to incorrect results or crashes."
+      },
+      {
+        "name": "Verify and AssertAttribute usage",
+        "description": "Verify(G) checks a probable BSGS and completes it by applying Todd-Coxeter-Schreier if incomplete. AssertAttribute(G, \"Order\", n) or AssertAttribute(G, \"IsVerified\", true) can be used to inform Magma of known facts.",
+        "guidance": "Providing the correct order speeds up BSGS construction and makes RandomSchreier results guaranteed; incorrect assertions risk incorrect computations or crashes."
+      },
+      {
+        "name": "Natural R-module (RSpace(G))",
+        "description": "RSpace(G) returns the natural R-module for a subgroup of GL(n, R) (an R-module, not an R[G]-module). The group acts on the natural module by right multiplication; images may be computed with ^ or *.",
+        "guidance": "Use v^(G.i) or v*(G.i) for images; sets, sequences and subspaces may also be imaged. Compare usage with permutation-group actions for analogous operations."
+      },
+      {
+        "name": "Orbits and stabilizers (Orbit, OrbitBounded, Orbits, LineOrbits, Stabilizer)",
+        "description": "Orbit(G,T) computes orbit of T (vector, set, sequence, or subspace) under G; OrbitBounded(G,T,b) returns orbit if its size \u2264 b, otherwise false. Orbits(G) partitions vectors when module is finite and small; LineOrbits(G) computes orbits on 1-d subspaces. Stabilizer(G,T) returns stabilizer subgroup.",
+        "guidance": "If an orbit is infinite, Orbit will not return; use OrbitBounded to impose limits. OrbitClosure returns the minimal G-invariant set containing S."
+      },
+      {
+        "name": "Induced permutation action on orbits (OrbitAction, OrbitImage, OrbitKernel and bounded variants)",
+        "description": "OrbitAction(G,S) constructs the permutation representation \u03c6: G \u2192 L induced by G acting on the orbit-closure of S and returns (\u03c6, induced group L, kernel). Bounded variants require the orbit-closure size \u2264 b or return false.",
+        "guidance": "These functions are used to reduce matrix-group problems to permutation-group computations (e.g., finding composition factors). Use bounded variants to avoid explosion when closures are large."
+      },
+      {
+        "name": "K[G]-module operations and irreducibility (IsIrreducible, GModule, Submodule/Quotient images)",
+        "description": "GModule(G) creates the natural K[G]-module M. IsIrreducible(G) returns true if G acts irreducibly on M, otherwise false plus a proper submodule. QuotientModuleImage and SubmoduleImage construct images of the group on quotient/submodule.",
+        "guidance": "Use module routines (from Chapter 29) to analyze submodule structure and composition factors. Workflow examples illustrate constructing submodule/quotient images and testing irreducibility iteratively."
+      },
+      {
+        "name": "Recognizing classical groups (IsClassicalGroup and related predicates)",
+        "description": "Functions such as IsClassicalGroup, IsLinearGroup, IsSpecialLinearGroup, IsSymplecticType, IsSymplecticGroup, IsOrthogonalType, IsOrthogonalGroup, IsSpecialOrthogonalGroup, IsUnitaryType, IsUnitaryGroup, IsSpecialUnitaryGroup employ Las Vegas algorithms to test whether, modulo scalars, G lies between a classical simple group and its automorphism group or to test containment/isomorphism with specific classical groups.",
+        "guidance": "If any of these functions returns true, the answer is guaranteed correct. If they return false, the conclusion is probabilistic: G is probably not the tested group. IsClassicalGroup returns true together with the family name and, where relevant, the preserved form."
+      },
+      {
+        "name": "Aschbacher family classification (conditions i\u2013viii)",
+        "description": "A subgroup G of GL(V) over a finite field K satisfies at least one Aschbacher condition: (i) reducible action on V; (ii) semilinear over extension field; (iii) imprimitivity; (iv) preserves nontrivial tensor-product decomposition; (v) normal subgroup acting absolutely irreducibly of extra-special p-/2-group symplectic type; (vi) preserves symmetric tensor-product decomposition; (vii) acts linearly over proper subfield modulo scalars; (viii) contains SL or one of the classical groups over K.",
+        "guidance": "This classification underlies alternative recognition/analysis algorithms for matrix groups outside the range where BSGS techniques apply. Use Aschbacher-based tests to decide algorithmic strategy for large-degree finite-field matrix groups."
+      }
+    ]
+  }
+}

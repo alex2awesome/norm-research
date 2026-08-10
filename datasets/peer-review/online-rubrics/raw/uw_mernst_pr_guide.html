@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>How to create and review a GitHub pull request</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+</head>
+<body>
+<h1 id="How_to_create_and_review_a_GitHub_pull_request">How to create and review a GitHub pull request</h1>
+
+<h2>by <a href="../">Michael Ernst</a></h2>  <!-- omit from toc -->
+<h4>March, 2017<br>  <!-- omit from toc -->
+Last updated: March 20, 2024
+</h4>
+
+<p>
+The main way of contributing to an open-source project that is hosted on GitHub is via a <em>pull request</em>.  A pull request says, &ldquo;Here are some changes that I have made in my copy.  Please incorporate them into the main version of the project.&rdquo;
+</p>
+
+<p>Contents:</p>
+<!-- start toc.  do not edit; run html-update-toc instead -->
+    <ul>
+      <li><a href="#setup">Preliminaries (setup)</a></li>
+      <li><a href="#start-work">Start on a unit of work</a>
+        <ul>
+          <li><a href="#why-work-on-a-branch">Why to work on a branch</a></li>
+        </ul></li>
+      <li><a href="#committing-and-pushing-changes">Committing and pushing changes</a></li>
+      <li><a href="#pull-upstream">Pull upstream into your branch</a></li>
+      <li><a href="#logical-units">Divide your changes into logical units</a>
+        <ul>
+          <li><a href="#logical-units-after-the-fact">What to do if a branch contains multiple distinct changes</a></li>
+        </ul></li>
+      <li><a href="#creating-pull-request">Creating a pull request</a>
+        <ul>
+          <li><a href="#creating-pull-request-private">Creating a private pull request (rare)</a></li>
+          <li><a href="#creating-pull-request-pushed">Creating a pull request for already-pushed code (rare)</a></li>
+        </ul></li>
+      <li><a href="#respond-to-reviews">Responding to review feedback</a></li>
+      <li><a href="#reviewing">Reviewing a pull request</a>
+        <ul>
+          <li><a href="#merging">Merging the pull request</a>
+            <ul>
+              <li><a href="#merging-squash">Squash, don't just merge</a></li>
+              <li><a href="#merging-commit-message">Commit message</a></li>
+            </ul></li>
+        </ul></li>
+    </ul>
+<!-- end toc -->
+
+<p>
+(Also see <a href="version-control.html">Version control concepts and best practices</a>.)
+</p>
+
+
+<h2 id="setup">Preliminaries (setup)</h2>
+
+<ul>
+  <li><a href="https://github.com/join">Sign up for a GitHub account</a>
+
+  <li><a href="https://docs.github.com/en/get-started/git-basics/set-up-git">Install Git</a>
+
+  <li>Fork the project (use the &ldquo;Fork&rdquo; button in the upper right corner of its
+  GitHub page), to make your own copy of the repository on GitHub.  We will call the original project
+  &ldquo;upstream&rdquo;; your copy is called a &ldquo;fork&rdquo;.  </li>
+
+  <li>Enable continuous integration on your fork.  Use the same continuous
+  integration that the upstream project uses.
+    <ul>
+      <li>
+        For Azure Pipelines:  Browse
+        to <a href="https://azure.microsoft.com/en-us/products/devops/pipelines/">azure.microsoft.com</a>,
+        click &ldquo;Start free with GitHub&rdquo;, follow remaining instructions.
+        <!-- TODO: make this more explicit -->
+      </li>
+      <li>
+        For CircleCI:  Browse
+        to <a href="https://app.circleci.com/pipelines">circleci.com</a>, log
+        in with GitHub, under &ldquo;Select an organization&rdquo; choose your
+        username, click &ldquo;Set Up Project&rdquo;, follow remaining instructions.
+        <!-- TODO: make this more explicit -->
+      </li>
+      <li>
+        for GitHub Workflows: there is nothing to do; the existence of
+        a <code>.github/workflows/<em>foo</em>.yml</code> file in your
+        repository enables CI.  If the upstream repository has such a file,
+        then so does your fork.
+      </li>
+      <li>
+        For Travis CI:  Browse to
+        <a href="https://www.travis-ci.com">travis-ci.com</a>, log in using GitHub, and
+        turn on the toggle next to your fork's name.  (Click
+        &ldquo;refresh&rdquo; if you do not see your fork.)  Be sure to give
+        Travis access to your GitHub account so that Travis can send you email
+        notifications about each broken build.
+        Note that Travis CI is no longer free for all open-source projects;
+        the project must apply for an Open Source Subscription.
+      </li>
+    </ul>
+  </li>
+
+  <li>Clone your fork locally to create a working copy.  You can run a
+    command such as one of these:
+
+    <pre>git clone git@github.com:<em>USERNAME</em>/<em>REPONAME</em>.git</pre>
+    <pre>git clone https://github.com/<em>USERNAME</em>/<em>REPONAME</em>.git</pre>
+
+    <p>
+    where <em>USERNAME</em> is your GitHub username.  (In any example
+    command, you need to replace any text in <em>ITALIC CAPS</em>.)
+    </p>
+
+  <li>Create a git remote named &ldquo;upstream&rdquo; to refer to where
+  you forked your copy from, by running:
+
+<pre>
+cd <em>REPONAME</em>
+git remote add upstream https://github.com/<em>OTHERUSER</em>/<em>REPONAME</em>.git
+git fetch upstream
+</pre>
+
+  <li>In your working copy, compile and run the tests as a sanity check.
+  You should find the instructions for doing so in, or linked from,
+  a <code>README</code> file.
+</ul>
+
+
+<h2 id="start-work">Start on a unit of work</h2>
+
+<p>
+When you are ready to start on a unit of work, such as fixing a bug or
+implementing a feature, create a branch.  A branch is a parallel thread of
+development &mdash; you can create as many branches as you want in your
+repository, which is like having multiple independent repositories.
+All the work on every branch is saved on GitHub.
+</p>
+
+<p>
+Each working copy has a single current branch.
+When you commit changes (with <code>git commit</code>) or push commits to
+GitHub (with <code>git push</code>), they are saved to the current branch.
+You must always remember which branch you are working on; making changes to
+the wrong branch is a common mistake.
+</p>
+
+<p>
+Here are two ways to change which branch is the
+current branch.
+(Before changing the current branch, <a href="#pull-upstream">update your
+repository from upstream</a> and commit any changes.)
+</p>
+
+<ul>
+<li>
+<p>
+To <em>create</em> a branch named <em>MYBRANCHNAME</em> and make it the current branch,
+run
+</p>
+
+<pre>git switch -c <em>MYBRANCHNAME</em></pre>
+
+<p>
+(The older equivalent command is <code>git checkout -b <em>MYBRANCHNAME</em></code>.)
+</p>
+
+<p>
+Use a descriptive, readable name for your branch, such as
+<code>unicode-support</code> or
+<code>fix-issue-22</code>.
+</p>
+
+</li>
+<li>
+<p>
+Switch to an <em>existing</em> branch (that is, make an existing branch the
+current branch) by running
+</p>
+
+<pre>git switch <em>MYBRANCHNAME</em></pre>
+
+<p>
+(The older equivalent is <code>git checkout <em>MYBRANCHNAME</em></code>.)
+</p>
+</li>
+</ul>
+
+<p>
+Each branch should represent a logical unit of work.  If you are doing two
+different tasks like fixing a bug and performing a refactoring (or if while
+doing a task you discover a second, distinct
+task, like the need to refactor or to improve unrelated documentation), then create
+two different branches for them.  This is a bit of a
+hassle for you, but it makes reviewing your changes <em>much</em> easier, and the
+maintainers will be more likely to accept your changes.
+</p>
+
+
+<h3 id="why-work-on-a-branch">Why to work on a branch</h3>
+
+<p>
+Do not work on the main branch in your fork.  (It is often
+named <code>main</code> or <code>master</code>.)  If you do so,
+future pull requests will be cluttered by unnecessary merge commits.  The
+rest of this section explains why; you can skip it unless you want to learn
+more details.
+</p>
+
+<p>
+When a developer merges your work into the main repository, that usually
+creates a new commit (it contains the same code changes, but has a
+different identity than the one or more commits that you made in your
+branch).  Whenever a branch isn't identical to upstream, pulling from
+upstream will create a new merge commit.  Once a branch is different from
+upstream, each pull will accumulate more changes (differing commits) from
+upstream.
+</p>
+
+<p>
+Therefore, it is better to keep your main branch identical
+to upstream, and create a new branch for each pull request.  You will
+delete the branch when your pull request is merged into the upstream
+repository.  (GitHub will do the deletion automatically if you 
+enable &ldquo;Automatically delete head branches&rdquo; in
+the repository settings of your fork.)
+</p>
+
+<p>
+If you do create a pull request from your fork's main branch, leading to
+spurious merge commits on your fork's main branch, then after
+all your pull requests are merged, you are probably best off deleting your
+GitHub fork (do this at GitHub.com) and all clones of it, and then
+re-creating the fork (do this at GitHub.com) and re-cloning.  There are
+other ways to fix the problem, but they use advanced git commands and are
+more error-prone.
+</p>
+
+
+<h2 id="committing-and-pushing-changes">Committing and pushing changes</h2>
+
+<p>
+Before you start to implement your changes, write tests that currently fail but will
+pass once you have fixed the bug or implemented the feature.  Run the tests
+locally to confirm that they currently fail.  (The project's developer
+documentation will tell you how to do this.)  Now, commit the tests and
+push them.  Check that continuous integration has run the
+project's tests on your fork and that they failed.
+</p>
+
+<p>
+Now, do your work, testing locally and committing logical chunks of work as
+you go.  You can push these commits to GitHub by running <code>git
+push</code> whenever you like.  Eventually, you will be done and ready for
+a code review.
+</p>
+
+<p id="being-done">
+Being done requires at least the following:
+</p>
+
+<ul>
+  <li>
+    Testing: You have written tests for your feature or bug fix.  All the
+    tests pass, both locally and in continuous integration.
+  <li>
+    Documentation: You have documented each procedure that you added or
+    modified, and you have updated the user manual and changelog if appropriate.
+  <li>
+    Completeness:  Any change you make is because you discovered a problem.
+    Look for other places that the problem might manifest, such as in code
+    with a similar specification or implementation.  Fix them all at once
+    rather than leaving some to be discovered later.
+</ul>
+
+
+<h2 id="pull-upstream">Pull upstream into your branch</h2>
+
+<p>
+Periodically pull upstream into your branch; that is, incorporate into your
+branch any work that other maintainers have done since you created your
+branch.  It's easier to do this frequently than all at once.  Here are two
+ways to do so:
+<pre>
+git pull upstream <em>BRANCHNAME</em>
+</pre>
+or
+<pre>
+git pull https://github.com/<em>OTHERUSER</em>/<em>REPONAME</em>.git
+</pre>
+
+<p>
+If this command had any effect, then:
+</p>
+<ul>
+  <li>
+    resolve merge conflicts if any
+  <li>
+    check that your fork still passes all tests locally
+  <li>
+    push the changes
+  <li>
+    check that your fork still passes all tests in continuous integration
+</ul>
+
+
+<h2 id="logical-units">Divide your changes into logical units</h2>
+
+<p>
+Oftentimes, when you are working to add a feature, you will also fix a bug,
+or add documentation, or perform a refactoring.  It is great to make these
+improvements.  However, each pull request should be a single, logical unit.
+</p>
+
+<p>
+It's a bit more work to separate different changes into different branches,
+but it makes each pull request much easier to understand.  Each pull
+request can be reviewed more quickly.  A change history with more, smaller
+commits is more helpful to future developers.  Test failures are easier to
+understand.  Any interactions between changes are easy to see.
+</p>
+
+
+<h3 id="logical-units-after-the-fact">What to do if a branch contains multiple distinct changes</h3>
+
+<p>
+If you have made multiple different changes in a branch, create a new
+branch for each distinct change (other than the main change that the branch
+is about), and open a separate pull request for each new branch.
+You do not need to undo any of the
+changes in the branch that combines multiple changes.
+</p>
+
+<p>
+Here is a concrete example.
+Suppose your repository starts out with a branch named <code>feature</code>
+(the actual name should be more descriptive!), and you realize that it
+contains three distinct changes: a feature, unrelated documentation
+improvements, and a refactoring.  You do not need to undo any of the
+changes in branch <code>feature</code>.
+</p>
+<ol>
+  <li>Make two new branches <code>add-documentation</code>
+    and <code>refactoring</code>.
+  <li>Copy the relevant changes from <code>feature</code> to each of those
+      branches.
+  <li>Open pull requests to your main branch for each of the new branches.
+  <li>If you get feedback on one of those smaller pull requests and edit
+    its branch (<code>add-documentation</code>
+    or <code>refactoring</code>), then pull that branch into
+    branch <code>feature</code>.  Doing so reduces the number of merge
+    conflicts.
+  <li>When the smaller pull requests are merged, pull the main branch
+    into <code>feature</code>.  It is now a single-concern branch, because
+    its only difference from the main branch is the feature.
+</ol>
+
+
+<h2 id="creating-pull-request">Creating a pull request</h2>
+
+<p>
+Once you are happy with your work and you believe it
+is <a href="#being-done">ready</a> to be incorporated into the project's
+main repository, you can create a pull request.
+</p>
+
+<ol>
+
+  <li><a href="#pull-upstream">Update your branch (which is in your fork) from upstream</a>.
+
+  <li>Ensure that the branch passes all tests both locally and on
+  continuous integration.
+
+  <li>On your fork's GitHub page, click on &ldquo;New pull request&rdquo;, which appears just above the list of files.
+  </li>
+
+  <li> The last dropdown box is by default &ldquo;compare: main&rdquo;; change that
+  to your branch.  Wait a moment until GitHub shows you the changes, then
+  review all of them (you will need to scroll to see them all).  </li>
+
+  <li>If there are any changes that are not related to main
+  topic of your branch (or gratuitous whitespace/formatting changes), then
+  don't make the pull request.  Instead, go back to your working copy on your computer, undo
+  those changes, and commit.  Then start over to make the pull request,
+    with a smaller and cleaner set of changes.
+
+  <li>Click &ldquo;Create pull request&rdquo;.
+    <ul>
+      <li>Give a descriptive title,
+        that would be appropriate as a commit message for your work when merged.
+        Sometimes it is also appropriate to write a
+        paragraph that explains what you have done.
+      </li>
+      <li>
+        If your pull request fixes any issues, then either the descriptive
+        paragraph should include the text &ldquo;fixes
+        #<em>NNN</em>&rdquo;, or you should click on &ldquo;linked issues&rdquo; (in
+        the right column near the bottom).  Either of these links your pull
+        request to the issue and automatically closes the issue when your
+        pull request is accepted.  Putting the text &ldquo;fixes
+        #<em>NNN</em>&rdquo; in the title of the pull request does not seem
+        to work.
+      </li>
+      <li>Ensure that the &ldquo;Allow edits from maintainers&rdquo; checkbox is enabled.</li>
+      <li>Finally, click &ldquo;Create pull request&rdquo;.</li>
+    </ul>
+  </li>
+  
+
+  <li>If an automated tool (such as CodeRabbit or Copilot) gives code
+  review feedback, consider each comment.  Make a change if appropriate, then
+  click "resolve comment".</li>
+
+  <li>
+  After the pull request passes its tests, assign it to someone, send
+  mail, or write a comment to request a review.  The mere creation
+  of the pull request doesn't necessarily signal that you believe your code
+  is ready for review.</li>
+
+</ol>   
+
+<p>
+Make your code self-explanatory.
+You should not write pull request comments on lines of code in your own
+pull request, and
+you should write very little in the introductory comment to your pull
+request.
+Comments in a pull request will never be seen by a programmer reading the
+source code.  If there is information that is needed by a programmer
+reading the source code, you should put it in a code comment.
+This also applies to answering questions from reviewers:  if a reviewer
+asks a question, then clarify the code or add documentation, rather than
+answering the question in the pull request comment thread.
+</p>
+
+
+<h3 id="creating-pull-request-private">Creating a private pull request (rare)</h3>
+
+<p>
+Sometimes you want feedback on your code before you are ready to merge it
+into a different fork.  In this case, you can create a pull request between
+two branches of your fork.
+</p>
+
+<ol>
+  <li>
+    Create a new branch on your fork called (say) &ldquo;codeReviewTargetTemporary&rdquo;.
+    It should be up to date with respect to the branch you
+    intend to merge your changes into, which is often the main branch.
+  </li>
+  <li>Pull the codeReviewTargetTemporary branch into your branch.
+    (Periodically update the codeReviewTargetTemporary from the main branch and pull
+    it into your branch.)
+  <li>In GitHub, create a pull request that requests to merge your working
+    branch into the codeReviewTargetTemporary branch.</li>
+  <li>Assign someone to that pull request.</li>
+  <li>After your code has been reviewed, discard the codeReviewTargetTemporary branch
+    (to which you have made no changes).</li>
+</ol>
+
+
+<h3 id="creating-pull-request-pushed">Creating a pull request for already-pushed code (rare)</h3>
+
+<p>
+Sometimes, you want a review of code that you have already pushed to
+GitHub.  Or, you want a <a href="code-review.html">holistic code review</a>
+to critique the design of an entire component of your code, rather than
+incremental code reviews of bits and pieces of it.
+</p>
+
+<p>
+GitHub's pull request mechanism does not support this workflow well, but
+here are two ways to make it work.
+</p>
+
+<ul>
+  <li>
+    Create a new branch with no code, and then
+    pull-request <code>main</code> into it.  You will never merge that
+    pull request, but will merely address feedback in <code>main</code>
+    and eventually close the pull request without merging it.
+  </li>
+  <li>
+    The reviewer creates a new branch with identical contents
+    to <code>main</code> (that is, do <code>git checkout main; git
+    checkout -b review</code>).  Now, the reviewer reads and edits
+    the <code>review</code> branch in their normal editor, adding TODO code
+    comments.  The author also edits the <code>review</code> branch, until
+    there are no more TODO code comments in the diff.  Then, merge the
+    branch into main.
+  </li>
+</ul>
+
+
+<h2 id="respond-to-reviews">Responding to review feedback</h2>
+
+<ol>
+  <li>You will receive feedback on your pull request.  Respond to the
+  feedback by making changes in your working copy,
+  committing them, and pushing them to GitHub when the tests pass locally.
+  
+  <p>As soon as you receive feedback, you can start working on it.  The
+  reviewer should send you a message and/or
+  assign the code review back to you, but the reviewer might forget, so
+  don't wait for those events.
+
+  <p>Make sure you are
+  working on the right branch; use <code>git branch</code> to check.
+  Never force a push with <code>git push -f</code>.  Forcing a push is bad
+  practice, it will cause loss of code review comments that GitHub attached to
+  that commit (you can't control which commit GitHub uses), and 
+  it can cause merge conflicts for people who have cloned your branch (such
+  as the people doing the review).
+
+  <p>Go through each piece of feedback.
+    <ul>
+  <li>If you agree with a code review comment and do what it
+  suggests, mark it as resolved.  <em>Don't</em> respond in the GitHub code review system.  For
+  example, <b>don't reply &ldquo;Done&rdquo; or &ldquo;I did that&rdquo;</b>.
+  Doing so clutters the conversation history.
+  <li>Respond if more discussion is needed, such as asking a followup
+  question or explaining why you disagree with the suggestion.
+  <li>If the code
+  review asks a question, then usually the best way to answer it is by
+  improving the documentation.  Answering it in the code review will not
+  help other programmers who read your code later, after it has been
+  merged.
+  </ul>
+
+    <p>When you push commits to GitHub, the pull request will be
+    automatically updated.  If you change a line of code on which you
+    received feedback, that feedback is no longer shown by default (or
+    maybe it is shown but marked as out of date).
+    That is, GitHub assumes that if a line near a review comment has been
+    changed, then the review comment has been resolved.  This means that
+    you should try not to push changes (such as a change to indentation)
+    that change a line without addressing all the comments related to that
+    line.  </p>
+    
+  <li>After you have addressed all the review feedback, <em>explicitly</em>
+    request a re-review.  Do not assume that person will know when you are
+    done.  Here are three ways to request a re-review:
+    <ul>
+      <li>Use the pull request's GitHub webpage to request a re-review
+        from the person who gave the original feedback. You can do this by
+        adding that person as a reviewer &mdash; this works even if that person
+        has reviewed the pull request before.
+      </li>
+      <li>Assign the pull request to that person, using the
+        &ldquo;Assignees&rdquo; list in the right column of the webpage's
+        &ldquo;Conversation&rdquo; tab.
+      </li>
+      <li>Write a comment in the conversation in the GitHub pull request.
+      </li>
+    </ul>
+  <li>There will often be several rounds of feedback and fixes.  The
+    reviewer needs to approve your changes, and there may have been parts
+    of your pull request that were confusing or that the reviewer was
+    otherwise unable to review on the first iteration.  You are not done
+    until the reviewer has approved your pull request.  (Sometimes,
+    multiple people will review your pull request, but it is most efficient
+    to have them do their reviews one at a time rather than concurrently.)
+    Remember to periodically <a href="#pull-upstream">update your branch
+    from upstream</a>.
+
+  <li>Eventually, your pull request will be accepted and your changes will
+  be part of the project.  Congratulations!  </li>
+
+  <li>Delete your branch, which no longer serves any purpose.  (It's easier
+    to enable &ldquo;Automatically delete head branches&rdquo; in
+    the repository settings of your fork.  Then you don't have to do this
+    step.)
+
+    <p>
+    Periodically run <code>git remote prune origin</code> to remove deleted
+    branches from your working copy, so that you don't accidentally use them.
+    </p>
+</ol>
+
+<p>
+Some Git documentation recommends rebasing, amending commits, or other
+changes to existing version control history.  Don't do any of these things.
+They are confusing and error-prone, they can corrupt your pull request, and
+they are not necessary.  All of your changes will be squashed and merged
+into a single commit when your pull request is accepted, so don't worry
+about what the version control history of your branch looks like.  Just
+focus on its differences from the upstream's main branch, which you can see in
+your pull request.
+</p>
+
+<p>
+  You will receive email about comments to your pull requests.
+  Don't reply by email.  Instead, reply on the GitHub webpage that is
+  referenced by the email.
+  One reason is that if you reply by email, you may needlessly bloat your
+  response with all the quoted text from the email you received.
+  Another reason is that if you reply by email, GitHub may not associate
+  your comment with the right thread in the code review.
+</p>
+
+
+<h2 id="reviewing">Reviewing a pull request</h2>
+
+<p>
+This section is for maintainers who are reviewing and merging a pull request.
+</p>
+
+<p>
+This section is currently incomplete, but contains a few tips.
+</p>
+
+<h3 id="merging">Merging the pull request</h3>
+
+<h4 id="merging-squash">Squash, don't just merge</h4>
+
+<p>
+It is desirable to keep the version control history clean:  in the main
+branch, each logical change should be in one commit, even if the pull
+request entailed work over a period of time and multiple commits on a
+feature branch.  To achieve this, select &ldquo;Squash and
+merge&rdquo; when you merge a pull request.
+&ldquo;Squash and merge&rdquo; results in a single commit that contains all the changes
+in the pull request.  Consistently using &ldquo;Squash and merge&rdquo;
+results in a linear commit history on the main branch.
+</p>
+
+<p>
+A single commit is desirable because a pull request represents a single
+conceptual change that has been tested and reviewed as a logical unit.
+When a pull request is ready to be merged, it may consist of many commits.
+Future maintainers will not be interested in each individual commit, such
+as showing bug fixing within the logical change or interactions during the
+pull request review.  A git history that is littered with lots of little
+commits is much harder to read and understand.
+</p>
+
+<p>
+A side benefit of squash-and-merge is that every commit on the main
+branch passes tests.
+</p>
+
+<p>
+The repository owner can prevent incorrect pull request merges.  In the
+repository settings, in the &ldquo;Merge button&rdquo; section, disable
+&ldquo;Allow merge commits&rdquo; and &ldquo;Allow rebase merging&rdquo;.
+You might also want to enable &ldquo;Automatically delete head
+branches&rdquo;.
+</p>
+
+
+<h4 id="merging-commit-message">Commit message</h4>
+
+<p>
+When you squash-and-merge a GitHub pull request, the default first line of
+the commit message is the pull request's title, and the remainder (which
+GitHub calls the &ldquo;extended description&rdquo;) is the concatenation
+of the messages for all the commits in the pull request.  This latter
+information is not useful to future developers.  Therefore, edit the detail
+text to remove all the commit messages.  Use the pull request's description
+(the very first comment that was written when the pull request was
+created), if any.
+</p>
+
+<p>
+Another problem with not editing the commit message is that it may leave
+&ldquo;[ci skip]&rdquo; in the commit message, so the merge commit may not be
+processed by continuous integration such as Azure Pipelines, CircleCI,
+GitHub Workflows, or Travis CI.  (CI may perform some
+action on every (successful) commit to main.)
+</p>
+
+
+<hr>
+<p>
+Back to <a href="./">Advice compiled by Michael Ernst</a>.
+</p>
+
+<address>
+  <a href="../">Michael Ernst</a>
+</address>
+
+</body>
+</html>
+
+<!--
+Local Variables:
+time-stamp-start: "^Last updated: "
+time-stamp-end: "\\.?$"
+time-stamp-format: "%:b %:d, %:y"
+time-stamp-line-limit: 20
+End:
+-->
+
+<!--  LocalWords:  REPONAME cd OTHERUSER MYBRANCHNAME NNN rebasing
+ -->
+<!--  LocalWords:  BRANCHNAME dropdown upstream's Assignees webpage's isn
+ -->
+<!--  LocalWords:  doesn codeReviewTargetTemporary TODO didn aren circleci
+ -->
+<!--  LocalWords:  rebase travis ci changelog
+ -->

@@ -1,0 +1,519 @@
+You are an expert fellow stand-up comedian critiquing a joke or bit posted to a comedy workshop subreddit.
+
+# Your task
+
+You will read one comment thread under a stand-up joke post and extract every quality judgment the commenters' makes about the original joke or bit, then tag each judgment against a fixed list of canonical comedy craft norms.
+
+# Two levels of structure
+
+LEVEL 1 — PASSAGE: a paragraph or multi-sentence span where the commenters is making a quality judgment. Each comment thread under a stand-up joke post usually contains 3-10 passages.
+
+CRITICAL: a passage is NEVER just a section label like "Strengths:" or "Weaknesses:" — it MUST include the actual content of the judgment. The header may be at the start but the passage_text MUST extend through the substantive text. A passage_text of less than 50 characters is almost always wrong.
+
+LEVEL 2 — SIGNAL: a specific phrase INSIDE the passage that EVIDENCES a comedy craft norm (without necessarily BEING the comedy craft norm). For example, the phrase 'punchline lands too late' is a complaint evidencing 'pacing' norm; 'the setup recycles a tired premise' is a complaint evidencing 'originality' norm; 'great misdirection in line 3' is praise evidencing 'subversion craft' norm.
+
+Each signal has:
+- signal_text: an exact substring of THE PASSAGE (not the full comment thread under a stand-up joke post), 10-200 chars
+- signal_type: exactly one of `complaint`, `praise`, `observation`, `suggestion`
+- polarity: exactly one of `positive`, `negative`, `neutral`
+- rubric_matches: a list of 0-3 integer ids from the vocabulary below. Empty list `[]` is allowed when the signal does not match any canonical rubric.
+
+# Norm vocabulary
+
+Each item below has the format `[id] name — short description`. Multi-label tagging: a signal can match 0-3 rubrics. Be strict — only tag a rubric if the signal genuinely instantiates that rubric. Do not match by surface keyword alone.
+
+[1] Ethical target selection: punch up, avoid harm and cruelty — Assesses who/what is targeted and how: favor punching up (power, hypocrisy, systems, self) over victims/marginalized groups and tragedies; avoid stereotyping an
+[2] Comedy‑first: laughs over shock, sermon, or agenda — Prioritize delivering laughs and craft over edginess, applause‑lines, or moralizing. Shock/provocation is acceptable only when it clearly serves a well‑made jok
+[3] Laugh yield and impact — Frequency, consistency, and strength of laughs; ability to elicit vivid, positive audience reactions (beyond tepid amusement).
+[4] Benign‑violation calibration and cruelty check — Ensure violations feel playfully safe (mock‑attack, bounded stakes) rather than real harm; avoid unearned meanness or malign aggression that blocks laughter.
+[5] Play/safety frame, consent, and distance — Establish trust, consent, and a clear play frame; manage stakes and negative emotions so transgressions read as comedic (not threatening) and serious concern is
+[6] Prank ethics and harm minimization — Keep practical jokes playful and discoverable before harm; avoid hoaxes/confidence tricks and prevent humiliation or physical danger.
+[7] Clean‑comedy craft and constraints — Create effective humor within clean standards (no profanity/explicit material), leaning on relatable, situational, and visual techniques while preserving comic 
+[8] Vulgar/explicit content: audience fit and framing — Use sexual/off‑color/toilet material deliberately, matched to audience/venue; frame culturally and avoid using explicitness as a crutch.
+[9] Taboo/dark/shock content: purpose, calibration, and risk — Handle taboo/transgressive material with clear comic purpose; calibrate intensity to audience tolerance; make offense feel earned (not gratuitous); anticipate a
+[10] Sensitive‑content handling and harm minimization — Guardrails for identity/atrocity/trauma topics: avoid glamorizing harm, anticipate collateral effects, weigh free‑speech vs accountability, provide context/warn
+[11] Satirical target clarity and intent — Make the satirical target and stance explicit and defensible; align jokes with the central frame so the audience laughs at the intended target and detects the i
+[12] Parody/satire craft: device use and form fidelity — Select worthy targets; mimic forms convincingly (genres, formats, headlines); research specifics; develop the bit to expose ignorance, hypocrisy, or pretension.
+[13] Satire and social commentary: clarity, layering, and comedy‑first — Use humor to explore ideas and critique power/culture with layered meaning while keeping comedic craft primary and the message clear.
+[14] Political/institutional satire: targets, efficacy, and reception — Target systems/ideologies credibly; balance bite with clarity and humor; signal satire to reduce misreadings; anticipate political impact and audience reactions
+[15] Sociopolitical engagement and editorial stance — Issue‑driven comedy that interrogates authority/current events with editorial independence; evaluates breadth, timeliness, and effectiveness of critique.
+[16] Advocacy comedy: clarity, agency, and impact — When comedy aims to spur action, assess constructive pathways, audience agency, credible proposals, and real‑world effects without didacticism.
+[17] Audience knowledge and cultural accessibility — Match references and cultural/linguistic frames to audience knowledge; keep specificity while ensuring the joke remains accessible across groups.
+[18] Audience/venue/context fit and expectation management — Tailor material to audience, venue, and moment; signal genre/tone; decide on core vs crossover reach without eroding voice; avoid context‑blind missteps.
+[19] Topicality, subject breadth, and durability — Choice and range of contemporary targets; leverage timeliness while avoiding shallow riffs; manage perishability vs evergreen value.
+[20] Observational and relatable humor effectiveness — Mine everyday specifics and recognizable truths so laughs arise from resonance and craft, not mere ‘relatability’ claims.
+[21] Truthfulness and recognizability as humor engine — Ground premises in recognizable social/emotional truth; let honesty and specificity power the humor so jokes ‘feel true.’
+[22] License and speaker standing for sensitive material — Has the performer earned trust and social license (identity, venue, privacy) to approach edgy topics and recent tragedies?
+[23] Quality over pandering and empty signaling — Favor well‑written, original, joke‑driven work over attention‑seeking, brand‑building, or tokenized stances that don’t improve the comedy.
+[24] Cultural/historical sensitivity and informed representation — Demonstrate research and empathy; avoid stereotypes; use precise, responsible wording; attend to history, timing, and equity; include/normalize marginalized per
+[25] Humane, tasteful tone over cynicism or cruelty — Favor warmth and humane skepticism; maintain wit with taste and dignity rather than cynical or demeaning postures.
+[26] Human reference in comedy — Comedy ultimately refers to the human; nonhuman subjects become funny by evoking human attitudes, expressions, or uses (often via anthropomorphism/personificati
+[27] News/topical satire craft and execution — Timely, sharp engagement with current events using a credible news/journalistic voice: ground bits in real premises, move fast, and define/aim targets clearly s
+[28] Topicality and timeliness calibration — Choose when and how to tie material to current events and shared moments (including paratext like openings/headlines). Balance freshness and frequency with audi
+[29] Satire target selection and sharpness — Focus and sting of sociopolitical satire—clear, relevant targets (institutions, figures, systems), with incisive angles and a disciplined scope that maximizes i
+[30] Taboo/shock as comedic technique and calibration — Use of taboo, shock, raunch, and aggressive humor as deliberate devices. Calibrate psychic distance, timing, and purpose so provocation illuminates rather than 
+[31] Standards/compliance and institutional acceptability — Navigate platform/network policies, ratings, cultural/legal sensitivities, and editorial language constraints; balance free expression with institutional norms 
+[32] Provocation, backlash, and controversy management — Anticipate and handle offense risks, protests, and evolving standards; own missteps, clarify intent, and recognize that ‘context’ or ‘shock value’ defenses don’
+[33] Clean vs explicit register and audience appropriateness — Choose and sustain a register (family‑friendly to blue/gross‑out) that fits the audience/venue, signaling suitability and avoiding gratuitous obscenity or tone 
+[34] Taste and timing on traumatic or charged subjects — Exercise judgment and restraint when treating tragedy, suffering, misconduct, or beloved figures; calibrate ‘too soon’ and know when/if to convert pain into jok
+[35] Emotional honesty, personal candor, and authenticity — Root material in sincere premises and lived experience; use vulnerability and specific personal narratives to build trust and power the comedy without evasive o
+[36] Specificity and precision as a humor lever — Use concrete, hyper‑specific details and exact word choice to sharpen incongruity and make observations feel fresh and non‑obvious.
+[37] Writing economy and clarity — Prioritize the core setup and payoff; include only what serves the joke; keep language and storylines simple and clean for maximum laugh clarity.
+[38] Audience targeting and contextual fit — Aim tone, references, and content at a clearly defined audience and venue; tailor to room norms, use‑case, and timing to maximize receptivity.
+[39] Accessibility and dependence on shared context — Manage how much prior knowledge or posting context is required; choose between universal readability and insider depth while maintaining a shared common‑sense f
+[40] Audience trust, play frame, and contract — Establish a reliable comic frame early, earn social license, deliver laughs at the expected cadence, and avoid over‑explaining—trusting audiences to infer targe
+[41] Audience interaction, crowd work, and room management — Read the room, warm up effectively, choose when to engage/ignore, handle hecklers ethically and funnily, personalize without hostility, and iterate material bas
+[42] Comedic timing, pacing, and delivery — Micro‑ and macro‑control of rhythm, pauses, tempo, intonation/voice, physicality, and beat placement to maximize clarity, laugh density, and momentum.
+[43] Physical and visual comedy execution — Effective nonverbal and sight‑gag work—slapstick, pantomime, props, and visual beats that read clearly (even without sound) and travel across audiences.
+[44] Production design and audiovisual craft for comedy — Use camera, editing, graphics, wardrobe, staging, music/bleeps/silence, and overall art direction to set tone, misdirect, and time punchlines.
+[45] Cartoon/visual‑humor craft and internal logic — Drawing style, paneling, framing, internal logic, and text‑image timing integrate to deliver clear setup–punch dynamics suited to the publication/platform.
+[46] Surprise, incongruity, and misdirection mechanics — Construct setups and expectation paths that enable surprising, reconstructible flips; use rule‑bound absurdity and layered or single punches to produce the humo
+[47] Parody and intertextual/reference‑driven humor — Exploit audience familiarity with sources—voices, archetypes, pop culture, and texts—balancing caricature vs faithful mimicry so the target and point are clear.
+[48] Ethics, accountability, and accuracy in issue‑driven comedy — When work engages real people/issues, ensure factual verification, fairness, privacy care, transparency of methods/intent, and sincere accountability for harm.
+[49] Humor’s social and interactional functions — Assess how humor bonds groups, reduces tension, manages power/solidarity and facework, signals acceptance, or serves persuasive/therapeutic ends.
+[50] Tonal balance: humor with seriousness and emotion — Blend comedy with drama/pathos without jarring clashes; place relief beats thoughtfully, sustain chosen tones, and pivot to seriousness when warranted by contex
+[51] Laugh density and pacing — Sustain an appropriate laughs‑per‑page/minute rate; trim dead air and place non‑joke beats strategically to keep momentum and ROI high.
+[52] Character‑driven comedy: characterization and casting — Build strong, purposeful characters and ensembles; cast/host to amplify archetypes and dynamics so relationships drive the laughs.
+[53] Distinctive comedic voice/brand and autonomy — Develop and extend a unique, authentic comedic voice/brand across media, leveraging autonomy to take smart risks and differentiate the work.
+[54] Framing via titles/headlines and tonal targeting — Use titles/headlines/openings to signal satirical tone and choose between realistic (AP‑style) and intentionally deranged/surreal headline modes.
+[55] Originality and genuine craft over formula or clout‑chasing — Avoid predictable, by‑the‑numbers jokes and algorithm‑bait; favor lived‑experience freshness, surprise, and bona fide joke craft over manufactured conflict.
+[56] Social distance, power, and facework in humor — Manage solidarity vs distance, politeness norms, and face concerns—using humor to save or threaten face appropriately while avoiding smugness or harm.
+[57] Representation ethics and avoiding demeaning language — Handle identity (race, religion, gender, etc.) responsibly: avoid slurs and reductive caricatures; don’t empower denialists; embrace visibility chosen by subjec
+[58] Target‑choice ethics: punching up vs down — Evaluate whether jokes target power rather than the vulnerable; avoid bullying or picking targets unlikely to push back.
+[59] Medium/format‑specific humor and adaptation (with voice integrity) — Tailor devices and structure to stand‑up/sketch/sitcom/news parody/games/etc., adapt across media and markets, and preserve core comedic voice as form does work
+[60] Formal/format innovation and risk‑taking — Refresh comedic form via unconventional structures, platforms, meta‑framing, or embodied/stunt/ minimalist experiments when they genuinely serve the comedy.
+[61] Digital/social comedy literacy, memetics, and shareability — Command online formats (memes/GIFs), context and subcultural signals, and design for replication/virality; select bits that land on first read and travel across
+[62] Affective distance and detachment conditions for laughter — Laughter thrives when threat is low, causes are reconstructible, and urgent emotions are muted; detachment/relief conditions support humorous processing.
+[63] Genre/style classification and delivery modes — Identify and deploy appropriate comedic genres and modes (observational, deadpan, insult/roast, slapstick, surreal, parody, musical, etc.) aligned to the bit’s 
+[64] Benign-violation calibration — Norm violations are strong enough to be funny yet framed as safe/benign; avoid being too threatening (not benign) or too safe (no violation).
+[65] Freshness vs cliché (avoid hack) — Reject overused premises, clams, and clichés; subvert if used; deliver novelty in angle and construction.
+[66] Effective self‑deprecating humor — Use oneself as the butt of the joke with authenticity, proportion, and timing—competent-but-erring persona that builds likability and laughs.
+[67] Distinct comic persona/voice and authenticity — A clear, unmistakable comedic voice/persona that feels truthful and on‑brand; material fits and is filtered through that POV without self‑contradiction.
+[68] Emotional honesty and vulnerability — Candid, self-revealing material (including self‑targeting) that forges connection and comedic payoff without self‑pity or deflection.
+[69] Visual comedy craft and clarity — Draftsmanship, composition, and visual economy that make the gag read instantly; tight image–caption/balloon integration; visual humor that works without heavy 
+[70] Meme culture and social‑media humor — Short, remixable formats attuned to platform culture and community protocols; ordinary‑person relatability; political/self‑deprecating meme functions.
+[71] Economy, editing, and joke density — Ruthless tightening and punch‑up to keep setups clean, wording lean, and laughs-per-minute high; choose strongest jokes per premise.
+[72] Timing, delivery, and room control — Pacing, pauses, beats, mic/voice technique, escalation, and using audience feedback—letting laughs land without stepping on them.
+[73] Respect the audience; avoid over‑explaining — Trust audience intelligence; don’t pre‑apologize, condescend, or hand‑hold references unless necessary.
+[74] Grounded, sincere performance and delivery — Committed, earnest (often deadpan/straight‑man) performance without winky self‑awareness; manage beats after laughs while staying in character.
+[75] Satire’s rhetorical impact — Ridicule and distillation that create memorable frames and can shape public sentiment, attention, or discourse.
+[76] Satire signaling and misinterpretation risk — Balance plausibility and subtlety with clear irony markers; anticipate out‑of‑context use, duping, or cross‑cultural misreadings.
+[77] Platform/standards constraints and offense risk — Fit to broadcaster/brand standards, age suitability, censorship/safety concerns, and likely offense or institutional pushback.
+[78] Boundary‑pushing intent and risk management — Deliberate provocation calibrated to social/legal consequences and activist timing; push edges while planning for backlash.
+[79] Timeliness and topicality — Engage the current moment with awareness of tradeoffs between immediacy and staying power; judge temporal distance and datedness.
+[80] Writing craft, clarity, and language‑level humor — Precise, economical wording and structure; phrasing, sound, and comparisons that concentrate comic effect; clear prose/dialogue.
+[81] Observational comedy craft — Attentive observation of everyday life and informal social analysis to spark recognition‑based laughs.
+[82] Topical angle and anchoring — Choose salient current topics, recast them with a sharp angle, and tie to the moment with agile callbacks and updates.
+[83] Recurring formats and staging devices — Design signature segments, openings/credits, modular devices (fake ads, stunts), and use sets/props/editorial beats as active comedic elements.
+[84] Public‑controversy response and apology quality — Sincere, prompt reckoning under scrutiny—acknowledge harm, show learning, manage scope, avoid feigned ignorance or exploitation.
+[85] Survivor‑centered accountability — Center harmed parties’ needs, avoid minimizing pain, and include concrete reparative or bystander/ally‑building actions.
+[86] Incongruity–resolution clarity — Set a normal frame, introduce/locate the violation, and guide the audience to the second reading without over‑explaining, within a playful mindset.
+[87] Parody craft, tone, and intertextuality — Mimic and skewer source styles with clarity and wit; manage affectionate vs. hostile tone; use allusion/homage without alienating outsiders.
+[88] Audience, venue, and platform fit & accessibility — Align tone, references, structure, and interaction style to the room/platform and audience competencies and norms so they can ‘get it.’
+[89] Character relationships and empathy — Credible, engaging relationships with emotional stakes; flawed, sympathetic characters whose humanity amplifies humor.
+[90] Character‑driven comedy: construction and ensemble dynamics — Build specific, voiced characters with chemistry and motivations; leverage ensemble friction and dialog to drive comic clashes.
+[91] Storytelling and personal material — Shape stories (argument vs. laugh modules), mining lived experience—including hard events—with specificity and emotion that universalize without pleading.
+[92] Premise clarity, framing, and hook — State the premise/topic and comic angle clearly up front; establish the world (including the single unusual thing) with a memorable hook.
+[93] Coherent comedic world‑building and legibility — Invented premises/devices are coherent, expandable, and framed so distortions/absurdities remain legible as one clear thought.
+[94] Balancing humor with pathos — Blend levity with emotional undertow (grief, shame, bittersweet) and high/low textures without jarring shifts.
+[95] Visual–verbal interplay and signaling — Words, props, staging, and on‑screen text interlock to create dual‑channel jokes with clear comedic signaling.
+[96] Coarseness vs. cleanliness: tone management — Use raunch/profanity judiciously; balance crude/gross‑out elements with warmth or smarter textures; avoid gratuitous nastiness.
+[97] Market positioning, audience targeting, and launch strategy — Define target demo and tone; package, position, and schedule releases; leverage creators/influencers and cross‑media plans to build cultural footprint.
+[98] Sociality of laughter and group function — Humor’s dependence on social complicity, bonding, and echo; some comic forms require interactive audience contexts to work.
+[99] Persona/voice distinctness and consistency — Creates a vivid, memorable comedic persona/voice with clear values and tone; embodies it authentically and consistently across bits/scenes and in alignment with
+[100] Heckler management and room control — Diagnose interruption types, keep the room on your side, respond proportionally, deploy tactics/put‑downs, and regain flow without derailing the show.
+[101] Crowd work effectiveness and room stewardship — Use direct audience interaction and spontaneous moments to build shared mirth, rescue dips, and guide behavior—without overreliance or loss of control.
+[102] Audience adaptation and specificity — Tailor material, references, and tone to the specific room/event and demographics, treating the audience as an active partner.
+[103] Profanity/edginess and standards management — Use or avoid explicit language/sexual/dark content deliberately for comic effect while respecting platform norms, taste boundaries, and avoiding slurs.
+[104] Standards, compliance, and localization risk — Anticipate platform/region rules (bleeps, tone‑downs, ratings), legal/censorship risks, and child‑protection constraints; adapt content accordingly.
+[105] Backlash and external repercussions risk — Anticipate sponsor/industry/regulatory penalties and public‑standards backlash from provocative content choices.
+[106] Controversy stance and response strategy — Choose whether and how to engage controversy; address harm purposefully or move on strategically; avoid fixation and performative posturing.
+[107] Cultural representation and responsibility — Represent groups authentically and contextually; avoid appropriation, negative portrayals, or sidelining; use ensemble equitably.
+[108] Musical comedy and song parody — Use music/songs as a primary comic vehicle (including parody); integrate style/lyrics so musical elements deliver the laughs.
+[109] Comics form craft and innovation — Choose and innovate comics form (single vs. multi‑panel, layout, marginalia) with medium‑fit that advances the comedy.
+[110] Delivery and timing craft — Control pace, rhythm, breathing, and alignment of voice/body language so punchlines land; poor delivery undercuts material.
+[111] Purposeful pauses and audience space — Use silence/negative space and laughter beats to pace setups and punches; allow reactions to shape timing.
+[112] Originality and innovation (avoid derivative work) — Offer fresh premises/angles and formal invention; avoid imitation and stale/problematic tropes; subvert expectations.
+[113] Incongruity and surprise mechanics — Produce laughs via pertinent expectation violations, juxtapositions, substitutions, and calibrated non‑sequiturs.
+[114] Frame‑shift, resolution, and causal intelligibility — Set up an accessible reading, trigger an abrupt yet coherent reframe, and resolve it satisfyingly with natural‑feeling causal links (surprising, not confusing).
+[115] Cognitive complexity sweet spot — Match interpretive difficulty to audience capacity—too easy bores, too hard confuses; aim for ‘just right.’
+[116] Background knowledge and understanding tests — Leverage cultural/reference knowledge and common‑sense reasoning so ‘getting it’ rewards informed audiences without opaque gatekeeping.
+[117] Intertextuality and self‑reference — Use pop‑culture touchstones, internal callbacks, and self‑reflexive moves to generate recognition and layered laughs.
+[118] Economy, brevity, and clarity — Keep language plain and tight; clean setups, concise punches, no fat; every line advances joke, character, or plot.
+[119] Wordplay and language‑driven humor — Deliver compact, lexical humor (puns, neologisms, concise irony) deployed where wordplay supports rather than distracts from the bit.
+[120] Running gags and recurrence — Return to jokes, motifs, formats, or characters with variation to build anticipation and payoff over time.
+[121] Comedic narrative structure and closure — Build clear arcs (setup, escalation, payoff), sustain stakes and callbacks, and land satisfying comic resolutions.
+[122] Truthfulness and embellishment bounds — Start from facts/recognizable truths; calibrate hyperbole without hoaxes or misleading claims; correct errors when found.
+[123] Internet‑native humor and meme conventions — Exploit platform affordances (remixability, short‑form pacing, layered irony, posting context) to make and spread jokes.
+[124] Parody, homage, and pastiche — Lampoon or affectionately recreate known works/genres/figures with clear targets and comedic clarity.
+[125] News satire format and plausibility — Mimic news/panel formats while clearly signaling satire through sourcing, structure, and plausibility to avoid real‑world confusion.
+[126] Tension and release mechanics — Harness emotion/tension, place comic relief well, and puncture pressure cleanly to produce laughter.
+[127] Cringe/awkwardness calibrated — Use social discomfort as the engine while calibrating sensitivity to avoid audience alienation.
+[128] Audience strategy, positioning, and growth — Identify core demographics, differentiate positioning, and plan targeted expansion across outlets/markets.
+[129] Shareability and practical usefulness — Increase spread by using positive emotion, vivid hooks, and practically useful/behavior‑changing takeaways.
+[130] Deadpan delivery and dry wit — Sustain affectless, matter‑of‑fact delivery and understated phrasing to heighten contrast with absurd content.
+[131] Character and impersonation craft — Create and perform memorable comic characters/impersonations with consistent traits, archetypal clarity, and satirical bite.
+[132] Topicality, timeliness, and prescience — Address timely issues in ways that feel of‑the‑moment (or intentionally timeless) and can prove prescient over time.
+[133] Personal material, vulnerability, and self‑deprecation — Mine real experiences with honest disclosure and specific detail; use self‑deprecation to earn trust and laughs while maintaining connection.
+[134] Crowd work, room reading, and heckler management — Quality, specificity, and risk management in live audience engagement—reading the room, responsive riffing, de‑escalation and targeted barbs, maintaining contro
+[135] Platform optimization, virality, and audience targeting — Tailor content to platform norms and audiences; engineer shareable, unskippable moments using surprise/high‑arousal emotion; optimize packaging, format, recordi
+[136] Platform/broadcast standards and constraints — Sponsor/network/platform rules (taste, profanity, libel, watershed/slot) and censorship contexts that shape what can be shown or said and where it can run.
+[137] Content boundaries and professional/institutional consequences — Navigating boundaries (roastee requests, complaint zones), anticipating advertiser/brand pressure and institutional retaliation, and assessing career/legal fall
+[138] Running gags, callbacks, and quotability — Design and pacing of recurring bits/characters, callbacks, and catchphrases—building cumulative laughs and memorability while avoiding fatigue or overuse.
+[139] Specificity and show‑don’t‑tell — Use precise 5‑W details and concrete act‑outs to ground the premise and emotions; avoid abstractions and generic claims.
+[140] Concision and word economy (setup economy) — Keep setups minimal, clear, and tight; remove nonessential words so the strongest beat lands fast and clean.
+[141] Core joke structure: setup→punch→tags — Build clear expectations, land a decisive switch/punch at the end, and add disciplined tags while sustaining internal logic.
+[142] Misdirection and expectation subversion mechanics — Engineer two‑story twists and other reversals: plant compatible setups, calibrate ambiguity, avoid telegraphing, and deliver a clean ‘aha’ reinterpretation.
+[143] Cognitive surprise and audience processing fit — Time the reveal so audiences can notice the incongruity and resolve it quickly; match clarity/ambiguity and beat cadence to processing speed.
+[144] Pun/wordplay construction and clarity — Craft puns/wordplay so the double meaning lands cleanly without post‑hoc explanation; place the funniest word last.
+[145] Verbal wit, word choice, and sound — Exploit rhythm, symmetry, comparison, diction, rarity, and phonetics to sharpen phrasing and elevate laughs while staying clear and precise.
+[146] Delivery, timing, and commitment — Precision in timing, cadence, tone, and physical/vocal commitment; fully inhabit the bit and sell beats with energy and control.
+[147] Straight‑man dynamics and deadpan — Use a grounded foil and flat affect strategically to heighten contrast and frame chaos or absurdity.
+[148] Topical anchoring and freshness — Tie jokes to clear, current headlines and media, retain just‑enough context for instant intelligibility, and keep takes fresh.
+[149] Parody craft and voice fidelity — Convincingly mirror a target’s style/voice and recognizable specifics, then deploy a sharp twist for commentary.
+[150] Observational/everyday‑life humor — Mine quotidian experiences and social minutiae for accessible insights and non‑obvious twists (one‑liners or anecdotes).
+[151] Incongruity and juxtaposition techniques — Generate laughs by placing unlike elements together (contrast, literalism, comparisons) and revealing surprising connections.
+[152] Absurdism and surreal style — Lean on illogical, dreamlike premises or maximal silliness (often with neutral delivery) as the primary comic engine.
+[153] Emotional honesty, vulnerability, and resonance — Use candid self‑disclosure and genuine feeling (anxiety, melancholy, empathy) to deepen connection and give jokes layered impact.
+[154] Cross‑cultural translation and translatability — Handle language/culture‑specific references and puns so meaning survives across audiences and avoids misreading.
+[155] Shared knowledge and reference accessibility — Calibrate inside jokes and cultural signifiers so intended audiences have the background to interpret the humor without confusion.
+[156] Framing/play signals and irony clarity — Signal ‘this is play/comedy’ and mark irony clearly enough to prevent literal misreadings or harmful repurposing.
+[157] Single‑panel cartoon and caption craft — Compose for instant read: clear single‑joke images, focal dominance, minimalism/negative space, precise caption rhythm/wording with last‑word load, and image‑te
+[158] Evidence and editorial integrity — Demonstrate rigorous sourcing, transparency, and completeness (data, experts, key voices), truthful framing, and faithful editing.
+[159] Ensemble casting and chemistry — Cast for fit and variety; build felt camaraderie and dynamics that elevate jokes and enable standout performances.
+[160] Guest/collaboration strategy — Use guests/cameos/collaborations to add variety, credibility, reach, and specific comedic value.
+[161] Packaging and credits as comedic space — Extend humor through releases, menus, specials, and credits with self‑referential/meta gags and episode‑specific variations.
+[162] Originality of premise and angle — Push past first thoughts, avoid hack shapes/clichés and derivative/reused material, and present a distinctive, owned hook or high‑concept.
+[163] Premise clarity and generative strength — State a clear, opinionated premise that naturally yields strong, varied comedic situations and interactions.
+[164] Roast/insult craft and tone (affection vs contempt) — Work within roast tradition with sharp put‑downs while signaling warmth/affection to avoid mean‑spiritedness.
+[165] Distinct comic voice/persona and alignment — Define and commit to a clear persona/POV and coherent comic vision; align material with the artist’s brand/voice, build presence and trust, and use persona/char
+[166] Originality and specific angle of premise/execution — Premises and takes feel fresh and distinctive; avoid stock/cliché; deliver a precise, disarming angle and novel execution that surprises while ringing true.
+[167] Personal authenticity and calibrated vulnerability — Ground material in truthful, specific personal perspective; share earned disclosures with emotional candor without manipulation or overburdening; build genuine 
+[168] Focused premise framing and setup economy — State a single, specific premise/POV; establish a credible base reality; craft clear, concise setups that let audiences infer connective angles; sustain and str
+[169] Surprise, misdirection, and dual‑read clarity — Build a clear expectation then pivot to an unexpected yet coherent meaning; manage incongruity and its resolution, ensure the audience can hold both scripts, an
+[170] Punch placement and stress — Land the twist on the final, strongest stress‑bearing word; avoid burying the joke.
+[171] Timing, pacing, rhythm, and momentum — Control beats, pauses, tempo, and energy to prime and release laughs; sustain momentum, edit out bloat, and keep a high hit rate.
+[172] Single‑panel cartoon economy and text–image logic — Deliver compact gags with minimal elements; integrate caption and image so each depends on the other; maintain internal premise coherence.
+[173] Platform/format fit and adaptability — Design material and performance for the venue and medium (live, TV, audio, social, international), honoring constraints and sensitivities while preserving comed
+[174] Memetic design, stickiness, and virality — Use intertext/templates, simplicity, and participatory affordances to invite remixing and sharing; craft elements that travel and endure culturally.
+[175] Recurring bits and identity building — Deploy recurring segments, characters, callbacks, and catchphrases to create continuity, recognizability, and cumulative payoff without feeling forced.
+[176] Public apology quality and accountability — Provide timely, specific acknowledgment of harm, sincere contrition, and concrete commitments with visible follow‑through.
+[177] Wordplay and phonetic/lexical humor — Generate laughs from ambiguity, double meanings, and playful sound/definition twists; ensure clarity and payoff of the shift.
+[178] Concrete imagery and vivid specificity — Use precise, sensory details and striking comparisons to concretize premises and sharpen jokes.
+[179] Emotional resonance and impact — Create felt stakes and poignant beats that move the audience beyond laughs.
+[180] Guest strategy, variety, and diversity — Use guests and cameos to add perspective and unpredictability, broaden reach, and reflect inclusive representation while serving the show’s aims.
+[181] Australian humor conventions — Core Australian comedic traits—larrikin anti‑authoritarianism, dry/irreverent tone, vernacular slang, and cartooning prominence.
+[182] Allusion and cultural reference craft — Use indirect or literary/cultural references so shared recognition delivers the laugh; balance accessibility with depth.
+[183] Instructional clarity and practical pedagogy — Present principles with clear scope and outcomes, scaffolded lessons, and interactive, fluff‑free explanations of why jokes/scenes work or fail.
+[184] Structural economy and editorial rigor — Build purposeful architecture and flow; cut even good jokes that break progression; revise ruthlessly for clarity, coherence, and satisfying resolution.
+[185] Musical comedy integration — Seamlessly combine comedy with music and stagecraft (songs, choreography, sound/lighting) as a cohesive bit.
+[186] Misunderstanding and contextual clash engines — Drive comedy via errors, competing definitions, or context collisions that escalate tension and status play.
+[187] Avoid explaining the joke — Do not add clarifying tags or expository captions; let timing and inference deliver the laugh.
+[188] Temporal topicality and durability — Calibrate between timely relevance and evergreen universality; hit the moment without going stale and ensure surprises still play over time.
+[189] Editorial identity and naming — Use titles, naming conventions, and branding signals that clearly convey stance and fit the content’s identity.
+[190] Compressed, quotable phrasing — Craft brief, precise lines with full meaning that click instantly and travel.
+[191] Improv scene fundamentals and game — Yes‑And agreement and listening, establish base reality, find and heighten the game, make specific offers, and collaborate additively with pace and story sense.
+[192] Improv performance mindset and risk — Play with presence and commitment, embrace risk and failure, and keep scenes fun/cohesive through crowd work and recovery.
+[193] Heckler management — Neutralize disruptions without escalation; maintain control, tone, and audience goodwill.
+[194] Observational relatability and everyday mining — Ground angles in widely recognized experiences and actively mine mundane life for specific, relatable laughs.
+[195] Self‑deprecation and willingness to be embarrassed — The comic targets themself—owning flaws and tolerating embarrassment—to create humility, rapport, and social leveling.
+[196] Button/punchline landing — Ends scenes or pieces with a clean, decisive final gag (button/tag/stinger) that lands as a satisfying payoff.
+[197] Callbacks and connective payoffs — Returns to earlier moments to stitch the piece together and reward recognition with cohesive, earned callbacks.
+[198] Absurdism and non sequitur technique — Deploys surreal, illogical, or abrupt non‑sequitur shifts—often played straight—to generate offbeat, anarchic humor.
+[199] Parody, pastiche, and intertextuality — Imitates, references, or transforms styles/texts with fit and invention—moving beyond imitation into purposeful comedic commentary.
+[200] One‑liners: tight setup and punch — Single‑line or ultra‑short jokes with concise setups, precise wording, rhythm, and instantly impactful punches.
+[201] Wordplay and linguistic twist quality — Clever, organic manipulation of language (puns, reversals, analogies, cliché strings) used with restraint, precision, and purpose.
+[202] Concise, precise phrasing — Economical, concrete language with no filler; every word earns its place and phrasing is tight, quotable, and clear.
+[203] Host presence and utilization — Keeps the host present and tailored to their strengths while projecting professionalism and delivered value.
+[204] International translatability and language choice — Concepts and jokes travel across cultures with mindful localization; language/region choices support cross‑border clarity and appeal.
+[205] Misdirection and expectation subversion — Sets clear expectations and artfully subverts them with earned, non‑obvious turns; misdirection and reveals land cleanly.
+[206] Reframing and logical surprise strength — Finds unexpected‑yet‑inevitable new meanings or angles that recontextualize setups and deliver satisfying reframes.
+[207] Research‑informed grounding and context — Accuracy and credibility rooted in research and context setting (citations, prior work, historical/market framing).
+[208] Conversational rapport and camaraderie — Interplay reads as genuine friendship with relaxed, quick‑witted tone; guest/audience rapport feels lively and collaborative.
+[209] Recurring world‑building elements — Designs recurring characters/segments/catchphrases and guest antagonists that build continuity and brand the show’s identity.
+[210] Expressive delivery and stage/camera presence — Confident, likable command of stage/camera with effective vocal, physical, and timing choices that make material land.
+[211] Production craft and visual style — Cinematography, visual framing, lighting, set/choreo, and score serve tone and story with intentional aesthetic choices.
+[212] Alignment with host/show/outlet voice — Lines and pieces fit the established persona and editorial voice without breaking tone or character.
+[213] Originality vs. derivativeness (avoid recycling) — Material feels fresh and owned by the performer; avoids recycled bits, hack moves, and obvious imitation.
+[214] Improv collaboration: Yes‑And and group mind — Accepts/gives offers without blocking, trusts partners, and sustains co‑creation with shared focus (group mind).
+[215] Personal authenticity and vulnerability — Candid, emotionally honest sharing of real experiences (including painful disclosures) that builds trust and depth.
+[216] Image–text joke integration — Image and caption/panel work together so the juxtaposition carries setup→pivot/punch; compression heightens effect.
+[217] Structural/narrative coherence and focus — Clear through‑line and organized progression; plots cohere, avoid meandering, and edits preserve pace and purpose.
+[218] Relatability and recognition — Grounds material in shared, familiar realities that evoke the ‘I’ve felt that’ response and audience sympathy.
+[219] Persona authenticity and personal voice — Maintains a distinct, true persona/voice (even in teams) and integrates genuine life influences without rote shtick.
+[220] Virality/shareability drivers — Features that drive sharing: surprise/interestingness, high arousal, interactivity/variability, collective dynamics, and visual salience.
+[221] Improv ensemble support, agreement, and choice clarity — Active, generous partner work: immediate yes-and to establish the reality, make partners look good, truly listen and mirror, add declarative information, and ch
+[222] Internal realism and logic coherence — Character actions and world rules remain consistent and believable (even in absurdity); reactions feel honest and contrivance is avoided.
+[223] Plausibility and verisimilitude through authentic detail — Ground choices in credible, contemporary context and bolster believability with concrete, accurate, sensory details across camera, performance, and business.
+[224] Setup–surprise mechanics and punchline delivery — Engineer a clear shared expectation, guide plausible misdirection, and deliver a decisive, earned flip with crisp timing and precise punch wording; the re-inter
+[225] Verbal economy and punchiness — Every word is load‑bearing: tight, efficient setups and concise, rhythmically intentional lines that land quickly and memorably.
+[226] Callback design and deployment — Place, recontextualize, and time callbacks across a piece or set to culminate strands and create cumulative payoff.
+[227] Branding cues and opening theme/sequence — Recurring audio/visual markers (themes, bumpers, openings) that prime audience expectations, set tone, and express identity with effective length and variation.
+[228] Integrating improvisation within structure — Blend spontaneity/ad‑libs with scripted material and story clarity so risk‑taking adds freshness without derailing coherence; keep process in service of product
+[229] Factual accuracy and evidentiary support — Verify facts, cite transparent sources/experts, and clearly separate verified information from speculation; correct promptly when needed.
+[230] Suicide‑site reporting: context and prevention measures — Explain why locations attract attempts and report concrete, on‑site prevention responses (barriers, patrols, trained volunteers, signage) with specific, actiona
+[231] Single‑panel cartoon: image–caption integration and visual expressiveness — Image provides context and the caption supplies the turn; composition, timing, and expressive drawing deliver immediate, legible intent without merely describin
+[232] Farce mechanics: exaggerated, improbable absurdity — Leans on wildly improbable situations, misunderstandings, and heightened, stylized performances to drive comic chaos.
+[233] High‑concept hook uniqueness — A clear, distinctive premise that instantly stands out (at pitch/slate level) and departs from stock conceits.
+[234] Originality and creative novelty vs derivation — Genuinely new ideas and formal choices; surprising connections; visible drive to avoid stale lines/stock beats while knowing when intentional remix signals mean
+[235] Performance timing, pacing, and delivery control — Sustain flow between bits; control rhythm, pauses, transitions, and energy; use mic technique and room read to keep momentum without signaling a bomb.
+[236] Interview/hosting craft and conversational control — Guide discussions with agile prompts and listening; maintain effortless presence and steer conversations so interactions are compelling and natural.
+[237] Setup clarity and social‑rule grounding — Establish the expected world succinctly, grounded in relatable moments and clear social rules so the audience shares assumptions before the turn.
+[238] Segment‑based show structure, sequencing, and identity — Design and order segments (short-to-main flow, bridges, act mix) and repeat or vary formats to build a coherent, signature program voice.
+[239] Editing craft, transitions, and pacing — Trim ruthlessly, shape rhythm, and use clean transitions/continuity so runtime, tone, and clarity stay tight and propulsive.
+[240] Physical acting and nonverbal communication — Outside‑in character work using posture, movement, face, and object work (even gibberish) to convey truthful behavior and emotion without text.
+[241] Tonal control and calibration — Confidently set and sustain tone across the soft–hard, silly–sharp, and light–pitch‑black spectrum; manage shifts and stylistic ambition without incoherence.
+[242] Realism and authentic portrayal choices — Depict communities and details with grounded authenticity while crafting fictionalized, lived‑in worlds that feel distinct yet believable.
+[243] Cross‑media adaptability and presence — Demonstrated and potential quality adapting across media/eras with sustained cross‑platform presence and fit.
+[244] Production craft, design, and execution quality — Purposeful cinematography, sound, and production design (including sets/locations) with operational excellence in live/taped contexts; constraints are used to a
+[245] Narrative structure: coherence, stakes, and pacing — Maintain unity across plotlines, escalate relationships/stakes organically, and keep scripts economical and free of padding.
+[246] Signature recurring bits/segments/characters — Memorable recurring segments and characters that become a signature engine and reliably deliver audience payoff.
+[247] Recurrence, motifs, and running jokes for world‑building — Use repetition (running bits, motifs, callbacks) to create shared context, escalate over time, and define show identity and comic world.
+[248] Genre identification and blending — Name core/secondary genres and intentionally mix modes to expand or subvert conventions while keeping threads coherent.
+[249] Live speaking and hosting presentation delivery — Stage entrance and mic craft, timing, eye contact, reading/warming the room, and concise, impactful delivery beyond reliance on slides.
+[250] Nonfiction depth, access, and distilled clarity — Deep sourcing/access and systemic context paired with lucid synthesis that makes complex issues graspable without losing nuance.
+[251] Distinctive personal comic voice — A clear, consistent, only‑you point of view and sound—recognizably your voice across pieces without imitation.
+[252] Plain, accessible, clear prose — Use familiar, jargon‑light language and clean sentences so specialists and lay readers can follow with ease.
+[253] Ensemble chemistry, balance, and adaptability — Leads and supporting players spark and share spotlight equitably; the group shows cohesion and can flex between configurations.
+[254] Breadth vs depth of subject matter — Balance wide topical range under a unified voice against focused deep dives; demonstrate both curiosity and judicious scope.
+[255] Personal authenticity, ownership, and vulnerability — Material openly owns the performer’s story, with honest, self‑implicating candor and emotional presence that forges connection without self‑glorification.
+[256] In‑the‑moment responsiveness and organic ad‑libs — Visible responsiveness to partners and the room; ad‑libs feel organic (not pre‑rehearsed) while preserving clarity and control.
+[257] Accumulation and format‑subversion structures — Use list builds, overcommitment/tedium, and structural gimmicks (e.g., numbered lists) to create comic escalation, then twist the format itself for payoff.
+[258] Pacing, momentum, and runtime control — Controls tempo and scene lengths to sustain forward motion and watchability; avoids drag or rush and manages overall runtime and energy flow.
+[259] Major story beats and act structure — Clear, well-executed act and beat architecture (inciting incident, turns, climax, resolution), integrating subplots and pilot/episode spine to deliver a satisfy
+[260] Narrative cohesion and integration — Themes, plotlines, and formal devices cohere into an inevitable whole; A/B stories and multi-plot structures connect and pay off.
+[261] Ensemble collaboration and group mind — Players communicate, support, and make aligned choices so the ensemble functions as a coherent whole.
+[262] Stage presence, showmanship, and physical control — Commands attention with confident openings, charismatic energy, and precise physical/vocal control.
+[263] Spontaneity and in-the-moment improvisation — Creates authentically in the moment—riffing on what just happened and reacting to partners/audience rather than pre-planning.
+[264] Repetition with variation — Repeats elements while changing form/angle so the pattern builds without staleness; manages duration so the bit doesn’t overstay.
+[265] Escalation within patterns — Heightens the game by plausibly raising stakes/scale or stacking beats, avoiding mere extensions that don’t constitute new jokes.
+[266] Callback craft and reincorporation — Reintroduces earlier elements in surprising, meaningful ways, often escalating them for payoff and cohesion.
+[267] Ending buttons that land — Ends on a clear, memorable blow/tag that delivers a final escalation and strong impression.
+[268] Lead chemistry — Leads exhibit palpable, compelling rapport that anchors and elevates scenes.
+[269] Titles, opens, and packaging as creative devices — Cohesive title sequences, music, and on-screen design/credits that brand the show, set tone, and add value beyond padding.
+[270] Music integration and scoring — Selection/composition of songs and score that reinforce character, tone, emotion, and storytelling.
+[271] Musical branding: themes and recurring cues — Distinctive opening/closing themes and recurring musical motifs that audiences recognize and that define the show’s sonic identity.
+[272] Wordplay density and craft — Deliberate, skillful use of puns/double meanings and semantic twists, with high density and clarity.
+[273] One-liner craft — Self-contained, tightly written jokes with precise phrasing; can scale or seed longer pieces.
+[274] Caption contest excellence — Captions that honor the specific drawing while making a surprising, non-generic interpretive leap suited to New Yorker–style contests.
+[275] Brand identity coherence (recurring elements) — Unifying voice and recurring segments/characters that build recognizability and continuity.
+[276] Format adaptability and evolution — The concept readily adapts across regions/seasons and extends across media via spin-offs, variants, and migrations while maintaining continuity.
+[277] Editorial economy and concise prose — Ruthless, precise cutting and phrasing that omits non-essentials while preserving unity and clarity.
+[278] Integration of external media/clips — Effective incorporation of external media (e.g., sourced clips, interviews) into episode/segment structure to enrich context and flow.
+[279] Personal history and lived experience as engine — Draws on specific personal history and perspective to ground, shape, and deepen stories with authentic detail.
+[280] Misdirection and reveal design — Primes an initial reading with fair cues and conceals an alternate interpretation, then flips expectations with a justified reveal.
+[281] Surprise payoffs: unexpected yet earned — Setups lead to turns that genuinely surprise while feeling inevitable in hindsight and meaningfully connected to the setup.
+[282] Show format and recurring structures — Clear, consistent architecture of host/segments/recurring bits and episode composition that defines the series identity.
+[283] Game identification and escalating beat development — Clearly identify the comedic game and heighten it across beats/tags/acts; each turn adds specificity, stakes, or absurdity, avoiding simple repetition or unrela
+[284] House band/announcer integration and identity — Music direction and house band/announcer consistently reinforce show identity, support transitions with live performance when appropriate, and provide on‑air fu
+[285] Bait‑and‑switch reinterpretation (garden‑path script switch) — Setup steers the audience to an obvious reading (often via an ambiguous connector); a clear punchline trigger forces a sudden switch to a covert script; evaluat
+[286] Dual‑script availability, opposition, and coherence — Both readings are linguistically valid and available; they stand in salient opposition; a discoverable rule makes the post‑switch reading retrospectively cohere
+[287] Incongruity–Resolution quality — Jokes present a salient expectation violation and supply a rapid, satisfying interpretive bridge. Assess suddenness/magnitude of incongruity, clarity/strength o
+[288] Bisociation and dual‑frame processing — Humor from holding or rapidly toggling between incompatible frames; evaluates simultaneity/toggling, commitment to the initial frame, shock/surprise conditions,
+[289] Rule of Three / three‑beat pattern — Establish, confirm, then subvert on the third beat. Requires recognizability, proportional escalation, and a clean, surprising break on C.
+[290] Running gags, callbacks, and recurrence — Effective reuse across a set/series: runners/catchphrases, seeded callbacks, tags/multipunch extensions, and theme‑and‑variation. Scores clarity of recall, esca
+[291] Punch placement and setup→punch architecture — Build clear expectation, concentrate the violation/payoff at the end, keep the pivot clean, and place the strongest word last; ensure punch draws on setup; mana
+[292] Structural craft and beats — Macro/meso construction of jokes and scenes: premise→setup→punch flow, beat/pulse design, act/scene templates, compression/unity, and judicious use of rhetorica
+[293] Anti‑comedy and anticlimax — Intentional deflation or withholding: shaggy‑dog/trivial payoffs, omitted/over‑explained punches, bathos and anti‑timing. Evaluates clarity of intent, tension m
+[294] Meta‑comedy and self‑reflexive framing — Self‑reference and process as the joke: contract manipulation, alienation/immersion control, and metacommentary on form/performance. Scores clarity, layering, a
+[295] Intertextual parody, allusion, and mimicry — Borrow/mimic known works or styles to generate contrast or burlesque; assess recognizability, fidelity vs distortion, density of reference, and the comic turn d
+[296] Image–text interplay and visual satire (cartoons/captions) — Caption–image synergy and dissonance, visual puns, symbolic caricature, and minimal‑image/strong‑caption pairings. Evaluates whether dual readings are licensed 
+[297] Editing‑driven juxtaposition and contradiction — Cutting and juxtaposition as the engine: side‑by‑side contradiction reveals, contradiction montages, and cutaway punchlines. Scores editorial timing, contrast s
+[298] Timing and delivery (micro‑timing and paralinguistics) — Precision and intentional anti‑timing in performance/on‑page: pauses, tempo, linger/clip choices, voice/pitch shifts, and diegetic interrupts that shape tension
+[299] Reversal‑based punchlines (micro‑ to clause‑level inversions) — Compact flips of assumptions or relations (one‑word pivots, antimetabole/definition reversals, politeness↔profanity, subject‑object swaps). Scores cleanliness, 
+[300] Plot‑level reversals and turning points — Structural turns that reorient knowledge/action (peripeteia/anagnorisis) and external interventions (deus ex) used for comic resolution. Assess plausibility, ti
+[301] Find and heighten the game (improv) — Identify the scene’s unusual pattern, agree on it, and escalate it systematically across beats. Scores clarity of the game and disciplined heightening.
+[302] Story‑structure templates for comedy — Apply explicit narrative blueprints (3‑/4‑act, Save‑the‑Cat, story circle) to pace, organize, and concentrate comedic payoffs.
+[303] Irony: surface vs intended meaning — Exploit gaps between literal surface and actual intent (verbal/situational/dramatic). Scores clarity of the ironic stance and audience uptake.
+[304] Pun and wordplay mechanisms — Verbal humor relying on the signifier: paronomasia and homophony, portmanteau/morphological blends, zeugma/cryptic clueing, Swifties. Assesses type selection, c
+[305] Double entendre and innuendo — Dual‑reading lines—typically innocuous vs risqué/ironic. Evaluates cueing, deniability, timing, and audience uptake.
+[306] Lexical‑ambiguity puns (double meaning) — Humor driven by a single lexical item bearing multiple senses (polysemy/homonymy/syllepsis). Scores cueing of the alternate sense and coherence of the retrofit.
+[307] SSTH/GTVH‑based analysis — Evaluate via script opposition and the GTVH resources (Script Opposition, Logical Mechanism, Situation, Narrative Strategy, Language), integrating incongruity–r
+[308] Pragmatic inference and linguistic guidance — Gricean/Relevance‑theoretic mechanisms that steer interpretation: how implicatures, processing instructions, and linguistic form license the punch and constrain
+[309] Camerawork and cinematic staging for comedy — Framing, shot/sequence design, and mock‑verité/backstage textures that position, pace, or punctuate jokes on screen.
+[310] Visual design and scenography for comedy — Sets/props/wardrobe and visual design choices that externalize contrast, support readability, and deliver or reinforce gags.
+[311] Contrast and valuation flips — Humor via polarity or magnitude reversals (high↔low, grand→petty; minimization/magnification) producing ironic contrast.
+[312] Analytic/argument‑based humor — Hyper‑rational or formal‑argument frames (Holmesian deduction, reductio, playful fallacies, definition games) used to expose everyday absurdity.
+[313] Benign violation: presence, balance, and resolution validity — Evaluate whether a recognizable norm is violated while remaining acceptable/benign; check clear cueing of the benign frame (V ∧ N), mapping of surprise to a rea
+[314] Bergsonian mechanization/rigidity as the comic source — Comic effect from the mechanical encrusted on the living: rigid habits, repetition, inelasticity, body-as-machine movement, fixed vices/ruling traits, and autom
+[315] Absurdism, surrealism, and dream‑logic humor — Humor driven by illogic and surreal juxtapositions: abandoning ordinary causality, non sequiturs, dream‑logic structures, and absurd images—assessing when such 
+[316] Punchline‑last placement — Place the funniest word/twist at the final beat; end on the peak without follow‑on that deflates the laugh.
+[317] Triadic patterning (Rule of Three) with punch‑last — Establish a short list/pattern (typically three) to set expectations and place the surprising/absurd element last with crisp rhythm.
+[318] Relevance‑theoretic mechanisms in humor — Assess humorous inference via Relevance Theory: intentional misdirection, ad hoc concept adjustment, optimal relevance, competing viewpoints/nested spaces, and 
+[319] Mockumentary/documentary comedic stylings — Use of documentary/reality conventions (diegetic camera, talking heads/confessionals, verité B‑roll, off‑screen interviewer, on‑camera awareness, casting as sel
+[320] Parody fidelity and style matching (including musical) — How closely a parody matches the source’s formal signatures—lexicon/syntax, thought‑patterns, meter/rhyme/arrangement for songs—while substituting content to ma
+[321] Improv game craft: find, play, and heighten (UCB) — Initiate clearly, identify the first unusual thing (the Game), actively play it, and heighten through structured beats/tags (often Rule of Three).
+[322] Show and segment structural scaffolds — Recurring macro‑formats and segment frameworks (monologues, desk pieces, panels, remotes, roasts, cold opens, recurring closers) that organize joke delivery, pa
+[323] Comedic persona: construction, voice, and maintenance — Build and deploy a comic persona or heightened self with distinct voice, stance, and status signals; maintain consistency (never breaking), calibrate self‑depre
+[324] Condensation/portmanteau wordplay — Fuse meanings by minimal modification or blending (letter change/substitution, portmanteau) so two sources or senses press together and the overlap carries the 
+[325] Brevity and ellipsis‑based wit — Concise phrasing and omission that let audiences infer the elided material; tests whether paraphrase preserves sense but loses the laugh, showing form/wording b
+[326] Pun mechanisms and lexical‑ambiguity taxonomy — Classify and evaluate puns by sense/form relations and modality: homophonic/homographic/homonymic, paronymy/letter change, malapropism, bilingual, visual/grapho
+[327] Joke cycles and stereotype‑based subgenres — Use and evolution of canned joke families (e.g., lightbulb, blonde/occupational/region cycles), tracking topical shifts and reliance on stock stereotypes.
+[328] Music as comedic and narrative device — How diegetic/score music or full numbers cue, punctuate, or carry jokes and tone; integration with format and adaptations so songs advance comedic/narrative aim
+[329] Irony devices (verbal and dramatic) — Use of irony: what’s said vs meant (verbal) and audience–character knowledge gaps (dramatic) to create comic tension or contrast.
+[330] Stock/parodic archetypes and recurring character design — Use of recognizable stock or exaggerated archetypes (including recurring named types) with balanced caricature vs consistent traits/occasional competence to dri
+[331] GTVH — Language (LA) — Surface verbal realization: exact wording and placement of functional elements; phonological, morphological, syntactic, and lexical choices at the punch.
+[332] Alliteration and sound patterning — Use of patterned sounds (alliteration, consonance, initial consonant chains) to add rhythm, emphasis, and comic snap.
+[333] Rhetorical polish and rhythmic devices — Line‑level craft that heightens laughs: meter/rhythm, sound patterning, and rhetorical figures (parallelism, understatement/exaggeration, asyndeton/polysyndeton
+[334] Rule of three / triples — Use of triads to establish a minimal rhythmic pattern that primes a surprising or escalated third beat and can imply plurality visually.
+[335] Deadpan delivery and affect control — Flat or tightly controlled affect—poker‑face, restrained facial/vocal cues, and slow‑burn micro‑leaks—contrasted with charged/absurd content to heighten incongr
+[336] Mockumentary format (documentary conventions for comedy) — Adoption of documentary conventions (cinéma‑vérité look, talking heads, direct address) to generate comedic effect and satirize targeted domains.
+[337] Late‑night talk/variety format — components and sequencing — Standard talk‑variety structure: cold open/monologue, desk bits/recurring segments, guest interviews in ordered blocks, musical/stand‑up slot, and closing; host
+[338] Dark/black and grotesque comedy calibration — Use of taboo, tragic, or grotesque themes calibrated against audience safety and satirical or gallows‑humor aims; manages tone/target alignment with horror aest
+[339] Satire: modes, stance, and aim — Satirical stance and method (Horatian/Juvenalian, irony) and clarity of corrective/ethical intent—distinguishing critique from mere teasing.
+[340] Satire and political commentary targets — How effectively humor interrogates institutions, public discourse, and systemic issues (media, governance, capitalism, feminism, celebrity) with clarity, fairne
+[341] Legal/ethical signaling safeguards (satire/parody) — Use of disclaimers/labels, fictionalization, permissions/decorum, and technique limits to signal satirical intent and mitigate legal/ethical risk when referenci
+[342] Parody fidelity and stylistic replication — How closely a work reproduces a source’s style/voice while altering meaning—from faithful mimicry with local twists to transformative critique; covers homage/bi
+[343] Parody/Spoof — Humorous imitation that subverts or critiques the style, genre, or conventions of a source text or form—able to lampoon while paying homage.
+[344] Ventriloquism performance and puppet persona — Character comedy via ventriloquy: distinct puppet design/persona, prop use, and straight‑man/wisecracking‑dummy dynamic; assessment of technique and comic inter
+[345] Bergson: the mechanical encrusted on the living — Comic effect when living behavior appears rigid or automatic—loss of elasticity/automatism makes people resemble machines; includes habits of body and mind.
+[346] Computational humor modeling: data, features, and evaluation — Resources and methods for computational humor: multimodal datasets/labels, feature design (incl. delivery/body vs punchline), model configurations, and transpar
+[347] Comedy genre classification and coverage — Accurate identification/usage of comedy genres and modes across works, with attention to breadth (short/long‑form) and correct labeling (observational, black, b
+[348] Music in comedy: songs, motifs, and musical form — Use of music and songs to generate humor and structure: original songs, leitmotifs, musical pastiche, and long‑form musical improv as comic engines.
+[349] Audience prerequisites for getting a joke — Whether a recognized play frame, relevant background knowledge/cognitive sophistication, and moderate arousal/safety framing are in place for humor recovery.
+[350] Legal/broadcast standards and censorship constraints — How legal/regulatory and network/platform policies (obscenity, profanity, depiction bans) shape comedic choices and edits or self‑censorship.
+[351] Racial slurs and racist representations (disqualifying) — Presence of racial/ethnic/religious slurs, racist performance (e.g., blackface), or racist caricature—treated as disqualifying regardless of joke context.
+[352] Representation ethics and harm minimization — Avoid minimizing trauma for laughs; attend to ableist, racist, and gendered harms; avoid false equivalences and exploitative portrayals; pursue remediation and 
+[353] Jewish humor: themes, traits, and methods — Characteristic topics and styles (e.g., mothers, frugality, self‑deprecation, Talmudic/legalistic reasoning), social functions, and historical/cultural context.
+[354] Meme structure and diffusion — Memetic elements and affordances (templates, repetition, puzzles), diffusion properties (longevity, fecundity, fidelity), and sharing/attribution norms.
+[355] Superiority mechanism and corrective laughter — Humor that elevates audience/speaker by lowering a target; includes corrective/disciplining laughter and self‑deprecating forms that grant the audience superior
+[356] Deadpan delivery (stoic affect) — Humor delivered with flat/stoic affect—minimal facial expression, vocal change, and movement; often slow or lethargic pacing; avoids overt approval‑seeking to h
+[357] Facts‑first rigor in political/news satire — For political/public‑interest comedy and news satire: prioritize verified truth, rigorous fact‑checking, credible/primary sources, context/data use, transparent
+[358] Verification, attribution, and transparency standards — Ensure factual basis and accountability: corroborate with documents/multiple sources; accurate quotation; explicit source attribution (including anonymous/prior
+[359] Compliance with legal/regulatory/platform standards — Conformance to rights clearance, broadcasting/content ratings, platform standards, and applicable law/constitutional protections; assess exposure to complaints 
+[360] Neural bases of humor: comprehension → reward — Accounts linking humor comprehension to hedonic reward: two‑stage success conditions (incongruity resolution/comprehension then pleasantness) and neural correla
+[361] Definite article usage: rules and exceptions — Evaluate correct use of ‘the’: shared/previously mentioned or unique referents; superlatives/ordinals; geography/institutions; dates/ordinals; exceptions with p
+[362] Regulatory and political risk constraints — How law, culture, and politics constrain comedic content: indecency hours/standards, defamation/privacy and historical‑distortion rules, blasphemy‑related penal
+[363] Methodological rigor in humor research — Demand clear constructs/definitions, appropriate models/tests and sampling, replication/reliability, subgroup analyses, dataset granularity, sound inclusion/exc
+[364] Protected‑class harm avoidance in comedic content — Prohibit stereotyping, slurs, and demeaning portrayals of protected groups; avoid trivializing atrocities or sexual violence; use visual markers responsibly and
+
+# Worked examples
+
+## Example 1 (critique_heavy_workshop_thread)
+
+INPUT (unit_id=1oxzt5a):
+[POST by u/ThrowRA-1828373]
+Title: Full-Time Woman
+Body: Being a woman can be very overwhelming in these modern times.
+
+I'm working full-time.
+
+My husband is working full-time.
+
+But I'm also doing all the cleaning and cooking.
+
+It's a full-time job, plus a part-time cleaning job, and plus a part-time cooking job.
+
+I'm exhausted.
+
+Then my husband goes, "Hey ... Wanna give me a blow job?"
+
+Another job?!
+
+FUCK!
+
+I mean, I'm just going to tell him, "No! Let's Fuck!"
+
+It's the only break I have these days.
+
+I get to just lay there while you do the work.
+
+It's the only break I have.
+
+A fucking hymen break.
+
+[COMMENTS]
+- u/MaizeMountain6139 (score=1): This is one of the stronger bits I have seen here, honestly   I think you could beat some of these jokes, of course, but as is, it's pretty funny. Maybe within the "sex is my only break" you can talk about your favorite position and why "I like doggy so I can scroll TikTok/watch TV…"
+- u/PappysSecrets (score=-3): I like the premise of women working jobs and home, although it may be played a lot, there's always some angle to make it new.  Like myself, I see you with good first thoughts, but you (I) need to go deeper (thanks CLCE), where the gold is buried.  That said:   Then my husband goes, "Hey ... Wanna give me a blow job?"  Oh yeah, baby ...right now.  Here's the vacuum, go for it, but be gentle.
+  - u/tomaesop (score=2): This is really strong. I see how you're setting the premise with the "outsource to machines" thing. But there mi... [truncated]
+
+OUTPUT (one line of JSON):
+{"unit_id": "1oxzt5a", "passages": [{"passage_text": "- u/MaizeMountain6139 (score=1): This is one of the stronger bits I have seen here, honestly   I think you could beat some of these jokes, of course, but as is, it's pretty funny. Maybe within the \"sex is my only break\" you can talk about your favorite position and why \"I like doggy so I can scroll TikTok/watch TV…\"", "passage_polarity": "positive", "signals": [{"signal_text": "This is one of the stronger bits I have seen here", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}, {"signal_text": "I think you could beat some of these jokes", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [71, 141]}, {"signal_text": "as is, it's pretty funny", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}, {"signal_text": "Maybe within the \"sex is my only break\" you can talk about your favorite position and why \"I like doggy so I can scroll TikTok/watch TV…\"", "signal_type": "suggestion", "polarity": "neutral", "rubric_matches": [138, 178]}]}, {"passage_text": "- u/PappysSecrets (score=-3): I like the premise of women working jobs and home, although it may be played a lot, there's always some angle to make it new.  Like myself, I see you with good first thoughts, but you (I) need to go deeper (thanks CLCE), where the gold is buried.  That said:   Then my husband goes, \"Hey ... Wanna give me a blow job?\"  Oh yeah, baby ...right now.  Here's the vacuum, go for it, but be gentle.", "passage_polarity": "negative", "signals": [{"signal_text": "I like the premise of women working jobs and home", "signal_type": "praise", "polarity": "positive", "rubric_matches": [92, 163]}, {"signal_text": "it may be played a lot", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [65, 162]}, {"signal_text": "there's always some angle to make it new", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [55, 112]}, {"signal_text": "you (I) need to go deeper", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [36, 139]}, {"signal_text": "Here's the vacuum, go for it, but be gentle.", "signal_type": "suggestion", "polarity": "neutral", "rubric_matches": [142, 46]}]}, {"passage_text": "  - u/tomaesop (score=2): This is really strong. I see how you're setting the premise with the \"outsource to machines\" thing. But there might be other ways to get there.   Maybe there's something with \"I try to work smarter (he's hard enough for both of us)\"", "passage_polarity": "positive", "signals": [{"signal_text": "This is really strong", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}, {"signal_text": "I see how you're setting the premise with the \"outsource to machines\" thing", "signal_type": "praise", "polarity": "positive", "rubric_matches": [92, 163]}, {"signal_text": "But there might be other ways to get there", "signal_type": "suggestion", "polarity": "neutral", "rubric_matches": [168]}, {"signal_text": "Maybe there's something with \"I try to work smarter (he's hard enough for both of us)\"", "signal_type": "suggestion", "polarity": "neutral", "rubric_matches": [119, 144]}]}, {"passage_text": "  - u/Queen-of-meme (score=1): I think the ending can be adjusted but not to this, if this is gonna work it needs her humor and energy not this it's boring.", "passage_polarity": "negative", "signals": [{"signal_text": "the ending can be adjusted", "signal_type": "suggestion", "polarity": "negative", "rubric_matches": [121, 196]}, {"signal_text": "it needs her humor and energy", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [53, 67, 99]}, {"signal_text": "not this it's boring", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [3]}]}]}
+
+## Example 2 (praise_heavy_successful_set)
+
+INPUT (unit_id=1qibkqt):
+[POST by u/redkinoko]
+Title: Tried the new immigrant joke I posted here onstage.
+Body: Opened for Steve Byrne over the weekend. Figured I'd sneak a few new jokes in.
+
+[COMMENTS]
+- u/Business-Health-3104 (score=12): Dude. You were killing it. You could even pause a little longer in between the math jokes. They're good. Give the dumb Americans time to get it before you drop the next one. But overall you've got great presence and funny material. Good luck brother.
+- u/ubersiren (score=1): Your jokes were genuinely funny! I do think that it helped us online viewers to have subtitles. Your pace was a bit fast, especially with the math bit. It may have been a little hard for the audience to make out what you were saying so that portion didn't get the laughs it deserved.
+- u/Captain_Chappie (score=1): Unfortunately the audience didn't even know what calculus is, so one of your best jokes didn't land.  Which is ironic, but I doubt they would have known about irony either.
+- u/KongLongSchlongDong (score=1): Wholesome, personable, too much of a cornball for my tastes but it seems like that's what you're going for.
+- u/helpfulskeptic (score=1): Loved all of this. Including the absurdity of befriending ICE so that someone will come to your shows🤣
+
+OUTPUT (one line of JSON):
+{"unit_id": "1qibkqt", "passages": [{"passage_text": "- u/Business-Health-3104 (score=12): Dude. You were killing it. You could even pause a little longer in between the math jokes. They're good. Give the dumb Americans time to get it before you drop the next one. But overall you've got great presence and funny material. Good luck brother.", "passage_polarity": "positive", "signals": [{"signal_text": "You were killing it", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}, {"signal_text": "You could even pause a little longer in between the math jokes", "signal_type": "suggestion", "polarity": "neutral", "rubric_matches": [42, 111, 171]}, {"signal_text": "Give the dumb Americans time to get it before you drop the next one", "signal_type": "suggestion", "polarity": "neutral", "rubric_matches": [111, 143]}, {"signal_text": "you've got great presence", "signal_type": "praise", "polarity": "positive", "rubric_matches": [210, 74]}, {"signal_text": "funny material", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}]}, {"passage_text": "- u/ubersiren (score=1): Your jokes were genuinely funny! I do think that it helped us online viewers to have subtitles. Your pace was a bit fast, especially with the math bit. It may have been a little hard for the audience to make out what you were saying so that portion didn't get the laughs it deserved.", "passage_polarity": "positive", "signals": [{"signal_text": "Your jokes were genuinely funny!", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}, {"signal_text": "Your pace was a bit fast, especially with the math bit", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [42, 171, 235]}, {"signal_text": "It may have been a little hard for the audience to make out what you were saying", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [110, 146]}, {"signal_text": "that portion didn't get the laughs it deserved", "signal_type": "observation", "polarity": "negative", "rubric_matches": [3, 51]}]}, {"passage_text": "- u/Captain_Chappie (score=1): Unfortunately the audience didn't even know what calculus is, so one of your best jokes didn't land.  Which is ironic, but I doubt they would have known about irony either.", "passage_polarity": "negative", "signals": [{"signal_text": "the audience didn't even know what calculus is", "signal_type": "observation", "polarity": "negative", "rubric_matches": [17, 116, 155]}, {"signal_text": "one of your best jokes didn't land", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [3, 38]}]}, {"passage_text": "- u/KongLongSchlongDong (score=1): Wholesome, personable, too much of a cornball for my tastes but it seems like that's what you're going for.", "passage_polarity": "positive", "signals": [{"signal_text": "Wholesome, personable", "signal_type": "praise", "polarity": "positive", "rubric_matches": [67, 219]}, {"signal_text": "too much of a cornball for my tastes", "signal_type": "complaint", "polarity": "negative", "rubric_matches": [25, 53]}, {"signal_text": "it seems like that's what you're going for", "signal_type": "observation", "polarity": "neutral", "rubric_matches": [53, 99]}]}, {"passage_text": "- u/helpfulskeptic (score=1): Loved all of this. Including the absurdity of befriending ICE so that someone will come to your shows🤣", "passage_polarity": "positive", "signals": [{"signal_text": "Loved all of this", "signal_type": "praise", "polarity": "positive", "rubric_matches": [3]}, {"signal_text": "the absurdity of befriending ICE so that someone will come to your shows", "signal_type": "praise", "polarity": "positive", "rubric_matches": [152, 46, 198]}]}]}
+
+# Hard constraints (failures we have seen)
+
+1. **passage_text MUST be at least 50 chars** and MUST include the actual quality-judgment content, not just a section label. If a passage starts with "Strengths:", "Weaknesses:", "Pros:", "Cons:", etc., extend it to include the body text.
+
+2. **signal_text MUST be an exact substring of passage_text** — copy character-by-character, including punctuation, whitespace, and quotes. Do NOT paraphrase. If you can't find an exact span, skip that signal.
+
+3. **passage_text MUST be an exact substring of the comment thread under a stand-up joke post text** — copy character-by-character.
+
+   - Do NOT add or remove whitespace anywhere — preserve ALL spacing, newlines, and tabs exactly as they appear in the source.
+   - Do NOT add spaces between CJK characters (Chinese / Japanese / Korean) and adjacent Latin characters. If the source is `这个group`, your passage_text contains `这个group`, NOT `这个 group`.
+   - Do NOT collapse markdown separators like `---` or `===` or `***`. If the source contains `---` between two paragraphs, the separator MUST appear inside your passage_text verbatim.
+   - When in doubt, copy a slightly longer span — the snap-to-source post-processor handles minor cases but cannot recover from character substitutions.
+
+4. **JSON escaping (CRITICAL — this is the #1 cause of broken output)**: the text often contains LaTeX commands like `\bullet`, `\mathcal`, `\theta`, `\alpha`. Inside a JSON string, a single backslash `\` followed by certain letters IS A CONTROL CHARACTER, not a literal backslash. So:
+
+   - Source has: `\bullet` (literal) → JSON string MUST contain `\\bullet` (escaped). Writing `\bullet` will produce a backspace character (0x08) in the output, NOT the LaTeX command.
+   - Source has: `\mathcal{O}` → JSON MUST be `\\mathcal{O}`.
+   - Source has: `\theta_0` → JSON MUST be `\\theta_0`.
+   - Source has: `\n` (literal backslash + n) → JSON MUST be `\\n`. Don't use `\n` because that produces an actual newline.
+
+   Every literal backslash in the source MUST be doubled in your JSON output. There are NO exceptions. If you are unsure, double the backslash — over-escaping is fine, under-escaping breaks parsing.
+
+5. **HIGH RECALL on signals**: aim 3-10 per passage. Don't miss quality judgments.
+
+6. **Capture both criticism and praise.** Comedy workshop comments skew critical-but-constructive (most threads are 70% suggestions, 20% praise, 10% complaints). Reddit-style riffs ('lol same') are NOT signals — extract only substantive judgments.
+
+7. **Empty rubric_matches `[]` is fine** — that signals a taxonomy gap, which is useful to surface.
+
+# Output format
+
+Output STRICT JSON on a SINGLE LINE. No markdown fences. No prose before or after. Schema:
+
+```
+{"unit_id": "<from input>", "passages": [
+  {"passage_text": "<exact substring of input, >=50 chars>",
+    "passage_polarity": "positive|negative|mixed",
+    "signals": [
+      {"signal_text": "<exact substring of passage_text>",
+        "signal_type": "complaint|praise|observation|suggestion",
+        "polarity": "positive|negative|neutral",
+        "rubric_matches": [<int>, ...]}
+    ]}
+]}
+```
+
+# Now process this comment thread under a stand-up joke post
+
+unit_id: 1qd9h5v
+
+text:
+[POST by u/redkinoko]
+Title: It's weird doing standup comedy as an immigrant right now because most immigrants are trying to stay indoors and keep a low profile, but I'm still posting "Here's where you can find me several nights this month, you can even catch me on 2 different times on Friday at the same spot if you're busy."
+Body: At this point I'm thinking of making ICE my friends, just to make sure they never come to my shows.
+
+[COMMENTS]
+- u/W0nderingMe (score=7): The title is funny.   The caption ... I see what you're getting at and the idea is funny, but needs some help on the phrasing.
+  - u/redkinoko (score=4): Thank you. Is this any better?   I'm thinking of making ICE my friends.  Because my friends never come to my shows.
+    - u/clce (score=2): I agree. Typically a good joke makes the audience think for half a second before they get it. You get a much better laugh that way. But it's not obscure or hard to get. Just takes a half second.
+    - u/clce (score=1): Absolutely not. That's handing the joke to the audience and Just doesn't work.   I would say something like, I'm thinking of reaching out, maybe making friends with some ice agents. That way I never have to worry about them coming to my shows.   Honestly, your original phrasing or mine, it's comedy Gold. I love this joke.   It creates tension, people thinking you're going to go political, and then you make it about something else. It's good.
+    - u/WorcesterResident (score=1): Yes.  This is the correct phrasing.  EDIT: I saw your stand-up act.  It was hilarious.  You definitely have a bright future.  Keep at it.
+- u/Toothless-In-Wapping (score=4): That title joke is gold.   Comment needs a setup about how friends don’t come to your shows, then say maybe I should befriend ICE
+  - u/JacobAldridge (score=3): I’m not so sure, I like that it takes a monent to connect the dots and then realise his friends are unsupportive - makes it that bit funnier (but of course would need to be live tested).
+    - u/r
+
+Output rules:
+- Do NOT think aloud. Do NOT explain your reasoning.
+- Do NOT preface with "Let me", "The user", "First I'll", "The paper concerns", or any meta-text.
+- Do NOT summarize the input comment thread under a stand-up joke post. Skip the introduction. Go DIRECTLY to identifying quality-judgment passages.
+- Begin your response with the character `{` and end with `}`.
+- Output exactly ONE JSON object on ONE line. Nothing else before or after.

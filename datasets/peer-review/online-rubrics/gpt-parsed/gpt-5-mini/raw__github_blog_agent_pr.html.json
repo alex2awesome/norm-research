@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/peer-review/online-rubrics/raw/github_blog_agent_pr.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 4803,
+  "output_tokens": 3330,
+  "elapsed_s": 686.2335716669913,
+  "extracted": {
+    "orientation": "blog_post",
+    "intended_audience": "software engineers and code reviewers who review pull requests (especially agent-generated PRs)",
+    "subtask_short": "reviewing agent-generated pull requests",
+    "subtask_description": "Practical guidance for human reviewers on how to evaluate, triage, and approve pull requests produced or assisted by coding agents, focusing on correctness, security, CI integrity, reuse, and reviewer effort. Emphasizes a timeboxed checklist and red flags unique to agent-generated changes.",
+    "subtask_keywords": [
+      "code_review",
+      "agents",
+      "pull_requests",
+      "software_engineering",
+      "security"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Establish authorship and bring system context",
+        "description": "Before reading a single line of diff, understand who (or what) wrote the pull request and model its capabilities and failure modes.",
+        "guidance": "A coding agent is a productive, literal, pattern-following contributor with zero context about your incident history, your team\u2019s edge case lore, or operational constraints that don\u2019t live in the repo. The agent will produce code that 'looks complete' but can miss contextual constraints. Reviewers must supply judgment and context that agents lack."
+      },
+      {
+        "name": "Author must edit PR body and self-review",
+        "description": "If you\u2019re opening an agent-generated pull request, edit the body before requesting review and review it yourself.",
+        "guidance": "Agents are verbose and may describe things better explored in code. Authors should annotate diffs where context helps and signal they validated the agent captured intent. 'Reviewing your own pull request isn\u2019t optional when agents are involved.' This signals respect for reviewer time and reduces wasted rounds."
+      },
+      {
+        "name": "Any change that weakens CI is a blocker",
+        "description": "Treat modifications that reduce CI rigor as an immediate block to approving an agent PR.",
+        "guidance": "Check if coverage thresholds changed, tests removed/renamed/marked skipped, workflows stopped running on forks/PRs, or CI steps are gated behind new conditions. The article states: 'Any change that weakens CI is a blocker. Full stop.' Require an explicit justification before continuing."
+      },
+      {
+        "name": "Detect CI gaming anti-patterns",
+        "description": "Identify common agent strategies to get tests passing by weakening CI rather than fixing code.",
+        "guidance": "Watch for agents removing tests, skipping lint steps, adding '|| true' to test commands, or otherwise bypassing failure signals. If you see these, block the merge and require remediation."
+      },
+      {
+        "name": "Search for duplicated utilities (code reuse blindness)",
+        "description": "Agents often reimplement patterns without discovering existing utilities; search for duplicates when new helpers appear.",
+        "guidance": "For every new helper or utility, do a quick repo search. Symptoms include new functions that duplicate existing ones with slightly different names, reimplemented validation logic, or middleware recreated from scratch. If equivalent functionality exists, require consolidation before merge. The author claims this is 'the highest-ROI thing you can do as a reviewer.'"
+      },
+      {
+        "name": "Require justification and thresholds for adding new utilities",
+        "description": "Demand rationale when an agent PR adds new utilities above a certain size or complexity.",
+        "guidance": "Pro tip from article: require justification for adding new utilities in agent PRs above a size threshold. This catches duplication early and prevents agents from proliferating near-duplicate helpers across the codebase."
+      },
+      {
+        "name": "Trace the critical path; don\u2019t just scan",
+        "description": "Pick the most critical logic change and follow it end-to-end from input to output rather than skimming diffs.",
+        "guidance": "Trace one critical path: input \u2192 transforms \u2192 output. Check boundary conditions (zero, max, empty), permission checks on every branch, missing validation for external values, off-by-one errors in pagination, and surprising conditional logic. The article emphasizes: 'Trace it, don\u2019t just scan it.'"
+      },
+      {
+        "name": "Require a new test that fails on pre-change behavior",
+        "description": "Insist that non-trivial logic changes include a test that would have failed before the change.",
+        "guidance": "If the agent cannot write a test that would have caught the bug it claims to fix, the fix is incomplete or the understanding is wrong. The article lists this as a required action before merging non-trivial agent changes."
+      },
+      {
+        "name": "Watch for hallucinated-but-passing correctness",
+        "description": "Be alert for code that compiles and passes tests but is logically incorrect due to blind spots in the agent's reasoning.",
+        "guidance": "Examples: off-by-one errors, missing permission checks on rarely-hit branches, validation that short-circuits an edge case, and race conditions that only appear at scale. CI will catch obvious hallucinations; the dangerous cases need human tracing and boundary testing."
+      },
+      {
+        "name": "Agentic ghosting: responsiveness and implementation plan",
+        "description": "Evaluate the PR\u2019s history for responsiveness and whether there is a clear implementation plan to avoid wasting review effort.",
+        "guidance": "Large PRs with no structured plan often lead to agent abandonment or misalignment. Before investing deep review in a large agent PR, check prior responsiveness and whether the PR includes a plan. If absent, request a breakdown or smaller scoped units using the suggested short message: ask for a clearer implementation plan and smaller pieces. This saves reviewer time."
+      },
+      {
+        "name": "When to request a smaller pull request",
+        "description": "Specific conditions under which the reviewer should ask the author to split or shrink the PR.",
+        "guidance": "Request smaller PRs if: the diff touches more than five unrelated files; you can\u2019t describe the PR purpose in one sentence; the agent has no implementation plan or the PR body is empty; CI is failing and the only changes are to test files. Use these as hard triggers to avoid large, unreviewable agent PRs."
+      },
+      {
+        "name": "Untrusted input in workflows is a blocker (prompt injection risk)",
+        "description": "Treat any workflow that interpolates untrusted repo content into LLM prompts or executes model output as a blocker until secured.",
+        "guidance": "Check if pull request bodies, issue bodies, or commit messages are interpolated into prompts without sanitization; if model output is being executed as shell commands without validation; if secrets are accessible to the agent step or printed to logs. If any are true, require fixes before merge."
+      },
+      {
+        "name": "Least-privilege permissions in workflow YAML",
+        "description": "Ensure workflows that call models or agents run with least-privilege permissions.",
+        "guidance": "Require the GITHUB_TOKEN be scoped appropriately (read-only when possible). The article suggests 'permissions: read-all is a reasonable default' and flags write-scoped tokens as risky when not necessary."
+      },
+      {
+        "name": "Sanitize inputs, separate analysis from execution, and require human gates",
+        "description": "Protect against prompt injection by sanitizing user-provided content and separating the model\u2019s analysis from any execution steps with human approval.",
+        "guidance": "Sanitize and quote untrusted content before it touches a prompt. Separate 'analysis' steps (model generates suggestions) from 'execution' steps (running commands) and add a human approval gate for anything touching production. Explicit advice: 'never eval model output.'"
+      },
+      {
+        "name": "Timeboxed review checklist (scan & classify \u2192 CI \u2192 utilities \u2192 critical path \u2192 security \u2192 evidence)",
+        "description": "A short, timeboxed order of operations for efficient reviews of agent PRs with approximate minutes for each step.",
+        "guidance": "Recommended steps and times: 1\u20132 min: scan & classify (file list, diff size, narrow vs complex); 2\u20133 min: check CI changes first; 3\u20135 min: scan for new utilities and search for duplicates; 5\u20138 min: trace one critical path end-to-end; 8\u20139 min: run security checklist for any LLM-calling workflows; 9\u201310 min: require evidence (tests failing on pre-change) and ask for rollback plan if needed. Use this to set review depth."
+      },
+      {
+        "name": "Use automated review (Copilot) as a prerequisite, not a replacement",
+        "description": "Run automated review tools first to catch mechanical issues so humans can focus on judgment and context.",
+        "guidance": "Let Copilot (or similar) run first to flag style inconsistencies, obvious logic errors, missing error handling, and type mismatches. Make automated review a prerequisite: if it finds obvious issues, have the author address them before human review. You can tune automated checks with custom instructions to surface CI threshold changes, new utilities, and validation of external inputs."
+      },
+      {
+        "name": "Codify repeatable checklists into automated workflows",
+        "description": "Where possible, codify personal review checklists into automation to block merges on critical issues.",
+        "guidance": "Pro tip: use the Copilot SDK or workflow scripts to run your checklist\u2014auth on admin endpoints, tests run, safe env handling\u2014against diffs automatically. If critical issues are found, block the merge. This reduces time spent scanning boilerplate and preserves human time for judgment."
+      },
+      {
+        "name": "Require rollback/mitigation plans for risky changes",
+        "description": "Ask for a rollback plan or mitigation strategy when a change is risky or touches critical paths.",
+        "guidance": "If a change is risky and lacks a rollback plan, request one before merge. The article calls out asking for a rollback plan where appropriate as part of evidence/requirements for risky changes."
+      },
+      {
+        "name": "Default to a red-flag checklist on complex agent PRs",
+        "description": "Treat the enumerated red flags as the default mode for complex or agent-generated pull requests.",
+        "guidance": "The article's final guidance: 'Red flag checklist as your default on complex agent pull requests.' Key takeaways reiterate that any CI weakening is a hard stop, let agents run first, and you must trace the critical path. Apply the red-flag checklist proactively rather than reactively."
+      }
+    ]
+  }
+}

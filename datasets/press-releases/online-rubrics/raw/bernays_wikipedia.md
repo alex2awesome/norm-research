@@ -1,0 +1,1744 @@
+<!-- URL: https://en.wikipedia.org/wiki/Edward_Bernays -->
+<!-- HTTP: 200 SIZE:   326182 -->
+<!DOCTYPE html>
+<html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Edward Bernays - Wikipedia</title>
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )enwikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"10974804-9aa2-4eda-8fe6-ae0f9e8bef0e","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Edward_Bernays","wgTitle":"Edward Bernays","wgCurRevisionId":1352301679,"wgRevisionId":1352301679,"wgArticleId":158130,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["CS1 errors: ISBN date","Webarchive template wayback links","CS1 Danish-language sources (da)","CS1 maint: multiple names: authors list","Articles with short description","Short description is different from Wikidata","Biography with signature","Articles with hCards","Pages with Austrian German IPA","CS1 maint: ref duplicates default","Commons category link from Wikidata","People appearing on C-SPAN","Articles with Project Gutenberg links","Articles with Internet Archive links","Articles with LibriVox links","1891 births","1995 deaths","Advertising theorists","American men centenarians","American foreign policy writers","American male non-fiction writers","American people of Austrian-Jewish descent","American political writers","American public relations people","20th-century Austrian Jews","Bernays family","Cornell University College of Agriculture and Life Sciences alumni","Crowd psychologists","Crowd psychology","DeWitt Clinton High School alumni","Emigrants from Austria-Hungary to the United States","Freud family","Jewish American non-fiction writers","Jewish anti-communists","Jewish centenarians","Marketing theorists","Mass media theorists","Propaganda theorists","Public relations pioneers","Public relations scholars","Public relations theorists","20th-century American male writers"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Edward_Bernays","wgRelevantArticleId":158130,"wgTempUserName":null,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgNoticeProject":"wikipedia","wgFlaggedRevsParams":{"tags":{"status":{"levels":1}}},"wgConfirmEditCaptchaNeededForGenericEdit":"hcaptcha","wgConfirmEditForceShowCaptcha":false,"wgConfirmEditHCaptchaVisualEditorOnLoadIntegrationEnabled":false,"wgConfirmEditHCaptchaSiteKey":"5d0c670e-a5f4-4258-ad16-1f42792c9c62","wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true,"wgPopupsFlags":0,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en"},"wgMFDisplayWikibaseDescriptions":{"search":true,"watchlist":true,"tagline":false,"nearby":true},"wgWMESchemaEditAttemptStepOversample":false,"wgWMEPageLength":80000,"wgTestKitchenUserExperiments":{"overrides":[],"enrolled":[],"assigned":[],"subject_ids":[]},"wgEditSubmitButtonLabelPublish":true,"wgVisualEditorPageIsDisambiguation":false,"wgULSPosition":"interlanguage","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false,"wgWikibaseItemId":"Q434839","wgCheckUserClientHintsHeadersJsApi":["brands","architecture","bitness","fullVersionList","mobile","model","platform","platformVersion"],"GEHomepageSuggestedEditsEnableTopics":true,"wgGESuggestedEditsTaskTypes":{"taskTypes":["copyedit","link-recommendation"],"unavailableTaskTypes":[]},"wgGETopicsMatchModeEnabled":false,"wgGELevelingUpEnabledForUser":false,"wgPersonalDashboardMenuVisible":false};
+RLSTATE={"ext.globalCssJs.user.styles":"ready","site.styles":"ready","user.styles":"ready","ext.globalCssJs.user":"ready","user":"ready","user.options":"loading","ext.wikimediamessages.styles":"ready","ext.cite.styles":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","jquery.makeCollapsible.styles":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","ext.uls.interlanguage":"ready","wikibase.client.init":"ready"};RLPAGEMODULES=["ext.parsermigration.survey","ext.cite.ux-enhancements","mediawiki.page.media","ext.scribunto.logs","site","mediawiki.page.ready","jquery.makeCollapsible","mediawiki.toc","skins.vector.js","ext.centralNotice.geoIP","ext.centralNotice.startUp","ext.gadget.ReferenceTooltips","ext.gadget.switcher","ext.urlShortener.toolbar","ext.centralauth.centralautologin","ext.testKitchen","mmv.bootstrap","ext.popups","ext.visualEditor.desktopArticleTarget.init","ext.echo.centralauth","ext.eventLogging","ext.wikimediaEvents","ext.navigationTiming","ext.uls.interface","ext.cx.eventlogging.campaigns","ext.cx.uls.quick.actions","wikibase.client.vector-2022","wikibase.databox.fromWikidata","ext.checkUser.clientHints","ext.quicksurveys.init","ext.growthExperiments.SuggestedEditSession"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=ext.cite.styles%7Cext.uls.interlanguage%7Cext.visualEditor.desktopArticleTarget.noscript%7Cext.wikimediamessages.styles%7Cjquery.makeCollapsible.styles%7Cskins.vector.icons%2Cstyles%7Cskins.vector.search.codex.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector-2022">
+<script async="" src="/w/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=vector-2022"></script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector-2022">
+<meta name="generator" content="MediaWiki 1.47.0-wmf.1">
+<meta name="referrer" content="origin">
+<meta name="referrer" content="origin-when-cross-origin">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/6/61/Edward_Bernays_cropped.png">
+<meta property="og:image:width" content="961">
+<meta property="og:image:height" content="1200">
+<meta name="viewport" content="width=1120">
+<meta property="og:title" content="Edward Bernays - Wikipedia">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="//upload.wikimedia.org">
+<link rel="alternate" type="application/x-wiki" title="Edit this page" href="/w/index.php?title=Edward_Bernays&amp;action=edit">
+<link rel="apple-touch-icon" href="/static/apple-touch/wikipedia.png">
+<link rel="icon" href="/static/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="/w/rest.php/v1/search" title="Wikipedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="//en.wikipedia.org/w/api.php?action=rsd">
+<link rel="canonical" href="https://en.wikipedia.org/wiki/Edward_Bernays">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">
+<link rel="alternate" type="application/atom+xml" title="Wikipedia Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="dns-prefetch" href="//meta.wikimedia.org" />
+<link rel="dns-prefetch" href="auth.wikimedia.org">
+</head>
+<body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Edward_Bernays rootpage-Edward_Bernays skin-vector-2022 action-view">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
+<div class="vector-header-container">
+	<header class="vector-header mw-header no-font-mode-scale">
+		<div class="vector-header-start">
+			<nav class="vector-main-menu-landmark" aria-label="Site">
+				
+<div id="vector-main-menu-dropdown" class="vector-dropdown vector-main-menu-dropdown vector-button-flush-left vector-button-flush-right"  title="Main menu" >
+	<input type="checkbox" id="vector-main-menu-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-main-menu-dropdown" class="vector-dropdown-checkbox "  aria-label="Main menu"  >
+	<label id="vector-main-menu-dropdown-label" for="vector-main-menu-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-menu mw-ui-icon-wikimedia-menu"></span>
+
+<span class="vector-dropdown-label-text">Main menu</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+				<div id="vector-main-menu-unpinned-container" class="vector-unpinned-container">
+		
+<div id="vector-main-menu" class="vector-main-menu vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-main-menu-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="main-menu-pinned"
+	data-pinnable-element-id="vector-main-menu"
+	data-pinned-container-id="vector-main-menu-pinned-container"
+	data-unpinned-container-id="vector-main-menu-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Main menu</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-main-menu.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-main-menu.unpin">hide</button>
+</div>
+
+	
+<div id="p-navigation" class="vector-menu mw-portlet mw-portlet-navigation"  >
+	<div class="vector-menu-heading">
+		Navigation
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-mainpage-description" class="mw-list-item"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z"><span>Main page</span></a></li><li id="n-contents" class="mw-list-item"><a href="/wiki/Wikipedia:Contents" title="Guides to browsing Wikipedia"><span>Contents</span></a></li><li id="n-currentevents" class="mw-list-item"><a href="/wiki/Portal:Current_events" title="Articles related to current events"><span>Current events</span></a></li><li id="n-randompage" class="mw-list-item"><a href="/wiki/Special:Random" title="Visit a randomly selected article [x]" accesskey="x"><span>Random article</span></a></li><li id="n-aboutsite" class="mw-list-item"><a href="/wiki/Wikipedia:About" title="Learn about Wikipedia and how it works"><span>About Wikipedia</span></a></li><li id="n-contactpage" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us" title="How to contact Wikipedia"><span>Contact us</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-interaction" class="vector-menu mw-portlet mw-portlet-interaction"  >
+	<div class="vector-menu-heading">
+		Contribute
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-help" class="mw-list-item"><a href="/wiki/Help:Contents" title="Guidance on how to use and edit Wikipedia"><span>Help</span></a></li><li id="n-introduction" class="mw-list-item"><a href="/wiki/Help:Introduction" title="Learn how to edit Wikipedia"><span>Learn to edit</span></a></li><li id="n-portal" class="mw-list-item"><a href="/wiki/Wikipedia:Community_portal" title="The hub for editors"><span>Community portal</span></a></li><li id="n-recentchanges" class="mw-list-item"><a href="/wiki/Special:RecentChanges" title="A list of recent changes to Wikipedia [r]" accesskey="r"><span>Recent changes</span></a></li><li id="n-upload" class="mw-list-item"><a href="/wiki/Wikipedia:File_upload_wizard" title="Add images or other media for use on Wikipedia"><span>Upload file</span></a></li><li id="n-specialpages" class="mw-list-item"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q"><span>Special pages</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+				</div>
+
+	</div>
+</div>
+
+		</nav>
+			
+<a href="/wiki/Main_Page" class="mw-logo">
+	<img class="mw-logo-icon" src="/static/images/icons/enwiki-25.svg" alt="" aria-hidden="true" height="50" width="50">
+	<span class="mw-logo-container skin-invert">
+		<img class="mw-logo-wordmark" alt="Wikipedia" src="/static/images/mobile/copyright/wikipedia-wordmark-en-25.svg" style="width: 8.75em; height: 1.375em;">
+		<img class="mw-logo-tagline" alt="The Free Encyclopedia" src="/static/images/mobile/copyright/wikipedia-tagline-en-25.svg" width="140" height="11" style="width: 8.75em; height: 0.6875em;">
+	</span>
+</a>
+
+		</div>
+		<div class="vector-header-end">
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-collapses vector-search-box-show-thumbnail vector-search-box-auto-expand-width vector-search-box">
+	<a href="/wiki/Special:Search" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only search-toggle" title="Search Wikipedia [f]" accesskey="f"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+	</a>
+	<div class="vector-typeahead-search-container">
+		<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail cdx-typeahead-search--auto-expand-width">
+			<form action="/w/index.php" id="searchform" class="cdx-search-input cdx-search-input--has-end-button">
+				<div id="simpleSearch" class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+					<div class="cdx-text-input cdx-text-input--has-start-icon">
+						<input
+							class="cdx-text-input__input mw-searchInput" autocomplete="off"
+							 type="search" name="search" placeholder="Search Wikipedia" aria-label="Search Wikipedia" autocapitalize="none" spellcheck="false" title="Search Wikipedia [f]" accesskey="f" id="searchInput"
+							>
+						<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+					</div>
+					<input type="hidden" name="title" value="Special:Search">
+				</div>
+				<button class="cdx-button cdx-search-input__end-button">Search</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+			<nav class="vector-user-links vector-user-links-wide" aria-label="Personal tools">
+	<div class="vector-user-links-main">
+	
+<div id="p-vector-user-menu-preferences" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-userpage" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	<nav class="vector-appearance-landmark" aria-label="Appearance">
+		
+<div id="vector-appearance-dropdown" class="vector-dropdown "  title="Change the appearance of the page&#039;s font size, width, and color" >
+	<input type="checkbox" id="vector-appearance-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-appearance-dropdown" class="vector-dropdown-checkbox "  aria-label="Appearance"  >
+	<label id="vector-appearance-dropdown-label" for="vector-appearance-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-appearance mw-ui-icon-wikimedia-appearance"></span>
+
+<span class="vector-dropdown-label-text">Appearance</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+			<div id="vector-appearance-unpinned-container" class="vector-unpinned-container">
+				
+			</div>
+		
+	</div>
+</div>
+
+	</nav>
+	
+<div id="p-vector-user-menu-notifications" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-overflow" class="vector-menu mw-portlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=" cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=Edward+Bernays" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span>Create account</span></a>
+</li>
+<li id="pt-login-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=Edward+Bernays" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	</div>
+	
+<div id="vector-user-links-dropdown" class="vector-dropdown vector-user-menu vector-button-flush-right vector-user-menu-logged-out user-links-collapsible-item"  title="Log in and more options" >
+	<input type="checkbox" id="vector-user-links-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-user-links-dropdown" class="vector-dropdown-checkbox "  aria-label="Personal tools"  >
+	<label id="vector-user-links-dropdown-label" for="vector-user-links-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-ellipsis mw-ui-icon-wikimedia-ellipsis"></span>
+
+<span class="vector-dropdown-label-text">Personal tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+		
+<div id="p-personal" class="vector-menu mw-portlet mw-portlet-personal user-links-collapsible-item"  title="User menu" >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=""><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=Edward+Bernays" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span class="vector-icon mw-ui-icon-userAdd mw-ui-icon-wikimedia-userAdd"></span>
+
+<span>Create account</span></a>
+</li>
+<li id="pt-login" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=Edward+Bernays" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span class="vector-icon mw-ui-icon-logIn mw-ui-icon-wikimedia-logIn"></span>
+
+<span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+</nav>
+
+		</div>
+	</header>
+</div>
+<div class="mw-page-container">
+	<div class="mw-page-container-inner">
+		<div class="vector-sitenotice-container">
+			<div id="siteNotice"><!-- CentralNotice --></div>
+		</div>
+		<div class="vector-column-start">
+			<div class="vector-main-menu-container">
+		<div id="mw-navigation">
+			<nav id="mw-panel" class="vector-main-menu-landmark" aria-label="Site">
+				<div id="vector-main-menu-pinned-container" class="vector-pinned-container">
+				
+				</div>
+		</nav>
+		</div>
+	</div>
+	<div class="vector-sticky-pinned-container">
+				<nav id="mw-panel-toc" aria-label="Contents" data-event-name="ui.sidebar-toc" class="mw-table-of-contents-container vector-toc-landmark">
+					<div id="vector-toc-pinned-container" class="vector-pinned-container">
+					<div id="vector-toc" class="vector-toc vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-toc-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="toc-pinned"
+	data-pinnable-element-id="vector-toc"
+	data-pinned-container-id="vector-toc-pinned-container"
+	data-unpinned-container-id="vector-toc-unpinned-container"
+>
+	<h2 class="vector-pinnable-header-label">Contents</h2>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-toc.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-toc.unpin">hide</button>
+</div>
+
+
+	<ul class="vector-toc-contents" id="mw-panel-toc-list">
+		<li id="toc-mw-content-text"
+			class="vector-toc-list-item vector-toc-level-1">
+			<a href="#" class="vector-toc-link">
+				<div class="vector-toc-text">(Top)</div>
+			</a>
+		</li>
+		<li id="toc-Family_and_education"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Family_and_education">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">1</span>
+				<span>Family and education</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Family_and_education-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Career"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Career">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">2</span>
+				<span>Career</span>
+			</div>
+		</a>
+		
+			<button aria-controls="toc-Career-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>Toggle Career subsection</span>
+			</button>
+		
+		<ul id="toc-Career-sublist" class="vector-toc-list">
+			<li id="toc-Medical_editor"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Medical_editor">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">2.1</span>
+					<span>Medical editor</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Medical_editor-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Press_agent"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Press_agent">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">2.2</span>
+					<span>Press agent</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Press_agent-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-World_War_I"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#World_War_I">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">2.3</span>
+					<span>World War I</span>
+				</div>
+			</a>
+			
+			<ul id="toc-World_War_I-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Counsel_on_public_relations"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Counsel_on_public_relations">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">2.4</span>
+					<span>Counsel on public relations</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Counsel_on_public_relations-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li id="toc-Notable_clients_and_campaigns"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Notable_clients_and_campaigns">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>Notable clients and campaigns</span>
+			</div>
+		</a>
+		
+			<button aria-controls="toc-Notable_clients_and_campaigns-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>Toggle Notable clients and campaigns subsection</span>
+			</button>
+		
+		<ul id="toc-Notable_clients_and_campaigns-sublist" class="vector-toc-list">
+			<li id="toc-Light&#039;s_Golden_Jubilee"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Light&#039;s_Golden_Jubilee">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.1</span>
+					<span>Light's Golden Jubilee</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Light&#039;s_Golden_Jubilee-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Political_clients"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Political_clients">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.2</span>
+					<span>Political clients</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Political_clients-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Non-profit_clients"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Non-profit_clients">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.3</span>
+					<span>Non-profit clients</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Non-profit_clients-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Freud"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Freud">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.4</span>
+					<span>Freud</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Freud-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Tobacco"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Tobacco">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.5</span>
+					<span>Tobacco</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Tobacco-sublist" class="vector-toc-list">
+				<li id="toc-Torches_of_Freedom"
+			class="vector-toc-list-item vector-toc-level-3">
+			<a class="vector-toc-link" href="#Torches_of_Freedom">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.5.1</span>
+					<span>Torches of Freedom</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Torches_of_Freedom-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Green_Ball"
+			class="vector-toc-list-item vector-toc-level-3">
+			<a class="vector-toc-link" href="#Green_Ball">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.5.2</span>
+					<span>Green Ball</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Green_Ball-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Modus_operandi"
+			class="vector-toc-list-item vector-toc-level-3">
+			<a class="vector-toc-link" href="#Modus_operandi">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.5.3</span>
+					<span>Modus operandi</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Modus_operandi-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+		</li>
+		<li id="toc-United_Fruit_and_Guatemala"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#United_Fruit_and_Guatemala">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">3.6</span>
+					<span>United Fruit and Guatemala</span>
+				</div>
+			</a>
+			
+			<ul id="toc-United_Fruit_and_Guatemala-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li id="toc-Techniques"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Techniques">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>Techniques</span>
+			</div>
+		</a>
+		
+			<button aria-controls="toc-Techniques-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>Toggle Techniques subsection</span>
+			</button>
+		
+		<ul id="toc-Techniques-sublist" class="vector-toc-list">
+			<li id="toc-Third_parties"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Third_parties">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">4.1</span>
+					<span>Third parties</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Third_parties-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Scientific_approach"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Scientific_approach">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">4.2</span>
+					<span>Scientific approach</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Scientific_approach-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li id="toc-Philosophy"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Philosophy">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>Philosophy</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Philosophy-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Death_and_legacy"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Death_and_legacy">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">6</span>
+				<span>Death and legacy</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Death_and_legacy-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Publications"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Publications">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">7</span>
+				<span>Publications</span>
+			</div>
+		</a>
+		
+			<button aria-controls="toc-Publications-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>Toggle Publications subsection</span>
+			</button>
+		
+		<ul id="toc-Publications-sublist" class="vector-toc-list">
+			<li id="toc-Books"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Books">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">7.1</span>
+					<span>Books</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Books-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+		<li id="toc-Selected_articles"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Selected_articles">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">7.2</span>
+					<span>Selected articles</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Selected_articles-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li id="toc-See_also"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#See_also">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">8</span>
+				<span>See also</span>
+			</div>
+		</a>
+		
+		<ul id="toc-See_also-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-References"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#References">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">9</span>
+				<span>References</span>
+			</div>
+		</a>
+		
+			<button aria-controls="toc-References-sublist" class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-toc-toggle">
+				<span class="vector-icon mw-ui-icon-wikimedia-expand"></span>
+				<span>Toggle References subsection</span>
+			</button>
+		
+		<ul id="toc-References-sublist" class="vector-toc-list">
+			<li id="toc-Sources"
+			class="vector-toc-list-item vector-toc-level-2">
+			<a class="vector-toc-link" href="#Sources">
+				<div class="vector-toc-text">
+					<span class="vector-toc-numb">9.1</span>
+					<span>Sources</span>
+				</div>
+			</a>
+			
+			<ul id="toc-Sources-sublist" class="vector-toc-list">
+			</ul>
+		</li>
+	</ul>
+	</li>
+	<li id="toc-Further_reading"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#Further_reading">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">10</span>
+				<span>Further reading</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Further_reading-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-External_links"
+		class="vector-toc-list-item vector-toc-level-1">
+		<a class="vector-toc-link" href="#External_links">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">11</span>
+				<span>External links</span>
+			</div>
+		</a>
+		
+		<ul id="toc-External_links-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+</ul>
+</div>
+
+					</div>
+		</nav>
+			</div>
+		</div>
+		<div class="mw-content-container">
+			<main id="content" class="mw-body">
+				<header class="mw-body-header vector-page-titlebar no-font-mode-scale">
+					<nav aria-label="Contents" class="vector-toc-landmark">
+						
+<div id="vector-page-titlebar-toc" class="vector-dropdown vector-page-titlebar-toc vector-button-flush-left"  title="Table of Contents" >
+	<input type="checkbox" id="vector-page-titlebar-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-titlebar-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+	<label id="vector-page-titlebar-toc-label" for="vector-page-titlebar-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+							<div id="vector-page-titlebar-toc-unpinned-container" class="vector-unpinned-container">
+			</div>
+		
+	</div>
+</div>
+
+					</nav>
+					<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">Edward Bernays</span></span></h1>
+							
+<div id="p-lang-btn" class="vector-dropdown mw-portlet mw-portlet-lang"  >
+	<input type="checkbox" id="p-lang-btn-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-p-lang-btn" class="vector-dropdown-checkbox mw-interlanguage-selector" aria-label="Go to an article in another language. Available in 38 languages"   >
+	<label id="p-lang-btn-label" for="p-lang-btn-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive mw-portlet-lang-heading-38" aria-hidden="true"  ><span class="vector-icon mw-ui-icon-language-progressive mw-ui-icon-wikimedia-language-progressive"></span>
+
+<span class="vector-dropdown-label-text">38 languages</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+		<div class="vector-menu-content">
+			
+			<ul class="vector-menu-content-list">
+				
+				<li class="interlanguage-link interwiki-af mw-list-item"><a href="https://af.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Afrikaans" lang="af" hreflang="af" data-title="Edward Bernays" data-language-autonym="Afrikaans" data-language-local-name="Afrikaans" class="interlanguage-link-target"><span>Afrikaans</span></a></li><li class="interlanguage-link interwiki-ar mw-list-item"><a href="https://ar.wikipedia.org/wiki/%D8%A5%D8%AF%D9%88%D8%B1%D8%AF_%D8%A8%D9%8A%D8%B1%D9%86%D9%8A%D8%B2" title="إدورد بيرنيز – Arabic" lang="ar" hreflang="ar" data-title="إدورد بيرنيز" data-language-autonym="العربية" data-language-local-name="Arabic" class="interlanguage-link-target"><span>العربية</span></a></li><li class="interlanguage-link interwiki-arz mw-list-item"><a href="https://arz.wikipedia.org/wiki/%D8%A7%D8%AF%D9%88%D8%B1%D8%AF_%D8%A8%D9%8A%D8%B1%D9%86%D9%8A%D8%B2" title="ادورد بيرنيز – Egyptian Arabic" lang="arz" hreflang="arz" data-title="ادورد بيرنيز" data-language-autonym="مصرى" data-language-local-name="Egyptian Arabic" class="interlanguage-link-target"><span>مصرى</span></a></li><li class="interlanguage-link interwiki-bg mw-list-item"><a href="https://bg.wikipedia.org/wiki/%D0%95%D0%B4%D1%83%D0%B0%D1%80%D0%B4_%D0%91%D0%B5%D1%80%D0%BD%D0%B0%D0%B9%D1%81" title="Едуард Бернайс – Bulgarian" lang="bg" hreflang="bg" data-title="Едуард Бернайс" data-language-autonym="Български" data-language-local-name="Bulgarian" class="interlanguage-link-target"><span>Български</span></a></li><li class="interlanguage-link interwiki-ca mw-list-item"><a href="https://ca.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Catalan" lang="ca" hreflang="ca" data-title="Edward Bernays" data-language-autonym="Català" data-language-local-name="Catalan" class="interlanguage-link-target"><span>Català</span></a></li><li class="interlanguage-link interwiki-cs mw-list-item"><a href="https://cs.wikipedia.org/wiki/Edward_L._Bernays" title="Edward L. Bernays – Czech" lang="cs" hreflang="cs" data-title="Edward L. Bernays" data-language-autonym="Čeština" data-language-local-name="Czech" class="interlanguage-link-target"><span>Čeština</span></a></li><li class="interlanguage-link interwiki-da mw-list-item"><a href="https://da.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Danish" lang="da" hreflang="da" data-title="Edward Bernays" data-language-autonym="Dansk" data-language-local-name="Danish" class="interlanguage-link-target"><span>Dansk</span></a></li><li class="interlanguage-link interwiki-de mw-list-item"><a href="https://de.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – German" lang="de" hreflang="de" data-title="Edward Bernays" data-language-autonym="Deutsch" data-language-local-name="German" class="interlanguage-link-target"><span>Deutsch</span></a></li><li class="interlanguage-link interwiki-es mw-list-item"><a href="https://es.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Spanish" lang="es" hreflang="es" data-title="Edward Bernays" data-language-autonym="Español" data-language-local-name="Spanish" class="interlanguage-link-target"><span>Español</span></a></li><li class="interlanguage-link interwiki-et mw-list-item"><a href="https://et.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Estonian" lang="et" hreflang="et" data-title="Edward Bernays" data-language-autonym="Eesti" data-language-local-name="Estonian" class="interlanguage-link-target"><span>Eesti</span></a></li><li class="interlanguage-link interwiki-eu mw-list-item"><a href="https://eu.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Basque" lang="eu" hreflang="eu" data-title="Edward Bernays" data-language-autonym="Euskara" data-language-local-name="Basque" class="interlanguage-link-target"><span>Euskara</span></a></li><li class="interlanguage-link interwiki-fa mw-list-item"><a href="https://fa.wikipedia.org/wiki/%D8%A7%D8%AF%D9%88%D8%A7%D8%B1%D8%AF_%D8%A8%D8%B1%D9%86%DB%8C%D8%B2" title="ادوارد برنیز – Persian" lang="fa" hreflang="fa" data-title="ادوارد برنیز" data-language-autonym="فارسی" data-language-local-name="Persian" class="interlanguage-link-target"><span>فارسی</span></a></li><li class="interlanguage-link interwiki-fi mw-list-item"><a href="https://fi.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Finnish" lang="fi" hreflang="fi" data-title="Edward Bernays" data-language-autonym="Suomi" data-language-local-name="Finnish" class="interlanguage-link-target"><span>Suomi</span></a></li><li class="interlanguage-link interwiki-fr mw-list-item"><a href="https://fr.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – French" lang="fr" hreflang="fr" data-title="Edward Bernays" data-language-autonym="Français" data-language-local-name="French" class="interlanguage-link-target"><span>Français</span></a></li><li class="interlanguage-link interwiki-he mw-list-item"><a href="https://he.wikipedia.org/wiki/%D7%90%D7%93%D7%95%D7%90%D7%A8%D7%93_%D7%91%D7%A8%D7%A0%D7%99%D7%99%D7%A1" title="אדוארד ברנייס – Hebrew" lang="he" hreflang="he" data-title="אדוארד ברנייס" data-language-autonym="עברית" data-language-local-name="Hebrew" class="interlanguage-link-target"><span>עברית</span></a></li><li class="interlanguage-link interwiki-hr mw-list-item"><a href="https://hr.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Croatian" lang="hr" hreflang="hr" data-title="Edward Bernays" data-language-autonym="Hrvatski" data-language-local-name="Croatian" class="interlanguage-link-target"><span>Hrvatski</span></a></li><li class="interlanguage-link interwiki-hu mw-list-item"><a href="https://hu.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Hungarian" lang="hu" hreflang="hu" data-title="Edward Bernays" data-language-autonym="Magyar" data-language-local-name="Hungarian" class="interlanguage-link-target"><span>Magyar</span></a></li><li class="interlanguage-link interwiki-hy mw-list-item"><a href="https://hy.wikipedia.org/wiki/%D4%B7%D5%A4%D5%BE%D5%A1%D6%80%D5%A4_%D4%B2%D5%A5%D6%80%D5%B6%D5%A5%D5%B5%D5%BD" title="Էդվարդ Բերնեյս – Armenian" lang="hy" hreflang="hy" data-title="Էդվարդ Բերնեյս" data-language-autonym="Հայերեն" data-language-local-name="Armenian" class="interlanguage-link-target"><span>Հայերեն</span></a></li><li class="interlanguage-link interwiki-id mw-list-item"><a href="https://id.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Indonesian" lang="id" hreflang="id" data-title="Edward Bernays" data-language-autonym="Bahasa Indonesia" data-language-local-name="Indonesian" class="interlanguage-link-target"><span>Bahasa Indonesia</span></a></li><li class="interlanguage-link interwiki-is mw-list-item"><a href="https://is.wikipedia.org/wiki/Edward_L.J._Bernays" title="Edward L.J. Bernays – Icelandic" lang="is" hreflang="is" data-title="Edward L.J. Bernays" data-language-autonym="Íslenska" data-language-local-name="Icelandic" class="interlanguage-link-target"><span>Íslenska</span></a></li><li class="interlanguage-link interwiki-it mw-list-item"><a href="https://it.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Italian" lang="it" hreflang="it" data-title="Edward Bernays" data-language-autonym="Italiano" data-language-local-name="Italian" class="interlanguage-link-target"><span>Italiano</span></a></li><li class="interlanguage-link interwiki-ja mw-list-item"><a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%89%E3%83%AF%E3%83%BC%E3%83%89%E3%83%BB%E3%83%90%E3%83%BC%E3%83%8D%E3%82%A4%E3%82%BA" title="エドワード・バーネイズ – Japanese" lang="ja" hreflang="ja" data-title="エドワード・バーネイズ" data-language-autonym="日本語" data-language-local-name="Japanese" class="interlanguage-link-target"><span>日本語</span></a></li><li class="interlanguage-link interwiki-kk mw-list-item"><a href="https://kk.wikipedia.org/wiki/%D0%AD%D0%B4%D0%B2%D0%B0%D1%80%D0%B4_%D0%91%D0%B5%D1%80%D0%BD%D0%B5%D0%B9%D1%81" title="Эдвард Бернейс – Kazakh" lang="kk" hreflang="kk" data-title="Эдвард Бернейс" data-language-autonym="Қазақша" data-language-local-name="Kazakh" class="interlanguage-link-target"><span>Қазақша</span></a></li><li class="interlanguage-link interwiki-ko mw-list-item"><a href="https://ko.wikipedia.org/wiki/%EC%97%90%EB%93%9C%EC%9B%8C%EB%93%9C_%EB%B2%84%EB%84%A4%EC%9D%B4%EC%8A%A4" title="에드워드 버네이스 – Korean" lang="ko" hreflang="ko" data-title="에드워드 버네이스" data-language-autonym="한국어" data-language-local-name="Korean" class="interlanguage-link-target"><span>한국어</span></a></li><li class="interlanguage-link interwiki-lv mw-list-item"><a href="https://lv.wikipedia.org/wiki/Edvards_Berneiss" title="Edvards Berneiss – Latvian" lang="lv" hreflang="lv" data-title="Edvards Berneiss" data-language-autonym="Latviešu" data-language-local-name="Latvian" class="interlanguage-link-target"><span>Latviešu</span></a></li><li class="interlanguage-link interwiki-nl mw-list-item"><a href="https://nl.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Dutch" lang="nl" hreflang="nl" data-title="Edward Bernays" data-language-autonym="Nederlands" data-language-local-name="Dutch" class="interlanguage-link-target"><span>Nederlands</span></a></li><li class="interlanguage-link interwiki-no mw-list-item"><a href="https://no.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Norwegian Bokmål" lang="nb" hreflang="nb" data-title="Edward Bernays" data-language-autonym="Norsk bokmål" data-language-local-name="Norwegian Bokmål" class="interlanguage-link-target"><span>Norsk bokmål</span></a></li><li class="interlanguage-link interwiki-pam mw-list-item"><a href="https://pam.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Pampanga" lang="pam" hreflang="pam" data-title="Edward Bernays" data-language-autonym="Kapampangan" data-language-local-name="Pampanga" class="interlanguage-link-target"><span>Kapampangan</span></a></li><li class="interlanguage-link interwiki-pl mw-list-item"><a href="https://pl.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Polish" lang="pl" hreflang="pl" data-title="Edward Bernays" data-language-autonym="Polski" data-language-local-name="Polish" class="interlanguage-link-target"><span>Polski</span></a></li><li class="interlanguage-link interwiki-pt mw-list-item"><a href="https://pt.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Portuguese" lang="pt" hreflang="pt" data-title="Edward Bernays" data-language-autonym="Português" data-language-local-name="Portuguese" class="interlanguage-link-target"><span>Português</span></a></li><li class="interlanguage-link interwiki-ro mw-list-item"><a href="https://ro.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Romanian" lang="ro" hreflang="ro" data-title="Edward Bernays" data-language-autonym="Română" data-language-local-name="Romanian" class="interlanguage-link-target"><span>Română</span></a></li><li class="interlanguage-link interwiki-ru mw-list-item"><a href="https://ru.wikipedia.org/wiki/%D0%91%D0%B5%D1%80%D0%BD%D0%B5%D0%B9%D1%81,_%D0%AD%D0%B4%D0%B2%D0%B0%D1%80%D0%B4" title="Бернейс, Эдвард – Russian" lang="ru" hreflang="ru" data-title="Бернейс, Эдвард" data-language-autonym="Русский" data-language-local-name="Russian" class="interlanguage-link-target"><span>Русский</span></a></li><li class="interlanguage-link interwiki-sl mw-list-item"><a href="https://sl.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Slovenian" lang="sl" hreflang="sl" data-title="Edward Bernays" data-language-autonym="Slovenščina" data-language-local-name="Slovenian" class="interlanguage-link-target"><span>Slovenščina</span></a></li><li class="interlanguage-link interwiki-sr mw-list-item"><a href="https://sr.wikipedia.org/wiki/%D0%95%D0%B4%D0%B2%D0%B0%D1%80%D0%B4_%D0%91%D0%B5%D1%80%D0%BD%D0%B0%D1%98%D0%B7" title="Едвард Бернајз – Serbian" lang="sr" hreflang="sr" data-title="Едвард Бернајз" data-language-autonym="Српски / srpski" data-language-local-name="Serbian" class="interlanguage-link-target"><span>Српски / srpski</span></a></li><li class="interlanguage-link interwiki-sv mw-list-item"><a href="https://sv.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Swedish" lang="sv" hreflang="sv" data-title="Edward Bernays" data-language-autonym="Svenska" data-language-local-name="Swedish" class="interlanguage-link-target"><span>Svenska</span></a></li><li class="interlanguage-link interwiki-tr mw-list-item"><a href="https://tr.wikipedia.org/wiki/Edward_Bernays" title="Edward Bernays – Turkish" lang="tr" hreflang="tr" data-title="Edward Bernays" data-language-autonym="Türkçe" data-language-local-name="Turkish" class="interlanguage-link-target"><span>Türkçe</span></a></li><li class="interlanguage-link interwiki-uk mw-list-item"><a href="https://uk.wikipedia.org/wiki/%D0%95%D0%B4%D0%B2%D0%B0%D1%80%D0%B4_%D0%91%D0%B5%D1%80%D0%BD%D0%B5%D0%B9%D0%B7" title="Едвард Бернейз – Ukrainian" lang="uk" hreflang="uk" data-title="Едвард Бернейз" data-language-autonym="Українська" data-language-local-name="Ukrainian" class="interlanguage-link-target"><span>Українська</span></a></li><li class="interlanguage-link interwiki-zh mw-list-item"><a href="https://zh.wikipedia.org/wiki/%E6%84%9B%E5%BE%B7%E8%8F%AF%C2%B7%E4%BC%AF%E5%85%A7%E6%96%AF" title="愛德華·伯內斯 – Chinese" lang="zh" hreflang="zh" data-title="愛德華·伯內斯" data-language-autonym="中文" data-language-local-name="Chinese" class="interlanguage-link-target"><span>中文</span></a></li>
+			</ul>
+			<div class="after-portlet after-portlet-lang"><span class="wb-langlinks-edit wb-langlinks-link"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q434839#sitelinks-wikipedia" title="Edit interlanguage links" class="wbc-editpage">Edit links</a></span></div>
+		</div>
+
+	</div>
+</div>
+</header>
+				<div class="vector-page-toolbar vector-feature-custom-font-size-clientpref--excluded">
+					<div class="vector-page-toolbar-container">
+						<div id="left-navigation">
+							<nav aria-label="Namespaces">
+								
+<div id="p-associated-pages" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-associated-pages"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/Edward_Bernays" title="View the content page [c]" accesskey="c"><span>Article</span></a></li><li id="ca-talk" class="vector-tab-noicon mw-list-item"><a href="/wiki/Talk:Edward_Bernays" rel="discussion" title="Discuss improvements to the content page [t]" accesskey="t"><span>Talk</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+								
+<div id="vector-variants-dropdown" class="vector-dropdown emptyPortlet"  >
+	<input type="checkbox" id="vector-variants-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-variants-dropdown" class="vector-dropdown-checkbox " aria-label="Change language variant"   >
+	<label id="vector-variants-dropdown-label" for="vector-variants-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">English</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+					
+<div id="p-variants" class="vector-menu mw-portlet mw-portlet-variants emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+						<div id="right-navigation" class="vector-collapsible">
+							<nav aria-label="Views">
+								
+<div id="p-views" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-views"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/Edward_Bernays"><span>Read</span></a></li><li id="ca-edit" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-history" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;action=history" title="Past revisions of this page [h]" accesskey="h"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+							</nav>
+				
+							<nav class="vector-page-tools-landmark" aria-label="Page tools">
+								
+<div id="vector-page-tools-dropdown" class="vector-dropdown vector-page-tools-dropdown"  >
+	<input type="checkbox" id="vector-page-tools-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-tools-dropdown" class="vector-dropdown-checkbox "  aria-label="Tools"  >
+	<label id="vector-page-tools-dropdown-label" for="vector-page-tools-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">Tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+									<div id="vector-page-tools-unpinned-container" class="vector-unpinned-container">
+						
+<div id="vector-page-tools" class="vector-page-tools vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-page-tools-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="page-tools-pinned"
+	data-pinnable-element-id="vector-page-tools"
+	data-pinned-container-id="vector-page-tools-pinned-container"
+	data-unpinned-container-id="vector-page-tools-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Tools</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-page-tools.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-page-tools.unpin">hide</button>
+</div>
+
+	
+<div id="p-cactions" class="vector-menu mw-portlet mw-portlet-cactions emptyPortlet vector-has-collapsible-items"  title="More options" >
+	<div class="vector-menu-heading">
+		Actions
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-more-view" class="selected vector-more-collapsible-item mw-list-item"><a href="/wiki/Edward_Bernays"><span>Read</span></a></li><li id="ca-more-edit" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-more-history" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;action=history"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-tb" class="vector-menu mw-portlet mw-portlet-tb"  >
+	<div class="vector-menu-heading">
+		General
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-whatlinkshere" class="mw-list-item"><a href="/wiki/Special:WhatLinksHere/Edward_Bernays" title="List of all English Wikipedia pages containing links to this page [j]" accesskey="j"><span>What links here</span></a></li><li id="t-recentchangeslinked" class="mw-list-item"><a href="/wiki/Special:RecentChangesLinked/Edward_Bernays" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k"><span>Related changes</span></a></li><li id="t-upload" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [u]" accesskey="u"><span>Upload file</span></a></li><li id="t-permalink" class="mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;oldid=1352301679" title="Permanent link to this revision of this page"><span>Permanent link</span></a></li><li id="t-info" class="mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;action=info" title="More information about this page"><span>Page information</span></a></li><li id="t-cite" class="mw-list-item"><a href="/w/index.php?title=Special:CiteThisPage&amp;page=Edward_Bernays&amp;id=1352301679&amp;wpFormIdentifier=titleform" title="Information on how to cite this page"><span>Cite this page</span></a></li><li id="t-urlshortener" class="mw-list-item"><a href="/w/index.php?title=Special:UrlShortener&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FEdward_Bernays"><span>Get shortened URL</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-coll-print_export" class="vector-menu mw-portlet mw-portlet-coll-print_export"  >
+	<div class="vector-menu-heading">
+		Print/export
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="coll-download-as-rl" class="mw-list-item"><a href="/w/index.php?title=Special:DownloadAsPdf&amp;page=Edward_Bernays&amp;action=show-download-screen" title="Download this page as a PDF file"><span>Download as PDF</span></a></li><li id="t-print" class="mw-list-item"><a href="/w/index.php?title=Edward_Bernays&amp;printable=yes" title="Printable version of this page [p]" accesskey="p"><span>Printable version</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-wikibase-otherprojects" class="vector-menu mw-portlet mw-portlet-wikibase-otherprojects"  >
+	<div class="vector-menu-heading">
+		In other projects
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li class="wb-otherproject-link wb-otherproject-commons mw-list-item"><a href="https://commons.wikimedia.org/wiki/Category:Edward_Bernays" hreflang="en"><span>Wikimedia Commons</span></a></li><li class="wb-otherproject-link wb-otherproject-wikiquote mw-list-item"><a href="https://en.wikiquote.org/wiki/Edward_Bernays" hreflang="en"><span>Wikiquote</span></a></li><li class="wb-otherproject-link wb-otherproject-wikisource mw-list-item"><a href="https://en.wikisource.org/wiki/Author:Edward_Bernays" hreflang="en"><span>Wikisource</span></a></li><li id="t-wikibase" class="wb-otherproject-link wb-otherproject-wikibase-dataitem mw-list-item"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q434839" title="Structured data on this page hosted by Wikidata [g]" accesskey="g"><span>Wikidata item</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+									</div>
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="vector-column-end no-font-mode-scale">
+					<div class="vector-sticky-pinned-container">
+						<div class="wp25eastereggs-vector-sitenotice-landmark"></div>
+						<nav class="vector-page-tools-landmark" aria-label="Page tools">
+							<div id="vector-page-tools-pinned-container" class="vector-pinned-container">
+				
+							</div>
+		</nav>
+						<nav class="vector-appearance-landmark" aria-label="Appearance">
+							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
+
+							</div>
+		</nav>
+					</div>
+				</div>
+				<div id="bodyContent" class="vector-body" aria-labelledby="firstHeading" data-mw-ve-target-container>
+					<div class="vector-body-before-content">
+							<div class="mw-indicators">
+		</div>
+
+						<div id="siteSub" class="noprint">From Wikipedia, the free encyclopedia</div>
+					</div>
+					<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+					
+					
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-subjectpageheader">
+</div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="shortdescription nomobile noexcerpt noprint searchaux" style="display:none">American public relations pioneer (1891–1995)</div>
+<style data-mw-deduplicate="TemplateStyles:r1353403208">.mw-parser-output .infobox-subbox{padding:0;border:none;margin:-3px;width:auto;min-width:100%;font-size:100%;clear:none;float:none;background-color:transparent;color:inherit}.mw-parser-output .infobox-3cols-child{margin:-3px}.mw-parser-output .infobox .navbar{font-size:100%}@media screen{html.skin-theme-clientpref-night .mw-parser-output .infobox-full-data:not(.notheme)>div:not(.notheme)[style]{background:#1f1f23!important;color:#f8f9fa}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .infobox-full-data:not(.notheme)>div:not(.notheme)[style]{background:#1f1f23!important;color:#f8f9fa}}@media(min-width:640px){body.skin--responsive .mw-parser-output .infobox-table{display:table!important}body.skin--responsive .mw-parser-output .infobox-table>caption{display:table-caption!important}body.skin--responsive .mw-parser-output .infobox-table>tbody{display:table-row-group}body.skin--responsive .mw-parser-output .infobox-table th,body.skin--responsive .mw-parser-output .infobox-table td{padding-left:inherit;padding-right:inherit}}</style><table class="infobox biography vcard"><tbody><tr><th colspan="2" class="infobox-above"><div class="fn">Edward L. Bernays</div></th></tr><tr><td colspan="2" class="infobox-image"><span class="mw-default-size" typeof="mw:File/Frameless"><a href="/wiki/File:Edward_Bernays_cropped.png" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/6/61/Edward_Bernays_cropped.png/250px-Edward_Bernays_cropped.png" decoding="async" width="250" height="312" style="--mw-file-upright: 1" class="mw-file-element mw-file-upright" srcset="//upload.wikimedia.org/wikipedia/commons/6/61/Edward_Bernays_cropped.png 2x" data-file-width="403" data-file-height="503" /></a></span><div class="infobox-caption">Bernays in 1917</div></td></tr><tr><th scope="row" class="infobox-label">Born</th><td class="infobox-data"><div style="display:inline" class="nickname">Edward Bernays<sup id="cite&#95;ref-1" class="reference"><a href="#cite_note-1"><span class="cite-bracket">&#91;</span>1<span class="cite-bracket">&#93;</span></a></sup></div><br /><span style="display:none">(<span class="bday">1891-11-22</span>)</span>November 22, 1891<br /><div style="display:inline" class="birthplace"><a href="/wiki/Vienna" title="Vienna">Vienna</a>, <a href="/wiki/Austria-Hungary" title="Austria-Hungary">Austria-Hungary</a></div><span style="display:none" data-plural="1"></span></td></tr><tr><th scope="row" class="infobox-label">Died</th><td class="infobox-data">March 9, 1995<span style="display:none">(1995-03-09)</span> (aged&#160;103)<br /><div style="display:inline" class="deathplace"><a href="/wiki/Cambridge,_Massachusetts" title="Cambridge, Massachusetts">Cambridge, Massachusetts</a>, U.S.</div><span style="display:none" data-plural="1"></span></td></tr><tr><th scope="row" class="infobox-label">Education</th><td class="infobox-data"><a href="/wiki/Cornell_University" title="Cornell University">Cornell University</a> (BS)</td></tr><tr><th scope="row" class="infobox-label">Known&#160;for</th><td class="infobox-data"><style data-mw-deduplicate="TemplateStyles:r1126788409">.mw-parser-output .plainlist ol,.mw-parser-output .plainlist ul{line-height:inherit;list-style:none;margin:0;padding:0}.mw-parser-output .plainlist ol li,.mw-parser-output .plainlist ul li{margin-bottom:0}</style><div class="plainlist">
+<ul><li><a href="/wiki/Public_relations" title="Public relations">Public relations</a> (<a href="/wiki/Public_relations_campaigns_of_Edward_Bernays" title="Public relations campaigns of Edward Bernays">campaigns</a>)</li>
+<li><a href="/wiki/Advertising" title="Advertising">Advertising</a></li>
+<li><b>Books</b></li>
+<li><i><a href="/wiki/Crystallizing_Public_Opinion" title="Crystallizing Public Opinion">Crystallizing Public Opinion</a></i> (1923)</li>
+<li><i><a href="/wiki/Propaganda_(book)" title="Propaganda (book)">Propaganda</a></i> (1928)</li>
+<li><i><a href="/wiki/Public_Relations_(book)" title="Public Relations (book)">Public Relations</a></i> (1945)</li>
+<li><i><a href="/wiki/The_Engineering_of_Consent" title="The Engineering of Consent">The Engineering of Consent</a></i> (1955)</li></ul>
+</div></td></tr><tr><th scope="row" class="infobox-label">Spouse</th><td class="infobox-data"><style data-mw-deduplicate="TemplateStyles:r1298804929">.mw-parser-output .marriage-line-margin2px{line-height:0;margin-bottom:-2px}.mw-parser-output .marriage-line-margin3px{line-height:0;margin-bottom:-3px}.mw-parser-output .marriage-display-inline{display:inline}</style>
+<div class="marriage-display-inline"><div style="display:inline-block;line-height:normal;margin-top:1px;white-space:normal;"><a href="/wiki/Doris_Fleischman" title="Doris Fleischman">Doris Fleischman</a></div>
+   <div class="marriage-line-margin2px">&#8203;</div>&#32;<div style="display:inline-block;margin-bottom:1px;">&#8203;</div>&#40;<abbr title="married">m.</abbr>&#160;1922&#59;&#32;died&#160;<style data-mw-deduplicate="TemplateStyles:r1038841319">.mw-parser-output .tooltip-dotted{border-bottom:1px dotted;cursor:help}</style><span class="rt-commentedText tooltip" title="July 10, 1980">1980</span>&#41;<wbr />&#8203;</div></td></tr><tr><th scope="row" class="infobox-label">Children</th><td class="infobox-data"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" /><div class="plainlist"><ul><li>Doris Held<sup id="cite&#95;ref-nytimes&#95;2-0" class="reference"><a href="#cite_note-nytimes-2"><span class="cite-bracket">&#91;</span>2<span class="cite-bracket">&#93;</span></a></sup></li><li><a href="/wiki/Anne_Bernays" title="Anne Bernays">Anne Bernays</a></li></ul></div></td></tr><tr><th scope="row" class="infobox-label">Parents</th><td class="infobox-data"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" /><div class="plainlist"><ul><li>Ely Bernays (father)</li><li>Anna (Freud) Bernays (mother)</li></ul></div></td></tr><tr><th scope="row" class="infobox-label">Relatives</th><td class="infobox-data"><a href="/wiki/Martha_Bernays" title="Martha Bernays">Martha Bernays</a> (aunt)<br /><a href="/wiki/Sigmund_Freud" title="Sigmund Freud">Sigmund Freud</a> (uncle)<br /><a href="/wiki/Isaac_Bernays" title="Isaac Bernays">Isaac Bernays</a> (great-grandfather)<br /><a href="/wiki/Marc_Randolph" title="Marc Randolph">Marc Randolph</a> (great-nephew)<br /><a href="/wiki/Nicolae_Steinhardt" title="Nicolae Steinhardt">Nicolae Steinhardt</a> (cousin)</td></tr><tr><td colspan="2" class="infobox-full-data"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1353403208" /><b>Scientific career</b></td></tr><tr><th scope="row" class="infobox-label">Fields</th><td class="infobox-data category"><a href="/wiki/Psychology" title="Psychology">Psychology</a>, <a href="/wiki/Sociology" title="Sociology">sociology</a></td></tr><tr style="display:none"><td colspan="2">
+</td></tr><tr><th colspan="2" class="infobox-header">Signature</th></tr><tr><td colspan="2" class="infobox-full-data"><span class="infobox-signature skin-invert" typeof="mw:File"><a href="/wiki/File:Edward_L._Bernays_signature.png" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Edward_L._Bernays_signature.png/250px-Edward_L._Bernays_signature.png" decoding="async" width="150" height="81" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Edward_L._Bernays_signature.png/330px-Edward_L._Bernays_signature.png 2x" data-file-width="1342" data-file-height="726" /></a></span></td></tr></tbody></table>
+<p><b>Edward Louis Bernays</b> (<span class="rt-commentedText nowrap"><span class="IPA nopopups noexcerpt" lang="en-fonipa"><a href="/wiki/Help:IPA/English" title="Help:IPA/English">/<span style="border-bottom:1px dotted"><span title="&#39;b&#39; in &#39;buy&#39;">b</span><span title="/ɜːr/: &#39;ur&#39; in &#39;fur&#39;">ɜːr</span><span title="/ˈ/: primary stress follows">ˈ</span><span title="&#39;n&#39; in &#39;nigh&#39;">n</span><span title="/eɪ/: &#39;a&#39; in &#39;face&#39;">eɪ</span><span title="&#39;z&#39; in &#39;zoom&#39;">z</span></span>/</a></span></span> <a href="/wiki/Help:Pronunciation_respelling_key" title="Help:Pronunciation respelling key"><i title="English pronunciation respelling">bur-<span style="font-size:90%">NAYZ</span></i></a>; <style data-mw-deduplicate="TemplateStyles:r1177148991">.mw-parser-output .IPA-label-small{font-size:85%}.mw-parser-output .references .IPA-label-small,.mw-parser-output .infobox .IPA-label-small,.mw-parser-output .navbox .IPA-label-small{font-size:100%}</style><span class="IPA-label IPA-label-small">Austrian German:</span> <span class="IPA nowrap" lang="de-Latn-AT-fonipa"><a href="/wiki/Help:IPA/Standard_German" title="Help:IPA/Standard German">&#91;bɛrˈnaɪs&#93;</a></span>; November 22, 1891 − March 9, 1995) was an Austrian-American pioneer in the field of <a href="/wiki/Public_relations" title="Public relations">public relations</a> and <a href="/wiki/Propaganda" title="Propaganda">propaganda</a>, referred to in his obituary as "the father of public relations".<sup id="cite&#95;ref-3" class="reference"><a href="#cite_note-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup> While credited with advancing the profession of public relations, his techniques have been criticized for manipulating public opinion, often in ways that undermined individual autonomy and democratic values.<sup id="cite&#95;ref-4" class="reference"><a href="#cite_note-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-5" class="reference"><a href="#cite_note-5"><span class="cite-bracket">&#91;</span>5<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>His best-known campaigns include a 1929 effort to promote female smoking by branding cigarettes as feminist "<a href="/wiki/Torches_of_Freedom" title="Torches of Freedom">Torches of Freedom</a>", and his work for the <a href="/wiki/United_Fruit_Company" title="United Fruit Company">United Fruit Company</a> in the 1950s, connected with the <a href="/wiki/1954_Guatemalan_coup_d%27%C3%A9tat" title="1954 Guatemalan coup d&#39;état">CIA-orchestrated overthrow of the democratically elected Guatemalan government</a> in 1954. Bernays' involvement in Guatemala facilitated <a href="/wiki/U.S._imperialism" class="mw-redirect" title="U.S. imperialism">US imperialism</a> and contributed to <a href="/wiki/Guatemalan_Civil_War" title="Guatemalan Civil War">decades of civil unrest and repression</a>, raising ethical concerns about his role in undermining democratic governance.<sup id="cite&#95;ref-6" class="reference"><a href="#cite_note-6"><span class="cite-bracket">&#91;</span>6<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-7" class="reference"><a href="#cite_note-7"><span class="cite-bracket">&#91;</span>7<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>He worked for dozens of major American corporations, including <a href="/wiki/Procter_%26_Gamble" title="Procter &amp; Gamble">Procter &amp; Gamble</a> and <a href="/wiki/General_Electric" title="General Electric">General Electric</a>, and for government agencies, politicians, and non-profit organizations.
+</p><p>Of his many books, <i><a href="/wiki/Crystallizing_Public_Opinion" title="Crystallizing Public Opinion">Crystallizing Public Opinion</a></i> (1923) and <i><a href="/wiki/Propaganda_(book)" title="Propaganda (book)">Propaganda</a></i> (1928) gained special attention as early efforts to define and theorize the field of public relations. Citing works of writers such as <a href="/wiki/Gustave_Le_Bon" title="Gustave Le Bon">Gustave Le Bon</a>, <a href="/wiki/Wilfred_Trotter" title="Wilfred Trotter">Wilfred Trotter</a>, <a href="/wiki/Walter_Lippmann" title="Walter Lippmann">Walter Lippmann</a>, and <a href="/wiki/Sigmund_Freud" title="Sigmund Freud">Sigmund Freud</a> (his own <a href="https://en.wiktionary.org/wiki/double_uncle" class="extiw" title="wikt:double uncle">double uncle</a>), he described <a href="/wiki/Mass_society" title="Mass society">the masses</a> as irrational and subject to <a href="/wiki/Herd_instinct" class="mw-redirect" title="Herd instinct">herd instinct</a>—and he outlined how skilled practitioners could use <a href="/wiki/Crowd_psychology" title="Crowd psychology">crowd psychology</a> and <a href="/wiki/Psychoanalysis" title="Psychoanalysis">psychoanalysis</a> to control them in desired ways.<sup id="cite&#95;ref-8" class="reference"><a href="#cite_note-8"><span class="cite-bracket">&#91;</span>8<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-9" class="reference"><a href="#cite_note-9"><span class="cite-bracket">&#91;</span>9<span class="cite-bracket">&#93;</span></a></sup>  Bernays later synthesized many of these ideas in his post-war book, <i><a href="/wiki/Public_Relations_(book)" title="Public Relations (book)">Public Relations</a></i> (1945), which outlines the science of managing information released to the public by an organization, in a manner most advantageous to the organization.  He does this by first providing an overview of the history of public relations, and then provides insight into its application.
+</p><p>Bernays was named one of the 100 most influential Americans of the twentieth century by <a href="/wiki/Life_(magazine)" title="Life (magazine)"><i>Life</i></a>.<sup id="cite&#95;ref-10" class="reference"><a href="#cite_note-10"><span class="cite-bracket">&#91;</span>10<span class="cite-bracket">&#93;</span></a></sup> His work has been linked to the rise of modern propaganda techniques that some argue have eroded democratic engagement and suppressed dissent.<sup id="cite&#95;ref-11" class="reference"><a href="#cite_note-11"><span class="cite-bracket">&#91;</span>11<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-12" class="reference"><a href="#cite_note-12"><span class="cite-bracket">&#91;</span>12<span class="cite-bracket">&#93;</span></a></sup> He was the subject of a full-length biography by <a href="/wiki/Larry_Tye" title="Larry Tye">Larry Tye</a> entitled <i>The Father of Spin</i> (1999) and later an award-winning 2002 documentary for the <a href="/wiki/BBC" title="BBC">BBC</a> by <a href="/wiki/Adam_Curtis" title="Adam Curtis">Adam Curtis</a> entitled <i><a href="/wiki/The_Century_of_the_Self" title="The Century of the Self">The Century of the Self</a></i>.
+</p>
+<meta property="mw:PageProp/toc" />
+<div class="mw-heading mw-heading2"><h2 id="Family_and_education">Family and education</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=1" title="Edit section: Family and education"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Edward Bernays was born in Vienna to a Jewish family.<sup id="cite&#95;ref-13" class="reference"><a href="#cite_note-13"><span class="cite-bracket">&#91;</span>13<span class="cite-bracket">&#93;</span></a></sup> His mother, Anna (1858–1955), was <a href="/wiki/Sigmund_Freud" title="Sigmund Freud">Sigmund Freud</a>'s sister, and his father Eli (1860–1921) was the brother of Freud's wife, Martha Bernays; their grandfather, <a href="/wiki/Isaac_Bernays" title="Isaac Bernays">Isaac Bernays</a> (through their father <a href="/wiki/Bernays_family" title="Bernays family">Berman</a>), was the <a href="/wiki/Chief_rabbi" class="mw-redirect" title="Chief rabbi">chief rabbi</a> of Hamburg and a relative of the poet <a href="/wiki/Heinrich_Heine" title="Heinrich Heine">Heinrich Heine</a>.<sup id="cite&#95;ref-14" class="reference"><a href="#cite_note-14"><span class="cite-bracket">&#91;</span>14<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-15" class="reference"><a href="#cite_note-15"><span class="cite-bracket">&#91;</span>15<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The Bernays family moved from Vienna to the United States in the 1890s. After Eli Bernays started working as a grain exporter at the Manhattan Produce Exchange, he sent for his wife and children.<sup id="cite&#95;ref-FOOTNOTETye1998115&#95;16-0" class="reference"><a href="#cite_note-FOOTNOTETye1998115-16"><span class="cite-bracket">&#91;</span>16<span class="cite-bracket">&#93;</span></a></sup> In 1892, his family moved to New York City, where Bernays attended <a href="/wiki/DeWitt_Clinton_High_School" title="DeWitt Clinton High School">DeWitt Clinton High School</a>.<sup id="cite&#95;ref-Colford&#95;Birthday&#95;Salute&#95;17-0" class="reference"><a href="#cite_note-Colford_Birthday_Salute-17"><span class="cite-bracket">&#91;</span>17<span class="cite-bracket">&#93;</span></a></sup> In 1912 he graduated from <a href="/wiki/Cornell_University" title="Cornell University">Cornell University</a> with a degree in agriculture, but chose journalism as his first career.<sup id="cite&#95;ref-FOOTNOTETye19984–5&#95;18-0" class="reference"><a href="#cite_note-FOOTNOTETye19984–5-18"><span class="cite-bracket">&#91;</span>18<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>He married <a href="/wiki/Doris_E._Fleischman" class="mw-redirect" title="Doris E. Fleischman">Doris E. Fleischman</a> in 1922.<sup id="cite&#95;ref-nytobit&#95;19-0" class="reference"><a href="#cite_note-nytobit-19"><span class="cite-bracket">&#91;</span>19<span class="cite-bracket">&#93;</span></a></sup> Fleischman was a member of the <a href="/wiki/Lucy_Stone_League" title="Lucy Stone League">Lucy Stone League</a>, a group which encouraged women to keep their names after marriage.<sup id="cite&#95;ref-20" class="reference"><a href="#cite_note-20"><span class="cite-bracket">&#91;</span>20<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Later, however, she changed her mind and her name, becoming Doris Bernays. By all accounts, Fleischman played a major though quiet role in the Bernays public relations business—including ghost-writing numerous memos and speeches, and publishing a newsletter.<sup id="cite&#95;ref-tye&#95;21-0" class="reference"><a href="#cite_note-tye-21"><span class="cite-bracket">&#91;</span>21<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Career">Career</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=2" title="Edit section: Career"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>After graduating from Cornell, Bernays wrote for the <i>National Nurseryman</i> journal. Then he worked at the New York City Produce Exchange, where his father was a grain exporter. He went to Paris and worked for <a href="/wiki/Louis_Dreyfus_Company" title="Louis Dreyfus Company">Louis Dreyfus and Company</a>, reading grain cables. By December 1912, he had returned to New York.<sup id="cite&#95;ref-FOOTNOTETye19984–5&#95;18-1" class="reference"><a href="#cite_note-FOOTNOTETye19984–5-18"><span class="cite-bracket">&#91;</span>18<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Medical_editor">Medical editor</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=3" title="Edit section: Medical editor"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Following a meeting in New York with school friend Fred Robinson, Bernays became co-editor of <i>Medical Review of Reviews</i> and <i>Dietetic and Hygienic Gazette</i> in 1912. They took editorial positions in favor of showers and against corsets, and distributed free copies to thousands of physicians across the country.<sup id="cite&#95;ref-22" class="reference"><a href="#cite_note-22"><span class="cite-bracket">&#91;</span>22<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Two months later they took up the cause of <i><a href="/wiki/Damaged_Goods_(play)" class="mw-redirect" title="Damaged Goods (play)">Damaged Goods</a></i>, an English translation of <i>Les Avariés</i> by <a href="/wiki/Eug%C3%A8ne_Brieux" title="Eugène Brieux">Eugène Brieux</a>. After publishing a positive review of the play, Bernays and Robinson wrote to its lead actor, <a href="/wiki/Richard_Bennett_(actor)" title="Richard Bennett (actor)">Richard Bennett</a>: "The editors of the <i>Medical Review of Reviews</i> support your praiseworthy intention to fight sex-pruriency in the United States by producing Brieux's play <i>Damaged Goods</i>. You can count on our help."<sup id="cite&#95;ref-23" class="reference"><a href="#cite_note-23"><span class="cite-bracket">&#91;</span>23<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The play controversially dealt with <a href="/wiki/Venereal_disease" class="mw-redirect" title="Venereal disease">venereal disease</a> and prostitution—Bernays called it "a propaganda play that fought for <a href="/wiki/Sex_education" title="Sex education">sex education</a>."<sup id="cite&#95;ref-FOOTNOTERamptonStauber200144&#95;24-0" class="reference"><a href="#cite_note-FOOTNOTERamptonStauber200144-24"><span class="cite-bracket">&#91;</span>24<span class="cite-bracket">&#93;</span></a></sup> He created the "<i>Medical Review of Reviews</i> Sociological Fund Committee" and successfully solicited the support of such elite figures as <a href="/wiki/John_D._Rockefeller_Jr." title="John D. Rockefeller Jr.">John D. Rockefeller Jr.</a>, <a href="/wiki/Franklin_Delano_Roosevelt" class="mw-redirect" title="Franklin Delano Roosevelt">Franklin Delano Roosevelt</a> and <a href="/wiki/Eleanor_Roosevelt" title="Eleanor Roosevelt">Eleanor Roosevelt</a>, Reverend <a href="/wiki/John_Haynes_Holmes" title="John Haynes Holmes">John Haynes Holmes</a>, and Anne Harriman Sands Rutherford Vanderbilt, wife of <a href="/wiki/William_Kissam_Vanderbilt" title="William Kissam Vanderbilt">William Kissam Vanderbilt</a>.<sup id="cite&#95;ref-25" class="reference"><a href="#cite_note-25"><span class="cite-bracket">&#91;</span>25<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-FOOTNOTECutlip1994162&#95;26-0" class="reference"><a href="#cite_note-FOOTNOTECutlip1994162-26"><span class="cite-bracket">&#91;</span>26<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Press_agent">Press agent</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=4" title="Edit section: Press agent"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>After his foray into the world of theater, Bernays worked as a creative <a href="/wiki/Press_agent" class="mw-redirect" title="Press agent">press agent</a> for various performers and performances. Already, he was using a variety of techniques that would become hallmarks of his later practice. He promoted the <i><a href="/wiki/Daddy-Long-Legs_(novel)" title="Daddy-Long-Legs (novel)">Daddy Long Legs</a></i> stage play by tying it in with the cause of charity for orphans. To create interest in <a href="/wiki/Sergei_Diaghilev" title="Sergei Diaghilev">Sergei Diaghilev</a>'s <a href="/wiki/Ballets_Russes" title="Ballets Russes">Ballets Russes</a>, he educated Americans about the subtleties of ballet—and publicized a picture of <a href="/wiki/Flore_Revalles" title="Flore Revalles">Flore Revalles</a>, wearing a tight-fitting dress, at the Bronx Zoo, posed with a large snake. He built up opera singer <a href="/wiki/Enrico_Caruso" title="Enrico Caruso">Enrico Caruso</a> as an idol whose voice was so sensitive that comically extreme measures were taken to protect it.<sup id="cite&#95;ref-FOOTNOTETye19989–16&#95;27-0" class="reference"><a href="#cite_note-FOOTNOTETye19989–16-27"><span class="cite-bracket">&#91;</span>27<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="World_War_I">World War I</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=5" title="Edit section: World War I"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>After the US entered the war, the <a href="/wiki/Committee_on_Public_Information" title="Committee on Public Information">Committee on Public Information</a> (CPI) hired Bernays to work for its Bureau of Latin-American Affairs, based in an office in New York. Bernays, along with Lieutenant F. E. Ackerman, focused on building support for war, domestically and abroad, focusing especially on businesses operating in Latin America.<sup id="cite&#95;ref-28" class="reference"><a href="#cite_note-28"><span class="cite-bracket">&#91;</span>28<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-29" class="reference"><a href="#cite_note-29"><span class="cite-bracket">&#91;</span>29<span class="cite-bracket">&#93;</span></a></sup> Bernays referred to this work as "<a href="/wiki/Psychological_warfare" title="Psychological warfare">psychological warfare</a>".<sup id="cite&#95;ref-30" class="reference"><a href="#cite_note-30"><span class="cite-bracket">&#91;</span>30<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-31" class="reference"><a href="#cite_note-31"><span class="cite-bracket">&#91;</span>31<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>After fighting ended, Bernays was part of a sixteen-person publicity group working for the CPI at the <a href="/wiki/Paris_Peace_Conference,_1919" class="mw-redirect" title="Paris Peace Conference, 1919">Paris Peace Conference</a>. A scandal arose from his reference to propaganda in a press release. As reported by the <i>New York World</i>, the "announced object of the expedition is 'to interpret the work of the Peace Conference by keeping up a worldwide propaganda to disseminate American accomplishments and ideals.'"<sup id="cite&#95;ref-FOOTNOTETye199819&#95;32-0" class="reference"><a href="#cite_note-FOOTNOTETye199819-32"><span class="cite-bracket">&#91;</span>32<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-33" class="reference"><a href="#cite_note-33"><span class="cite-bracket">&#91;</span>33<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays later described a realization that his work for the CPI could also be used in peacetime:
+</p>
+<style data-mw-deduplicate="TemplateStyles:r1244412712">.mw-parser-output .templatequote{overflow:hidden;margin:1em 0;padding:0 32px}.mw-parser-output .templatequotecite{line-height:1.5em;text-align:left;margin-top:0}@media(min-width:500px){.mw-parser-output .templatequotecite{padding-left:1.6em}}</style><blockquote class="templatequote"><p>There was one basic lesson I learned in the CPI—that efforts comparable to those applied by the CPI to affect the attitudes of the enemy, of neutrals, and people of this country could be applied with equal facility to peacetime pursuits. In other words, what could be done for a nation at war could be done for organizations and people in a nation at peace.<sup id="cite&#95;ref-FOOTNOTECutlip1994168&#95;34-0" class="reference"><a href="#cite_note-FOOTNOTECutlip1994168-34"><span class="cite-bracket">&#91;</span>34<span class="cite-bracket">&#93;</span></a></sup></p></blockquote>
+<div class="mw-heading mw-heading3"><h3 id="Counsel_on_public_relations">Counsel on public relations</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=6" title="Edit section: Counsel on public relations"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Bernays, who pursued his calling in New York City from 1919 to 1963, styled himself a "public relations counsel". He had very pronounced views on the differences between what he did and what people in <a href="/wiki/Advertising" title="Advertising">advertising</a> did. A pivotal figure in the orchestration of elaborate corporate advertising campaigns and multi-media consumer spectacles, he is among those listed in the acknowledgments section of the seminal government social science study <i>Recent Social Trends in the United States</i> (1933).<sup id="cite&#95;ref-35" class="reference"><a href="#cite_note-35"><span class="cite-bracket">&#91;</span>35<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Notable_clients_and_campaigns">Notable clients and campaigns</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=7" title="Edit section: Notable clients and campaigns"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1320445320">.mw-parser-output .hatnote{font-style:italic}.mw-parser-output div.hatnote{padding-left:1.6em;margin-bottom:0.5em}.mw-parser-output .hatnote i{font-style:normal}.mw-parser-output .hatnote+link+.hatnote{margin-top:-0.5em}@media print{body.ns-0 .mw-parser-output .hatnote{display:none!important}}</style><div role="note" class="hatnote navigation-not-searchable">Further information: <a href="/wiki/Public_relations_campaigns_of_Edward_Bernays" title="Public relations campaigns of Edward Bernays">Public relations campaigns of Edward Bernays</a></div>
+<p>Bernays used ideas of his uncle <a href="/wiki/Sigmund_Freud" title="Sigmund Freud">Sigmund Freud</a> to help convince the public, among other things, that bacon and eggs was the true all-American breakfast.<sup id="cite&#95;ref-36" class="reference"><a href="#cite_note-36"><span class="cite-bracket">&#91;</span>36<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>In the 1930s, his <a href="/wiki/Dixie_Cup" class="mw-redirect" title="Dixie Cup">Dixie Cup</a> campaign was designed to convince American consumers that only <a href="/wiki/Disposable_cup" title="Disposable cup">disposable cups</a> were sanitary, by linking the imagery of an overflowing cup with subliminal images of genitalia and <a href="/wiki/Venereal_disease" class="mw-redirect" title="Venereal disease">venereal disease</a>.<sup id="cite&#95;ref-Alan&#95;Bilton&#95;2013&#95;16&#95;37-0" class="reference"><a href="#cite_note-Alan_Bilton_2013_16-37"><span class="cite-bracket">&#91;</span>37<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>He was publicity director for the <a href="/wiki/1939_New_York_World%27s_Fair" title="1939 New York World&#39;s Fair">1939 New York World's Fair</a>.<sup id="cite&#95;ref-38" class="reference"><a href="#cite_note-38"><span class="cite-bracket">&#91;</span>38<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Light's_Golden_Jubilee"><span id="Light.27s_Golden_Jubilee"></span>Light's Golden Jubilee</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=8" title="Edit section: Light&#039;s Golden Jubilee"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1320445320" /><div role="note" class="hatnote navigation-not-searchable">Main article: <a href="/wiki/Light%27s_Golden_Jubilee" title="Light&#39;s Golden Jubilee">Light's Golden Jubilee</a></div>
+<div class="mw-heading mw-heading3"><h3 id="Political_clients">Political clients</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=9" title="Edit section: Political clients"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>In 1924 Bernays set up a vaudeville "pancake breakfast" for <a href="/wiki/Calvin_Coolidge" title="Calvin Coolidge">Calvin Coolidge</a> to change his stuffy image prior to the <a href="/wiki/1924_United_States_presidential_election" title="1924 United States presidential election">1924 election</a>. Entertainers including <a href="/wiki/Al_Jolson" title="Al Jolson">Al Jolson</a>, <a href="/wiki/Raymond_Hitchcock_(actor)" title="Raymond Hitchcock (actor)">Raymond Hitchcock</a>, and the <a href="/wiki/Dolly_Sisters" title="Dolly Sisters">Dolly Sisters</a> performed on the White House lawn. The event was widely reported by American newspapers, with <i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i> running the story under the headline "President Nearly Laughs".<sup id="cite&#95;ref-39" class="reference"><a href="#cite_note-39"><span class="cite-bracket">&#91;</span>39<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>A desperate <a href="/wiki/Herbert_Hoover" title="Herbert Hoover">Herbert Hoover</a> consulted with Bernays a month before the <a href="/wiki/1932_United_States_presidential_election" title="1932 United States presidential election">1932 presidential election</a>. Bernays advised Hoover to create disunity within his opposition and to present an image of him as an invincible leader.<sup id="cite&#95;ref-FOOTNOTETye199879–80&#95;40-0" class="reference"><a href="#cite_note-FOOTNOTETye199879–80-40"><span class="cite-bracket">&#91;</span>40<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays advised <a href="/wiki/William_O%27Dwyer" title="William O&#39;Dwyer">William O'Dwyer</a>, in his candidacy for mayor of New York City, on how to appear in front of different demographics. For example, he should tell Irish voters about his actions against the <a href="/wiki/Italian_mafia" class="mw-redirect" title="Italian mafia">Italian mafia</a>—and Italian voters about his plans to reform the <a href="/wiki/New_York_Police_Department" class="mw-redirect" title="New York Police Department">police department</a>. To Jews he should appear as a committed opponent of the Nazis.<sup id="cite&#95;ref-FOOTNOTETye199881–83&#95;41-0" class="reference"><a href="#cite_note-FOOTNOTETye199881–83-41"><span class="cite-bracket">&#91;</span>41<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>He helped to name the <a href="/wiki/President%27s_Emergency_Committee_for_Employment" class="mw-redirect" title="President&#39;s Emergency Committee for Employment">President's Emergency Committee for Employment</a>, suggesting this name as preferable to the "Committee for Unemployment".<sup id="cite&#95;ref-FOOTNOTETye199884–85&#95;42-0" class="reference"><a href="#cite_note-FOOTNOTETye199884–85-42"><span class="cite-bracket">&#91;</span>42<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>During <a href="/wiki/World_War_II" title="World War II">World War II</a>, Bernays advised the <a href="/wiki/Office_of_War_Information" class="mw-redirect" title="Office of War Information">Office of War Information</a>, as well as the <a href="/wiki/United_States_Army" title="United States Army">Army</a> and <a href="/wiki/United_States_Navy" title="United States Navy">Navy</a>. He was chairman of the National Advisory Committee of the Third U.S. War Loan, co-chairman of the Victory Book campaign, and part of the New York State Defense Council.  During the <a href="/wiki/Cold_War" title="Cold War">Cold War</a> he advised the <a href="/wiki/United_States_Information_Agency" title="United States Information Agency">United States Information Agency</a>.<sup id="cite&#95;ref-FOOTNOTETye199884–85&#95;42-1" class="reference"><a href="#cite_note-FOOTNOTETye199884–85-42"><span class="cite-bracket">&#91;</span>42<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays reported turning down the <a href="/wiki/Nazi" class="mw-redirect" title="Nazi">Nazis</a>, <a href="/wiki/Nicaragua" title="Nicaragua">Nicaragua</a> under the <a href="/wiki/Somoza_family" title="Somoza family">Somoza family</a>, <a href="/wiki/Francisco_Franco" title="Francisco Franco">Francisco Franco</a>, and <a href="/wiki/Richard_Nixon" title="Richard Nixon">Richard Nixon</a> as clients.<sup id="cite&#95;ref-FOOTNOTETye199889&#95;43-0" class="reference"><a href="#cite_note-FOOTNOTETye199889-43"><span class="cite-bracket">&#91;</span>43<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Non-profit_clients">Non-profit clients</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=10" title="Edit section: Non-profit clients"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Bernays also worked on behalf of many non-profit institutions and organizations. These included, to name just a few, the <a href="/w/index.php?title=Committee_on_Publicity_Methods_in_Social_Work&amp;action=edit&amp;redlink=1" class="new" title="Committee on Publicity Methods in Social Work (page does not exist)">Committee on Publicity Methods in Social Work</a> (1926–1927), the <a href="/w/index.php?title=Jewish_Mental_Health_Society&amp;action=edit&amp;redlink=1" class="new" title="Jewish Mental Health Society (page does not exist)">Jewish Mental Health Society</a> (1928), the <a href="/w/index.php?title=Book_Publishers_Research_Institute&amp;action=edit&amp;redlink=1" class="new" title="Book Publishers Research Institute (page does not exist)">Book Publishers Research Institute</a> (1930–1931), the <a href="/wiki/New_York_Infirmary_for_Women_and_Children" class="mw-redirect" title="New York Infirmary for Women and Children">New York Infirmary for Women and Children</a> (1933), the <a href="/w/index.php?title=Committee_for_Consumer_Legislation&amp;action=edit&amp;redlink=1" class="new" title="Committee for Consumer Legislation (page does not exist)">Committee for Consumer Legislation</a> (1934), and the <a href="/w/index.php?title=Friends_of_Danish_Freedom_and_Democracy&amp;action=edit&amp;redlink=1" class="new" title="Friends of Danish Freedom and Democracy (page does not exist)">Friends of Danish Freedom and Democracy</a> (1940).<sup id="cite&#95;ref-44" class="reference"><a href="#cite_note-44"><span class="cite-bracket">&#91;</span>44<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-Hasselriis1959&#95;45-0" class="reference"><a href="#cite_note-Hasselriis1959-45"><span class="cite-bracket">&#91;</span>45<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-JensenJensen2003&#95;46-0" class="reference"><a href="#cite_note-JensenJensen2003-46"><span class="cite-bracket">&#91;</span>46<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Freud">Freud</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=11" title="Edit section: Freud"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>In 1920, Bernays organized the publication of Freud's <i><a href="/wiki/Introductory_Lectures_on_Psychoanalysis" class="mw-redirect" title="Introductory Lectures on Psychoanalysis">Introductory Lectures on Psychoanalysis</a></i> in the U.S., sending royalty money to his uncle in Vienna. Freud turned down further offers at promotion, such as a possible lecture tour and an invitation to write 3,000-word newspaper columns, for $1,000 each, on topics such as "The Wife's Mental Place in the Home" and "What a Child Thinks About."<sup id="cite&#95;ref-FOOTNOTETye1998185–190&#95;47-0" class="reference"><a href="#cite_note-FOOTNOTETye1998185–190-47"><span class="cite-bracket">&#91;</span>47<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Tobacco">Tobacco</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=12" title="Edit section: Tobacco"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>In 1927, Bernays worked briefly for <a href="/wiki/Liggett_Group" title="Liggett Group">Liggett and Myers</a>, makers of <a href="/wiki/Chesterfield_(cigarette)" title="Chesterfield (cigarette)">Chesterfield</a> cigarettes. He pulled a stunt against the competing brand, <a href="/wiki/Lucky_Strike" title="Lucky Strike">Lucky Strike</a>, which involved mocking the endorsements of opera singers who said Lucky Strikes were "kind to your voice". <a href="/wiki/George_Washington_Hill" title="George Washington Hill">George Washington Hill</a>, head of the <a href="/wiki/American_Tobacco_Company" title="American Tobacco Company">American Tobacco Company</a>, which made Lucky Strike, promptly hired Bernays away from Liggett and Myers.<sup id="cite&#95;ref-FOOTNOTETye199835–36&#95;48-0" class="reference"><a href="#cite_note-FOOTNOTETye199835–36-48"><span class="cite-bracket">&#91;</span>48<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<figure class="mw-default-size" typeof="mw:File/Thumb"><a href="/wiki/File:LUCKY_STRIKE,_GIRL_IN_RED.jpg" class="mw-file-description"><img src="//upload.wikimedia.org/wikipedia/commons/thumb/2/21/LUCKY_STRIKE%2C_GIRL_IN_RED.jpg/250px-LUCKY_STRIKE%2C_GIRL_IN_RED.jpg" decoding="async" width="250" height="315" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/2/21/LUCKY_STRIKE%2C_GIRL_IN_RED.jpg/500px-LUCKY_STRIKE%2C_GIRL_IN_RED.jpg 2x" data-file-width="1054" data-file-height="1328" /></a><figcaption>"Girl in Red" advertisement for Lucky Strike; shot by <a href="/wiki/Nickolas_Muray" title="Nickolas Muray">Nickolas Muray</a>, a photographer enlisted by Bernays to help popularize feminine thinness and cigarette smoking <sup id="cite&#95;ref-Tye23-26&#95;49-0" class="reference"><a href="#cite_note-Tye23-26-49"><span class="cite-bracket">&#91;</span>49<span class="cite-bracket">&#93;</span></a></sup></figcaption></figure>
+<p>When he started working for American Tobacco Company, Bernays was given the objective of increasing Lucky Strike sales among women, who, for the most part, had formerly avoided smoking. The first strategy was to persuade women to smoke cigarettes instead of eating. Bernays began by promoting the <a href="/wiki/The_Thin_Ideal" class="mw-redirect" title="The Thin Ideal">ideal of thinness</a> itself, using photographers, artists, newspapers, and magazines to promote the special beauty of thin women. Medical authorities were found to promote the choice of cigarettes over sweets. Home-makers were cautioned that keeping cigarettes on hand was a social necessity.<sup id="cite&#95;ref-Tye23-26&#95;49-1" class="reference"><a href="#cite_note-Tye23-26-49"><span class="cite-bracket">&#91;</span>49<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading4"><h4 id="Torches_of_Freedom">Torches of Freedom</h4><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=13" title="Edit section: Torches of Freedom"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1320445320" /><div role="note" class="hatnote navigation-not-searchable">Main article: <a href="/wiki/Torches_of_Freedom" title="Torches of Freedom">Torches of Freedom</a></div>
+<p>The first campaign succeeded; women smoked more cigarettes; American Tobacco Company brought in more revenue; and Lucky Strike led the market in growth. But a taboo remained on women smoking in public. Bernays consulted with psychoanalyst <a href="/wiki/Abraham_Brill" title="Abraham Brill">Abraham Brill</a>, a student of Freud's, who reported to him that cigarettes represented "torches of freedom" for women whose feminine desires were increasingly suppressed by their role in the modern world.<sup id="cite&#95;ref-50" class="reference"><a href="#cite_note-50"><span class="cite-bracket">&#91;</span>50<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays wrote:<sup id="cite&#95;ref-FOOTNOTETye199829&#95;51-0" class="reference"><a href="#cite_note-FOOTNOTETye199829-51"><span class="cite-bracket">&#91;</span>51<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>Because it should appear as news with no division of the publicity, actresses should be definitely out. On the other hand, if young women who stand for feminism—someone from the Women's Party, say—could be secured, the fact that the movement would be advertised too, would not be bad. . . While they should be goodlooking, they should not be too 'model-y.' Three for each church covered should be sufficient. Of course they are not to smoke simply as they come down the church steps. They are to join in the Easter parade, puffing away.</p></blockquote>
+<p>The march went as planned, as did the ensuing publicity, with ripples of women smoking prominently across the country.<sup id="cite&#95;ref-52" class="reference"><a href="#cite_note-52"><span class="cite-bracket">&#91;</span>52<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-53" class="reference"><a href="#cite_note-53"><span class="cite-bracket">&#91;</span>53<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading4"><h4 id="Green_Ball">Green Ball</h4><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=14" title="Edit section: Green Ball"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>In 1934, Bernays was asked to deal with women's apparent reluctance to buy Lucky Strikes because their green and red package clashed with standard female fashions. When Bernays suggested changing the package to a neutral color, Hill refused, saying that he had already spent millions advertising the package. Bernays then worked to make green a fashionable color.<sup id="cite&#95;ref-FOOTNOTETye199838&#95;54-0" class="reference"><a href="#cite_note-FOOTNOTETye199838-54"><span class="cite-bracket">&#91;</span>54<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>The centerpiece of his efforts was the Green Ball, a social event at the <a href="/wiki/Waldorf_Astoria" class="mw-redirect" title="Waldorf Astoria">Waldorf Astoria</a>, hosted by <a href="/wiki/Narcissa_Cox_Vanderlip" title="Narcissa Cox Vanderlip">Narcissa Cox Vanderlip</a>. The pretext for the ball and its unnamed underwriter was that proceeds would go to charity. Famous society women would attend wearing green dresses. Manufacturers and retailers of clothing and accessories were advised of the excitement growing around the color green. Intellectuals were enlisted to give highbrow talks on the theme of green. Before the ball had taken place, newspapers and magazines (encouraged in various ways by Bernays's office) had latched on to the idea that green was all the rage.<sup id="cite&#95;ref-55" class="reference"><a href="#cite_note-55"><span class="cite-bracket">&#91;</span>55<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading4"><h4 id="Modus_operandi">Modus operandi</h4><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=15" title="Edit section: Modus operandi"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Throughout the job, Bernays concealed the fact that he was working for the American Tobacco Company, and succeeded in keeping his own name out of the affair as well. Staff were instructed never to mention his name. Third parties were used, and various notable people received payments to promote smoking publicly as if on their own initiative.<sup id="cite&#95;ref-56" class="reference"><a href="#cite_note-56"><span class="cite-bracket">&#91;</span>56<span class="cite-bracket">&#93;</span></a></sup> Decades later, however, Bernays boasted about his role.<sup id="cite&#95;ref-57" class="reference"><a href="#cite_note-57"><span class="cite-bracket">&#91;</span>57<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays did not smoke cigarettes himself, and persistently tried to induce his wife Doris to quit.<sup id="cite&#95;ref-58" class="reference"><a href="#cite_note-58"><span class="cite-bracket">&#91;</span>58<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="United_Fruit_and_Guatemala">United Fruit and Guatemala</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=16" title="Edit section: United Fruit and Guatemala"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1320445320" /><div role="note" class="hatnote navigation-not-searchable">See also: <a href="/wiki/1954_Guatemalan_coup_d%27%C3%A9tat" title="1954 Guatemalan coup d&#39;état">1954 Guatemalan coup d'état</a></div>
+<p>The <a href="/wiki/United_Fruit_Company" title="United Fruit Company">United Fruit Company</a> (<a href="/wiki/Chiquita_Brands_International" class="mw-redirect" title="Chiquita Brands International">Chiquita</a>) hired Bernays in the early 1940s for the purpose of promoting banana sales within the United States, which he did by linking bananas to good health and to American interests and by placing them strategically in the hands of celebrities, in hotels, and other conspicuous places. Bernays also argued that United Fruit needed to put a <a href="/wiki/Spin_(public_relations)" class="mw-redirect" title="Spin (public relations)">positive spin</a> on the banana-growing countries themselves, and for this purpose created a front group called the Middle America Information Bureau, which supplied information to journalists and academics.<sup id="cite&#95;ref-59" class="reference"><a href="#cite_note-59"><span class="cite-bracket">&#91;</span>59<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>United Fruit shut down the Middle America Information Bureau in 1948 under the new presidency of <a href="/wiki/Thomas_Dudley_Cabot" title="Thomas Dudley Cabot">Thomas Dudley Cabot</a>. Bernays resented this change but stayed on with the company, for a reported annual fee of more than $100,000<sup id="cite&#95;ref-60" class="reference"><a href="#cite_note-60"><span class="cite-bracket">&#91;</span>60<span class="cite-bracket">&#93;</span></a></sup> (equivalent to nearly $1.27 million in 2023).<sup id="cite&#95;ref-61" class="reference"><a href="#cite_note-61"><span class="cite-bracket">&#91;</span>61<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>In 1952, Guatemala' s democratically elected President <a href="/wiki/Jacobo_Arbenz" class="mw-redirect" title="Jacobo Arbenz">Jacobo Arbenz</a> seized 40% of United Fruit's Guatemalan land holdings. United Fruit engaged Bernays, who worked on the national press and successfully drummed up coverage of Guatemala's 'Communist menace'.<sup id="cite&#95;ref-Immerman&#95;62-0" class="reference"><a href="#cite_note-Immerman-62"><span class="cite-bracket">&#91;</span>62<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-63" class="reference"><a href="#cite_note-63"><span class="cite-bracket">&#91;</span>63<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>He recommended a campaign in which universities, lawyers, and the U.S. government would all condemn expropriation as immoral and illegal; the company should use media pressure "to induce the President and State Department to issue a policy pronouncement comparable to the Monroe Doctrine concerning expropriation." In the following months, <i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i>, the <i><a href="/wiki/New_York_Herald_Tribune" title="New York Herald Tribune">New York Herald Tribune</a></i>, <i><a href="/wiki/Time_(magazine)" title="Time (magazine)">Time</a></i>, <i><a href="/wiki/Newsweek" title="Newsweek">Newsweek</a></i>, and the <i><a href="/wiki/Atlantic_Monthly" class="mw-redirect" title="Atlantic Monthly">Atlantic Monthly</a></i> had all published articles describing the threat of Communism in Guatemala. A Bernays memo in July 1951 recommended that this wave of media attention should be translated into action by promoting:
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>(a) a change in present U.S. ambassadorial and consular representation, (b) the imposition of congressional sanctions in this country against government aid to pro-Communist regimes, (c) U.S. government subsidizing of research by disinterested groups like the Brookings Institution into various phases of the problem.<sup id="cite&#95;ref-FOOTNOTETye1998167–170&#95;64-0" class="reference"><a href="#cite_note-FOOTNOTETye1998167–170-64"><span class="cite-bracket">&#91;</span>64<span class="cite-bracket">&#93;</span></a></sup></p></blockquote>
+<p>Per Bernays's strategy, United Fruit distributed favorable articles and an anonymous <i>Report on Guatemala</i> to every member of Congress and to national "opinion molders".<sup id="cite&#95;ref-FOOTNOTETye1998175&#95;65-0" class="reference"><a href="#cite_note-FOOTNOTETye1998175-65"><span class="cite-bracket">&#91;</span>65<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-Kirch&#95;66-0" class="reference"><a href="#cite_note-Kirch-66"><span class="cite-bracket">&#91;</span>66<span class="cite-bracket">&#93;</span></a></sup> They also published a weekly <i>Guatemala Newsletter</i> and sent it to 250 journalists, some of whom used it as a source for their reporting.<sup id="cite&#95;ref-Kirch&#95;66-1" class="reference"><a href="#cite_note-Kirch-66"><span class="cite-bracket">&#91;</span>66<span class="cite-bracket">&#93;</span></a></sup>
+Bernays formed close relationships with journalists including <i>The New York Times</i> reporter Will Lissner and columnist <a href="/wiki/Walter_Winchell" title="Walter Winchell">Walter Winchell</a>.<sup id="cite&#95;ref-Immerman&#95;62-1" class="reference"><a href="#cite_note-Immerman-62"><span class="cite-bracket">&#91;</span>62<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-FOOTNOTETye1998167–170&#95;64-1" class="reference"><a href="#cite_note-FOOTNOTETye1998167–170-64"><span class="cite-bracket">&#91;</span>64<span class="cite-bracket">&#93;</span></a></sup> In January 1952 he brought a cohort of journalists from various notable newspapers on a tour of Guatemala, sponsored by the company. This technique proved highly effective and was repeated four more times.<sup id="cite&#95;ref-Kirch&#95;66-2" class="reference"><a href="#cite_note-Kirch-66"><span class="cite-bracket">&#91;</span>66<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>In June 1954, the U.S. <a href="/wiki/Central_Intelligence_Agency" title="Central Intelligence Agency">Central Intelligence Agency</a> effected a coup d'état code-named <a href="/wiki/Operation_PBSuccess" class="mw-redirect" title="Operation PBSuccess">Operation PBSuccess</a>. The CIA backed a minimal military force, fronted by <a href="/wiki/Carlos_Castillo_Armas" title="Carlos Castillo Armas">Carlos Castillo Armas</a>, with a <a href="/wiki/Psychological_warfare" title="Psychological warfare">psychological warfare</a> campaign to portray military defeat as a foregone conclusion. During the coup itself, Bernays was the primary supplier of information for the international <a href="/wiki/Newswire" class="mw-redirect" title="Newswire">newswires</a> <a href="/wiki/Associated_Press" title="Associated Press">Associated Press</a>, <a href="/wiki/United_Press_International" title="United Press International">United Press International</a>, and the <a href="/wiki/International_News_Service" title="International News Service">International News Service</a>.<sup id="cite&#95;ref-67" class="reference"><a href="#cite_note-67"><span class="cite-bracket">&#91;</span>67<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-68" class="reference"><a href="#cite_note-68"><span class="cite-bracket">&#91;</span>68<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Following the coup, Bernays built up the image of Guatemala's new president <a href="/wiki/Carlos_Castillo_Armas" title="Carlos Castillo Armas">Carlos Castillo Armas</a>, giving advice for his public appearances both in Guatemala and in the U.S. In 1956, Bernays produced a pamphlet comparing the Communist way and the Christian way.<sup id="cite&#95;ref-69" class="reference"><a href="#cite_note-69"><span class="cite-bracket">&#91;</span>69<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>In 1959, United Fruit dispensed with all external advisors including Bernays.<sup id="cite&#95;ref-FOOTNOTETye1998180&#95;70-0" class="reference"><a href="#cite_note-FOOTNOTETye1998180-70"><span class="cite-bracket">&#91;</span>70<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Techniques">Techniques</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=17" title="Edit section: Techniques"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<div class="mw-heading mw-heading3"><h3 id="Third_parties">Third parties</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=18" title="Edit section: Third parties"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Bernays argued that the covert use of third parties was morally legitimate because those parties were morally autonomous actors.<sup id="cite&#95;ref-71" class="reference"><a href="#cite_note-71"><span class="cite-bracket">&#91;</span>71<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>"If you can influence the leaders, either with or without their conscious cooperation, you automatically influence the group which they sway", he said. In order to promote sales of bacon, for example, he conducted research and found that the American public ate very light breakfast of coffee, maybe a roll and orange juice. He went to his physician and found that a heavy breakfast was sounder from the standpoint of health than a light breakfast because the body loses energy during the night and needs it during the day. He asked the physician if he would be willing, at no cost, to write to 5,000 physicians and ask them whether their judgment was the same as his—confirming his judgment. About 4,500 answered back, all concurring that a more significant breakfast was better for the health of the American people than a light breakfast. He arranged for this finding to be published in newspapers throughout the country with headlines like '4,500 physicians urge bigger breakfast' while other articles stated that bacon and eggs should be a central part of breakfast and, as a result of these actions, the sale of bacon went up.<sup id="cite&#95;ref-Edward&#95;L.&#95;Bernays&#95;tells&#95;the&#95;story&#95;of&#95;making&#95;bacon&#95;&amp;&#95;eggs&#95;all-American&#95;Breakfast&#95;72-0" class="reference"><a href="#cite_note-Edward_L._Bernays_tells_the_story_of_making_bacon_&amp;_eggs_all-American_Breakfast-72"><span class="cite-bracket">&#91;</span>72<span class="cite-bracket">&#93;</span></a></sup></p></blockquote>
+<p>Describing the response to his campaign for Ivory Soap, Bernays wrote: "As if actuated by the pressure of a button, people began working for the client instead of the client begging people to buy."<sup id="cite&#95;ref-FOOTNOTEMarks195773&#95;73-0" class="reference"><a href="#cite_note-FOOTNOTEMarks195773-73"><span class="cite-bracket">&#91;</span>73<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Businesses found these covert methods irresistible. Strother Walker and Paul Sklar wrote in <i>Business Finds Its Voice</i> (1938) that Bernays had offered a solution to popular skepticism of business which arose in the depression: better "to implant an idea in a group leader's mind and let him spread it than to write up an idea and send it to the papers as a release, in the old-fashioned way&#160;…".<sup id="cite&#95;ref-74" class="reference"><a href="#cite_note-74"><span class="cite-bracket">&#91;</span>74<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading3"><h3 id="Scientific_approach">Scientific approach</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=19" title="Edit section: Scientific approach"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1320445320" /><div role="note" class="hatnote navigation-not-searchable">See also: <a href="/wiki/Social_engineering_(political_science)" title="Social engineering (political science)">Social engineering (political science)</a></div>
+<p>Bernays pioneered the public relations industry's use of <a href="/wiki/Mass_psychology" class="mw-redirect" title="Mass psychology">mass psychology</a> and other <a href="/wiki/Social_sciences" class="mw-redirect" title="Social sciences">social sciences</a> to design its public persuasion campaigns: "If we understand the mechanism and motives of the group mind, is it not possible to control and regiment the masses according to our will without their knowing about it? The recent practice of <a href="/wiki/Propaganda" title="Propaganda">propaganda</a> has proved that it is possible, at least up to a certain point and within certain limits."<sup id="cite&#95;ref-Bernays&#95;Propaganda&#95;2005&#95;75-0" class="reference"><a href="#cite_note-Bernays_Propaganda_2005-75"><span class="cite-bracket">&#91;</span>75<span class="cite-bracket">&#93;</span></a></sup> He later called this scientific technique of opinion-molding the <a href="/wiki/The_Engineering_of_Consent" title="The Engineering of Consent"><i>engineering of consent</i></a>.<sup id="cite&#95;ref-Bernays&#95;Engineering&#95;1947&#95;76-0" class="reference"><a href="#cite_note-Bernays_Engineering_1947-76"><span class="cite-bracket">&#91;</span>76<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays expanded on <a href="/wiki/Walter_Lippmann" title="Walter Lippmann">Walter Lippmann</a>'s concept of <a href="/wiki/Stereotype" title="Stereotype">stereotype</a>, arguing that predictable elements could be manipulated for mass effects:
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>But instead of a mind, universal literacy has given [the common man] a rubber stamp, a rubber stamp inked with advertising slogans, with editorials, with published scientific data, with the trivialities of tabloids and the profundities of history, but quite innocent of original thought. Each man's rubber stamp is the twin of millions of others, so that when these millions are exposed to the same stimuli, all receive identical imprints. [...]
+The amazing readiness with which large masses accept this process is probably accounted for by the fact that no attempt is made to convince them that black is white. Instead, their preconceived hazy ideas that a certain gray is almost black or almost white are brought into sharper focus. Their prejudices, notions, and convictions are used as a starting point, with the result that they are drawn by a thread into passionate adherence to a given mental picture.<sup id="cite&#95;ref-77" class="reference"><a href="#cite_note-77"><span class="cite-bracket">&#91;</span>77<span class="cite-bracket">&#93;</span></a></sup></p></blockquote>
+<p>Not only psychology but sociology played an important role for the public relations counsel, according to Bernays. The individual is "a cell organized into the social unit. Touch a nerve at a sensitive spot and you get an automatic response from certain specific members of the organism."<sup id="cite&#95;ref-78" class="reference"><a href="#cite_note-78"><span class="cite-bracket">&#91;</span>78<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Philosophy">Philosophy</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=20" title="Edit section: Philosophy"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Bernays touted the idea that the "masses" are driven by factors outside their conscious understanding, and therefore that their minds can and should be manipulated by the capable few. "Intelligent men must realize that propaganda is the modern instrument by which they can fight for productive ends and help to bring order out of chaos."<sup id="cite&#95;ref-FOOTNOTEMarks195773&#95;73-1" class="reference"><a href="#cite_note-FOOTNOTEMarks195773-73"><span class="cite-bracket">&#91;</span>73<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-79" class="reference"><a href="#cite_note-79"><span class="cite-bracket">&#91;</span>79<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-80" class="reference"><a href="#cite_note-80"><span class="cite-bracket">&#91;</span>80<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<style data-mw-deduplicate="TemplateStyles:r1224211176">.mw-parser-output .quotebox{background-color:#F9F9F9;border:1px solid #aaa;box-sizing:border-box;padding:10px;font-size:88%;max-width:100%}.mw-parser-output .quotebox.floatleft{margin:.5em 1.4em .8em 0}.mw-parser-output .quotebox.floatright{margin:.5em 0 .8em 1.4em}.mw-parser-output .quotebox.centered{overflow:hidden;position:relative;margin:.5em auto .8em auto}.mw-parser-output .quotebox.floatleft span,.mw-parser-output .quotebox.floatright span{font-style:inherit}.mw-parser-output .quotebox>blockquote{margin:0;padding:0;border-left:0;font-family:inherit;font-size:inherit}.mw-parser-output .quotebox-title{text-align:center;font-size:110%;font-weight:bold}.mw-parser-output .quotebox-quote>:first-child{margin-top:0}.mw-parser-output .quotebox-quote:last-child>:last-child{margin-bottom:0}.mw-parser-output .quotebox-quote.quoted:before{font-family:"Times New Roman",serif;font-weight:bold;font-size:large;color:gray;content:" “ ";vertical-align:-45%;line-height:0}.mw-parser-output .quotebox-quote.quoted:after{font-family:"Times New Roman",serif;font-weight:bold;font-size:large;color:gray;content:" ” ";line-height:0}.mw-parser-output .quotebox .left-aligned{text-align:left}.mw-parser-output .quotebox .right-aligned{text-align:right}.mw-parser-output .quotebox .center-aligned{text-align:center}.mw-parser-output .quotebox .quote-title,.mw-parser-output .quotebox .quotebox-quote{display:block}.mw-parser-output .quotebox cite{display:block;font-style:normal}@media screen and (max-width:640px){.mw-parser-output .quotebox{width:100%!important;margin:0 0 .8em!important;float:none!important}}</style><div class="quotebox pullquote floatright" style="width:50%; ;">
+<blockquote class="quotebox-quote left-aligned" style="">
+<p>The conscious and intelligent manipulation of the organized habits and opinions of the masses is an important element in <a href="/wiki/Democracy" title="Democracy">democratic</a> society. Those who manipulate this unseen mechanism of society constitute an <a href="/wiki/Invisible_government" class="mw-redirect" title="Invisible government">invisible government</a> which is the true ruling power of our country.&#160;... We are governed, our minds are molded, our tastes formed, our ideas suggested, largely by men we have never heard of. This is a logical result of the way in which our democratic society is organized. Vast numbers of human beings must cooperate in this manner if they are to live together as a smoothly functioning society.&#160;... In almost every act of our daily lives, whether in the sphere of <a href="/wiki/Politics" title="Politics">politics</a> or business, in our social conduct or our <a href="/wiki/Ethical" class="mw-redirect" title="Ethical">ethical</a> thinking, we are dominated by the relatively small number of persons&#160;... who understand the mental processes and social patterns of the masses. It is they who pull the wires which control the public mind.
+</p>
+</blockquote>
+<div style="padding-bottom: 0; padding-top: 0.5em"><cite class="left-aligned" style="">—&#8202;<a rel="nofollow" class="external text" href="https://archive.org/details/Propaganda1928ByEdwardL.Bernays">– <i>Propaganda</i></a> (1928) pp. 9–10</cite></div>
+</div>
+<p>Propaganda was portrayed as the only alternative to chaos.<sup id="cite&#95;ref-81" class="reference"><a href="#cite_note-81"><span class="cite-bracket">&#91;</span>81<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>One way Bernays reconciled manipulation with liberalism was his claim that the human masses would inevitably succumb to manipulation—and therefore the good propagandists could compete with the evil, without incurring any marginal moral cost.<sup id="cite&#95;ref-82" class="reference"><a href="#cite_note-82"><span class="cite-bracket">&#91;</span>82<span class="cite-bracket">&#93;</span></a></sup> In his view, "the minority which uses this power is increasingly intelligent, and works more and more on behalf of ideas that are socially constructive."<sup id="cite&#95;ref-83" class="reference"><a href="#cite_note-83"><span class="cite-bracket">&#91;</span>83<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Unlike some other early public relations practitioners, Bernays advocated centralization and planning. <a href="/wiki/Marvin_Olasky" title="Marvin Olasky">Marvin Olasky</a> calls his 1945 book <i>Take Your Place at the Peace Table</i> "a clear appeal for a form of mild corporate socialism."<sup id="cite&#95;ref-84" class="reference"><a href="#cite_note-84"><span class="cite-bracket">&#91;</span>84<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Death_and_legacy">Death and legacy</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=21" title="Edit section: Death and legacy"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1353403208" /><table class="infobox" style="clear: right; float:right;margin:0 0 4px 1.5em"><tbody><tr><th colspan="2" class="infobox-above" style="font-size:115%">External videos</th></tr><tr><td colspan="2" class="infobox-full-data" style="text-align: left"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Nuvola_apps_kaboodle.svg" class="mw-file-description"><img alt="video icon" src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png" decoding="async" width="16" height="16" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/40px-Nuvola_apps_kaboodle.svg.png 2x" data-file-width="128" data-file-height="128" /></a></span> <a rel="nofollow" class="external text" href="https://www.c-span.org/video/?6053-1/public-relations-founders-perspective">Discussion with Edward Bernays (age 97) at the American University School of Communications, January 23, 1989</a>, <a href="/wiki/C-SPAN" title="C-SPAN">C-SPAN</a></td></tr><tr><td colspan="2" class="infobox-full-data" style="text-align: left"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Nuvola_apps_kaboodle.svg" class="mw-file-description"><img alt="video icon" src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png" decoding="async" width="16" height="16" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/40px-Nuvola_apps_kaboodle.svg.png 2x" data-file-width="128" data-file-height="128" /></a></span> <a rel="nofollow" class="external text" href="https://www.c-span.org/video/?183741-1/propaganda">Discussion of <i>Propaganda</i> with Anne Bernays (daughter of Edward Bernays) and NYU professor Mark Crispin Miller, September 29, 2004</a>, <a href="/wiki/C-SPAN" title="C-SPAN">C-SPAN</a></td></tr></tbody></table>
+<p>Edward Bernays died in 1995 at the age of 103, in his Cambridge, Massachusetts home. In his obituary, <a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a> said that "Over the years, he was instrumental in the formation of opinion-shaping methods that were used on behalf of many business and industrial enterprises, welfare and civic groups, and governments at home and abroad."<sup id="cite&#95;ref-:0&#95;85-0" class="reference"><a href="#cite_note-:0-85"><span class="cite-bracket">&#91;</span>85<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Near his 100th birthday, he led an unsuccessful campaign to pass legislation in Massachusetts and other states requiring public relations practitioners to be licensed.<sup id="cite&#95;ref-:0&#95;85-1" class="reference"><a href="#cite_note-:0-85"><span class="cite-bracket">&#91;</span>85<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Much of Bernays's reputation today stems from his persistent public relations campaign to build his own reputation as "America's No. 1 Publicist". During his active years, many of his peers in the industry were offended by Bernays's continuous self-promotion. According to <a href="/wiki/Scott_Cutlip" title="Scott Cutlip">Scott Cutlip</a>, "Bernays was a brilliant person who had a spectacular career, but, to use an old-fashioned word, he was a braggart."<sup id="cite&#95;ref-FOOTNOTECutlip1994160&#95;86-0" class="reference"><a href="#cite_note-FOOTNOTECutlip1994160-86"><span class="cite-bracket">&#91;</span>86<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Bernays attracted positive and negative attention for his grand statements about the role of public relations in society. Reviewers praised <i><a href="/wiki/Crystallizing_Public_Opinion" title="Crystallizing Public Opinion">Crystallizing Public Opinion</a></i> (1923) as a pioneering study of the importance of something called <a href="/wiki/Public_opinion" title="Public opinion">public opinion</a>. <i><a href="/wiki/Propaganda_(book)" title="Propaganda (book)">Propaganda</a></i> (1928) drew more criticism for its advocacy of mass manipulation.<sup id="cite&#95;ref-FOOTNOTECutlip19944–6&#95;87-0" class="reference"><a href="#cite_note-FOOTNOTECutlip19944–6-87"><span class="cite-bracket">&#91;</span>87<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>In the 1930s, his critics became more harsh. As the leading figure in public relations and a notorious advocate of "propaganda", Bernays was compared to European fascists such as <a href="/wiki/Joseph_Goebbels" title="Joseph Goebbels">Joseph Goebbels</a> and <a href="/wiki/Adolf_Hitler" title="Adolf Hitler">Adolf Hitler</a>.<sup id="cite&#95;ref-88" class="reference"><a href="#cite_note-88"><span class="cite-bracket">&#91;</span>88<span class="cite-bracket">&#93;</span></a></sup> (Bernays wrote in his 1965 autobiography that Goebbels read and used his books.)<sup id="cite&#95;ref-89" class="reference"><a href="#cite_note-89"><span class="cite-bracket">&#91;</span>89<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Rather than retreating from the spotlight, Bernays continued to play up his ideas—for example, stating in a 1935 speech to the Financial Advertisers Association that strong men (including publicists) should become human symbols to lead the masses.<sup id="cite&#95;ref-90" class="reference"><a href="#cite_note-90"><span class="cite-bracket">&#91;</span>90<span class="cite-bracket">&#93;</span></a></sup> On other occasions he tempered this message with the idea that, while propaganda is inevitable, the democratic system allows a pluralism of propaganda, while fascist systems offer only a single official propaganda.<sup id="cite&#95;ref-91" class="reference"><a href="#cite_note-91"><span class="cite-bracket">&#91;</span>91<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>At the same time, Bernays was praised for his apparent success, wisdom, foresight, and influence as an originator of public relations.<sup id="cite&#95;ref-92" class="reference"><a href="#cite_note-92"><span class="cite-bracket">&#91;</span>92<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>While opinions ranged from negative to positive, there was widespread agreement that propaganda had a powerful effect on the public mind.<sup id="cite&#95;ref-93" class="reference"><a href="#cite_note-93"><span class="cite-bracket">&#91;</span>93<span class="cite-bracket">&#93;</span></a></sup> According to John Stauber and Sheldon Rampton, in a published review of Larry Tye's biography of Bernays:<sup id="cite&#95;ref-94" class="reference"><a href="#cite_note-94"><span class="cite-bracket">&#91;</span>94<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>It is impossible to fundamentally grasp the social, political, economic and cultural developments of the past 100 years without some understanding of Bernays and his professional heirs in the public relations industry. PR is a 20th-century phenomenon, and Bernays—widely eulogized as the "father of public relations" at the time of his death in 1995—played a major role in defining the industry's philosophy and methods.</p></blockquote><p>The Edward L Bernays Foundation, founded in 1949, is still active and incorporated in Northampton, Massachusetts.<sup id="cite&#95;ref-95" class="reference"><a href="#cite_note-95"><span class="cite-bracket">&#91;</span>95<span class="cite-bracket">&#93;</span></a></sup>
+</p><div class="mw-heading mw-heading2"><h2 id="Publications">Publications</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=22" title="Edit section: Publications"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<div class="mw-heading mw-heading3"><h3 id="Books">Books</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=23" title="Edit section: Books"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li><style data-mw-deduplicate="TemplateStyles:r1333433106">.mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-parser-output .citation q{quotes:"\"""\"""'""'"}.mw-parser-output .citation:target{background-color:rgba(0,127,255,0.133)}.mw-parser-output .id-lock-free.id-lock-free a{background:url("//upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-limited.id-lock-limited a,.mw-parser-output .id-lock-registration.id-lock-registration a{background:url("//upload.wikimedia.org/wikipedia/commons/d/d6/Lock-gray-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-subscription.id-lock-subscription a{background:url("//upload.wikimedia.org/wikipedia/commons/a/aa/Lock-red-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .cs1-ws-icon a{background:url("//upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg")right 0.1em center/12px no-repeat}body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-free a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-limited a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-registration a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-subscription a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .cs1-ws-icon a{background-size:contain;padding:0 1em 0 0}.mw-parser-output .cs1-code{color:inherit;background:inherit;border:none;padding:inherit}.mw-parser-output .cs1-hidden-error{display:none;color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-visible-error{color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-maint{display:none;color:#085;margin-left:0.3em}.mw-parser-output .cs1-kern-left{padding-left:0.2em}.mw-parser-output .cs1-kern-right{padding-right:0.2em}.mw-parser-output .citation .mw-selflink{font-weight:inherit}@media screen{.mw-parser-output .cs1-format{font-size:95%}html.skin-theme-clientpref-night .mw-parser-output .cs1-maint{color:#18911f}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .cs1-maint{color:#18911f}}</style><cite id="CITEREFBernaysHoffensteinKingsleyPemberton1917" class="citation book cs1"><a class="mw-selflink selflink">Bernays, Edward L.</a>; Hoffenstein, Samuel; Kingsley, Walter J.; Pemberton, Murdock (1917). <a rel="nofollow" class="external text" href="https://archive.org/details/broadwayanth00bernrich"><i>The Broadway Anthology</i></a>. New York: Duffield &amp; Co.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=The+Broadway+Anthology&amp;rft.place=New+York&amp;rft.pub=Duffield+%26+Co.&amp;rft.date=1917&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward+L.&amp;rft.au=Hoffenstein%2C+Samuel&amp;rft.au=Kingsley%2C+Walter+J.&amp;rft.au=Pemberton%2C+Murdock&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fbroadwayanth00bernrich&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1923" class="citation book cs1"><a class="mw-selflink selflink">Bernays, Edward L.</a> (1923). <a rel="nofollow" class="external text" href="https://archive.org/details/crystallizingpu00bernrich"><i>Crystallizing Public Opinion</i></a>. New York: Boni and Liveright. <a href="/wiki/OCLC_(identifier)" class="mw-redirect" title="OCLC (identifier)">OCLC</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/oclc/215243834">215243834</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Crystallizing+Public+Opinion&amp;rft.place=New+York&amp;rft.pub=Boni+and+Liveright&amp;rft.date=1923&amp;rft&#95;id=info%3Aoclcnum%2F215243834&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward+L.&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fcrystallizingpu00bernrich&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li></ul>
+<ul><li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1927" class="citation book cs1"><a class="mw-selflink selflink">Bernays, Edward L.</a> (1927). <a rel="nofollow" class="external text" href="https://archive.org/details/publicrelationscounsel"><i>A Public Relations Counsel</i></a>. New York: Privately printed.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=A+Public+Relations+Counsel&amp;rft.place=New+York&amp;rft.pub=Privately+printed&amp;rft.date=1927&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward+L.&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fpublicrelationscounsel&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1927" class="citation book cs1"><a class="mw-selflink selflink">Bernays, Edward L.</a> (1927). <a rel="nofollow" class="external text" href="https://catalog.hathitrust.org/Record/007475698"><i>An Outline of Careers: A Practical Guide to Achievement by Thirty-Eight Eminent Americans</i></a>. New York: George H. Doran Company.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=An+Outline+of+Careers%3A+A+Practical+Guide+to+Achievement+by+Thirty-Eight+Eminent+Americans&amp;rft.place=New+York&amp;rft.pub=George+H.+Doran+Company&amp;rft.date=1927&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward+L.&amp;rft&#95;id=https%3A%2F%2Fcatalog.hathitrust.org%2FRecord%2F007475698&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><i>Verdict of Public Opinion on Propaganda</i> (1927).</li>
+<li><i><a href="/wiki/Propaganda_(book)" title="Propaganda (book)">Propaganda</a></i>. New York: <a href="/wiki/Horace_Liveright" title="Horace Liveright">Horace Liveright</a> (1928). <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-8046-1511-2" title="Special:BookSources/978-0-8046-1511-2"><bdi>978-0-8046-1511-2</bdi></a>.</li>
+<li><i>This Business of Propaganda</i> (1928).</li>
+<li><i>Universities—Pathfinders in Public Opinion</i> (1937).</li>
+<li><i>Careers for Men: A Practical Guide to Opportunity in Business, Written by Thirty-Eight Successful Americans</i> (1939).</li>
+<li><i>Speak Up for Democracy: What You Can Do—A Practical Plan of Action for Every American Citizen</i>. New York: <a href="/wiki/The_Viking_Press" class="mw-redirect" title="The Viking Press">The Viking Press</a> (1940).</li>
+<li><i>Future of Private Enterprise in the Post-War World</i> (1942).</li>
+<li><i>Democratic Leadership in Total War</i> (1943).</li>
+<li><i>Psychological Blueprint for the Peace—Canada, U.S.A.</i> (1944).</li>
+<li><i><a href="/wiki/Public_Relations_(book)" title="Public Relations (book)">Public Relations</a></i> (1945).</li>
+<li><a rel="nofollow" class="external text" href="https://www.sas.upenn.edu/~cavitch/pdf-library/Bernays_Take_Your_Place_at_the_Peace_Table.pdf"><i>Your Place at the Peace Table. What You Can Do to Win a Lasting United Nations Peace</i>.</a> New York: The Gerent Press (1945).</li>
+<li><i>What the British Think of Us: A Study of British Hostility to America and Americans and Its Motivation, with Recommendations for Improving Anglo-American Relations</i>, with <a href="/wiki/Doris_Fleischman" title="Doris Fleischman">Doris Fleischman</a> (1950).</li>
+<li><i><a href="/wiki/The_Engineering_of_Consent" title="The Engineering of Consent">The Engineering of Consent</a></i> (as contributor). Norman: <a href="/wiki/University_of_Oklahoma_Press" title="University of Oklahoma Press">University of Oklahoma Press</a> (1955). <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><a href="/wiki/OCLC_(identifier)" class="mw-redirect" title="OCLC (identifier)">OCLC</a>&#160;<a rel="nofollow" class="external text" href="https://www.worldcat.org/oclc/550584">550584</a>.</li>
+<li><i>Your Future in Public Relations</i> (1961).</li>
+<li><a rel="nofollow" class="external text" href="https://archive.org/download/surveyofworldsgr00bern/surveyofworldsgr00bern.pdf"><i>Survey of the World's Greatest Square Mile: Manhattan Island Below Fulton Street</i>.</a> New York: <a href="/wiki/One_Wall_Street" class="mw-redirect" title="One Wall Street">One Wall Street</a> (1964).</li>
+<li><a href="//archive.org/details/biographyofideam00bern" class="extiw" title="iarchive:biographyofideam00bern"><i>Biography of an Idea: Memoirs of Public Relations Counsel</i></a>. New York: <a href="/wiki/Simon_and_Schuster" class="mw-redirect" title="Simon and Schuster">Simon and Schuster</a> (1965).</li>
+<li><a href="//archive.org/details/caseforreapprais0000unse" class="extiw" title="iarchive:caseforreapprais0000unse"><i>The Case for Reappraisal of U.S. Overseas Information Policies and Programs</i> (Incorporating Congressman Fascell's Report)</a>, with <a href="/wiki/Burnet_Hershey" title="Burnet Hershey">Burnet Hershey</a>, eds. New York: Praeger (1970).</li></ul>
+<div class="mw-heading mw-heading3"><h3 id="Selected_articles">Selected articles</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=24" title="Edit section: Selected articles"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li>"The Minority Rules." <i>The Bookman</i> (Apr. 1927), pp.&#160;150–155.</li>
+<li><a rel="nofollow" class="external text" href="https://web.archive.org/web/20170407053758/http://w.truty.org/PDFs/Media/BERNAYS-ManipulatingPublicOpinion.pdf">"Manipulating Public Opinion: The Why and the How."</a> <i><a href="/wiki/American_Journal_of_Sociology" title="American Journal of Sociology">American Journal of Sociology</a></i>, vol. 33, no. 6 (May 1928).</li>
+<li><a rel="nofollow" class="external text" href="https://www.jstor.org/stable/1245869">"The Marketing of National Policies: A Study of War Propaganda."</a> <i><a href="/wiki/Journal_of_Marketing" title="Journal of Marketing">Journal of Marketing</a></i>, vol. 6, no. 3 (Jan. 1942). <a href="/wiki/JSTOR_(identifier)" class="mw-redirect" title="JSTOR (identifier)">JSTOR</a>&#160;<a rel="nofollow" class="external text" href="https://www.jstor.org/stable/1245869">1245869</a>.</li>
+<li>"Attitude Polls—Servants or Masters?" <i><a href="/wiki/Public_Opinion_Quarterly" title="Public Opinion Quarterly">Public Opinion Quarterly</a></i>, vol. 9, no. 3 (Autumn 1945).</li>
+<li><a rel="nofollow" class="external text" href="https://web.archive.org/web/20120813014102/http://gromitinc.com/lego/Library/Engineering_of_consent.pdf">"The Engineering of Consent."</a> <i><a href="/wiki/Annals_of_the_American_Academy_of_Political_and_Social_Science" class="mw-redirect" title="Annals of the American Academy of Political and Social Science">Annals of the American Academy of Political and Social Science</a></i>, vol. 250 (Mar. 1947).</li>
+<li><a rel="nofollow" class="external text" href="https://www.jstor.org/stable/2518569">"An Educational Program for Unions."</a> <i><a href="/wiki/Industrial_and_Labor_Relations_Review" title="Industrial and Labor Relations Review">Industrial and Labor Relations Review</a></i>, vol. 1, no. 1 (Oct. 1947). <a href="/wiki/JSTOR_(identifier)" class="mw-redirect" title="JSTOR (identifier)">JSTOR</a>&#160;<a rel="nofollow" class="external text" href="https://www.jstor.org/stable/2518569">2518569</a>.</li>
+<li><a rel="nofollow" class="external text" href="https://www.jstor.org/stable/3113663">"Emergence of the Public Relations Counsel: Principles and Recollections."</a> <i><a href="/wiki/Business_History_Review" title="Business History Review">Business History Review</a></i>, vol. 45, no.3 (Autumn 1971). <a href="/wiki/JSTOR_(identifier)" class="mw-redirect" title="JSTOR (identifier)">JSTOR</a>&#160;<a rel="nofollow" class="external text" href="https://www.jstor.org/stable/3113663">3113663</a>.</li></ul>
+<div class="mw-heading mw-heading2"><h2 id="See_also">See also</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=25" title="Edit section: See also"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li><i><a href="/wiki/The_Culture_of_Narcissism" title="The Culture of Narcissism">The Culture of Narcissism</a></i> <span style="font-size: 85%;">(1979)</span></li>
+<li><i><a href="/wiki/Propaganda:_The_Formation_of_Men%27s_Attitudes" title="Propaganda: The Formation of Men&#39;s Attitudes">Propaganda: The Formation of Men's Attitudes</a></i></li></ul>
+<div class="mw-heading mw-heading2"><h2 id="References">References</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=26" title="Edit section: References"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1327269900">.mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflist-columns-3{column-width:25em}body.skin-vector-2022 .mw-parser-output .reflist-columns-2{column-width:27em}body.skin-vector-2022 .mw-parser-output .reflist-columns-3{column-width:22.5em}.mw-parser-output .references[data-mw-group=upper-alpha]{list-style-type:upper-alpha}.mw-parser-output .references[data-mw-group=upper-roman]{list-style-type:upper-roman}.mw-parser-output .references[data-mw-group=lower-alpha]{list-style-type:lower-alpha}.mw-parser-output .references[data-mw-group=lower-greek]{list-style-type:lower-greek}.mw-parser-output .references[data-mw-group=lower-roman]{list-style-type:lower-roman}.mw-parser-output div.reflist-liststyle-upper-alpha .references{list-style-type:upper-alpha}.mw-parser-output div.reflist-liststyle-upper-roman .references{list-style-type:upper-roman}.mw-parser-output div.reflist-liststyle-lower-alpha .references{list-style-type:lower-alpha}.mw-parser-output div.reflist-liststyle-lower-greek .references{list-style-type:lower-greek}.mw-parser-output div.reflist-liststyle-lower-roman .references{list-style-type:lower-roman}</style><div>
+<div class="mw-references-wrap mw-references-columns"><ol class="references">
+<li id="cite&#95;note-1"><span class="mw-cite-backlink"><b><a href="#cite_ref-1">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;147: "Feeling he was too short, at 5 feet 4 inches, Eddie seemed determined to make everything else larger than life. He even inflated his name with an <i>L.</i>, a middle initial that was not on his birth record in Vienna. It apparently stood for Louis, although even his daughters aren't sure, since he didn't like to talk about it.</span>
+</li>
+<li id="cite&#95;note-nytimes-2"><span class="mw-cite-backlink"><b><a href="#cite_ref-nytimes_2-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation news cs1"><a rel="nofollow" class="external text" href="https://www.nytimes.com/1995/03/10/obituaries/edward-bernays-father-public-relations-leader-opinion-making-dies-103.html">"Edward Bernays, 'Father of Public Relations' And Leader in Opinion Making, Dies at 103"</a>. <i>The New York Times</i>. 10 March 1995. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20201112013441/https://www.nytimes.com/1995/03/10/obituaries/edward-bernays-father-public-relations-leader-opinion-making-dies-103.html">Archived</a> from the original on 12 November 2020<span class="reference-accessdate">. Retrieved <span class="nowrap">January 9,</span> 2021</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+New+York+Times&amp;rft.atitle=Edward+Bernays%2C+%27Father+of+Public+Relations%27+And+Leader+in+Opinion+Making%2C+Dies+at+103&amp;rft.date=1995-03-10&amp;rft&#95;id=https%3A%2F%2Fwww.nytimes.com%2F1995%2F03%2F10%2Fobituaries%2Fedward-bernays-father-public-relations-leader-opinion-making-dies-103.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-3"><span class="mw-cite-backlink"><b><a href="#cite_ref-3">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation news cs1"><a rel="nofollow" class="external text" href="https://www.nytimes.com/books/98/08/16/specials/bernays-obit.html">"Edward Bernays, 'Father of Public Relations' And Leader in Opinion Making, Dies at 103"</a>. <i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i>. March 10, 1995. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20180124200210/http://www.nytimes.com/books/98/08/16/specials/bernays-obit.html">Archived</a> from the original on January 24, 2018<span class="reference-accessdate">. Retrieved <span class="nowrap">February 7,</span> 2017</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+New+York+Times&amp;rft.atitle=Edward+Bernays%2C+%27Father+of+Public+Relations%27+And+Leader+in+Opinion+Making%2C+Dies+at+103&amp;rft.date=1995-03-10&amp;rft&#95;id=https%3A%2F%2Fwww.nytimes.com%2Fbooks%2F98%2F08%2F16%2Fspecials%2Fbernays-obit.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-4"><span class="mw-cite-backlink"><b><a href="#cite_ref-4">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFChomsky1988" class="citation book cs1">Chomsky, Noam (1988). <i>Manufacturing Consent: The Political Economy of the Mass Media</i>. Pantheon Books. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0375714498" title="Special:BookSources/978-0375714498"><bdi>978-0375714498</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Manufacturing+Consent%3A+The+Political+Economy+of+the+Mass+Media&amp;rft.pub=Pantheon+Books&amp;rft.date=1988&amp;rft.isbn=978-0375714498&amp;rft.aulast=Chomsky&amp;rft.aufirst=Noam&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-5"><span class="mw-cite-backlink"><b><a href="#cite_ref-5">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation audio-visual cs1">Adam Curtis (2002). <a rel="nofollow" class="external text" href="https://www.bbc.co.uk/iplayer/episodes/p00ghx6g/the-century-of-the-self"><i>The Century of the Self</i></a>. BBC<span class="reference-accessdate">. Retrieved <span class="nowrap">October 6,</span> 2024</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=The+Century+of+the+Self&amp;rft.pub=BBC&amp;rft.date=2002&amp;rft&#95;id=https%3A%2F%2Fwww.bbc.co.uk%2Fiplayer%2Fepisodes%2Fp00ghx6g%2Fthe-century-of-the-self&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-6"><span class="mw-cite-backlink"><b><a href="#cite_ref-6">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFTye1999" class="citation book cs1">Tye, Larry (1999). <i>The Father of Spin: Edward L. Bernays and the Birth of Public Relations</i>. Henry Holt &amp; Co. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0805067897" title="Special:BookSources/978-0805067897"><bdi>978-0805067897</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=The+Father+of+Spin%3A+Edward+L.+Bernays+and+the+Birth+of+Public+Relations&amp;rft.pub=Henry+Holt+%26+Co.&amp;rft.date=1999&amp;rft.isbn=978-0805067897&amp;rft.aulast=Tye&amp;rft.aufirst=Larry&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-7"><span class="mw-cite-backlink"><b><a href="#cite_ref-7">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSt.&#95;John" class="citation journal cs1">St. John, Burton. <span class="id-lock-subscription" title="Paid subscription required"><a rel="nofollow" class="external text" href="http://www.tandfonline.com/doi/abs/10.1080/14616700802580565">"Claiming Journalistic Truth: US press guardedness toward Edward L. Bernays' conception of the minority voice and the "corroding acid" of propaganda"</a></span>. <i>Journalism Studies</i>. <b>10</b> (3): <span class="nowrap">353–</span>367. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1080%2F14616700802580565">10.1080/14616700802580565</a>. <a href="/wiki/ISSN_(identifier)" class="mw-redirect" title="ISSN (identifier)">ISSN</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/issn/1461-670X">1461-670X</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journalism+Studies&amp;rft.atitle=Claiming+Journalistic+Truth%3A+US+press+guardedness+toward+Edward+L.+Bernays%E2%80%99+conception+of+the+minority+voice+and+the+%22corroding+acid%22+of+propaganda&amp;rft.volume=10&amp;rft.issue=3&amp;rft.pages=353-367&amp;rft&#95;id=info%3Adoi%2F10.1080%2F14616700802580565&amp;rft.issn=1461-670X&amp;rft.aulast=St.+John&amp;rft.aufirst=Burton&amp;rft&#95;id=http%3A%2F%2Fwww.tandfonline.com%2Fdoi%2Fabs%2F10.1080%2F14616700802580565&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-8"><span class="mw-cite-backlink"><b><a href="#cite_ref-8">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1923" class="citation book cs1">Bernays, Edward (1923). <span class="id-lock-registration" title="Free registration required"><a rel="nofollow" class="external text" href="https://archive.org/details/crystallizingpub0000bern"><i>Crystallizing Public Opinion</i></a></span>. Ig Publishing. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/1-935439-26-X" title="Special:BookSources/1-935439-26-X"><bdi>1-935439-26-X</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Crystallizing+Public+Opinion&amp;rft.pub=Ig+Publishing&amp;rft.date=1923&amp;rft.isbn=1-935439-26-X&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fcrystallizingpub0000bern&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span> <span class="cs1-hidden-error citation-comment"><code class="cs1-code">{{<a href="/wiki/Template:Cite_book" title="Template:Cite book">cite book</a>}}</code>: </span><span class="cs1-hidden-error citation-comment">ISBN / Date incompatibility (<a href="/wiki/Help:CS1_errors#invalid_isbn_date" title="Help:CS1 errors">help</a>)</span></span>
+</li>
+<li id="cite&#95;note-9"><span class="mw-cite-backlink"><b><a href="#cite_ref-9">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1928" class="citation book cs1">Bernays, Edward (1928). <i>Propaganda</i>. Ig Publishing. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-9703125-9-8" title="Special:BookSources/0-9703125-9-8"><bdi>0-9703125-9-8</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Propaganda&amp;rft.pub=Ig+Publishing&amp;rft.date=1928&amp;rft.isbn=0-9703125-9-8&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span> <span class="cs1-hidden-error citation-comment"><code class="cs1-code">{{<a href="/wiki/Template:Cite_book" title="Template:Cite book">cite book</a>}}</code>: </span><span class="cs1-hidden-error citation-comment">ISBN / Date incompatibility (<a href="/wiki/Help:CS1_errors#invalid_isbn_date" title="Help:CS1 errors">help</a>)</span></span>
+</li>
+<li id="cite&#95;note-10"><span class="mw-cite-backlink"><b><a href="#cite_ref-10">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFEwen,&#95;Stuart1996" class="citation book cs1">Ewen, Stuart (1996). <a rel="nofollow" class="external text" href="https://web.archive.org/web/20080905203439/http://www.bway.net/~drstu/chapter.html">"Visiting Edward Bernays"</a>. <i>PR! A Social History Of Spin</i>. Basic Books. Archived from <a rel="nofollow" class="external text" href="http://www.bway.net/~drstu/chapter.html">the original</a> on September 5, 2008.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=bookitem&amp;rft.atitle=Visiting+Edward+Bernays&amp;rft.btitle=PR%21+A+Social+History+Of+Spin&amp;rft.pub=Basic+Books&amp;rft.date=1996&amp;rft.au=Ewen%2C+Stuart&amp;rft&#95;id=http%3A%2F%2Fwww.bway.net%2F~drstu%2Fchapter.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-11"><span class="mw-cite-backlink"><b><a href="#cite_ref-11">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFLears1994" class="citation book cs1">Lears, T. J. Jackson (1994). <i>Fables of Abundance: A Cultural History of Advertising in America</i>. Basic Books. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0465090754" title="Special:BookSources/978-0465090754"><bdi>978-0465090754</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Fables+of+Abundance%3A+A+Cultural+History+of+Advertising+in+America&amp;rft.pub=Basic+Books&amp;rft.date=1994&amp;rft.isbn=978-0465090754&amp;rft.aulast=Lears&amp;rft.aufirst=T.+J.+Jackson&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-12"><span class="mw-cite-backlink"><b><a href="#cite_ref-12">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSnow2002" class="citation book cs1">Snow, Nancy (2002). <i>Propaganda, Inc.: Selling America's Culture to the World</i>. Seven Stories Press. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-1583225578" title="Special:BookSources/978-1583225578"><bdi>978-1583225578</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Propaganda%2C+Inc.%3A+Selling+America%27s+Culture+to+the+World&amp;rft.pub=Seven+Stories+Press&amp;rft.date=2002&amp;rft.isbn=978-1583225578&amp;rft.aulast=Snow&amp;rft.aufirst=Nancy&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-13"><span class="mw-cite-backlink"><b><a href="#cite_ref-13">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFLavin2002" class="citation news cs1">Lavin, Maud (July 21, 2002). <a rel="nofollow" class="external text" href="https://www.chicagotribune.com/2002/07/21/a-literary-couples-muted-memoir-of-1950s-new-york/">"A literary couple's muted memoir of 1950s New York"</a>. <i><a href="/wiki/Chicago_Tribune" title="Chicago Tribune">Chicago Tribune</a></i>. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20180911044557/http://articles.chicagotribune.com/2002-07-21/entertainment/0207200475_1_nephew-of-sigmund-freud-literary-culture-caste">Archived</a> from the original on 2018-09-11<span class="reference-accessdate">. Retrieved <span class="nowrap">2018-09-10</span></span>. <q>Edward and his wife, Doris Fleischman, were nonpracticing, highly assimilated, wealthy German-American Jews, and Anne grew up a self-professed hothouse flower on New York's Upper East Side.</q></cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Chicago+Tribune&amp;rft.atitle=A+literary+couple%27s+muted+memoir+of+1950s+New+York&amp;rft.date=2002-07-21&amp;rft.aulast=Lavin&amp;rft.aufirst=Maud&amp;rft&#95;id=https%3A%2F%2Fwww.chicagotribune.com%2F2002%2F07%2F21%2Fa-literary-couples-muted-memoir-of-1950s-new-york%2F&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-14"><span class="mw-cite-backlink"><b><a href="#cite_ref-14">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFHeld2009" class="citation journal cs1">Held, Lisa (December 2009). <a rel="nofollow" class="external text" href="https://www.apa.org/monitor/2009/12/consumer">"Psychoanalysis shapes consumer culture"</a>. <i><a href="/wiki/Monitor_on_Psychology" class="mw-redirect" title="Monitor on Psychology">Monitor on Psychology</a></i>. <b>40</b> (11). <a href="/wiki/American_Psychological_Association" title="American Psychological Association">American Psychological Association</a> (APA): 32.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Monitor+on+Psychology&amp;rft.atitle=Psychoanalysis+shapes+consumer+culture&amp;rft.volume=40&amp;rft.issue=11&amp;rft.pages=32&amp;rft.date=2009-12&amp;rft.aulast=Held&amp;rft.aufirst=Lisa&amp;rft&#95;id=https%3A%2F%2Fwww.apa.org%2Fmonitor%2F2009%2F12%2Fconsumer&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-15"><span class="mw-cite-backlink"><b><a href="#cite_ref-15">^</a></b></span> <span class="reference-text"><a href="/wiki/David_Bakan" title="David Bakan">Bakan, David</a> (1958). <a rel="nofollow" class="external text" href="https://archive.org/download/DavidBakanSigmundFreudAndTheJewishMysticalTradition/David%20Bakan%20-%20Sigmund%20Freud%20and%20the%20Jewish%20Mystical%20Tradition.pdf"><i>Sigmund Freud and the Jewish Mystical Tradition</i>.</a> <a href="/wiki/Princeton_University_Press" title="Princeton University Press">Princeton University Press</a>, p. 196.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye1998115-16"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye1998115_16-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;115.</span>
+</li>
+<li id="cite&#95;note-Colford&#95;Birthday&#95;Salute-17"><span class="mw-cite-backlink"><b><a href="#cite_ref-Colford_Birthday_Salute_17-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFColford1991" class="citation news cs1">Colford, Paul D. (December 5, 1991). <a rel="nofollow" class="external text" href="https://web.archive.org/web/20130720075544/http://pqasb.pqarchiver.com/newsday/access/102844501.html?dids=102844501:102844501&amp;FMT=ABS&amp;FMTS=ABS:FT&amp;type=current&amp;date=Dec+05%2C+1991&amp;author=By+Paul+D.+Colford.+STAFF+WRITER&amp;pub=Newsday+(Combined+editions)&amp;desc=A+BIRTHDAY+SALUTE+TO+THE+FATHER+OF+PUBLIC+RELATIONS+For+Immediate+Release%3A+Edward+Bernays+Is+100&amp;pqatl=google">"A Birthday Salute to the Father of Public Relations"</a>. <i>Newsday</i> (Nassau&#160;ed.). Part II p. 78. Archived from <a rel="nofollow" class="external text" href="https://pqasb.pqarchiver.com/newsday/access/102844501.html?dids=102844501:102844501&amp;FMT=ABS&amp;FMTS=ABS:FT&amp;type=current&amp;date=Dec+05%2C+1991&amp;author=By+Paul+D.+Colford.+STAFF+WRITER&amp;pub=Newsday+(Combined+editions)&amp;desc=A+BIRTHDAY+SALUTE+TO+THE+FATHER+OF+PUBLIC+RELATIONS+For+Immediate+Release%3A+Edward+Bernays+Is+100&amp;pqatl=google">the original</a> on July 20, 2013<span class="reference-accessdate">. Retrieved <span class="nowrap">February 24,</span> 2016</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Newsday&amp;rft.atitle=A+Birthday+Salute+to+the+Father+of+Public+Relations&amp;rft.pages=Part+II+p.+78&amp;rft.date=1991-12-05&amp;rft.aulast=Colford&amp;rft.aufirst=Paul+D.&amp;rft&#95;id=https%3A%2F%2Fpqasb.pqarchiver.com%2Fnewsday%2Faccess%2F102844501.html%3Fdids%3D102844501%3A102844501%26FMT%3DABS%26FMTS%3DABS%3AFT%26type%3Dcurrent%26date%3DDec%2B05%252C%2B1991%26author%3DBy%2BPaul%2BD.%2BColford.%2BSTAFF%2BWRITER%26pub%3DNewsday%2B%28Combined%2Beditions%29%26desc%3DA%2BBIRTHDAY%2BSALUTE%2BTO%2BTHE%2BFATHER%2BOF%2BPUBLIC%2BRELATIONS%2BFor%2BImmediate%2BRelease%253A%2BEdward%2BBernays%2BIs%2B100%26pqatl%3Dgoogle&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye19984–5-18"><span class="mw-cite-backlink">^ <a href="#cite_ref-FOOTNOTETye19984–5_18-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-FOOTNOTETye19984–5_18-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;4–5.</span>
+</li>
+<li id="cite&#95;note-nytobit-19"><span class="mw-cite-backlink"><b><a href="#cite_ref-nytobit_19-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCook1980" class="citation news cs1">Cook, Joan (July 12, 1980). <a rel="nofollow" class="external text" href="https://www.nytimes.com/1980/07/12/archives/doris-fleischman-bernays-dead-pioneer-public-relations-counsel.html">"Doris Fleischman Bernays Dead; Pioneer Public Relations Counsel"</a>. <i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i>. Metropolitan Report p. 22. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20180723065831/https://www.nytimes.com/1980/07/12/archives/doris-fleischman-bernays-dead-pioneer-public-relations-counsel.html">Archived</a> from the original on July 23, 2018<span class="reference-accessdate">. Retrieved <span class="nowrap">February 24,</span> 2016</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+New+York+Times&amp;rft.atitle=Doris+Fleischman+Bernays+Dead%3B+Pioneer+Public+Relations+Counsel&amp;rft.pages=Metropolitan+Report+p.+22&amp;rft.date=1980-07-12&amp;rft.aulast=Cook&amp;rft.aufirst=Joan&amp;rft&#95;id=https%3A%2F%2Fwww.nytimes.com%2F1980%2F07%2F12%2Farchives%2Fdoris-fleischman-bernays-dead-pioneer-public-relations-counsel.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-20"><span class="mw-cite-backlink"><b><a href="#cite_ref-20">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://jwa.org/encyclopedia/article/fleischman-doris">"Doris Fleischman"</a>. <i>Jewish Women's Archive</i><span class="reference-accessdate">. Retrieved <span class="nowrap">2022-11-04</span></span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=Jewish+Women%27s+Archive&amp;rft.atitle=Doris+Fleischman&amp;rft&#95;id=https%3A%2F%2Fjwa.org%2Fencyclopedia%2Farticle%2Ffleischman-doris&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-tye-21"><span class="mw-cite-backlink"><b><a href="#cite_ref-tye_21-0">^</a></b></span> <span class="reference-text">Tye (1998), pp. 1–3, 123–124. "Once she resolved to enter her husband's world of public relations, Doris did play a central role in building the Bernays empire, and when the press dubbed him the prince of publicity she could rightfully claim to be the princess. She made her mark first as a wordsmith, churning out press releases and polished stories on clients ranging from the U.S. War Department to the <a href="/wiki/American_Tobacco_Company" title="American Tobacco Company">American Tobacco Company</a>. She also conceived of, wrote, and edited a four-page newsletter called <i>Contact</i>, which reprinted parts of speeches and articles on public relations, sorted through new ideas in the field, and promoted the activities of the Bernays office. And she ghost-wrote scores of speeches and strategy papers that were delivered under her husband's name. It's easy to pick out her writings from among the many papers that Eddie Bernays left behind: they're the ones with rich vocabulary and poetic flourish, free from the more formal style that was his trademark."</span>
+</li>
+<li id="cite&#95;note-22"><span class="mw-cite-backlink"><b><a href="#cite_ref-22">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;5–6: "They used the <i>Medical Review</i> to argue against women wearing corsets with stays and to encourage shower baths; they published expert opinions on health controversies, a relatively novel approach; and they distributed free copies to most of the 137,000 licensed physicians in the United States."</span>
+</li>
+<li id="cite&#95;note-23"><span class="mw-cite-backlink"><b><a href="#cite_ref-23">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;6–7: "Bennett quickly accepted the offer, pumping up the young editor with visions of a crusade against Victorian mores, promising to recruit actors who would work without pay and prodding him to raise money for the production. Eddie was so excited that he volunteered to underwrite the production."</span>
+</li>
+<li id="cite&#95;note-FOOTNOTERamptonStauber200144-24"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTERamptonStauber200144_24-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFRamptonStauber2001">Rampton &amp; Stauber 2001</a>, p.&#160;44.</span>
+</li>
+<li id="cite&#95;note-25"><span class="mw-cite-backlink"><b><a href="#cite_ref-25">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;8 "The key with <i>Damaged Goods</i>, he realized, was to transform the controversy into a cause and recruit backers who already were public role models. The twenty-one-year-old editor formed a <i>Medical Review of Reviews</i> Sociological Fund Committee, then attracted members with an artful appeal that played on Bennett's reputation as an artist as well as the worthiness of battling prudishness. Among those who signed up were John D. Rockefeller, Jr., Mrs. William K. Vanderbilt Sr., Mr. and Mrs. Franklin D. Roosevelt, Dr. William Jay Schieffelin, whose company had recently brought to America a treatment for <a href="/wiki/Syphilis" title="Syphilis">syphilis</a>, and the Reverent John Haynes Holmes of New York's Unitarian Community Church."</span>
+</li>
+<li id="cite&#95;note-FOOTNOTECutlip1994162-26"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTECutlip1994162_26-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFCutlip1994">Cutlip 1994</a>, p.&#160;162.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye19989–16-27"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye19989–16_27-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;9–16.</span>
+</li>
+<li id="cite&#95;note-28"><span class="mw-cite-backlink"><b><a href="#cite_ref-28">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;18: "Finally given his chance to serve, Eddie recruited Ford, International Harvester, and scores of other American firms to distribute literature on U.S. war aims to foreign contacts and post U.S. propaganda on the windows of 650 American offices overseas. He distributed postcards to Italian soldiers at the front so they could boost morale at home, and he planted propaganda behind the German lines to sow dissent. He organized rallies at <a href="/wiki/Carnegie_Hall" title="Carnegie Hall">Carnegie Hall</a> featuring freedom fighters from Poland, Czechoslovakia, and other states that were anxious to break free of the Austro-Hungarian Empire. And to counter German propaganda he had American propaganda printed in Spanish and Portuguese and inserted into export journals sent across Latin America. <br />"In short, he helped win America over to an unpopular war using precisely the techniques he'd used to promote <i>Daddy Long Legs</i> and the Ballet Russe."</span>
+</li>
+<li id="cite&#95;note-29"><span class="mw-cite-backlink"><b><a href="#cite_ref-29">^</a></b></span> <span class="reference-text">James R. Mock, "<a rel="nofollow" class="external text" href="https://www.jstor.org/stable/2506870">The Creel Committee in Latin America</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20200502102013/https://www.jstor.org/stable/2506870">Archived</a> 2020-05-02 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>", <i>The Hispanic American Historical Review</i> 22(2), May 1942, p. 276. "Another section of the New York office, however, was especially concerned with publicity channels and publicity for the nations south of us. This was the division known as the Bureau of Latin-American Affairs, with Edward L. Bernays and Lieutenant F. E. Ackerman playing possibly the leading roles. That organization appealed especially to American firms doing business in Latin America, and secured their cooperation. In addition to means already cited, this section utilized various kinds of educators, especially as a medium of distributing pamphlets."</span>
+</li>
+<li id="cite&#95;note-30"><span class="mw-cite-backlink"><b><a href="#cite_ref-30">^</a></b></span> <span class="reference-text"><a href="#CITEREFEwen1996">Ewen 1996</a>, pp.&#160;162–163: "During the war years, Bernays joined the army of publicists rallied under the banner of the CPI and concentrated on propaganda efforts aimed at Latin American business interests. Within this vast campaign of "psychological warfare", as he described it, Bernays—like others of his generation—began to develop an expanded sense of publicity and its practical uses."</span>
+</li>
+<li id="cite&#95;note-31"><span class="mw-cite-backlink"><b><a href="#cite_ref-31">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFAxelrod2009" class="citation book cs1">Axelrod, Alan (2009). <a rel="nofollow" class="external text" href="https://books.google.com/books?id=nEi1RpLqbNQC&amp;pg=PA200"><i>Selling the Great War: The Making of American Propaganda</i></a>. St. Martin's Publishing Group. p.&#160;200. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-0-230-61959-3" title="Special:BookSources/978-0-230-61959-3"><bdi>978-0-230-61959-3</bdi></a>. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20200508042947/https://books.google.com/books?id=nEi1RpLqbNQC&amp;pg=PA200">Archived</a> from the original on May 8, 2020<span class="reference-accessdate">. Retrieved <span class="nowrap">May 21,</span> 2020</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Selling+the+Great+War%3A+The+Making+of+American+Propaganda&amp;rft.pages=200&amp;rft.pub=St.+Martin%27s+Publishing+Group&amp;rft.date=2009&amp;rft.isbn=978-0-230-61959-3&amp;rft.aulast=Axelrod&amp;rft.aufirst=Alan&amp;rft&#95;id=https%3A%2F%2Fbooks.google.com%2Fbooks%3Fid%3DnEi1RpLqbNQC%26pg%3DPA200&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199819-32"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199819_32-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;19.</span>
+</li>
+<li id="cite&#95;note-33"><span class="mw-cite-backlink"><b><a href="#cite_ref-33">^</a></b></span> <span class="reference-text"><a href="#CITEREFCutlip1994">Cutlip 1994</a>, p.&#160;165: "Bernays' release announced that the Official Press Mission to the Peace Conference was leaving the next day for Paris and instead of the narrow technical press support mission Creel had defined for the group, Bernays inserted this sentence: 'The announced object of the expedition is to interpret the work of the Peace Conference by keeping up a worldwide propaganda to disseminate American accomplishments and ideals.' Two days later, the <i>New York World</i> headlined the story: 'TO INTERPRET AMERICAN IDEALS.' George Creel was furious; already in a battle with Congress, Creel knew that this would add fat to the fire. He disavowed the story. Nonetheless, it hastened the demise of the CPI."</span>
+</li>
+<li id="cite&#95;note-FOOTNOTECutlip1994168-34"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTECutlip1994168_34-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFCutlip1994">Cutlip 1994</a>, p.&#160;168.</span>
+</li>
+<li id="cite&#95;note-35"><span class="mw-cite-backlink"><b><a href="#cite_ref-35">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFPresident&#39;s&#95;Research&#95;Committee&#95;on&#95;Social&#95;Trends1933" class="citation book cs1">President's Research Committee on Social Trends (1933). <a rel="nofollow" class="external text" href="https://archive.org/details/recentsocialtren01unitrich"><i>Recent Social Trends in the United States</i></a>. <a href="/wiki/McGraw-Hill_Education" class="mw-redirect" title="McGraw-Hill Education">McGraw-Hill Book Company</a> &#8211; via <a href="/wiki/Internet_Archive" title="Internet Archive">Internet Archive</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Recent+Social+Trends+in+the+United+States&amp;rft.pub=McGraw-Hill+Book+Company&amp;rft.date=1933&amp;rft.au=President%27s+Research+Committee+on+Social+Trends&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Frecentsocialtren01unitrich&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-36"><span class="mw-cite-backlink"><b><a href="#cite_ref-36">^</a></b></span> <span class="reference-text">Alix Spiegel. <a rel="nofollow" class="external text" href="https://www.npr.org/templates/story/story.php?storyId=4612464">"Freud's Nephew and the Origins of Public Relations"</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20180421162917/https://www.npr.org/templates/story/story.php?storyId=4612464">Archived</a> 2018-04-21 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>, <a href="/wiki/Morning_Edition" title="Morning Edition">Morning Edition</a>, 2005-04-22.</span>
+</li>
+<li id="cite&#95;note-Alan&#95;Bilton&#95;2013&#95;16-37"><span class="mw-cite-backlink"><b><a href="#cite_ref-Alan_Bilton_2013_16_37-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFAlan&#95;Bilton2013" class="citation book cs1">Alan Bilton (2013). <a rel="nofollow" class="external text" href="https://books.google.com/books?id=fqYJ6uYbBHEC&amp;pg=PA16"><i>Silent Film Comedy and American Culture</i></a>. Palgrave Macmillan. p.&#160;16. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-1-137-02025-3" title="Special:BookSources/978-1-137-02025-3"><bdi>978-1-137-02025-3</bdi></a>. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20200507105352/https://books.google.com/books?id=fqYJ6uYbBHEC&amp;pg=PA16">Archived</a> from the original on 2020-05-07<span class="reference-accessdate">. Retrieved <span class="nowrap">2017-08-26</span></span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Silent+Film+Comedy+and+American+Culture&amp;rft.pages=16&amp;rft.pub=Palgrave+Macmillan&amp;rft.date=2013&amp;rft.isbn=978-1-137-02025-3&amp;rft.au=Alan+Bilton&amp;rft&#95;id=https%3A%2F%2Fbooks.google.com%2Fbooks%3Fid%3DfqYJ6uYbBHEC%26pg%3DPA16&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-38"><span class="mw-cite-backlink"><b><a href="#cite_ref-38">^</a></b></span> <span class="reference-text">See "<a rel="nofollow" class="external text" href="http://brbl-dl.library.yale.edu/vufind/Record/4161671">The New York world's fair, a symbol for democracy</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20170406201752/http://brbl-dl.library.yale.edu/vufind/Record/4161671">Archived</a> 2017-04-06 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>", address by Bernays to the Merchant's Association of New York, April 7, 1937.</span>
+</li>
+<li id="cite&#95;note-39"><span class="mw-cite-backlink"><b><a href="#cite_ref-39">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;77–79 See "<a rel="nofollow" class="external text" href="http://memory.loc.gov/cgi-bin/ampage?collId=cool&amp;itemLink=D?coolbib:13:./temp/~ammem_nePo::&amp;hdl=amrlm:me02:0001">Breakfast With Coolidge</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20210224080021/http://memory.loc.gov/cgi-bin/ampage?collId=cool&amp;itemLink=D%3Fcoolbib%3A13%3A.%2Ftemp%2F~ammem_nePo%3A%3A&amp;hdl=amrlm%3Ame02%3A0001">Archived</a> 2021-02-24 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>" typescript, prepared 8 February 1962.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199879–80-40"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199879–80_40-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;79–80.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199881–83-41"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199881–83_41-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;81–83.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199884–85-42"><span class="mw-cite-backlink">^ <a href="#cite_ref-FOOTNOTETye199884–85_42-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-FOOTNOTETye199884–85_42-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;84–85.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199889-43"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199889_43-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;89.</span>
+</li>
+<li id="cite&#95;note-44"><span class="mw-cite-backlink"><b><a href="#cite_ref-44">^</a></b></span> <span class="reference-text"><a href="#CITEREFBernays1965">Bernays 1965</a>, p.&#160;606: "I offered to help organize the Friends of Danish Freedom and Democracy, made up for the most part of Americans of Danish ..."</span>
+</li>
+<li id="cite&#95;note-Hasselriis1959-45"><span class="mw-cite-backlink"><b><a href="#cite_ref-Hasselriis1959_45-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFHasselriis1959" class="citation book cs1 cs1-prop-foreign-lang-source">Hasselriis, Caspar Henrik Wolffsen (1959). <a rel="nofollow" class="external text" href="https://books.google.com/books?id=zGjXAAAAMAAJ"><i>Helligdag: erindringer</i></a> (in Danish). Udgivet af Dansk samvirke hos E. Munksgaard. p.&#160;143. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20160524083328/https://books.google.com/books?id=zGjXAAAAMAAJ">Archived</a> from the original on 2016-05-24<span class="reference-accessdate">. Retrieved <span class="nowrap">2016-04-18</span></span>. <q>... at han vilde engagere den kendte Public Relations Ekspert Edward L. Bernays til at være Raadgiver. ... Resultatet blev Dannelsen af "American Friends of Danish Freedom and Democracy", et Navn foreslaaet af Mr. Bernays, som mente, ...</q></cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Helligdag%3A+erindringer&amp;rft.pages=143&amp;rft.pub=Udgivet+af+Dansk+samvirke+hos+E.+Munksgaard&amp;rft.date=1959&amp;rft.aulast=Hasselriis&amp;rft.aufirst=Caspar+Henrik+Wolffsen&amp;rft&#95;id=https%3A%2F%2Fbooks.google.com%2Fbooks%3Fid%3DzGjXAAAAMAAJ&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-JensenJensen2003-46"><span class="mw-cite-backlink"><b><a href="#cite_ref-JensenJensen2003_46-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFJensenJensen2003" class="citation book cs1">Jensen, Mette Bastholm; Jensen, Steven L. B. (2003). <a rel="nofollow" class="external text" href="https://books.google.com/books?id=ur8wAQAAIAAJ"><i>Denmark and the Holocaust</i></a>. Institute for International Studies, Department for Holocaust and Genocide Studies. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/978-87-989305-1-8" title="Special:BookSources/978-87-989305-1-8"><bdi>978-87-989305-1-8</bdi></a>. <a rel="nofollow" class="external text" href="https://web.archive.org/web/20160424075921/https://books.google.com/books?id=ur8wAQAAIAAJ">Archived</a> from the original on 2016-04-24<span class="reference-accessdate">. Retrieved <span class="nowrap">2016-04-18</span></span>. <q>The "Father of Public Relations and Spin" and nephew of Sigmund Freud Edward L. Bernays (1890–1995), was also hired by the Friends of Danish Freedom and Democracy as a ...</q></cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Denmark+and+the+Holocaust&amp;rft.pub=Institute+for+International+Studies%2C+Department+for+Holocaust+and+Genocide+Studies&amp;rft.date=2003&amp;rft.isbn=978-87-989305-1-8&amp;rft.aulast=Jensen&amp;rft.aufirst=Mette+Bastholm&amp;rft.au=Jensen%2C+Steven+L.+B.&amp;rft&#95;id=https%3A%2F%2Fbooks.google.com%2Fbooks%3Fid%3Dur8wAQAAIAAJ&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye1998185–190-47"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye1998185–190_47-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;185–190.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199835–36-48"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199835–36_48-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;35–36.</span>
+</li>
+<li id="cite&#95;note-Tye23-26-49"><span class="mw-cite-backlink">^ <a href="#cite_ref-Tye23-26_49-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-Tye23-26_49-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text">Tye (1998), pp.&#160;23–26. "Bernays launched the campaign against sweets with his tried-and-true tactic of enlisting 'experts', in this case convincing Nickolas Muray, a photographer friend, to ask other photographers and artists to sing praises of the thin. 'I have come to the conclusion', Muray wrote, 'that the slender woman who, combining suppleness and grace with slenderness, who instead of overeating sweets and desserts, lights a cigarette, as the advertisements say, has created a new standard of female loveliness. . .  I am interested in knowing if my own judgment concurs with that of others, and should be most happy to have your opinion on the subject.'"</span>
+</li>
+<li id="cite&#95;note-50"><span class="mw-cite-backlink"><b><a href="#cite_ref-50">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;27–28: "Bernays understood they were up against a social taboo that cast doubt on the character of women who smoked, but he wasn't sure of the basis of the inhibition or how it could be overcome. So he got Hill to agree to pay for a consultation with Dr. A. A. Brill, a psychoanalyst and disciple of Bernays's uncle, Dr. Sigmund Freud. <br />"'It is perfectly normal for women to want to smoke cigarettes', Brill advised. 'The emancipation of women has suppressed many of their feminine desires. More women now do the same work as men do. Many women bear no children; those who do bear have fewer children. Feminine traits are masked. Cigarettes, which are equated with men, become torches of freedom.'<br />"That rang a bell for Bernays. Why not organize a parade of prominent women lighting their 'torches of freedom'? And do it on Easter Sunday, a holiday symbolizing freedom of spirit, on Fifth Avenue, America's most prestigious promenade?"</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199829-51"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199829_51-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;29.</span>
+</li>
+<li id="cite&#95;note-52"><span class="mw-cite-backlink"><b><a href="#cite_ref-52">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;30–31: "The actual march went off more smoothly than even its scriptwriters imagined. Ten young women turned out, marching down Fifth Avenue with their lighted 'torches of freedom,' and the newspapers loved it. <br />[...] Miss Hunt issued the following communiqué from the smoke-clouded battlefield: 'I hope that we have started something and that these torches of freedom, with no particular brand favored, will smash the discriminatory taboo on cigarettes for women and that our sex will go on breaking down all discriminations.'<br />Go on they did. During the following days women were reported to be taking to the streets, lighted cigarettes in hand, in Boston and Detroit, Wheeling and San Francisco."</span>
+</li>
+<li id="cite&#95;note-53"><span class="mw-cite-backlink"><b><a href="#cite_ref-53">^</a></b></span> <span class="reference-text">"<a rel="nofollow" class="external text" href="https://query.nytimes.com/gst/abstract.html?res=9A05E0D61F31E33ABC4953DFB2668382639EDE&amp;legacy=true">Group of Girls Puff at Cigarettes as a Gesture of 'Freedom'</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20170916183329/https://query.nytimes.com/gst/abstract.html?res=9A05E0D61F31E33ABC4953DFB2668382639EDE&amp;legacy=true">Archived</a> 2017-09-16 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>" (part of a headline), <i>The New York Times</i>, 1 April 1929.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye199838-54"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye199838_54-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;38.</span>
+</li>
+<li id="cite&#95;note-55"><span class="mw-cite-backlink"><b><a href="#cite_ref-55">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;39: "Vogelman signed up and invited fashion editors to the Waldorf for a Green Fashions Fall Luncheon with, of course, green menus featuring green beans, asparagus-tip salad, broiled French lamb chops with haricots verts and olivette potatoes, pistachio mousse glacé, green mints, and crème de menthe. The head of the Hunter College art department gave a talk entitled "Green in the Work of Great Artists," and a noted psychologist enlightened guests on the psychological implications of the color green. The press took note, with the <i>New York Sun</i> headline reading, "It looks like a Green Winter." The <i>Post</i> predicted a "Green Autumn," and one of the wire services wrote about "fall fashions stalking the forests for their color note, picking green as the modish fall wear."</span>
+</li>
+<li id="cite&#95;note-56"><span class="mw-cite-backlink"><b><a href="#cite_ref-56">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;31–32: "One way he found citizens and specialists was by offering money. Sometimes it came as an honorarium, like the $100 he proposed paying 'a dietician [who] talks on diet as the best means to produce moderate curves' and a 'physiologist induced to comment on benefits of modern trend to reasonable figure.' Then there was the $5000 he offered to donate to the favorite charity of Mrs. Charles Dana Gibson, wife of the creator of the renowned Gibson Girl illustrations, if she would agree to sign a statement saying 'she smoked Luckies and that they were kind to her throat.'"</span>
+</li>
+<li id="cite&#95;note-57"><span class="mw-cite-backlink"><b><a href="#cite_ref-57">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;33–34: "If he began by disguising his role in the battle to get women smoking, Bernays more than made up for that in later years. The parade story in particular became part of his repertoire on the speaking circuit and in scores of interviews until his death in 1995, and with each retelling the tale got more colorful and his claims more sweeping. In his 1965 memoirs, for instance, he discussed the slow process of breaking down conventions like the taboo against women smoking. But by 1971 he was telling an oral historian at Columbia University that 'overnight the taboo was broken by one overt act,' the 1929 Easter Sunday march."</span>
+</li>
+<li id="cite&#95;note-58"><span class="mw-cite-backlink"><b><a href="#cite_ref-58">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;27, <a rel="nofollow" class="external text" href="https://books.google.com/books?id=hv6gBAAAQBAJ&amp;pg=PA48">48</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20200507034315/https://books.google.com/books?id=hv6gBAAAQBAJ&amp;pg=PA48">Archived</a> 2020-05-07 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>. "Whatever his attitude in public, at home he did all he could to persuade his wife, Doris, to give up her pack-a-day habit."</span>
+</li>
+<li id="cite&#95;note-59"><span class="mw-cite-backlink"><b><a href="#cite_ref-59">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;160–164. Tye notes: "The bureau even renamed the region, explaining that 'Middle America' was 'a rational and timely expansion of the phrase 'Central America,' which by long usage includes only the republics of Guatemala, Honduras, Nicaragua, El Salvador, Costa Rica, Panama, and the colony of British Honduras.' Middle America would include those countries, along with Mexico and the Caribbean island republics of Cuba, Haiti, and the Dominican Republic."</span>
+</li>
+<li id="cite&#95;note-60"><span class="mw-cite-backlink"><b><a href="#cite_ref-60">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, pp.&#160;164–165: Tye's source for Bernays's $100,000 fee is probably Thomas McCann, whom he quotes on p. 178 as saying: "My estimate is we were spending in excess of $100,000 a year for Edward L. Bernays, just for his consulting services, which was an enormous amount of money in 1952."</span>
+</li>
+<li id="cite&#95;note-61"><span class="mw-cite-backlink"><b><a href="#cite_ref-61">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://www.in2013dollars.com/us/inflation/1948?amount=100000#:~:text=%24100%2C000%20in%201948%20is%20equivalent,cumulative%20price%20increase%20of%201%2C168.43%25.">"CPI Inflation Calculator – $100,000 in 1948"</a>. CPI Inflation Calculator<span class="reference-accessdate">. Retrieved <span class="nowrap">4 September</span> 2023</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=CPI+Inflation+Calculator+%E2%80%93+%24100%2C000+in+1948&amp;rft.pub=CPI+Inflation+Calculator&amp;rft&#95;id=https%3A%2F%2Fwww.in2013dollars.com%2Fus%2Finflation%2F1948%3Famount%3D100000%23%3A~%3Atext%3D%2524100%252C000%2520in%25201948%2520is%2520equivalent%2Ccumulative%2520price%2520increase%2520of%25201%252C168.43%2525.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-Immerman-62"><span class="mw-cite-backlink">^ <a href="#cite_ref-Immerman_62-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-Immerman_62-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text">Richard H. Immerman, <i>The CIA in Guatemala: The Foreign Policy of Intervention</i>; University of Texas Press, 1982; 9th printing, 2004; <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-292-71083-6" title="Special:BookSources/0-292-71083-6"><bdi>0-292-71083-6</bdi></a>; pp. <a rel="nofollow" class="external text" href="https://books.google.com/books?id=hPGlIqDU_nAC&amp;pg=PA112">112</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20170406203807/https://books.google.com/books?id=hPGlIqDU_nAC&amp;pg=PA112">Archived</a> 2017-04-06 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>–114.</span>
+</li>
+<li id="cite&#95;note-63"><span class="mw-cite-backlink"><b><a href="#cite_ref-63">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFChomskyWaterstone2020" class="citation book cs1"><a href="/wiki/Noam_Chomsky" title="Noam Chomsky">Chomsky, Noam</a>; Waterstone, Marv (2020). "Hegemonic Common Sense". <i>Consequences of Capitalism: Manufacturing Discontent and Resistance</i>. Haymarket Books. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/9781642593839" title="Special:BookSources/9781642593839"><bdi>9781642593839</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=bookitem&amp;rft.atitle=Hegemonic+Common+Sense&amp;rft.btitle=Consequences+of+Capitalism%3A+Manufacturing+Discontent+and+Resistance&amp;rft.pub=Haymarket+Books&amp;rft.date=2020&amp;rft.isbn=9781642593839&amp;rft.aulast=Chomsky&amp;rft.aufirst=Noam&amp;rft.au=Waterstone%2C+Marv&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye1998167–170-64"><span class="mw-cite-backlink">^ <a href="#cite_ref-FOOTNOTETye1998167–170_64-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-FOOTNOTETye1998167–170_64-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;167–170.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye1998175-65"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye1998175_65-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;175.</span>
+</li>
+<li id="cite&#95;note-Kirch-66"><span class="mw-cite-backlink">^ <a href="#cite_ref-Kirch_66-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-Kirch_66-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-Kirch_66-2"><sup><i><b>c</b></i></sup></a></span> <span class="reference-text">John Kirch, "<a rel="nofollow" class="external text" href="http://imerrill.umd.edu/johnkirch/files/2010/03/Covering-a-Coup-John-Kirch.pdf">Covering a Coup: The American Press and Guatemala in 1954</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20120623103539/http://imerrill.umd.edu/johnkirch/files/2010/03/Covering-a-Coup-John-Kirch.pdf">Archived</a> 2012-06-23 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>", Paper presented at AEJMC National Convention, Washington DC; August 2007.</span>
+</li>
+<li id="cite&#95;note-67"><span class="mw-cite-backlink"><b><a href="#cite_ref-67">^</a></b></span> <span class="reference-text">Étienne Dasso, "<a rel="nofollow" class="external text" href="https://orda.revues.org/2667">Aux origines du coup d'État de 1954 au Guatemala&#160;: le rôle de la United Fruit Company dans la préparation du soulèvement contre Jacobo Arbenz</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20170406201457/https://orda.revues.org/2667">Archived</a> 2017-04-06 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>", <i>L'Ordinaire des Amériques</i> 210 (2010), pp. 175–192.</span>
+</li>
+<li id="cite&#95;note-68"><span class="mw-cite-backlink"><b><a href="#cite_ref-68">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;176: "His Library of Congress files show he remained a key source of information for the press, especially the liberal press, right through the takeover. In fact, as the invasion was commencing on June 18, his papers indicate hew as giving the 'first news anyone received on the situation' to the Associated Press, United Press, the International News Service, and <i>The New York Times</i>, with contacts intensifying over the next several days."</span>
+</li>
+<li id="cite&#95;note-69"><span class="mw-cite-backlink"><b><a href="#cite_ref-69">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;179: "And in 1956 Bernays came up with the idea of widely disseminating a comparison of the teachings of the Communists with those of the church. 'Hate is the driving force of communism,' the report concluded, whereas 'charity is the impelling motive of Christianity.' And under communism 'there is no moral law' and 'no personal liberty,' whereas in Christianity 'the moral law is the way which man is created to follow' and 'free will means liberty is possible, the liberty of the sons of God to do the right.'"</span>
+</li>
+<li id="cite&#95;note-FOOTNOTETye1998180-70"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTETye1998180_70-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;180.</span>
+</li>
+<li id="cite&#95;note-71"><span class="mw-cite-backlink"><b><a href="#cite_ref-71">^</a></b></span> <span class="reference-text"><a href="#CITEREFMarks1957">Marks 1957</a>, p.&#160;82: "Bernays once spoke directly to the question of the ethics of a propagandist's speaking through a 'front.' There is no evidence that, at the time, he convinced anyone; but his position is worth considering as contrast to the prevailing judgment. While he readily admitted that a propagandist may not ethically <u>buy</u> the cooperation of a third party, he argued that it is perfectly legitimate for him to enlist the aid of a third party and conceal the relationship. The third party becomes a new advocate, not a subsidiary of the first. He continued:
+
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>That individual or organization may then propagandize it [the original client's point of view] through its own channels because it is interested in it. In such a case, the point of origin then becomes that individual or organization. The public relations counsel, having made the link between the interest of his client and the interest of the third party, no longer need figure in the resulting expression to the public. [Bernays, 'This Business of Propaganda,' p. 199.]</p></blockquote></span>
+</li>
+<li id="cite&#95;note-Edward&#95;L.&#95;Bernays&#95;tells&#95;the&#95;story&#95;of&#95;making&#95;bacon&#95;&amp;&#95;eggs&#95;all-American&#95;Breakfast-72"><span class="mw-cite-backlink"><b><a href="#cite_ref-Edward_L._Bernays_tells_the_story_of_making_bacon_&amp;_eggs_all-American_Breakfast_72-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation audio-visual cs1"><a rel="nofollow" class="external text" href="https://www.youtube.com/watch?v=6vFz_FgGvJI"><i>Edward L. Bernays tells the story of making bacon &amp; eggs all-American Breakfast</i></a>. September 12, 2014. <a rel="nofollow" class="external text" href="https://ghostarchive.org/varchive/youtube/20211118/6vFz_FgGvJI">Archived</a> from the original on November 18, 2021 &#8211; via <a href="/wiki/YouTube" title="YouTube">YouTube</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Edward+L.+Bernays+tells+the+story+of+making+bacon+%26+eggs+all-American+Breakfast&amp;rft.date=2014-09-12&amp;rft&#95;id=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D6vFz&#95;FgGvJI&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-FOOTNOTEMarks195773-73"><span class="mw-cite-backlink">^ <a href="#cite_ref-FOOTNOTEMarks195773_73-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-FOOTNOTEMarks195773_73-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><a href="#CITEREFMarks1957">Marks 1957</a>, p.&#160;73.</span>
+</li>
+<li id="cite&#95;note-74"><span class="mw-cite-backlink"><b><a href="#cite_ref-74">^</a></b></span> <span class="reference-text">Quoted in <a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;10</span>
+</li>
+<li id="cite&#95;note-Bernays&#95;Propaganda&#95;2005-75"><span class="mw-cite-backlink"><b><a href="#cite_ref-Bernays_Propaganda_2005_75-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays2005" class="citation book cs1">Bernays, Edward (2005) [1928]. <i>Propaganda</i>. Brooklyn, N.Y.: Ig Pub. p.&#160;47. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-9703125-9-8" title="Special:BookSources/0-9703125-9-8"><bdi>0-9703125-9-8</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Propaganda&amp;rft.place=Brooklyn%2C+N.Y.&amp;rft.pages=47&amp;rft.pub=Ig+Pub&amp;rft.date=2005&amp;rft.isbn=0-9703125-9-8&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-Bernays&#95;Engineering&#95;1947-76"><span class="mw-cite-backlink"><b><a href="#cite_ref-Bernays_Engineering_1947_76-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1947" class="citation journal cs1">Bernays, Edward L. (March 1947). <a rel="nofollow" class="external text" href="https://web.archive.org/web/20120813014102/http://gromitinc.com/lego/Library/Engineering_of_consent.pdf">"The Engineering of Consent"</a> <span class="cs1-format">(PDF)</span>. <i><a href="/wiki/Annals_of_the_American_Academy_of_Political_and_Social_Science" class="mw-redirect" title="Annals of the American Academy of Political and Social Science">Annals of the American Academy of Political and Social Science</a></i>. <b>250</b> (1): 113–20 at p. 114. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1177%2F000271624725000116">10.1177/000271624725000116</a>. <a href="/wiki/ISSN_(identifier)" class="mw-redirect" title="ISSN (identifier)">ISSN</a>&#160;<a rel="nofollow" class="external text" href="https://search.worldcat.org/issn/0002-7162">0002-7162</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:167534969">167534969</a>. Archived from <a rel="nofollow" class="external text" href="http://gromitinc.com/lego/Library/Engineering_of_consent.pdf">the original</a> <span class="cs1-format">(PDF)</span> on August 13, 2012<span class="reference-accessdate">. Retrieved <span class="nowrap">February 24,</span> 2016</span>. <q>Any person or organization depends ultimately on public approval, and is therefore faced with the problem of engineering the public's consent to a program or goal.</q></cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Annals+of+the+American+Academy+of+Political+and+Social+Science&amp;rft.atitle=The+Engineering+of+Consent&amp;rft.volume=250&amp;rft.issue=1&amp;rft.pages=113-20+at+p.+114&amp;rft.date=1947-03&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A167534969%23id-name%3DS2CID&amp;rft.issn=0002-7162&amp;rft&#95;id=info%3Adoi%2F10.1177%2F000271624725000116&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward+L.&amp;rft&#95;id=http%3A%2F%2Fgromitinc.com%2Flego%2FLibrary%2FEngineering&#95;of&#95;consent.pdf&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-77"><span class="mw-cite-backlink"><b><a href="#cite_ref-77">^</a></b></span> <span class="reference-text">Bernays, "The Minority Rules" (1927), pp. 150, 151; cited in <a href="#CITEREFMarks1957">Marks 1957</a>, p.&#160;116</span>
+</li>
+<li id="cite&#95;note-78"><span class="mw-cite-backlink"><b><a href="#cite_ref-78">^</a></b></span> <span class="reference-text">Bernays, <i><a href="/wiki/Propaganda_(book)" title="Propaganda (book)">Propaganda</a></i> (1928), p. 28; quoted in <a href="#CITEREFOlasky1985">Olasky 1985</a>, p.&#160;20.</span>
+</li>
+<li id="cite&#95;note-79"><span class="mw-cite-backlink"><b><a href="#cite_ref-79">^</a></b></span> <span class="reference-text">Bernays, <i><a href="/wiki/Propaganda_(book)" title="Propaganda (book)">Propaganda</a></i> (1928), p. 159. Quoted in <a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;3.</span>
+</li>
+<li id="cite&#95;note-80"><span class="mw-cite-backlink"><b><a href="#cite_ref-80">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;17: "... his belief that behind-the-scenes controllers should exercise 'social responsibility' by devising clever public relations campaigns to direct 'human herds' into appropriate corals."</span>
+</li>
+<li id="cite&#95;note-81"><span class="mw-cite-backlink"><b><a href="#cite_ref-81">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1985">Olasky 1985</a>, p.&#160;19; <a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;19, f. 40 "Bernays emphasized that in a large scale society there were only two choices: manipulation or social chaos. He saw history moving in a certain direction and public relations practitioners obliged to climb on the locomotive".</span>
+</li>
+<li id="cite&#95;note-82"><span class="mw-cite-backlink"><b><a href="#cite_ref-82">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1984">Olasky 1984</a>, pp.&#160;13–14: "What Potter did not understand, though, is that the contradictions apparent to a classically-trained political scientist formed a seamless web in the new world of public relations that Bernays was proposing. If the 'individual common man' has no real individuality, as Bernays argued in <u>Propaganda</u>—only 'rubber stamping' by one propagandist or another, then one more duping does no harm to individual souls. And if Hitler had hit upon the techniques and used them for evil purposes, then that would be all the more reason—given the inevitability of these techniques being put into use and the inability of men to resist them—for those hoping to avoid the chaos to rush the techniques into use before evil could turn them into a triumph of fire."</span>
+</li>
+<li id="cite&#95;note-83"><span class="mw-cite-backlink"><b><a href="#cite_ref-83">^</a></b></span> <span class="reference-text">Bernays, "The Minority Rules" (1927), p. 155; quoted in <a href="#CITEREFMarks1957">Marks 1957</a>, p.&#160;182</span>
+</li>
+<li id="cite&#95;note-84"><span class="mw-cite-backlink"><b><a href="#cite_ref-84">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;12: "Bernays, however, anticipated greater centralization in government and media, and the consequent growth of a new bureaucracy. He advocated governmental licensing of public relations counselors, or at the least a set pattern of formal, university training befitting those who would form a latter-day mandarin class. Bernays also tried to enlist proponents of greater economic centralization in his public-relations planning.</span>
+</li>
+<li id="cite&#95;note-:0-85"><span class="mw-cite-backlink">^ <a href="#cite_ref-:0_85-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-:0_85-1"><sup><i><b>b</b></i></sup></a></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation news cs1"><a rel="nofollow" class="external text" data-mw-original-href="http://www.nytimes.com/1995/03/10/obituaries/edward-bernays-father-public-relations-leader-opinion-making-dies-103.html" href="https://www.nytimes.com/1995/03/10/obituaries/edward-bernays-father-public-relations-leader-opinion-making-dies-103.html">"Edward Bernays, 'Father of Public Relations' And Leader in Opinion Making, Dies at 103"</a>. <i><a href="/wiki/The_New_York_Times" title="The New York Times">The New York Times</a></i>. pp.&#160;Section B, Page 7<span class="reference-accessdate">. Retrieved <span class="nowrap">2024-11-15</span></span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=The+New+York+Times&amp;rft.atitle=Edward+Bernays%2C+%27Father+of+Public+Relations%27+And+Leader+in+Opinion+Making%2C+Dies+at+103&amp;rft.pages=Section+B%2C+Page+7&amp;rft&#95;id=http%3A%2F%2Fwww.nytimes.com%2F1995%2F03%2F10%2Fobituaries%2Fedward-bernays-father-public-relations-leader-opinion-making-dies-103.html&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-FOOTNOTECutlip1994160-86"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTECutlip1994160_86-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFCutlip1994">Cutlip 1994</a>, p.&#160;160.</span>
+</li>
+<li id="cite&#95;note-FOOTNOTECutlip19944–6-87"><span class="mw-cite-backlink"><b><a href="#cite_ref-FOOTNOTECutlip19944–6_87-0">^</a></b></span> <span class="reference-text"><a href="#CITEREFCutlip1994">Cutlip 1994</a>, pp.&#160;4–6.</span>
+</li>
+<li id="cite&#95;note-88"><span class="mw-cite-backlink"><b><a href="#cite_ref-88">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;8: "Bernays' own public relations also tended to suffer when comparisons were made between his techniques and those of the Nazis. One book in 1934, for instance, criticized the techniques of propaganda 'carried into perfection by the Lord Northcliffes in wartime England, the Edward Bernays in industrial America, and the Dr. Goebbels in fascist Germany.' <u>Barrons</u> linked American and German-style public relations in 1935 when it noted that 'Hitler, by making what Bernays calls "Devils" for the German masses to look down upon, has aroused the acclaim of the more easily swayed masses.' A 1934 article by Abraham H. Cohen in <u>Opinion</u> noted that Bernays had written a preface to a book on public opinion and commented, 'Now that the art of Ivy Lee and Edward Bernays has been reduced to a science, and is receiving the attention of the Universities, we may soon look to a new crop of manipulators of the public will. Who knows, but that a new American Goebbels&#160;... is now pouring over this book."</span>
+</li>
+<li id="cite&#95;note-89"><span class="mw-cite-backlink"><b><a href="#cite_ref-89">^</a></b></span> <span class="reference-text"><a href="#CITEREFBernays1965">Bernays 1965</a>, p.&#160;652. Quoted in Dennis W. Johnson, <i>Routledge Handbook of Political Management</i>, (New York: Routledge, 2009), p. <a rel="nofollow" class="external text" href="https://books.google.com/books?id=e0WTAgAAQBAJ&amp;pg=PA314">314</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20170406203617/https://books.google.com/books?id=e0WTAgAAQBAJ&amp;pg=PA314">Archived</a> 2017-04-06 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a> n. 3; and in <a href="#CITEREFTye1998">Tye 1998</a>, p.&#160;111 <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p><a href="/wiki/Karl_von_Wiegand" class="mw-redirect" title="Karl von Wiegand">Karl von Wiegand</a>, foreign correspondent of the Hearst newspapers, an old hand at interpreting Europe and just returned from Germany, was telling us about <a href="/wiki/Joseph_Goebbels" title="Joseph Goebbels">Goebbels</a> and his propaganda plans to consolidate Nazi power. Goebbels had shown Wiegand his propaganda library, the best Wiegand had ever seen. Goebbels, said Wiegand, was using my book <i>Crystallizing Public Opinion</i> as a basis for his destructive campaign against the Jews of Germany. This shocked me.&#160;... Obviously the attack on the Jews of Germany was no emotional outburst of the Nazis, but a deliberate, planned campaign.</p></blockquote></span>
+</li>
+<li id="cite&#95;note-90"><span class="mw-cite-backlink"><b><a href="#cite_ref-90">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1984">Olasky 1984</a>, pp.&#160;8–9: "Bernays himself added some gasoline to this fire when he argued, as did Goebbels, for the necessity of strong men, human gods, to emerge as influencers of public opinion; for instance, in a speech to the Financial Advertisers Association in 1935, Bernays said that the main answer to financial problems is 'to acquire an entire new set of outstanding human living symbols that will hold public confidence&#160;... Publicists, economists, leaders in research, the heads of great educational institutions can and should be made the human symbols to bring new faith and strength.' Journalists compared statements of that sort by Bernays to the thoughts of Goebbels or, alternately, Stalin."</span>
+</li>
+<li id="cite&#95;note-91"><span class="mw-cite-backlink"><b><a href="#cite_ref-91">^</a></b></span> <span class="reference-text"><a href="#CITEREFMarks1957">Marks 1957</a>, p.&#160;200: "By that time [the mid-1930s] he had developed a keen sense of the threat from fascism and frequently urged that the democracies use propaganda in their own defense. It was in this context that Bernays began treating propaganda as synonymous with free speech and debate, as an unexceptional feature of democracy itself rather than as its antithesis. As a participant on 'Town Meeting of the Air' in 1937 he said, <link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1244412712" /><blockquote class="templatequote"><p>Propaganda is the voice of the people in the democracy of today because it gives everyone an opportunity to present his point of view. Fascist or Communist societies have no alternate propagandas; they must accept the official propagandas of those in power. [...]</p></blockquote></span>
+</li>
+<li id="cite&#95;note-92"><span class="mw-cite-backlink"><b><a href="#cite_ref-92">^</a></b></span> <span class="reference-text"><a href="#CITEREFOlasky1984">Olasky 1984</a>, p.&#160;9: "Bernays was able to overcome criticism partly because there was, for many, little arguing with success. <u>Life</u> in 1933 noted that '... at 1 Wall St., there is Edw. L. Bernays, nephew of Sigmund Freud, who has probably made more money out of applied psycho-analysis than all Vienna ever saw.' The <u>Bulletin of the Financial Advertisers Association</u> examined profit figures in 1935 and then called Bernays 'the outstanding counsel on public relations in the United States today, a profession he was largely instrumental in creating.'"</span>
+</li>
+<li id="cite&#95;note-93"><span class="mw-cite-backlink"><b><a href="#cite_ref-93">^</a></b></span> <span class="reference-text"><a href="#CITEREFMarks1957">Marks 1957</a>, p.&#160;99: "And Bernays' word was respected. Said the Committee on Propaganda of the National Education Association, citing Bernays and, incidentally using another conventional metaphor, 'This continual and universal activity [i.e. of the 'thousands of highly trained and ingenious men' who work at 'the great occupation of "putting it over"'] is regimenting the public mind as an army regiments the bodies of its soldiers.'  In addition, there was a plethora of independent testimony such as that of the utility executive who told the F. T. C. that without the industry's propaganda 'state, municipal, and Government [sic] ownership would have been 100% ahead of what it is today; and Adolf Hitler's widely quoted comment that 'by sagacious and persistent use of propaganda heaven itself may be presented to a people as hell and, inversely, the most wretched existence as paradise.'"</span>
+</li>
+<li id="cite&#95;note-94"><span class="mw-cite-backlink"><b><a href="#cite_ref-94">^</a></b></span> <span class="reference-text">Stauber, John and Sheldon Rampton. "<a rel="nofollow" class="external text" href="http://www.prwatch.org/files/pdfs/prwatch/prwv6n2.pdf">Father of Spin: Edward L. Bernays and the Birth of PR</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20130116072155/http://www.prwatch.org/files/pdfs/prwatch/prwv6n2.pdf">Archived</a> 2013-01-16 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a>" (book review). <i>PR Watch</i> <b>6</b>:2, Second Quarter, 1999 (p.&#160;11).</span>
+</li>
+<li id="cite&#95;note-95"><span class="mw-cite-backlink"><b><a href="#cite_ref-95">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFRoberts2013" class="citation web cs1">Roberts, Andrea Suozzo, Alec Glassford, Ash Ngu, Brandon (2013-05-09). <a rel="nofollow" class="external text" href="https://projects.propublica.org/nonprofits/organizations/46057705">"Edward L Bernays Foundation Inc - Nonprofit Explorer"</a>. <i>ProPublica</i><span class="reference-accessdate">. Retrieved <span class="nowrap">2024-11-14</span></span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=ProPublica&amp;rft.atitle=Edward+L+Bernays+Foundation+Inc+-+Nonprofit+Explorer&amp;rft.date=2013-05-09&amp;rft.aulast=Roberts&amp;rft.aufirst=Andrea+Suozzo%2C+Alec+Glassford%2C+Ash+Ngu%2C+Brandon&amp;rft&#95;id=https%3A%2F%2Fprojects.propublica.org%2Fnonprofits%2Forganizations%2F46057705&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span><span class="cs1-maint citation-comment"><code class="cs1-code">{{<a href="/wiki/Template:Cite_web" title="Template:Cite web">cite web</a>}}</code>:  CS1 maint: multiple names: authors list (<a href="/wiki/Category:CS1_maint:_multiple_names:_authors_list" title="Category:CS1 maint: multiple names: authors list">link</a>)</span></span>
+</li>
+</ol></div></div>
+<div class="mw-heading mw-heading3"><h3 id="Sources">Sources</h3><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=27" title="Edit section: Sources"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1353403208" /><table class="infobox" style="clear: right; float:right;margin:0 0 4px 1.5em"><tbody><tr><th colspan="2" class="infobox-above" style="font-size:115%">External videos</th></tr><tr><td colspan="2" class="infobox-full-data" style="text-align: left"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Nuvola_apps_kaboodle.svg" class="mw-file-description"><img alt="video icon" src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png" decoding="async" width="16" height="16" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/40px-Nuvola_apps_kaboodle.svg.png 2x" data-file-width="128" data-file-height="128" /></a></span> <a rel="nofollow" class="external text" href="https://www.c-span.org/video/?110971-1/father-spin-edward-bernays"><i>Booknotes</i> interview with Larry Tye on <i>The Father of Spin</i>, September 20, 1998</a>, <a href="/wiki/C-SPAN" title="C-SPAN">C-SPAN</a></td></tr></tbody></table>
+<ul><li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFBernays1965" class="citation book cs1">Bernays, Edward (1965). <span class="id-lock-registration" title="Free registration required"><a rel="nofollow" class="external text" href="https://archive.org/details/biographyofideam00bern"><i>Biography of an Idea: Memoirs of Public Relations Counsel Edward L. Bernays</i></a></span>. New York: Simon and Schuster.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Biography+of+an+Idea%3A+Memoirs+of+Public+Relations+Counsel+Edward+L.+Bernays&amp;rft.place=New+York&amp;rft.pub=Simon+and+Schuster&amp;rft.date=1965&amp;rft.aulast=Bernays&amp;rft.aufirst=Edward&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2Fbiographyofideam00bern&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCutlip1994" class="citation book cs1"><a href="/wiki/Scott_Cutlip" title="Scott Cutlip">Cutlip, Scott M.</a> (1994). <i>The Unseen Power: Public Relations. A History</i>. Hove, UK: Lawrence Erlbaum. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-8058-1465-5" title="Special:BookSources/0-8058-1465-5"><bdi>0-8058-1465-5</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=The+Unseen+Power%3A+Public+Relations.+A+History.&amp;rft.place=Hove%2C+UK&amp;rft.pub=Lawrence+Erlbaum&amp;rft.date=1994&amp;rft.isbn=0-8058-1465-5&amp;rft.aulast=Cutlip&amp;rft.aufirst=Scott+M.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFEwen1996" class="citation book cs1"><a href="/wiki/Stuart_Ewen" title="Stuart Ewen">Ewen, Stuart</a> (1996). <i>PR! A Social History of Spin</i>. New York: Basic Books (Perseus). <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-465-06179-6" title="Special:BookSources/0-465-06179-6"><bdi>0-465-06179-6</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=PR%21+A+Social+History+of+Spin.&amp;rft.place=New+York&amp;rft.pub=Basic+Books+%28Perseus%29&amp;rft.date=1996&amp;rft.isbn=0-465-06179-6&amp;rft.aulast=Ewen&amp;rft.aufirst=Stuart&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFMarks1957" class="citation thesis cs1">Marks, Barry Alan (1957). <i>The Idea of Propaganda in America</i> (PhD thesis). University of Minnesota.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adissertation&amp;rft.title=The+Idea+of+Propaganda+in+America&amp;rft.degree=PhD&amp;rft.inst=University+of+Minnesota&amp;rft.date=1957&amp;rft.aulast=Marks&amp;rft.aufirst=Barry+Alan&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFOlasky1984" class="citation book cs1"><a href="/wiki/Marvin_Olasky" title="Marvin Olasky">Olasky, Marvin</a> (August 6, 1984). <a rel="nofollow" class="external text" href="https://archive.org/details/ERIC_ED245231"><i>Reception of Edward Bernays' Doctrine of 'Manipulating Public Opinion</i></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Reception+of+Edward+Bernays%27+Doctrine+of+%27Manipulating+Public+Opinion&amp;rft.date=1984-08-06&amp;rft.aulast=Olasky&amp;rft.aufirst=Marvin&amp;rft&#95;id=https%3A%2F%2Farchive.org%2Fdetails%2FERIC&#95;ED245231&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span><span class="cs1-maint citation-comment"><code class="cs1-code">{{<a href="/wiki/Template:Cite_book" title="Template:Cite book">cite book</a>}}</code>:  CS1 maint: ref duplicates default (<a href="/wiki/Category:CS1_maint:_ref_duplicates_default" title="Category:CS1 maint: ref duplicates default">link</a>)</span> Paper presented at the Annual Meeting of the Association for Education in Journalism and Mass Communication; (ERIC).</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFOlasky1985" class="citation journal cs1">Olasky, Marvin (Spring 1985). "<span class="cs1-kern-left"></span>"Bringing 'Order Out of Chaos": Edward Bernays and the Salvation of Society Through Public Relations"<span class="cs1-kern-right"></span>". <i>Journalism History</i>. <b>12</b> (1).</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journalism+History&amp;rft.atitle=%22Bringing+%27Order+Out+of+Chaos%22%3A+Edward+Bernays+and+the+Salvation+of+Society+Through+Public+Relations%22&amp;rft.ssn=spring&amp;rft.volume=12&amp;rft.issue=1&amp;rft.date=1985&amp;rft.aulast=Olasky&amp;rft.aufirst=Marvin&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span><span class="cs1-maint citation-comment"><code class="cs1-code">{{<a href="/wiki/Template:Cite_journal" title="Template:Cite journal">cite journal</a>}}</code>:  CS1 maint: ref duplicates default (<a href="/wiki/Category:CS1_maint:_ref_duplicates_default" title="Category:CS1 maint: ref duplicates default">link</a>)</span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFRamptonStauber2001" class="citation book cs1"><a href="/wiki/Sheldon_Rampton" title="Sheldon Rampton">Rampton, Sheldon</a>; <a href="/wiki/John_Stauber" title="John Stauber">Stauber, John</a> (2001). <i><a href="/wiki/Trust_Us,_We%27re_Experts" title="Trust Us, We&#39;re Experts">Trust Us, We're Experts! How Industry Manipulates Science and Gambles With Your Future</a></i>. New York: Jeremy P. Tarcher/Putnam. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/1-58542-059-X" title="Special:BookSources/1-58542-059-X"><bdi>1-58542-059-X</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Trust+Us%2C+We%27re+Experts%21+How+Industry+Manipulates+Science+and+Gambles+With+Your+Future&amp;rft.place=New+York&amp;rft.pub=Jeremy+P.+Tarcher%2FPutnam&amp;rft.date=2001&amp;rft.isbn=1-58542-059-X&amp;rft.aulast=Rampton&amp;rft.aufirst=Sheldon&amp;rft.au=Stauber%2C+John&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFTye1998" class="citation book cs1"><a href="/wiki/Larry_Tye" title="Larry Tye">Tye, Larry</a> (1998). <i>The Father of Spin: Edward L. Bernays and the Birth of Public Relations</i>. New York: Crown. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-8050-6789-2" title="Special:BookSources/0-8050-6789-2"><bdi>0-8050-6789-2</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=The+Father+of+Spin%3A+Edward+L.+Bernays+and+the+Birth+of+Public+Relations&amp;rft.place=New+York&amp;rft.pub=Crown&amp;rft.date=1998&amp;rft.isbn=0-8050-6789-2&amp;rft.aulast=Tye&amp;rft.aufirst=Larry&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li></ul>
+<div class="mw-heading mw-heading2"><h2 id="Further_reading">Further reading</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=28" title="Edit section: Further reading"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1353403208" /><table class="infobox" style="clear: right; float:right;margin:0 0 4px 1.5em"><tbody><tr><th colspan="2" class="infobox-above" style="font-size:115%">External videos</th></tr><tr><td colspan="2" class="infobox-full-data" style="text-align: left"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Nuvola_apps_kaboodle.svg" class="mw-file-description"><img alt="video icon" src="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png" decoding="async" width="16" height="16" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/40px-Nuvola_apps_kaboodle.svg.png 2x" data-file-width="128" data-file-height="128" /></a></span> <a rel="nofollow" class="external text" href="https://www.c-span.org/video/?316382-1/edward-bernays-corporate-public-relations">"Edward Bernays and Corporate Public Relations" – Presentation by University of Michigan professor David Hancock, December 5, 2013</a>, <a href="/wiki/C-SPAN" title="C-SPAN">C-SPAN</a></td></tr></tbody></table>
+<ul><li>American National Biography v. 2, Oxford University Press, 1999.</li>
+<li><a href="/wiki/John_Stauber" title="John Stauber">John Stauber</a> and <a href="/wiki/Sheldon_Rampton" title="Sheldon Rampton">Sheldon Rampton</a>, <i><a rel="nofollow" class="external text" href="http://www.prwatch.org/books/tsigfy.html">Toxic Sludge Is Good For You: Lies, Damn Lies and the Public Relations Industry</a></i></li>
+<li>Edward Bernays, <i>Biography of an Idea: Memoirs of a Public Relations Counsel</i> (<a rel="nofollow" class="external text" href="https://web.archive.org/web/20040311200824/http://www.mala.bc.ca/~soules/media112/pr.htm">excerpt</a> )</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCurtis,&#95;Adam2008" class="citation web cs1"><a href="/wiki/Adam_Curtis" title="Adam Curtis">Curtis, Adam</a> (November 26, 2008). <a rel="nofollow" class="external text" href="https://www.youtube.com/watch?v=Mojw7DIpu1k">"Century Of Self. 1-1 Happiness Machines"</a>. BBC. <a rel="nofollow" class="external text" href="https://ghostarchive.org/varchive/youtube/20211118/Mojw7DIpu1k">Archived</a> from the original on 2021-11-18<span class="reference-accessdate">. Retrieved <span class="nowrap">February 12,</span> 2010</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Century+Of+Self.+1-1+Happiness+Machines&amp;rft.pub=BBC&amp;rft.date=2008-11-26&amp;rft.au=Curtis%2C+Adam&amp;rft&#95;id=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DMojw7DIpu1k&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="https://www.npr.org/templates/story/story.php?storyId=4612464">"Freud's Nephew and the Origins of Public Relations"</a>. <i>NPR</i>. National Public Radio<span class="reference-accessdate">. Retrieved <span class="nowrap">February 12,</span> 2010</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=unknown&amp;rft.jtitle=NPR&amp;rft.atitle=Freud%27s+Nephew+and+the+Origins+of+Public+Relations&amp;rft&#95;id=https%3A%2F%2Fwww.npr.org%2Ftemplates%2Fstory%2Fstory.php%3FstoryId%3D4612464&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFNimmo,&#95;Dan&#95;D.Chevelle&#95;Newsome1997" class="citation book cs1">Nimmo, Dan D.; Chevelle Newsome (1997). <i>Political Commentators in the United States in the 20th Century: A Bio-Critical Sourcebook</i>. Westport, Conn.: <a href="/wiki/Greenwood_Press" class="mw-redirect" title="Greenwood Press">Greenwood Press</a>. pp.&#160;<span class="nowrap">1–</span>9. <a href="/wiki/ISBN_(identifier)" class="mw-redirect" title="ISBN (identifier)">ISBN</a>&#160;<a href="/wiki/Special:BookSources/0-313-29585-9" title="Special:BookSources/0-313-29585-9"><bdi>0-313-29585-9</bdi></a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Political+Commentators+in+the+United+States+in+the+20th+Century%3A+A+Bio-Critical+Sourcebook&amp;rft.place=Westport%2C+Conn.&amp;rft.pages=1-9&amp;rft.pub=Greenwood+Press&amp;rft.date=1997&amp;rft.isbn=0-313-29585-9&amp;rft.au=Nimmo%2C+Dan+D.&amp;rft.au=Chevelle+Newsome&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><a href="/wiki/Marvin_Olasky" title="Marvin Olasky">Marvin Olasky</a> column on his interview with Bernays at <a rel="nofollow" class="external text" href="http://www.townhall.com/Columnists/MarvinOlasky/2006/07/27/deliver_us_from_chaos">Townhall.com</a> <a rel="nofollow" class="external text" href="https://web.archive.org/web/20081207094910/http://www.townhall.com/Columnists/MarvinOlasky/2006/07/27/deliver_us_from_chaos">Archived</a> 2008-12-07 at the <a href="/wiki/Wayback_Machine" title="Wayback Machine">Wayback Machine</a></li>
+<li><a href="/wiki/Wilfred_Trotter" title="Wilfred Trotter">Wilfred Trotter</a> (1919). <i><a href="/wiki/Instincts_of_the_Herd_in_Peace_and_War" title="Instincts of the Herd in Peace and War">Instincts of the Herd in Peace and War</a></i> – 4th impression, with postscript. New York, MacMillan.</li>
+<li>Stephen Bender. <a rel="nofollow" class="external text" href="http://archive.lewrockwell.com/orig6/bender2.html">Karl Rove &amp; the Spectre of Freud's Nephew</a>, <a href="/wiki/LewRockwell.com" class="mw-redirect" title="LewRockwell.com">LewRockwell.com</a>, 2005-02-04</li></ul>
+<div class="mw-heading mw-heading2"><h2 id="External_links">External links</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Edward_Bernays&amp;action=edit&amp;section=29" title="Edit section: External links"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1314755338">.mw-parser-output .side-box{margin:4px 0;box-sizing:border-box;border:1px solid #aaa;font-size:88%;line-height:1.25em;background-color:var(--background-color-interactive-subtle,#f8f9fa);color:inherit;display:flow-root}.mw-parser-output .infobox .side-box{font-size:100%}.mw-parser-output .side-box-abovebelow,.mw-parser-output .side-box-text{padding:0.25em 0.9em}.mw-parser-output .side-box-image{padding:2px 0 2px 0.9em;text-align:center}.mw-parser-output .side-box-imageright{padding:2px 0.9em 2px 0;text-align:center}@media(min-width:500px){.mw-parser-output .side-box-flex{display:flex;align-items:center}.mw-parser-output .side-box-text{flex:1;min-width:0}}@media(min-width:640px){.mw-parser-output .side-box{width:238px}.mw-parser-output .side-box-right{clear:right;float:right;margin-left:1em}.mw-parser-output .side-box-left{margin-right:1em}}</style><style data-mw-deduplicate="TemplateStyles:r1311551236">@media print{body.ns-0 .mw-parser-output .sistersitebox{display:none!important}}@media screen{html.skin-theme-clientpref-night .mw-parser-output .sistersitebox img[src*="Wiktionary-logo-en-v2.svg"]{filter:invert(1)brightness(55%)contrast(250%)hue-rotate(180deg)}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .sistersitebox img[src*="Wiktionary-logo-en-v2.svg"]{filter:invert(1)brightness(55%)contrast(250%)hue-rotate(180deg)}}</style><div class="side-box side-box-right plainlinks sistersitebox"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" />
+<div class="side-box-flex">
+<div class="side-box-image"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Wikisource-logo.svg" class="mw-file-description"><img alt="Wikisource logo" src="//upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/40px-Wikisource-logo.svg.png" decoding="async" width="38" height="40" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Wikisource-logo.svg/120px-Wikisource-logo.svg.png 2x" data-file-width="410" data-file-height="430" /></a></span></div>
+<div class="side-box-text plainlist">English <a href="/wiki/Wikisource" title="Wikisource">Wikisource</a> has original works by or about:
+<div style="margin-left: 10px;"><b><a href="https://en.wikisource.org/wiki/en:Author:Edward_Bernays" class="extiw" title="s:en:Author:Edward Bernays">Edward Bernays</a></b></div></div></div>
+</div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314755338" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1311551236" /><div class="side-box side-box-right plainlinks sistersitebox"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" />
+<div class="side-box-flex">
+<div class="side-box-image"><span class="noviewer" typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/40px-Wikiquote-logo.svg.png" decoding="async" width="34" height="40" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Wikiquote-logo.svg/120px-Wikiquote-logo.svg.png 2x" data-file-width="300" data-file-height="355" /></span></span></div>
+<div class="side-box-text plainlist">Wikiquote has quotations related to <i><b><a href="https://en.wikiquote.org/wiki/Special:Search/Edward_Bernays" class="extiw" title="q:Special:Search/Edward Bernays">Edward Bernays</a></b></i>.</div></div>
+</div>
+<link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314755338" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1311551236" /><div class="side-box side-box-right plainlinks sistersitebox"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1126788409" />
+<div class="side-box-flex">
+<div class="side-box-image"><span class="noviewer" typeof="mw:File"><a href="/wiki/File:Commons-logo.svg" class="mw-file-description"><img alt="Wikimedia Commons logo" src="//upload.wikimedia.org/wikipedia/en/thumb/4/4a/Commons-logo.svg/40px-Commons-logo.svg.png" decoding="async" width="30" height="40" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/en/thumb/4/4a/Commons-logo.svg/60px-Commons-logo.svg.png 2x" data-file-width="1024" data-file-height="1376" /></a></span></div>
+<div class="side-box-text plainlist">Wikimedia Commons has media related to <span style="font-weight: bold; font-style: italic;"><a href="https://commons.wikimedia.org/wiki/Category:Edward_Bernays" class="extiw" title="commons:Category:Edward Bernays">Edward Bernays</a></span>.</div></div>
+</div>
+<ul><li><a rel="nofollow" class="external text" href="http://findingaids.loc.gov/db/search/xq/searchMfer02.xq?_id=loc.mss.eadmss.ms003016&amp;_faSection=overview&amp;_faSubsection=did&amp;_dmdid=">Edward L. Bernays papers</a> at Library of Congress (finding aid)
+<ul><li>Some Bernays papers at LOC are <a rel="nofollow" class="external text" href="http://memory.loc.gov/cgi-bin/query/r?ammem/coolbib:@field(NUMBER+@band(amrlm+@syn(me01+me02+me03+me04+me05+me06+me07+me08+me09+me10+me11+me12+me13+me14+me15+me16+me17+me18+me19+me20+me21+me22)))">online</a> as part of "Prosperity and Thrift: The Coolidge Era and the Consumer Economy, 1921–1929".</li></ul></li>
+<li>The <a rel="nofollow" class="external text" href="http://hdl.handle.net/2047/D20297190">Edward L. Bernays papers, 1982–1998 (bulk 1993–1995)</a> are located in the Northeastern University Libraries, Archives and Special Collections Department, Boston, MA.</li>
+<li><a rel="nofollow" class="external text" href="https://www.youtube.com/watch?v=vL1PPGCJnuoTorches_of_Freedom">Torches of Freedom Video Clip</a></li>
+<li><a rel="nofollow" class="external text" href="https://www.youtube.com/watch?v=6pyyP2chM8k">Edward L. Bernays tells the story of "Torches of Freedom" in his own words – video clip – 1999</a></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite class="citation web cs1"><a rel="nofollow" class="external text" href="http://memory.loc.gov/cgi-bin/ampage?collId=cool&amp;itemLink=r?ammem/coolbib:@field%28TITLE+@od1%28Edward+L+Bernays+Papers+++Are+We+Victims+of+Propaganda?+A+Debate++Everett+Dean+Martin+and+Edward+L++Bernays+%29%29&amp;hdl=amrlm:me20:0001">"Everett Dean Martin and Edward L. Bernays, <i>Are We Victims of Propaganda?</i> (Library of Congress reproduction from The Forum Magazine, March, 1929)"</a>. Memory.loc.gov<span class="reference-accessdate">. Retrieved <span class="nowrap">February 12,</span> 2010</span>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=unknown&amp;rft.btitle=Everett+Dean+Martin+and+Edward+L.+Bernays%2C+Are+We+Victims+of+Propaganda%3F+%28Library+of+Congress+reproduction+from+The+Forum+Magazine%2C+March%2C+1929%29&amp;rft.pub=Memory.loc.gov&amp;rft&#95;id=http%3A%2F%2Fmemory.loc.gov%2Fcgi-bin%2Fampage%3FcollId%3Dcool%26itemLink%3Dr%3Fammem%2Fcoolbib%3A%40field%2528TITLE%2B%40od1%2528Edward%2BL%2BBernays%2BPapers%2B%2B%2BAre%2BWe%2BVictims%2Bof%2BPropaganda%3F%2BA%2BDebate%2B%2BEverett%2BDean%2BMartin%2Band%2BEdward%2BL%2B%2BBernays%2B%2529%2529%26hdl%3Damrlm%3Ame20%3A0001&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3AEdward+Bernays" class="Z3988"></span></li>
+<li><a rel="nofollow" class="external text" href="https://www.c-span.org/person/?5703">Appearances</a> on <a href="/wiki/C-SPAN" title="C-SPAN">C-SPAN</a></li>
+<li><a rel="nofollow" class="external text" href="https://www.gutenberg.org/ebooks/author/5865">Works by Edward Bernays</a> at <a href="/wiki/Project_Gutenberg" title="Project Gutenberg">Project Gutenberg</a></li>
+<li><a rel="nofollow" class="external text" href="https://archive.org/search.php?query=%28%28subject%3A%22Bernays%2C%20Edward%22%20OR%20subject%3A%22Edward%20Bernays%22%20OR%20creator%3A%22Bernays%2C%20Edward%22%20OR%20creator%3A%22Edward%20Bernays%22%20OR%20creator%3A%22Bernays%2C%20E%2E%22%20OR%20title%3A%22Edward%20Bernays%22%20OR%20description%3A%22Bernays%2C%20Edward%22%20OR%20description%3A%22Edward%20Bernays%22%29%20OR%20%28%221891-1995%22%20AND%20Bernays%29%29%20AND%20%28-mediatype:software%29">Works by or about Edward Bernays</a> at the <a href="/wiki/Internet_Archive" title="Internet Archive">Internet Archive</a></li>
+<li><a rel="nofollow" class="external text" href="https://librivox.org/author/18611">Works by Edward Bernays</a> at <a href="/wiki/LibriVox" title="LibriVox">LibriVox</a> (public domain audiobooks) <span typeof="mw:File"><span><img alt="" src="//upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/20px-Speaker_Icon.svg.png" decoding="async" width="15" height="15" class="mw-file-element" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/40px-Speaker_Icon.svg.png 2x" data-file-width="500" data-file-height="500" /></span></span></li>
+<li><a rel="nofollow" class="external text" href="https://archive.org/details/LETTERTOMREDWARDLBERNAYSFROMSanitized80B01676R0038000200830">LETTER TO MR. EDWARD L. BERNAYS FROM &lt;Sanitized&gt; RDP80B01676R003800020083-0 </a>; "<a rel="nofollow" class="external text" href="https://archive.org/details/LETTERTOMREDWARDLBERNAYSFROMSanitized80B01676R0038000200849">LETTER TO MR. EDWARD L. BERNAYS FROM &lt;Sanitized&gt; RDP80B01676R003800020084-9 </a>", 1958, Central Intelligence Agency,</li></ul>
+<div class="navbox-styles"><style data-mw-deduplicate="TemplateStyles:r1333133064">.mw-parser-output .hlist dl,.mw-parser-output .hlist ol,.mw-parser-output .hlist ul{margin:0;padding:0}.mw-parser-output .hlist dd,.mw-parser-output .hlist dt,.mw-parser-output .hlist li{margin:0;display:inline}.mw-parser-output .hlist.inline,.mw-parser-output .hlist.inline dl,.mw-parser-output .hlist.inline ol,.mw-parser-output .hlist.inline ul,.mw-parser-output .hlist dl dl,.mw-parser-output .hlist dl ol,.mw-parser-output .hlist dl ul,.mw-parser-output .hlist ol dl,.mw-parser-output .hlist ol ol,.mw-parser-output .hlist ol ul,.mw-parser-output .hlist ul dl,.mw-parser-output .hlist ul ol,.mw-parser-output .hlist ul ul{display:inline}.mw-parser-output .hlist .mw-empty-li{display:none}.mw-parser-output .hlist dt::after{content:": "}.mw-parser-output .hlist dd::after,.mw-parser-output .hlist li::after{content:"\a0 · ";font-weight:bold}.mw-parser-output .hlist dd:last-child::after,.mw-parser-output .hlist dt:last-child::after,.mw-parser-output .hlist li:last-child::after{content:none}.mw-parser-output .hlist dd dd:first-child::before,.mw-parser-output .hlist dd dt:first-child::before,.mw-parser-output .hlist dd li:first-child::before,.mw-parser-output .hlist dt dd:first-child::before,.mw-parser-output .hlist dt dt:first-child::before,.mw-parser-output .hlist dt li:first-child::before,.mw-parser-output .hlist li dd:first-child::before,.mw-parser-output .hlist li dt:first-child::before,.mw-parser-output .hlist li li:first-child::before{content:" (";font-weight:normal}.mw-parser-output .hlist dd dd:last-child::after,.mw-parser-output .hlist dd dt:last-child::after,.mw-parser-output .hlist dd li:last-child::after,.mw-parser-output .hlist dt dd:last-child::after,.mw-parser-output .hlist dt dt:last-child::after,.mw-parser-output .hlist dt li:last-child::after,.mw-parser-output .hlist li dd:last-child::after,.mw-parser-output .hlist li dt:last-child::after,.mw-parser-output .hlist li li:last-child::after{content:")";font-weight:normal}.mw-parser-output .hlist ol{counter-reset:listitem}.mw-parser-output .hlist ol>li{counter-increment:listitem}.mw-parser-output .hlist ol>li::before{content:" "counter(listitem)"\a0 "}.mw-parser-output .hlist dd ol>li:first-child::before,.mw-parser-output .hlist dt ol>li:first-child::before,.mw-parser-output .hlist li ol>li:first-child::before{content:" ("counter(listitem)"\a0 "}</style><style data-mw-deduplicate="TemplateStyles:r1314944253">.mw-parser-output .navbox{box-sizing:border-box;border:1px solid #a2a9b1;width:100%;clear:both;font-size:88%;text-align:center;padding:1px;margin:1em auto 0}.mw-parser-output .navbox .navbox{margin-top:0}.mw-parser-output .navbox+.navbox,.mw-parser-output .navbox+.navbox-styles+.navbox{margin-top:-1px}.mw-parser-output .navbox-inner,.mw-parser-output .navbox-subgroup{width:100%}.mw-parser-output .navbox-group,.mw-parser-output .navbox-title,.mw-parser-output .navbox-abovebelow{padding:0.25em 1em;line-height:1.5em;text-align:center}.mw-parser-output .navbox-group{white-space:nowrap;text-align:right}.mw-parser-output .navbox,.mw-parser-output .navbox-subgroup{background-color:#fdfdfd;color:inherit}.mw-parser-output .navbox-list{line-height:1.5em;border-color:#fdfdfd}.mw-parser-output .navbox-list-with-group{text-align:left;border-left-width:2px;border-left-style:solid}.mw-parser-output tr+tr>.navbox-abovebelow,.mw-parser-output tr+tr>.navbox-group,.mw-parser-output tr+tr>.navbox-image,.mw-parser-output tr+tr>.navbox-list{border-top:2px solid #fdfdfd}.mw-parser-output .navbox-title{background-color:#ccf;color:inherit}.mw-parser-output .navbox-abovebelow,.mw-parser-output .navbox-group,.mw-parser-output .navbox-subgroup .navbox-title{background-color:#ddf;color:inherit}.mw-parser-output .navbox-subgroup .navbox-group,.mw-parser-output .navbox-subgroup .navbox-abovebelow{background-color:#e6e6ff;color:inherit}.mw-parser-output .navbox-even{background-color:#f7f7f7;color:inherit}.mw-parser-output .navbox-odd{background-color:transparent;color:inherit}.mw-parser-output .navbox .hlist td dl,.mw-parser-output .navbox .hlist td ol,.mw-parser-output .navbox .hlist td ul,.mw-parser-output .navbox td.hlist dl,.mw-parser-output .navbox td.hlist ol,.mw-parser-output .navbox td.hlist ul{padding:0.125em 0}.mw-parser-output .navbox .navbar{display:block;font-size:100%}.mw-parser-output .navbox-title .navbar{float:left;text-align:left;margin-right:0.5em}body.skin--responsive .mw-parser-output .navbox-image img{max-width:none!important}@media print{body.ns-0 .mw-parser-output .navbox{display:none!important}}</style></div><div role="navigation" class="navbox" aria-labelledby="1920s&#95;media&#95;culture381" style="padding:3px"><table class="nowraplinks mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><style data-mw-deduplicate="TemplateStyles:r1239400231">.mw-parser-output .navbar{display:inline;font-size:88%;font-weight:normal}.mw-parser-output .navbar-collapse{float:left;text-align:left}.mw-parser-output .navbar-boxtext{word-spacing:0}.mw-parser-output .navbar ul{display:inline-block;white-space:nowrap;line-height:inherit}.mw-parser-output .navbar-brackets::before{margin-right:-0.125em;content:"[ "}.mw-parser-output .navbar-brackets::after{margin-left:-0.125em;content:" ]"}.mw-parser-output .navbar li{word-spacing:-0.125em}.mw-parser-output .navbar a>span,.mw-parser-output .navbar a>abbr{text-decoration:inherit}.mw-parser-output .navbar-mini abbr{font-variant:small-caps;border-bottom:none;text-decoration:none;cursor:inherit}.mw-parser-output .navbar-ct-full{font-size:114%;margin:0 7em}.mw-parser-output .navbar-ct-mini{font-size:114%;margin:0 4em}html.skin-theme-clientpref-night .mw-parser-output .navbar li a abbr{color:var(--color-base)!important}@media(prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .navbar li a abbr{color:var(--color-base)!important}}@media print{.mw-parser-output .navbar{display:none!important}}</style><div class="navbar plainlinks hlist navbar-mini"><ul><li class="nv-view"><a href="/wiki/Template:1920s_media_culture" title="Template:1920s media culture"><abbr title="View this template">v</abbr></a></li><li class="nv-talk"><a href="/wiki/Template_talk:1920s_media_culture" title="Template talk:1920s media culture"><abbr title="Discuss this template">t</abbr></a></li><li class="nv-edit"><a href="/wiki/Special:EditPage/Template:1920s_media_culture" title="Special:EditPage/Template:1920s media culture"><abbr title="Edit this template">e</abbr></a></li></ul></div><div id="1920s&#95;media&#95;culture381" style="font-size:114%;margin:0 4em"><a href="/wiki/1920s" title="1920s">1920s</a> <a href="/wiki/Media_culture" title="Media culture">media culture</a></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%">Collective imaginary</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Flapper" title="Flapper">Flapper</a></li>
+<li><a href="/wiki/Betty_Boop" title="Betty Boop">Betty Boop</a></li>
+<li><a href="/wiki/Modern_girl" title="Modern girl">Modern girl</a></li>
+<li><a href="/wiki/Torches_of_Freedom" title="Torches of Freedom">Torches of Freedom</a></li>
+<li><a href="/wiki/Cosmetics_in_the_1920s" title="Cosmetics in the 1920s">Cosmetics in the 1920s</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Theoreticians</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Walter_Lippmann" title="Walter Lippmann">Walter Lippmann</a></li>
+<li><a class="mw-selflink selflink">Edward Bernays</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Other topics</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Tad_Dorgan" title="Tad Dorgan">Tad Dorgan</a></li>
+<li><a href="/wiki/Federal_Radio_Commission" title="Federal Radio Commission">Federal Radio Commission</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">1930s topics</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Mohawk_Valley_formula" title="Mohawk Valley formula">Mohawk Valley formula</a></li>
+<li><a href="/wiki/Remington_Rand_strike_of_1936%E2%80%931937" class="mw-redirect" title="Remington Rand strike of 1936–1937">Remington Rand strike of 1936–1937</a></li></ul>
+</div></td></tr></tbody></table></div>
+<div class="navbox-styles"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314944253" /></div><div role="navigation" class="navbox" aria-labelledby="Sigmund&#95;Freud3658" style="padding:3px"><table class="nowraplinks mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1239400231" /><div class="navbar plainlinks hlist navbar-mini"><ul><li class="nv-view"><a href="/wiki/Template:Sigmund_Freud" title="Template:Sigmund Freud"><abbr title="View this template">v</abbr></a></li><li class="nv-talk"><a href="/wiki/Template_talk:Sigmund_Freud" title="Template talk:Sigmund Freud"><abbr title="Discuss this template">t</abbr></a></li><li class="nv-edit"><a href="/wiki/Special:EditPage/Template:Sigmund_Freud" title="Special:EditPage/Template:Sigmund Freud"><abbr title="Edit this template">e</abbr></a></li></ul></div><div id="Sigmund&#95;Freud3658" style="font-size:114%;margin:0 4em"><a href="/wiki/Sigmund_Freud" title="Sigmund Freud">Sigmund Freud</a></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%">Books</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><i><a href="/wiki/On_Aphasia" title="On Aphasia">On Aphasia</a></i> (1891)</li>
+<li><i><a href="/wiki/Studies_on_Hysteria" title="Studies on Hysteria">Studies on Hysteria</a></i> (1895)</li>
+<li><a href="/wiki/The_Interpretation_of_Dreams" title="The Interpretation of Dreams"><i>The Interpretation of Dreams</i> <span style="font-size: 85%;">(including <i>On Dreams</i>)</span></a> (1899)</li>
+<li><i><a href="/wiki/The_Psychopathology_of_Everyday_Life" title="The Psychopathology of Everyday Life">The Psychopathology of Everyday Life</a></i> (1901)</li>
+<li><i><a href="/wiki/Jokes_and_Their_Relation_to_the_Unconscious" title="Jokes and Their Relation to the Unconscious">Jokes and Their Relation to the Unconscious</a></i> (1905)</li>
+<li><i><a href="/wiki/Totem_and_Taboo" title="Totem and Taboo">Totem and Taboo</a></i> (1913)</li>
+<li><i><a href="/wiki/Introduction_to_Psychoanalysis" title="Introduction to Psychoanalysis">Introduction to Psychoanalysis</a></i> (1916–17)</li>
+<li><i><a href="/wiki/Group_Psychology_and_the_Analysis_of_the_Ego" title="Group Psychology and the Analysis of the Ego">Group Psychology and the Analysis of the Ego</a></i> (1921)</li>
+<li><i><a href="/wiki/The_Ego_and_the_Id" title="The Ego and the Id">The Ego and the Id</a></i> (1923)</li>
+<li><i><a href="/wiki/The_Question_of_Lay_Analysis" title="The Question of Lay Analysis">The Question of Lay Analysis</a></i> (1926)</li>
+<li><i><a href="/wiki/The_Future_of_an_Illusion" title="The Future of an Illusion">The Future of an Illusion</a></i> (1927)</li>
+<li><i><a href="/wiki/Civilization_and_Its_Discontents" title="Civilization and Its Discontents">Civilization and Its Discontents</a></i> (1930)</li>
+<li><i><a href="/wiki/Moses_and_Monotheism" title="Moses and Monotheism">Moses and Monotheism</a></i> (1939)</li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Essays</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li>"<a href="/wiki/The_Aetiology_of_Hysteria" title="The Aetiology of Hysteria">The Aetiology of Hysteria</a>" (1896)</li>
+<li><i><a href="/wiki/Three_Essays_on_the_Theory_of_Sexuality" title="Three Essays on the Theory of Sexuality">Three Essays on the Theory of Sexuality</a></i> (1905)</li>
+<li><i><a href="/wiki/Delusion_and_Dream_in_Jensen%27s_Gradiva" title="Delusion and Dream in Jensen&#39;s Gradiva">Delusion and Dream in Jensen's Gradiva</a></i> (1907)</li>
+<li>"<a href="/wiki/Creative_Writers_and_Day-Dreaming" title="Creative Writers and Day-Dreaming">Creative Writers and Day-Dreaming</a>" (1908)</li>
+<li><i><a href="/wiki/Leonardo_da_Vinci,_A_Memory_of_His_Childhood" title="Leonardo da Vinci, A Memory of His Childhood">Leonardo da Vinci, A Memory of His Childhood</a></i> (1910)</li>
+<li><i><a href="/wiki/On_Narcissism" title="On Narcissism">On Narcissism</a></i> (1914)</li>
+<li><i><a href="/wiki/The_History_of_the_Psychoanalytic_Movement" title="The History of the Psychoanalytic Movement">The History of the Psychoanalytic Movement</a></i> (1914)</li>
+<li>"<a href="/wiki/Some_Character-Types_Met_with_in_Psycho-Analytic_Work" title="Some Character-Types Met with in Psycho-Analytic Work">Some Character-Types Met with in Psycho-Analytic Work</a>" (1915)</li>
+<li><i><a href="/wiki/Thoughts_for_the_Times_on_War_and_Death" title="Thoughts for the Times on War and Death">Thoughts for the Times on War and Death</a></i> (1916)</li>
+<li>"<a href="/wiki/Mourning_and_Melancholia" title="Mourning and Melancholia">Mourning and Melancholia</a>" (1918)</li>
+<li><i><a href="/wiki/Beyond_the_Pleasure_Principle" title="Beyond the Pleasure Principle">Beyond the Pleasure Principle</a></i> (1920)</li>
+<li>"<a href="/wiki/Medusa%27s_Head" title="Medusa&#39;s Head">Medusa's Head</a>" (1922)</li>
+<li><i><a href="/wiki/Dostoevsky_and_Parricide" title="Dostoevsky and Parricide">Dostoevsky and Parricide</a></i> (1928)</li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Case studies</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Dora_(case_study)" title="Dora (case study)">"Dora" <span style="font-size: 85%;">(Ida Bauer)</span></a></li>
+<li><a href="/wiki/Emma_Eckstein" title="Emma Eckstein">Emma Eckstein</a></li>
+<li><a href="/wiki/Herbert_Graf" title="Herbert Graf">Herbert Graf <span style="font-size: 85%;">("Little Hans")</span></a></li>
+<li><a href="/wiki/Irma%27s_injection" title="Irma&#39;s injection">Irma's injection</a></li>
+<li><a href="/wiki/Anna_O." class="mw-redirect" title="Anna O.">"Anna O."</a>&#160;<span style="font-size: 85%;">(<a href="/wiki/Bertha_Pappenheim" title="Bertha Pappenheim">Bertha Pappenheim</a>)</span></li>
+<li><a href="/wiki/Rat_Man" title="Rat Man">"Rat Man"</a></li>
+<li><a href="/wiki/Sergei_Pankejeff" title="Sergei Pankejeff">Sergei Pankejeff <span style="font-size: 85%;">("Wolfman")</span></a></li>
+<li><a href="/wiki/Daniel_Paul_Schreber" title="Daniel Paul Schreber">Daniel Paul Schreber</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Original<br />concepts</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Psychoanalysis" title="Psychoanalysis">Psychoanalysis</a></li>
+<li><a href="/wiki/Id,_ego_and_superego" title="Id, ego and superego">Id, ego and superego</a></li>
+<li><a href="/wiki/Libido" title="Libido">Libido</a></li>
+<li><a href="/wiki/Preconscious" title="Preconscious">Preconscious</a></li>
+<li><a href="/wiki/Ego_ideal" title="Ego ideal">Ego ideal</a>
+<ul><li><a href="/wiki/Censorship_(psychoanalysis)" title="Censorship (psychoanalysis)">censorship</a></li></ul></li>
+<li><a href="/wiki/Free_association_(psychology)" title="Free association (psychology)">Free association</a></li>
+<li><a href="/wiki/Transference" title="Transference">Transference</a></li>
+<li><a href="/wiki/Psychosexual_development" title="Psychosexual development">Psychosexual development</a>
+<ul><li><a href="/wiki/Oral_stage" title="Oral stage">Oral stage</a></li>
+<li><a href="/wiki/Anal_stage" title="Anal stage">Anal stage</a></li>
+<li><a href="/wiki/Phallic_stage" title="Phallic stage">Phallic stage</a></li>
+<li><a href="/wiki/Latency_stage" title="Latency stage">Latency stage</a></li>
+<li><a href="/wiki/Genital_stage" title="Genital stage">Genital stage</a></li></ul></li>
+<li><a href="/wiki/Oedipus_complex" title="Oedipus complex">Oedipus complex</a>
+<ul><li><a href="/wiki/Father_complex" title="Father complex">Father complex</a></li></ul></li>
+<li><a href="/wiki/Deferred_obedience" title="Deferred obedience">Deferred obedience</a></li>
+<li><a href="/wiki/Reality_principle" title="Reality principle">Reality principle</a></li>
+<li><a href="/wiki/Freud%27s_seduction_theory" title="Freud&#39;s seduction theory">Seduction theory</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Related</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Sigmund_Freud_bibliography" title="Sigmund Freud bibliography">Bibliography</a>
+<ul><li><a href="/wiki/The_Standard_Edition_of_the_Complete_Psychological_Works_of_Sigmund_Freud" title="The Standard Edition of the Complete Psychological Works of Sigmund Freud">complete works</a></li></ul></li>
+<li><a href="/wiki/Sigmund_Freud_Archives" title="Sigmund Freud Archives">Archives</a></li>
+<li><a href="/wiki/Sigmund_Freud_Museum_(Vienna)" title="Sigmund Freud Museum (Vienna)">Vienna home and museum</a></li>
+<li><a href="/wiki/Freud_Museum" title="Freud Museum">London home and museum</a>
+<ul><li><a href="/wiki/Statue_of_Sigmund_Freud,_Hampstead" title="Statue of Sigmund Freud, Hampstead">1971 statue</a></li></ul></li>
+<li><a href="/wiki/Freud_Corner_(Golders_Green_Crematorium)" title="Freud Corner (Golders Green Crematorium)">Interment</a></li>
+<li><a href="/wiki/Freudian_slip" title="Freudian slip">Freudian slip</a></li>
+<li><a href="/wiki/Humor_in_Freud" title="Humor in Freud">Humor</a></li>
+<li><a href="/wiki/Inner_circle_(psychoanalysis)" class="mw-redirect" title="Inner circle (psychoanalysis)">Inner circle</a></li>
+<li><a href="/wiki/Neo-Freudianism" title="Neo-Freudianism">Neo-Freudianism</a></li>
+<li><a href="/wiki/Sigmund_Freud%27s_views_on_homosexuality" title="Sigmund Freud&#39;s views on homosexuality">Views on homosexuality</a></li>
+<li><a href="/wiki/Sigmund_Freud%27s_views_on_religion" title="Sigmund Freud&#39;s views on religion">Religious views</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Cultural<br />depictions</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><i><a href="/wiki/Freud:_The_Secret_Passion" title="Freud: The Secret Passion">Freud: The Secret Passion</a></i> (1962 film)</li>
+<li><i><a href="/wiki/The_Visitor_(play)" title="The Visitor (play)">The Visitor</a></i> (1993 play)</li>
+<li><i><a href="/wiki/Mahler_on_the_Couch" title="Mahler on the Couch">Mahler on the Couch</a></i> (2010 film)</li>
+<li><i><a href="/wiki/A_Dangerous_Method" title="A Dangerous Method">A Dangerous Method</a></i> (2011 film)</li>
+<li><i><a href="/wiki/Freud_(TV_series)" title="Freud (TV series)">Freud</a></i> (2020 TV series)</li>
+<li><i><a href="/wiki/Freud%27s_Last_Session" title="Freud&#39;s Last Session">Freud's Last Session</a></i> (2023 film)</li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Freud_family" title="Freud family">Family</a></th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Martha_Bernays" title="Martha Bernays">Martha Bernays (wife)</a></li>
+<li><a href="/wiki/Anna_Freud" title="Anna Freud">Anna Freud (daughter)</a></li>
+<li><a href="/wiki/Ernst_L._Freud" title="Ernst L. Freud">Ernst L. Freud (son)</a></li>
+<li><a href="/wiki/Clement_Freud" title="Clement Freud">Clement Freud (grandson)</a></li>
+<li><a href="/wiki/Lucian_Freud" title="Lucian Freud">Lucian Freud (grandson)</a></li>
+<li><a href="/wiki/Walter_Freud" title="Walter Freud">Walter Freud (grandson)</a></li>
+<li><a href="/wiki/Amalia_Freud" title="Amalia Freud">Amalia Freud (mother)</a></li>
+<li><a href="/wiki/Jacob_Freud" title="Jacob Freud">Jacob Freud (father)</a></li>
+<li><a class="mw-selflink selflink">Edward Bernay (nephew)</a></li>
+<li><a href="/wiki/Jofi" title="Jofi">Jofi (dog)</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Prizes</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Sigmund_Freud_Prize" title="Sigmund Freud Prize">Sigmund Freud Prize</a></li></ul>
+</div></td></tr></tbody></table></div>
+<div class="navbox-styles"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314944253" /></div><div role="navigation" class="navbox" aria-labelledby="Media&#95;culture3273" style="padding:3px"><table class="nowraplinks mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1239400231" /><div class="navbar plainlinks hlist navbar-mini"><ul><li class="nv-view"><a href="/wiki/Template:Media_culture" title="Template:Media culture"><abbr title="View this template">v</abbr></a></li><li class="nv-talk"><a href="/wiki/Template_talk:Media_culture" title="Template talk:Media culture"><abbr title="Discuss this template">t</abbr></a></li><li class="nv-edit"><a href="/wiki/Special:EditPage/Template:Media_culture" title="Special:EditPage/Template:Media culture"><abbr title="Edit this template">e</abbr></a></li></ul></div><div id="Media&#95;culture3273" style="font-size:114%;margin:0 4em"><a href="/wiki/Media_culture" title="Media culture">Media culture</a></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%">Media</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/24-hour_news_cycle" title="24-hour news cycle">24-hour news cycle</a></li>
+<li><a href="/wiki/Alternative_media" title="Alternative media">Alternative media</a></li>
+<li><a href="/wiki/Digital_media" title="Digital media">Digital media</a></li>
+<li><a href="/wiki/Electronic_media" title="Electronic media">Electronic media</a></li>
+<li><a href="/wiki/Independent_media" title="Independent media">Independent media</a></li>
+<li><a href="/wiki/Lost_media" title="Lost media">Lost media</a></li>
+<li><a href="/wiki/Mass_media" title="Mass media">Mass media</a></li>
+<li><a href="/wiki/Mainstream_media" title="Mainstream media">Mainstream media</a></li>
+<li><a href="/wiki/Media_economics" title="Media economics">Media economics</a></li>
+<li><a href="/wiki/Mobile_media" title="Mobile media">Mobile media</a></li>
+<li><a href="/wiki/New_media" title="New media">New media</a></li>
+<li><a href="/wiki/News_broadcasting" class="mw-redirect" title="News broadcasting">News broadcasting</a></li>
+<li><a href="/wiki/News_media" title="News media">News media</a></li>
+<li><a href="/wiki/Old_media" title="Old media">Old media</a></li>
+<li><a href="/wiki/Physical_media" title="Physical media">Physical media</a></li>
+<li><a href="/wiki/Social_media" title="Social media">Social media</a>
+<ul><li><a href="/wiki/Influencer" title="Influencer">Influencers</a></li></ul></li>
+<li><a href="/wiki/State_media" title="State media">State media</a></li>
+<li><a href="/wiki/Streaming_media" title="Streaming media">Streaming media</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Principles</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Media_development" title="Media development">Media development</a></li>
+<li><a href="/wiki/Media_policy" title="Media policy">Media policy</a></li>
+<li><a href="/wiki/Media_independence" class="mw-redirect" title="Media independence">Media independence</a>
+<ul><li><a href="/wiki/Freedom_of_information" title="Freedom of information">Freedom of information</a></li>
+<li><a href="/wiki/Freedom_of_speech" title="Freedom of speech">Freedom of speech</a></li></ul></li>
+<li><a href="/wiki/Media_pluralism" title="Media pluralism">Media pluralism</a></li>
+<li><a href="/wiki/Media_transparency" title="Media transparency">Media transparency</a></li>
+<li><a href="/wiki/Marketplace_of_ideas" title="Marketplace of ideas">Marketplace of ideas</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Ideology</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Advanced_capitalism" title="Advanced capitalism">Advanced capitalism</a></li>
+<li><a href="/wiki/American_Dream" title="American Dream">American Dream</a></li>
+<li><a href="/wiki/Bipartisanship_as_an_ideology" class="mw-redirect" title="Bipartisanship as an ideology">Bipartisanship</a></li>
+<li><a href="/wiki/Consumerism" title="Consumerism">Consumerism</a></li>
+<li><a href="/wiki/Pens%C3%A9e_unique" title="Pensée unique">Pensée unique</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Deception</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em"></div><table class="nowraplinks navbox-subgroup" style="border-spacing:0"><tbody><tr><th scope="row" class="navbox-group" style="width:1%;font-weight:normal;">Forms</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Advertising" title="Advertising">Advertising</a></li>
+<li><a href="/wiki/Propaganda" title="Propaganda">Propaganda</a>
+<ul><li><a href="/wiki/Fake_news" title="Fake news">Fake news</a></li></ul></li>
+<li><a href="/wiki/Public_relations" title="Public relations">Public relations</a></li>
+<li><a href="/wiki/Spin_(propaganda)" title="Spin (propaganda)">Spin</a></li>
+<li><a href="/wiki/Tabloid_journalism" title="Tabloid journalism">Tabloid journalism</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%;font-weight:normal;">Techniques</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Cult_of_personality" title="Cult of personality">Cult of personality</a></li>
+<li><a href="/wiki/Dumbing_down" title="Dumbing down">Dumbing down</a></li>
+<li><a href="/wiki/Framing_(social_sciences)" title="Framing (social sciences)">Framing</a></li>
+<li><a href="/wiki/Media_circus" title="Media circus">Media circus</a></li>
+<li><a href="/wiki/Media_event" title="Media event">Media event</a></li>
+<li><a href="/wiki/Narcotizing_dysfunction" title="Narcotizing dysfunction">Narcotizing dysfunction</a></li>
+<li><a href="/wiki/Protest_paradigm" title="Protest paradigm">Protest paradigm</a></li>
+<li><a href="/wiki/Recuperation_(politics)" title="Recuperation (politics)">Recuperation</a></li>
+<li><a href="/wiki/Sensationalism" title="Sensationalism">Sensationalism</a></li>
+<li><a href="/wiki/Viral_phenomena" class="mw-redirect" title="Viral phenomena">Viral phenomena</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%;font-weight:normal;">Others</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Catch_and_kill" title="Catch and kill">Catch and kill</a></li>
+<li><a href="/wiki/Crowd_manipulation" title="Crowd manipulation">Crowd manipulation</a></li>
+<li><a href="/wiki/Managing_the_news" title="Managing the news">Managing the news</a></li>
+<li><a href="/wiki/Media_manipulation" title="Media manipulation">Media manipulation</a></li></ul>
+</div></td></tr></tbody></table><div></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Philosophers</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Theodor_W._Adorno" title="Theodor W. Adorno">Theodor W. Adorno</a></li>
+<li><a href="/wiki/Jean_Baudrillard" title="Jean Baudrillard">Jean Baudrillard</a></li>
+<li><a class="mw-selflink selflink">Edward Bernays</a></li>
+<li><a href="/wiki/Noam_Chomsky" title="Noam Chomsky">Noam Chomsky</a></li>
+<li><a href="/wiki/Guy_Debord" title="Guy Debord">Guy Debord</a></li>
+<li><a href="/wiki/Walter_Lippmann" title="Walter Lippmann">Walter Lippmann</a></li>
+<li><a href="/wiki/Marshall_McLuhan" title="Marshall McLuhan">Marshall McLuhan</a></li>
+<li><a href="/wiki/Jacques_Ranci%C3%A8re" title="Jacques Rancière">Jacques Rancière</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%"><a href="/wiki/Counterculture" title="Counterculture">Counterculture</a></th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Boycott" title="Boycott">Boycott</a></li>
+<li><a href="/wiki/Call-out_culture" class="mw-redirect" title="Call-out culture">Call-out culture</a></li>
+<li><a href="/wiki/Cancel_culture" title="Cancel culture">Cancel culture</a></li>
+<li><a href="/wiki/Civil_disobedience" title="Civil disobedience">Civil disobedience</a></li>
+<li><a href="/wiki/Culture_jamming" title="Culture jamming">Culture jamming</a></li>
+<li><a href="/wiki/Political_demonstration" title="Political demonstration">Demonstration</a></li>
+<li><a href="/wiki/Graffiti" title="Graffiti">Graffiti</a></li>
+<li><a href="/wiki/Occupation_(protest)" title="Occupation (protest)">Occupation</a></li>
+<li><a href="/wiki/Political_satire" title="Political satire">Political satire</a></li>
+<li><a href="/wiki/Protest" title="Protest">Protest</a></li>
+<li><a href="/wiki/Punk_subculture" title="Punk subculture">Punk</a></li>
+<li><a href="/wiki/Review_bomb" title="Review bomb">Review bomb</a></li>
+<li><a href="/wiki/Strike_action" title="Strike action">Strike action</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">In academia</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Influence_of_mass_media" title="Influence of mass media">Influence of mass media</a></li>
+<li><a href="/wiki/Media_studies" title="Media studies">Media studies</a></li>
+<li><a href="/wiki/Mediatization_(media)" title="Mediatization (media)">Mediatization</a></li>
+<li><a href="/wiki/Semiotic_democracy" title="Semiotic democracy">Semiotic democracy</a></li>
+<li><i><a href="/wiki/The_Lonely_Crowd" title="The Lonely Crowd">The Lonely Crowd</a></i></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Issues</th><td class="navbox-list-with-group navbox-list navbox-even hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Agenda-setting_theory" title="Agenda-setting theory">Agenda-setting theory</a></li>
+<li><a href="/wiki/Anonymity" title="Anonymity">Anonymity</a></li>
+<li><a href="/wiki/Concentration_of_media_ownership" title="Concentration of media ownership">Concentration of media ownership</a></li>
+<li><a href="/wiki/Exploitation_of_women_in_mass_media" title="Exploitation of women in mass media">Exploitation of women</a></li>
+<li><a href="/wiki/Freedom_of_speech" title="Freedom of speech">Freedom of speech</a></li>
+<li><a href="/wiki/Media_bias" title="Media bias">Media bias</a></li>
+<li><a href="/wiki/Privacy" title="Privacy">Privacy</a></li>
+<li><a href="/wiki/Social_influence" title="Social influence">Social influence</a></li>
+<li><a href="/wiki/Media_transparency" title="Media transparency">Transparency</a></li>
+<li><a href="/wiki/Trial_by_media" title="Trial by media">Trial by media</a></li>
+<li><a href="/wiki/Effects_of_violence_in_mass_media" title="Effects of violence in mass media">Violence</a></li></ul>
+</div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Synonyms</th><td class="navbox-list-with-group navbox-list navbox-odd hlist" style="width:100%;padding:0"><div style="padding:0 0.25em">
+<ul><li><a href="/wiki/Advanced_capitalism" title="Advanced capitalism">Advanced capitalism</a></li>
+<li><a href="/wiki/Culture_industry" title="Culture industry">Culture industry</a></li>
+<li><a href="/wiki/Mass_society" title="Mass society">Mass society</a></li>
+<li><a href="/wiki/Media_franchise" title="Media franchise">Media franchise</a></li>
+<li><a href="/wiki/Post-Fordism" title="Post-Fordism">Post-Fordism</a></li>
+<li><a href="/wiki/Spectacle_(critical_theory)" title="Spectacle (critical theory)">Society of the Spectacle</a></li></ul>
+</div></td></tr></tbody></table></div>
+<div class="navbox-styles"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333133064" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1314944253" /><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1038841319" /></div><div role="navigation" class="navbox authority-control" aria-labelledby="Authority&#95;control&#95;databases&#95;frameless&amp;#124;text-top&amp;#124;10px&amp;#124;alt=Edit&#95;this&#95;at&#95;Wikidata&amp;#124;link=https&amp;#58;//www.wikidata.org/wiki/Q434839#identifiers&amp;#124;class=noprint&amp;#124;Edit&#95;this&#95;at&#95;Wikidata3357" style="padding:3px"><table class="nowraplinks hlist mw-collapsible autocollapse navbox-inner" style="border-spacing:0;background:transparent;color:inherit"><tbody><tr><th scope="col" class="navbox-title" colspan="2"><div id="Authority&#95;control&#95;databases&#95;frameless&amp;#124;text-top&amp;#124;10px&amp;#124;alt=Edit&#95;this&#95;at&#95;Wikidata&amp;#124;link=https&amp;#58;//www.wikidata.org/wiki/Q434839#identifiers&amp;#124;class=noprint&amp;#124;Edit&#95;this&#95;at&#95;Wikidata3357" style="font-size:114%;margin:0 4em"><a href="/wiki/Help:Authority_control" title="Help:Authority control">Authority control databases</a> <span class="mw-valign-text-top noprint" typeof="mw:File/Frameless"><a href="https://www.wikidata.org/wiki/Q434839#identifiers" title="Edit this at Wikidata"><img alt="Edit this at Wikidata" src="//upload.wikimedia.org/wikipedia/en/thumb/8/8a/OOjs_UI_icon_edit-ltr-progressive.svg/20px-OOjs_UI_icon_edit-ltr-progressive.svg.png" decoding="async" width="10" height="10" class="mw-file-element" data-file-width="20" data-file-height="20" /></a></span></div></th></tr><tr><th scope="row" class="navbox-group" style="width:1%">International</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://isni.org/isni/0000000110327312">ISNI</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://viaf.org/viaf/110922659">VIAF</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://d-nb.info/gnd/118656309">GND</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.worldcat.org/fast/1440224">FAST</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.oclc.org/worldcat/entity/E39PBJyRBYCqHgRYY4pQMHhJXd">WorldCat</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">National</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.loc.gov/authorities/n79056585">United States</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://catalogue.bnf.fr/ark:/12148/cb15592084x">France</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://data.bnf.fr/ark:/12148/cb15592084x">BnF data</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://id.ndl.go.jp/auth/ndlna/01113458">Japan</a></span></li><li><span class="uid"><span class="rt-commentedText tooltip tooltip-dotted" title="Bernays, Edward L."><a rel="nofollow" class="external text" href="https://opac.sbn.it/nome/TO0V030972">Italy</a></span></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://aleph.nkp.cz/F/?func=find-c&amp;local_base=aut&amp;ccl_term=ica=xx0157513&amp;CON_LNG=ENG">Czech Republic</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://datos.bne.es/resource/XX855442">Spain</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="http://id.bnportugal.gov.pt/aut/catbnp/1290156">Portugal</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="http://data.bibliotheken.nl/id/thes/p070903670">Netherlands</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://authority.bibsys.no/authority/rest/authorities/html/1090980">Norway</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="http://katalog.nsk.hr/F/?func=direct&amp;doc_number=000599284&amp;local_base=nsk10">Croatia</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://lod.nl.go.kr/resource/KAC200905052">Korea</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://libris.kb.se/53hlqdgp2t71m3n">Sweden</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://dbn.bn.org.pl/descriptor-details/9811240720605606">Poland</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://www.nli.org.il/en/authorities/987007594414005171">Israel</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://cantic.bnc.cat/registre/981061717832606706">Catalonia</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Academics</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://ci.nii.ac.jp/author/DA04225716?l=en">CiNii</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Artists</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://www.getty.edu/vow/ULANFullDisplay?find=&amp;role=&amp;nation=&amp;subjectid=500291271">ULAN</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">People</th><td class="navbox-list-with-group navbox-list navbox-odd" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://trove.nla.gov.au/people/792434">Trove</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://www.deutsche-biographie.de/118656309.html?language=en">Deutsche Biographie</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://www.deutsche-digitale-bibliothek.de/person/gnd/118656309">DDB</a></span></li></ul></div></td></tr><tr><th scope="row" class="navbox-group" style="width:1%">Other</th><td class="navbox-list-with-group navbox-list navbox-even" style="width:100%;padding:0"><div style="padding:0 0.25em"><ul><li><span class="uid"><a rel="nofollow" class="external text" href="https://www.idref.fr/081508204">IdRef</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://openlibrary.org/works/OL410747A?mode=all">Open Library</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://snaccooperative.org/ark:/99166/w6vd708z">SNAC</a></span></li><li><span class="uid"><a rel="nofollow" class="external text" href="https://lux.collections.yale.edu/view/person/14942a3d-9b92-401f-b275-31f63b626173">Yale LUX</a></span></li></ul></div></td></tr></tbody></table></div>
+<!-- 
+NewPP limit report
+Parsed by mw‐web.codfw.main‐7c7b59648b‐vmpg8
+Cached time: 20260510022535
+Cache expiry: 79200
+Cache expiry source: Module:Wd (os.date(!%Y‐%m‐%d))
+Reduced expiry: true
+Complications: [vary‐revision‐sha1, prevent‐selective‐update, show‐toc]
+CPU time usage: 1.509 seconds
+Real time usage: 1.783 seconds
+Preprocessor visited node count: 11136/1000000
+Revision size: 78665/2097152 bytes
+Post‐expand include size: 214858/2097152 bytes
+Template argument size: 21983/2097152 bytes
+Highest expansion depth: 27/100
+Expensive parser function count: 8/500
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 248089/5000000 bytes
+Lua time usage: 0.984/10.000 seconds
+Lua memory usage: 21739703/52428800 bytes
+Number of Wikibase entities loaded: 1/500
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00% 1581.006      1 -total
+ 21.86%  345.580      1 Template:Infobox_scientist
+ 14.88%  235.263      1 Template:Reflist
+ 13.81%  218.315     25 Template:Cite_book
+  8.41%  132.926      1 Template:IPA
+  7.87%  124.413     25 Template:Sfn
+  7.30%  115.490      3 Template:Sister_project
+  7.22%  114.147      3 Template:Side_box
+  7.07%  111.828      1 Template:Wikisource
+  6.81%  107.726      1 Template:Wikisource/outer_core
+-->
+
+<!-- Render ID 8684c352-4c17-11f1-abc7-ff5eac2799c4 -->
+
+<!-- Saved in parser cache with key enwiki:pcache:158130:|#|:idhash:canonical and timestamp 20260510022535 and revision id 1352301679. Rendering was triggered because: page_view
+ -->
+</div><noscript><img src="https://en.wikipedia.org/wiki/Special:CentralAutoLogin/start?useformat=desktop&amp;type=1x1&amp;usesul3=1" alt="" width="1" height="1" style="border: none; position: absolute;"></noscript>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://en.wikipedia.org/w/index.php?title=Edward_Bernays&amp;oldid=1352301679">https://en.wikipedia.org/w/index.php?title=Edward_Bernays&amp;oldid=1352301679</a>"</div></div>
+					<div id="catlinks" class="catlinks" data-mw-interface=""><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Help:Category" title="Help:Category">Categories</a>: <ul><li><a href="/wiki/Category:1891_births" title="Category:1891 births">1891 births</a></li><li><a href="/wiki/Category:1995_deaths" title="Category:1995 deaths">1995 deaths</a></li><li><a href="/wiki/Category:Advertising_theorists" title="Category:Advertising theorists">Advertising theorists</a></li><li><a href="/wiki/Category:American_men_centenarians" title="Category:American men centenarians">American men centenarians</a></li><li><a href="/wiki/Category:American_foreign_policy_writers" title="Category:American foreign policy writers">American foreign policy writers</a></li><li><a href="/wiki/Category:American_male_non-fiction_writers" title="Category:American male non-fiction writers">American male non-fiction writers</a></li><li><a href="/wiki/Category:American_people_of_Austrian-Jewish_descent" title="Category:American people of Austrian-Jewish descent">American people of Austrian-Jewish descent</a></li><li><a href="/wiki/Category:American_political_writers" title="Category:American political writers">American political writers</a></li><li><a href="/wiki/Category:American_public_relations_people" title="Category:American public relations people">American public relations people</a></li><li><a href="/wiki/Category:20th-century_Austrian_Jews" title="Category:20th-century Austrian Jews">20th-century Austrian Jews</a></li><li><a href="/wiki/Category:Bernays_family" title="Category:Bernays family">Bernays family</a></li><li><a href="/wiki/Category:Cornell_University_College_of_Agriculture_and_Life_Sciences_alumni" title="Category:Cornell University College of Agriculture and Life Sciences alumni">Cornell University College of Agriculture and Life Sciences alumni</a></li><li><a href="/wiki/Category:Crowd_psychologists" title="Category:Crowd psychologists">Crowd psychologists</a></li><li><a href="/wiki/Category:Crowd_psychology" title="Category:Crowd psychology">Crowd psychology</a></li><li><a href="/wiki/Category:DeWitt_Clinton_High_School_alumni" title="Category:DeWitt Clinton High School alumni">DeWitt Clinton High School alumni</a></li><li><a href="/wiki/Category:Emigrants_from_Austria-Hungary_to_the_United_States" title="Category:Emigrants from Austria-Hungary to the United States">Emigrants from Austria-Hungary to the United States</a></li><li><a href="/wiki/Category:Freud_family" title="Category:Freud family">Freud family</a></li><li><a href="/wiki/Category:Jewish_American_non-fiction_writers" title="Category:Jewish American non-fiction writers">Jewish American non-fiction writers</a></li><li><a href="/wiki/Category:Jewish_anti-communists" title="Category:Jewish anti-communists">Jewish anti-communists</a></li><li><a href="/wiki/Category:Jewish_centenarians" title="Category:Jewish centenarians">Jewish centenarians</a></li><li><a href="/wiki/Category:Marketing_theorists" title="Category:Marketing theorists">Marketing theorists</a></li><li><a href="/wiki/Category:Mass_media_theorists" title="Category:Mass media theorists">Mass media theorists</a></li><li><a href="/wiki/Category:Propaganda_theorists" title="Category:Propaganda theorists">Propaganda theorists</a></li><li><a href="/wiki/Category:Public_relations_pioneers" title="Category:Public relations pioneers">Public relations pioneers</a></li><li><a href="/wiki/Category:Public_relations_scholars" title="Category:Public relations scholars">Public relations scholars</a></li><li><a href="/wiki/Category:Public_relations_theorists" title="Category:Public relations theorists">Public relations theorists</a></li><li><a href="/wiki/Category:20th-century_American_male_writers" title="Category:20th-century American male writers">20th-century American male writers</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden categories: <ul><li><a href="/wiki/Category:CS1_errors:_ISBN_date" title="Category:CS1 errors: ISBN date">CS1 errors: ISBN date</a></li><li><a href="/wiki/Category:Webarchive_template_wayback_links" title="Category:Webarchive template wayback links">Webarchive template wayback links</a></li><li><a href="/wiki/Category:CS1_Danish-language_sources_(da)" title="Category:CS1 Danish-language sources (da)">CS1 Danish-language sources (da)</a></li><li><a href="/wiki/Category:CS1_maint:_multiple_names:_authors_list" title="Category:CS1 maint: multiple names: authors list">CS1 maint: multiple names: authors list</a></li><li><a href="/wiki/Category:Articles_with_short_description" title="Category:Articles with short description">Articles with short description</a></li><li><a href="/wiki/Category:Short_description_is_different_from_Wikidata" title="Category:Short description is different from Wikidata">Short description is different from Wikidata</a></li><li><a href="/wiki/Category:Biography_with_signature" title="Category:Biography with signature">Biography with signature</a></li><li><a href="/wiki/Category:Articles_with_hCards" title="Category:Articles with hCards">Articles with hCards</a></li><li><a href="/wiki/Category:Pages_with_Austrian_German_IPA" title="Category:Pages with Austrian German IPA">Pages with Austrian German IPA</a></li><li><a href="/wiki/Category:CS1_maint:_ref_duplicates_default" title="Category:CS1 maint: ref duplicates default">CS1 maint: ref duplicates default</a></li><li><a href="/wiki/Category:Commons_category_link_from_Wikidata" title="Category:Commons category link from Wikidata">Commons category link from Wikidata</a></li><li><a href="/wiki/Category:People_appearing_on_C-SPAN" title="Category:People appearing on C-SPAN">People appearing on C-SPAN</a></li><li><a href="/wiki/Category:Articles_with_Project_Gutenberg_links" title="Category:Articles with Project Gutenberg links">Articles with Project Gutenberg links</a></li><li><a href="/wiki/Category:Articles_with_Internet_Archive_links" title="Category:Articles with Internet Archive links">Articles with Internet Archive links</a></li><li><a href="/wiki/Category:Articles_with_LibriVox_links" title="Category:Articles with LibriVox links">Articles with LibriVox links</a></li></ul></div></div>
+				</div>
+			</main>
+			
+		</div>
+		<div class="mw-footer-container">
+			
+<footer id="footer" class="mw-footer" >
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> This page was last edited on 3 May 2026, at 11:39<span class="anonymous-show">&#160;(UTC)</span>.</li>
+	<li id="footer-info-copyright">Text is available under the <a href="/wiki/Wikipedia:Text_of_the_Creative_Commons_Attribution-ShareAlike_4.0_International_License" title="Wikipedia:Text of the Creative Commons Attribution-ShareAlike 4.0 International License">Creative Commons Attribution-ShareAlike 4.0 License</a>;
+additional terms may apply. By using this site, you agree to the <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Terms_of_Use" class="extiw" title="foundation:Special:MyLanguage/Policy:Terms of Use">Terms of Use</a> and <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy" class="extiw" title="foundation:Special:MyLanguage/Policy:Privacy policy">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a rel="nofollow" class="external text" href="https://wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, a non-profit organization.</li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-privacy"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy">Privacy policy</a></li>
+	<li id="footer-places-about"><a href="/wiki/Wikipedia:About">About Wikipedia</a></li>
+	<li id="footer-places-disclaimers"><a href="/wiki/Wikipedia:General_disclaimer">Disclaimers</a></li>
+	<li id="footer-places-contact"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a></li>
+	<li id="footer-places-legal-safety-contacts"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Legal:Wikimedia_Foundation_Legal_and_Safety_Contact_Information">Legal &amp; safety contacts</a></li>
+	<li id="footer-places-wm-codeofconduct"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Universal_Code_of_Conduct">Code of Conduct</a></li>
+	<li id="footer-places-developers"><a href="https://developer.wikimedia.org">Developers</a></li>
+	<li id="footer-places-statslink"><a href="https://stats.wikimedia.org/#/en.wikipedia.org">Statistics</a></li>
+	<li id="footer-places-cookiestatement"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Cookie_statement">Cookie statement</a></li>
+	<li id="footer-places-mobileview"><a href="//en.wikipedia.org/w/index.php?title=Edward_Bernays&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="footer-icons" class="noprint">
+	<li id="footer-copyrightico"><a href="https://www.wikimedia.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/static/images/footer/wikimedia-button.svg" width="84" height="29"><img src="/static/images/footer/wikimedia.svg" width="25" height="25" alt="Wikimedia Foundation" lang="en" loading="lazy"></picture></a></li>
+	<li id="footer-poweredbyico"><a href="https://www.mediawiki.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/w/resources/assets/poweredby_mediawiki.svg" width="88" height="31"><img src="/w/resources/assets/mediawiki_compact.svg" alt="Powered by MediaWiki" lang="en" width="25" height="25" loading="lazy"></picture></a></li>
+</ul>
+
+</footer>
+
+		</div>
+	</div> 
+</div> 
+<div class="vector-header-container vector-sticky-header-container no-font-mode-scale">
+	<div id="vector-sticky-header" class="vector-sticky-header">
+		<div class="vector-sticky-header-start">
+			<div class="vector-sticky-header-icon-start vector-button-flush-left" aria-hidden="true">
+				<button class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-sticky-header-search-toggle" tabindex="-1" data-event-name="ui.vector-sticky-search-form.icon"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+			</button>
+		</div>
+			
+		<div role="search" class="vector-search-box-vue  vector-search-box-show-thumbnail vector-search-box">
+			<div class="vector-typeahead-search-container">
+				<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail">
+					<form action="/w/index.php" id="vector-sticky-search-form" class="cdx-search-input cdx-search-input--has-end-button">
+						<div  class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+							<div class="cdx-text-input cdx-text-input--has-start-icon">
+								<input
+									class="cdx-text-input__input mw-searchInput" autocomplete="off"
+									
+									type="search" name="search" placeholder="Search Wikipedia">
+								<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+							</div>
+							<input type="hidden" name="title" value="Special:Search">
+						</div>
+						<button class="cdx-button cdx-search-input__end-button">Search</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-context-bar">
+				<nav aria-label="Contents" class="vector-toc-landmark">
+						
+					<div id="vector-sticky-header-toc" class="vector-dropdown mw-portlet mw-portlet-sticky-header-toc vector-sticky-header-toc vector-button-flush-left"  >
+						<input type="checkbox" id="vector-sticky-header-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-sticky-header-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+						<label id="vector-sticky-header-toc-label" for="vector-sticky-header-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+						</label>
+						<div class="vector-dropdown-content">
+					
+						<div id="vector-sticky-header-toc-unpinned-container" class="vector-unpinned-container">
+						</div>
+					
+						</div>
+					</div>
+			</nav>
+				<div class="vector-sticky-header-context-bar-primary" aria-hidden="true" ><span lang="en" dir="ltr"><span class="mw-page-title-main">Edward Bernays</span></span></div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-end" aria-hidden="true">
+			<div class="vector-sticky-header-icons">
+				<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-event-name="talk-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-event-name="subject-sticky-header"><span class="vector-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-event-name="history-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only mw-watchlink" id="ca-watchstar-sticky-header" tabindex="-1" data-event-name="watch-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-star mw-ui-icon-wikimedia-wikimedia-star"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-event-name="wikitext-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-event-name="ve-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-event-name="ve-edit-protected-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span>
+
+<span></span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-buttons">
+				<button class="cdx-button cdx-button--weight-quiet mw-interlanguage-selector" id="p-lang-btn-sticky-header" tabindex="-1" data-event-name="ui.dropdown-p-lang-btn-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>38 languages</span>
+			</button>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive" id="ca-addsection-sticky-header" tabindex="-1" data-event-name="addsection-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbleAdd-progressive mw-ui-icon-wikimedia-speechBubbleAdd-progressive"></span>
+
+<span>Add topic</span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-icon-end">
+				<div class="vector-user-links">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+	<ul>
+		
+	</ul>
+</div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgHostname":"mw-web.codfw.main-7c7b59648b-htcmr","wgBackendResponseTime":146,"wgPageParseReport":{"limitreport":{"cputime":"1.509","walltime":"1.783","ppvisitednodes":{"value":11136,"limit":1000000},"revisionsize":{"value":78665,"limit":2097152},"postexpandincludesize":{"value":214858,"limit":2097152},"templateargumentsize":{"value":21983,"limit":2097152},"expansiondepth":{"value":27,"limit":100},"expensivefunctioncount":{"value":8,"limit":500},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":248089,"limit":5000000},"entityaccesscount":{"value":1,"limit":500},"timingprofile":["100.00% 1581.006      1 -total"," 21.86%  345.580      1 Template:Infobox_scientist"," 14.88%  235.263      1 Template:Reflist"," 13.81%  218.315     25 Template:Cite_book","  8.41%  132.926      1 Template:IPA","  7.87%  124.413     25 Template:Sfn","  7.30%  115.490      3 Template:Sister_project","  7.22%  114.147      3 Template:Side_box","  7.07%  111.828      1 Template:Wikisource","  6.81%  107.726      1 Template:Wikisource/outer_core"]},"scribunto":{"limitreport-timeusage":{"value":"0.984","limit":"10.000"},"limitreport-memusage":{"value":21739703,"limit":52428800},"limitreport-logs":"table#1 {\n}\n\"\"\nanchor_id_list = table#1 {\n    [\"CITEREFAlan_Bilton2013\"] = 1,\n    [\"CITEREFAxelrod2009\"] = 1,\n    [\"CITEREFBernays1923\"] = 2,\n    [\"CITEREFBernays1927\"] = 2,\n    [\"CITEREFBernays1928\"] = 1,\n    [\"CITEREFBernays1947\"] = 1,\n    [\"CITEREFBernays1965\"] = 1,\n    [\"CITEREFBernays2005\"] = 1,\n    [\"CITEREFBernaysHoffensteinKingsleyPemberton1917\"] = 1,\n    [\"CITEREFChomsky1988\"] = 1,\n    [\"CITEREFChomskyWaterstone2020\"] = 1,\n    [\"CITEREFColford1991\"] = 1,\n    [\"CITEREFCook1980\"] = 1,\n    [\"CITEREFCurtis,_Adam2008\"] = 1,\n    [\"CITEREFCutlip1994\"] = 1,\n    [\"CITEREFEwen,_Stuart1996\"] = 1,\n    [\"CITEREFEwen1996\"] = 1,\n    [\"CITEREFHasselriis1959\"] = 1,\n    [\"CITEREFHeld2009\"] = 1,\n    [\"CITEREFJensenJensen2003\"] = 1,\n    [\"CITEREFLavin2002\"] = 1,\n    [\"CITEREFLears1994\"] = 1,\n    [\"CITEREFMarks1957\"] = 1,\n    [\"CITEREFNimmo,_Dan_D.Chevelle_Newsome1997\"] = 1,\n    [\"CITEREFOlasky1984\"] = 1,\n    [\"CITEREFOlasky1985\"] = 1,\n    [\"CITEREFPresident\u0026#039;s_Research_Committee_on_Social_Trends1933\"] = 1,\n    [\"CITEREFRamptonStauber2001\"] = 1,\n    [\"CITEREFRoberts2013\"] = 1,\n    [\"CITEREFSnow2002\"] = 1,\n    [\"CITEREFSt._John\"] = 1,\n    [\"CITEREFTye1998\"] = 1,\n    [\"CITEREFTye1999\"] = 1,\n}\ntemplate_list = table#1 {\n    [\"1920s media culture\"] = 1,\n    [\"Authority control\"] = 1,\n    [\"Birth date\"] = 1,\n    [\"Blockquote\"] = 9,\n    [\"C-SPAN\"] = 1,\n    [\"Cbignore\"] = 2,\n    [\"Cite AV media\"] = 1,\n    [\"Cite book\"] = 25,\n    [\"Cite journal\"] = 4,\n    [\"Cite news\"] = 6,\n    [\"Cite thesis\"] = 1,\n    [\"Cite video\"] = 1,\n    [\"Cite web\"] = 6,\n    [\"Commons category\"] = 1,\n    [\"DEFAULTSORT:Bernays, Edward\"] = 1,\n    [\"Death date and age\"] = 1,\n    [\"External media\"] = 3,\n    [\"Further\"] = 1,\n    [\"Gutenberg author\"] = 1,\n    [\"Harvnb\"] = 37,\n    [\"IPA\"] = 1,\n    [\"IPAc-en\"] = 1,\n    [\"ISBN\"] = 2,\n    [\"Infobox scientist\"] = 1,\n    [\"Internet Archive author\"] = 1,\n    [\"JSTOR\"] = 3,\n    [\"Librivox author\"] = 1,\n    [\"Main\"] = 2,\n    [\"Marriage\"] = 1,\n    [\"Media culture\"] = 1,\n    [\"OCLC\"] = 1,\n    [\"Plainlist\"] = 1,\n    [\"Quote box\"] = 1,\n    [\"Reflist\"] = 1,\n    [\"Respell\"] = 1,\n    [\"See also\"] = 2,\n    [\"Sfn\"] = 25,\n    [\"Sfnref\"] = 2,\n    [\"Short description\"] = 1,\n    [\"Sigmund Freud\"] = 1,\n    [\"Smaller\"] = 1,\n    [\"Ubl\"] = 1,\n    [\"Webarchive\"] = 12,\n    [\"Wikiquote\"] = 1,\n    [\"Wikisource\"] = 1,\n}\narticle_whitelist = table#1 {\n}\nciteref_patterns = table#1 {\n}\n"},"cachereport":{"origin":"mw-web.codfw.main-7c7b59648b-vmpg8","timestamp":"20260510022535","ttl":79200,"transientcontent":true,"expiry-source":"Module:Wd (os.date(!%Y-%m-%d))"}}});});</script>
+<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Article","name":"Edward Bernays","url":"https:\/\/en.wikipedia.org\/wiki\/Edward_Bernays","sameAs":"http:\/\/www.wikidata.org\/entity\/Q434839","mainEntity":"http:\/\/www.wikidata.org\/entity\/Q434839","author":{"@type":"Organization","name":"Contributors to Wikimedia projects"},"publisher":{"@type":"Organization","name":"Wikimedia Foundation, Inc.","logo":{"@type":"ImageObject","url":"https:\/\/www.wikimedia.org\/static\/images\/wmf-hor-googpub.png"}},"datePublished":"2002-12-15T02:30:21Z","dateModified":"2026-05-03T11:39:41Z","image":"https:\/\/upload.wikimedia.org\/wikipedia\/commons\/6\/61\/Edward_Bernays_cropped.png","headline":"American propaganda and marketing pioneer (1891-1995)"}</script>
+</body>
+</html>

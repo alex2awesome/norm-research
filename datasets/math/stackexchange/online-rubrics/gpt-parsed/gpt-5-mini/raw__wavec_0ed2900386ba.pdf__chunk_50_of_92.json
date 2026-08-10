@@ -1,0 +1,196 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/math-stackexchange/online-rubrics/raw/wavec_0ed2900386ba.pdf",
+  "task": "math-stackexchange",
+  "source_dir": "raw",
+  "source_file": "wavec_0ed2900386ba.pdf",
+  "chunk_idx": 50,
+  "n_chunks": 92,
+  "chunk_chars": 39993,
+  "model": "gpt-5-mini",
+  "elapsed_s": 297.8343641659958,
+  "input_tokens": 14169,
+  "output_tokens": 6053,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "Users of GAP (computational group theorists, mathematicians and programmers) working with irreducible maximal finite integral matrix groups and semigroups/monoids",
+    "subtask_short": "GAP imf and semigroup functions reference",
+    "subtask_description": "Reference documentation for GAP library functions handling irreducible maximal finite (i.m.f.) integral matrix groups (Imf*) and semigroup/monoid creation and queries. Covers function inputs, outputs, invariants returned, performance notes, and usage constraints.",
+    "subtask_keywords": [
+      "gap",
+      "imf",
+      "integral_matrix_groups",
+      "semigroup",
+      "monoid",
+      "reference_manual"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "ImfNumberQQClasses / ImfNumberQClasses / ImfNumberZClasses (validity ranges)",
+        "description": "ImfNumberQQClasses(dim) returns q1(dim), the number of Q-classes of i.m.f. rational matrix groups of dimension dim; ImfNumberQClasses(dim) returns the number of Q-classes of groups of dimension dim available in the library; ImfNumberZClasses(dim, q) returns the number of Z-classes in the q-th Q-class of i.m.f. integral matrix groups of dimension dim.",
+        "guidance": "Valid values of dim are positive integers up to 31 for Q-classes functions; ImfNumberZClasses valid dims are positive integers up to 11 and primes up to 23. Note: the library arranges Q-classes so that Q1(dim) classes precede Q2(dim) when known (dim \u2264 11 or dim \u2208 {13,17,19,23}) allowing loops over only Q1(dim) by using indices 1..q1(dim)."
+      },
+      {
+        "name": "DisplayImfInvariants (displayed Z-class invariants)",
+        "description": "DisplayImfInvariants(dim, q[, z]) displays Z-class invariants of groups in the z-th Z-class of the q-th Q-class of i.m.f. integral matrix groups of dimension dim.",
+        "guidance": "Displayed items: Z-class number (dim.q.z) or Q-class number (dim.q) depending on dim, a message if the group is solvable, the size of the group, the isomorphism type, elementary divisors of associated quadratic form, sizes of orbits of short vectors (degrees of faithful permutation representations), the norm of associated short vectors, and if group is not i.m.f. in GLn(Q) an explanatory message including the rational i.m.f. Q-class number. Parameters dim, q, z accept 0 to loop over all dimensions/Q-classes/Z-classes; z\u22601 must not be specified if Z-classes are unknown (dim>11 and dim \u2209 {13,17,19,23}). Greatest legal dim is 31. The function uses shorthand for elementary divisors (e.g., 1*3^3*9^3*27)."
+      },
+      {
+        "name": "Meaning of isomorphism-type notation in DisplayImfInvariants",
+        "description": "The documentation defines notations used in isomorphismType strings: A x B (direct product), A subd B (subdirect product), A Y B (central product), A wr B (wreath product), A:B (split extension), A.B (extension, split or non-split).",
+        "guidance": "Lists the group families and specific groups used in descriptions (cyclic, dihedral, quaternion, alternating, symmetric, linear, unitary, symplectic, orthogonal, extraspecial, Chevalley, twisted Chevalley, Suzuki, Weyl, sporadic simple groups). This explains the textual isomorphismType values displayed by DisplayImfInvariants/ImfInvariants."
+      },
+      {
+        "name": "ImfInvariants (record components returned)",
+        "description": "ImfInvariants(dim, q[, z]) returns a record providing some Z-class invariants for the z-th Z-class in the q-th Q-class of i.m.f. integral matrix groups of dimension dim.",
+        "guidance": "The resulting record contains six or seven components: size (group size), isSolvable (true if solvable), isomorphismType (text string), elementaryDivisors (of associated Gram matrix), minimalNorm (norm of associated short vectors), sizesOrbitsShortVectors (sizes of orbits of short vectors), maximalQClass (Q-class number of containing rational i.m.f. group, only if G is not rational i.m.f.). Note four items (size, solvability, isomorphism type, corresponding rational i.m.f. class) are both Z- and Q-class invariants. z\u22601 must not be specified if Z-classes unknown; default z=1 is accepted and interpreted as the only representative if Z-classes unknown. Greatest legal dim is 31. Examples show formats of components."
+      },
+      {
+        "name": "ImfMatrixGroup (extraction function behavior and returned attributes)",
+        "description": "ImfMatrixGroup(dim, q[, z]) returns a representative group G of the z-th Z-class in the q-th Q-class of i.m.f. integral matrix groups of dimension dim.",
+        "guidance": "Default z=1 accepted even if Z-classes unknown (specifies the only representative). The returned matrix group has attributes Size and IsSolvable set; additionally has IsImfMatrixGroup (logical true) and ImfRecord (a record). The ImfRecord contains isomorphismType, elementaryDivisors, minimalNorm, sizesOrbitsShortVectors, maximalQClass (if not rational i.m.f.), plus 'form' (the associated Gram matrix F) and 'repsOrbitsShortVectors' (representatives of the orbits of short vectors). Recommendation: for computations prefer the isomorphic permutation group induced by action on an orbit of short vectors (permutation routines are more efficient than matrix group routines)."
+      },
+      {
+        "name": "IsomorphismPermGroup (mapping to permutation group and performance note)",
+        "description": "IsomorphismPermGroup(G) returns an isomorphism \u03c6 from an i.m.f. integral matrix group G to a permutation group P := \u03c6(G) acting on a minimal orbit S of short vectors of G.",
+        "guidance": "Maps each matrix m\u2208G to the permutation induced by action on S. Construction may be space- and time-consuming for large orbits; only six Q-classes have minimal orbit size >20000 (worst: 196560 for the Leech lattice dim=24,q=3). The inverse isomorphism \u03c6^{-1} is constructed using a Q-base B\u2282S and base change matrix M: for each base vector position bi in S, the image under p determines the i-th row of \u03c6^{-1}(p) after multiplying by M. Use Image and PreImage to switch between G and P. Example workflow: compute derived subgroup in permutation group then PreImage back to matrix group."
+      },
+      {
+        "name": "IsomorphismPermGroupImfGroup (orbit selection)",
+        "description": "IsomorphismPermGroupImfGroup(G, n) returns an isomorphism \u03c6 from an i.m.f. matrix group G to a permutation group acting on the n-th orbit of short vectors of G.",
+        "guidance": "Orbits of short vectors are sorted by increasing size. IsomorphismPermGroup(G) is equivalent to IsomorphismPermGroupImfGroup(G,1). You may specify which orbit to use; examples show differing LargestMovedPoint values for different orbit indices. Construction and inverse-construction details are as in IsomorphismPermGroup."
+      },
+      {
+        "name": "Short vectors, orbits, and norms (concepts used as invariants)",
+        "description": "An associated positive definite quadratic form F defines a norm ||v||_F for v\u2208L; the finite set of vectors of minimal norm are called short vectors. The set of short vectors splits into orbits under G, and G (irreducible) acts faithfully on each orbit by right multiplication.",
+        "guidance": "GAP provides for each orbit the orbit size and a representative vector; sizes are used as degrees for permutation representations. minimalNorm and sizesOrbitsShortVectors are reported by ImfInvariants/DisplayImfInvariants/ImfRecord. Use these orbits to build efficient permutation models for computations."
+      },
+      {
+        "name": "Behavior of parameter 0 in Imf display/extraction functions",
+        "description": "If you specify the value 0 for any of the parameters dim, q, or z in DisplayImfInvariants (and analogous behavior in ImfInvariants/ImfMatrixGroup), the command will loop over all available dimensions, Q-classes of given dimension, or Z-classes within the given Q-class respectively.",
+        "guidance": "Otherwise argument values must be in range. A z\u22601 must not be specified if Z-classes are not known for the given dimension. Default z is 1; accepted even if Z-classes are not known (interpreted as only representative)."
+      },
+      {
+        "name": "Display shorthand for elementary divisors",
+        "description": "DisplayImfInvariants uses a shorthand to display elementary divisors (e.g., '1*3^3*9^3*27' stands for the list 1,3,3,3,9,9,9,27).",
+        "guidance": "ImfInvariants provides elementaryDivisors as an ordinary GAP list rather than shorthand; users who need programmatic access should use ImfInvariants rather than DisplayImfInvariants."
+      },
+      {
+        "name": "Recommendation to use permutation group routines for computations",
+        "description": "Permutation group routines in GAP are much more efficient than matrix group routines; perform computations in an isomorphic permutation group induced by action on an orbit of short vectors whenever possible.",
+        "guidance": "Use IsomorphismPermGroup or IsomorphismPermGroupImfGroup to obtain isomorphisms to permutation groups. Beware of large-orbit constructions which may be expensive."
+      },
+      {
+        "name": "IsSemigroup definition (recognition)",
+        "description": "IsSemigroup(D) returns true if the object D is a semigroup; a semigroup is a magma with associative multiplication.",
+        "guidance": "This is a synonym for the magma/associativity category checks; use Magma and IsAssociative if needing to check associativity explicitly."
+      },
+      {
+        "name": "Semigroup (construction semantics)",
+        "description": "Semigroup(gen1,gen2,...) returns the semigroup generated by its arguments (closure under multiplication). Semigroup(gens) returns the semigroup generated by the elements in the homogeneous list gens; a square matrix as only argument is treated as one generator, not a list of generators.",
+        "guidance": "It is not checked whether the underlying multiplication is associative\u2014use Magma and IsAssociative to verify. Examples illustrate creating transformation semigroups. SemigroupByGenerators(gens) is the underlying operation of Semigroup."
+      },
+      {
+        "name": "Subsemigroup / SubsemigroupNC (synonyms and usage)",
+        "description": "Subsemigroup(S, gens) and SubsemigroupNC(S, gens) are synonyms of Submagma and SubmagmaNC respectively; they return the subsemigroup generated by gens within S.",
+        "guidance": "Use these to obtain subsemigroups; examples show creating a commutative transformation semigroup with one generator."
+      },
+      {
+        "name": "IsSubsemigroup (membership test)",
+        "description": "IsSubsemigroup(S, T) returns true if T is a subsemigroup of S, false otherwise.",
+        "guidance": "Examples show checking whether semigroups generated by certain transformations are subsemigroups of other semigroups. Useful for validation of containment."
+      },
+      {
+        "name": "AsSemigroup and AsSubsemigroup (conversion)",
+        "description": "AsSemigroup(C) returns the semigroup represented by collection C if elements of C form a semigroup; otherwise fail. AsSubsemigroup(D, C) returns C as a subsemigroup with parent D if C\u2282D and forms a semigroup; otherwise fail.",
+        "guidance": "These operations are for converting collections into semigroup objects when appropriate; they return fail when constraints are not met."
+      },
+      {
+        "name": "GeneratorsOfSemigroup and IsGeneratorsOfSemigroup",
+        "description": "GeneratorsOfSemigroup(S) returns the generator list for semigroup S (same as magma generators). IsGeneratorsOfSemigroup(C) reflects whether collection C generates a semigroup (uses IsAssociativeElementCollection/IsGeneratorsOfSemigroup properties).",
+        "guidance": "GeneratorsOfSemigroup returns the generators used; IsGeneratorsOfSemigroup can be used to test whether a given collection is a generating set for a semigroup. Note: generator lists may contain objects like transformations or matrices."
+      },
+      {
+        "name": "FreeSemigroup (forms, labeling, and warnings)",
+        "description": "FreeSemigroup supports multiple calling forms: by rank (integer), by explicit generator names (strings), by list of names, or by 'infinite' rank with optional prefix and initial list. Optional wfilt argument chooses representation (syllable/letter/w-letter/b-letter words families).",
+        "guidance": "Default name prefix is 's' and generatorNames option can override labeling. Warning: labels are only for printing and do not necessarily distinguish generators (you can create two generators both labeled 'x' which are distinct objects). Examples illustrate many calling forms and caveats about names not necessarily distinguishing letters."
+      },
+      {
+        "name": "SemigroupByMultiplicationTable (existence check)",
+        "description": "SemigroupByMultiplicationTable(A) returns the semigroup whose multiplication is defined by square matrix A (as a Cayley table) if such a semigroup exists; otherwise fail.",
+        "guidance": "Use this to construct a semigroup from a multiplication table representation. Examples show a success case and a fail case (where the table does not define an associative semigroup)."
+      },
+      {
+        "name": "IsMonoid definition (recognition)",
+        "description": "IsMonoid(D) returns true if D is a monoid; a monoid is a magma-with-one with associative multiplication.",
+        "guidance": "Use MagmaWithOne and IsAssociative to check underlying conditions if needed."
+      },
+      {
+        "name": "Monoid (construction semantics and identity handling)",
+        "description": "Monoid(gen1,gen2,...) returns the monoid generated by arguments (closure under multiplication and taking the 0-th power); Monoid(gens[, id]) returns the monoid generated by gens with optional identity id provided.",
+        "guidance": "A square matrix as only argument is treated as one generator, not a list. As with semigroups, associativity is not checked automatically. MonoidByGenerators(gens[, one]) is the underlying operation."
+      },
+      {
+        "name": "Submonoid / SubmonoidNC (synonyms)",
+        "description": "Submonoid(M, gens) and SubmonoidNC(M, gens) are synonyms for SubmagmaWithOne and SubmagmaWithOneNC respectively.",
+        "guidance": "Use these to construct submonoids generated by gens within M."
+      },
+      {
+        "name": "AsMonoid and AsSubmonoid (conversion)",
+        "description": "AsMonoid(C) returns C as a monoid if elements of C form a monoid; otherwise fail. AsSubmonoid(D, C) returns monoid C with parent D if C\u2282D and forms a monoid; otherwise fail.",
+        "guidance": "These operations mirror semigroup conversion functions but for monoids (with identity)."
+      },
+      {
+        "name": "GeneratorsOfMonoid and TrivialSubmonoid",
+        "description": "GeneratorsOfMonoid(M) returns the monoid generators (same as magma-with-one generators). TrivialSubmonoid(M) is a synonym for TrivialSubmagmaWithOne.",
+        "guidance": "GeneratorsOfMonoid returns the set used to build M; TrivialSubmonoid returns the trivial (identity-only) submonoid."
+      },
+      {
+        "name": "FreeMonoid (forms, labeling, and warnings)",
+        "description": "FreeMonoid supports similar calling forms to FreeSemigroup: by rank, by explicit names, by list names, or by infinite rank with prefix and init list; optional wfilt chooses representation. Default generator name prefix is 'm'.",
+        "guidance": "Labels are only for printing and do not necessarily distinguish generators. Examples show creation of finite and infinite free monoids and retrieving GeneratorsOfMonoid for first few names."
+      },
+      {
+        "name": "MonoidByMultiplicationTable (existence check)",
+        "description": "MonoidByMultiplicationTable(A) returns the monoid whose multiplication is defined by square matrix A (Cayley table) if such a monoid exists; otherwise fail.",
+        "guidance": "Use this to create monoids from multiplication tables; examples show success and fail cases where table doesn't define a monoid."
+      },
+      {
+        "name": "InverseSemigroup and InverseMonoid (generation semantics)",
+        "description": "InverseSemigroup(obj1,obj2,...) returns the inverse semigroup generated by the union of provided associative elements with unique semigroup inverses (or semigroups/collections thereof); this equals the semigroup generated by the union and their inverses. InverseMonoid is analogous but returns an inverse monoid.",
+        "guidance": "Currently the only associative elements with unique semigroup inverses in GAP that do not always generate a group are partial permutations. Examples show building inverse semigroups/monoids from PartialPerm objects and Idempotents. InverseMonoid includes the identity in generator lists."
+      },
+      {
+        "name": "GeneratorsOfInverseSemigroup / GeneratorsOfInverseMonoid (returned generator sets)",
+        "description": "GeneratorsOfInverseSemigroup(S) returns the inverse semigroup generators used to define S; GeneratorsOfInverseMonoid(S) returns the inverse monoid generators used to define S.",
+        "guidance": "For an inverse semigroup S, GeneratorsOfSemigroup(S) equals the union of inverse semigroup generators and their inverses. There are four possible generating sets for an inverse monoid corresponding to different generator notions (inverse monoid, inverse semigroup, monoid, semigroup); examples illustrate differences."
+      },
+      {
+        "name": "IsInverseSubsemigroup (test)",
+        "description": "IsInverseSubsemigroup(S, T) returns true if T is an inverse subsemigroup of S.",
+        "guidance": "Examples demonstrate checking inverse subsemigroup status for symmetric inverse semigroups and constructed semigroups; useful for validating inverse properties."
+      },
+      {
+        "name": "IsRegularSemigroup and IsRegularSemigroupElement (regularity tests)",
+        "description": "IsRegularSemigroup(S) returns true if every D-class of S is regular (i.e., S is regular). IsRegularSemigroupElement(S,x) returns true if x has a general inverse in S (there exists y with x*y*x = x and y*x*y = y).",
+        "guidance": "These properties identify regularity at semigroup or element level. Use InversesOfSemigroupElement(S,x) to list inverses when they exist. Examples show retrieving inverses and testing regularity."
+      },
+      {
+        "name": "InversesOfSemigroupElement (inverse enumeration)",
+        "description": "InversesOfSemigroupElement(S,x) returns a list of inverses of element x in semigroup S; y is an inverse of x iff x*y*x = x and y*x*y = y.",
+        "guidance": "x has an inverse iff x is a regular element of S. Examples show returned inverse lists and usage for checking regularity. Works for various semigroup element types (transformations, Rees matrix semigroup elements)."
+      },
+      {
+        "name": "IsSimpleSemigroup / IsZeroSimpleSemigroup / IsZeroGroup / IsReesCongruenceSemigroup (structural predicates)",
+        "description": "IsSimpleSemigroup(S) is true iff S has no proper ideals. IsZeroSimpleSemigroup(S) is true iff S (with zero) has no proper ideals except 0. IsZeroGroup(S) is true iff S is a group with zero adjoined. IsReesCongruenceSemigroup(S) returns true if all congruences of S are Rees congruences.",
+        "guidance": "These are structural tests for semigroups/monoids; some operations may enter a break-loop if a zero cannot be found. Use these predicates to classify semigroup structure."
+      },
+      {
+        "name": "SemigroupIdealByGenerators / ReesCongruenceOfSemigroupIdeal / IsLeft/RightSemigroupIdeal",
+        "description": "SemigroupIdealByGenerators(S, gens) returns the two-sided ideal of S generated by gens. ReesCongruenceOfSemigroupIdeal(I) returns the congruence on S given by \u0394 \u222a I\u00d7I defined by two-sided ideal I. IsLeftSemigroupIdeal(I), IsRightSemigroupIdeal(I), IsSemigroupIdeal(I) are category/property checks for ideals.",
+        "guidance": "These functions let you construct and reason about ideals in semigroups and obtain the associated Rees congruences; consistent with magma ideal behavior described in Magma chapter."
+      }
+    ]
+  }
+}

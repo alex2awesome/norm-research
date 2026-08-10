@@ -1,0 +1,95 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_d95cc9ee4e26.html",
+  "task": "press-releases",
+  "source_dir": "raw",
+  "source_file": "wavee_d95cc9ee4e26.html",
+  "chunk_idx": 2,
+  "n_chunks": 4,
+  "chunk_chars": 39311,
+  "model": "gpt-5-mini",
+  "elapsed_s": 38.18800316599663,
+  "input_tokens": 11319,
+  "output_tokens": 3826,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational linguists, NLP researchers, and graduate students working on semantic role labeling / FrameNet-style annotation",
+    "subtask_short": "automatic_semantic_role_labeling",
+    "subtask_description": "Designing and evaluating statistical systems that identify frame elements / semantic roles in text (FrameNet-style), including methods for generalizing to unseen lexical items and integrating with syntactic parsing.",
+    "subtask_keywords": [
+      "nlp",
+      "semantic_role_labeling",
+      "frame_semantics",
+      "FrameNet",
+      "research"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Automatic clustering for head-word generalization",
+        "description": "Use probabilistic clustering of verb\u2013object co-occurrence counts (EM with deterministic annealing) to produce soft clusters of noun heads (P(n | c)) that can be used to estimate role probabilities for unseen head words.",
+        "guidance": "Train on large parsed corpora (example: 2,610,946 verb-object pairs with 290,105 cross-validation pairs). Set number of clusters a priori (experimented with 256 and 64). After clustering, compute P(c | h) via Bayes' rule and marginalize to get P(r | h, pt, t). Deterministic annealing used to avoid overfitting. Results: very high coverage (97.9% of test NPs covered by clustering vocabulary); clustered statistics decreased raw accuracy (87.0% \u2192 79.7%) but when combined with full system increased NP performance from 83.4% to 85.0% (overall from 80.4% to 81.2%; p < .05)."
+      },
+      {
+        "name": "Use of a hand-built semantic hierarchy (WordNet) for generalization",
+        "description": "Ascend the WordNet hypernym hierarchy from a head word until reaching a level with training data; percolate counts up the hierarchy to estimate P(r | s, pt, t) where s is a WordNet sense/hypernym.",
+        "guidance": "Convert WordNet's DAG to a tree by taking the first hypernym listed; use the first listed WordNet sense for words (acknowledging resulting errors). Convert plurals to singulars (e.g., via CELEX) and add certain personal pronouns as hyponyms of 'person' to increase coverage. Limit use to NPs. Results: lower coverage than clustering (coverage 80.8% on NPs) and roughly similar accuracy (84.3% on NPs vs. 85.0% for clustering). Notes: proper nouns and many pronouns absent from WordNet, and sense/hypernym choice heuristics introduce error; word-sense disambiguation or a proper-noun lexicon could help."
+      },
+      {
+        "name": "Bootstrapping from automatically labeled (unannotated) data",
+        "description": "Label large amounts of unannotated data with the current automatic system (use single most likely hypothesis), then retrain or backoff to the automatically labeled statistics to expand coverage.",
+        "guidance": "Use only one iteration in experiments; example: 156,590 unannotated sentences increased training data ~6x. Pauto (trained on auto-labeled data) achieved ~81.0% vs. Ptrain (annotated) 87.0% accuracy. Combining annotated + auto data increased coverage (41.6% \u2192 54.7%) and performance to 44.5% for NPs; backing off to Pauto for unseen cases can help. Caveat: automatic labels overlap with annotated data and are noisy; naive incorporation into backoff lattice can slightly decrease performance because of label noise and overlap (the system's backing-off classification correctly handled only 66% of the additional cases covered)."
+      },
+      {
+        "name": "Evaluation metrics: coverage / accuracy / performance (and labeled vs. unlabeled measures)",
+        "description": "Report coverage (fraction of test cases for which the estimator can produce an estimate), accuracy (correctness on covered cases), and combined 'performance' measures; for boundary tasks report precision and recall for unlabeled and labeled (boundary+role) tasks.",
+        "guidance": "Tables present Coverage, Accuracy, Performance for different distributions; Boundary identification and labeled tasks use precision and recall (examples: independent boundary id + baseline labeler: unlabeled precision/recall 72.6/63.1; labeled precision/recall 67.0/46.8). Use statistical tests (e.g., report significance p < .05) when comparing systems."
+      },
+      {
+        "name": "Frame Element Group (FEG) priors to model inter-role dependencies",
+        "description": "Model the prior probability over the unordered set of roles (the frame element group present in a sentence) for a given target word P({r1...n} | t) to capture argument-structure patterns and dependencies between role assignments.",
+        "guidance": "Estimate empirical FEG priors from training data but smooth due to sparsity: linearly interpolate empirical FEG prior with product of individual probabilities of presence/absence for each role (\u03bbP(fe_group) + (1\u2212\u03bb)\u220f P(role\u2208FEG|t)P(role\u2209FEG|t)). Tune \u03bb on development set (example: \u03bb=0.6 yielded 81.6% performance). Use FEG priors to influence global role assignment (argmax over role assignments), improving accuracy on role labeling with annotated boundaries. Beware of data sparsity (15% of test sentences had unseen FEGs) and possible compounding of errors when applied on automatically identified boundaries."
+      },
+      {
+        "name": "Integrated boundary identification and role labeling",
+        "description": "Jointly infer which constituents are frame elements (binary fei) and their roles, allowing role-labeling decisions (and FEG priors) to influence boundary identification.",
+        "guidance": "Formulate joint argmax over role assignments including P(ri | fi, fei, t)P(fei | fi). Integration yields improved unlabeled boundary identification and labeled precision/recall versus a pipeline approach; example: integrated approach unlabeled precision/recall 74.0/70.1 and labeled precision/recall 64.6/61.2 vs. pipeline numbers shown in Table 15. Complexity is exponential in number of constituents; implement pruning by beam-search over partial hypotheses and keep top m hypotheses at each extension (m=10 used after experimentation). When comparing to pipeline, match number of returned elements by adjusting thresholds for fair comparison."
+      },
+      {
+        "name": "Feature lattice and interpolation for P(fe | p, h, t)",
+        "description": "Estimate probability a constituent is a frame element by interpolating distributions conditioned on different features: path (p), target word (t), and head word (h): P(fe | p, h, t) = \u03bb1 P(fe | p) + \u03bb2 P(fe | p, t) + \u03bb3 P(fe | h, t).",
+        "guidance": "Use different feature-conditioned distributions in a backoff/interpolation lattice; tune \u03bb weights on development data. Apply head-word-based distributions primarily for NPs where head words are informative."
+      },
+      {
+        "name": "Path feature (parse-path from target to constituent) as a primary selector",
+        "description": "Represent the sequence of nonterminals along the path through the parse tree from the target word to a candidate constituent (the 'path' feature) and use it to predict both frame-element status and role.",
+        "guidance": "Path is a long-distance syntactic feature and is central to the model for identifying likely roles; note that using long paths complicates integration with chart parsers (violates independence assumptions). Path is used in combination with other features (subcat, head) in the distribution lattice."
+      },
+      {
+        "name": "Subcategorization (syntactic signature) feature for verbs",
+        "description": "Use the identity of the phrase-structure rule expanding the verb's parent node (e.g., 'VP \u2192 VB NP' vs 'VP \u2192 VB') as a subcategorization feature to distinguish transitive vs. intransitive uses and influence role assignment.",
+        "guidance": "Collapse verb POS tags into a single VB tag. Use subcat only when target is a verb and primarily for NP constituents. Feature is specific and can be affected by adjuncts (e.g., 'yesterday' parsed as NP can alter subcat). Variations like counting NPs in VP or total VP children were tested with no significant change. Adding P(r | subcat, path, t) to lattice improved performance slightly (80.4% \u2192 80.8%)."
+      },
+      {
+        "name": "Avoid fragmenting sparse training data by adding unnecessary features",
+        "description": "Do not include redundant or highly overlapping features that further fragment counts in sparse training data; simpler smoothed global parameters (like FEG prior) may be preferable to many conditional features.",
+        "guidance": "Example: removing 'passive' and 'position' features and using a smaller lattice improved role-labeling to 82.8% vs. 81.6% when extra features were present. Evaluate feature usefulness empirically and prefer single parameters that capture key dependencies when data are sparse."
+      },
+      {
+        "name": "Integration of semantic-role model into syntactic parsing via rescoring",
+        "description": "Generate multiple candidate parses (keep parses within a probability margin) and rescore parses by computing the best frame-element assignment for each parse, selecting the overall highest-probability syntactic+semantic analysis.",
+        "guidance": "Modify chart parser to retain equivalent constituents within a margin rather than only the single best; example kept parses within 1/e vs best. Average of 14.9 parses per sentence obtained; rescoring changed the best parse for 18% of sentences but yielded only a small, non-statistically-significant improvement in frame-element recall. Practical limits: generating large n-best sets is computationally expensive due to grammar lexicalization and pruning interactions."
+      },
+      {
+        "name": "Practical preprocessing and heuristic choices",
+        "description": "Perform several preprocessing and heuristic steps to improve coverage and tractability: exclude 'to be' from co-occurrence counts, identify direct objects as NPs directly under VP, convert plurals to singulars, add select pronouns into WordNet mapping, and choose first WordNet sense/hypernym where necessary.",
+        "guidance": "These heuristics increase coverage or reduce noise but introduce errors (e.g., 'to be' excluded because it is not semantically informative; NP extraction may pick nominal adjuncts). Be explicit about such choices and their tradeoffs: e.g., converting plurals to singulars raised WordNet coverage from 71.0% to 80.8%."
+      },
+      {
+        "name": "Generalization to unseen predicates using FrameNet frame membership and thematic roles",
+        "description": "To handle predicates with no training data, generalize using frame-semantic groupings: use data from other target words in the same FrameNet frame or semantic domain, or map to abstract thematic roles (Agent, Patient, Goal) to enable cross-predicate generalization.",
+        "guidance": "Use FrameNet frame membership as an intermediate level to pool statistics; experiments also consider mapping to thematic roles to test sensitivity to role inventory. This approach aims to enable prediction for unseen predicates by leveraging frame-level or domain-level regularities rather than conditioning only on lexical identity."
+      }
+    ]
+  }
+}
