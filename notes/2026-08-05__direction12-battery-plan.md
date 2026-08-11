@@ -1621,3 +1621,28 @@ still-gaining/unreliable — with the hive-mind control (46% ≈ 51%) and base-r
 controlled family ownership (ratios .77-.95 ≈ independence) already on file. The
 verdict table's works-as-stated row inherits this split (12.6 + 18.3 + 4.2).
 Criterion-6 analysis debt: CLEAR.
+
+## Criterion-5: frozen rung assignments + P1-P3 scored (2026-08-11 ~15:45)
+
+Rung rule fixed BEFORE computing any correlate (outputs/analyses/ladder_p123_v1/,
+rule in artifact): R1-name 169 / R2-statement 497 / R3-demonstration 1 /
+R4-listener-bound 163 / R5-low-ceiling 202.
+
+**Prereg outcomes (frozen 2026-08-06):**
+- P1 (concreteness decreases down rungs): **FAILS** — Spearman rho=+.068 (wrong sign,
+  p=.03); rung means non-monotone (2.72 / 2.63 / — / 2.72 / 2.76).
+- P2 (beyond-text share increases down rungs): **FAILS** — rho=−.044 n.s.; beyond-text
+  share is HIGHEST at R1-name (.142).
+- P3: **untestable** — the demonstration rung is nearly EMPTY (n=1): under the frozen
+  rule, constructs with certified example content almost always ALSO have a strong
+  definition (the content≠winning finding, resurfacing structurally): demonstration is
+  an ADDITIVE/remedial channel, not a primary articulation rung.
+
+**Verdict = the prereg's third landing zone, verbatim: "the operational ladder does not
+reduce to lexical abstractness" — publishable as such, and thematically load-bearing:
+the transmission ceiling is a property of the construct–listener PAIR, not of how
+abstract the construct's words are. No abstractness language in core results.** The
+R3-empty observation is reported as its own finding (examples never carry a construct
+alone at bank scale; they repair or refine statements).
+Criterion-5 status: EXECUTED per prereg (assignments frozen first; predictions scored;
+landing zone recorded). All analysis criteria (2,4,5,6) now DELIVERED.
