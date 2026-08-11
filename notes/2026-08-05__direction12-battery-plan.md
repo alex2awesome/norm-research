@@ -1559,3 +1559,20 @@ proofs that some tail constructs keep gaining beyond local ladders." Never phras
 "the tail is inarticulable" or "gpt-oss is weaker." Task #22 CLOSED as
 measured+disclosed. Artifacts: mbar_decensor_gptoss.npz, decensor_harvest_v1.json,
 decensor_tail_v1.json (+ laptop mirrors).
+
+## Channel x scale exhibit v2 (criterion 2 fold-in, 2026-08-11 ~14:15)
+
+Built LOCALLY from the story data pack (outputs/analyses/channel_scale_v2/). Bank-scale
+(humor 284, LOO references — voter rungs scored vs the OTHER voter after the v1 pass
+exposed voter-vs-own-consensus degeneracy [recovery=1.0 by construction; that pass was
+discarded before recording]): rubric-channel recovery climbs .50 -> .70-.73 across the
+qwen family with per-category paired CIs (mechanics +.1962* / norm-boundary +.2278* /
+other +.2173* top-vs-bottom). NEW: norm-boundary constructs climb SLOWER at small-mid
+capacity (7b .601 vs mechanics .756) and catch up by 72b — the rubric channel needs
+more capacity for norm constructs, rhyming with their exemplar-content profile.
+Bank channel ordering at llama70b (v3 holdout, n=203): def-name +.1343*, examples-name
++.0530*, examples-def -.0813*; plus the certified examples cells at qwen72b/gptoss.
+Coverage disclosures recorded in-artifact: explanation/dossier + thinking = slate-only;
+"units" = no construct-side scored channel (4.1 decomposition is definitional);
+name-at-bank = llama70b holdout only. Criterion-2 status: per-class bank curves with
+CI'd headline cells DELIVERED under these disclosures.
