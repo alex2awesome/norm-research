@@ -136,10 +136,12 @@ GENERIC = {
                                 loader_arg="hashtagwars_verdict"),
     "mathse_accepted_verdict": dict(dir="mathse_accepted", tag="mathse_accepted",
                                     pat="mathse_accepted_r%s", rounds=("1", "2"),
-                                    loader_arg="mathse_accepted"),
+                                    loader_arg="mathse_accepted",
+                                    struct_npz="mathse_accepted_position.npz"),
     "mathse_vote_score": dict(dir="mathse_vote", tag="mathse_vote",
                               pat="mathse_vote_r%s", rounds=("1", "2", "3"),
-                              loader_arg="mathse_vote"),
+                              loader_arg="mathse_vote",
+                              struct_npz="mathse_vote_position.npz"),
     "cap_finalist": dict(dir="cap_finalist", tag="cap_finalist",
                          pat="cap_finalist_r%s", rounds=("1", "2", "4", "5"),
                          loader_arg="cap_finalist",
@@ -214,13 +216,39 @@ def _generic(cell):
         d_, cfg["pat"], cfg["rounds"], collapsed, len(y))
     bank = np.column_stack([V, A] + Ab)
     names = ["V", "A_base"] + An
-    nuis = np.column_stack(Bb) if Bb else np.zeros((len(y), 0))
+    nuis_gemma = np.column_stack(Bb) if Bb else np.zeros((len(y), 0))
+
+    # ---- declared STRUCT / observed-covariate columns -----------------------
+    # §F2: "nuisance block = Track-B spurious channels + declared STRUCT columns
+    # where the cell has them".  On the two math.SE cells the OBSERVED POSITION
+    # ORDINALS are exactly that: recovered at 100% coverage by those campaigns, and
+    # unreachable by any text channel (the position-blindness law).  Only the RAW
+    # observed columns are used; the npz's `joint`/`joint_within` arrays are
+    # label-FITTED models of those columns and are never features.
+    struct, sn = np.zeros((len(y), 0)), []
+    sp = cfg.get("struct_npz")
+    if sp and (d_ / sp).exists():
+        zz = np.load(d_ / sp, allow_pickle=True)
+        Xs = np.asarray(zz["X"], dtype=float)
+        assert Xs.shape[0] == len(y), f"{cell}: position npz {Xs.shape[0]} rows != {len(y)}"
+        struct = Xs
+        sn = [f"STRUCT:{str(s)}" for s in zz["names"]]
+        conv.append(f"declared STRUCT attached from {sp}: {', '.join(str(s) for s in zz['names'])} "
+                    "(raw observed ordinals only; the npz `joint`/`joint_within` "
+                    "label-fitted scores are NEVER used as features)")
+    elif sp:
+        conv.append(f"STRUCT npz {sp} DECLARED BUT MISSING on this box -- nuisance is "
+                    "Gemma-only and the cell is FLAGGED")
+
+    nuis = np.column_stack([nuis_gemma, struct]) if struct.shape[1] else nuis_gemma
+    Bn = Bn + sn
+    Bstrict = Bstrict + [True] * len(sn)
     return dict(
         cell=cell, ids=ids, y=y, groups=groups,
         E=np.isin(dsplit, ["eval", "test"]),
         bank=bank, bank_names=names, nuis=nuis, nuis_names=Bn,
         nuis_strict=np.array(Bstrict, dtype=bool) if Bstrict else np.zeros(0, dtype=bool),
-        n_nuis_gemma=int(nuis.shape[1]), n_struct=0,
+        n_nuis_gemma=int(nuis_gemma.shape[1]), n_struct=int(struct.shape[1]),
         collapse_gate_dropped=dropped,
         provenance={
             "bank_enriched": (f"closure/{cfg['dir']}: [V, A_base] + every A-ROUTED round "
@@ -229,7 +257,8 @@ def _generic(cell):
             "nuisance": (f"every Track-B routed criterion from the same routing files, "
                          f"columns from {cfg['pat'] % 'N'}_scores.npz"),
             "conventions": conv,
-            "struct": "no declared STRUCT/observed-covariate column for this cell",
+            "struct": (", ".join(sn) if sn else
+                       "no declared STRUCT/observed-covariate column for this cell"),
         },
     )
 
