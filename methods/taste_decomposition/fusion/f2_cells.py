@@ -318,8 +318,16 @@ def peer_verdict():
             strict += [not bool(x.get("mixed", False)) for x in B]
     nuis_pop = np.column_stack(nb) if nb else np.zeros((len(pop_ids), 0))
     assert nuis_pop.shape[0] == len(pop_ids), "peer_verdict: B rows != population rows"
-    pos = {d: i for i, d in enumerate(pop_ids)}
-    idx = np.array([pos[i] for i in ids])
+    # LANDMINE: 5 ntitles repeat among the 1,244 E rows (n_groups_E 1,239), so an
+    # id->position dict silently collapses them.  E is taken POSITIONALLY from the
+    # campaign's own dense_split, exactly as t0_build_rows.py did, and the resulting
+    # id sequence is asserted equal element-by-element.
+    _sum, _sp, dsplit_pv, _mn = L.load_splits()
+    Emask = np.isin(np.asarray(dsplit_pv, dtype=object), ["eval", "test"])
+    idx = np.flatnonzero(Emask)
+    assert len(idx) == len(ids), f"peer_verdict: E {len(idx)} != t0_rows {len(ids)}"
+    assert [pop_ids[k] for k in idx] == list(ids), \
+        "peer_verdict: E id sequence differs from t0_rows order"
     return dict(
         cell="peer_verdict", ids=ids, y=y, groups=groups,
         E=np.ones(len(y), dtype=bool),       # t0_rows is already E

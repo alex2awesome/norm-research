@@ -117,6 +117,14 @@ def load_E(cell):
 def align(cell, adapter_out, ids_E, y_E, groups_E):
     """Subset the adapter's population matrices to E, in the master ledger's order."""
     a = adapter_out
+    if list(map(str, a["ids"])) == list(map(str, ids_E)):
+        # adapter already returns exactly the master-ledger E rows, in order
+        idx = np.arange(len(ids_E))
+        ok_y = bool(np.array_equal(np.asarray(a["y"])[idx], y_E))
+        assert ok_y, f"{cell}: y mismatch on the identity join"
+        return a["bank"][idx], a["nuis"][idx], {
+            "n_E": int(len(idx)), "join": "identity (adapter returns E in ledger order)",
+            "y_equal_elementwise": True, "E_mask_agrees_with_adapter": True}
     pos = {str(i): k for k, i in enumerate(a["ids"])}
     assert len(pos) == len(a["ids"]), f"{cell}: duplicate ids in the closure population"
     missing = [i for i in ids_E if i not in pos]
