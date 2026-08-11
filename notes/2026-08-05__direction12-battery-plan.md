@@ -1597,3 +1597,27 @@ nothing-certified = 0 because family-dependence covers the residual. The 60% dia
 share IS the listener-indexed thesis in table form. Criterion-4 status: every-construct
 verdict row DELIVERED (deep-censored tail explicitly disclosed via the de-censor
 verdict; 5 stronger-listener rows are the existence proofs).
+
+## Criterion-6 reliability filter + frontier spot-check (2026-08-11 ~15:00)
+
+The 362 plateaued-everywhere constructs screened for reference reliability
+(voter-agreement >= .70, kept items >= 150, top NON-VOTER local recovery >= .65;
+outputs/analyses/reliability_filter_v1/). The plateau set SPLITS THREE WAYS:
+
+| subset | n | share of 1,032 | reading |
+|---|---|---|---|
+| RELIABLE plateau (high recovery, ceiling reached) | 130 | 12.6% | articulable-and-done: transmission succeeded, capability adds nothing more |
+| plateau at LOW recovery (<.65 at best local non-voter) | 189 | 18.3% | the LOW-CEILING-EVERYWHERE set: flat in all families AND never well-transmitted locally — the paper's plateau-everywhere thesis set |
+| reference-unreliable (voter agreement <.70) | 43 | 4.2% | no claim certified |
+
+Frontier spot-check (humor reliable-plateaus ∩ gpt-oss definition rows, no new
+scoring): 37/40 consistent (frontier <= local top + .05); 3 contradictions logged in
+the artifact — quote 130 as "≈130, 3 frontier-contested".
+
+The closing-claim quantification (criterion 6) is now: ~12.6% articulable-and-done,
+~18.3% low-ceiling-everywhere (inside the user's predicted 10-20% band for
+plateauing-everywhere), 60.1% listener-family-relative (verdict table), remainder
+still-gaining/unreliable — with the hive-mind control (46% ≈ 51%) and base-rate-
+controlled family ownership (ratios .77-.95 ≈ independence) already on file. The
+verdict table's works-as-stated row inherits this split (12.6 + 18.3 + 4.2).
+Criterion-6 analysis debt: CLEAR.
