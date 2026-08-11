@@ -1576,3 +1576,24 @@ Coverage disclosures recorded in-artifact: explanation/dossier + thinking = slat
 "units" = no construct-side scored channel (4.1 decomposition is definitional);
 name-at-bank = llama70b holdout only. Criterion-2 status: per-class bank curves with
 CI'd headline cells DELIVERED under these disclosures.
+
+## Verdict/remedy table v1 (criterion 4, 2026-08-11 ~14:30)
+
+Every construct in the 1,032-row universe (family_verdict_join; the goal text's "1,270"
+was an older bank tally — universe difference disclosed) now carries a remedy verdict
+with an evidence trail (outputs/analyses/verdict_table_v1/, thresholds in-artifact):
+
+| remedy | n | share | grounds |
+|---|---|---|---|
+| dialect-matched-listener | 620 | 60.1% | family-dependent gains or undecensorable tail |
+| works-as-stated / none-needed | 362 | 35.1% | plateaued at every family top (ceiling reached) |
+| better-demonstration | 45 | 4.4% | certified exemplar content (fun−mm >= +.05) |
+| stronger-listener | 5 | 0.5% | frontier ceiling break on the still-gaining tail |
+
+Disclosures: demonstration remedy is humor-instrumented only (other tasks' zeros =
+not-measured, not absence); "better-statement" never fires as a distinct rule (its
+evidence base — def-weakness gating — overlaps better-demonstration; folded, stated);
+nothing-certified = 0 because family-dependence covers the residual. The 60% dialect
+share IS the listener-indexed thesis in table form. Criterion-4 status: every-construct
+verdict row DELIVERED (deep-censored tail explicitly disclosed via the de-censor
+verdict; 5 stronger-listener rows are the existence proofs).
