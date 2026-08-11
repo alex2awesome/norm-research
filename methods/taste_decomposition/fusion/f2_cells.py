@@ -237,8 +237,14 @@ def _generic(cell):
                     "(raw observed ordinals only; the npz `joint`/`joint_within` "
                     "label-fitted scores are NEVER used as features)")
     elif sp:
-        conv.append(f"STRUCT npz {sp} DECLARED BUT MISSING on this box -- nuisance is "
-                    "Gemma-only and the cell is FLAGGED")
+        # FAIL CLOSED. A declared STRUCT block that is merely "flagged" still produces a
+        # quotable-looking increment computed against the WRONG conditioning block --
+        # exactly the error the coordinator caught on mathse_accepted (nuis=30 not 36).
+        raise FileNotFoundError(
+            f"{cell}: declared STRUCT block {sp} is MISSING at {d_ / sp}. The F2 nuisance "
+            "block is 'Track-B channels + declared STRUCT'; running without it would "
+            "overstate the deconfounded residual. Sync the file and re-run -- this cell "
+            "must not produce a result until the STRUCT columns are present.")
 
     nuis = np.column_stack([nuis_gemma, struct]) if struct.shape[1] else nuis_gemma
     Bn = Bn + sn
