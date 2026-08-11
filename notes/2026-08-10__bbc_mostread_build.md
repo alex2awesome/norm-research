@@ -268,7 +268,139 @@ GPU and is not repeated.
 
 ## 7. Results
 
-*(Pending — bank scoring and the dense arm were running at the time of writing.)*
+n = 50,761 · groups = 2,251 capture days · pos rate .4405 · all arms on
+byte-identical headline text. Bank NA rate across the 8 shards: .295–.303.
+
+### 7.1 Layer-1 ledger
+
+**Read the within-day column as primary** (§5b: day identity alone is .5814 here,
+not .5000 as in V9).
+
+| quantity | pooled | within-day | group-bootstrap 95% CI |
+|---|---|---|---|
+| V_lin | .6478 | .6482 | [.6432, .6525] |
+| V_nl (3 seeds) | .6707 | .6718 | seeds .6709/.6709/.6702 |
+| A_lin | .6879 | .6908 | [.6833, .6921] |
+| VA_lin | .7054 | .7079 | [.7010, .7098] |
+| **VA_nl (3 seeds)** | **.7332** | **.7370** | seed0 [.7293, .7379] |
+| VA_nl seed spread | **.0010** | | |
+| **T (dense, eval)** | **.8230** | | per-seed .8218/.8234/.8239 |
+| T (dense, test) | .8097 | | per-seed .8080/.8116/.8095 |
+| Δ_interact | **+.0282** | | [+.0257, +.0308], P(>0)=1.00 |
+| Δ_total | +.1176 | | |
+| Δ_beyond (pooled) | +.0898 | | *cross-population — do not quote* |
+
+**Δ_beyond, SAME ROWS:**
+
+| leg | n | VA_lin | VA_nl | within-day VA_nl | T | **Δ_beyond** |
+|---|---|---|---|---|---|---|
+| eval | 5,075 | .7048 | .7366 | .7376 | .8230 | **+.0864** |
+| test | 5,072 | .7176 | .7407 | .7428 | .8097 | **+.0690** |
+
+Well-powered: the dense T 3-seed spread is .0021 (eval) against Δ_beyond +.0864
+— a ~40× margin. GBM seed spread .0010. Overfit gap on VA is .048–.063, notably
+tighter than V9's .12–.14.
+
+Pooled and within-day agree to ~.004 everywhere, so although day identity alone
+is .5814, day *composition* is not what the instruments are exploiting.
+
+Gates: **collapse gate PASS** on the assembled matrix; **OOF alignment gate**
+abs_diff 0.0 for both VA_nl and VA_lin, shuffled counterfactual .4983/.4982.
+Invalid shards [0,1,2,5,6,7] (the underpowered per-shard check, §7.3); dropping
+them leaves n=12,643 with V .6428 / A .6820 / VA .6975 / VA_nl .7128 — same
+ordering, same level.
+
+### 7.2 Rank, era
+
+**The instruments order the winners, not just identify them.** Frozen on the
+binary y and re-scored against most-read rank (22,357 ranked positives),
+Spearman vs −rank: VA_nl **+.144**, VA_lin +.135, A_lin +.129, V_nl +.065;
+top-3-vs-bottom-3 AUC .600 / .593 / .590 / .546. The articulated bank carries
+almost all of this — V alone is less than half of it.
+
+**Era stability** — VA_nl by year: .719 (2017), .735, **.770 (2019)**, .744,
+.748, .727, .706 (2023), .629 (2024, n=1,025 only). Stable across seven years
+with a mild decline; 2024 is a thin partial year and should not be read as a
+trend.
+
+### 7.3 Anchor battery — failed as shipped, diagnosed, and recovered
+
+| battery | pos | neg | scram | **pos-vs-neg AUC** | coherent-vs-scram |
+|---|---|---|---|---|---|
+| shipped (mixed-outlet anchors) | .4656 | .4778 | .5417 | **.481** | .389 |
+| diagnostic (BBC-only anchors) | .5771 | .5341 | .6684 | **.602** | .387 |
+| *V9 for reference* | .5574 | .4775 | .6078 | *.647* | *.364* |
+
+The shipped battery **failed** its responsiveness leg at chance (.481), which
+cannot be waved through. But the same bank scores A_lin **.6879 [.6833, .6921]**
+on this cell's own y — a bank separating most-read at .69 is not broken. The
+diagnosis, tested rather than asserted:
+
+> The two journalism cells draw anchors from the same all-outlet homepage-
+> placement pool, but their system prompts differ — V9 says "a major outlet's
+> home page", this cell says "**the BBC News** home page". The anchor rows are
+> mostly *not* BBC. So on anchor rows only, this cell's prompt asserts a
+> provenance the item contradicts, while on all 50,761 real rows the prompt is
+> true. That damages the battery and leaves the A matrix untouched.
+
+Redrawing both anchor classes from the 1,701 BBC rows of the placement
+population, changing nothing else, moves pos-vs-neg **.481 → .602** — in line
+with V9's .647 and with the homepage cell's own fitted A_lin (.5979). Hypothesis
+confirmed.
+
+**Third transferable discipline finding from this cell pair: anchor rows must
+match the provenance the system prompt asserts.** A cell-specific prompt silently
+invalidates a shared anchor pool. (The other two are in V9 §4.1/§4.3.) The
+coherence leg stays inverted (.387) for exactly the reason V9 §4.3 documents —
+`nanmean` over a tiny, variable denominator — and is again unreadable on the mean
+channel.
+
+The scored A matrices were produced in a pass that never saw an anchor row, so
+none of this touches the ledger.
+
+### 7.4 The contrast this cell was built to make
+
+Row overlap with V9 is **ZERO** (§4), so this is a **cell-level comparison, not
+a paired test**, and every difference below is confounded with era (2017-2024 vs
+2025-26) and with outlet mix (BBC-only vs six US/UK outlets). With that said:
+
+| | BBC most-read (same-outlet readership) | V9 tweets (cross-platform) |
+|---|---|---|
+| V_lin | .6478 | .5271 |
+| V_nl | .6707 | .5399 |
+| A_lin | **.6879** | .5661 |
+| VA_lin | .7054 | .5704 |
+| VA_nl | **.7332** | .5947 |
+| T | **.8230** | .6300 |
+| Δ_interact | +.0277 | +.0244 |
+| Δ_beyond (same-rows eval) | +.0864 | +.0348 |
+| group identity alone | .5814 | .5000 |
+
+**The user's question — platform dynamics or general crowd signal? — answers
+"both, and the difference is one of degree not kind."** Every instrument is
+stronger on the readership list: the articulated news-values bank alone moves
+from .566 to .688, and the dense ceiling from .630 to .823. A headline predicts
+what BBC readers will *click* far better than it predicts what Twitter will
+*amplify*. That is what one would expect if Twitter amplification adds a large
+component that no property of the headline can carry — who happened to tweet it,
+what else was competing, cascade effects — while a same-outlet most-read list is
+much closer to a clean readout of headline appeal.
+
+But the *shape* of the decomposition is remarkably similar. Δ_interact is nearly
+identical (+.028 vs +.024), i.e. in both cells the articulated criteria are
+mostly linear and interactions add the same small certain increment. And the
+articulated share of the achievable signal is comparable: VA_nl reaches
+**89.1%** of T on BBC (.7332/.8230) and **94.4%** on V9 (.5947/.6300) — so the
+tweets cell is, if anything, *proportionally* slightly more articulable even
+though it is far less predictable in absolute terms. The residual is larger on
+BBC in absolute AUC (+.086 vs +.035) because there is simply more signal there to
+divide.
+
+The one qualitative difference is structural rather than about magnitude: V9's y
+is a within-group median split, which forces group identity to .5000 and makes
+pooled ≈ within-group by construction; BBC's y is natural membership, so day
+identity alone carries .5814 — yet pooled and within-day still agree to .004.
+Both cells are honest, for different reasons.
 
 ---
 
