@@ -128,6 +128,8 @@ def run(cell, n_boot=2000):
     bank_oof_pop = np.mean(gbm_oofs, axis=0)
     bank_oof_E = bank_oof_pop[idx]
     a_full_on_E = float(roc_auc_score(y_E, bank_oof_E))
+    # persist stage 1 so the E-value analog can condition on the SAME block
+    np.save(ROWS / f"{cell}.bank_full_oof_E.npy", bank_oof_E)
     a_erefit = res["arms"]["a_VA_enr_nl"]
     gap = a_full_on_E - a_erefit
 
@@ -140,6 +142,7 @@ def run(cell, n_boot=2000):
                    "VA_enr_full_nl_on_E_per_seed":
                        [float(roc_auc_score(y_E, o[idx])) for o in gbm_oofs],
                    "VA_enr_full_nl_whole_population": summ["VA_nl_mean"]},
+        "stage1_column_file": str((ROWS / f"{cell}.bank_full_oof_E.npy").name),
         "enriched_bank_gap_fullfit_minus_Erefit": gap,
         "gap_exceeds_trigger": bool(gap > GAP_TRIGGER),
     })

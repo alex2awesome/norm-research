@@ -246,15 +246,25 @@ def z_bound(found_aucs, M_hat, S_obs):
 
 
 # ------------------------------------------------------------------- driver
-def run(cell, dry=False):
+def run(cell, dry=False, matched=False):
     p = RESULTS / f"f2_deconf_{cell}.json"
     res = json.loads(p.read_text())
-    delta3 = res["PRIMARY_stacked_increment_d_minus_c"]["estimate"]
+    if matched:
+        ms = res.get("matched_strength_companion") or {}
+        if not ms.get("applicable"):
+            print(f"  [{cell}] no applicable matched-strength companion -- skipping", flush=True)
+            return None
+        delta3 = ms["COMPANION_increment_dstar_minus_cstar"]["estimate"]
+    else:
+        delta3 = res["PRIMARY_stacked_increment_d_minus_c"]["estimate"]
     Y = res["top_nuisance_channels"][0]["alone_auc"]
     Y = max(Y, 1 - Y)
     found = [c["alone_auc"] for c in res["top_nuisance_channels"]]
 
-    blk = {"schema": SCHEMA, "frozen_definition": FREEZE,
+    blk = {"schema": (SCHEMA if not matched else "evalue_analog_matched/v1"),
+           "conditioning_block": ("[bank_enriched + nuisance] (E-refit primary)" if not matched
+                                  else "[bank_full_oof + nuisance] (matched-strength companion)"),
+           "frozen_definition": FREEZE,
            "Y_strongest_found_channel": Y,
            "Y_channel": res["top_nuisance_channels"][0]["name"],
            "primary_delta_3seed": delta3,
@@ -274,7 +284,7 @@ def run(cell, dry=False):
                     "verdict_reason": "PRIMARY increment is null/negative -- there is "
                                       "nothing to absorb, so the E-value analog is "
                                       "undefined for this cell"})
-        res["evalue_analog"] = blk
+        res["evalue_analog_matched" if matched else "evalue_analog"] = blk
         if not dry:
             p.write_text(json.dumps(res, indent=2, default=str))
         print(f"  [{cell}] Delta={delta3:+.4f} <= 0 -> E-value n/a", flush=True)
@@ -292,6 +302,10 @@ def run(cell, dry=False):
     idx = np.array([pos[i] for i in ids_E])
     bank, nuis = a["bank"][idx], a["nuis"][idx]
     assert np.array_equal(np.asarray(a["y"])[idx], y), f"{cell}: y mismatch"
+    if matched:
+        f = ROWS / f"{cell}.bank_full_oof_E.npy"
+        assert f.exists(), f"{cell}: run f2_matched.py first ({f} missing)"
+        bank = np.load(f).reshape(-1, 1)          # stage-1 column replaces the bank block
     family = meta["family"]
     auc_T = float(roc_auc_score(y, T))
 
@@ -361,7 +375,7 @@ def run(cell, dry=False):
         blk["verdict_reason"] = ("no Track-B Good-Turing missing mass on disk for this "
                                  "cell; X and RR stand, the M-hat-coupled bound does not")
 
-    res["evalue_analog"] = blk
+    res["evalue_analog_matched" if matched else "evalue_analog"] = blk
     if not dry:
         p.write_text(json.dumps(res, indent=2, default=str))
     print(f"  [{cell}] X={blk.get('X')} Y={Y:.4f} RR={blk.get('robustness_ratio_excess')} "
@@ -373,12 +387,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cell", action="append", required=True)
     ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--matched", action="store_true",
+                    help="condition X on the matched-strength block [bank_full_oof + nuisance]")
     args = ap.parse_args()
     for c in args.cell:
         t = time.time()
         print(f"=== E-value {c} ===", flush=True)
         try:
-            run(c, dry=args.dry)
+            run(c, dry=args.dry, matched=args.matched)
         except Exception as e:
             print(f"  [{c}] FAILED: {type(e).__name__}: {e}", flush=True)
         print(f"  [{c}] {time.time()-t:.0f}s", flush=True)
