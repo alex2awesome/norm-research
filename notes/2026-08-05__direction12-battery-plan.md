@@ -1819,3 +1819,20 @@ Disposition:
 - In-flight lanes: compile trials t1+t2 COMPLETE (all chunks full count); harness run
   banked under the seam ledger. GEPA pilot + hybrid leg + planted full-loop HELD as
   seam-paper charter items. No paper-#2 text edits until user directs.
+
+### 2026-08-12 — SCOPE RULING EXECUTED: paper #5 created, seam material moved
+- User: paper #2 will NOT focus on formal strings; keeps prompt scaling + scaling laws.
+  Codability-perp-scaling covariate paragraph: user ruled "don't need this anywhere."
+  4.1 census does not fold into #2; planted-equivalence stays only as 4.3's yardstick
+  validation.
+- NEW: latex/paper-5__metric-seam/ (own git repo like papers 1-4; Overleaf remote to be
+  wired when user names the paper). ICLR 2026 format. Contains: coded-isomorphism
+  section moved VERBATIM from #2 (fig:code-iso + fig:seam-spectrum + tab:seam-mech,
+  opening sentence rewired), generators gen_fig_code_iso.py / gen_fig_seam_spectrum.py,
+  removed_unit_types_appendix.tex.bak, stub sections for round-trip + boundary charter,
+  header comment = full banked-results charter w/ artifact paths. Compiles clean, all
+  refs resolve. Commit ccc66f6 (paper-5 repo).
+- Paper #2 (commit f32c033, paper-2 repo, NOT pushed to Overleaf): abstract now TWO
+  criteria; intro condition (2) = one forward-referencing sentence; outline bullet
+  removed; body coded-iso section replaced by one-sentence forward reference. Compiles
+  clean, zero undefined refs.
