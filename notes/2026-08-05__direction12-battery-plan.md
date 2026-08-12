@@ -1693,3 +1693,32 @@ about concrete surface qualities (timing/delivery/imagery) whose decision rule i
 tacit part, while abstract-sounding constructs carry conventionalized rules — same
 lesson as P2. Exploratory status (instrument sharpened post-hoc) unchanged; frozen-P1
 verdict (prediction fails) unchanged.
+
+## Notebook Part B: paper replicas + OSL-week exhibits + §4 re-org proposal (2026-08-11 evening)
+
+User directive: ground the week's OSL tasks and their insights for a §4 re-organization;
+update the articulation notebook with replicas of all paper plots plus the new exhibits.
+
+Delivered in notebooks/2026-08-10__articulation-story-4.1-4.3.ipynb (now 28 cells):
+- B.1 replicas from the same data the TikZ generators consume: osl-regimes verdict counts
+  match the paper EXACTLY (rising 884 / reaches 321 / bounded 65 / noisy 77 excl);
+  supervised Qwen3 ladder (hotpot+hover, init vs mean-draws); types6 nested merge +
+  coarse truth-condition axis + regime-by-domain; change-types parsed back out of the
+  AUTO-GENERATED gen_change_types.tex (paper-exact: decompression 51/49 def/expl, GEPA
+  77 score-anchors, M_omega 47 checking-steps) because the label scratchpad files are
+  gone; Tables 1-2 as dataframes with the PUPA re-mint status inline.
+- B.2 one exhibit per new instrument: family census, reliability screen + remedy table,
+  de-censor scatter, frontier-limit CI panel (both receivers, voter caveat), channel x
+  scale curves + headline cells, examples two-receiver ledger + norm-boundary
+  concentration, MI census degeneracy/H(pred), frozen rungs + P1 forest + P2 by rung.
+- P1 forest cell REIMPLEMENTS the audited instrument in-notebook (Brysbaert copied into
+  the data pack as analyses/brysbaert_concreteness.csv); reproduction check vs committed
+  values: humor +.264 (exact), math +.408 vs +.397, peer +.299 vs +.287, CW +.109 vs
+  +.114, news +.021 vs +.010, pooled +.091 vs +.092 — same signs, same significance
+  pattern; reference values printed alongside in the cell.
+- B.3 = the §4 re-org proposal (6 subsections: instrument / listener-relative verdicts /
+  which ceilings are real / frontier does not de-censor / channel x capability / every
+  construct a verdict), with an explicit kept/demoted ledger: bounded community&identity
+  signature STRENGTHENED (two independent instruments converge); single-family regime
+  counts demoted to per-family descriptions; extrapolated rising ceilings replaced by
+  the de-censor measurement. Table-2 MI-silver validity anchor UNTOUCHED (stays in §3).
