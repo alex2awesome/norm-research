@@ -50,6 +50,8 @@ def main():
           "|---|---|---:|---:|---:|---:|---:|---:|---|---|---|---|"]
     t2 = ["| cell | Δ (d)−(c) | X | Y | RR=(X−.5)/(Y−.5) | X/Y | M̂ (strict?) | Z | verdict |",
           "|---|---:|---:|---:|---:|---:|---|---:|---|"]
+    t0 = ["| cell | governing increment | which footing | P | verdict |",
+          "|---|---|---|---:|---|"]
     t3 = ["| cell | bank E-refit (a) | bank full-strength on E | gap | >.02 | (c*) | (d*) | COMPANION (d*)−(c*) [CI] P | E-refit primary (contrast) | matched X | matched RR | matched verdict |",
           "|---|---:|---:|---:|:-:|---:|---:|---|---:|---:|---:|---|"]
     missing, flags = [], []
@@ -90,6 +92,20 @@ def main():
                 mh, f4(e.get("Z")), e.get("verdict", "—")))
             ms = d.get("matched_strength_companion")
             em = d.get("evalue_analog_matched") or {}
+            # GOVERNING readout: the companion governs wherever the enriched-bank gap
+            # exceeds the .02 trigger (there the E-refit primary is not comparable to any
+            # full-strength bank comparison); otherwise the E-refit primary governs.
+            pr = d["PRIMARY_stacked_increment_d_minus_c"]
+            if ms and ms.get("applicable") and ms.get("gap_exceeds_trigger"):
+                g, foot = ms["COMPANION_increment_dstar_minus_cstar"], "matched-strength companion"
+            elif ms and not ms.get("applicable"):
+                g, foot = pr, "E-refit (companion n/a — E is the whole population)"
+            else:
+                g, foot = pr, "E-refit primary (gap below .02 trigger)"
+            gp = g["p_gt_0"]
+            vd = ("**significant positive**" if gp >= .95 else
+                  ("**SIGNIFICANTLY NEGATIVE**" if gp <= .05 else "null / not significant"))
+            t0.append(f"| `{c}` | {boot(g)} | {foot} | {gp:.2f} | {vd} |")
             if ms and ms.get("applicable"):
                 s1 = ms["stage1"]["VA_enr_full_nl_on_E_seedmean_probs"]
                 am = ms["arms_matched"]
@@ -113,7 +129,10 @@ def main():
             if e.get("NON_MONOTONE"):
                 flags.append(f"`{c}` NON_MONOTONE sweep")
 
-    out = ("### Arms and increments\n\n" + "\n".join(t1) +
+    out = ("### Governing increment per cell\n\nThe **companion** governs wherever the "
+           "enriched-bank gap exceeds the .02 trigger; otherwise the E-refit primary does. "
+           "All are INCREMENTAL information, never LEVEL residual.\n\n" + "\n".join(t0) +
+           "\n\n### Arms and increments\n\n" + "\n".join(t1) +
            "\n\n### Matched-strength companion (D1b-style two-stage)\n\n" + "\n".join(t3) +
            "\n\nWhere `>.02` is **Y**, the E-refit primary is a matched-footing readout and is "
            "**not** comparable to any full-strength bank comparison (including a closure "
