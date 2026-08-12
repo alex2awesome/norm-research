@@ -167,16 +167,37 @@ def main():
             a_tags += ["anchor_pos", "anchor_neg", "anchor_scram"]
 
         all_texts = texts + a_texts
-        convs = []
-        for t in all_texts:
-            f = bank_trunc(t)
-            for b in blocks:
-                convs.append([{"role": "user",
-                               "content": f"{SYS}\n\n{j['noun']}:\n{f}\n\n{b}"}])
+        # CHUNKED + RESUMABLE (added 2026-08-13 after the r1 engine got SIGTERM'd
+        # ~1 min in and the single 1.27M-prompt llm.chat call lost everything):
+        # texts are scored in chunks of CHUNK_TEXTS, each chunk's raw token strings
+        # land in <tag>_rawchunk<i>.json immediately, and completed chunks are
+        # skipped on relaunch. Item-major order inside a chunk is unchanged, so the
+        # final reshape is identical to the monolithic call.
+        CHUNK_TEXTS = 2000
+        n_chunks = (len(all_texts) + CHUNK_TEXTS - 1) // CHUNK_TEXTS
         print(f"[{tag}] {len(rows)} rows + {len(a_texts)} anchors x {len(crits)} crit "
-              f"= {len(convs)} prompts", flush=True)
-        outs = llm.chat(convs, sp)
-        raw = [o.outputs[0].text for o in outs]
+              f"= {len(all_texts) * len(crits)} prompts in {n_chunks} chunks", flush=True)
+        raw = []
+        for ci in range(n_chunks):
+            part = HERE / f"{tag}_rawchunk{ci}.json"
+            chunk = all_texts[ci * CHUNK_TEXTS:(ci + 1) * CHUNK_TEXTS]
+            if part.exists():
+                got = json.loads(part.read_text())
+                if len(got) == len(chunk) * len(crits):
+                    raw += got
+                    print(f"[{tag}] chunk {ci+1}/{n_chunks} cached, skip", flush=True)
+                    continue
+            convs = []
+            for t in chunk:
+                f = bank_trunc(t)
+                for b in blocks:
+                    convs.append([{"role": "user",
+                                   "content": f"{SYS}\n\n{j['noun']}:\n{f}\n\n{b}"}])
+            outs = llm.chat(convs, sp)
+            got = [o.outputs[0].text for o in outs]
+            part.write_text(json.dumps(got))
+            raw += got
+            print(f"[{tag}] chunk {ci+1}/{n_chunks} scored ({len(got)} prompts)", flush=True)
         X = np.array([parse_tok(t) for t in raw], dtype=float).reshape(
             len(all_texts), len(crits))
         Xpop, Xanc = X[:len(texts)], X[len(texts):]

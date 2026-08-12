@@ -3717,3 +3717,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   (vs +.0721 without topic, +.0927 unconditioned). Topic lifts the bank-side level,
   absorbs NONE of the dense edge. Audit conclusion unchanged; topic joins the
   cell's standing nuisance set with identity/NLL/year.
+
+## 2026-08-13 — BBC r1 scoring DIED + RELAUNCHED (chunked/resumable)
+- First run's engine got an external SIGTERM ~1 min after init (56K in-flight
+  aborted); the single 1.27M-prompt llm.chat call was unresumable — total loss.
+  Death moment coincides exactly with the harness reaping the hung launcher ssh.
+- Orphaned EngineCore (172GB, GPU5) killed by PID after ownership check; scorer
+  PATCHED: 26 chunks x ~2,000 texts, per-chunk rawchunk json + skip-on-relaunch.
+- RELAUNCHED 23:27:34Z; init 28.6s; GPU5 100%; launcher ssh severed EARLY by
+  killing local client PIDs (remote setsid job survives clean disconnect —
+  verified). Lesson filed: memory/reference_vllm_batch_chunking_launch_detach.md.
