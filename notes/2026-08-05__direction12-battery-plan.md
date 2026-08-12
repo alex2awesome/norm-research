@@ -1771,3 +1771,26 @@ paired 20k CIs; outputs/analyses/group_contrasts_v1/channel_emergence_by_z_v1.js
 **Norm-boundary categorization extension LAUNCHED** (user approved): 1,144 unlabeled
 metrics + 30 hidden humor overlap names (consistency check vs metric_categories_blind_v1)
 in 6 names-only blind chunks; same category semantics; wave 1 (c1-c3) running.
+
+## Norm-boundary categorization v2 (full universe) + RISING test verdict (2026-08-12)
+
+Extension merged: metric_categories_blind_v2.json — 1,347 metrics (832 mechanics /
+370 other / 145 norm-boundary); v1's 203 humor labels kept verbatim; 30-name hidden
+overlap consistency 28/30 (.93) between the independent blind judges.
+
+**Full-universe norm-boundary -> RISING test (100k one-sided perm):**
+- humor: P(RISING|nb)=.805 vs .380 rest, diff +.425, p<1e-5 (n_nb=41; STRENGTHENS the
+  v1 cell — extension added 11 more blind nb names and the effect held)
+- POOLED 8 domains: .734 vs .692, p=.19 — DOES NOT GENERALIZE pooled
+- news -.03 / peer -.13 / press -.06: null-to-reversed
+- Structural reading (not a conclusion): outside humor the banks are RISING-dominated
+  (base .70-.79; deep censoring), so verdict variance is compressed — the humor cell is
+  the only bank with enough REACHES mass (base RISING .38) for the contrast to breathe.
+  The claim of record stays HUMOR-SCOPED: "norm-boundary constructs keep gaining with
+  capability where craft-mechanics constructs finish early" — now at n=41 blind labels.
+
+**1B side answer (planted probe)**: llama1b PLANTED-definition recovery = .509 (chance)
+vs .613 @3B, .726 @8B, .805 @70B. At 1B even verbatim mechanical rules are inert — the
+receiver is not learning from ANY channel; its .53 real-def cell is lexical-prior
+residue, not rule-following. Order of emergence: execute-verbatim-rules 1B->3B;
+extract-content-from-articulation 7-8B; explanation>definition 32B+.
