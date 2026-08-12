@@ -5772,3 +5772,11 @@ UNCHANGED; never-worse claim PRESERVED (CI spans 0). Phrasing: "ties on PUPA"; n
 CRITERION 1 STATUS: with hover re-minted at call-parity (HB204) and this PUPA mint, all
 six benchmark rows now stand on same-session k=5 certified rescores. Criterion 1 CLOSED
 — all six goal criteria now closed or landed per their preregistered outcomes.
+
+## HB206 (2026-08-12) — Table 1 LaTeX landed (paper-2 commit)
+HB204 hover row + HB205 PUPA row of record are now IN the paper (paper-2 main.tex,
+commit "Table 1: land certified re-mint rows"): HoVer .503/---/.494/.569/+.066***;
+PUPA .906/.844/.883/.899/-.008 n.s. (caption carries the tie CI, matched-budget
+robustness note, and the sk1 box-change disclosure). Old .471/.557/+.086 and
+.883/.882/-.001 cells are gone from the draft. All six rows in the paper now match
+the certified same-session k=5 ledger.
