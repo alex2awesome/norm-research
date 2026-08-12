@@ -91,6 +91,26 @@ def apply(cell):
     if "fused_must_beat_bank" in d:
         d["fused_must_beat_bank"]["SUPERSEDED_BY"] = "standing_rule_sec11_F2 (see LABEL)"
 
+    # the re-based rule must ALSO be read on the matched-strength footing wherever the
+    # companion exists: that is the footing on which a full-strength bank comparison is
+    # made, and on the big-gap cells it can reverse the sign.
+    ms = d.get("matched_strength_companion")
+    if ms and ms.get("applicable"):
+        cs = ms["arms_matched"]["c_star_bankfull_plus_NUIS_nl"]
+        ds = ms["arms_matched"]["d_star_plus_T_nl"]
+        b = ms["COMPANION_increment_dstar_minus_cstar"]
+        d["standing_rule_sec11_F2"]["matched_strength_footing"] = {
+            "c_star": cs, "d_star": ds, "margin_dstar_minus_cstar": ds - cs,
+            "bootstrap_estimate": b["estimate"], "bootstrap_p_gt_0": b["p_gt_0"],
+            "verdict": "PASS" if ds > cs else "FAIL",
+            "SIGNIFICANT_AT_P95": bool(b["p_gt_0"] >= 0.95),
+            "SIGNIFICANTLY_NEGATIVE": bool(b["p_gt_0"] <= 0.05),
+            "note": ("where the enriched-bank gap exceeds .02 this is the footing that "
+                     "governs any full-strength bank comparison; a FAIL here with an "
+                     "E-refit PASS means the E-refit increment was an artefact of "
+                     "starving the bank, not a taste residual"),
+        }
+
     d["estimand_distinction"] = ESTIMAND
     d["PRIMARY_stacked_increment_d_minus_c"]["estimand"] = "INCREMENTAL_information"
     if d.get("matched_strength_companion", {}).get("applicable"):
