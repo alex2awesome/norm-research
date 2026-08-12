@@ -110,9 +110,11 @@ Decision rule encoded in the script:
 | Δ₀ > .02 but ε-check fails **or** residual CI spans zero | STOP AT ROUND 0 (terminal, **resolution-bound**) |
 | Δ₀ > .02 and resolvable | **report to coordinator before any rounds** (appendix cells do not auto-earn fleet spend) |
 
-A resolution-bound stop is reported as "closed at this cell's resolution", **never**
-"saturated" — the press_verdict wording, and the same distinction homepage curation
-turned on.
+A resolution-bound stop is **never** reported as "saturated". Note the encoded rule
+lumps two distinct outcomes into one label — the readout above separates them, and the
+separation is what this cell contributed: "no residual is measurable" (homepage) and
+"a real residual whose closure cannot be tracked" (tweets) are different findings that
+happen to share a stopping branch.
 
 ---
 
@@ -126,7 +128,7 @@ Written deliberately so this lane can be resumed cold. Current as of 2026-08-12.
 |---|---|---|
 | **BBC most-read** | round 0 COMPLETE, gate PASS (Δ₀ +.0749), ε-resolvable (.00252). Round-1 stage-1 slice BUILT and on disk. **Fleet HELD.** | run the sealed fleet the moment a second family is available |
 | **homepage curation** | **TERMINAL at round 0** (noise-floor). Logged. | none — closed |
-| **journalism tweets** | round 0 running | read `round0_results.json`, apply the decision table above, report |
+| **journalism tweets** | **TERMINAL at round 0**, resolution-bound (Δ₀ +.0407, residual CI excludes zero, ε-check fails at .00804) | none — closed unless the coordinator amends the split |
 
 ## The one blocker, and exactly what unblocks it
 
