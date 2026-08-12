@@ -234,6 +234,81 @@ and nothing scientific. GLM is re-probed **lazily**, one cheap request at each s
 boundary rather than a poll loop, because the 1302 is a shared quota other agents are
 also drawing on.
 
+## 2.4 Round 1 — fleet LANDED, pipeline stopped at the species boundary
+
+**Fleet: 200/200 proposals, 16/16 slots, no mid-wave degradation.** P=8 across 2
+families (codex_luna x4, glm x4), 8 distinct salts so card order differs per proposer.
+Track A 120 (8x15), Track B 80 (8x10); codex 100 / glm 100, exactly balanced. GLM was
+verified live on both keys immediately before the wave and used 555-934 output tokens
+per slot (negligible against the weekly Lite budget). The slice was NOT rebuilt --
+sha1 `49f7d9985b9ac8e632113a3a58d75604fbe9eca3`, recorded in `fleet_manifest_r1.json`
+along with the 2-family degradation reason, as the freeze requires.
+
+**Parser bug caught before it corrupted the accounting.** The first `collect` returned
+80/200 and zeroed three codex slots whose raw outputs were fine. Proposers do not
+reliably emit the literal `NAME:`/`DESCRIPTION:` prefixes; three formats appeared in
+one round:
+
+```
+NAME: x | DESCRIPTION: y | RATIONALE: z              (glm Track A)
+Plain-language accessibility: <desc> | RATIONALE: ...   (codex Track A)
+Headline length | <desc> | PARENT: ... | MIXED: no      (codex Track B)
+```
+
+Accepting 80/200 would have computed the species table and Good-Turing missing mass on
+a 60%-truncated pool with three proposers silently absent -- the same class of error as
+the math.SE tau-only under-merge, which inflated M-hat by 59%. The parser is now
+format-tolerant but still precise: a line must carry a known field marker
+(`RATIONALE|PARENT|MIXED|DESCRIPTION`), so prose cannot be mistaken for a proposal.
+Re-collected clean at 200/200, every proposer at exactly 25.
+
+### STOPPED HERE — species table blocked, and the fix is known
+
+Step 1 of the remaining pipeline (species table) needs bge embeddings as the SHORTLIST
+device. On this laptop `import sentence_transformers` fails with a TensorFlow
+initialisation error (`_pywrap_checkpoint_reader raised unreported exception`), though
+the bge models themselves are cached
+(`~/.cache/huggingface/hub/models--BAAI--bge-{small,base,large}-en-v1.5`).
+
+Two clean fixes for the successor, neither of which is a protocol change:
+  1. run the species step **on sk3** in `envs/ai_usage` (where the closure campaigns'
+     species steps have run before), or
+  2. load bge through torch/transformers directly rather than through
+     `sentence_transformers`, avoiding the TF import path entirely.
+
+Remember what the embedding is and is not: the freeze says concept identity is decided
+by **full-recall blind pairwise judging, NEVER embedding-tau across registers**. The
+cosine only builds the shortlist, so a different embedding backend does not change any
+adjudicated result.
+
+### Exact resumption sequence (nothing below has been run)
+
+```bash
+cd methods/taste_decomposition/closure/bbc_mostread
+# 1. species table (tau-only; SHORTLIST device, kept beside the merged table)
+python3 species.py --cell bbc_mostread --round 1        # adapt from mathse_vote/species.py
+# 2. b_merge: packet + BOTH sealed judge legs (resume-by-output-file)
+python3 ../run_bmerge_judges.py --cell bbc_mostread --round 1
+#    strict rule = BOTH judges say SAME; planted SAME/DIFFERENT anchors per judge;
+#    if only one judge returns, every downstream number carries a SINGLE-JUDGE flag
+# 3. apply the merge, then re-run selection on the MERGED species
+python3 species_merge.py --cell bbc_mostread --round 1
+# 4. blind routing audit + arbiter (AFTER the merge, never before)
+python3 audit.py   build    --cell bbc_mostread --round 1
+python3 arbiter.py          --cell bbc_mostread --round 1
+python3 audit.py   finalize --cell bbc_mostread --round 1
+# 5. STOP. Gemma scoring needs a GPU; CW owns GPU0. Coordinator assigns the card.
+```
+
+**The merge MUST precede both the audit and the missing-mass accounting.** This is the
+math.SE round-1 lesson: judge B arrived after the audit had already adjudicated the
+pool, which forced an unresolvable strict/loose split because the blind ids, planted
+probes and arbiter rulings were all keyed to the pre-merge selection.
+
+**Two-tier rule:** this directed round-1 sweep never feeds Good-Turing on its own; the
+merged species table is the figure of record and the tau-only one is kept beside it,
+labelled `good_turing_PREMERGE_tau_only`.
+
 ## 3. Fleet
 
 Per the coordinator's standing instruction, fleets run at **P = 8 across 2 families**
