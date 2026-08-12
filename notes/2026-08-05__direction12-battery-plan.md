@@ -1673,3 +1673,23 @@ was declined at design time); per-construct optimized articulations exist alongs
 (M_omega reconstruction objects; flip-selected sets) and are quoted ONLY with their
 optimization-artifact controls — the flip-at-frontier mm result (optimizer harvested
 pure calibration, zero content) is the demonstrated instance of why.
+
+## P1 rerun AUDITED (user challenge, 2026-08-11): within-task INVERSION, not mere flatness
+
+Audit 1 (lemmatizer): 78.5% exact / 17.3% rule / 4.2% unmatched; high-frequency rule
+resolutions all correct; named errors (themes->them, uses->us, primes->prim,
+slides->slid) = <1% of tokens, negligible for group means.
+Audit 2 (composition/Simpson's): within-task Spearman(rung, concreteness) is POSITIVE
+in 4/5 tasks — humor +.264***, math +.397***, peer +.287**, CW +.114*, news +.010 n.s.
+— all stronger than the pooled +.092 because the BETWEEN-task trend runs negative
+(deeper-rung tasks use slightly less concrete vocabulary), diluting the pool. So the
+pooled wrong-sign result is NOT a composition artifact; composition was hiding a
+stronger within-domain inversion.
+
+CORRECTED CLAIM (supersedes "essentially flat"): within domains, harder-to-transmit
+constructs are worded significantly MORE concretely. P1 fails with an inversion, not a
+null. Post-hoc interpretation (flagged): transmission-resistant constructs are often
+about concrete surface qualities (timing/delivery/imagery) whose decision rule is the
+tacit part, while abstract-sounding constructs carry conventionalized rules — same
+lesson as P2. Exploratory status (instrument sharpened post-hoc) unchanged; frozen-P1
+verdict (prediction fails) unchanged.
