@@ -148,6 +148,8 @@ The **companion** governs wherever the enriched-bank gap exceeds the .02 trigger
 
 | cell | governing increment | which footing | P | verdict |
 |---|---|---|---:|---|
+| `peer_verdict` | +.0588 [+.0339,+.0832] 1.00 | E-refit (companion n/a — E is the whole population) | 1.00 | **significant positive** |
+| `peer_curation` | +.0008 [−.0211,+.0241] 0.54 | matched-strength companion | 0.54 | null / not significant |
 | `peer_revealed` | +.0969 [+.0610,+.1339] 1.00 | matched-strength companion | 1.00 | **significant positive** |
 | `nc_responded` | +.0200 [+.0025,+.0377] 0.99 | E-refit primary (gap below .02 trigger) | 0.99 | **significant positive** |
 | `cw_community` | +.0988 [+.0880,+.1098] 1.00 | E-refit (companion n/a — E is the whole population) | 1.00 | **significant positive** |
@@ -178,6 +180,8 @@ The **companion** governs wherever the enriched-bank gap exceeds the .02 trigger
 
 | cell | bank E-refit (a) | bank full-strength on E | gap | >.02 | (c*) | (d*) | COMPANION (d*)−(c*) [CI] P | E-refit primary (contrast) | matched X | matched RR | matched verdict |
 |---|---:|---:|---:|:-:|---:|---:|---|---:|---:|---:|---|
+| `peer_verdict` | .6684 | — | — | — | — | — | _n/a — E is the whole population; companion identical to primary_ | +.0588 | — | — | — |
+| `peer_curation` | .5291 | .5974 | +.0684 | **Y** | .5688 | .5758 | +.0008 [−.0211,+.0241] 0.54 | −.0006 | .5447 | 0.73 | ABSORBABLE-IN-PRINCIPLE |
 | `peer_revealed` | .7202 | .7724 | +.0523 | **Y** | .7800 | .8691 | +.0969 [+.0610,+.1339] 1.00 | +.0927 | > AUC(T) = 0.8842 | 1.78 | ROBUST |
 | `nc_responded` | .7882 | .7995 | +.0114 | n | .8059 | .8330 | +.0274 [+.0108,+.0435] 1.00 | +.0200 | > AUC(T) = 0.8167 | 3.41 | ROBUST |
 | `cw_community` | .6652 | — | — | — | — | — | _n/a — E is the whole population; companion identical to primary_ | +.0988 | — | — | — |
@@ -194,8 +198,8 @@ Where `>.02` is **Y**, the E-refit primary is a matched-footing readout and is *
 
 | cell | Δ (d)−(c) | X | Y | RR=(X−.5)/(Y−.5) | X/Y | M̂ (strict?) | Z | verdict |
 |---|---:|---:|---:|---:|---:|---|---:|---|
-| `peer_verdict` | +.0588 | _pending_ | | | | | | |
-| `peer_curation` | −.0006 | _pending_ | | | | | | |
+| `peer_verdict` | +.0588 | > AUC(T) = 0.7769 | .5972 | 2.85 | 1.30 | — | — | Z_UNAVAILABLE |
+| `peer_curation` | −.0006 | — | .5614 | — | — | 0.67 (τ-era) | — | n/a |
 | `peer_revealed` | +.0927 | > AUC(T) = 0.8842 | .7162 | 1.78 | 1.23 | 0.43 (τ-era) | .7388 | ROBUST |
 | `nc_responded` | +.0200 | > AUC(T) = 0.8167 | .5929 | 3.41 | 1.38 | 0.72 (τ-era) | .6050 | ROBUST |
 | `cw_community` | +.0988 | > AUC(T) = 0.7921 | .5816 | 3.58 | 1.36 | 0.15 (τ-era) | .5744 | ROBUST |
@@ -209,7 +213,6 @@ Where `>.02` is **Y**, the E-refit primary is a matched-footing readout and is *
 `X` reported as `> AUC(T)` means the sweep never crossed zero even at a channel as strong as T itself: **not absorbable by any single channel weaker than T**.
 
 **§13 flags:** `cw_community` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `cw_community` spurious-alone 0.6651 > .65; `hashtagwars_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `jokes_community` spurious-alone 0.7282 > .65; `mathse_accepted_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `mathse_accepted_verdict` spurious-alone 0.6853 > .65; `mathse_vote_score` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `mathse_vote_score` spurious-alone 0.6691 > .65; `nc_responded` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `nc_responded` spurious-alone 0.7195 > .65; `peer_revealed` NON_MONOTONE sweep; `peer_revealed` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `peer_revealed` spurious-alone 0.7511 > .65; `peer_verdict` spurious-alone 0.6900 > .65; `press_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's 
-
 
 ## Artifacts
 
