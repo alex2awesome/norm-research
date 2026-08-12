@@ -3703,3 +3703,17 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Quoting rules going forward: (1) pooled +.093 only WITH the band split; (2) the
   2022-2023 band residual +.025 n.s. is the honest "current-era" number; (3) identity
   + NLL + year now belong in this cell's nuisance set for any future round.
+
+## 2026-08-13 — peer_revealed TOPIC arm (user: "some fields just get more citations")
+- Prior art confirmed on file: closure-time job1 (k-means bge-large strata k=5/10/20
+  train-fit + trend deciles + year strata + PC-50 covariate control) — topic-alone
+  .7415 on the same 478 rows; dense over topic+bank +.119 [+.083,+.154]; over
+  topic+trend+bank +.089 [+.057,+.119]; stratified Delta RISES at k=20 (topic floor
+  was the BANK's crutch). Topic was a READOUT robustness check then, not an F2
+  conditioning covariate.
+- NEW unified arm results/f2_topic_kitchensink_peer_revealed.json: bank + nuis(57)
+  + identity(4) + NLL + year + **topic PCs(50, cached bge-large embeddings, 478/478
+  joined)**: (c3) .7969 / (d3) .8724 -> residual **+.0728 [+.0372,+.1082] P=1.000**
+  (vs +.0721 without topic, +.0927 unconditioned). Topic lifts the bank-side level,
+  absorbs NONE of the dense edge. Audit conclusion unchanged; topic joins the
+  cell's standing nuisance set with identity/NLL/year.
