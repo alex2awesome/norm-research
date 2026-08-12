@@ -1836,3 +1836,32 @@ Disposition:
   criteria; intro condition (2) = one forward-referencing sentence; outline bullet
   removed; body coded-iso section replaced by one-sentence forward reference. Compiles
   clean, zero undefined refs.
+
+### 2026-08-12 — E-CERT VERDICT-SLICE CAMPAIGN: selection + predictions FROZEN (pre-launch)
+User directive: "please launch more metrics for e-cert." Design = run the full
+epsilon-certifiability loop (unit mining -> audit -> submodular assembly -> capture-
+recapture missing-value ceiling) on a verdict-stratified slice, as a SECOND INSTRUMENT
+on the articulation boundary (feeds #27 four-instruments-one-boundary).
+
+SELECTION (frozen, outputs/analyses/ecert_verdict_slice_v1.json, 195 metrics):
+- Cell A: ALL 65 pooled-BOUNDED (humor 41 / news 13 / peer 9 / CW 2).
+- Cell B: 65 of 337 plateaued-everywhere (within-family instrument; A excluded),
+  stable-hash sample md5('ecert-slice-v1:task:name') ascending.
+- Cell C: 65 of 69 rising-everywhere, same hash rule.
+
+PREDICTIONS (FROZEN before any e-cert scoring; readouts threshold-free rank stats,
+paired bootstrap on medians; report C(R(Omega)) recovery per standing rule):
+- P1: cells A+B exhaust their unit mass — achieved value ~= calibrated ceiling; missing-
+  mass fraction ranks LOWER than cell C (the plateau is not search shortfall).
+- P2: cell C shows unexhausted missing mass — ceiling sits above achieved value by a
+  margin exceeding A/B (the rise has certified headroom left).
+- P3: within the exhausted cells, A exhausts at LOWER absolute value than B (bounded =
+  genuine low ceiling; plateaued-everywhere contains high plateaus).
+- Falsifier worth stating: if A shows LARGE unexhausted mass, the BOUNDED verdict is
+  challenged (plateau could be search shortfall) — report either way.
+
+DISCIPLINE: results reported ALONGSIDE the frozen-arm curves with optimization-artifact
+controls, never replacing them (design-conditional rule; flip-at-frontier lesson).
+Metrics never label-aware; anchor tests every judging batch; sk3 only, 1 GPU, GPUs 1-2
+off-limits. LAUNCH PENDING: harness + input-format identification (scout in flight);
+cost estimate to be recorded here before the run starts.
