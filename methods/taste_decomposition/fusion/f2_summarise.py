@@ -50,6 +50,8 @@ def main():
           "|---|---|---:|---:|---:|---:|---:|---:|---|---|---|---|"]
     t2 = ["| cell | Δ (d)−(c) | X | Y | RR=(X−.5)/(Y−.5) | X/Y | M̂ (strict?) | Z | verdict |",
           "|---|---:|---:|---:|---:|---:|---|---:|---|"]
+    t3 = ["| cell | bank E-refit (a) | bank full-strength on E | gap | >.02 | (c*) | (d*) | COMPANION (d*)−(c*) [CI] P | E-refit primary (contrast) | matched X | matched RR | matched verdict |",
+          "|---|---:|---:|---:|:-:|---:|---:|---|---:|---:|---:|---|"]
     missing, flags = [], []
     for field, cells in ORDER:
         for c in cells:
@@ -86,13 +88,37 @@ def main():
                 "—" if e.get("robustness_ratio_excess") is None else f"{e['robustness_ratio_excess']:.2f}",
                 "—" if e.get("X_over_Y") is None else f"{e['X_over_Y']:.2f}",
                 mh, f4(e.get("Z")), e.get("verdict", "—")))
+            ms = d.get("matched_strength_companion")
+            em = d.get("evalue_analog_matched") or {}
+            if ms and ms.get("applicable"):
+                s1 = ms["stage1"]["VA_enr_full_nl_on_E_seedmean_probs"]
+                am = ms["arms_matched"]
+                t3.append("| `{}` | {} | {} | {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
+                    c, f4(a["a_VA_enr_nl"]), f4(s1),
+                    sg(ms["enriched_bank_gap_fullfit_minus_Erefit"]),
+                    "**Y**" if ms["gap_exceeds_trigger"] else "n",
+                    f4(am["c_star_bankfull_plus_NUIS_nl"]), f4(am["d_star_plus_T_nl"]),
+                    boot(ms["COMPANION_increment_dstar_minus_cstar"]),
+                    sg(ms["primary_Erefit_increment_for_contrast"]),
+                    (em.get("X_statement") or f4(em.get("X"))) if em else "—",
+                    "—" if not em or em.get("robustness_ratio_excess") is None
+                        else f"{em['robustness_ratio_excess']:.2f}",
+                    em.get("verdict", "—") if em else "—"))
+            elif ms:
+                t3.append(f"| `{c}` | {f4(a['a_VA_enr_nl'])} | — | — | — | — | — | "
+                          "_n/a — E is the whole population; companion identical to primary_ "
+                          f"| {sg(d['PRIMARY_stacked_increment_d_minus_c']['estimate'])} | — | — | — |")
             if e.get("Z_FLAG"):
                 flags.append(f"`{c}` {e['Z_FLAG'][:60]}")
             if e.get("NON_MONOTONE"):
                 flags.append(f"`{c}` NON_MONOTONE sweep")
 
     out = ("### Arms and increments\n\n" + "\n".join(t1) +
-           "\n\n### E-value analog\n\n" + "\n".join(t2) +
+           "\n\n### Matched-strength companion (D1b-style two-stage)\n\n" + "\n".join(t3) +
+           "\n\nWhere `>.02` is **Y**, the E-refit primary is a matched-footing readout and is "
+           "**not** comparable to any full-strength bank comparison (including a closure "
+           "campaign's same-rows verdict); the COMPANION is the quotable number there.\n"
+           "\n### E-value analog\n\n" + "\n".join(t2) +
            "\n\n`X` reported as `> AUC(T)` means the sweep never crossed zero even at a "
            "channel as strong as T itself: **not absorbable by any single channel weaker "
            "than T**.\n")
