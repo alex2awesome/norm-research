@@ -1794,3 +1794,28 @@ vs .613 @3B, .726 @8B, .805 @70B. At 1B even verbatim mechanical rules are inert
 receiver is not learning from ANY channel; its .53 real-def cell is lexical-prior
 residue, not rule-following. Order of emergence: execute-verbatim-rules 1B->3B;
 extract-content-from-articulation 7-8B; explanation>definition 32B+.
+
+## SCOPE RULING: coding material moves OUT of paper #2 -> METRIC-SEAM paper (user, 2026-08-12)
+
+User direction after the round-trip program buildout: stuffing metric-seam + coded
+metrics into paper #2 is too much; the coding piece is a distraction from #2's charge.
+Disposition:
+- Paper #2 keeps Collins routes (1) better string [channel grid/decompression/examples]
+  and (3) better listener [scaling/limits program] in depth; route (2) formal string
+  becomes ONE forward-referencing sentence — Fig 9 (code-iso), Table 3 (compile cliff),
+  and the F spectrum figure all MOVE OUT of #2.
+- Destination = the METRIC-SEAM paper (its own existing track: notes/2026-07-03__
+  metric-seam-paper-roadmap.md + v2 + section draft). NOT paper-1 (metric-codability =
+  the terms/lexicon paper; lexical codability != behavioral codability — do not conflate).
+- Seam paper additionally receives from this week: 8-domain unit codability taxonomy,
+  judged-vs-compiled correlation (rho .41, technical-register inflation), planted-
+  equivalence decomposition (mechanical-but-thick), the code round-trip instrument
+  (methods/metric_seam/roundtrip/, scripted+repeatable), GEPA-on-program lane (official
+  gepa engine), hybrid-executor continuum idea + the FROZEN component-level prediction
+  (round-trip fidelity per component tracks the Table-3 compile cliff — registered
+  BEFORE any hybrid scoring), and the boundary charter (fully-coded 0/176 at metric
+  reliability / effectively-coded 13.6% lenient ~2% strict / code-articulable ~25% t0;
+  one-sided decidability; text-locality as separate axis).
+- In-flight lanes: compile trials t1+t2 COMPLETE (all chunks full count); harness run
+  banked under the seam ledger. GEPA pilot + hybrid leg + planted full-loop HELD as
+  seam-paper charter items. No paper-#2 text edits until user directs.
