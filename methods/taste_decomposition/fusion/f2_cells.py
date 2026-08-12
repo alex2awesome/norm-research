@@ -148,6 +148,14 @@ GENERIC = {
                          gepa_targets="cap_finalist_gepa_targets.json"),
     "nc_responded": dict(dir="nc_responded", tag="nc_responded", pat="round%s",
                          rounds=("1", "2", "3", "4", "5"), loader="lib"),
+    # 2026-08-12: closure TERMINAL by the frozen stopping rule (r1/r2 both sub-eps,
+    # negative round-0 gate) -- the "after closure" precondition for F2 is satisfied.
+    # maps_batch1 follows the generic contract exactly (cells.py load(cell),
+    # <tag>_rN_routing_final.json with `final`/`final_route`, <tag>_rN_scores.npz).
+    "nc_outcome": dict(dir="maps_batch1", tag="nc_outcome", pat="nc_outcome_r%s",
+                       rounds=("1", "2"), loader_arg="nc_outcome"),
+    "nc_agree": dict(dir="maps_batch1", tag="nc_agree", pat="nc_agree_r%s",
+                     rounds=("1", "2"), loader_arg="nc_agree"),
 }
 
 
