@@ -48,6 +48,12 @@ def eval_fn_on(fn, ids, items, target):
             want.append(float(target[d]))
     if len(got) < 25 or len(set(got)) <= 1 or len(set(want)) <= 1:
         return None
+    # near-degeneracy screen (user concern 2026-08-12): a channel whose modal output
+    # covers >85% of items has its rank statistic driven by a handful of off-modal
+    # items — spuriously winnable on n=40. Screened, not scored.
+    from collections import Counter
+    if Counter(got).most_common(1)[0][1] / len(got) > 0.85:
+        return "NEAR_DEGENERATE"
     return spearman(got, want)
 
 
@@ -105,10 +111,13 @@ def main():
             fn = funcs.get(jid)
             if fn is None:
                 continue
-            row[f"R_home_{a}"] = (lambda v: round(v, 3) if v is not None else None)(
-                eval_fn_on(fn, sorted(det), items, eval_target))
+            v = eval_fn_on(fn, sorted(det), items, eval_target)
+            if v == "NEAR_DEGENERATE":
+                row[f"neardeg_{a}"] = True
+            else:
+                row[f"R_home_{a}"] = round(v, 3) if v is not None else None
             tr = eval_fn_on(fn, sorted(train_target), items, train_target)
-            if tr is not None:
+            if tr is not None and tr != "NEAR_DEGENERATE":
                 train_r[a] = tr
         if train_r:                     # best-of selected on TRAIN, scored on eval
             ba = max(train_r, key=train_r.get)
@@ -119,8 +128,11 @@ def main():
             keep = gr is not None and gr >= max(train_r.values(), default=-2)
             row["gepa_kept_by_train"] = bool(keep)
             if keep:
-                row["R_home_gepa"] = (lambda v: round(v, 3) if v is not None else None)(
-                    eval_fn_on(gepa[jid], sorted(det), items, eval_target))
+                v = eval_fn_on(gepa[jid], sorted(det), items, eval_target)
+                if v == "NEAR_DEGENERATE":
+                    row["neardeg_gepa"] = True
+                else:
+                    row["R_home_gepa"] = round(v, 3) if v is not None else None
         results.append(row)
 
     json.dump({"calibration": cal_rows, "results": results},
@@ -128,6 +140,8 @@ def main():
     print("\n=== CALIBRATION (spearman vs reference implementation) ===")
     for c in cal_rows:
         print(" ", c)
+    nd = sum(1 for r in results for k in r if str(k).startswith("neardeg_"))
+    print(f"\nnear-degenerate channels screened (modal output >85%): {nd}")
     print("\n=== HOME-vs-HOME (code round trip vs stored judge round trip) ===")
     for arm in [f"R_home_{a}" for a in arms] + ["R_home_best", "R_home_gepa"]:
         ok = [r for r in results if r.get(arm) is not None and r.get("R_judge") is not None]
