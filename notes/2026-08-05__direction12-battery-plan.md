@@ -1865,3 +1865,22 @@ controls, never replacing them (design-conditional rule; flip-at-frontier lesson
 Metrics never label-aware; anchor tests every judging batch; sk3 only, 1 GPU, GPUs 1-2
 off-limits. LAUNCH PENDING: harness + input-format identification (scout in flight);
 cost estimate to be recorded here before the run starts.
+
+### 2026-08-12 — E-CERT SLICE: smoke-1 caught empty capture stream; proposer families REPLACED (disclosed)
+Smoke-1 (2 humor metrics) VALIDATED THE GATE DESIGN: npz written and chain exited 0, but
+artifact inspection showed tags = {children} ONLY — zero free-gen rows = NO capture-recapture
+stream = the frozen P1/P2 predictions would have been unmeasurable. Root causes (surfaced by
+direct backend probes from sk3, errors were swallowed by generate() retries):
+- OpenRouter HTTP 402 Payment Required (credits exhausted) — kills qwen/llama/haiku proposer
+  families. USER ACTION if canonical 4-family set is wanted back: top up OpenRouter.
+- GLM HTTP 429 — key-resolver prefers ~/.z-ai-api-key-alexander-spangher.txt (DEAD account per
+  reference_glm_subscription_api); fix = ZAI_KEY_FILE pinned to the LIVE ~/.z-ai-api-key.txt.
+REPLACEMENT (disclosed instrument change): proposer families = glm-4.7 (zai_anthropic, live
+key) + gpt-4.1-mini (NEW 'openai' backend entry, sk3 SALT-lab key; gpt-5-mini rejected 400 on
+classic max_tokens param). 2-family CRC floor. The 272-bank itself used 3xGLM-4.7 (catalog),
+so family sets already vary across banks; within-slice cell comparisons (the frozen
+predictions) use one fixed family set and are unaffected; cross-bank LEVEL comparisons vs the
+272-bank get a family-set caveat. Proposer quota cost: ~555 GLM calls (~0.4M tok, trivial vs
+87M/wk) + ~555 gpt-4.1-mini calls (cents). Smoke-1 children-only npz QUARANTINED to
+outputs/ecert_slice_v1/quarantine_children_only/ on sk3 (skip-existing would have frozen them
+thin forever). Smoke-2 relaunched with the fixed families.

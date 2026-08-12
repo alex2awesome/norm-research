@@ -23,6 +23,13 @@ export VLLM_GPU_MEM_UTIL=0.93
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 PY="${PY:-/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python}"
 MODEL="${MODEL:-meta-llama/Llama-3.1-8B-Instruct}"
+# Live GLM key (the resolver's default preference is the DEAD alexander- account -> silent 429)
+export ZAI_KEY_FILE="$HOME/.z-ai-api-key.txt"
+# Proposer families (2026-08-12): OpenRouter is 402 (out of credits), so the canonical
+# glm/qwen/llama/haiku set is replaced by glm-4.7 + gpt-4.1-mini — the 2-family CRC floor.
+# Disclosed in the battery note; within-slice cell comparisons are unaffected (fixed set).
+FAMILIES='{"glm": {"model": "glm-4.7", "backend": "zai_anthropic"}, "gpt": {"model": "gpt-4.1-mini", "backend": "openai"}}'
+export FAMILIES
 OUT="$HOME/outputs/ecert_slice_v1"
 GILISTS="$OUT/gilists.json"
 cd "$REPO"
@@ -69,7 +76,7 @@ PYEOF
     "$PY" -m methods.metric_implementer.experiments.run_alpha_probe \
       --task "$TASK" --r2-bucket general --level R2 --target-model "$MODEL" \
       --gi-list "$GIS" --n-metrics 0 --M-freegen 60 --n-probes 300 --gepa-reserve 60 \
-      --skip-existing --out-dir "$OUT" \
+      --families "$FAMILIES" --skip-existing --out-dir "$OUT" \
       || echo "$(date): $TASK sweep exited nonzero — continuing chain (resume = re-run script)"
   done
   echo "$(date): E-CERT SLICE CHAIN DONE"
