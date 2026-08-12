@@ -1722,3 +1722,31 @@ Delivered in notebooks/2026-08-10__articulation-story-4.1-4.3.ipynb (now 28 cell
   signature STRENGTHENED (two independent instruments converge); single-family regime
   counts demoted to per-family descriptions; extrapolated rising ceilings replaced by
   the de-censor measurement. Table-2 MI-silver validity anchor UNTOUCHED (stays in §3).
+
+## Codability extension wave + notebook v5 iteration (2026-08-11 night)
+
+**Codability extension EXECUTED (user "run it now")**: 315 metrics / 1,260 units across the
+3 uncovered domains, 6 blind Sonnet crews, ALL anchors 6/6, 100% metric coverage vs defs
+(defs built from outputs/hierarchy/<task>_general_r2_expanded.json — verified as the same
+canonical source as the 5-task wave via humor 284/284 exact match). Unit-level MECHANICAL:
+press_releases 28.6% (902 units) / notice_and_comment 34.0% (332) / patents 38.5% (26) —
+procedural domains land high as predicted (vs humor 4%/CW 6%). Universe now 1,347 metrics
+/ 4,718 units / 8 domains. Files: code_metrics/{defs,unit_codability}_{press_releases,
+notice_and_comment,patents}.json.
+
+**Notebook v5 (user iteration)**: 4.2c re-axised to battery z (OpenCompass-validated);
+4.2d + illustrative before->after snippets; 4.2E mechanism note (gpt-oss = decoder
+collapse -> anchoring, NOT longer thinking); E-b/E-c simplified w/ reading guides;
+**E-c print-line direction error CORRECTED** (v4 said "demonstration succeeds where
+restatement fails" — wrong way round; certified claim is gate opens / gap never closes,
+i.e. exemplars never reach definition parity on planted); 4.3 upper-bound establishment
+text (fitted L profile-CI + planted capability-selected reference); 4.3b top-of-range
+gain panel (rising med > 0, others ~0 — the tail IS visible); coarse-axis derivation
+note; 4.3d/e redrawn single-message; reading-guide markdown before every 4.3 exhibit.
+4.1b now dual join: staircase groups (5 tasks) + OSL verdicts (8 domains) — both NULL
+(codability ⊥ scaling verdict).
+
+**HTML companion published** (artifact 34eaa18a): 18 humor constructs where examples beat
+definition >= .05 — definition arm beside the actual labeled exemplar texts (probe
+universe verified: humor silver texts 60:360, 300 probes, panel-dim match; probes
+exported from sk3 via _load_texts and staged to analyses/humor_probes_60_360.json).
