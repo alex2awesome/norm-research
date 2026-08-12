@@ -3640,3 +3640,66 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   lives claim-level (option3_claims_gemma_scale.jsonl / office-action data). Phased
   plan: conditions 1+2+4 + honest-T rebuild first (no new bank needed for T);
   A-bank rebuild only if the cell re-enters mining. Queued behind BBC/V3 GPU jobs.
+
+## 2026-08-12 — peer_revealed audit continuation: TEMPORAL SPLIT of the residual
+- **Memorization-suspicion CPU battery LANDED** (peer_identity_audit/
+  analyze_memorization_cpu.py + boot_bands.py; descriptive, frozen F2 stack OOFs,
+  paired row bootstrap, rows=groups on this cell). y construction verified: top-vs-
+  bottom quartile of citation percentile WITHIN venue x year (build_v3_s2.py);
+  year-alone on E = .458 (chance, as constructed).
+- **HEADLINE: the +.093 deconfounded residual is ERA-LOCALIZED.** (d)-(c) by year band:
+  **2013-2019 +.168 [+.090,+.251] P=1.00 (n=134) · 2020-2021 +.135 [+.059,+.215]
+  P=1.00 (n=136) · 2022-2023 +.025 [-.018,+.070] P=.87 NOT significant (n=208).**
+  On the era where Llama-3.1's pretraining could not contain settled citation
+  outcomes (2022-2023), the residual is the same order as the program's small-residual
+  cells. Mirror pattern: bank+nuis (c) is much STRONGER on 2022-2023 (.864) than on
+  2013-2019 (.715) while dense raw is flat (.87-.90 everywhere).
+- **Within-class fame tracking (suspicion lever (c))**: within y=1, raw dense tracks
+  each paper's OWN realized citation count at Spearman **.293** vs bank+nuis stack
+  **.026** (oof_d .170); within y=0 all ~.07. The trained-on-binary model orders
+  positives by graded fame the articulated instrument cannot see.
+- **Fame split**: 2020-2021 low-fame half (median 2 cites) residual +.371 — consistent
+  with RECOGNITION-ABSENCE as signal (unrecognized -> predict bottom quartile).
+- **Two candidate mechanisms recorded, NOT adjudicated**: (i) pretraining
+  memorization/recognition of settled outcomes; (ii) bank era-miscalibration
+  (criteria fail on old-era conventions; dense generalizes). Discriminator RUNNING:
+  base-Llama-3.1-8B abstract-NLL recognition probe (peer_recognition_probe.py, sk3
+  GPU0 stacked) -> recognition_readout.py splits the residual by seen-ness within
+  year bands.
+- **Quoting discipline (immediate)**: the .884/.888 community headline and the
+  "RR 1.78 ROBUST" E-value row now carry an era caveat — the residual is a pre-2022
+  phenomenon; never quote the pooled +.093 without the band split.
+
+## 2026-08-12 — peer_revealed RECOGNITION PROBE: memorization DISFAVORED
+- Probe LANDED (478/478 abstract-NLLs, base Llama-3.1-8B, sk3 GPU0 stacked;
+  peer_identity_audit/peer_recognition_nll.jsonl + recognition_readout.json).
+  Instrument valid: NLL tracks fame (Spearman vs own cites -.435 in 2013-2019 band,
+  -.313 overall) — famous papers ARE more "seen".
+- **Residual concentrates in the UNRECOGNIZED half — the OPPOSITE of the memorization
+  prediction.** Per band, (d)-(c) recognized-vs-unrecognized: 2013-2019 +.087
+  [-.059,+.237] n.s. vs **+.234 [+.099,+.368] sig**; 2020-2021 +.095 vs +.146;
+  2022-2023 +.017 vs +.031 (both n.s.); ALL +.061 vs +.110.
+- Reading (descriptive): if dense recalled memorized outcomes, its edge should live
+  where the model has seen the paper. It lives where it hasn't. Combined with (c)
+  being much weaker on old-era rows (.715 vs .864), the leading account is
+  **bank era/obscurity-miscalibration** — the articulated instrument fails on
+  old-convention and obscure papers; dense generalizes there. The within-positives
+  fame-tracking (rho .293) remains a recorded anomaly not fully explained by either
+  account (graded quality visible in text is the honest interpretation consistent
+  with the probe).
+- Kitchen-sink conditioning arm (nuis 57 + identity 4 + NLL + year) running —
+  results/f2_kitchensink_peer_revealed.json when landed.
+
+## 2026-08-12 — peer_revealed KITCHEN-SINK arm: residual survives ALL named channels
+- results/f2_kitchensink_peer_revealed.json: conditioning = bank + nuisance(57) +
+  identity(4) + recognition-NLL + year. (c'') .8136 -> (d'') .8786; residual
+  **+.0721 [+.0376,+.1065] P=1.000** (ref +.0927). NLL-alone .378 (reversed .622 —
+  recognized papers skew y=1, consistent instrument). AUDIT VERDICT (G4 CLOSED,
+  descriptive): the .88 level = honest bibliometric predictability + a residual that
+  no named channel absorbs; residual is era-localized (pre-2022) and concentrated on
+  UNRECOGNIZED/obscure papers = articulated-instrument miscalibration on old-era/
+  obscure text, NOT identity leakage or outcome memorization. Open anomalies recorded:
+  within-y=1 fame-tracking rho .293 (dense) vs .026 (bank); T0-null.
+- Quoting rules going forward: (1) pooled +.093 only WITH the band split; (2) the
+  2022-2023 band residual +.025 n.s. is the honest "current-era" number; (3) identity
+  + NLL + year now belong in this cell's nuisance set for any future round.
