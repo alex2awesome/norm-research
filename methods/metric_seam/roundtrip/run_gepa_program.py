@@ -49,6 +49,8 @@ def compile_program(src):
 
 
 def codex_lm(prompt: str) -> str:
+    # reflection replies come back on stdout; no file writes needed, but keep the
+    # sandbox read-only here deliberately (reflection must not touch the repo)
     r = subprocess.run(["node", CODEX, "task", prompt, "--fresh"],
                        timeout=900, capture_output=True, text=True)
     return r.stdout or ""

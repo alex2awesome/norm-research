@@ -38,8 +38,13 @@ def main(n_trials=2):
                 f"just the count of functions written.")
             print(f"=== codex trial t{t} chunk c{k} {time.strftime('%H:%M:%S')} ===",
                   flush=True)
-            subprocess.run(["node", CODEX, "task", prompt, "--fresh"],
-                           timeout=900, capture_output=True)
+            # --write: the companion sandbox is READ-ONLY without it (verified 2026-08-12)
+            r = subprocess.run(["node", CODEX, "task", "--write", prompt, "--fresh"],
+                               timeout=900, capture_output=True, text=True)
+            if not out.exists():        # fallback: reply-only response with a code fence
+                m = re.findall(r"```(?:python)?\n(.*?)```", r.stdout or "", re.S)
+                if m and "def score__" in m[-1]:
+                    out.write_text(m[-1])
             got = n_funcs(out)
             print(f"c{k} t{t}: {got}/{want} functions", flush=True)
     print("COMPILE TRIALS DONE")
