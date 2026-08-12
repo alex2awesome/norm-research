@@ -5742,3 +5742,33 @@ sk1 NUL-corrupted ablation_battery.py restored; laptop pulling the boxes' newer
 paperexact_arms.py; 167 sk3-only metric files pulled into repo; ENVIRONMENTS.md manifest
 added with env-freeze rule (envs are instruments: pinned, documented, never modified
 mid-campaign — sk2 server env = envs/vllm0251).
+
+## HB205 — PUPA 4-candidate re-mint CERTIFIED (2026-08-11, sk1) — criterion 1 CLOSED
+
+Box-change DISCLOSED: sk2 GPUs occupied 3+ days by other users -> mint moved to sk1 GPU7
+(port 8214, own fresh server, ./.venv vllm 0.25.1 = same pin as sk2 env). Single uniform
+session, fingerprint 2026-08-11T20:46:52Z skampere1.stanford.edu, k=5 passes, 221 items,
+all four candidates scored back-to-back on the same idle server; GLM judge via
+ZAI_KEY_FILE. Server killed clean (rc=0, EngineCore reaped).
+
+| candidate | mean (k=5) |
+|---|---|
+| GEPA official (seed) | .9062 |
+| M_omega unitrecomb_v8failmine | .8985 |
+| MIPROv2 (miprov2sk1) | .8831 |
+| GEPA+Merge (mergesk1) | .8442 |
+
+Paired 20k bootstraps on item-level deltas (M_omega vs):
+- GEPA seed:  -.0077 [-.0215,+.0066] n.s. — STATISTICAL TIE; items +43/-62/=116
+- MIPROv2:    +.0153 [-.0039,+.0344] n.s.
+- GEPA+Merge: +.0543 [+.0351,+.0737] *
+
+ROW OF RECORD (Table 1 PUPA): GEPA .906 / M_omega .899 / Delta -.008 n.s. (supersedes the
+old cross-session .883/.882/-.001; absolute levels moved because the fresh idle-server
+session scores higher — same lesson as the livebench load-dependence entry). W=3/6
+UNCHANGED; never-worse claim PRESERVED (CI spans 0). Phrasing: "ties on PUPA"; never
+"loses on PUPA"; keep the GEPA-shipped-seed caveat as elsewhere.
+
+CRITERION 1 STATUS: with hover re-minted at call-parity (HB204) and this PUPA mint, all
+six benchmark rows now stand on same-session k=5 certified rescores. Criterion 1 CLOSED
+— all six goal criteria now closed or landed per their preregistered outcomes.
