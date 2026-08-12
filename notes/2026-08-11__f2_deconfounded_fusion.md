@@ -201,74 +201,18 @@ Where `>.02` is **Y**, the E-refit primary is a matched-footing readout and is *
 | `peer_verdict` | +.0588 | > AUC(T) = 0.7769 | .5972 | 2.85 | 1.30 | — | — | Z_UNAVAILABLE |
 | `peer_curation` | −.0006 | — | .5614 | — | — | 0.67 (τ-era) | — | n/a |
 | `peer_revealed` | +.0927 | > AUC(T) = 0.8842 | .7162 | 1.78 | 1.23 | 0.43 (τ-era) | .7388 | ROBUST |
-| `nc_responded` | +.0200 | > AUC(T) = 0.8167 | .5929 | 3.41 | 1.38 | 0.72 (τ-era) | .6050 | ROBUST |
-| `cw_community` | +.0988 | > AUC(T) = 0.7921 | .5816 | 3.58 | 1.36 | 0.15 (τ-era) | .5744 | ROBUST |
+| `nc_responded` | +.0200 | > AUC(T) = 0.8167 | .5929 | 3.41 | 1.38 | 0.72 (strict) | .6050 | ROBUST |
+| `cw_community` | +.0988 | > AUC(T) = 0.7921 | .5816 | 3.58 | 1.36 | 0.20 (strict) | .5808 | ROBUST |
 | `hashtagwars_verdict` | +.0297 | > AUC(T) = 0.7315 | .6496 | 1.55 | 1.13 | 0.65 (τ-era) | .7800 | ABSORBABLE-IN-PRINCIPLE |
 | `cap_finalist` | +.0002 | .5935 | .5987 | 0.95 | 0.99 | 0.38 (strict) | .6213 | ABSORBABLE-IN-PRINCIPLE |
 | `jokes_community` | +.0151 | > AUC(T) = 0.7469 | .6595 | 1.55 | 1.13 | 0.30 (strict) | .6676 | ROBUST |
-| `mathse_accepted_verdict` | +.0086 | .5929 | .6442 | 0.64 | 0.92 | 0.26 (τ-era) | .6704 | ABSORBABLE-IN-PRINCIPLE |
-| `mathse_vote_score` | +.0085 | .5926 | .6029 | 0.90 | 0.98 | 0.35 (τ-era) | .6318 | ABSORBABLE-IN-PRINCIPLE |
+| `mathse_accepted_verdict` | +.0086 | .5929 | .6442 | 0.64 | 0.92 | 0.26 (strict) | .6704 | ABSORBABLE-IN-PRINCIPLE |
+| `mathse_vote_score` | +.0085 | .5926 | .6029 | 0.90 | 0.98 | 0.35 (strict) | .6318 | ABSORBABLE-IN-PRINCIPLE |
 | `press_verdict` | +.0899 | > AUC(T) = 0.7744 | .6031 | 2.66 | 1.28 | 0.45 (τ-era) | .6138 | ROBUST |
 
 `X` reported as `> AUC(T)` means the sweep never crossed zero even at a channel as strong as T itself: **not absorbable by any single channel weaker than T**.
 
-**§13 flags:** `cw_community` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `cw_community` spurious-alone 0.6651 > .65; `hashtagwars_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `jokes_community` spurious-alone 0.7282 > .65; `mathse_accepted_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `mathse_accepted_verdict` spurious-alone 0.6853 > .65; `mathse_vote_score` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `mathse_vote_score` spurious-alone 0.6691 > .65; `nc_responded` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `nc_responded` spurious-alone 0.7195 > .65; `peer_revealed` NON_MONOTONE sweep; `peer_revealed` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `peer_revealed` spurious-alone 0.7511 > .65; `peer_verdict` spurious-alone 0.6900 > .65; `press_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's 
-
-## Resumption hooks (battery closed 2026-08-11; reopen only for these)
-
-The battery is complete for all 11 terminal cells. Three things reopen it, and each
-has a one-command path — nothing needs re-deriving.
-
-**1. `peer_verdict` Z backfill.** The cell is marked `Z_UNAVAILABLE`: its pilot campaign
-predates the species/Good-Turing instrument, so no Track-B mass exists on disk (absent,
-not τ-era). A retroactive sealed Track-B fleet round is ordered (proposals + strict
-two-judge species only, no bank changes). When its species file lands in
-`closure/` with `tracks.B.good_turing` and `b_merge.strict`, run:
-
-    python3 methods/taste_decomposition/fusion/f2_evalue.py --cell peer_verdict
-
-`f2_evalue.find_mass` resolves species files automatically and prefers the strict
-figure; `f2_rulings.py` is idempotent and re-stamps the rulings blocks. X and RR
-(> AUC(T) = .7769, RR 2.85) are already computed and will not change — only Z and the
-verdict fill in. NOTE the resolver looks in `MASS_DIR["peer_verdict"] = "."` (the
-closure ROOT, where that campaign's round files live), not a per-cell subdir.
-
-**2. The strict-mass backfill for the other nine τ-era cells.** Same command per cell,
-same idempotence. Expect verdict flips toward ROBUST: at equal robustness ratio the two
-strict-mass cells already certify differently from the τ-era ones (`jokes` RR 1.55,
-strict M̂ .30, Z .667 → ROBUST vs `hashtagwars` RR 1.55, τ-era M̂ .65, Z .780 →
-ABSORBABLE). Only Z and `verdict` move; X, Y and RR are mass-independent.
-
-**3. New terminal cells** (SO votes, AoPS, cap_crowd, homepage). Per cell:
-
-    # a) adapter: add to GENERIC in f2_cells.py (dir, tag, round pattern, rounds,
-    #    loader_arg, struct_npz if the cell has declared observed ordinals)
-    python3 methods/taste_decomposition/fusion/f2_cells.py --cell <cell>   # verify n_E
-    # b) requires t0_rows/<cell>.npz + t0_scores/<cell>.jsonl.gz to exist first
-    #    (t0_build_rows.py then t0_score_vllm.py — the T0 arm is a STANDING COLUMN)
-    python3 methods/taste_decomposition/fusion/f2_deconf.py  --box <box> --cell <cell>
-    python3 methods/taste_decomposition/fusion/f2_evalue.py               --cell <cell>
-    python3 methods/taste_decomposition/fusion/f2_matched.py              --cell <cell>
-    python3 methods/taste_decomposition/fusion/f2_evalue.py  --matched    --cell <cell>
-    python3 methods/taste_decomposition/fusion/f2_rulings.py                          # all cells
-    python3 methods/taste_decomposition/fusion/f2_summarise.py --write
-
-### Binding operating rules this battery established
-
-- **ONE CELL PER PROCESS.** Every closure dir ships modules with identical names
-  (`cells.py`, `oof_alignment_gate.py`, `closure_core.py`); two adapters in one process
-  cross-contaminate `sys.modules`. It failed loudly here only because `mathse_vote` has
-  an alignment gate — a cell without one would mis-join silently.
-- **Never join an adapter to E through an id dict.** `peer_verdict` repeats 5 ntitles
-  among its 1,244 E rows. The identity fast path plus the `y_equal_elementwise`
-  assertion is what caught this in all three scripts; the assertion stays mandatory.
-- **A declared STRUCT block that is missing must FAIL, not warn.** A warn-only guard
-  produced a fully quotable-looking `mathse_accepted` increment against the wrong
-  conditioning block. Diagnostic that caught it: NUIS alone read .5615 where the
-  campaign's own position model reads .6600 on the same rows.
-- **Which box.** Run each cell on the box that reproduced its master-ledger row in the
-  T₀ arm (mirror cells → mac, scale-up-wave-C / mirror-2 → sk3 `envs/ai_usage`).
-  GroupKFold fold membership is sklearn-version AND architecture dependent.
+**§13 flags:** `cw_community` spurious-alone 0.6651 > .65; `hashtagwars_verdict` TAU_ERA_MASS -- this cell's B-side has no strict merge certi; `jokes_community` spurious-alone 0.7282 > .65; `mathse_accepted_verdict` spurious-alone 0.6853 > .65; `mathse_vote_score` spurious-alone 0.6691 > .65; `nc_responded` spurious-alone 0.7195 > .65; `peer_revealed` NON_MONOTONE sweep; `peer_revealed` TAU_ERA_MASS -- this cell's B-side has no strict merge certi; `peer_revealed` spurious-alone 0.7511 > .65; `peer_verdict` spurious-alone 0.6900 > .65; `press_verdict` TAU_ERA_MASS -- this cell's B-side has no strict merge certi
 
 ## Artifacts
 

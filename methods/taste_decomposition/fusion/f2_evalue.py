@@ -148,9 +148,52 @@ def _mass_from(obj):
     return None
 
 
+JUDGE_UNLABELLED = {"", "sealed-blind", "sealed blind", "judge a", "judge b", "blind"}
+
+
+def _judge_family(judges, source):
+    """Record the JUDGE FAMILY behind a strict merge. The strict-B corpus is
+    heterogeneous (Sonnet on jokes/mathse_vote, GPT-5+GLM on the caption cells,
+    unlabelled on mathse_accepted / nc_responded / cw), so cross-cell Z comparisons
+    must carry it."""
+    if not judges:
+        return {"judge_family": "UNLABELLED", "judges_raw": None, "judge_labelled": False,
+                "judge_source": source,
+                "caveat": "no judge model recorded in this campaign's merge artifact"}
+    raw = [str(j) for j in judges]
+    norm = [j.split("(")[0].strip().lower() for j in raw]
+    if all((n in JUDGE_UNLABELLED) for n in norm):
+        return {"judge_family": "UNLABELLED", "judges_raw": raw, "judge_labelled": False,
+                "judge_source": source,
+                "caveat": "merge artifact names the judges only generically"}
+    return {"judge_family": " + ".join(sorted(set(n for n in norm if n))),
+            "judges_raw": raw, "judge_labelled": True, "judge_source": source}
+
+
+def _gt_from_sizes(sizes):
+    """Good-Turing from a species-size multiset: M_hat = f1 / N."""
+    N = int(sum(sizes))
+    f1 = int(sum(1 for s in sizes if s == 1))
+    f2 = int(sum(1 for s in sizes if s == 2))
+    return {"M_hat": (f1 / N) if N else 0.0, "S_obs_reported": len(sizes),
+            "N_proposals": N, "f1": f1, "f2": f2}
+
+
+def _rnum(q):
+    s = "".join(c for c in q.stem.split("species")[0] if c.isdigit())
+    return int(s or 0)
+
+
 def _species_mass(path):
-    """Track-B Good-Turing from a species.json: STRICT (post-b_merge) when the file
-    declares b_merge.strict, else the tau-only PREMERGE figure, flagged."""
+    """Track-B Good-Turing from a <cell>_r<N>_species.json.
+
+    STRICT RULE (corrected 2026-08-11): a TOP-LEVEL `b_merge` block IS the strict-merge
+    certificate. Campaigns write it inconsistently -- some carry `strict: true`
+    (jokes, cap_finalist), others only `n_merge_edges_strict` (mathse_vote,
+    mathse_accepted) -- so keying on an inner flag mislabelled already-strict masses as
+    tau-era. Where `b_merge` exists, `tracks.B.good_turing` is the STRICT figure and the
+    tau figure is parked in `tracks.B.good_turing_PREMERGE_tau_only`.
+    """
     try:
         d = json.loads(Path(path).read_text())
     except Exception:
@@ -158,49 +201,96 @@ def _species_mass(path):
     B = (d.get("tracks") or {}).get("B")
     if not isinstance(B, dict):
         return None
-    strict = bool((d.get("b_merge") or {}).get("strict"))
-    gt = B.get("good_turing") if strict else None
-    field = "tracks.B.good_turing"
-    if not isinstance(gt, dict):
-        gt = B.get("good_turing") or B.get("good_turing_PREMERGE_tau_only")
-        field = ("tracks.B.good_turing" if B.get("good_turing")
-                 else "tracks.B.good_turing_PREMERGE_tau_only")
-    if not isinstance(gt, dict):
+    bm = d.get("b_merge")
+    strict = isinstance(bm, dict) and len(bm) > 0
+    gt = B.get("good_turing") if strict else (
+        B.get("good_turing") or B.get("good_turing_PREMERGE_tau_only"))
+    field = ("tracks.B.good_turing" if (strict or B.get("good_turing"))
+             else "tracks.B.good_turing_PREMERGE_tau_only")
+    if not isinstance(gt, dict) or gt.get("good_turing_missing_mass") is None:
         return None
-    m = gt.get("good_turing_missing_mass")
-    if m is None:
+    out = {"M_hat": float(gt["good_turing_missing_mass"]),
+           "S_obs_reported": int(gt.get("S_obs", 0)),
+           "N_proposals": gt.get("N_proposals"), "f1": gt.get("f1"), "f2": gt.get("f2"),
+           "field": field, "strict_marker_present": strict,
+           "merge_certificate": ("top-level b_merge block" if strict else None)}
+    out.update(_judge_family(bm.get("judges") if isinstance(bm, dict) else None,
+                             "species.json b_merge.judges"))
+    return out
+
+
+def _species_b_mass(path):
+    """nc_responded shape: round<N>_species_b.json -- a strict two-judge merge
+    (n_merge_edges + judge_agreement + anchor battery) whose species list gives
+    Good-Turing directly."""
+    try:
+        d = json.loads(Path(path).read_text())
+    except Exception:
         return None
-    return {"M_hat": float(m), "S_obs_reported": int(gt.get("S_obs", 0)),
-            "field": field, "strict_marker_present": strict,
-            "n_proposals": gt.get("N_proposals"), "f1": gt.get("f1"), "f2": gt.get("f2")}
+    sp = d.get("species")
+    if not isinstance(sp, list) or not sp:
+        return None
+    sizes = [int(s.get("n_members", len(s.get("members", [])))) for s in sp]
+    out = _gt_from_sizes(sizes)
+    out.update({"field": "species_b.json species list (f1/N)",
+                "strict_marker_present": True,
+                "merge_certificate": (f"two-judge blind merge: n_merge_edges="
+                                      f"{d.get('n_merge_edges')}, judge_agreement="
+                                      f"{d.get('judge_agreement')}")})
+    out.update(_judge_family(d.get("judges"), Path(path).name))
+    return out
+
+
+def _blind_partition_mass(path):
+    """cw_community shape: round<N>_species.json == {"B": {name: [member pids]}} --
+    the blind adjudicated partition (the freeze forbids embedding-tau identity here)."""
+    try:
+        d = json.loads(Path(path).read_text())
+    except Exception:
+        return None
+    B = d.get("B")
+    if not isinstance(B, dict) or not B or not all(isinstance(v, list) for v in B.values()):
+        return None
+    out = _gt_from_sizes([len(v) for v in B.values()])
+    out.update({"field": "round<N>_species.json B blind partition (f1/N)",
+                "strict_marker_present": True,
+                "merge_certificate": "blind adjudicated partition (no embedding-tau identity)"})
+    out.update(_judge_family(None, Path(path).name))
+    return out
 
 
 def find_mass(cell):
-    """Prefer the campaign's own species.json Track-B Good-Turing (strict where the
-    b_merge certificate exists); fall back to a *_missing_mass.json."""
+    """Resolve the cell's Track-B missing mass, preferring the highest-round STRICT
+    artifact; the field and merge certificate actually read are recorded."""
     d_ = CLOSURE / MASS_DIR.get(cell, cell)
     if not d_.exists():
         return {"available": False, "note": f"no closure dir {d_}"}
 
-    sp = [q for q in d_.glob("*species*.json") if "PREMERGE" not in q.name]
-    def _rnum(q):
-        s = "".join(c for c in q.stem.split("species")[0] if c.isdigit())
-        return int(s or 0)
-    best = None
-    for q in sorted(sp, key=_rnum):
-        got = _species_mass(q)
-        if got:
-            got["source"] = str(q.relative_to(TD.parents[1]))
-            got["round"] = _rnum(q)
-            best = got                      # keep the highest-numbered round that parses
-    if best:
-        best.update({"available": True, "TAU_ERA_MASS": not best["strict_marker_present"],
-                     "resolver": "species.json Track-B Good-Turing"})
+    cands = []
+    for q in d_.glob("*species*.json"):
+        if "PREMERGE" in q.name or "judge" in q.name or "key" in q.name:
+            continue
+        for fn in (_species_mass, _species_b_mass, _blind_partition_mass):
+            got = fn(q)
+            if got:
+                got["source"] = str(q.relative_to(TD.parents[1]))
+                got["round"] = _rnum(q)
+                cands.append(got)
+                break
+    if cands:
+        strict = [c for c in cands if c.get("strict_marker_present")]
+        pool = strict or cands
+        best = max(pool, key=lambda c: c["round"])
+        best.update({"available": True,
+                     "TAU_ERA_MASS": not best["strict_marker_present"],
+                     "resolver": "species artifact (strict preferred)",
+                     "n_candidates_seen": len(cands),
+                     "n_strict_candidates": len(strict)})
         return best
 
-    cands = [q for q in sorted(d_.glob("*missing_mass*.json")) if "P6" not in q.name]
+    mm = [q for q in sorted(d_.glob("*missing_mass*.json")) if "P6" not in q.name]
     picked, best_r = None, -1
-    for q in cands:
+    for q in mm:
         try:
             obj = json.loads(q.read_text())
         except Exception:
@@ -212,16 +302,15 @@ def find_mass(cell):
         if r >= best_r:
             best_r, picked = r, (got, q, r)
     if picked is None:
-        return {"available": False,
-                "searched": [str(q) for q in list(sp) + cands] or [str(d_)],
+        return {"available": False, "searched": [str(q) for q in mm] or [str(d_)],
                 "note": "no Track-B Good-Turing missing mass on disk for this cell"}
     (m, s_obs, field), path, rnd = picked
-    txt = path.read_text().lower()
-    strict = ("strict" in txt) or ("b_merge" in txt)
-    return {"available": True, "M_hat": m, "S_obs_reported": s_obs,
-            "source": str(path.relative_to(TD.parents[1])), "field": field,
-            "round": rnd, "strict_marker_present": bool(strict),
-            "TAU_ERA_MASS": (not strict), "resolver": "*_missing_mass.json"}
+    out = {"available": True, "M_hat": m, "S_obs_reported": s_obs,
+           "source": str(path.relative_to(TD.parents[1])), "field": field, "round": rnd,
+           "strict_marker_present": False, "TAU_ERA_MASS": True,
+           "resolver": "*_missing_mass.json (no species artifact found)"}
+    out.update(_judge_family(None, path.name))
+    return out
 
 
 def z_bound(found_aucs, M_hat, S_obs):
