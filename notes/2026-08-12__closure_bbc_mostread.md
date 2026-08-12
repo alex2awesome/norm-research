@@ -110,7 +110,26 @@ CI in the campaign). If the mean paired SD ≥ ε, the saturation rule is not
 interpretable as written and the campaign cross-fits (averages over fold-seeds) until
 it is, recording the depth.
 
-*Result lands with the round-0 block below.*
+**RESULT — resolvable, no cross-fitting needed, but with a caveat that matters.**
+
+| known-zero comparison | point | boot SD | 95% width |
+|---|---|---|---|
+| seed0 vs seed1 | −.0025 | .0023 | .0088 |
+| seed0 vs seed2 | +.0009 | .0028 | .0108 |
+| seed1 vs seed2 | **+.0034** | .0025 | .0096 |
+| **mean paired SD** | | **.00252** | |
+
+Mean paired SD **.00252 < ε = .005**, so the design resolves ε and the campaign runs
+**without cross-fitting** (depth 0, recorded).
+
+The caveat, stated because it constrains how any single round may be read: the 95%
+width of a comparison whose true change is **zero** is .009–.011, i.e. roughly **2ε**.
+And one such comparison actually reads **+.0034 — 68% of ε — from seed noise alone.**
+So a single round gain of ~.003 is *not* distinguishable from nothing on this cell.
+This is exactly why the frozen rule requires **two consecutive** sub-ε rounds rather
+than one, and it is the quantitative form of the SO lesson for this campaign: the
+saturation rule is interpretable here, but no individual round's gain near ε is
+quotable on its own.
 
 ---
 
@@ -118,10 +137,46 @@ it is, recording the depth.
 
 The curve is measured from the **closure protocol's own round-0 anchor** (VA fit on
 FIT+MINE only, read on MONITOR), never from the Layer-1 number: closure-split levels
-are protocol-specific (prereg AMENDMENT 1), and this campaign additionally runs a
-different sklearn build from the Layer-1 ledger, which moves GroupKFold assignments.
+are protocol-specific (prereg AMENDMENT 1). *(This cell runs sklearn 1.8.0, the same
+build the Layer-1 ledger used, so unlike the math.SE campaign there is no GroupKFold
+version drift here — recorded, but the protocol-specific rule still governs.)*
 
-*Results pending — the FIT+MINE fit is running.*
+| quantity | MONITOR (n = 2,060, 88 days) |
+|---|---|
+| VA_lin | .7176 |
+| VA_nl per seed | .7477 / .7502 / .7468 |
+| **VA_nl (mean of seed AUCs)** | **.7482** |
+| T per dense seed | .8229 / .8215 / .8249 |
+| **T** | **.8231** |
+| **Δ₀** | **+.0749** |
+
+(VA_lin OOF within FIT+MINE: .7052. The seed-averaged-prediction AUC is .7502 and is
+*not* the reported VA_nl — the frozen definition is the mean of per-seed AUCs.)
+
+### 2.1 GATE — **PASS, rounds run**
+
+Δ₀ = **+.0749** against the frozen threshold of .02. For context only (never
+differenced against the closure number): Layer-1 same-rows Δ_beyond was +.0864 eval /
++.0690 test, so the closure-split anchor sits between the two Layer-1 legs, which is
+the expected behaviour and a reassuring sign that the closure split is not doing
+anything strange.
+
+### 2.2 Swap baseline (C₊, C₋)
+
+| | value |
+|---|---|
+| C₊ = P(bank correct \| dense correct) | **.8227** |
+| C₋ = P(bank correct \| dense wrong) | **.4079** |
+| dense concordance on sampled pairs | .8278 |
+| pairs sampled | 400,000 |
+
+The round-0 asymmetry is large: where the dense model gets a discordant pair right the
+bank agrees 82% of the time, but where the dense model gets it wrong the bank is at
+**.41 — below the coin flip**. The adverse signature to watch in later rounds (per the
+swap algebra) is C₊ rising while C₋ **falls**, which would mean the bank is buying rank
+agreement by inheriting dense errors rather than by getting independently better.
+Starting from C₋ < .5, there is ample room for a genuine uniform improvement, and that
+is what a real closure should look like.
 
 ## 3. Fleet
 
