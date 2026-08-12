@@ -1750,3 +1750,24 @@ note; 4.3d/e redrawn single-message; reading-guide markdown before every 4.3 exh
 definition >= .05 — definition arm beside the actual labeled exemplar texts (probe
 universe verified: humor silver texts 60:360, 300 probes, panel-dim match; probes
 exported from sk3 via _load_texts and staged to analyses/humor_probes_60_360.json).
+
+## Channel-emergence-by-z readout + norm-boundary categorization extension launched (2026-08-11 late)
+
+**Emergence table** (32-slate arms x 10 local receivers, frontier-dossier consensus ref,
+paired 20k CIs; outputs/analyses/group_contrasts_v1/channel_emergence_by_z_v1.json):
+- dossier CONTENT (doss - mismatched-doss): -.006* @1B, ~0 @3B-class, EMERGES +.10-.12*
+  @7-8B, then monotone +.183* @14B, +.244* @32B, +.290*/+.252* @70B/72B. The ability to
+  extract construct-specific content from a full articulation turns on at z~1.6 and
+  never saturates in the local range.
+- ANCHOR (mismatched-doss - def): grows MORE negative with z (-.03 -> -.19*): stronger
+  receivers are more misled by wrong-construct text = they genuinely read it.
+- expl-def: pays only at 32B+ (+.033-.058*); NEGATIVE at qwen25-3b/gemma2-27b (more
+  text hurts small receivers).
+- def-name: modest everywhere (+.01-.06); name-abs rises .505 -> .752.
+- ex-def: negative at every local rung except llama70b (+.042*, the selector).
+- gemma2-27b row: battery-z INVALID for this model (composite-item chance collapse,
+  documented exclusion) — read its row by size class, not z.
+
+**Norm-boundary categorization extension LAUNCHED** (user approved): 1,144 unlabeled
+metrics + 30 hidden humor overlap names (consistency check vs metric_categories_blind_v1)
+in 6 names-only blind chunks; same category semantics; wave 1 (c1-c3) running.
