@@ -1646,3 +1646,30 @@ R3-empty observation is reported as its own finding (examples never carry a cons
 alone at bank scale; they repair or refine statements).
 Criterion-5 status: EXECUTED per prereg (assignments frozen first; predictions scored;
 landing zone recorded). All analysis criteria (2,4,5,6) now DELIVERED.
+
+## P1 exploratory rerun + silver-validation program (user directives 2026-08-11 evening)
+
+**P1 rerun (EXPLORATORY; frozen P1 verdict unchanged):** lemmatized + full function-word
+removal (median matched words 19→22, 1032/1032 usable): Spearman rho=+.092 (p=.003) —
+sharpening the instrument STRENGTHENS the wrong-sign trend; rung means 2.71-2.84 (flat
+band). P1's failure is robust to the coverage/lemmatization criticisms. Match-quality
+audit on file: 80% median match rate; top matched words are the rubric-writing register
+(avoid/use/clear/clarity/audience/structure) — all rungs share one instructional
+dialect; that is WHY wording concreteness cannot separate them.
+
+**Silver-label validation program (user-corrected framing):** silver labels come from
+the matching cascade over unstructured community discussion (26 corpora) + LLM
+extraction — the selection filters are DISCUSSION FREQUENCY and MATCHER
+RECOGNIZABILITY, not community codification (my earlier phrasing over-claimed;
+corrected). Approved responses: #1 coverage audit + #3 sparsity-correlation (task #31,
+CPU) and #4 synthetic-construct calibration frontier (task #30 = 1e, plan approved:
+60 constructs / 3 novelty tiers incl. anti-conventional T3, matched-complexity real
+controls, dual truth-vs-reference readout, predictions to freeze before scoring).
+Consequence-prediction validation (#2) explicitly scoped OUT to another paper.
+
+**M_omega-vs-frozen-arms clarification (for the record, after user challenge):** the
+ladder/P2 cells rest on FROZEN frontier-authored articulations (encoder-iteration arm
+was declined at design time); per-construct optimized articulations exist alongside
+(M_omega reconstruction objects; flip-selected sets) and are quoted ONLY with their
+optimization-artifact controls — the flip-at-frontier mm result (optimizer harvested
+pure calibration, zero content) is the demonstrated instance of why.
