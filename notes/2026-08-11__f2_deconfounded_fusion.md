@@ -142,7 +142,74 @@ recomputed**.
 
 ## Results
 
-<!-- RESULTS -->
+### Governing increment per cell
+
+The **companion** governs wherever the enriched-bank gap exceeds the .02 trigger; otherwise the E-refit primary does. All are INCREMENTAL information, never LEVEL residual.
+
+| cell | governing increment | which footing | P | verdict |
+|---|---|---|---:|---|
+| `peer_revealed` | +.0969 [+.0610,+.1339] 1.00 | matched-strength companion | 1.00 | **significant positive** |
+| `nc_responded` | +.0200 [+.0025,+.0377] 0.99 | E-refit primary (gap below .02 trigger) | 0.99 | **significant positive** |
+| `cw_community` | +.0988 [+.0880,+.1098] 1.00 | E-refit (companion n/a — E is the whole population) | 1.00 | **significant positive** |
+| `hashtagwars_verdict` | −.0230 [−.0630,+.0289] 0.21 | matched-strength companion | 0.21 | null / not significant |
+| `cap_finalist` | −.0224 [−.0454,−.0005] 0.02 | matched-strength companion | 0.02 | **SIGNIFICANTLY NEGATIVE** |
+| `jokes_community` | +.0115 [+.0070,+.0156] 1.00 | matched-strength companion | 1.00 | **significant positive** |
+| `mathse_accepted_verdict` | +.0073 [−.0024,+.0169] 0.93 | matched-strength companion | 0.93 | null / not significant |
+| `mathse_vote_score` | +.0085 [−.0040,+.0213] 0.92 | E-refit primary (gap below .02 trigger) | 0.92 | null / not significant |
+| `press_verdict` | +.0622 [+.0326,+.1052] 1.00 | matched-strength companion | 1.00 | **significant positive** |
+
+### Arms and increments
+
+| field | cell | n_E | (a) bank_enr | (b) NUIS | (c) enr+NUIS | (d) +T | (e) +T₀ | PRIMARY (d)−(c) [CI] P | WY band | SECONDARY (e)−(c) P | §11 |
+|---|---|---:|---:|---:|---:|---:|---:|---|---|---|---|
+| Peer review | `peer_verdict` | 1244 | .6684 | .6900 | .6828 | .7413 | .6941 | +.0588 [+.0339,+.0832] 1.00 | [+.0556,+.0695] | +.0175 1.00 | PASS |
+| Peer review | `peer_curation` | 1571 | .5291 | .5545 | .5408 | .5481 | .5438 | −.0006 [−.0304,+.0278] 0.48 | [−.0006,−.0006] | +.0051 0.70 | PASS |
+| Peer review | `peer_revealed` | 478 | .7202 | .7511 | .7837 | .8736 | .7843 | +.0927 [+.0565,+.1288] 1.00 | [+.0927,+.1306] | −.0006 0.47 | PASS |
+| Regulatory (N&C) | `nc_responded` | 1904 | .7882 | .7195 | .8042 | .8325 | .8006 | +.0200 [+.0025,+.0377] 0.99 | [+.0200,+.0434] | −.0058 0.12 | PASS |
+| Creative writing | `cw_community` | 7008 | .6652 | .6651 | .6931 | .7896 | .6919 | +.0988 [+.0880,+.1098] 1.00 | [+.0988,+.1132] | +.0005 0.65 | PASS |
+| Humor | `hashtagwars_verdict` | 924 | .5357 | .6267 | .5863 | .6127 | .5879 | +.0297 [−.0067,+.0634] 0.94 | [+.0162,+.0326] | −.0039 0.32 | PASS |
+| Humor | `cap_finalist` | 1055 | .6014 | .6298 | .6131 | .6165 | .6178 | +.0002 [−.0249,+.0241] 0.52 | [−.0091,+.0185] | +.0140 0.86 | PASS |
+| Humor | `jokes_community` | 3163 | .7214 | .7282 | .7462 | .7596 | .7448 | +.0151 [+.0086,+.0206] 1.00 | [+.0151,+.0241] | −.0002 0.43 | PASS |
+| Math | `mathse_accepted_verdict` | 2600 | .5801 | .6853 | .6918 | .7007 | .6931 | +.0086 [−.0015,+.0192] 0.95 | [+.0086,+.0241] | +.0029 0.84 | PASS |
+| Math | `mathse_vote_score` | 2326 | .6238 | .6691 | .6814 | .6881 | .6775 | +.0085 [−.0040,+.0213] 0.92 | [+.0085,+.0162] | −.0017 0.28 | PASS |
+| Journalism/press | `press_verdict` | 605 | .6860 | .5809 | .6686 | .7517 | .6806 | +.0899 [+.0638,+.1470] 1.00 | [+.0850,+.0936] | +.0072 0.85 | PASS |
+
+### Matched-strength companion (D1b-style two-stage)
+
+| cell | bank E-refit (a) | bank full-strength on E | gap | >.02 | (c*) | (d*) | COMPANION (d*)−(c*) [CI] P | E-refit primary (contrast) | matched X | matched RR | matched verdict |
+|---|---:|---:|---:|:-:|---:|---:|---|---:|---:|---:|---|
+| `peer_revealed` | .7202 | .7724 | +.0523 | **Y** | .7800 | .8691 | +.0969 [+.0610,+.1339] 1.00 | +.0927 | > AUC(T) = 0.8842 | 1.78 | ROBUST |
+| `nc_responded` | .7882 | .7995 | +.0114 | n | .8059 | .8330 | +.0274 [+.0108,+.0435] 1.00 | +.0200 | > AUC(T) = 0.8167 | 3.41 | ROBUST |
+| `cw_community` | .6652 | — | — | — | — | — | _n/a — E is the whole population; companion identical to primary_ | +.0988 | — | — | — |
+| `hashtagwars_verdict` | .5357 | .6751 | +.1393 | **Y** | .6279 | .6240 | −.0230 [−.0630,+.0289] 0.21 | +.0297 | — | — | n/a |
+| `cap_finalist` | .6014 | .6813 | +.0799 | **Y** | .6452 | .6217 | −.0224 [−.0454,−.0005] 0.02 | +.0002 | — | — | n/a |
+| `jokes_community` | .7214 | .7542 | +.0328 | **Y** | .7550 | .7691 | +.0115 [+.0070,+.0156] 1.00 | +.0151 | > AUC(T) = 0.7469 | 1.55 | ROBUST |
+| `mathse_accepted_verdict` | .5801 | .6206 | +.0405 | **Y** | .6969 | .7017 | +.0073 [−.0024,+.0169] 0.93 | +.0086 | > AUC(T) = 0.6439 | 1.00 | ABSORBABLE-IN-PRINCIPLE |
+| `mathse_vote_score` | .6238 | .6415 | +.0177 | n | .6698 | .6859 | +.0178 [+.0060,+.0296] 1.00 | +.0085 | .6456 | 1.41 | ROBUST |
+| `press_verdict` | .6860 | .7546 | +.0686 | **Y** | .6900 | .7538 | +.0622 [+.0326,+.1052] 1.00 | +.0899 | > AUC(T) = 0.7744 | 2.66 | ROBUST |
+
+Where `>.02` is **Y**, the E-refit primary is a matched-footing readout and is **not** comparable to any full-strength bank comparison (including a closure campaign's same-rows verdict); the COMPANION is the quotable number there.
+
+### E-value analog
+
+| cell | Δ (d)−(c) | X | Y | RR=(X−.5)/(Y−.5) | X/Y | M̂ (strict?) | Z | verdict |
+|---|---:|---:|---:|---:|---:|---|---:|---|
+| `peer_verdict` | +.0588 | _pending_ | | | | | | |
+| `peer_curation` | −.0006 | _pending_ | | | | | | |
+| `peer_revealed` | +.0927 | > AUC(T) = 0.8842 | .7162 | 1.78 | 1.23 | 0.43 (τ-era) | .7388 | ROBUST |
+| `nc_responded` | +.0200 | > AUC(T) = 0.8167 | .5929 | 3.41 | 1.38 | 0.72 (τ-era) | .6050 | ROBUST |
+| `cw_community` | +.0988 | > AUC(T) = 0.7921 | .5816 | 3.58 | 1.36 | 0.15 (τ-era) | .5744 | ROBUST |
+| `hashtagwars_verdict` | +.0297 | > AUC(T) = 0.7315 | .6496 | 1.55 | 1.13 | 0.65 (τ-era) | .7800 | ABSORBABLE-IN-PRINCIPLE |
+| `cap_finalist` | +.0002 | .5935 | .5987 | 0.95 | 0.99 | 0.38 (strict) | .6213 | ABSORBABLE-IN-PRINCIPLE |
+| `jokes_community` | +.0151 | > AUC(T) = 0.7469 | .6595 | 1.55 | 1.13 | 0.30 (strict) | .6676 | ROBUST |
+| `mathse_accepted_verdict` | +.0086 | .5929 | .6442 | 0.64 | 0.92 | 0.26 (τ-era) | .6704 | ABSORBABLE-IN-PRINCIPLE |
+| `mathse_vote_score` | +.0085 | .5926 | .6029 | 0.90 | 0.98 | 0.35 (τ-era) | .6318 | ABSORBABLE-IN-PRINCIPLE |
+| `press_verdict` | +.0899 | > AUC(T) = 0.7744 | .6031 | 2.66 | 1.28 | 0.45 (τ-era) | .6138 | ROBUST |
+
+`X` reported as `> AUC(T)` means the sweep never crossed zero even at a channel as strong as T itself: **not absorbable by any single channel weaker than T**.
+
+**§13 flags:** `cw_community` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `cw_community` spurious-alone 0.6651 > .65; `hashtagwars_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `jokes_community` spurious-alone 0.7282 > .65; `mathse_accepted_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `mathse_accepted_verdict` spurious-alone 0.6853 > .65; `mathse_vote_score` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `mathse_vote_score` spurious-alone 0.6691 > .65; `nc_responded` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `nc_responded` spurious-alone 0.7195 > .65; `peer_revealed` NON_MONOTONE sweep; `peer_revealed` TAU_ERA_MASS -- no strict-merge marker found in this cell's ; `peer_revealed` spurious-alone 0.7511 > .65; `peer_verdict` spurious-alone 0.6900 > .65; `press_verdict` TAU_ERA_MASS -- no strict-merge marker found in this cell's 
+
 
 ## Artifacts
 

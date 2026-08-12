@@ -298,8 +298,15 @@ def run(cell, dry=False, matched=False):
     groups = np.array([str(g) for g in z["groups"]], dtype=object)
     T = z["dense"].astype(float)
     a = F2C.ADAPTERS[cell]()
-    pos = {str(i): k for k, i in enumerate(a["ids"])}
-    idx = np.array([pos[i] for i in ids_E])
+    # identity fast path: adapters that already return E in ledger order must NOT be
+    # joined through an id dict -- peer_verdict repeats 5 ntitles and the dict collapses
+    # them (the same landmine fixed in f2_cells/f2_deconf).
+    if list(map(str, a["ids"])) == list(map(str, ids_E)):
+        idx = np.arange(len(ids_E))
+    else:
+        pos = {str(i): k for k, i in enumerate(a["ids"])}
+        assert len(pos) == len(a["ids"]), f"{cell}: duplicate ids in the closure population"
+        idx = np.array([pos[i] for i in ids_E])
     bank, nuis = a["bank"][idx], a["nuis"][idx]
     assert np.array_equal(np.asarray(a["y"])[idx], y), f"{cell}: y mismatch"
     if matched:

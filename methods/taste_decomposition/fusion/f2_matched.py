@@ -116,8 +116,12 @@ def run(cell, n_boot=2000):
         print(f"  [{cell}] E == population -> companion identical to primary", flush=True)
         return blk
 
-    pos = {str(i): k for k, i in enumerate(a["ids"])}
-    idx = np.array([pos[i] for i in ids_E])
+    if list(map(str, a["ids"])) == list(map(str, ids_E)):
+        idx = np.arange(len(ids_E))
+    else:
+        pos = {str(i): k for k, i in enumerate(a["ids"])}
+        assert len(pos) == len(a["ids"]), f"{cell}: duplicate ids in the closure population"
+        idx = np.array([pos[i] for i in ids_E])
     assert np.array_equal(y_pop[idx], y_E), f"{cell}: y mismatch on the E join"
     bank_pop, nuis_pop = a["bank"], a["nuis"]
 
