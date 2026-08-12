@@ -178,6 +178,62 @@ agreement by inheriting dense errors rather than by getting independently better
 Starting from C₋ < .5, there is ample room for a genuine uniform improvement, and that
 is what a real closure should look like.
 
+## 2.3 Round 1 — stage 1 built, sealed fleet HELD
+
+**Slice (deterministic, on disk).** Top |dense percentile − VA_nl OOF percentile|
+within M (8,087 rows), 60 cards. Percentile scale so the ranking is not merely dense
+confidence; VA_nl OOF refit grouped inside FIT+MINE so mining rows carry honest
+articulated predictions. Label blindness is asserted in code before the cards are
+written — headline plus the two percentiles only, no y, no most-read rank, no capture
+day, no per-criterion scores.
+
+**Direction asymmetry, recorded as a labelled AUGMENTATION to the proposer instruction
+(the prereg instruction itself is NOT rewritten mid-campaign).** Of the 60
+highest-disagreement rows the **bank scores higher than dense on 43** and dense higher
+on **17**. The top of the slice is human-interest and sport features that score well on
+news-value criteria but that the dense arm has learned BBC readers do not click:
+
+```
+[01] Staging a 'socially distanced' boxing match   dense .008 | articulated .974
+[02] The schoolteacher fighting Manny Pacquiao     dense .088 | articulated .983
+[03] 'Few cheers for George Weah this Christmas'   dense .095 | articulated .981
+```
+
+The round-1 Track-A prompt therefore carries a **neutral both-directions direction
+note**, explicitly labelled as an augmentation: proposers are asked both why the
+articulated bank may be *over*-predicting these items and what the dense arm may be
+seeing that the bank misses. The framing is not flipped wholesale — the prereg's
+"explain what the dense model perceives and the bank misses" stands, with the
+over-prediction direction added beside it.
+
+**HOLD — the sealed fleet cannot meet the 2-family floor, so it was not run.**
+
+| family | status at round 1 |
+|---|---|
+| Claude ×N | unavailable — subagent cap exhausted, 500/500, not raisable this session |
+| GLM-5.2 ×2 | unavailable — **both** keys return error **1302** |
+| codex gpt-5.6-luna | working (`CODEX_SMOKE_OK` verified) |
+
+GLM evidence, both keys, persisting across a 70 s pause:
+
+```
+glm_b: HTTP 429 :: {"code":"1302","message":"[1302][Rate limit reached for requests]
+                    [202608120923079f79f2f058bc4693]"}
+glm_a: HTTP 429 :: {"code":"1302","message":"[1302][Rate limit reached for requests]
+                    [202608120924174c98c593f69f44e9]"}
+```
+
+One family is below the freeze's recorded floor. The fleet gets exactly **one blind
+look** at this slice, and family diversity is what the recovery audit's dose-response
+shows driving the missing-mass accounting (Track-A M̂ .533 → .283 from P=6 → P=8), so
+spending the look sub-floor would irreversibly degrade round 1 and no later round can
+un-see the slice. Coordinator ruling (2026-08-12): **hold**, and keep the lane
+productive with homepage curation round 0 meanwhile. The slice is deterministic and on
+disk, so it will be byte-identical whenever the fleet runs — holding costs wall-clock
+and nothing scientific. GLM is re-probed **lazily**, one cheap request at each stage
+boundary rather than a poll loop, because the 1302 is a shared quota other agents are
+also drawing on.
+
 ## 3. Fleet
 
 Per the coordinator's standing instruction, fleets run at **P = 8 across 2 families**
