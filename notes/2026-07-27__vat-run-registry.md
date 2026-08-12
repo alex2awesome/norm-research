@@ -2638,3 +2638,866 @@ re-run and passed (shuffled counterfactual .493/.503). `BINDING: true`.
   mature-bank rebuild + closure campaign the natural next queue item, else the
   canonical humor-curation row rests on a degenerate instrument. Queued as a
   recommendation pending user confirmation.
+
+## 2026-08-10 — MATH.SE VOTES TERMINAL: MAPPED, NOT CLOSED — Δ₃ SUB-ε ON THE SEALED FLEET ROUND; RESIDUAL ~.025-.038 STANDS
+
+- **Δ₃ (P=8 sealed fleet): gain −.0019 MONITOR / +.0032 HONEST — sub-ε.** The
+  registered branch's requirement (plateau language only after a PROPOSING fleet
+  round comes back sub-ε) is satisfied: r1 sub-ε (proposing), r2 sub-ε (decomposition,
+  by letter), r3 sub-ε (fleet). **TERMINAL. Standing residual: Δ_beyond .0381 MONITOR
+  / .0252 HONEST** — survives conditioning on all named channels (+.031-.035, r1) and
+  the full discount table (r2). swap_signature true at r3 = the jokes-terminal
+  pattern (adverse-because-nothing-left; swap and sub-ε agreeing is what makes the
+  termination trustworthy). Plateau claim: "not discoverable by this miner at P=8
+  over 2 proposing + 1 decomposition + 1 fleet rounds, A-mass .283
+  (dose-response-validated)". First crowd cell with a genuine mining-resistant
+  residual whose carrier is measured (arrival order, not text-recoverable) but not
+  fully absorbed.
+- **Math field now FULLY TERMINAL 3/3** (accepted articulable/position; votes
+  mapped-not-closed ~.03; AoPS live but its verdict-column sibling terminal) — wait:
+  AoPS is curation and still live; the MATH.SE corpus pair is complete and is the
+  grid's cleanest same-text cross-y contrast.
+
+## 2026-08-10 — V6 STACKOVERFLOW VOTES BUILT + ARTICULABLE: BANK ≥ DENSE; "VOTE COLUMNS ARE NOT A NATURAL KIND"
+
+- Cell: y = answer Score above its own question's median (mirror of math.SE design;
+  raw thresholds rejected — question-popularity confound; y_accepted carried
+  separately, never merged). n=12,202 / 5,972 questions / pos .524. Corpus: existing
+  2026-06-11 SO mirror; the shipped so_python_v2 pool deliberately NOT reused (fused
+  accepted∧Score≥3 label = verdict/vote confound; question-disjoint).
+- **Ledger: V_nl .638 · A_lin .697 · VA_lin .700/.710 within-question · T .7074/.7050
+  (3 seeds) · Δ_interact −.0014 · same-rows Δ_beyond −.0297 eval / −.0143 test →
+  ARTICULABLE (scope: at 8B dense capacity), Layer-3 not eligible.** Within-question
+  EXCEEDS pooled everywhere (first vote cell; consequence of the y design). Question
+  identity alone .6043. Position = strongest trivial channel (.6552 within-question,
+  beats TF-IDF) — reported beside every number. Anchors 1.000; OOF diff 0; collapse
+  gate dropped 1.
+- §11 trigger (bank ≥ dense) FLAGGED not self-cleared: 1-seed judge-context dense
+  probe moved T +.007/−.001 (inside noise) — full fused arms come with the battery.
+- Ground truth: SO Body is MARKDOWN not HTML (ingest docstring wrong; legacy
+  strip_html shreds code); blockquote regex ate REPL prompts.
+- **Cross-cutting: vote columns now span −.03 (SO) to +.11 (peer citations) across
+  fields — crowd preference is NOT a natural kind**; code's two columns land on
+  opposite sides of the gate (PR merge +.05 vs SO ≤0).
+- Artifacts: results/so_votes ledger + datasets/stackoverflow build per agent note.
+
+## 2026-08-10 — CW REBUILD COMPLETE: THE INSTRUMENT SWAP MOVES THE TWO CELLS IN OPPOSITE DIRECTIONS
+
+- **RoyalRoad (verdict):** mature bank lifts the cell off chance — A_lin .5628, VA_nl
+  .5558 vs old-instrument .505 (+.058). **T is at chance (.4994; seeds .482-.531) and
+  the same-split baselines don't beat chance either** → per the checklist this is a
+  POWER statement (141-row eval), not a training failure and not headroom: Δ_beyond
+  −.056 is NOT quotable. Cell = articulated-only row, power-capped. Anchors certified
+  (.658 pos-vs-neg, scram .000).
+- **Wigleaf (curation): the bank is NOT certified, and that is the finding.** K=50
+  battery INVERTS (pos .8798 < neg .9016, pos-vs-neg AUC .498) while
+  coherent-vs-scrambled is .993 — the judge executes craft criteria perfectly and
+  cannot see the editor's cut: 83% of responses saturate at 1.0 because BOTH classes
+  are already-published literary flash. Replicated under char- and token-truncation.
+  Same family as cap_finalist's hard-negative level shift: **publishable-quality
+  pools defeat generic craft banks.** VA_nl .6051 ≈ T .6054 (Δ_beyond +.0003) but A
+  adds nothing over V and log-length alone reads .680 — the articulated ceiling here
+  is surface, not craft. Old ".578 best craft-rankability" verdict: new instrument
+  reads it WORSE (.541) — direction, not magnitude, is the quotable part (CIs ±.032).
+- Discipline: enforced collapse gate active (verified +.0004 isolated effect); token
+  truncation material for RoyalRoad (1,077/1,274 chapters over budget; char-trunc run
+  preserved); assembled-order gates 0.00e+00 both; Wigleaf class-weighted with the
+  404-positive caveat carried INSIDE the ledger JSONs.
+- **Two new landmines:** (a) split-provenance — the n=1,274 topicstrat cell uses
+  md5("split::"+fiction_id)%1000, NOT deconfound_v2's md5(fiction_id)%10 (wrong rule
+  reproduces at chance .656); (b) train_reward_model.py gained opt-in
+  DENSE_SPLIT_FRACTION_ATOL (default unchanged) for stable-hash splits landing off
+  the nominal fractions — reshuffling would violate the stable-split rule.
+- Option noted, not launched: a Wigleaf discovery campaign would need criteria that
+  can rank WITHIN published-quality pools (the editor's actual axes); generic-craft
+  saturation predicts standard mining saturates too.
+- Artifacts: results/cw_{royalroad_verdict,wigleaf_curation}_ledger.json (+oof/ids);
+  notes/2026-08-08__cw_royalroad_wigleaf_rebuild.md; outputs/va_gemma_banks_cw_expert/.
+
+## 2026-08-10 — USER DECISIONS: SI REBUILD GO; COMPETITIONS UNPARKED (retrieve, don't redo); JOKES FUSED-ARM AUDIT; BBC MOST-READ CELL ADDED
+
+- SI mature-bank rebuild APPROVED (canonical humor-curation); captions retirement
+  confirmed final.
+- Code competitions UNPARKED: user — "we have this matrix... retrieve the scores we
+  have and go forward with new features. Don't redo work." Confirmed on disk:
+  results/code_competitions_layer1.json (A_lin .6907 / A_nl .6696, n=999, 634 groups,
+  pos .851; flags: no V layer ever built, T population-mismatched). Forward plan =
+  keep A-scores, ADD V features + honest same-population dense T, same-rows readouts.
+- Jokes VA-beats-VAT audit: timing artifact hypothesis → F2 refit ([enriched bank +
+  nuisance + T] stack) runs FIRST on jokes; registered prediction fused > enriched
+  bank by ≈ the measured stacked increment (+.013-.016). Escalates to full audit if
+  refuted.
+- NEW CELL: BBC most-read (journalism community #2; dataset already built per
+  2026-06-12 taxonomy note) — tests whether tweets' platform dynamics vs a
+  same-outlet readership list changes the community residual.
+
+## 2026-08-10 — F2 JOKES AUDIT: PREDICTION CONFIRMED, FUSED-BEATS-BANK RESTORED (+.0382); TRACK-B ALONE OUT-PREDICTS THE FULL BANK ON JOKES
+
+- **The VA-beats-VAT trip was the stale-arm timing artifact, as registered:** F2 refit
+  on [enriched 124-col bank + 58 nuisance cols + T] gives (d) .7596 vs enriched bank
+  (a) .7214 — fused beats bank by +.0382. PRIMARY stacked increment (d)−(c) =
+  **+.0151 [+.0086,+.0206] P=1.000 — inside the registered +.013-.016 band.** No
+  escalation. §13 discharged: Westfall-Yarkoni attenuation makes the increment
+  LARGER at every simulated reliability (survives incremental-validity critique in
+  the right direction); matched sign check on the top channel agrees at all three
+  calipers.
+- **COORDINATOR RULING on the flagged LEACE trigger:** spurious-alone .7282 > .65
+  puts per-channel matched MAGNITUDES in the untrustworthy regime — LEACE becomes
+  mandatory only for any HEADLINE per-channel number on this cell; the primary
+  (d)−(c) is not per-channel and stands without it. Ruling recorded.
+- **Escalated finding 1: the named spurious channels ALONE (.7282) out-predict the
+  entire 124-criterion articulated bank (.7214) on jokes** — Track-B is the LARGER
+  nameable block (+.0248 over the bank, more than T adds on top). On crowd humor,
+  what the community responds to is better described by the "nuisance" vocabulary
+  (stock-material overlap, era-craft, register) than by the craft bank.
+- **Escalated finding 2: the untrained twin adds exactly nothing inside the
+  deconfounded design** ((e)−(c) = −.0002, P=.43) — independent replication of the
+  T₀ result + rules out nuisance-prior interaction (the registered secondary's
+  target).
+- **CORRECTION (t0 arm): code_v3 "VAT₀−VA significantly negative (−.0095 P=.01)"
+  RETRACTED** — that was the mac fit which failed the ledger gate; the ledger-exact
+  sk3 fit reads −.0021 [−.0099,+.0054] P=.31. VAT₀−VA is significantly negative on
+  NO cell; headline unchanged (untrained share <10% on 15/16, median ≈0%).
+- **SO votes: F2-BLOCKED, correctly** — banks on disk but no Track-B map (no closure
+  campaign), no master-ledger E row, no T₀ column. Queue ruling: SO gets a discovery
+  campaign before F2 (added to sweep queue after current lanes).
+- Design caveat carried: (a) is the E-refit of the enriched bank; the TERMINAL_LEDGER
+  .7527 is the campaign's FIT+MINE→held fit — name both designs whenever compared.
+  Battery: 10 remaining terminal cells running on their ledger-reproducing boxes.
+
+## 2026-08-10 — CODE ROUNDS OPEN + COMPETITIONS UNPARKED: V LAYER BEATS THE LLM BANK; TWO DEVIATIONS AND A FOLD LANDMINE
+
+- **Code decomposition pass: cleanest opening audit in the program** (0.0% misrouting,
+  0 disputes, probes 4/4; 5 parents → 5 real + 5 surface + 5 position channels).
+  Instrument win: the decomposed criteria are ANSWERABLE — NA .01 vs the incoming
+  bank's .58, pos-neg separation .114 vs .076. Scoring in flight (GPU 7, ppid=1;
+  prefix-cache pricing recorded: ~1.6 h per 25-criterion round).
+- **FLEET DEGRADATION RECORDED (largest of any cell): Claude family unavailable
+  (session subagent cap) → fleet = codex ×4 + GLM ×4 = P=8 / 2 FAMILIES — above the
+  P floor, BELOW the family floor**; decomposer and auditor were both luna in sealed
+  contexts (independent by context, not by family). Carried as a limitation on every
+  round-1+ number from this campaign until a Claude-family leg can be re-added.
+- **Competitions unparked: the new 27-feature deterministic V layer BEATS the
+  139-criterion LLM bank** (V_lin .7258 / V_nl .7289 vs A .6875/.7130; V+A .7383;
+  A adds +.009 over V). Dominant channel is ANTI-predictive code size — v_n_chars
+  alone .262 (.738 reversed): shorter, simpler code is more likely the editorial
+  approach. Language inert alone but conditions size (+.018).
+- **NEW LANDMINE (small-minority cells): plain GroupKFold(5) at 149 minority rows is
+  a ~.02 fold-composition artifact** (26-37 negatives/fold, A_lin .6683);
+  StratifiedGroupKFold(5, shuffle) equalises (29-30) and reproduces the recorded
+  .6907. Rule: stratify grouped folds whenever the absolute minority count is small.
+  A_lin reproduces; recorded A_nl .6696 superseded (live .7130; old file already
+  carried GATE_FAILED flag).
+- Honest same-population dense T chained (class-weighted pos_weight=n_neg/n_pos,
+  same-rows OOF saved, folds abort <15 negatives). Notes: closure_code.md §11 +
+  2026-08-10__code_competitions_unpark.md.
+
+## 2026-08-10 — BBC MOST-READ (journalism community #2): GROUND-TRUTH PASS REJECTS SHIPPED POOL; INSTRUMENTS DONE, T + LEDGER LANDING
+
+- Ground-truth pass (V8 standard) rejected the shipped pool on 4 defects: capture
+  type largely determines y (popular_page pos 1.000 / react .955 / parser-none .000 =
+  29.7% near-single-class); the manifest's length effect is an artifact of that
+  (within-morph 44.83 vs 44.76); **shipped splits are not day-grouped (3,343/3,421
+  days span >1 split — leaks the day)**; a 2.3% link-kind stratum where href fixes y.
+  Repair = filter + day-grouped re-split, NOT a rebuild (all 51,790 morph rows
+  re-derive label+rank from raw captures with 0 mismatches). Label = trailing
+  readership (day-D capture reports D−1), named as such.
+- Population 50,761 / 2,251 day-groups / pos .4405. **Zero row overlap with V9**
+  (era-disjoint corpora) → the tweets-vs-BBC contrast is CELL-LEVEL, era+mix
+  confounded; no paired test licensed. **Day identity alone .5807 vs V9's forced
+  .5000** (natural membership y) → within-day readouts PRIMARY here, pooled
+  secondary — the reverse of V9; enforced in the ledger.
+- Substantive teaser (gated, real): negatives are 3× question-framed and 3×
+  How/Why/What-opening — BBC readers under-click explainer framing relative to
+  homepage prominence. V-only .6586, TF-IDF .7446 — a high-articulable-surface cell;
+  not a length model (char length .491).
+- **Shared-helper anchor defects REPLICATE on an independent cell** (scram=nan scored
+  as failure; scram=1.000 from single surviving entities) — confirmed general to
+  short/high-NA items; V9's scramble repair shipped from the start here. New
+  micro-landmine: `pgrep -f` self-match deadlocked V9's waiter — use `kill -0` on
+  the recorded PID.
+- A-bank reuse population-exact (BBC is an authoring outlet of the news-values bank);
+  anchors on the same independent channel as V9 (comparable certifications). Bank
+  4/8 shards; dense chained GPU 1 (ppid=1 asserted). Ledger →
+  results/bbc_mostread_ledger.json; note notes/2026-08-10__bbc_mostread_build.md.
+
+## 2026-08-11 — SI REBUILD MILESTONE: THE "BANK = LENGTH MODEL" VERDICT RESTED ON A CONTAMINATED POPULATION; ANCHOR PROTOCOL INVALID FOR MIXED-ORIENTATION BANKS
+
+- **Ground-truth pass (V8 rule): 1,574/9,637 rows (16.3%) contain no joke text** —
+  parser artifacts (orphan bylines 1,111, list headers 226, section markers 133,
+  cartoon selectors 87, truncated orphans 17), **11× concentrated in the negative
+  class** (HM 19.1% vs winner 3.1%), mean 22 chars. Removing them: length-alone
+  pooled .6227 → **.5520** (within-week .6181 → .5589). **~60% of the v1 "length
+  model" was parse-artifact detection.** Byline format itself at chance (.4985);
+  detector conservative (real short entries kept); fragments flagged, not deleted.
+  → The SI v1 terminal verdict ("TIE, bank=length, 0/32 survive length strata") is
+  now CONFOUNDED — carried as a caveat; the clean-population rebuild decides the row.
+- **SHARED-HELPER BUG (upstream fix due in score_va_gemma_banks): the K=50 battery
+  averages criteria UNSIGNED — negatively-oriented criteria cancel the contrast.**
+  Raw battery read pos<neg (.509, "judge can't tell winners") purely from 8
+  flaw-oriented criteria; sign-corrected shard-0 contrast +.0643 vs raw +.0015 (43×).
+  Any mixed-orientation bank inherits this. Joins the scramble/all-NA defects on the
+  between-waves helper-fix list.
+- **Wigleaf saturation lesson refined: FLAW-detectors saturate on published pools
+  (the flaws were edited out); survivors must name flaws published work still has**
+  (stock template modal .50, stock referent .25). Week-spread smoke killed 5
+  saturating flaw criteria pre-run; single-contest smokes give false collapses.
+- Built: clean population 8,063/316 weeks (pos .188, minority 1,216); 36-criterion
+  bank (8 negatively oriented, all with length-orthogonality justifications); NA .182
+  uniform; NEW dense on clean data (old T fragment-trained → unusable); token
+  truncation fires on zero rows.
+- **BLOCKED on a NEW sk3 outage mode: SSH resets at the jump host during key
+  exchange (since ~00:30) — pre-login, so neither AFS-token nor disk-full.**
+  Idempotent resume armed (scratchpad/si_resume.sh); detached dense survived.
+  **Bank scored but NOT certified until the sign-corrected battery lands — nothing
+  from it quotable.** Note: notes/2026-08-10__si_mature_bank_rebuild.md.
+
+## 2026-08-11 — CODE INTERIM: OUTAGE = WHALE JUMP HOST (sk3 itself fine); SYS.PATH SHADOWING LANDMINE CAUGHT BY DRY-RUN
+
+- **Outage attribution corrected: `whale` (the ProxyCommand jump host) is resetting
+  connections, NOT sk3** — sk3 was never shown down; all detached GPU jobs (ppid=1)
+  unaffected: code decomposition scorer 3/8 shards, competitions dense T chained.
+- **NEW LANDMINE: sys.path insertion order lets a bare `import cells` resolve to
+  ANOTHER CELL'S adapter** (readout_code.py had maps_hw_si at position 0 → the
+  HW/SI adapter). Surfaced here as a TypeError; the dangerous version completes a
+  readout on the wrong cell's population silently. Blast-radius scan of closure/
+  clean (5 files carry the pattern, none affected — by-name imports). Rule: import
+  cell adapters BY NAME (cells_code), never bare; dry-run readouts on synthetic
+  scores before real scoring feeds them (also caught a round-label crash and a
+  MONITOR-length/full-population shape error; named shape guard added).
+- Rulings verified-by-running: tokens-not-chars card renderer (339-737 tok cards;
+  char budgets removed — they hand minified/CJK code more content at equal nominal
+  size); both-track pre-audit merge tested with a PLANTED cross-track duplicate
+  (caught at cosine .874; A copy kept since audit can re-route, dropped-A is
+  unrecoverable).
+
+## 2026-08-11 — SI ADDENDUM: THE v1 KILL WAS JUDGED AGAINST AN ARTIFACT-INFLATED BAR
+
+- On the CLEAN population the entire 19-feature V block reads V_lin .5511 / V_nl
+  .5836 (vs .6315 contaminated) — indistinguishable from raw char count alone
+  (.5520), and .5206 within length deciles. **The parse artifacts inflated the
+  length/format baseline by ~.08: v1's own bank (.613) would have BEATEN V
+  comfortably on clean data.** "Bank loses to length" was substantially "bank loses
+  to a fragment detector." Properly bounded: this shows the terminal comparison was
+  unfair, NOT that the v2 bank succeeds — Layer-1 decides that.
+- Two contamination flags beyond this cell: (a) the unsigned-averaging anchor bug is
+  upstream in score_va_gemma_banks — any negatively-oriented bank inherits it;
+  (b) parse_results.py feeds EVERY SI-derived artifact (v1 bank, old dense arm) —
+  anything built on the 9,637-row population is suspect.
+- v2 bank remains scored-not-certified until the sign-corrected battery lands
+  (whale outage; 5h skip-checkpointed resume armed).
+
+## 2026-08-11 — F2 BATCH (6 cells local): FUSED-BEATS-BANK PASSES 6/6; THE DECONFOUNDED RESIDUAL LEDGER TAKES SHAPE
+
+| cell | enr bank | NUIS | enr+NUIS | +T (d) | T | PRIMARY (d)−(c) | untrained (e)−(c) |
+|---|---|---|---|---|---|---|---|
+| cw_community | .6652 | .6651 | .6931 | .7896 | .7921 | **+.0988 [+.088,+.110] P=1.00** | +.0005 n.s. |
+| peer_revealed | .7202 | .7511 | .7837 | .8736 | .8842 | **+.0927 [+.056,+.129] P=1.00** | −.0006 n.s. |
+| hashtagwars | .5357 | .6267 | .5863 | .6127 | .7315 | +.0297 [−.007,+.063] P=.94 | −.0039 n.s. |
+| nc_responded | .7882 | .7195 | .8042 | .8325 | .8167 | **+.0200 [+.002,+.038] P=.99** | −.0058 n.s. |
+| jokes | .7214 | .7282 | .7462 | .7596 | .7469 | +.0151 [+.009,+.021] P=1.00 | −.0002 n.s. |
+| cap_finalist | .6014 | .6298 | .6131 | .6165 | .6124 | +.0002 n.s. | +.0140 P=.86 |
+
+- **Fused-must-beat-bank: PASS on all six.** Untrained twin ≈0 everywhere (secondary
+  behaves as registered; cap_finalist's +.014 P=.86 echoes its T₀ exception, n.s.).
+- **The Track-B-is-the-larger-nameable-block pattern now holds on THREE cells:**
+  NUIS alone beats the enriched bank on cap_finalist (.630 vs .601), jokes (.728 vs
+  .721), peer_revealed (.751 vs .720) — all crowd/revealed-type or editor-pool cells.
+- **The fully-deconfounded taste residuals (conditioned on enriched bank + all named
+  nuisance): CW +.099 and peer citations +.093 remain the program's two genuine
+  large residuals; nc_responded +.020 and jokes +.015 small-but-real; cap_finalist
+  zero.** HW's E-frame arms are weak (8-group cell; d .613 ≪ T .732) — its F2 row is
+  frame-limited, band quoted with the coarse-group caveat.
+- Frames: all arms E-refit on shared folds (direction1_mirror), join assertions +
+  ids-sha per cell; never quote (d)−(c) against campaign-frame Δs without naming
+  both designs. Remaining: peer_verdict/curation, nc_outcome/agree (computing local);
+  mathse ×2 + press (sk3, blocked on whale).
+
+## 2026-08-11 — CODE COMPETITIONS UNPARKED AND CLOSED: **NO RESIDUAL** (dense .697 < V+A .738)
+
+notes/2026-08-10__code_competitions_unpark.md; methods/taste_decomposition/code_competitions/.
+User directive: "retrieve the scores we have … go forward with new features. Don't redo work."
+A bank KEPT AS SCORED (never recomputed); what was built is the missing V layer + an honest
+same-population dense T. Population reproduced and asserted: **n=999, 634 canonical_pid
+groups, 850 pos / 149 NEG** (the minority count travels with every number).
+
+- **PROTOCOL FIX FIRST, and it was worth ~.02.** Plain GroupKFold(5) gives 26-37 negatives
+  per test fold and reads A_lin .6683; **StratifiedGroupKFold(5, shuffle=True)** equalises at
+  29-30 and reads .6834-.6919 across fold seeds, reproducing the recorded A_lin .6907. The
+  unstratified reading was a fold-composition artifact. At 149 minority rows stratification
+  is not optional.
+- **SAME-ROWS LADDER (per-seed mean / ensemble): V .7289/.7429 | A .7130/.7282 |
+  V+A .7383/.7535 | T_dense .6967/.7241.**
+  **Δ_total = −.0322, Δ_beyond = −.0416 (means) / −.0294 (ensembles).** All three dense
+  seeds (.7060/.7080/.6762) sit below the V+A mean → **the sign is not a seed artifact.**
+  Cell joins the DENSE-BELOW-BANK group (cap_crowd, SI, press).
+- **THE NEW V LAYER BEATS THE 139-CRITERION LLM BANK** (+.016 nl) and beats dense outright.
+  V is an **anti-predictive CODE-SIZE channel**: v_n_chars alone .262 (= .738 reversed),
+  with identifier/line/operator/branch counts all in .26-.32. Shorter, simpler code = the
+  editorial's approach. Language is inert alone (.497) but conditions the size features
+  (removing it costs V_lin .018).
+- **Design §11: fused .7537 vs bank ensemble .7535 = +.0002 — a WASH.** Numerically clears
+  the rule, substantively fails it; reproduces "fusion reaches max(parents), nowhere
+  reliably exceeds it" on dense-below-bank cells. **Contrast with the code_v3 PR-merge cell,
+  where fusion beat BOTH parents (+.058 over bank) — the two code cells sit on opposite
+  sides of this line, which is the useful finding.**
+- **The retired population-mismatched T was .69; the honest same-population T is .6967/.7241
+  — the LEVEL barely moved.** What changed is legitimacy: the number is now same-rows, and
+  on that footing the verdict flips from "unknown, flagged" to "no residual".
+- A_lin reproduces (.6875 vs .6907); **A_nl does NOT** (.7130 live vs .6696 recorded, and
+  .6929 unstratified — both above it). The surviving file already carried GATE_FAILED, so
+  the recorded nonlinear number is **superseded, not a target**.
+- Bounds: 149 negatives; dense seed spread .0318 ≈ the deltas themselves, so the SIGN is
+  solid and the MAGNITUDE is soft. V's edge rests on the size channel — a length-neutralised
+  arm should be expected to lower V and V+A.
+- REUSE not rewrite: `ac_dense.py` imports CodeDataset/mb_predict from the very script that
+  produced the retired T (`scripts/dense_ceiling/run_dense_ceiling.py`), changing exactly two
+  things — class weighting (pos_weight = n_neg/n_pos on the train fold; the shared runner
+  used unweighted BCE) and saving pooled OOF vectors (it averaged per-fold AUCs).
+
+## 2026-08-11 — SI v2 BANK: CERTIFICATION FAILED — INSTRUMENT FAILURE, NOT CELL FAILURE; PAIRWISE REDESIGN PROPOSED
+
+- **Sign-corrected K=50 battery: pos-vs-neg .483 (SE ≈.058 → chance, not inverted);
+  coherent-vs-scrambled .884** — the judge reads content fine and cannot see the
+  winners-vs-honorable-mentions cut. Agent self-correction logged: shard-0's +.0643
+  margin held on only 3/7 shards — the sign fix was real but reveals the failure.
+- Acceptance: **0/33 criteria clear |AUC−.5|≥.05** (v1 managed 2); median .0065;
+  direction validity **9/29 (31%)** — A_lin .5647 is a fitted composite over
+  near-chance columns, not a measurement. The length-confound design DID work
+  (movers don't shrink under stratification) — designing away length succeeded;
+  designing in signal did not.
+- Ledger (clean pop, n=8,063/316 weeks/pos .188): V_nl .5960 · A_lin .5647 · VA_nl
+  .6011 · T .6241 · Δ_beyond +.0076 eval/+.0195 test. **NOT terminal per §14: dense
+  seed spread .0351 > Δ_beyond (V8 signature), while T .624 over a .552 length
+  baseline says the target is real. INSTRUMENT failure, not cell failure.**
+- Contamination finding stands, now deflationary: on clean data "bank = length
+  model" is literally false because BOTH sit near chance (A_lin .5647 > V_lin .5587;
+  the ordering reversed because V collapsed, not because A rose).
+- **Diagnosis: item-level ABSOLUTE scoring cannot carry a COMPARATIVE editorial
+  construct** (one winner from ~25 entries/contest) — the third instance of the
+  published-pool family (Wigleaf saturation, cap_finalist level shift), now at its
+  purest. **Proposed (needs user sign-off — new measurement shape): (1) within-week
+  PAIRWISE readout; (2) frontier-judge probe on a few hundred within-week pairs to
+  separate "criteria wrong" from "Gemma-4-31B can't see this" (currently
+  confounded).** No third same-shape bank.
+- Upstream actions re-flagged: score_va_gemma_banks unsigned-averaging fix;
+  parse_results.py contamination touches all old SI artifacts.
+
+## 2026-08-11 — CODE_V3 DECOMPOSITION ROUND (Addendum 3) LANDS: Δ +.0554 → +.0484, SWAP FIRES ROUND ONE
+
+notes/2026-08-09__closure_code.md §11-§13; closure/code_v3/code_v3_rd_results.json.
+Scoring 8/8 shards, 171,780 prompts, NA **.0086**, **0/15 collapsed** (base bank NA was .58).
+Readout on the FINAL 3-seed ensemble, so the r=0 anchor is restated at +.0554 honest.
+
+- **CURVE POINT r_d:** honest-full (144 repos) VA_nl .6307 → .6377, **gain +.0070**,
+  **Δ +.0554 → +.0484** (12.6% of the residual closed). MONITOR (29 repos) +.0611 → +.0429.
+  Routing 5A/10B, misrouting **0.0%**, probes **4/4**. NOT sub-ε on either tier → **round 1
+  proceeds** (trailing 0 of 2).
+- **THE ε COMPARISON MUST CARRY THE SEED BAND.** MONITOR VA_nl seed spread **.0274** > the
+  MONITOR gain **+.0182** — the gain is smaller than the noise on its own statistic. Quote
+  the honest-full +.0070/144-repo figure; **the 30% MONITOR reduction is NOT quotable.**
+  This is the §8.2 protocol warning biting on round one, exactly as pre-registered.
+- **SWAP SIGNATURE FIRES AT ROUND ONE: ΔC₊ +.0188, ΔC₋ −.0061, Δρ +.019.** Matters more here
+  than on N&C because this cell's round-0 C₋ was already **.5099 = chance**, so the bank is
+  now BELOW chance on the pairs dense gets wrong. Part of the gain is dense-imitation, not
+  articulation. Watch round 1; two consecutive swap rounds = the miner is teaching the
+  student the teacher's mistakes.
+- **SPURIOUS MAP: ten channels, ALL WEAK** (alone-AUC .463-.528, max deviation .037); joint
+  spurious model **.5364**, far below the .65 matched-sampling trigger. **N&C hit .672 after
+  one round and .712 after three — the code cell's nuisance space is much thinner.**
+  Strongest and only substantive channel: **version-era vocabulary, ANTI-predictive .463**.
+- **DISCOUNT NULL AGAIN — third independent family of controls to fail.** Δ_adj +.0731 (all)
+  / +.0674 (mixed excluded) vs undiscounted +.0484 — Δ WIDENS, same as N&C/CW (Δ_adj is not
+  an effect size). Stratification-free: after a stack absorbs all ten channels the dense
+  score still adds **+.1442** within-repo (bank +.0904). With §4 position (leaves +.0509) and
+  §6 geometry (leaves +.036-.054), three independent nuisance families do not explain it.
+- **FLEET DEGRADATION (recorded): Claude family unavailable all session (subagent cap
+  500/500).** Decomposer and blind auditor both = gpt-5.6-luna via codex exec (frontier,
+  >Sonnet) — so the audit was independent by CONTEXT but not by FAMILY. Fleet for rounds
+  1-5 = codex ×4 + GLM ×4 = **P=8 / 2 families**: above the P floor, BELOW the family floor.
+  Both GLM keys verified live.
+- Throughput datum for lane scheduling: **19 prompt/s at 15 criteria vs 63 at 83** — the
+  ~7K-token PR context is prefilled per row and amortised across that row's criteria, so
+  fewer criteria per row is strictly worse. A 25-criterion round ≈ 1.6 h.
+
+## 2026-08-11 — BBC MOST-READ COMPLETE: LARGE WELL-POWERED RESIDUAL (+.086/+.069); TWEETS' SIGNAL IS NOT A PLATFORM ARTIFACT
+
+- **Ledger (n=50,761 / 2,251 day-groups / pos .4405, within-day primary):** V_nl .6718
+  · A_lin .6908 · VA_nl **.7370** · T **.8230 eval / .8097 test** · Δ_interact +.0282
+  [+.026,+.031] · **same-rows Δ_beyond +.0864 eval / +.0690 test — the best-powered
+  residual in the grid (T seed spread .0021 ≈ Δ/40)**. Pooled ≈ within-day (±.004) —
+  day composition not exploited. Instruments ORDER the winners (Spearman vs −rank
+  +.144 over 22,357 ranked positives, bank-carried). Era-stable 2017-2023. OOF 0.0.
+- **The platform-dynamics answer (user's question): DEGREE, not kind.** Every
+  instrument is stronger on same-outlet readership than cross-platform amplification
+  (headlines predict BBC clicks far better than Twitter pickup), but the
+  decomposition SHAPE matches: Δ_interact nearly identical, VA_nl reaches 89.1% of T
+  on BBC vs 94.4% on tweets — **tweets is proportionally slightly MORE articulable;
+  V9's signal is not a platform artifact.** Cell-level contrast only (zero row
+  overlap, era+mix confounded).
+- Community-column consequence: journalism community carries a SUBSTANTIAL residual
+  on the readership platform (+.07-.09) — the community spread now runs −.03 (SO) →
+  +.02-.03 (tweets) → +.07-.09 (BBC) → +.10-.11 (CW, citations) with the two clean
+  zeros both platform-vote cells. BBC → discovery queue (journalism priority).
+- **Third anchor-discipline finding: anchor rows must match the provenance the
+  system prompt asserts** — the BBC prompt says "the BBC News home page" while the
+  shared anchor pool is mostly non-BBC; battery .481 → .602 with provenance-matched
+  anchors (V9-comparable). Ledger untouched (A scored anchor-free in-pass). Joins
+  the scramble/all-NA/unsigned-averaging fixes on the between-waves helper list.
+- Artifacts: results/bbc_mostread_ledger.json (+oof/ids); datasets/bbc-mostread/va/;
+  outputs/va_gemma_banks_bbc_mostread/; notes/2026-08-10__bbc_mostread_build.md;
+  commits 4de0770, cf861d2. Smoke-flagged criterion retraction noted (no collapse at
+  scale).
+
+## 2026-08-11 — CODE ROUND d: 12.6% OF RESIDUAL CLOSED (honest-full +.0070); THIRD NUISANCE FAMILY FAILS; SWAP ADVERSE AT ROUND ONE
+
+- Curve: Δ r0 +.0554 (restated vs final 3-seed ensemble) → **Δ r_d +.0484 honest-full
+  (144 repos); gain +.0070 = 12.6% of the residual.** Not sub-ε → round 1 proceeds
+  (trailing 0/2). Audit: 5A/10B, 0.0% misrouting, probes 4/4, 0 collapsed.
+  **Self-enforced §8.2: the MONITOR gain (+.0182) is SMALLER than the MONITOR seed
+  spread (.0274) — the 30% MONITOR reduction is NOT quotable; honest-full is the
+  quotable tier.**
+- **Swap signature ADVERSE on the first round** (ΔC₊ +.0188, ΔC₋ −.0061), biting
+  harder than elsewhere because round-0 C₋ was already at chance (.5099) — the bank
+  is now BELOW chance on pairs dense gets wrong: part of the +.0070 is imitation.
+  Two consecutive swap-adverse rounds ⇒ miner teaching the student the teacher's
+  mistakes; round 1 is the test.
+- **Code's nuisance space is markedly THIN: joint spurious model .5364** (vs N&C .672
+  after one round); ten channels all weak (.463-.528); the one substantive channel is
+  version-era vocabulary, ANTI-predictive (.463). Discount WIDENS Δ (+.0731/+.0674
+  vs +.0484) — **third independent nuisance family to fail on this cell** (position
+  leaves +.0509; geometry/length leaves +.036-.054; mined channels leave more).
+  Stacked: after absorbing all ten named channels, dense still adds **+.1442
+  within-repo** (bank +.0904). The code residual is the program's most
+  control-resistant.
+- Fleet limitation carried: P=8/2 families (Claude cap), below family floor.
+  code_competitions closure logged by the agent (registry + strict list).
+
+## 2026-08-11 — USER DECISION: JOURNALISM COMMUNITY CANONICAL = BBC MOST-READ (main body); TWEETS → APPENDIX. SO AUDIT ORDERED
+
+- User: "keep twitter for the appendix, and BBC most read for the main body."
+  Journalism community primary = BBC most-read (best-powered residual in grid);
+  tweets = appendix/contrast (the platform-dynamics pair stays quotable as a
+  degree-not-kind contrast). Strict list updated.
+- User: "run an audit on StackOverflow — is there something we might be missing?"
+  Independent skeptical audit dispatched. Ranked suspicion #1: VIEW ASYMMETRY (the
+  caption lesson) — did the dense arm see the QUESTION context the bank judged
+  against, or the answer alone? A within-question y makes question context
+  load-bearing; an answer-only dense arm would be handicapped exactly like the
+  cartoonless caption models.
+
+## 2026-08-11 — SO DUAL-TRACK CLOSURE CAMPAIGN DISPATCHED (user order); T reference deferred to the audit's question-inclusive control ruling
+
+## 2026-08-11 — SO ROUND 0: ε-RESOLVABILITY POWER CHECK BLOCKS THE FROZEN DESIGN — FIXED BY CROSS-FITTED DENSE; QTRUNC T ADOPTED; Δ₀ = WASH
+
+- **NEW DISCIPLINE (make standard): pre-campaign ε-resolvability power check.**
+  MONITOR ⊂ dense-held-out left n=501; paired round-over-round sd .00566 > ε=.005.
+  Killer diagnostic: DROPPING the bank's strongest criterion (alone |AUC−.5|=.106)
+  moves MONITOR VA_nl by −.0003 ± .0057 — if removing the best criterion is
+  invisible, adding one cannot be visible; every round would read sub-ε on noise and
+  the campaign would terminate at r2 on nothing. Fix (launched, not just proposed):
+  5-fold cross-fitted dense via question-hash buckets (shared trainer untouched);
+  honest set = union of test tenths (6,056 rows, selection-free) → MONITOR ~1,220,
+  paired noise ≈.0036 < ε. Eval tenths kept as selection-touched sensitivity only.
+- **T convention resolved with the audit (coordinated): qtrunc = question-inclusive,
+  answer-preserving dense — .7277 eval / .7231 test seed-42, the strongest view;
+  adopted as campaign-primary (3-seed completion running); title-view = labelled
+  secondary.** Question context is worth ~+.02 to dense once displacement is avoided.
+- **Δ₀ on MONITOR: wash under all three T conventions** (qtrunc −.0097 [−.049,+.030])
+  — confirms the audit's re-read of the cell. Swap near-symmetric (C₊ 60 vs C₋ 72
+  on 501 rows): two readers making DIFFERENT errors of similar size, not a dense
+  advantage. The V6 "bank beats dense" phrasing is retired; the row reads
+  "articulable — bank ≈ dense (wash)" pending campaign rounds.
+- Fleet limitation for the whole campaign: 2 families (Claude cap), logged per round.
+  Collapse gate dropped 1/40; 14/14 alignment gates; MONITOR trivial channels
+  recorded (question id .711 / charlen .609 / position .592).
+
+## 2026-08-11 — CERTIFICATE BACKFILL DISPATCHED (user order) + E-VALUE-ANALOG COLUMN ADDED TO F2
+
+- Backfill: strict two-judge blind A-side merges on the ARCHIVED proposal pools of
+  all 9 older campaigns (peer ×3, cw, HW, press, nc_responded, mathse ×2) —
+  judge pair = luna + glm (Claude cap exhausted; identities recorded); originals
+  never modified (new certA_strict.json per campaign); output = old-τ vs strict
+  side-by-side table; quoted A-masses that move get corrected here on landing.
+- F2 gains a per-cell E-VALUE-ANALOG sensitivity column (formula FROZEN in the F2
+  note before any computation): minimum alone-AUC an unfound nuisance channel needs
+  to absorb the PRIMARY increment (X), robustness ratio vs strongest found channel
+  (X/Y), and the strict-B-mass-coupled odds-form bound (Z). Registered-simulation
+  fallback allowed under a pre-frozen sweep design.
+
+## 2026-08-11 — BACKFILL PRE-FLIGHT CORRECTIONS (agent catch, before any judge spend)
+
+- **FRAMING CORRECTION: the strict merge does NOT systematically deflate Track-A
+  masses** — on AoPS it RAISED A (.5000→.5583) while lowering B (.5000→.3375),
+  because species_merge adds only CROSS-PROPOSER edges and so undoes τ's
+  within-proposer merges. Per-cell direction unpredictable; the backfill table is a
+  correction, not a deflation. (My earlier entry implied inflation-only; corrected.)
+- Judge design ruling: sol+luna pair (Claude cap exhausted; GLM payload-broken;
+  Codex-for-judging standing rule), single-family caveat documented symmetrically
+  with the existing Sonnet-Sonnet merges; **AoPS Track-A re-run under the new pair =
+  cross-instrument anchor, gating the table's readability** (reproduce .5583 within
+  LOO band → deltas readable; else report as new-instrument re-survey only).
+- Scope: nc_responded already strict (dropped); peer_verdict A-pool possibly
+  unrecoverable (brief inventory only, no re-mining); cw_community schema adapter;
+  maps_batch1 deduped against _ext dirs; species_merge apply extended to write NEW
+  _strictA files (in-place rewrite was unguarded — code change + all-copy sync).
+- Old-τ column banked for the six runnable cells: peer_curation r5 .7778 /
+  peer_revealed r5 .5667 / hashtagwars r4 .7333 / press r2 .5889 / mathse_vote r3
+  .2833 / mathse_accepted r2 .3250.
+
+## 2026-08-11 — E-VALUE FORMULA FROZEN (committed pre-compute); TWO NEW LANDMINES; F2 7/11; STRUCT-ORDINAL ENFORCEMENT
+
+- E-value analog frozen (89a154dd0, sha 3a2be4bf…) BEFORE any value: X = adversarial
+  rank(T)-blend threshold (explicit LOWER bound), RR = (X−.5)/(Y−.5), Z = expected-max
+  of unfound species from exponential tail × strict M̂; verdicts ROBUST /
+  ABSORBABLE-IN-PRINCIPLE / n-a. First value: hashtagwars X > .7315 — not absorbable
+  by any single channel weaker than T itself; RR ≥ 1.55.
+- **LANDMINE: cross-cell sys.modules contamination** — closure dirs ship same-named
+  modules; two cells' adapters in one process cross-link (mathse_vote's gate read
+  mathse_accepted's OOF — caught loudly ONLY because a gate existed). **Rule: one
+  cell per process.** Also: peer_verdict's 5 duplicate ntitles collapse id→position
+  dicts — E taken positionally with elementwise id assertion.
+- Strict-B census for Z: strict only jokes (.30) + cap_finalist (.38); 8 cells
+  τ-era-tagged pending backfill; peer_verdict NO B-mass (pre-species pilot) →
+  Z_UNAVAILABLE, X/RR stand.
+- **Coordinator enforcement: mathse cells' F2 nuisance blocks must include OBSERVED
+  position-ordinal STRUCT columns** (text channels cannot carry ordinals; the landed
+  mathse_accepted +.0349 overstates its deconfounded residual if Gemma-only —
+  recompute ordered; jokes gets a STRUCT-inclusive variant row).
+- F2 landed 7/11: jokes +.0151 · cw +.0988 · peer_revealed +.0927 · mathse_accepted
+  +.0349 (pre-STRUCT) · HW +.0297 · nc_responded +.0200 · cap_finalist +.0002.
+  NUIS-beats-enriched-bank now 4/7 cells.
+
+## 2026-08-11 — F2 UPDATES: MATHSE +.0349 RETRACTED (STRUCT enforcement); JOKES = FIRST "ROBUST" E-VALUE CERTIFICATE; PRESS F2 FRAME GUARD
+
+- **mathse_accepted F2 +.0349 RETRACTED** — computed Gemma-only (adapter n_struct=0);
+  STRUCT-inclusive recompute running with all six observed ordinal columns (raw
+  observed only; the npz's label-fitted joint models explicitly excluded — recorded).
+  Expected per the campaign's own matched result (Δ_adj −.0011): the cell reports as
+  "carrier = structural ordinal," not taste. mathse_vote runs STRUCT-inclusive from
+  the start. jokes needed no change (already STRUCT-inclusive, created_utc carried).
+- **First E-value certificates: jokes ROBUST on STRICT mass** — X > AUC(T) .7469 (no
+  single channel weaker than T can absorb +.0151), RR 1.55, Z .6676 from strict M̂
+  .30 → X > Z. HW pending strict mass (τ-era .65).
+- **press_verdict F2 +.0899 P=1.00 LANDED WITH A FRAME GUARD (do not quote as a
+  residual):** its (c) is an E-REFIT bank and press is the worst E-refit-pessimism
+  case (.681 vs .744 full) — NOT comparable to the closure verdict (+.0093 same-rows
+  vs full-strength terminal bank). Matched-strength (D1b-style) companion ORDERED for
+  press + any cell with fullfit−E-refit gap >.02 (peer_curation, peer_revealed to be
+  checked); companion = the quotable number for those rows.
+
+## 2026-08-11 — MATCHED-STRENGTH COMPANION BUILT (measured trigger, all cells); τ-vs-STRICT MASS IS NOW CERTIFICATE-DECIDING
+
+- Companion implemented per spec: stage-1 full-population grouped-OOF enriched bank
+  read on E; stage-2 frozen stack over [bank_full_oof + nuisance] ± T/T₀ with
+  byte-identical folds — increments differ ONLY in bank training strength.
+  Trigger computed on the MEASURED enriched-bank gap per cell (not pre-selected);
+  7 cells fire (press +.063, peer_revealed +.069, peer_curation +.061, cap_finalist
+  +.086, jokes +.035, mathse_accepted +.042, mathse_vote +.025). cw_community and
+  peer_verdict: companion UNDEFINED (E = whole population) — recorded, not
+  fabricated. quoting_rule embedded per cell JSON; both E-value variants
+  (evalue_analog + evalue_analog_matched) side by side.
+- **τ-era vs strict mass now decides certificates: hashtagwars = ABSORBABLE-IN-
+  PRINCIPLE (Z .7799 from τ-era M̂ .65 → Ŝ_unf ≈61) while jokes = ROBUST with
+  IDENTICAL X-side numbers (strict M̂ .30 → Z .6676).** Nine of eleven cells carry
+  provisional τ-era Z — the certA backfill's stakes just rose: several verdicts
+  expected to flip ROBUST when strict masses land.
+- Battery: 8/11 arm-sets landed; mathse pair recomputing STRUCT-inclusive;
+  peer_verdict/peer_curation computing.
+
+## 2026-08-11 — F2 9/11: MATH.SE VOTES' RESIDUAL COLLAPSES UNDER OBSERVED-ORDINAL CONDITIONING; PRESS = STRONGEST ROBUST; THIRD "FLAG ≠ ENFORCE" INSTANCE
+
+- **mathse_vote_score (genuinely STRUCT-inclusive, npz verified on box): the
+  mining-resistant residual collapses to +.0085 [−.004,+.021] P=.92 once the
+  OBSERVED ordinal family is in the conditioning block** (NUIS incl. ordinals .6691
+  > enriched bank .6238). E-value agrees: **RR = 0.90 — the only cell < 1** (a
+  single unfound channel weaker than one already found would absorb it) →
+  ABSORBABLE-IN-PRINCIPLE. **Verdict refinement: the vote cell's carrier is largely
+  STRUCTURAL too** (campaign frame's +.025-.038 was conditional on named TEXT
+  channels only; the arrival-order family carries most of it, mirroring accepted).
+  The math.SE pair now reads: accepted = fully structural; votes = mostly structural
+  + small unresolved remainder.
+- **press_verdict: ROBUST at RR 2.66 (strongest in battery)** — X > AUC(T) .7744,
+  Z .6138; frame guard holding (E-refit +.0899 never quoted vs closure verdict;
+  matched-strength companion queued as the quotable number). Press is one of few
+  cells where the bank DOMINATES the named nuisance (.686 vs .581).
+- **mathse_accepted retraction UPHELD — second Gemma-only instance:** the position
+  npz was missing ON SK3 and the adapter FLAGGED the declared-but-missing STRUCT
+  block and continued with 30 columns (tell: NUIS .5615 vs the campaign's joint
+  position .6600 on identical rows). **Third program instance of flag ≠ enforce
+  (collapse gate, battery sign, now missing STRUCT) → RULE: declared blocks that
+  fail to load must RAISE, never warn** (committed a09ee708d). File synced; cell
+  re-running.
+- Battery 9/11 landed; verdicts so far: ROBUST press + jokes(strict); ABSORBABLE HW
+  (τ-era Z) + mathse_vote (RR<1); null cap_finalist; pending others.
+
+## 2026-08-11 — F2 SK3 SIDE COMPLETE: MATHSE_ACCEPTED FINAL (+.0086, 75% position); PRESS QUOTABLE = +.0622 COMPANION; LEVEL-vs-INCREMENT DISTINCTION OF RECORD; TWO RULINGS
+
+- **mathse_accepted final (STRUCT-inclusive, npz verified): PRIMARY +.0086
+  [−.0015,+.0192] P=.949 — ~75% of the retracted +.0349 was position.** NUIS jumps
+  .5615→.6853 (sanity-matched to the campaign's joint position .6600). RR .64
+  E-refit / 1.00 matched → ABSORBABLE. The grid's clearest structural-carrier cell.
+- **Companions landed (sk3): press +.0622 [+.0326,+.1052] = THE QUOTABLE press
+  number** (E-refit +.0899 labelled not-quotable); jokes +.0115; mathse_accepted
+  +.0073 n.s.; **mathse_vote INVERTS: companion +.0178 [+.0060,+.0296] > E-refit
+  +.0085, matched E-value flips ABSORBABLE → ROBUST (RR 1.41)** — E-refit was
+  PESSIMISTIC there; measuring the enriched-bank gap per cell (vs inheriting
+  original-bank gaps) was load-bearing (its gap sat just under the trigger).
+  math.SE votes' verdict: mostly structural + SMALL ROBUST REMAINDER (+.018 matched).
+- **DISTINCTION OF RECORD (press made it vivid): LEVEL residual (Δ_beyond = T − bank,
+  the closure estimand; press +.0093) vs INCREMENTAL information (stacked (d)−(c);
+  press +.0622) are DIFFERENT quantities — similar levels via partly uncorrelated
+  signal means level ≈ 0 with increment ≫ 0, both true. Every quoted number names
+  which it is; never conflate.**
+- **RULING 1: §11 re-based for F2 rows to (d) > (c)** (fused must beat the strongest
+  nameable stack; (d) vs (a) passes trivially under a strong nuisance block —
+  mathse_accepted's +.1207 "PASS" was nearly all nuisance). **RULING 2: LEACE Leg-3
+  scope = per-channel EFFECT claims only** (descriptive alone-AUCs exempt); 5 cells
+  have spurious-alone >.65 → LEACE runs if the paper quotes per-channel effects there.
+- peer_curation F2: NULL (−.0006 P=.48). peer_revealed sweep NON_MONOTONE (recorded,
+  not smoothed). Remaining: peer_verdict arms, cw E-value, mac companions.
+
+## 2026-08-11 — RULINGS IMPLEMENTED (commit 9bf23e297): UNDER THE RE-BASED RULE, THE DECONFOUNDED RESIDUAL IS SIGNIFICANT ON 5 OF 10 LANDED CELLS
+
+- Re-based §11 ((d)>(c)) per-cell with bootstrap CI + SIGNIFICANT_AT_P95 flag; old
+  (d)-vs-(a) retained as context labelled TRIVIAL-UNDER-NUISANCE (mathse_accepted's
+  "+.1207 PASS" drops to +.0090 — the old rule discriminated nothing).
+- **Significant deconfounded increments (P≥.95): cw +.0966 · peer_revealed +.0899 ·
+  press +.0830 · nc_responded +.0282 · jokes +.0134. Point-only (CI includes 0,
+  verdict_qualified guards against pass-as-positive): HW +.0264 · mathse_accepted
+  +.0090 · peer_curation +.0073 · mathse_vote +.0067 · cap_finalist +.0034.**
+- Press is the one cell where the nuisance block DEGRADES the bank ((c) .6686 <
+  (a) .6860) — genuinely weak nuisance, consistent with its RR 2.66.
+- LEACE Leg-3 markers embedded per artifact (required:false now; auto-flag on the 5
+  spurious-alone>.65 cells if a per-channel effect is ever quoted). estimand
+  (LEVEL vs INCREMENTAL) tags travel inline with every number. Seed-mean vs
+  bootstrap-seed0 relationship stated in-JSON.
+- Remaining to battery close: peer_verdict arms, cw E-value, mac companions ×7.
+
+## 2026-08-11 — USER RULING: PATENTS HAS NO COMMUNITY CELL — FORWARD CITATIONS ARE PROCESS-ENFORCED, NOT PREFERENCE
+
+- User: citations are enforced by design by the patent process (duty of disclosure /
+  examiner citation practice) — they are relatedness/obligation signals, not a
+  community's revealed preference. RULING: patents = VERDICT-ONLY field in the grid
+  (itself informative — some fields structurally lack crowd preference channels).
+  This matches the program's own earlier reasoning about engagement labels (the
+  2026-06-16 tweetapi note called such labels IMPACT cells, not articulability cells).
+- V7 forward-cites is RECLASSIFIED, not discarded: it stands as an appendix IMPACT
+  cell (clean leak battery, ground-truthed label, V+T built) — quotable as
+  "predicting technological citation impact," never as community preference. Its
+  ledger completes as an appendix artifact; no discovery campaign will be run on it.
+- Strict list + notebook updated (patents removed from the community column).
+
+## 2026-08-11 — V_NEW WAS NEVER REAL (user catch): COMPILATION PILOT DISPATCHED
+
+- User caught that the notebook's V_new ≈ V everywhere. Honest state: the discovery
+  program routes all mined criteria into the JUDGED bank; no stage ever compiled
+  discovered criteria into deterministic code — the V_new column was a display
+  fallback except code-competitions (whose user-ordered 27-feature coded layer beat
+  the LLM bank — the existence proof).
+- PILOT dispatched (3 terminal cells: jokes, press, nc_responded) reusing the seam
+  program's AGENTIC-COMPILE machinery: codability triage → compile → held-out
+  certification (ρ vs judged parent + alone-AUC) → V_new = V + certified compiled
+  columns → frozen-stack refits (V_nl / V_new_nl / VA_nl / (V_new+A)_nl). The
+  compile-success profile per criterion family is itself a codability measurement
+  (bridge to Paper #1 themes). Compiler family = luna (recorded). Scale-up only
+  after the pilot table.
+
+## 2026-08-11 — MATCHED-STRENGTH CORRECTION REVERSES TWO CELLS; PEER_VERDICT TRIPS THE INTERACTION FLAG; E-VALUES 10/10 (E-refit footing)
+
+- **Companions computed per cell (direction NOT universal — peer_revealed and
+  mathse_vote GROW at matched strength):** HW sign-flips (+.0297 E-refit → −.0230
+  P=.21; its E-refit bank .5357 was essentially chance vs .6751 full — the largest
+  starvation gap, +.1393); **cap_finalist goes SIGNIFICANTLY NEGATIVE (−.0224
+  [−.0454,−.0005] P=.021): adding T to the full-strength bank+nuisance actively
+  hurts → §11 FAIL on the matched footing (second verdict block recorded;
+  FAIL-matched/PASS-E-refit = the E-refit increment was a bank-starvation artifact,
+  not residual).** Note: consistent with the cartoonless-dense handicap on caption
+  cells — the ctx-control (cartoon-inclusive dense) retests this arm when it lands.
+- **Matched-footing significant residual set now: peer_verdict +.0588 · cw +.0966 ·
+  peer_revealed +.0969 · press +.0622 · mathse_vote +.0178 · jokes +.0115
+  (nc_responded companion in flight).** press/HW/cap corrections all flowed from the
+  frame guard — computing the gap per cell was load-bearing.
+- **peer_verdict is the ONLY cell tripping the registered SECONDARY: (e)−(c) =
+  +.0175 P=.996 — nuisance-prior interaction** (T₀ alone .5573 ≈ chance, so it is
+  interaction, not independent prior signal). Flagged for its own look; every other
+  secondary within ±.009 of zero.
+- E-values complete on E-refit footing: ROBUST cw (RR 3.58), nc_responded (3.41),
+  press (2.66), peer_revealed (1.78), jokes (1.55, strict M̂); ABSORBABLE HW (τ-era
+  Z), cap_finalist (.95), mathse_vote (.90 — flips ROBUST 1.41 on matched),
+  mathse_accepted (.64). Commit f50c35ed3. Remaining: 3 mac companions + 5 matched
+  E-values → battery close.
+
+## 2026-08-11 — F2 BATTERY COMPLETE (11/11): THE DECONFOUNDED TASTE LEDGER — 6 SIGNIFICANT / 4 NULL / 1 NEGATIVE
+
+- **Governing increments (companion where enriched-bank gap >.02, else E-refit):
+  SIGNIFICANT — cw +.0988 · peer_revealed +.0969 · press +.0622 · peer_verdict
+  +.0588 · nc_responded +.0200 · jokes +.0115. NULL — mathse_vote +.0085 ·
+  mathse_accepted +.0073 · peer_curation +.0008 · hashtagwars −.0230.
+  SIGNIFICANTLY NEGATIVE — cap_finalist −.0224 (P=.02).** The two coordinator-
+  ordered corrections produced the hardening: STRUCT inclusion killed
+  mathse_accepted (+.0349→+.0073); matched strength killed HW (+.0297→−.0230) and
+  cap_finalist (+.0002→−.0224).
+- Cross-cutting: (1) **the named nuisance block beats the enriched bank on 6/11
+  cells** — Track-B is the larger nameable block on most cells; only press and
+  nc_responded have banks that clearly dominate their nuisance; (2) untrained twin
+  inert 10/11 (peer_verdict +.0175 P=.996 = the sole nuisance-prior interaction
+  flag, queued for its own look); (3) E-refit pessimism is BIDIRECTIONAL (inflated
+  5 cells, deflated 2) — per-cell gap measurement was load-bearing; (4) at equal RR
+  1.55, strict-mass jokes certifies ROBUST while τ-era HW does not — the backfill
+  decides several verdicts.
+- E-values: ROBUST cw 3.58 / nc_responded 3.41 / press 2.66 / peer_revealed 1.78 /
+  jokes 1.55(strict); ABSORBABLE HW / cap_finalist .95 / mathse_vote .90 /
+  peer_curation .73 / mathse_accepted .64. peer_verdict E-value computing.
+- Process: the duplicate-ntitle landmine bit a THIRD time (f2_evalue/f2_matched);
+  y_equal_elementwise caught it each time — assertion stays mandatory in this
+  script family (bffaf4642). NON_MONOTONE sweep on peer_revealed recorded.
+- Note: notes/2026-08-11__f2_deconfounded_fusion.md; results/f2_deconf_<cell>.json.
+  Goal items 4-5 (deconfounded fused, trained + untrained) are COMPLETE for all
+  terminal cells; new cells inherit the battery at terminal.
+
+## 2026-08-11 — CERT-A BACKFILL COMPLETE: ALL SIX MASSES MOVE (3↓/3↑, .03-.37); ANCHOR FIRES THE FALLBACK — RESULTS ARE A NEW-INSTRUMENT RE-SURVEY
+
+- Strict Track-A masses (sol+luna judges, anchors 6/6): peer_curation .778→.589 ·
+  peer_revealed .567→.600 · **hashtagwars .733→.367** · press .589→.622 ·
+  **mathse_vote .283→.475** · **mathse_accepted .325→.558**. Direction 3 down / 3 up
+  — the unpredictable-direction framing is confirmed empirically. Mechanism: strict
+  S_obs = N − edges in 7/7 (union-find barely chains); deltas mostly measure how many
+  τ clusters were WITHIN-proposer merges the strict rule refuses.
+- **ANCHOR VERDICT: the pre-registered fallback branch fires.** Sonnet's AoPS .5583
+  sits inside the sol+luna LOO band, but the band swallows the effect: the judge-
+  family delta (−.0667) is NOT small vs the correction (+.0583) — the families
+  disagree on the AoPS correction's SIGN (concordance 95.3% historic pair vs 86.7%
+  new; luna liberal at 45.3% SAME). **Quoting rule: these strict masses are a
+  SEPARATE INSTRUMENT (sol+luna re-survey), never deltas against Sonnet-era figures;
+  each certA_strict.json carries cross_instrument_calibration; τ-era A-mass quotes
+  now carry "sol+luna strict re-survey reads X" companions.** Partial stabiliser
+  noted: the both-SAME AND rule holds edge counts 41-49 across all six judge
+  pairings despite single-judge SAME rates 32-45%.
+- Scope: cw_community ALREADY strict (blind full-recall partition — no adapter run,
+  no duplicate estimate); nc_responded already strict (confirmed); peer_verdict
+  A-POOL UNRECOVERABLE (no proposer field → f₁/LOO undefined; stays τ-era with
+  caveat, not re-mined). maps_batch1 dupes byte-identical; _ext dirs = record.
+- Code: cmd_apply writes NEW _species_strictA.json (in-place only via --inplace);
+  LOO jackknife added; runner reconstructed from on-disk bmerge prompts
+  (run_bmerge_judges.py); all copies synced, divergences recorded.
+  notes/2026-08-11__certA_backfill.md.
+- NEXT (queued): peer_verdict retroactive Track-B round (GLM payload probe first);
+  then certB strict re-survey for the τ-era-Z cells (Z consumes B-masses — the
+  F2 verdicts hang on those, not on certA).
+
+## 2026-08-11 — Z PASS RE-RUN AFTER RESOLVER FIX: PROVENANCE CORRECTED, ONE VALUE MOVED (cw .15→.20), ZERO VERDICT FLIPS
+
+- Actual failure mode narrower than diagnosed: resolver keyed on b_merge.strict
+  (mathse pair carries b_merge without the inner flag). Rule of record: presence of
+  a top-level b_merge block IS the certificate; nc_responded's species_b two-judge
+  merge and cw's blind partition added as recognized shapes.
+- The mislabelled cells' M̂ VALUES were already post-merge — the mislabel was
+  provenance, not magnitude: **relabeling changed one number (cw Z .5744→.5808,
+  still ROBUST; from reading the terminal blind partition instead of a stale
+  missing_mass.json) and zero verdicts.** Expectation-setting for the certB
+  backfill: where species files already carry post-merge good_turing, strict
+  certificates CONFIRM numbers rather than move them.
+- Z_judge_family recorded in every Z; judge_labelled=false on three campaigns whose
+  merge artifacts genuinely contain no model name (nc_responded, cw,
+  mathse_accepted) — a record gap, not a parsing miss; cross-cell Z comparisons
+  carry the caveat. f2_rez.py = seconds-fast Z/verdict refresh (X/Y/RR never re-run)
+  for the remaining backfills. Commit 90fd3f614.
+
+## 2026-08-11 — HASHTAGWARS DEEP AUDIT: Δ_beyond RULED NULL; RESIDUAL WAS INSTRUMENT DEGRADATION; SEVERE-BUT-TEXT-INVISIBLE METADATA LEAK
+
+- **The retrieval batch is a severe metadata leak AND irrelevant to the residual:**
+  Snowflake IDs are time-ordered; 88/101 contests have fully DISJOINT positive/
+  negative ID ranges; a LABEL-FREE largest-ID-gap split recovers y at **.974**
+  (two API sweeps: winners pulled first, filler later). But it is INVISIBLE to
+  text: grouped-OOF tf-idf text→sweep .4787 (chance); all 44 channels ρ ≤ .063 with
+  posting time within-class. **r1:B04's "batch visible in text" reading RETRACTED.**
+  Method ruling: at 97.4% collinearity with y the sweep CANNOT be a discount channel
+  — stratified/matched Δ_adj is undefined; refusing to produce that number is the
+  finding; within-class time tests are the valid substitute.
+- **The residual's actual source: the decomposition pass is the campaign's ONLY
+  judging batch to FAIL the scrambled-anchor gate (.5876, salad > real negatives)**
+  — a degraded A block depresses VA_nl and inflates Δ_beyond, which is why
+  REWORDING nine rubrics beat 54 mined criteria 5:1 (84% of closure verified).
+  Instrument degradation, not taste.
+- **STRICT-LIST ROW (adopted verbatim): Δ_beyond NULL, not quotable as taste** —
+  campaign +.0286 has jackknife SE .0607 (t=.47); F2 matched −.0230 [−.063,+.029];
+  the +.056 "level gap" was never significant (t=1.14). E-refit arms =
+  STARVATION FRAME ONLY, incl. "nuisance .6267 > bank .5357" — a 44-vs-158-column
+  refit diagnostic, NOT a fact about nuisance → **the F2 cross-cutting
+  "NUIS>bank on 6/11" is corrected to 5/11 + one starvation artifact.**
+- Cross-fitted rebuild REJECTED with arithmetic (projected SE .0271, t≈1.05 — five
+  trainings for a still-null): the decisive cheap job = RESCORE the 9 decomposition
+  components under a passing anchor battery (ordered). Curation-shaped confirmed:
+  fixed quota 9.92±.28 positives/contest over pools 12-181 — level-shift regime,
+  not commensurable with independent-judgment cells.
+- Infra flag from the audit: sk3 login shows the AFS "Could not chdir" root-disk-full
+  signature — checked this turn.
+
+## 2026-08-12 — HOMEPAGE CURATION COMPLETE: ARTICULABLE (Δ_beyond +.0068/+.0109 same-rows); JOURNALISM COLUMN DONE; MATHLIB 3-SEED DATA FOUND COMPLETE ON DISK
+
+- **Homepage v2 ledger (n=12,998 snapshot-grouped):** V_nl .6432 · A_lin .6623 ·
+  VA_nl .7291 (spread .0026) · Δ_interact +.0589 · **same-rows Δ_beyond +.0068 eval /
+  +.0109 eval+test vs T .7109/.7251 — residual essentially CLOSED; largely
+  articulable.** Bank validity: coherence .9900, 0/29 below chance, NA exactly 0
+  over 376,942 cells, anchors 6/6 attempt-0, all alignment gates 0.00e+00.
+- **Same-rows discipline was load-bearing AGAIN:** pooled VA_nl .7291 > pooled T →
+  Δ −.0182 "bank beats dense" WOULD HAVE TRIPPED the auto-audit falsely — the press
+  population-mismatch failure pattern, prevented by design this time.
+- **Two new substantive findings:** (1) top-half placement goes to the LESS
+  distinctive headline — the page-relative criteria are the bank's two most
+  NEGATIVE columns (b26 .4343, b27 .4322); the top story is what the rest of the
+  page is also about (running-story repetition; corroborated by b09 .5538 positive).
+  The census bank could never have found this (no page-relative family). (2) No
+  single criterion exceeds .566 — A_lin .662 is genuinely multivariate (the census
+  bank's signal sat in 2 salad-blind columns).
+- Genre channel GONE by construction (mask has zero variance — A_mask undefined;
+  judged levels carry the whole +.0816, vs press's +.0014 over its mask). Stratified:
+  ~95% of A's edge over V is genuine WITHIN-story-type ranking (A_lin .6623 → .6312
+  stratified; sport the one failing stratum .487). T₀ .4902/.4925 = chance
+  (T−T₀ +.2279 — the ceiling is entirely learned).
+- Artifacts: homepage_curation_storygrouped_ledger.json, samerows_T (filled), _t0,
+  rubrics_v2, batteries; notes/2026-08-09__homepage_curation_completion.md
+  (incl. corrected legacy triage superseding the preliminary a13 claim). Cell →
+  discovery queue. **JOURNALISM: press terminal · homepage complete · BBC built ·
+  tweets built (appendix) — the column the user prioritized is DONE at
+  instrument level.**
+- **MATHLIB: all 3 seeds BOTH arms already trained+scored on disk** (bigtrain eval
+  .682/.600/.629, test .535/.571/.544; regime eval .621/.550/.551, test
+  .523/.490/.552) — no GPU needed; the split-divergence replicates across 6
+  trainings (eval≫test both regimes; test means ~.52-.55, seed spread ~.04).
+  Resolution write-up queued to the corrections agent (CPU).
+
+## 2026-08-12 — MATHLIB RESOLVED: NO HONEST DENSE T (select-on-eval inflation proven); HW FINAL: GATE "FAILURE" WAS A COMPOSITION ARTIFACT — NEW ANCHOR-GATE RULE
+
+- **MATHLIB row adopted:** dense fails on honest rows across 3 regimes / 9 seeds
+  (test .467 canonical / .522 regime / .550 train-big; CategoryTheory .517 chance).
+  NOT starvation (7.5× negatives lifted eval .564→.637, test flat); NOT a harder
+  test half — **TF-IDF (.6796→.7883) and size-alone (.6024→.6909) both score HIGHER
+  on test**: the dense-only eval≫test gap is checkpoint-selection optimism amplified
+  by instability (seed-to-seed prediction ρ .35-.67 — three seeds aren't estimating
+  one function). **Quote no T; Δ_beyond not computable; the cell's readable ceiling
+  is LEXICAL (TF-IDF .788).** Bank VA_nl .672 is a reference (different split
+  design), never differenced. Third neural-reader-fails cell class (with RoyalRoad
+  power-cap — but distinct shape: here the articulated+lexical sides read well).
+- **HW FINAL — the audit corrected itself, on the record:** the "instrument
+  degradation" reading is RETRACTED. The decomposition batch's .5876 gate was a
+  COMPOSITION ARTIFACT: the A-routed 9 components pass at **.9897** while the
+  extent-of-surface channels invert (.0000) — CORRECTLY, because scrambling does
+  not destroy an extent (2× length, kept capitals/hashtags score high, as they
+  should). Δ curve reproduces byte-exactly (diffs 0.0000); the NULL verdict stands
+  on statistics alone (t=.47; matched −.0230). The 84%-from-rewording finding is
+  RE-FOUNDED on craft-surface entanglement inside frozen rubrics (the Addendum-3
+  MIXED mechanism with a positive closure outcome), not judge quality. No GPU used;
+  reuse-before-rebuild prevented an unnecessary rescore.
+- **NEW STANDING RULE (adopt everywhere): the scrambled-anchor gate is computed on
+  the subset whose value scrambling DESTROYS (in practice the A-routed subset),
+  never pooled over batches containing extent-of-surface channels** — a pooled gate
+  on a mixed batch measures composition, not reading. Record both; the subset
+  figure gates. Retroactively clears the campaign's only "gate failure"
+  (→ zero-with-composition-note in any cross-cutting count).
+
+## 2026-08-11 — CW expansion inventory (dataset-holes mandate) + BBC closure round 0
+- **CW RoyalRoad — EXPANDABLE, but only via re-matched build.** Raw crawl `royalroad_stubs_v1.jsonl` = 2,367 usable fictions (100% wayback, balance 1,184/1,183); current n=1,274 leaves 1,093 unused. The 1,274 is a deliberate topic×era match, and the matching is load-bearing: full-pool unmatched lexical floor .606 (≥.6 = DIRTY under §17m), era-match-only .600 (boundary); current build .524 CLEAN. Topic content, not capture era, is what leaks at larger n. **DECISION (coordinator, under user's "fill the dataset holes" directive): option (b) approved** — bge-large cluster all 2,367, find the largest topic×era-matched subsample holding lexical <.58, rescore bank on new rows only, retrain dense at new n. RoyalRoad 5-fold cross-fit (honest n=651, 4.6× old eval) continues in parallel as the fallback ceiling.
+- **CW Wigleaf — DATASET EXHAUSTED, accept n=1,568/404.** Year coverage complete (2008–2025, all 18 years). 98.5% of wayback-recoverable positives and 97.9% of recoverable negatives already used; the larger top50_texts.jsonl is mixed-provenance (500 live) and would reinstate the fetch_source .90 leak the current build killed (.500). Growth requires new crawling at uncertain yield. Power caveat stands; pairwise frontier probe (270 units × 45 criteria, anchors 45/45 on smoke) is the instrument route.
+- **BBC most-read closure ROUND 0 — GATE PASS (+.0749), rounds run.** VA_nl .7482 / T .8231 on MONITOR (2,060 rows, 88 days, taken inside dense-held-out). Order-join proven element-wise with shuffled counterfactuals (.5038/.4956). ε-resolvable depth 0 (paired seed SD .00252 < ε .005) with caveat: zero-change 95% width ≈ 2ε, one null pair reads +.0034 — no single round's near-ε gain quotable; two-consecutive-rounds rule governs saturation. Swap baseline C₊ .8227 / C₋ .4079. **FREEZE ADDENDUM 4: page-position channel structurally unavailable** — scraper builds negatives excluding most-read hrefs (0/33,400 overlap), so position is perfectly confounded with y; the "lists reflect placement" worry needs a raw-capture re-parse, recorded not mined. Fleet degraded to P=8/2 families (Claude cap 500/500) — freeze floor, recorded per round; GPU: one card, yielding to CW priority. Artifacts: closure/bbc_mostread/, notes/2026-08-12__closure_bbc_mostread.md, commits 9d33589/8c82a8d.
