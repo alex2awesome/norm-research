@@ -1884,3 +1884,16 @@ predictions) use one fixed family set and are unaffected; cross-bank LEVEL compa
 87M/wk) + ~555 gpt-4.1-mini calls (cents). Smoke-1 children-only npz QUARANTINED to
 outputs/ecert_slice_v1/quarantine_children_only/ on sk3 (skip-existing would have frozen them
 thin forever). Smoke-2 relaunched with the fixed families.
+
+### 2026-08-12 (later) — CANONICAL 4-FAMILY INSTRUMENT RESTORED; 2-fam humor lane quarantined
+User topped up OpenRouter (new key ~/.openrouter-api-key-2.txt laptop -> deployed as sk3
+~/.openrouter-api-key.txt, old key kept .bak-20260812); all three OpenRouter families probe
+live (qwen-2.5-72b / llama-3.3-70b / haiku-4.5) + glm-4.7 on the live ZAI key = canonical
+DEFAULT_FAMILIES restored. DECISION: instrument must be ONE fixed family set across cells
+(cell composition correlates with task; humor-heavy cell A mined 2-fam while other cells
+4-fam would confound family-set with cell) -> chain STOPPED clean (wrapper 1744571 ->
+python 1815768 -> EngineCore 1815897, explicit PIDs; nntruong's EngineCore untouched;
+GPU 5 verified 0 MiB), 74 humor 2-fam banks + smoke pair QUARANTINED to
+outputs/ecert_slice_v1/twofam_v1/ (kept as a family-set-sensitivity arm: same 74 metrics
+mined under both family sets = free instrument-robustness comparison). Full 185 re-mine
+launching with canonical 4 families after smoke-3 validates 4-family tags.

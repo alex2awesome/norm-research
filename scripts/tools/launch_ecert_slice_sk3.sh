@@ -25,11 +25,11 @@ PY="${PY:-/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python}"
 MODEL="${MODEL:-meta-llama/Llama-3.1-8B-Instruct}"
 # Live GLM key (the resolver's default preference is the DEAD alexander- account -> silent 429)
 export ZAI_KEY_FILE="$HOME/.z-ai-api-key.txt"
-# Proposer families (2026-08-12): OpenRouter is 402 (out of credits), so the canonical
-# glm/qwen/llama/haiku set is replaced by glm-4.7 + gpt-4.1-mini — the 2-family CRC floor.
-# Disclosed in the battery note; within-slice cell comparisons are unaffected (fixed set).
-FAMILIES='{"glm": {"model": "glm-4.7", "backend": "zai_anthropic"}, "gpt": {"model": "gpt-4.1-mini", "backend": "openai"}}'
-export FAMILIES
+# Proposer families: CANONICAL 4-family default (glm/qwen/llama/haiku) restored 2026-08-12
+# after the user topped up OpenRouter (new key deployed to ~/.openrouter-api-key.txt on sk3;
+# old key kept as .bak-20260812). The interim 2-family (glm+gpt-4.1-mini) humor banks are
+# quarantined in $OUT/twofam_v1/ as a family-set-sensitivity arm — instrument must be ONE
+# fixed family set across all cells.
 OUT="$HOME/outputs/ecert_slice_v1"
 GILISTS="$OUT/gilists.json"
 cd "$REPO"
@@ -76,7 +76,7 @@ PYEOF
     "$PY" -m methods.metric_implementer.experiments.run_alpha_probe \
       --task "$TASK" --r2-bucket general --level R2 --target-model "$MODEL" \
       --gi-list "$GIS" --n-metrics 0 --M-freegen 60 --n-probes 300 --gepa-reserve 60 \
-      --families "$FAMILIES" --skip-existing --out-dir "$OUT" \
+      --skip-existing --out-dir "$OUT" \
       || echo "$(date): $TASK sweep exited nonzero — continuing chain (resume = re-run script)"
   done
   echo "$(date): E-CERT SLICE CHAIN DONE"
