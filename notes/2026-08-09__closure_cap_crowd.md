@@ -333,3 +333,71 @@ stands; the *interpretation* is corrected here, and cap_finalist's cross-cutting
 should be read against this paragraph. P3's falsifier did **not** trigger — the criteria
 are not anti-predictive on both cells — so the hard-negative construction remains the
 right explanation for the *shift*; it is the word "backwards" that was too strong.
+
+---
+
+## 8. APPENDIX — campaign STOPPED mid-round-4 (caption cells retired 2026-08-11)
+
+The user retired the caption cells from the programme while round 4 was in its readout
+stage. This appendix is the honest state of the campaign at that point. **No further
+rounds were run, and this cell has NO terminal ledger** — do not quote one.
+
+### 8.1 What is complete and trustworthy
+
+| stage | state |
+|---|---|
+| view check (§1) | **DONE** — mismatch confirmed, plus r1 probes **failed 2/4** |
+| round 3 view repair (TIER R) | **DONE** — 552,150 prompts, GPU 5, rc=0; curve re-derived (§6.1) |
+| observed-covariate line (§6.2) | **DONE** — contest ordinal exactly .5000; crowd columns excluded as label-defining |
+| cross-cell transplant (§7) | **DONE** — P1 passes 12/12, P2 fails (ρ = +.411), P3 not triggered |
+| round 4 fleet + species + merge + audit | **DONE** — 10/16 slots (P=5 / 2 families), strict merge anchors 2/2 both judges, **probes 4/4, misrouting 0/21**, final A=11 / B=10 (4 mixed) |
+| round 4 Gemma scoring | **DONE** — GPU 5, rc=0, 0 collapsed, NA .0006, coherence 1.0000 |
+| **round 4 readout** | **launched detached; lands at `cap_crowd_r4_results.json`** — not read into this note |
+| round 5, GEPA, terminal ledger | **NOT RUN** |
+
+### 8.2 The Δ curve as it stands (repaired view, enforced collapse gate)
+
+| round | kind | fleet | VA_nl MONITOR | gain | counts toward clock |
+|---|---|---|---:|---:|:--:|
+| 0 | baseline | — | .6488 | — | — |
+| 1 | proposing (degraded, view-repaired) | P=4 / 2 fam | .6424 | −.0065 | no (§1) |
+| 2 | proposing (degraded, view-repaired) | P=4 / 2 fam | .6420 | −.0004 | no (§1) |
+| 3 | **VIEW REPAIR (TIER R)** | none | — | — | exempt |
+| 4 | proposing | P=5 / 2 fam | *pending readout* | *pending* | yes (§3 ruling) |
+
+Clock **0** entering round 4.
+
+### 8.3 BOTH T conventions, as required — the numbers to quote from this cell
+
+Δ_beyond after round 2, repaired view. **Matched-vanilla is the campaign PRIMARY; the
+archived arm is reported beside it and the two are never differenced.**
+
+| | MONITOR (1,072 / 32 contests / 536 pos) | HONEST (2,190 / 64 contests) |
+|---|---:|---:|
+| VA_nl (repaired, after r2) | .6420 | .6252 |
+| **T_matched_vanilla (PRIMARY)** | **.6212** | **.6047** |
+| **Δ_beyond (primary)** | **−.0208** | **−.0205** |
+| T_archived | .5469 | .5554 |
+| Δ_beyond (archived) | −.0951 | −.0698 |
+
+**Re-basing cuts the bank's lead by more than 3× and that is the single most important
+thing to carry from this cell.** The sign is robust (the bank leads on both arms); the
+magnitude is a statement about which dense model you compare to, not about the bank.
+
+### 8.4 Missing mass, round 4 (strict two-judge merged, the figure of record here)
+
+**A .387** [LOPO .367–.533], **B .300** [.300–.425]; τ over-merged A (11 → 43) and
+under-merged B (32 → 26) — the two-directional τ failure replicating on a **third** cell.
+Round 4 is the only cap_crowd round at this campaign's declared standard; the r1/r2
+τ-only numbers are superseded.
+
+### 8.5 The result worth keeping from this cell
+
+The **cross-cell transplant (§7)** is the deliverable that survives the cancellation, and
+it does not depend on the unfinished rounds: cap_finalist's criterion text, scored on
+cap_crowd with the label as the only difference, shows the curation/community contrast is
+a **LEVEL SHIFT (mean alone-AUC .514 → .553, all 12 sign-contradicting criteria crossing
+above .5, all significantly) and NOT a sign inversion (ρ = +.411, p = .041 — the two
+labels agree on which craft properties matter more)**. That corrects cap_finalist §10.7's
+"comic-craft vocabulary runs backwards" wording, and cap_finalist's cross-cutting line 7
+should be read against §7.2 here.

@@ -765,9 +765,8 @@ Closure protocol agrees throughout: combined **+.0554** [+.023, +.091], p = .000
 
 Artifact: `closure/code_v3/gate_readout_3seed.json`.
 
-**Rounds are NOT started.** GPU lanes are assigned elsewhere (full-sweep queue,
-`notes/2026-08-09__full_sweep_queue.md`); this campaign's rounds are slotted into lane C
-after the math.SE work clears GPU 7. Everything downstream is staged and unfired: the
+**[SUPERSEDED 2026-08-10: lane C cleared, rounds STARTED — see §11.]** GPU lanes were
+assigned elsewhere at the time of the gate; Everything downstream is staged and unfired: the
 decomposition-first pass on the 5 census-deduped parents, the sealed P=6/3-family fleet,
 the 4 corpus-matched PR probes, `score_round_code.py`, and the within-repo `readout_code.py`
 with dual-tier seed bands and repo-cluster CIs. The mining slice will be built against the
@@ -828,3 +827,286 @@ honest thing is to measure it rather than argue about it.
 | decomposition parents + staged prompt | `closure/code_v3/parents_code.json`, `code_v3_rd_parents_used.json`, `scratchpad/code_v3/code_v3_rd/prompt_decomposer.txt` |
 | incoming instrument (83-criterion scores, V matrix, VA_nl OOF, dense seed-42 preds) | `closure/code_v3/abank_rescore/`, `closure/code_v3/dense_seed42/` |
 | dense seed chain (sk3) | `datasets/code-review/dense_standard_v3/run_code_v3_seeds12.sh`, `runner_v3_seeds12.log`, `rm_out_seed{1,2}/`, `abank_rescore/score_one_seed_v3.py` |
+
+
+---
+
+## 11. DECOMPOSITION-FIRST PASS (FREEZE ADDENDUM 3) — authored, audited clean, scoring in flight
+
+Lane C cleared 2026-08-10 and the rounds were greenlit. The decomposition pass runs first,
+as the brief directs.
+
+### 11.1 RECORDED FLEET DEGRADATION — the Claude family is gone this session
+
+**The hard subagent cap was reached (500/500), so no Claude leg is available for any role
+in this campaign.** This is a larger degradation than any previous cell recorded, and it
+changes three instruments, all noted at the point of use:
+
+| role | freeze / worked-campaign instrument | what actually ran | class |
+|---|---|---|---|
+| decomposer | sealed Claude Opus subagent | **gpt-5.6-luna** via `codex exec`, effort high, read-only scratch wd outside the repo | frontier |
+| blind routing auditor | fresh Sonnet-class subagent per round | **gpt-5.6-luna** via `codex exec`, effort high, fresh sealed context | > Sonnet |
+| proposer fleet (rounds 1..5) | Claude ×2 + gpt-5.6-luna ×2 + GLM ×2 (P=6/3 families) | Claude unavailable → **codex ×4 + GLM ×4, P=8 / 2 families** | above the P floor, **below the family floor** |
+
+GLM was checked first per the directive and **both keys are live** (smoke-tested, 1.0 s and
+1.2 s, `model=glm-5.2`). So the fleet clears the freeze's P ≥ 4 floor with room (P = 8) but
+sits at **2 families, not 3** — recorded as a degradation, and it means the cross-family
+species statistics for this cell are not comparable to the 3-family cells.
+
+### 11.2 The pass
+
+Parents (§7): 5 census-deduped MIXED parents. The sealed decomposer returned a
+well-formed object on the first call — **10 components (5 candidate-real + 5 surface,
+exactly 2 per parent) and 5 Addendum-4 position channels**, parse-checked before use.
+
+| | candidate-real (→ A) | surface (→ B) |
+|---|---|---|
+| Contribution readiness | Evidence of Correct, Complete Contribution | Submission-Norm Marker Extent |
+| Simplicity (KISS/YAGNI) | Requirement-Bounded Design Simplicity | Complexity-Discussion Surface Extent |
+| Refactoring quality | Substantive Behavior-Preserving Refactoring | Refactor-Presentation Marker Extent |
+| Documentation formatting | Semantically Useful Documentation | Documentation-Format Marker Extent |
+| **PR communication quality** | **Actionable Change Rationale** | **Communication-Scaffolding Extent** |
+
+Position channels (all → B): Conventionlessness Cue, Shared-History Presupposition,
+Concurrent-Activity Cue, Version-Era Anchor, Automation-Generated Submission.
+
+### 11.3 Blind routing audit — clean
+
+| | round d |
+|---|---|
+| criteria audited (+ planted) | 15 (+4) |
+| **misrouting rate** | **0.0%** |
+| disputes → arbiter | **0** |
+| **corpus-matched probes** | **4/4 separated** |
+| final routing | **5 A / 10 B** (2 mixed) |
+| auditor confidence | high on 13/15, medium on 2 |
+
+Both authored probe pairs separated as designed: *"states why the change is needed"* and
+*"names the concrete failure it addresses"* → quality-relevant; *"extent to which a PR
+template is filled in"* and *"conventional-commit and issue-reference formatting"* →
+incidental. A 0% misrouting rate with 4/4 probes is the cleanest audit any cell in the
+program has opened with, and it is worth noting that the decomposer and the auditor were
+the *same base model in different sealed contexts* — so the audit was not adversarially
+independent by family, only by context. Recorded as a limitation of this session's fleet.
+
+### 11.4 Scoring — in flight, anchors already passed
+
+Gemma-4-31B offline batch on sk3 GPU 7 (lane C), ledger-claimed after a 4 MiB co-tenant
+check, launched with `setsid --fork` so the job runs at **ppid = 1** and survives session
+loss; verified resident on GPU 7 alone (EngineCore 64.7 GB, single card, co-tenant on
+GPU 1 belongs to another agent and was never touched).
+
+**Anchor battery K = 50 per tier — all three gates PASS, and by a wide margin:**
+
+| tier | mean over answered | NA rate | mean with NA→0 |
+|---|---:|---:|---:|
+| merged (pos) | .4825 | .009 | **.4780** |
+| closed-unmerged (neg) | .3689 | .013 | **.3640** |
+| word-scrambled | .0291 | .291 | **.0207** |
+
+`scram < neg < pos` on all three. Note the contrast with the incoming 83-criterion bank,
+whose anchors read .3066 / .2307 / .0013: these 15 decomposed criteria have a **pos−neg
+separation of .114 against the bank's .076**, and a far lower NA rate (.01 vs .58) — the
+decomposition produced criteria the judge can almost always answer, which is exactly what
+splitting a parent into a substantive component and a surface component should do.
+
+Throughput note: 19 prompt/s versus the base bank's 63. The cause is prefix-cache
+amortisation — the ~7K-token PR context is prefilled once per row and shared across the
+criteria scored for that row, so 15 criteria amortise it 5.5× worse than 83 did. ETA ≈ 2.6 h
+for 11,452 × 15 = 171,780 prompts. This sets the cost of every later round
+(25 criteria ≈ 1.6 h), which is worth knowing for lane scheduling.
+
+### 11.5 Accumulated rulings applied
+
+* **enforced collapse gate** — collapsed criteria (>98% modal or all-NA) are now *excluded*
+  from every block in `readout_code.py`, with ids and statistics recorded under
+  `enforced_collapse_gate`, never deleted;
+* **item-view assertion** — `run_batch` asserts the (row, criterion) ownership map of the
+  flattened prompt list, the corner entries, the reshape, and non-empty judge text, so a
+  transposed or short batch cannot reach a score matrix;
+* **parseability / completeness waits** — the scorer refuses to write if the generation
+  count differs from the prompt count (interrupted-generation gate); the decomposer and
+  auditor runners both parse-and-count-check before their output is accepted;
+* **`setsid --fork` + ppid = 1** — verified on both the scorer and the chained follow-on;
+* **swap algebra, dual-tier seed bands, repo-cluster CIs** — already in `readout_code.py`.
+
+
+## 12. Infrastructure log — outage, and two bugs the dry run caught before they cost a run
+
+### 12.1 sk3 unreachable (jump-host failure), detached jobs unaffected
+
+From ~18:15 on 2026-08-10 the laptop lost the path to sk3: `kex_exchange_identification:
+Connection closed by remote host`, 100% ICMP loss to `skampere3`. Diagnosed to the **jump
+host, not sk3** — the ssh config routes through `ProxyCommand ssh -4 -W %h:%p whale`, and a
+direct probe of `whale` returns `Connection reset by 171.64.75.72 port 22`. So sk3 itself
+was never shown to be down.
+
+Consequences, and why they are small: both GPU jobs were launched with `setsid --fork` and
+run at **ppid = 1**, so neither depends on my session or my ssh path — the decomposition
+scorer (3 of 8 shards done at the last contact) and the chained code_competitions dense T
+continue regardless. A patient reconnect waiter (120 s backoff, one probe at a time, per
+the NAT64 gentle-retry rule; IPv6 not touched) is armed and will re-report scorer state on
+recovery. The one thing that *is* blocked is fetching new slice-card text, and that path
+fails loudly: `cells.fetch_texts` asserts rather than returning short text, which was
+confirmed during the outage.
+
+### 12.2 A `sys.path` shadowing bug — silent, and caught only by running the code
+
+`readout_code.py` and `stage1_slice_code.py` both did
+
+```python
+sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(HERE.parent / "maps_hw_si"))
+```
+
+The second insert puts **maps_hw_si at position 0**, so a bare `import cells` resolved to
+`maps_hw_si/cells.py` — the HashtagWars/Style-Invitational adapter — instead of this cell's
+shim. It surfaced as `TypeError: load() missing 1 required positional argument: 'cell'`,
+but the dangerous form of this bug is the silent one: had the two `load()` signatures been
+compatible, the readout would have run to completion on **another cell's population**.
+Fixed by inserting `maps_hw_si` first and `HERE` last, with the reason in a comment.
+
+**Blast-radius check, run immediately:** a scan of the whole `closure/` tree found the
+pattern in five further files, **all of them mine** (`round0_code.py`, `census_code.py`,
+`gate_readout.py`, `build_splits_code.py`, `select_parents_code.py`) and **none of them
+affected** — they import `cells_code` by its unambiguous module name, and `closure_core`
+exists only in `maps_hw_si` so it resolves correctly either way. No other cell in the
+program uses the pattern. **No already-computed result on this cell is affected**: the
+census, the splits, the gate table, the §11 fused check and the closure r = 0 anchor all
+go through `cells_code`.
+
+### 12.3 A round-label crash, and the dry run itself
+
+`stage1_slice_code.current_blocks` did `int(rnd)` on anything that was not `"d"`, so a
+non-integer round label crashed it. Now tolerant: prior rounds are `["d"] + 1..r-1` for an
+integer round, and `[]` for anything else.
+
+### 12.4 Dry-run outcome — readout path PROVEN
+
+A **third** bug surfaced on the rerun: `discount()` passed the MONITOR-length
+`rbx["nl_mon"]` into a full-population within-repo reader — the identical shape error that
+had already bitten `round0_code.py`. Fixed with `_expand`, and because this class has now
+recurred, `cells_code.within_repo_auc` gained a **named shape guard** that fails with an
+explanatory message instead of an opaque `IndexError` (or, worse, passing silently on a
+cell where the two lengths happen to coincide).
+
+With that, the readout ran clean and every stage produced correct structure:
+
+| stage | dry-run outcome |
+|---|---|
+| routing + **enforced collapse gate** | n_A 5, n_B **10 → 9** — the planted constant column B03 was excluded from every block and recorded |
+| Track-A curve | all four tiers (MONITOR / honest-full / eval / test) with gains |
+| MONITOR seed band | .0274, matching the round-0 value |
+| spurious map | 18 channels (9 ids × score + applied), 0 dropped by the degeneracy screen |
+| discount | both `ALL_B` and `STRICT_no_mixed`; matched-sampling trigger correctly **not** fired at spurious-alone .5055 < .65 |
+| stacked increment | joint-B, dense, and the dense-over-B increment, all tiers |
+| swap algebra | ΔC₊ / ΔC₋ and the signature flag, all tiers |
+
+The *levels* in that run are meaningless — a synthetic column was built to separate the
+label almost perfectly, which is why VA_new reads ~.90 and Δ_adj goes negative. That is the
+point of a dry run: it proves the plumbing without pretending to be a measurement. All
+`code_v3_rDRYRUN*` artifacts were deleted afterwards.
+
+Both bugs were found by **dry-running `readout_code.py` end-to-end on synthetic scores**
+during the outage — 300 lines of readout code that had never been executed, and that the
+real 2.6-hour scoring job feeds directly into. The synthetic set deliberately includes one
+constant column so the **enforced collapse gate** is exercised rather than assumed. All
+dry-run artifacts carry the tag `code_v3_rDRYRUN` and are deleted afterwards, so nothing
+that could be mistaken for a measurement is left on disk.
+
+
+## 13. ROUND d RESULT — the decomposition pass closes ~13% of the residual, and the swap fires
+
+Scoring completed during the outage (8/8 shards, 171,780 prompts, pooled NA **.0086**,
+**0/15 collapsed**, modal fraction max .825). Readout run on the repaired code, with the
+dense score now the **final 3-seed ensemble** — so the r = 0 anchor is restated here on that
+ensemble (HONEST +.0554) rather than the seed-42-only +.0522 of §8.
+
+### 13.1 The first curve point
+
+| tier | T | VA_nl r0 | VA_nl **r_d** | **gain** | Δ r0 | **Δ r_d** |
+|---|---:|---:|---:|---:|---:|---:|
+| **MONITOR** (29 repos) | .6763 | .6152 | .6334 | **+.0182** | +.0611 | **+.0429** |
+| **honest-full** (144 repos) | .6861 | .6307 | .6377 | **+.0070** | +.0554 | **+.0484** |
+| eval (71) | .7196 | .6506 | .6586 | +.0080 | +.0690 | +.0610 |
+| test (73) | .6494 | .6088 | .6148 | +.0060 | +.0406 | +.0346 |
+
+Routing 5 A / 10 B, misrouting 0.0%, probes 4/4, **0 criteria lost to the enforced collapse
+gate**.
+
+**Saturation flags: NOT sub-ε on either tier** (+.0182 MONITOR, +.0070 honest, both above
+ε = .005). Trailing run 0 of the required 2 → **mining continues to round 1.**
+
+**But the ε comparison must be read against the seed band, and this is the §8.2 warning
+biting on the very first round.** The MONITOR VA_nl seed spread is **.0274**, i.e. the
+MONITOR gain of +.0182 is *smaller than the noise on the statistic it is being compared
+against*. The honest-full tier is the better-powered one and it agrees in sign at +.0070.
+So the defensible statement is: **the decomposition round bought a small but real gain —
++.0070 on 144 repositories, a 12.6% reduction of the residual (+.0554 → +.0484) — and the
+30% reduction visible on MONITOR (+.0611 → +.0429) is not separable from seed noise and
+must not be quoted.**
+
+### 13.2 The swap signature fires — on round one
+
+| | ΔC₊ | ΔC₋ | Δρ | signature? |
+|---|---:|---:|---:|---|
+| r0 → r_d (honest) | **+.0188** | **−.0061** | +.019 | **YES** |
+
+C₊ up and C₋ down is exactly the pattern the algebra was written to detect: the bank gained
+rank agreement with the dense model partly by **inheriting its errors**. It matters more
+here than it did on N&C because this cell's round-0 C₋ was already **.5099 — chance** (§8.3),
+so pushing it down puts the bank *below* chance on the pairs dense gets wrong. Part of the
++.0070 honest gain is therefore dense-imitation rather than independent articulation, and
+the honest reading of round d is a **real but partly-imitative** gain. Round 1 should be
+watched for the same signature; two consecutive swap rounds would mean the miner has
+started teaching the student the teacher's mistakes.
+
+### 13.3 Spurious map — ten named channels, all weak
+
+Within-repo alone-AUC on the honest population:
+
+| channel | alone AUC | MIXED | conjectured upstream parent |
+|---|---:|---|---|
+| **Version-Era Anchor Extent** | **.4629** | | temporal position / project lifecycle stage |
+| Refactor-Presentation Marker | .5278 | | surface carrier of "refactoring quality" |
+| Complexity-Discussion Surface | .5251 | **yes** | surface carrier of "simplicity" |
+| Shared-History Presupposition | .5233 | **yes** | late arrival / accumulated repo history |
+| Communication-Scaffolding | .5097 | | surface carrier of "PR communication quality" |
+| Concurrent-Activity Cue | .5046 | | repository busyness around the PR |
+| Documentation-Format Marker | .5038 | | surface carrier of "documentation formatting" |
+| Submission-Norm Marker | .4932 | | surface carrier of "contribution readiness" |
+| Conventionlessness Cue | .4939 | | early vs late arrival / codebase maturity |
+| Automation-Generated Submission | .4928 | | repository automation maturity |
+
+**Every channel is weak** — the largest deviation from chance is .037, and the joint
+spurious model reaches only **.5364**, far below the .65 matched-sampling trigger (not
+fired). For calibration, N&C's joint nuisance model hit **.672** after one round and .712
+after three. **The code cell's named nuisance space is much thinner than N&C's**, which is
+consistent with everything else this cell has shown: the position channel is null on
+average (§4), no geometry feature predicts alone (§6), and the bank is not a length model.
+
+The strongest channel being **anti-predictive version-era vocabulary** (.463) is the only
+substantive spurious finding so far: PRs whose language pins them to an older toolchain era
+fare slightly worse, within repository.
+
+### 13.4 The discount is null again — third independent confirmation
+
+| readout (honest) | ALL 10 channels | STRICT (2 mixed excluded) |
+|---|---:|---:|
+| spurious-alone (HistGB, within-repo) | .5364 | .5319 |
+| **Δ_adj** | **+.0731** | **+.0674** |
+| Δ undiscounted | +.0484 | +.0484 |
+
+**Δ widens under discount, at both ends of the MIXED band** — the same behaviour N&C and CW
+showed, and the same warning applies: **Δ_adj is not an effect size**, because stratifying
+on a nuisance score costs VA more than it costs T. The defensible claim is the negative one:
+*ten named nuisance channels, five of them derived by reasoning from unseen upstream causes
+and five of them position fingerprints, do not explain the code residual.*
+
+The stratification-free stacked increment says it without any stratification: after a
+logistic stack absorbs **all ten** named channels, the dense score still adds **+.1442**
+within-repo, against the bank's +.0904.
+
+Together with §4 (position discount leaves Δ at +.0509) and §6 (every geometry
+stratification leaves Δ at +.036 to +.054), this is now the **third independent family of
+nuisance controls that fails to explain the residual**.

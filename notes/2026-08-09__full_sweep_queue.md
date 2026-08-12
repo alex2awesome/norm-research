@@ -32,7 +32,7 @@ notes/2026-08-08__vat-3xN-decomposition-grid.md + registry.
 | code_v3 | DONE | r0 DONE; 3-seed gate readout MISSING (seeds trained) → lane C; rounds if gate holds | after closure |
 | press_verdict | DONE | DONE (r2 terminal-at-resolution) | QUEUE F2 |
 | — new cells — | at build | at build (queue when ledger lands) | at build |
-| V6 SO votes | building | queue on landing | — |
+| V6 SO votes | **DONE 2026-08-10 (articulable, Δ −.03)** | **QUEUED — required before F2** (no Track-B map yet; F2 correctly blocked on it) | after discovery |
 | V7 patents fwd-cites | building (T+A overnight) | queue on landing | — |
 | V8 co-signing | DONE | BLOCKED (gate underpowered — Track-B route only) | T₀ pending |
 | V9 tweets | building | queue on landing | — |
@@ -80,3 +80,15 @@ User: "focus specially on getting all the journalism and press release ones fini
 - V9 tweets: build agent RESUMED (was mid-Layer-1 at session kill); its dense arm gets
   the next free GPU 0-3 window; then discovery-queued with same priority.
 - Journalism cells enter discovery AHEAD of nc_agree/nc_outcome in lane ordering.
+
+## F2 RESUMPTION STATE (2026-08-11, battery closed)
+F2 complete 11/11 terminal cells; parked resumable (hooks in
+notes/2026-08-11__f2_deconfounded_fusion.md, commit 3484e3eb0). Pickups in order:
+(1) peer_verdict Z after its sealed Track-B round (MASS_DIR gotcha: closure ROOT);
+(2) strict-mass Z refresh per certA/certB backfill cell (X/Y/RR mass-independent —
+flips are bookkeeping, not new evidence); (3) NEW TERMINAL CELLS (SO, AoPS,
+cap_crowd, homepage) — PREREQUISITE: build each cell's T₀ column FIRST
+(t0_build_rows → t0_score_vllm) before the five-command F2 sequence; queue SO's T₀
+ahead of its terminal date. Four binding operating rules recorded in the note
+(one-cell-per-process; no id-dict joins to E; missing STRUCT raises; run on the
+ledger-reproducing box).

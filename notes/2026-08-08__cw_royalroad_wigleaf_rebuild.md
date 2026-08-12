@@ -216,7 +216,8 @@ chance.
 | **ledgers** | `methods/taste_decomposition/results/cw_royalroad_verdict_ledger.json`, `.../cw_wigleaf_curation_ledger.json` |
 | OOF arrays (with ids) | `methods/taste_decomposition/results/<cell>_oof.npz` |
 | run chain | `methods/dense/run_cw_expert_chain.sh`; GPU claim/poll wrapper `scripts/tools/cw_expert_gpu_claim_and_launch.sh` |
-| logs | `logs/cw_expert/{launcher.log,chain.log,stage1_gemma_score.log}` |
+| logs | `logs/cw_expert/{launcher.log,chain.log,stage1_gemma_score.log,layer1.log}` |
+| superseded char-trunc scoring (kept) | `outputs/va_gemma_banks_cw_expert_CHARTRUNC_20260808/` + `logs/cw_expert/stage1_gemma_score.CHARTRUNC.log` |
 
 Scale: 1,274×45 = 57,330 + 1,568×45 = 70,560 = **127,890 judge prompts**, plus
 2 × 150 × 45 = 13,500 battery prompts.
@@ -248,57 +249,132 @@ engine-init time are different numbers. Size the engine to the latter.
 
 ---
 
-## 5. Status — built and validated, GPU-blocked
+## 5. Results
 
-Everything that does not need a GPU is **done and verified**. The GPU stages are staged
-and self-driving. What has been proven so far:
+Ran 2026-08-10 on GPU0 (claimed ledger-free, 102.3 GiB free, auto-util 0.540 = 96.3 GiB;
+released rc=0). 127,890 judge prompts + 13,500 battery prompts. Layer-1 CPU.
 
-| check | result |
-|---|---|
-| RoyalRoad population | 1,274 rows, 637 pos, 1,274 groups — matches the audited build exactly |
-| Wigleaf population | 1,568 rows, 404 pos, 1,568 groups — matches the audited build exactly |
-| RoyalRoad split rule | **1.0000** agreement with `md5("split::"+fiction_id)%1000` (asserted at build) |
-| Wigleaf split rule | existing `md5(title\|author\|year)%10` files reused verbatim |
-| bank builders | both load: 45 criteria, ctx assembled, V dim 15, all 15 V columns finite with std > 0; longest prompt 7,493 chars ≈ 2.1K tokens (fits `max_model_len` 4096) |
-| anchors | pos / neg / scrambled triples construct correctly on both cells |
-| dense split loading | RoyalRoad OK at atol .03 (**still fails at the default .02**, guard intact), Wigleaf OK at the untouched default |
-| **layer-1 driver, end-to-end** | dry-run on synthetic matrices for BOTH cells: linear + GBM seeds {0,1,2} + seed spread + group bootstrap + secondary grouping all run; **assembled-order gate PASS at max\|diff\| = 0.00e+00**; `<cell>_oof.npz` written with `ids`/`groups`/`y`/`secondary_groups` + 8 OOF vectors |
+### 5.1 Ledgers
 
-**Blocker: GPU contention.** The charge specified strict discipline — claim only a card
-verified at **0 MiB / 0% util**. Over ~100 minutes of 10-second polling, *no card on
-sk3 ever reached 0 MiB.* Snapshot at 20:25Z (free MiB of 183,359):
+| | **RoyalRoad** VERDICT | **Wigleaf** CURATION |
+|---|---|---|
+| n / positives | 1,274 / 637 (.500) | 1,568 / **404** (.258) |
+| V_lin | .5545 | .5927 |
+| V_nl (mean seeds 0-2) | .5379 | .5728 |
+| **A_lin** | **.5628** [.530, .595] | **.5407** [.509, .573] |
+| VA_lin | .5662 [.534, .597] | .5923 [.560, .625] |
+| **VA_nl** (mean seeds 0-2) | **.5558** | **.6051** |
+| VA_nl seeds | .5599 / .5534 / .5540 (spread **.0065**) | .6005 / .6060 / .6087 (spread **.0083**) |
+| **T** (dense eval, seed-mean) | **.4994** | **.6054** |
+| T per seed (eval) | .4822 / .485 / .531 | .6042 / .5556 / .6563 |
+| T per seed (test) | .5224 / .5387 / .5728 | .575 / .5943 / .6162 |
+| Δ_interact | −.0104 (seed0 −.0062, CI [−.043,+.029], P(>0)=.36) | +.0128 (seed0 +.0082, CI [−.024,+.039], P(>0)=.68) |
+| Δ_total | −.0668 | +.0131 |
+| **Δ_beyond** | **−.0564** (see 5.3 — not a usable headroom) | **+.0003** |
+| old instrument | .505 | .578 |
 
-```
-GPU0 44,755   GPU1 82,451   GPU2 16,221   GPU3 13,787
-GPU4 68,043   GPU5 66,961   GPU6 131,335  GPU7 100,127
-```
+Gates: **assembled-order gate PASS on both, max\|diff\| = 0.00e+00.** Collapse gate
+(R1) dropped 1 A-criterion in 3 of 5 RoyalRoad folds, 0 on Wigleaf. Shard 2 was
+anchor-INVALID on both cells; leave-it-out sensitivity moves nothing materially
+(RoyalRoad n=968: V .571 / A .568 / VA .578; Wigleaf n=1,198: V .584 / A .560 / VA .604).
+Seed spreads (.0065, .0083) are smaller than every Δ discussed — the spread the 2026-07
+campaign never ran.
 
-The residual holders are other people's live work, never touched: GPU4 = **nntruong**'s
-`VLLM::EngineCore`, parked **12 d 13 h**; GPU6 = another Claude agent's 8 h job (52 GiB);
-GPU5/GPU7 = **ngnawe**'s `stage4_interventions.py` plus other agents' jobs. One claim was
-won on GPU3 at 19:20:52Z and lost to the init race described in §4a; it was released
-cleanly (rc=1, no orphan).
+### 5.2 Instrument QC — the two cells diverge sharply
 
-**The run is armed and will complete on its own** if a card frees: launcher
-`scripts/tools/cw_expert_gpu_claim_and_launch.sh` (PID logged in `logs/cw_expert/
-launcher.log`), 12 attempts over a ~24 h budget, `--auto-util` sizing, stage 1
-shard-checkpointed and stage 2 `RUN_DONE`-resumable, so every retry resumes.
+| | RoyalRoad | Wigleaf |
+|---|---|---|
+| distribution check | **PASS** mean .7232, NA .0118, hist 0.0:4,678 / 0.5:22,009 / 1.0:29,964 | **PASS** mean **.8991**, NA .0261, hist 0.0:2,021 / 0.5:9,820 / **1.0:56,874** |
+| K=50 battery | pos **.7750** > neg **.6919** > scram **.0000** | pos **.8798** < neg **.9016** > scram .0698 |
+| pos-vs-neg AUC | **.658** | **.498 — at chance** |
+| coherent-vs-scrambled AUC | 1.000 | .993 |
+| ordering holds | **YES → certified** | **NO → NOT certified for the pos/neg contrast** |
 
-**One-line unblock, coordinator's call.** The strict rule may stay unsatisfiable while
-the full-grid campaigns run. The launcher supports an **off-by-default** opt-in that
-matches the CLAIM-STACKED pattern the rest of this box already uses:
+**RoyalRoad's A bank is certified. Wigleaf's is not.** The Gemma judge plainly executes
+the criteria on Wigleaf — it separates real prose from word salad at .993 — but it cannot
+separate Top-50 from longlist: the battery ordering inverts, and **83% of all Wigleaf
+responses are 1.0** (mean .899). That is range restriction, and it is substantively
+sensible: both Wigleaf classes are *already-published literary flash fiction*, so a
+generic craft bank saturates and the editor's cut is a distinction it cannot see. Any
+Wigleaf A-number must be read behind that flag. This replicated identically under both
+character- and token-truncation, so it is a property of the cell, not of the cut.
 
-```bash
-ALLOW_STACK=1 setsid nohup bash scripts/tools/cw_expert_gpu_claim_and_launch.sh \
-  > logs/cw_expert/launcher.log 2>&1 &
-```
+### 5.3 RoyalRoad's T is at chance — and that is a power statement, not a ceiling
 
-It accepts a **ledger-free** card with ≥ `STACK_MIN_FREE_MIB` (default 92,160 = 90 GiB,
-enough for Gemma-4-31B bf16 + KV) and never touches a co-tenant. GPU6 (131 GiB free) has
-satisfied that bar continuously for the last half hour. I did **not** enable it
-unilaterally — it relaxes the GPU discipline the charge set.
+All three dense seeds land at eval .4822 / .485 / .531 (mean **.4994**) while the bank
+sits at VA_lin .5662, so Δ_beyond is **negative**. A negative Δ_beyond is not "negative
+taste headroom" — it means **the dense arm is not a valid ceiling for this cell** and
+Δ_beyond should not be quoted as a headroom estimate. Pre-kill checklist item (b), run on
+this exact split rather than quoted from an older pooled run:
 
-### Harvest, once the chain reports `CW_EXPERT_CHAIN_DONE`
+| same-split baseline | RoyalRoad eval / test | Wigleaf eval / test |
+|---|---|---|
+| TF-IDF + logistic | **.4348 / .6149** | .5631 / .5194 |
+| log-length only | .5828 / .4547 | **.6801** / .5740 |
+| dense (seed-mean) | .4994 / .5446 | .6054 / .5952 |
+
+On RoyalRoad the simple baseline does **not** reliably beat chance either — TF-IDF is
+*below* chance on eval (.435) and above on test (.615), and length-only flips the other
+way (.583 / .455). So dense-at-chance is **not** the checklist's "baseline > big model =
+training-run failure" signature; it is consistent with a genuinely weak text signal read
+through 141-row eval and 142-row test splits. The honest statement: **at n=1,274 with
+~141-row evaluation splits, RoyalRoad cannot support a trustworthy T**, and the earlier
+".588 LEXICAL" figure (a differently-pooled evaluation) should not be carried as this
+split's floor.
+
+Wigleaf's dense arm behaves properly by contrast (.605 > TF-IDF .563 on eval). But
+**log-length alone reaches .680 on the Wigleaf eval split** — above the entire V+A stack
+— then falls to .574 on test. Length is doing much of the observable work and the
+splits are too small (43 and 48 positives) to pin it down. Length lives inside V by
+design (`v_log_chars`, `v_log_words`), so this is not a leak, but it does mean Wigleaf's
+V_lin .5927 should be read as "largely a length/size effect," not as craft.
+
+### 5.4 Against the old-instrument numbers
+
+The swap moves the two cells in **opposite** directions:
+
+| cell | old bank (2026-07-06) | new mature A_lin | change |
+|---|---|---|---|
+| RoyalRoad | .505 (called a "genuine null") | **.5628** | **+.058** |
+| Wigleaf | .578 (best craft-rankability in the CW leg) | **.5407** | **−.037** |
+
+Both are *instrument swaps* — different bank construction (GEPA-phrased vs k-medoid),
+different judge (Gemma-4-31B vs likely Llama-3.3-70B), different truncation unit — on a
+fixed population. They are **not** same-instrument deltas and must never be differenced
+as such. With group-bootstrap CIs of roughly ±.032, neither move is individually
+decisive; what is notable is the *direction*.
+
+Read together with 5.2, the reversal has a coherent reading. The re-audit's headline
+worry was that RoyalRoad's null might be instrument-limited. It partly was: a mature bank
+does lift it off chance (.505 → .563). But the cell's dense ceiling is at chance, so
+nothing about RoyalRoad is well-measured at this n. Meanwhile Wigleaf — the cell that
+looked *best* under the old instrument — is where the mature instrument does **worse**
+and where the anchor battery outright fails to certify the pos/neg contrast. The
+"documented NULL BANK" label was wrong for Wigleaf, as the re-audit argued, but the
+correction is not "it ranks craft well"; it is **"its bank saturates and the instrument
+cannot certify it."**
+
+One thing the rebuild does settle cleanly: on Wigleaf, **VA_nl .6051 ≈ T .6054**, so
+Δ_beyond = **+.0003**. The V+A stack reaches the dense ceiling — there is no measurable
+taste residual beyond the articulated stack on this cell. Note this is achieved with
+A contributing essentially nothing over V (VA_lin .5923 ≈ V_lin .5927; A_lin .5407 is the
+weakest leg), i.e. the ceiling is reached by surface features, not by craft criteria.
+
+### 5.5 Standing caveats
+
+* **Wigleaf power caveat** (carried in the ledger JSON): 404 absolute positives; eval and
+  test rest on **43** and **48** positives. Same order as the mathlib false-null case.
+* **RoyalRoad T caveat**: 141-row eval / 142-row test; all three seeds at chance;
+  Δ_beyond unusable as headroom.
+* Δ_interact is within the seed spread on both cells (P(>0) = .36 and .68) — **no
+  interaction effect on either.**
+* Train-vs-OOF overfit gaps are large on both (VA ≈ .33–.41), expected for GBM on
+  ~1.3–1.6k rows with 60 columns; the OOF ledger adjudicates, not the train fit.
+* Both cells are FIRST-FIT: no external reproduction gate exists, so the assembled-order
+  gate stands in its place (both PASS at exactly 0.0).
+
+### Reproduce
+
 
 ```bash
 # 1. instrument QC — read BEFORE any AUC
@@ -310,15 +386,263 @@ cat datasets/creative-writing/*/dense_standard/eval_pass_results.json  # T per s
 python methods/taste_decomposition/cw_expert_layer1.py --cell all
 ```
 
-Read order matters: if `distribution_check.PASS` is false or the battery ordering fails,
-the A numbers are instrument artifacts and nothing downstream should be quoted.
+Read order matters, and it bit here: both cells PASS the distribution check, but
+**Wigleaf fails the battery ordering**, so its A-numbers carry the §5.2 flag everywhere
+they appear. RoyalRoad passes both and its A-numbers are certified.
 
-### The comparison this is set up to make
+---
 
-Once T lands, both cells get their first Δ_beyond. The prior-instrument numbers to place
-the new A_lin against — as an instrument swap on a fixed population, **not** a
-same-instrument delta — are **RoyalRoad .505** (genuinely at chance) and **Wigleaf .578**
-(highest craft-rankability in the CW leg; its "0 kept" was saturation, not a null). The
-sharp question the rebuild answers: does a GEPA-phrased, Gemma-4-31B-judged,
-anchor-certified bank move RoyalRoad off chance — and does dense text beat *either* bank,
-which is the one thing no CW expert cell has ever been asked.
+## 6. Follow-up package (2026-08-11) — power fix, pairwise instrument, expansion
+
+### 6.1 RoyalRoad 5-fold cross-fit — the power fix CONFIRMS the chance verdict
+
+The single-split T (.4994) rested on a 141-row eval that was *also* the
+checkpoint-selection split. Replaced with the SO-template cross-fit: bucket =
+`md5("split::"+fiction_id)%1000//100`; fold k trains on 8 tenths, selects on tenth
+2k+1, predicts tenth 2k. Honest set = union of the 5 test tenths, **n=651 / 308 pos,
+selection-free, 4.6x the old eval**. Bucket rule reproduces the canonical split at
+**1.0000**. Seed 42.
+
+| fold | n | pos | AUC |
+|---|---|---|---|
+| 0 | 132 | 60 | .5061 |
+| 1 | 126 | 66 | .4683 |
+| 2 | 134 | 65 | .5570 |
+| 3 | 118 | 57 | .4781 |
+| 4 | 141 | 60 | .4836 |
+
+**T_fold_mean .4986 · T_pooled .4981 [CI .4532, .5399] · T_rank_pooled .4994** —
+estimator spread **.0013**, so cross-fold calibration is not an issue. The prior
+single-split .4994 is reproduced almost exactly.
+
+**Verdict: T-at-chance was NOT a power artifact.** With 4.6x the rows and a
+selection-free honest set, RoyalRoad's dense ceiling is still chance. The fix was
+worth running precisely because it converts "we cannot tell" into "we can, and it
+is chance".
+
+Same rows (n=651), bank OOF restricted to the honest ids, never re-fit:
+
+| | value |
+|---|---|
+| V_lin | .5764 |
+| A_lin | **.5875** |
+| VA_lin | .5946 |
+| VA_nl (mean 3 seeds) | .5718 |
+| **T (fold mean)** | **.4986** |
+| Δ_beyond (T − VA_nl) | **−.0732** |
+| Δ vs A_lin | −.0889 |
+
+**The bank beats the dense arm by ~.09 on identical rows.** This trips the standing
+"dense/fused upper bound fails to beat the bank" rule and should not be read as
+"no residual": T is a *lower* bound on the ideal model. Two mechanisms are live and
+must be named before anyone quotes this: (i) **view asymmetry** — the dense arm reads
+the first 1,024 tokens while the A judge reads head 960 + tail 640, i.e. it *sees the
+ending*, and RoyalRoad chapters run to a median 2,918 tokens, so dense sees ~35% of
+the chapter and never the close; (ii) an 8B LoRA on ~1k rows is a weak ceiling. The
+clean test of (i) is a head+tail-view dense arm on the same folds — not run.
+
+### 6.2 Wigleaf pairwise probe — the instrument fix WORKS
+
+200 matched pairs (130 same-magazine / 70 same-year), 40 flipped replicates, 30
+scrambled anchors, 45 bank criteria + a holistic question, judged comparatively by
+**gpt-5.6-sol** via `codex exec`. Coverage **270/270**.
+
+**Validity gates (read first):**
+
+| gate | result |
+|---|---|
+| anchors (real vs scrambled) | **pick-real .9963**, holistic 1.000 |
+| order consistency (flipped replicates) | criteria **.8406**, holistic **.90** |
+| position | A .4297 / B .5426 / **TIE .0278** |
+
+The tie rate is the tell: **2.8%**, against 83% of absolute responses pinned at 1.0.
+The comparative frame restores the headroom the 3-point absolute scale had lost.
+
+**Separation:**
+
+| readout | AUC | CI95 |
+|---|---|---|
+| composite (majority of 45) | **.610** | [.5425, .6775] |
+| holistic (overall stronger) | **.610** | [.54, .68] |
+| mean per-criterion | .5678 | — |
+| same-magazine stratum | **.6231** | — |
+| same-year stratum | .5857 | — |
+| *absolute bank, for context* | A_lin .5407; battery pos-vs-neg **.498** | — |
+
+32/45 criteria exceed .55; **23/45 have a CI excluding .50**. Crucially the
+**same-magazine** stratum is the *strongest* (.6231), so venue is not driving it.
+
+**Answer to the probe question: yes.** Comparative judging separates the editor's
+cut where absolute scoring could not — the battery went from **.498 (chance)** to a
+composite of **.610** with anchors at .996 and order-consistency at .84.
+
+What the editor's cut rewards, per-criterion — endings and voice, not tidiness:
+
+| top | AUC | | bottom | AUC |
+|---|---|---|---|---|
+| Ending resonance | .6325 | | Dynamic relationships | .5250 |
+| Distinctive narrative voice | .6175 | | Exposition is integrated | .5175 |
+| Ending is earned | .6150 | | **Prose economy** | **.4600** |
+| Tonal control | .6125 | | **Causal narrative progression** | **.4575** |
+
+The two below-chance criteria are substantive, not noise: longlist pieces are
+*more* economical and *more* causally tidy. The Top-50 cut rewards a resonant close
+and a distinctive voice and mildly penalises conventional neatness.
+
+**Estimand caveat:** pairwise AUC is measured on matched pairs under forced choice;
+A_lin .5407 is an unpaired grouped-OOF AUC over all 1,568 rows. These are different
+estimands — the comparison licenses "comparative judging separates the cut", never a
+like-for-like ".610 − .5407" delta.
+
+### 6.3 RoyalRoad expansion — GO, n=1,742 at lexical .5759
+
+Sweep over k-means topic granularity (bge-large, 2,367-fiction usable pool), taking
+the largest topic×era-matched subsample under a .58 lexical margin:
+
+| k | n | lexical | register | era abs r | new rows | |
+|---|---|---|---|---|---|---|
+| 6 | 1,952 | .6028 | .5575 | .000 | 827 | over |
+| 16 | 1,872 | .5976 | .5623 | .000 | 791 | over |
+| 20 | 1,828 | .5814 | .5497 | .000 | 761 | over |
+| **24** | **1,742** | **.5759** | .5382 | .000 | **719** | **CLEAN** |
+| 32 | 1,746 | .5883 | .5427 | .000 | 719 | over |
+| 40 | 1,688 | .5715 | .5263 | .000 | 591 | CLEAN |
+
+**Chosen k=24: n=1,742 (+468 over the cell of record), lexical .5759, era-y corr
+.000** — clears the .58 margin and the 1,450 floor, so the build proceeds. 719 new
+rows, 1,023 carried; note the expanded set is *not* a superset — 251 of the old rows
+fall out when the matching is recomputed at k=24.
+
+Split (per-fiction stable hash, so growth moves no existing row): train 1,374 (702
+pos) / eval 181 (82) / test 187 (87). Bank rescoring runs on the **719 new rows
+only**; carried rows keep their token-truncated scores and are never re-judged.
+
+---
+
+## 7. Second follow-up (2026-08-11/12)
+
+### 7.1 rr_v2_k24 — SENSITIVITY DESIGN, not the cell of record
+
+The hole was fillable; the fill loses certification. rr_v1 (n=1,274) stays canonical.
+
+| | rr_v1 (canonical) | rr_v2_k24 (sensitivity) |
+|---|---|---|
+| n | 1,274 | 1,742 |
+| lexical floor | **.524** | .5759 |
+| K=50 battery pos-vs-neg | **.658 PASS** | **.445 FAIL** (pos .7157 < neg .7577) |
+| A_lin | .5628 | .5627 |
+| VA_lin | .5946 (honest rows) | .5628 |
+| VA_nl | .5718 (honest rows) | .5505 |
+| T | .4986 (cross-fit, n=651) | .5112 (n=1,742) |
+| Δ_beyond | −.0732 | −.0393 |
+
+Two things worth keeping. **(a) The two-batch seam is clean**: carried-row mean A
+.7262 vs new-row .7270, and batch membership predicts y at .5098 (chance), so
+merging the rr_v1 and expansion judging batches introduced no artifact. **(b) n was
+never the binding constraint on RoyalRoad's T** — going 1,274 → 1,742 moved T from
+.4994/.4986 to .5112, still chance. That makes the head+tail view hypothesis the
+live one, not sample size.
+
+### 7.2 Wigleaf pairwise at n=600 — the size channel is the whole story
+
+Wave 2 added 400 pairs (253 same-magazine, no combination reuse, 11% anchors);
+coverage 484/484. Merged n=600.
+
+Gates hold at scale: anchors **.9982**, order consistency **.8331**, position
+A .4682 / B .5062, tie rate 2.6%.
+
+But the separation regresses hard from the 200-pair pilot:
+
+| readout | n=200 | **n=600** |
+|---|---|---|
+| composite | .610 | **.5517** [.5117, .5917] |
+| holistic | .610 | **.5417** |
+| same-magazine | .6231 | **.5796** |
+| same-year | .5857 | .5023 |
+
+**P2 pairwise-native Layer-1 (600 pairs, antisymmetry enforced, group = pair):**
+
+| | full | size-matched (300) | size-divergent (300) |
+|---|---|---|---|
+| V_lin | .6655 | **.6140** | .6773 |
+| **A_lin** | .5933 | **.4986 — EXACTLY CHANCE** | .6300 |
+| VA_lin | .6566 | .5659 | .6518 |
+| VA_nl | .6621 (spread .0073) | .5999 | .6875 |
+| length-only | .6191 | .5361 | .6703 |
+
+**The ruling-3 test returns a clean verdict: the craft bank vanishes.** Hold
+|Δ log-size| below its median and the 45 GEPA-phrased criteria score **.4986** —
+chance to three decimals. Every bit of A's apparent pairwise signal (.5933 overall,
+.6300 among size-divergent pairs) rides on the size channel.
+
+What does survive size-matching is **V at .6140** — and *not* because V is size:
+length-only falls to .5361 in the same stratum. So the signal is non-size surface
+style (type-token ratio, sentence-length variability, dialogue fraction, readability),
+not articulated craft.
+
+**Wigleaf's honest story is editorial scope plus surface style, not craft.** Every
+Wigleaf pairwise number travels with this. The earlier "endings and voice" reading
+from the 200-pair pilot does not survive n=600 — at scale the top criterion is
+Ending resonance .5842, and Causal narrative progression is still below chance
+(.4658), but the whole per-criterion spread now sits inside the size channel's shadow.
+
+T_pair is still pending the cross-fitted Wigleaf dense arm (queued); the P2 script
+computes it automatically once those folds land.
+
+---
+
+## 8. Handoff — future work, and what is running
+
+### 8.1 Trainer improvement to make OUTSIDE any live ledger run
+
+`methods/dense/train_reward_model.py` tokenises with **`padding="max_length"`**
+(lines ~251 and ~279), so every row costs the full budget regardless of its true
+length. On the RoyalRoad V3 full-text arm this is the dominant cost: the median
+chapter is 2,918 tokens against a 16,384 budget, so roughly **five sixths of the
+compute is spent on padding**. At 16384 a row costs 10.2x what it costs at 1600,
+which is why the 10 fold-arms run ~15 h instead of ~3 h.
+
+**Proposed change (NOT made here):** switch the collator to dynamic padding
+(pad to the longest sequence in the batch). With dynamic padding a 16384-cap run
+would be *cheaper* than today's 8192-cap run, because almost every batch would pad
+to a few thousand tokens rather than the cap.
+
+**Adoption protocol, deliberately strict** — this edits a file every dense ledger in
+the program depends on:
+1. make the change on a branch, with no live chain invoking the trainer;
+2. re-run ONE small completed fold (e.g. `dense_crossfit/fold0`, seed 42) under both
+   collators and require a **byte-identity check** on `preds_test.csv` — dynamic vs
+   max_length padding must produce identical predictions, since padding is masked and
+   should be numerically inert;
+3. only if identity holds, adopt it and record the equivalence in the registry.
+If identity does NOT hold, that is itself a finding (it would mean padding is leaking
+into the head) and the change must not be adopted silently.
+
+Frozen-recipe discipline outranks wall-clock: this was explicitly deferred rather
+than taken during the live queue.
+
+### 8.2 Lane state at handoff
+
+| arm | design id | status |
+|---|---|---|
+| rr_v1 cross-fit (honest T) | `dense_crossfit` | done — T .4986 |
+| judge-view audit | `dense_crossfit_judgeview` | done — T **.5846** (+.0860) |
+| rr_v2 expansion | `rr_v2_k24` | done — SENSITIVITY only |
+| Wigleaf cross-fit | `wigleaf/dense_crossfit` | done — T **.5589** |
+| **V3 full text, arms a+b** | **`v3_aug_fulltext`** | ▶ running, ~15 h, 16384, 4/1274 truncated |
+| decomposition arm | `decomp1024` (614+410 @1024) | queued (phase 2) |
+| Stage-A gate + zero-shot ×2 | `cw_transfer_v1` | queued (phase 2) |
+| Stage B fine-tunes | — | not built |
+| final CW ledger | — | not built; triggers the fused-must-beat-bank auto-audit, log registry-first |
+
+### 8.3 Numbers that are superseded and must not be re-quoted
+
+* RoyalRoad **Δ_beyond −.0732** — superseded. On the fair (judge) view it is **+.0128**.
+* RoyalRoad single-split **T .4994** on a 141-row eval — superseded by the cross-fit
+  (.4986) and then reframed by the view audit; the standard-1024 T is a VIEW artifact
+  pending the decomposition arm's split of view vs budget.
+* Wigleaf **T .6054** — never-quote (select-on-eval optimism). Item-level number of
+  record is **.5589**; **T_pair .5618**.
+* Wigleaf pairwise **composite .610** from the 200-pair pilot — superseded by
+  **.5517** at n=600.
+* rr_v2_k24 numbers are never canonical (A-bank battery failed at .445).

@@ -10,8 +10,8 @@ and §14 (pre-kill checklist, binding).
 Status: **BUILT.** Population, y, splits, V extractor (46), A bank (40 mined →
 39 after the enforced collapse gate), 7/7 Gemma-scored shards, K=50 anchor
 battery certified, 3-seed dense (T), Layer-1 + Layer-2(a) ledger with
-ids-carried OOF at exact reproduction. One item-view sensitivity arm outstanding
-(§6e), which the gate verdict is explicitly conditioned on.
+ids-carried OOF at exact reproduction, plus a 1-seed item-view sensitivity arm
+(§6e) that rules out the leading artifact. **COMPLETE.**
 
 **Headline: the software-code vote column is HIGHLY ARTICULABLE.** Same-rows
 Δ_beyond is **−.0297 eval / −.0143 test** — the 39 stated criteria plus 46

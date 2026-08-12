@@ -611,7 +611,159 @@ slower than an idle card, as expected under contention.
 
 ### 7c. Headline numbers
 
-<!--RESULTS-->
+Chain completed 2026-08-09T14:37:46Z (rc=0, GPU 0 released cleanly). It ran unattended
+through a jump-host outage; all stages were detached and checkpointed, so nothing was
+lost and nothing needed resuming.
+
+**Full-run bank validity — every gate passed.**
+
+| check | result |
+|---|---|
+| coherent-vs-scrambled AUC (K=50) | **.9900** (census .5617 fresh / .3869 archived) |
+| scrambled row mean | **.0000** |
+| criteria below chance on coherence | **0 / 29** |
+| all-NA anchor rows, by tag | **0 / 50 pos, 0 / 50 neg, 0 / 50 scrambled** |
+| per-shard 3-row anchors | **6 / 6 valid on attempt 0**; pos .776–.897 > neg .379–.810 > scram .000 |
+| INVALID shards | **none** |
+| judge distribution | NA **.0000**, 0 near-constant, no all-min collapse, no half-pinned |
+| item NA rate over 376,942 cells | **0.000000** |
+| assembled-order gate | **PASS**, max\|diff\| = **0.00e+00** |
+| dense alignment gate | **PASS** (group + judgement sequences match row-for-row, all 3 seeds) |
+
+**Layer-1 ledger — pooled OOF (n = 12,998, snapshot-grouped GroupKFold(5)).**
+
+| quantity | value |
+|---|---:|
+| V_lin | .5807 |
+| V_nl (seeds .6435 / .6423 / .6439) | **.6432** |
+| **A_lin** | **.6623** [.6495, .6741] |
+| VA_lin | .6701 |
+| **VA_nl** (seeds .7288 / .7306 / .7279, spread .0026) | **.7291** |
+| Δ_interact | **+.0589** [+.0512, +.0661], P(>0) = 1.00 |
+
+**Same-rows Δ_beyond vs the recorded T — the honest comparison.**
+
+| | eval (n = 1,313) | eval+test (n = 2,631) |
+|---|---:|---:|
+| T (dense, recorded) | **.7109** | **.7251** |
+| V_lin | .5863 | — |
+| A_lin | .6425 | — |
+| VA_lin | .6563 | .6620 |
+| VA_nl (seeds .6987/.7031/.6988) | **.7041** | **.7143** |
+| Δ_total (T − VA_lin) | +.0546 | +.0631 |
+| **Δ_beyond (T − VA_nl)** | **+.0068** | **+.0109** |
+
+**The residual is essentially closed: +.007 to +.011.** The articulated bank plus a
+23-feature surface bank reaches within about one AUC point of an 8B LoRA trained on the
+same rows. On this cell the preference is very largely *articulable*.
+
+**The same-rows discipline was load-bearing, exactly as the press precedent warned.**
+Pooled, VA_nl (.7291) sits **above** T (.7109) — a Δ_beyond of **−.0182**, which reads as
+"the bank beats the dense model". That is an artifact of comparing a 12,998-row OOF
+against a 1,313-row held-out T. On the same rows the ordering reverses and dense wins by
++.0068. Only the same-rows figure is quotable; the pooled one is carried in the ledger
+under `POOLED_CONTEXT_ONLY` with the warning attached. Because same-rows VA_nl < T, the
+"fused must beat bank" auto-audit does **not** fire — but it *would have* fired on the
+pooled number, which is the second time this cell's design has manufactured a false
+positive out of a population mismatch.
+
+**T₀ (untrained arm) — at chance, and not collapsed.**
+
+| | eval | test | eval+test |
+|---|---:|---:|---:|
+| **T₀** (base Llama-3.1-8B, zero-shot) | **.4902** | **.4925** | **.4915** |
+| T (trained, 3-seed prob-mean ensemble) | .7182 | .7497 | .7340 |
+| **T − T₀** | **+.2279** | | +.2425 |
+
+Not a degenerate readout: 330 distinct `p_yes` values, sd .226, no NaNs over 2,631 rows.
+Within-snapshot, T₀ is .5014 against T's .7060 — the base model has **no** zero-shot
+purchase on homepage placement, so the entire trained ceiling here is learned, none of it
+prior. (Note the .7182 vs the ledger's .7109: the ledger uses the campaign convention,
+mean of the three seeds' AUCs; .7182 is the AUC of the mean of the three seeds'
+probabilities. Both are reported; they are not interchangeable.)
+
+**Applicability-mask ablation — the genre channel is gone.**
+
+| block | k | lin pooled | nl seed0 | lin same-rows eval |
+|---|---:|---:|---:|---:|
+| **A_mask_only** | **0** | — | — | — |
+| A_levels_only (median-imputed) | 29 | .6623 | .6929 | .6425 |
+| A_layer1_const05 | 29 | .6623 | .6929 | .6425 |
+| A_mask + A_levels | 29 | .6623 | .6929 | .6425 |
+| V_only | 23 | .5807 | .6435 | .5863 |
+| V_plus_mask | 23 | .5807 | .6435 | .5863 |
+| V + A primary | 52 | .6701 | .7288 | .6563 |
+
+**Not one applicability bit has variance.** The NA rate over all 376,942 judged cells is
+exactly zero, so `A_mask_only` is an empty block, `V_plus_mask` is identical to `V_only`,
+and the three A-block variants coincide. Against the press cell:
+
+| | press_verdict | **homepage (v2)** |
+|---|---|---|
+| mask alone | **.7322** (≥ the whole 126-feature scorecard) | **undefined — no mask exists** |
+| judged levels worth over the mask | **+.0014** | **+.0816** (A_lin .6623 vs V_lin .5807) |
+
+On press, forty judged rubric levels were worth one-tenth of an AUC point over the bare
+fact of which rubrics applied. Here there is no "which applied" — every criterion is
+answered for every item — and the judged levels carry the entire +.082 that A adds over
+the deterministic surface. The failure mode is closed by construction, and the ablation
+confirms rather than assumes it.
+
+**Story-type-stratified readout — the bank ranks WITHIN story type.**
+
+| readout | pooled | stratified (size-weighted) | composition share |
+|---|---:|---:|---:|
+| V_lin | .5807 | .5669 | +.0138 |
+| **A_lin** | **.6623** | **.6312** | **+.0311** |
+| VA_lin | .6701 | .6412 | +.0289 |
+| VA_nl (mean3) | .7342 | .7175 | +.0167 |
+
+Story type alone predicts placement at **.5875**, so a genre detector was available to be
+bought — and A did buy some of it: **.031 of A's pooled .662 is composition**. But
+**.6312 survives inside story type**, i.e. ~95% of A's advantage over V is genuine
+within-type ranking. Per-stratum A_lin: other .672, lifestyle .655, conflict .650,
+business .621, politics .621, crime .596, culture .590, disaster .590, health .570,
+**sport .487** — sport (n=504) is the one story type where the bank fails outright.
+
+**The pos-vs-neg caution I registered: RESOLVED — the fitted weights find what the flat
+mean could not.**
+
+The full-run K=50 battery reproduced the pilot exactly: pos .5934 / neg .6597, pos-vs-neg
+AUC **.4788**, `ordering_holds_on_means` **False**. As an unweighted 29-criterion average
+the bank is below chance at separating top-half from bottom-half placement. Yet fitted:
+**A_lin = .6623 [.6495, .6741]** pooled and **.6425** same-rows. The flat mean is simply
+the wrong estimator here, and the reason is visible in the univariate screen:
+
+| direction | criterion | alone-AUC |
+|---|---|---:|
+| + | b14 Public consequence rather than private curiosity | .5654 |
+| + | b09 Instalment in a larger running story | .5538 |
+| + | b06 Scale of consequence | .5536 |
+| + | b28 Stronger claim than its page neighbours | .5494 |
+| + | b12 Stakes are hard to undo | .5360 |
+| **−** | **b03 Reads as a grammatical, publishable headline** | **.4421** |
+| **−** | **b26 Distinct from the other headlines on this page** | **.4343** |
+| **−** | **b27 Adds information the rest of the page does not** | **.4322** |
+
+Roughly a third of the bank is *negatively* associated with top-half placement, so an
+unweighted mean cancels the signal that signed weights recover. Two substantive readings
+fall out, and both are new:
+
+* **Top-half placement goes to the LESS distinctive headline.** b26 and b27 — the
+  page-relative distinctiveness criteria — are the bank's two most *negative* columns.
+  The story at the top of the page is the one the rest of the page is also about: the
+  day's running story, repeated. That is a finding about homepage curation, and it is one
+  the census bank could not have produced because it had no page-relative family at all.
+  It also independently corroborates b09 (running-story instalment) on the positive side.
+* **No single criterion exceeds .566.** A_lin .662 is a genuinely multivariate result, not
+  one strong column carrying a bank — the opposite of the census bank, whose signal was
+  concentrated in two columns that rated word salad at ceiling.
+
+**Secondary, descriptive only — outlet-grouped CV** (the design the registry retired as
+unpowered): V_lin .4566, A_lin .6102, VA_lin .5608, VA_nl .5601. Reported for continuity;
+not quotable as this cell's numbers.
+
+**Every number above carries the weak-instrument flag: y is spatial placement.**
 
 ---
 

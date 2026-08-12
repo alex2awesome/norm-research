@@ -8,6 +8,21 @@ dense bound · MAP = mined dual-track spurious/real map · CLO = closure to
 saturation/plateau. Target: every non-null cell reaches MAP; every field with ≥2
 preference types supports a cross-y decomposition contrast.
 
+## CANONICAL-SLOT RULINGS 2026-08-12 (user, morning session) — read BEFORE the grid
+- **N&C**: verdict=responded and curation=outcome KEPT; **community REMOVED** (co-signing
+  underpowered / not a meaningful community preference; V8 build -> appendix).
+- **CW verdict: RoyalRoad RETIRED "for now"** (replacement sources being explored — Reedsy
+  et al.); rr_v1/rr_v2 + view-artifact findings stay quotable as appendix. V3 fulltext
+  chain killed mid-run at arm_a fold3 (artifacts kept).
+- **Humor curation: Style Invitational RETIRED "for now"**; theta-probe + ledger -> appendix.
+  Humor curation slot currently EMPTY (captions retired 2026-08-10, SI retired today).
+- **Humor verdict: HashtagWars retirement UNDER CONSIDERATION** (still canonical today).
+- **Patents verdict**: honest-dense revival under RUNBOOK prereg conditions QUEUED (user
+  asked "can we run one, after deconfounding and everything?").
+- **Peer revealed**: identity audit LANDED 2026-08-12 — author channel REAL (train-encoder .671 held-out, fame .674; 78.6%/95.2% author/inst fold overlap; identity increment over bank+57 = +.0236 [+.0008,+.0473] P=.979) but the dense residual SURVIVES identity conditioning: (d')-(c') **+.0744 [+.0395,+.1077] P=1.000** vs ref +.0927 (~20% absorbed). E-value ROBUST unchanged (identity < Y=.716). OPEN: memorization probe (T0-null is indirect evidence against). results/f2_identity_peer_revealed.json.
+- **Code PR-merge V column FILLED 2026-08-12**: within-repo V_nl .5525 eval/.5484 test (pooled .675/.561 = composition, never quote); VA same-subset .652/.615.
+- **Code competitions V3 fused arm RUNNING** (sk3 GPU1, arm a, 5 folds; max-of-variants column only). BBC r1 Gemma scoring RUNNING (GPU5).
+
 ## The grid (as of 2026-08-08)
 
 | field | VERDICT (decision-maker) | CURATION (expert selection) | VOTE/REVEALED (crowd) |

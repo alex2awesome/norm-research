@@ -3583,3 +3583,60 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - **nc_outcome: PRIMARY stacked increment (d)−(c) = +.0194 [+.0007,+.0375] P=.980 — small but significant deconfounded taste residual** (arms: bank_enr .6162 / NUIS .6096 / enr+nuis .6156 / +T .6358 / +T₀ .6187). SECONDARY (e)−(c) −.0024 ≈ 0 as predicted. Fused-vs-bank PASS (+.0197). Note the estimand lesson repeats: the closure LEVEL readout (bank ≥ dense) and the F2 INCREMENTAL readout (+.019 conditioned on everything nameable) are different questions — dense carries a small signal the enriched bank + 22 nuisance channels don't span, even though its level doesn't beat the bank.
 - **nc_agree: PRIMARY −.0099 [−.0330,+.0150] P=.211 NULL** — no deconfounded residual. Two flags: (1) **NUIS ALONE (.6115) BEATS THE ENRICHED BANK (.5730)** — nuisance>bank now 6/13 cells; on this cell that's the docket-composition confound wearing a new coat. (2) **SECONDARY (e)−(c) = +.0208 P=.983 POSITIVE** — the F2 spec's registered anomaly flag ("a positive here flags nuisance-prior interaction"); with this cell's unstable y (eval .566/test .639) and docket confound, recorded as a flag, not interpreted.
 - Env matched battery of record (mac, py 3.12.3, sklearn 1.7.2); adapters = generic contract on maps_batch1 artifacts; missing-STRUCT rule not triggered (no declared STRUCT on these cells). Results: results/f2_deconf_nc_{outcome,agree}.json.
+
+## 2026-08-12 — MORNING RULINGS (user) + relaunch wave
+- **USER RULINGS**: (1) N&C keeps verdict=responded + curation=outcome; **REMOVED from
+  community** (co-signing not meaningful as community preference; V8 artifacts → appendix).
+  (2) **RoyalRoad RETIRED** (CW verdict) and **Style Invitational RETIRED** (humor
+  curation) "for now — exploring other options"; ledgers stay quotable as appendix.
+  (3) HashtagWars retirement under consideration (still canonical humor verdict today).
+- **RR V3 fulltext chain KILLED** at arm_a fold3/5 (wrapper 938783 then trainer 1722221,
+  targeted PIDs; ledger RELEASE written; arm_a folds 0-2 artifacts kept under
+  dense_crossfit_v3aug_fulltext/). Rationale: ~10h GPU remaining on a retired cell.
+  Phase-2 watcher moot (RR_V3AUG_CHAIN_DONE will never fire).
+- **BBC most-read r1 Gemma scoring LAUNCHED** sk3 GPU5 (pid 1745819 runner; engine
+  loaded 172GB): 50,761 headlines x 25 routed criteria + K=50 anchor battery;
+  bbc_mostread_population.csv generated from va/population.csv.gz (raw_headline view =
+  bank view, persona matched to score_mostread_bank.py). Watcher armed (fire-on-done).
+- **USER REQUESTS queued this wave**: (a) code PR-merge within-repo V-only leg (fills
+  VERDICT V column); (b) patents honest-dense revival per RUNBOOK prereg conditions;
+  (c) V3 fused arm on code competitions; (d) peer_revealed leak audit — author/
+  institution identity channels (NOT in the 57 judged nuisance channels; F2
+  nuisance_struct=0 for this cell) + pretraining-memorization probe.
+
+## 2026-08-12 — morning wave LANDINGS
+- **code_v3 (PR merge) V-ONLY WITHIN-REPO leg LANDED** (closure/code_v3/abank_rescore/
+  v_only_within_repo.{py,json,log}; frozen Layer-1 HistGB seeds 0-2, GroupKFold(5) by
+  repo, within-repo n-weighted >=20-row both-class repos): **V_nl .5525 eval / .5484
+  test** (VA_nl same-subset .6517/.6150 — reproduces the recorded ~.63 frame). Pooled
+  V_nl .675 eval vs .561 test = the known composition artifact, never quote. Reading:
+  V features carry almost nothing within-repo; the bank does the work. V_new = V (no
+  compiled columns for this cell). Notebook VERDICT row updated to V=.550.
+- **peer_revealed IDENTITY LEAK AUDIT LANDED** (user-ordered; methods/taste_decomposition/
+  peer_identity_audit/ + fusion/f2_identity_arm.py + results/f2_identity_peer_revealed.json).
+  OpenAlex authorships fetched 4,663/4,663. Findings: (1) fold-overlap is real — 78.6% of
+  held-out rows share >=1 author with train, 95.2% share an institution (GroupKFold by
+  ntitle does not block identity); (2) author-identity-alone (train-encoder, leak-free
+  construction) AUC **.671 held-out** / fame-logcites .674 — a REAL channel absent from
+  the 57 judged nuisance columns; identity increment over bank+57 = **+.0236
+  [+.0008,+.0473] P=.979 SIGNIFICANT**; (3) BUT the dense residual SURVIVES identity
+  conditioning: **(d')-(c') = +.0744 [+.0395,+.1077] P=1.000** vs reference +.0927 —
+  identity absorbs ~20%, not the residual. Institution channel weak (.550). Identity
+  covariates rank BELOW the strongest found nuisance channel (Y=.716), so the E-value
+  ROBUST verdict is unchanged. Remaining unaudited channel: pretraining memorization
+  (T0-null +/-.0006 is indirect evidence against; direct probe = open item).
+- **code_competitions V3 fused arm chain LAUNCHED** (user request): builder
+  methods/taste_decomposition/code_competitions/build_code_competitions_v3aug.py
+  (same-rows n=999, StratifiedGroupKFold(5,shuffle,rs=0) by canonical_pid, per-fold
+  train-only permutation importance, VA-block-first prompt, arm a, max_len 4096);
+  chain scripts/tools/code_v3aug_chain.sh on sk3 **GPU1** (GPU0 was grabbed by a
+  co-tenant between kill and launch). LANDMINE hit + fixed: train_reward_model's
+  80/10/10 split-ratio guard rejects 5-fold layouts (68/12/20) -> DENSE_SPLIT_FRACTION_ATOL=0.15.
+  Estimand: max-of-variants VAT column only.
+- **patents revival SCOPED (G2)**: RUNBOOK prereg conditions = (1) restrict label to
+  §102/§103, (2) rebuild candidate sets symmetrically w/ randomized slots, (3) real
+  multi-criterion A bank from online-rubrics, (4) claim-ordinal declared Track-B
+  nuisance; quote Δ over V+A+STRUCT only. Statute field is NOT in labels.parquet —
+  lives claim-level (option3_claims_gemma_scale.jsonl / office-action data). Phased
+  plan: conditions 1+2+4 + honest-T rebuild first (no new bank needed for T);
+  A-bank rebuild only if the cell re-enters mining. Queued behind BBC/V3 GPU jobs.

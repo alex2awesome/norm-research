@@ -112,6 +112,82 @@ whether an 8B reader trades that shift for the 7.5× negatives profitably.
 
 <!--RESULTS_MATHLIB-->
 
+`methods/taste_decomposition/results/samerows_T_mathlib_bigtrain.json`;
+diagnosis `datasets/math/mathlib/mathlib_split_divergence_diagnosis.json` (sk3).
+3 seeds each, class-weighted, select-on-eval, canonical rows held fixed.
+
+| arm | train rows | train negs | eval mean (spread) | **test mean (spread)** |
+|---|---:|---:|---:|---:|
+| canonical slice (the starved run this fixes) | 6,229 | 363 | .5643 (.126) | .4670 (.072) |
+| **TRAIN-BIG** | 29,324 | 2,705 | .6370 (.082) | **.5498 (.036)** |
+| regime-matched secondary | 6,651 | 780 | .5740 (.071) | .5216 (.063) |
+
+**More data fixed the collapse and did not fix the cell.** 7.5x the negatives removed the
+majority-class degeneracy and lifted the eval number by +.073, but the honest half moved to
+.5498 and stopped. The regime-matched arm — built to test whether the train→eval
+distribution shift was the culprit — came out *lower* than train-big on both halves, so the
+shift is not what is holding the dense arm down either.
+
+### The eval ≫ test divergence is selection inflation, not a harder test half
+
+The gap replicates across all three regimes (+.087 train-big, +.052 regime-matched, +.097
+canonical). It is not a property of the test rows:
+
+| instrument, identical area-grouped folds | eval | test |
+|---|---:|---:|
+| dense, train-big (3-seed mean) | .6370 | **.5498** |
+| class-weighted TF-IDF, canonical train | .6796 | **.7883** |
+| class-weighted TF-IDF, regime train | .6754 | **.7913** |
+| class-weighted TF-IDF, big train | .6489 | .6415 |
+| PR size alone (−additions) | .6024 | **.6909** |
+
+Every non-dense instrument scores **higher** on test than on eval. If the test half carried
+less signal, the bag-of-words and the raw size feature would fall there too; both rise. The
+two halves are also compositionally matched — both 100% `year>=2025`, both 100%
+`conv_prefix=='feat'`, pos-rate .9442 vs .9497, `changed_files` median 2 vs 2 (test PRs are
+somewhat larger: additions median 100 vs 55, text length 6,271 vs 4,702, and carry more
+zero-review-thread rows, .287 vs .212 — differences that make test *easier* for a
+size-sensitive reader, which is the direction the baselines move).
+
+So the dense-only eval-over-test gap is the checkpoint-selection optimism this cell's own
+history already flagged (~.035 in the 2026-06 run), enlarged by how unstable these runs are.
+
+**Instability, measured.** Seed-to-seed correlation of *predicted probabilities* on the same
+rows: train-big .62–.67 (eval) / .52–.64 (test); regime-matched .40–.53; canonical .35–.43.
+Three seeds of one recipe are not estimating one function — the seed mean averages over
+materially different models, which is exactly what makes a max-over-checkpoints eval score
+optimistic.
+
+### On the only test area big enough to read, the dense reader is at chance
+
+The test fold is 789 CategoryTheory rows (37 negatives) + 6 Control rows (3 negatives).
+Control is noise; test AUC is effectively CategoryTheory AUC.
+
+| CategoryTheory (789 rows) | seed 42 | seed 1 | seed 2 | mean |
+|---|---:|---:|---:|---:|
+| dense, train-big | .4984 | .5439 | .5100 | **.5174** |
+| dense, regime-matched | .4856 | .4666 | .5201 | .4908 |
+| dense, canonical | .4183 | .4164 | .4802 | .4383 |
+| TF-IDF, same rows | — | — | — | **.626 / .776 / .772** (big / regime / canonical train) |
+
+A fine-tuned 8B reader sits at chance on rows a linear bag-of-words reads at .77.
+
+### Verdict: no honest dense bound exists for this cell
+
+**T is not quotable.** Δ_beyond is not computable — it needs an honest T, and the dense arm
+does not supply one. Note also that the bank's VA_nl .6721 / VA_lin .6827 come from the
+Layer-1 pipeline's label-**stratified** split of the 7,956-row slice, **not** these
+area-grouped folds, so they are a reference point and not an apples-to-apples comparator;
+nothing should be differenced against them from this run.
+
+What the cell *does* support, on honest area-disjoint folds: a class-weighted linear TF-IDF
+reaches **.788** on the test half where the dense reader reaches .550, and PR size alone
+reaches .691. **The ceiling mathlib has is lexical, and the dense instrument does not reach
+it.** That is a finding about the instrument, not a null for the cell — and it is the
+opposite shape from a null-bank cell like RoyalRoad, where the articulated side is what is
+missing. Here the articulated and lexical sides both read; the neural reader is the one that
+fails.
+
 ---
 
 ## JOB 2 — homepage STORY-GROUPED T
