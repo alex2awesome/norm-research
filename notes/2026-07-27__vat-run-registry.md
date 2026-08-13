@@ -3926,3 +3926,12 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Gemma scoring of the 25 r2 criteria LAUNCHED (GPU6, chunked scorer). Readout r2
   after: X2 = [V, A, A1(16), A2(14)]; Delta_2 vs Delta_1 +.0645; a sub-eps gain
   here = FIRST sub-eps round (rule needs two consecutive).
+
+## 2026-08-13 — BBC r2 READOUT: gain +.0067, still super-eps — ROUND 3 REQUIRED
+- Track A: VA .7586 -> .7653 MONITOR (the 14 r2 criteria add +.0067); Delta .0645 ->
+  .0578; **gain +.0067 > eps .005** — NOT sub-eps. No sub-eps round yet; the
+  two-consecutive rule cannot fire before r4 at the earliest. Gain trajectory
+  .0084 -> .0067 = geometric shrink toward the eps floor.
+- Spurious: joint B (20 channels r1+r2) .6532; dense over B+bank .0845.
+- ROUND 3 LAUNCHING: slice with r2 bank state + ban of r1+r2 slice rows; same
+  2-family fleet + cross-family merge + fresh-probe audit flow.
