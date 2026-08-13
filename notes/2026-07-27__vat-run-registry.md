@@ -3763,3 +3763,15 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Recorded nuance (math.SE lexicalized-ordinal law): the parent-claim mention
   ("of claim 1") IS in the text, so T reads partial ordinal signal regardless —
   that is exactly what the harvest-side conditioning is for; never scrub the text.
+
+## 2026-08-13 — USER RULING: no "STRUCT" tier, DECORRELATE (standing rule)
+- "'STRUCT' is not a thing... these are all CONFOUNDS that should be DECORRELATED.
+  Don't report 'V+A+STRUCT' as something special."
+- Supersedes the patents RUNBOOK's "quote Δ over V+A+STRUCT" PHRASING (the math —
+  conditioning on those channels — is unchanged). Patents harvest frame is now
+  IDENTICAL to every other cell: nuisance block = {claim ordinal, parent-claim num,
+  dependency flag, length family} in the F2-style stacked arms; report the
+  **deconfounded residual (d)−(c)** with CI + WY band + matched-sampling check,
+  channel list in the caption. Ladder stays V → V+A → fused → T only.
+- Standing rule filed: memory/feedback_no_struct_tier_decorrelate.md (applies to
+  ALL cells: no structural/positional/length bundle ever gets tier status).
