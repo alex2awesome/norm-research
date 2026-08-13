@@ -3884,3 +3884,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Lesson (transferable): finalize artifacts that retain pre-arbiter fields need the
   consumer to name the FINAL field explicitly; the r2 builder's count assertion is
   what caught it — keep count assertions in every routing consumer.
+
+## 2026-08-13 — BBC r1 readout v2 (ARBITER-FINAL routing) — CORRECTED NUMBERS OF RECORD
+- With final_route (16A/9B): **VA .7502 -> .7586 on MONITOR; Delta .0729 -> .0645;
+  gain +.0084 > eps .005 — NOT sub-eps, r2 proceeds.** The superseded audit_track
+  readout had shown gain +.0159: the 2 arbiter-demoted channels were carrying ~half
+  the apparent bank gain — the demotions were load-bearing, arbiter vindicated.
+- Joint B (9 channels) .6305; dense over B+bank_r1 +.0960 unchanged.
+- r2 slice BUILT with corrected routing + r1 bank state + prior-round row ban
+  (slice_r2.json). PATENTS train-side bank scoring COMPLETE (47,949 claims x 30) —
+  arm_a_v2 refit unblocked.
