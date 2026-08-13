@@ -3748,3 +3748,18 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Chain scripts/tools/patents_v3_chain.sh RUNNING on sk3 **GPU7** via stack runner
   (launched 23:59:54Z; ~1-1.5h/arm at max_len 768 batch 16); launcher ssh severed
   early per the new landmine discipline; watcher armed.
+
+## 2026-08-13 — USER RULING: patents ordinal DECORRELATED, not banked in the block
+- User caught a design deviation: my arm_a block included own claim ordinal +
+  parent-claim number. The RUNBOOK prereg says ordinal = **declared TRACK-B
+  NUISANCE** (quote Δ over V+A+STRUCT) — and own-ordinal is metadata invisible in
+  the claim text, so blocking it would have INJECTED the .75 nuisance channel into
+  the fused VAT bar (incommensurable with other cells' bars).
+- FIXED before arm_a trained (arm_t was mid-training, unaffected): block = text-
+  derived content features only (dependency flag kept — computed from a substring
+  the model already sees); STRUCT (own ordinal, parent num, dependency, lengths)
+  now lives in harvest_strata_NEVER_AN_INPUT.csv as the nuisance block for the
+  F2-style deconfounded readouts at harvest.
+- Recorded nuance (math.SE lexicalized-ordinal law): the parent-claim mention
+  ("of claim 1") IS in the text, so T reads partial ordinal signal regardless —
+  that is exactly what the harvest-side conditioning is for; never scrub the text.

@@ -45,12 +45,16 @@ def claim_only(t):
 
 
 def feats(el, claim_num):
+    """BLOCK = text-derived content features ONLY (user ruling 2026-08-13 + the
+    RUNBOOK prereg: claim ordinal position is a DECLARED TRACK-B NUISANCE, handled
+    by the deconfounding machinery at harvest — quote Δ over V+A+STRUCT — and own
+    claim_num is metadata invisible in the text, so feeding it to the fused arm
+    would inject the nuisance channel into the VAT bar). The dependency flag stays:
+    it is computed from a substring the model already sees."""
     words = el.split()
     dep = DEP.search(el)
     return {
-        "claim ordinal number": float(claim_num) if claim_num == claim_num else np.nan,
         "is dependent claim": 1.0 if dep else 0.0,
-        "parent claim referenced": float(dep.group(1)) if dep else 0.0,
         "character length": float(len(el)),
         "word count": float(len(words)),
         "mean word length": float(np.mean([len(w) for w in words])) if words else 0.0,
@@ -58,6 +62,20 @@ def feats(el, claim_num):
         "semicolon count": float(el.count(";")),
         "wherein-clause count": float(len(re.findall(r"\bwherein\b", el, re.I))),
         "numeric token count": float(len(re.findall(r"\d+(?:\.\d+)?", el))),
+    }
+
+
+def struct_feats(el, claim_num):
+    """The declared Track-B nuisance block for the harvest-side deconfounding
+    (F2-style stacked arms): own ordinal (metadata), parent-claim number, plus the
+    same text-derived structure. NEVER enters any model input."""
+    dep = DEP.search(el)
+    return {
+        "claim_num": float(claim_num) if claim_num == claim_num else np.nan,
+        "parent_claim_num": float(dep.group(1)) if dep else 0.0,
+        "is_dependent": 1.0 if dep else 0.0,
+        "char_len": float(len(el)),
+        "word_len": float(len(el.split())),
     }
 
 
@@ -74,8 +92,10 @@ def fmt(v):
 man = {"design_id": "patents_v3_claimonly", "construct":
        "examiner rejected this claim element (any ground) — verdict on claim text; "
        "references DROPPED (construction asymmetry removed; placebo moot)",
-       "estimand_arm_a": "V3 fused arm (V_claim+STRUCT block + text), max-of-variants "
-                         "VAT column only; judged-A bank pending (revival cond. 3)",
+       "estimand_arm_a": "V3 fused arm (text-derived V_claim block + text), "
+                         "max-of-variants VAT column only; claim ordinal/parent-num = "
+                         "TRACK-B NUISANCE handled at harvest by the F2 machinery "
+                         "(quote Δ over V+A+STRUCT); judged-A bank pending (cond. 3)",
        "estimand_arm_t": "honest T for the claim-only construct",
        "rows_identical_to": "dense_standard splits (app_id-grouped)", "splits": {}}
 
@@ -93,10 +113,13 @@ for nm in ("train", "eval", "test"):
     tt = base.assign(text=["CLAIM ELEMENT:\n" + e for e in el])
     ta.to_csv(OUT / "arm_a" / "split" / f"{nm}.csv", index=False)
     tt.to_csv(OUT / "arm_t" / "split" / f"{nm}.csv", index=False)
-    strata_rows.append(pd.DataFrame({"row_id": base.row_id,
-                                     "rejection_type": d.rejection_type,
-                                     "claim_num": d.claim_num, "split": nm,
-                                     "judgement": d.judgement.astype(int)}))
+    S = pd.DataFrame([struct_feats(e, c) for e, c in zip(el, d.claim_num)])
+    strata_rows.append(pd.concat([pd.DataFrame({"row_id": base.row_id,
+                                                "rejection_type": d.rejection_type,
+                                                "split": nm,
+                                                "group": base.group,
+                                                "judgement": base.judgement}),
+                                  S], axis=1))
     man["splits"][nm] = {"n": int(len(d)), "pos_rate": float(d.judgement.mean()),
                          "median_claim_chars": int(el.str.len().median()),
                          "p99_claim_chars": int(el.str.len().quantile(.99))}
