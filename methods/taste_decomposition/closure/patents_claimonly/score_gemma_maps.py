@@ -43,6 +43,7 @@ PERSONA = {
     # (the bank's view) instead of a doubled "HEADLINE:\nHEADLINE: ...".
     "bbc_mostread": ("an experienced news editor performing a measurement task", "HEADLINE"),
     "patents_claimonly": ("an experienced patent examiner performing a measurement task", "CLAIM ELEMENT"),
+    "patents_claimonly_train": ("an experienced patent examiner performing a measurement task", "CLAIM ELEMENT"),
 }
 
 # TRUNCATION MATCHED TO THE INCOMING BANK.  The A bank was scored with a
