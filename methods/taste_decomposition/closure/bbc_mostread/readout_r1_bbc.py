@@ -69,7 +69,7 @@ r1_ids = [str(x) for x in z["row_id"]]
 assert r1_ids == pop.row_id.tolist(), "r1 scores not aligned with population"
 cids = [str(c) for c in z["crit_ids"]]
 routing = json.load(open(HERE / "bbc_mostread_r1_routing_final.json"))
-track = {c["blind_id"]: c["audit_track"] for c in routing["final"]}
+track = {c["blind_id"]: c["final_route"] for c in routing["final"]}  # ARBITER-FINAL (audit_track is pre-arbiter; caught 2026-08-13)
 iA = [i for i, c in enumerate(cids) if track.get(c) == "A"]
 iB = [i for i, c in enumerate(cids) if track.get(c) == "B"]
 res["routing"] = {"n_A": len(iA), "n_B": len(iB)}

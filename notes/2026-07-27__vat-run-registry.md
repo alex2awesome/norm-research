@@ -3872,3 +3872,15 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   dense exactly where dense errs (strong complementarity signature).
 - Notebook journalism community row updated (note only — MONITOR-frame numbers are
   never mixed into the E-frame bars).
+
+## 2026-08-13 — CORRECTION: BBC r1 readout used PRE-ARBITER routing (superseded, rerunning)
+- The r2 slice builder's own assertion (expected 16 A-routed, got 18) exposed it:
+  routing_final.json carries BOTH `audit_track` (pre-arbiter, A=18/B=7) and
+  `final_route` (arbiter-final, A=16/B=9). The r1 readout used `audit_track`, so
+  VA1 .7662 included 2 arbiter-demoted nuisance channels and the B map missed 2.
+- **Numbers from the first readout (VA1 .7662, gain +.0159) are SUPERSEDED** —
+  json renamed readout_r1_results.AUDITTRACK_SUPERSEDED.json; both scripts fixed to
+  `final_route`; readout RERUNNING on sk3. Notebook note will be refreshed on landing.
+- Lesson (transferable): finalize artifacts that retain pre-arbiter fields need the
+  consumer to name the FINAL field explicitly; the r2 builder's count assertion is
+  what caught it — keep count assertions in every routing consumer.
