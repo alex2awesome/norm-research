@@ -161,3 +161,34 @@ NYC Midnight: park unless forum-access ethics + posting-rate question resolved.
   mapping feasibility unprobed. Style Conversational (Empress's pick rationale,
   WaPo era) = articulated-norm source; check nrars.net mirrors.
 - Twitter: tweetapi account exists but Substack is the better bet (user decision).
+
+## Overnight collection wave (2026-08-13, launched ~00:30)
+
+**Removal-verdict recovery — resolved after full raw-source audit:**
+- All dump lineages (rebuilt per-subreddit, original monthly RC_2016-06, Arctic
+  Shift live) = 0% removed-text survival. Every published removals corpus was
+  captured realtime pre-2023; that firehose is gone.
+- **PullPush** (realtime ES lineage): API limits ~10 ids/req + hard 429s.
+  WP story comments: 4/4 test ids [removed] — harvester over all 333,834
+  removed WP ids running on sk3 (`harvest_pullpush.py`, ~2 days) to measure
+  the true intact rate at scale.
+- **Wayback/ArchiveTeam = the jokes route.** Thread pages captured for ~85-95%
+  of removed jokes 2021-2023; body extraction (rendered `data-click-id="text"`
+  div — NOT selftext JSON, which SSR omits) recovers **6/22 = 27% of random
+  removed 2021 jokes** (e.g. "opposite of Christopher Reeve?" -> "Christopher
+  Walken"). NSFW-flagged (~4-7%) unrecoverable (SSR omits body). Projected
+  15-25K removed-jokes-with-text 2021-2023.
+  Pipeline: sk3 `jokes_wayback_pipeline.py` (stable-hash order → any prefix =
+  uniform sample), log `jokes_wayback.log`.
+
+**Running overnight** (all resumable, 1 req/s-class politeness):
+1. Reedsy Prompts full scrape — laptop `datasets/creative-writing/reedsy_prompts/`
+   (contest index → per-contest story lists → all story pages, ~25-35K pages)
+2. RoyalRoad deep metrics — laptop `royalroad_expansion/scrape_deep_metrics.py`
+   (all 1,584 stubs + top-5K followers + 5K stable-hash sample = full fiction
+   pages w/ 5-dim scores, favorites, avg views, reviews)
+3. McSweeney's archive — laptop `datasets/humor/mcsweeneys_archive/`
+   (~1,458 index pages → ~29K piece pages; pool for anthology-curation cell)
+4. PullPush WP removed-text harvester — sk3
+5. Jokes Wayback pipeline — sk3
+6. Wayback coverage probe (2022/2023 verification) — laptop

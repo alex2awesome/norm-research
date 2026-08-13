@@ -3858,3 +3858,17 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Ladder status: V .620 / V+A .668 / fused .754 / T .751 (pooled frame); V_new +
   (V+A)_new = compilation + 2-family mining fleet (codex back), queued behind
   train-side scoring (GPU6, running) and bank certification write-up.
+
+## 2026-08-13 — BBC most-read ROUND 1 READOUT LANDED (mining productive; r2 required)
+- readout_r1_bbc.py on sk3 (readout_r1_results.json). TRACK A: the 16 A-routed mined
+  criteria lift the bank **VA .7502 -> .7662 on MONITOR** (seeds .7634-.7656);
+  **Delta .0729 -> .0570; gain +.0159 > eps .005 = NOT sub-eps** -> round 2 proceeds
+  (rule couldn't fire at r1 regardless). Convention note: Delta_0 here uses
+  VA0=seedmean_pred .7502 (T_MON .8231); the registry's earlier +.0749 used
+  mean-of-seed-AUCs .7482 — both recorded, same instrument.
+- SPURIOUS: all 9 B channels weak — top "Named-public-figure lead" .5534, joint B
+  .5785 (vs bank .722 lin); dense over B+bank_r1 linear stack +.0960 on the 10,147
+  dense-held-out rows. SWAP: C+ .794 / C- .392 — the bank actively disagrees with
+  dense exactly where dense errs (strong complementarity signature).
+- Notebook journalism community row updated (note only — MONITOR-frame numbers are
+  never mixed into the E-frame bars).
