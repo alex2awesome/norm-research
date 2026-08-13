@@ -3831,3 +3831,14 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   channel now gone; old ref-based V .601/VA .626 RETIRED to appendix with the old
   construct. Phase 2 (judged-A bank from online-rubrics -> Gemma) fills V+A and
   upgrades the fused arm; queued for next free GPU window.
+
+## 2026-08-13 — CODEX BACK (user caught it: usage panel 100% remaining)
+- Probe: `codex exec --skip-git-repo-check` returns CODEX_ALIVE. The "Aug 18" reset
+  message was pessimistic — weekly window rolled. Judge-checks-use-codex rule back
+  in force; memory updated. UNBLOCKED: patents (V+A)_new 2-family mining fleet,
+  SI Phase 2 (mining vs pairwise residual), BBC Track-B second-judge upgrade,
+  V_new compilation with the original codex compiler.
+- Patents bank_v1 CURATED (GLM sweep 10x150 -> 193 concepts -> merged 30 criteria,
+  label-blind; datasets/patents/v3_claimonly/bank_v1.json): clarity/definiteness,
+  antecedent basis, relative-terminology, prepositional clarity families etc.
+  Next: Gemma scoring of eval+test claims (11,988 x 30 + anchors) on a free GPU.
