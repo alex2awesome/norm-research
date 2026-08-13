@@ -3967,3 +3967,19 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Spurious: joint B (47 channels) .6884; dense over B+bank +.0676 (trajectory
   .0960 -> .0845 -> .0733 -> .0676 — monotone consumption of the dense edge).
 - ROUND 5 (final) LAUNCHING.
+
+## 2026-08-13 — BBC MOST-READ CAMPAIGN TERMINAL (5 rounds, one overnight)
+- **VERDICT: TERMINAL BY CAP — stopping rule never fired** (gains +.0084/+.0067/
+  +.0058/+.0067/−.0019; only r5 sub-eps). Bank VA .7502 -> .7779 peak (r4); Delta
+  .0729 -> ~.046: **~37% of the best-powered residual in the grid closed by mining;
+  the remaining ~+.046 MONITOR residual is REAL, resolvable, and NOT closed** —
+  terminal bank = LOWER bound (caption-finalist pattern at much higher power).
+- 66 arbiter-final mined A criteria added; 71 B channels mapped (joint .6908; top
+  "Headline length" .598; question/explainer-framing family ANTI .428 — the
+  homepage "less distinctive wins" inversion family recurs on the crowd side).
+- Dense-over-everything-named: .0960 -> .0636 monotone. FUSED (B+bank+dense stack,
+  10,147 held-out rows): **.8170** — the journalism community VAT column candidate.
+- Swap C+ .835 / C- .381: strongest complementarity signature in the program.
+- Instrument record: anchors 4/4 x5 rounds x2 tracks; probes 4/4 x5; cross-family
+  strict merges throughout; misrouting 6/25 -> 2/25. Ledger:
+  closure/bbc_mostread/bbc_mostread_TERMINAL_LEDGER.json
