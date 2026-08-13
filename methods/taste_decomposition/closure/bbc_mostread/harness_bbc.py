@@ -189,11 +189,30 @@ def collect(round_no: int):
                 continue
             for ln in f.read_text().splitlines():
                 ln = ln.strip().lstrip("-*0123456789. ")
+                bare = None
                 if not HAS_FIELD.search(ln):
-                    continue                      # not a proposal line
+                    # 4th variant (glm_d Track B, round 3): "NAME: desc | <parent
+                    # text, unlabeled> | yes|no" — bare trailing mixed flag, no
+                    # PARENT:/MIXED: labels. Parse-only extension; content untouched.
+                    parts = [p.strip() for p in ln.split("|")]
+                    if len(parts) >= 3 and parts[-1].lower() in ("yes", "no"):
+                        bare = parts
+                    else:
+                        continue                  # not a proposal line
                 m = (LINE_STRICT.match(ln) or LINE_LOOSE.match(ln)
                      or LINE_PIPE.match(ln))
-                if not m:
+                if not m and not bare:
+                    continue
+                if bare and not (LINE_STRICT.match(bare[0]) or LINE_LOOSE.match(bare[0])):
+                    continue
+                if bare:
+                    m = LINE_STRICT.match(bare[0]) or LINE_LOOSE.match(bare[0])
+                    item = {"track": track, "proposer": p["name"], "family": p["family"],
+                            "name": m.group("name").strip().strip("*").strip()[:120],
+                            "description": m.group("desc").strip()[:600],
+                            "parent": bare[1][:200] if len(bare) > 2 else "",
+                            "mixed": bare[-1].strip().lower()}
+                    out.append(item)
                     continue
                 rest = m.group("desc")
                 item = {"track": track, "proposer": p["name"], "family": p["family"],

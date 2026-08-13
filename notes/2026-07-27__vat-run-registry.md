@@ -3935,3 +3935,14 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Spurious: joint B (20 channels r1+r2) .6532; dense over B+bank .0845.
 - ROUND 3 LAUNCHING: slice with r2 bank state + ban of r1+r2 slice rows; same
   2-family fleet + cross-family merge + fresh-probe audit flow.
+
+## 2026-08-13 — BBC r3 to scoring boundary; patents arm_a2 training
+- r3 fleet 200/200 (after a 4th parse-variant extension for glm_d's bare-mixed pipe
+  format — parse-only, sealed content untouched); species: A-mass ROSE .400->.517
+  (real-space churn) while B flat .525 (consumed) — the program's known asymmetry
+  in-round. Cross-family strict merge anchors 4/4 (A edges 39 / B 31); audit
+  probes 4/4, arbiter ruled 5 -> **final A=11 / B=14** — first round where nuisance
+  outnumbers substance (plateau signal). Gemma scoring on GPU7.
+- Patents arm_a2 (V3 block WITH 26 judged criteria scores, full 59,937 rows) built
+  after fixing an NpzFile lazy-decompression trap (z["X"] per-access = 1.8M
+  decompressions; materialize once) and TRAINING on GPU6 (~2-3h at max_len 1280).

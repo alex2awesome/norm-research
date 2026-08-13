@@ -29,10 +29,11 @@ print(f"[bank] {len(live)} non-collapsed criteria in block", flush=True)
 score_by_id = {}
 for f in ("patents_claimonly_r0_scores.npz", "patents_claimonly_train_r0_scores.npz"):
     z = np.load(SC / f, allow_pickle=True)
+    X = z["X"]                       # materialize ONCE (NpzFile re-decompresses per access)
     cid = [str(c) for c in z["crit_ids"]]
     col = {u: i for i, u in enumerate(cid)}
     for i, rid in enumerate([str(x) for x in z["row_id"]]):
-        score_by_id[rid] = {u: z["X"][i, col[u]] for u in cid}
+        score_by_id[rid] = {u: X[i, col[u]] for u in cid}
 print(f"[scores] {len(score_by_id)} rows with judged scores", flush=True)
 
 DEP = re.compile(r"\bof claim (\d+)\b", re.I)
