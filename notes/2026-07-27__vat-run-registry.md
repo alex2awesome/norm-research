@@ -4008,3 +4008,20 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   absorbed the dense edge down to ~.009 — a mining fleet would chase eps-scale
   headroom. Propose declaring the cell CLOSED at phase 2 unless the formal mined
   column is wanted; awaiting user.
+
+## 2026-08-13 — homepage fused bar + peer-curation deconfounding check (user Qs)
+- **Homepage fused LANDED**: grouped-OOF stack [VA_nl OOF, dense seed-mean] on the
+  2,631 dense-held-out rows = **.7402 pooled (.7258 eval / .7544 test)** — beats
+  both parents (VA .7143 / dense .7340 same rows). Fills the last empty journalism-
+  curation column; closure unchanged (terminal r0). V+A_new stays empty BY DESIGN:
+  terminal at round 0 = no mining rounds = no mined criteria.
+  results/homepage_fused_stack.json.
+- **Peer curation deconfounding audit (question-answer)**: F2 primary is NULL
+  (-.0006, P=.48) over bank + 52 mined nuisance channels. Venue is FIXED by
+  construction (population 100% ICLR); **year-alone AUC .4951 = chance** (checked
+  today; pos-rate wobbles by year but composition washes out); nuisance_struct=0
+  (no explicit year/venue covariates) BUT the null-residual asymmetry applies:
+  adding covariates to (c) can only shrink (d)-(c) further — a null cannot be
+  manufactured by missing confounds. The fleet itself mined the identity-adjacent
+  channel (r1:B09 "Identity-revealing URLs, handles and organisation-named host").
+  LEVELS are raw instrument AUCs (ladder convention, all cells).
