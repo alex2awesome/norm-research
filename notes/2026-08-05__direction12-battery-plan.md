@@ -1897,3 +1897,15 @@ GPU 5 verified 0 MiB), 74 humor 2-fam banks + smoke pair QUARANTINED to
 outputs/ecert_slice_v1/twofam_v1/ (kept as a family-set-sensitivity arm: same 74 metrics
 mined under both family sets = free instrument-robustness comparison). Full 185 re-mine
 launching with canonical 4 families after smoke-3 validates 4-family tags.
+
+### 2026-08-12 (night) — FULL 185-METRIC CHAIN LAUNCHED, canonical 4-family, GPU-0 co-tenancy
+Smoke-3 (GPU 5) failed twice: engine-init race vs a competing allocation, then EngineCore
+died 16:26 and the driver HUNG 6.4h silent (caught after fleet-wide network blip; wedged
+tree killed by explicit PIDs 1869266->1869267->1869282). GPU 5 since claimed by the other
+agent's train_reward_model.py (not touched). No idle allowed GPU -> launcher gained
+FORCE_GPU + VLLM_GPU_MEM_UTIL override (one knob, disclosed): co-tenant on GPU 0 at util
+0.5 (~89GB alongside sibling tenants). Smoke-4 GREEN: 2 humor banks with children + 15
+glm + 15 qwen + 15 llama + 15 haiku each, 0 failures, ~5 min. FULL CHAIN LAUNCHED
+22:58 PT (wrapper pid 2261199, log ecert_slice_v1_gpu0.log, monitor armed): humor 74 ->
+CW 48 -> news 25 -> math 23 -> peer 15, ~2.5min/metric incl. 4 API families -> ETA
+~7-8h (API latency dominates vs the 2-fam morning rate). Task #32 in_progress.

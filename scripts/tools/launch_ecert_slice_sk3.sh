@@ -19,7 +19,7 @@ export HF_HUB_OFFLINE=1
 export FLASHINFER_DISABLE_VERSION_CHECK=1
 export VLLM_USE_FLASHINFER_MOE_FP8=0
 export TOKENIZERS_PARALLELISM=false
-export VLLM_GPU_MEM_UTIL=0.93
+export VLLM_GPU_MEM_UTIL="${VLLM_GPU_MEM_UTIL:-0.93}"
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
 PY="${PY:-/lfs/skampere3/0/alexspan/envs/ai_usage/bin/python}"
 MODEL="${MODEL:-meta-llama/Llama-3.1-8B-Instruct}"
@@ -35,14 +35,20 @@ GILISTS="$OUT/gilists.json"
 cd "$REPO"
 [ -f "$GILISTS" ] || { echo "missing $GILISTS"; exit 1; }
 
-# GPU: first idle among the ALLOWED set only
+# GPU: FORCE_GPU=<n> pins an allowed GPU explicitly (co-tenancy: pair with VLLM_GPU_MEM_UTIL
+# sized to the FREE memory, e.g. 0.5 — the 8B executor needs ~25GB); otherwise first idle
+# among the ALLOWED set only.
 FREE=""
-for g in 0 5 6 7; do
-  used=$(nvidia-smi --query-gpu=index,memory.used --format=csv,noheader,nounits \
-         | awk -F', ' -v g="$g" '$1==g {print $2}')
-  if [ -n "$used" ] && [ "$used" -lt 2000 ]; then FREE=$g; break; fi
-done
-[ -n "$FREE" ] && export CUDA_VISIBLE_DEVICES="$FREE" || { echo "no allowed idle GPU (0/5/6/7)"; exit 1; }
+if [ -n "${FORCE_GPU:-}" ]; then
+  case " 0 5 6 7 " in *" $FORCE_GPU "*) FREE="$FORCE_GPU";; *) echo "FORCE_GPU=$FORCE_GPU not in allowed set 0/5/6/7"; exit 1;; esac
+else
+  for g in 0 5 6 7; do
+    used=$(nvidia-smi --query-gpu=index,memory.used --format=csv,noheader,nounits \
+           | awk -F', ' -v g="$g" '$1==g {print $2}')
+    if [ -n "$used" ] && [ "$used" -lt 2000 ]; then FREE=$g; break; fi
+  done
+fi
+[ -n "$FREE" ] && export CUDA_VISIBLE_DEVICES="$FREE" || { echo "no allowed idle GPU (0/5/6/7); use FORCE_GPU=<n> VLLM_GPU_MEM_UTIL=<u> to co-tenant"; exit 1; }
 
 export PY MODEL OUT GILISTS FREE REPO
 TASKS="${TASKS:-humor creative-writing news-homepages math-stackexchange peer-review}"
