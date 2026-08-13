@@ -3811,3 +3811,23 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   content features — the ref-based V/A died with the references) and trains on all
   47,949 rows; the judged-A upgrade (phase 2, online-rubrics -> Gemma on GPU5 after
   v3max) triggers an arm_a_v2 retrain with criteria scores in the block.
+
+## 2026-08-13 — PATENTS CLAIM-ONLY PHASE 1 HARVEST LANDED (trustworthy ladder v1)
+- Construct: "examiner rejected this claim element (any ground)" — claim text only,
+  references dropped, same rows/splits as dense_standard (eval+test n=11,988,
+  6,128 app_id groups). Artifacts: datasets/patents/v3_claimonly/harvest_v3_claimonly.json.
+- **Honest T .7194 eval / .7834 test** (arm_t). **V3 fused arm .7198 / .7859**
+  (arm_a; VAT max-of-variants column; block wash vs T pre-A-bank, as expected —
+  text-derived features are redundant with text).
+- Confound strength (decorrelated, never a tier): NUIS block alone
+  {claim ordinal, parent num, dependency, char/word len} = **.7547**;
+  claim_num alone .2516 (= .748 reversed). V_content .6198; V+NUIS .7676; +T .7907.
+- **DECONFOUNDED RESIDUAL (d)-(c) = +.0229 [+.0171, +.0285] P=1.000** — a small,
+  real dense increment beyond content features + every structural confound.
+- **§102/§103 replicate: STABLE** — T .7639, residual +.0237 [+.0184,+.0288]
+  (n=10,259). The claim-only construct does NOT have the placebo problem by design
+  (no reference-reading claimed), and the residual is ground-insensitive.
+- vs the old cell: old T .7965/.8389 carried ~.05-.08 of reference/asymmetry
+  channel now gone; old ref-based V .601/VA .626 RETIRED to appendix with the old
+  construct. Phase 2 (judged-A bank from online-rubrics -> Gemma) fills V+A and
+  upgrades the fused arm; queued for next free GPU window.
