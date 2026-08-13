@@ -3993,3 +3993,18 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   (.7537) remains the VAT column. All-platform OOF .8180 recorded as
   COMPOSITION-INFLATED (platform pos-rates .19-.84), never a cell number.
   Artifacts: code_competitions/v3max_harvest.json.
+
+## 2026-08-13 — PATENTS arm_a_v2 LANDED: wash — V3-design verdict now CROSS-CELL
+- arm_a2 (26 judged criteria scores in the block, full 59,937 rows): eval .7167 /
+  test .7808 ~= arm_t plain text .7194/.7834 ~= arm_a content-block .7198/.7859.
+  **Criteria-in-prompt adds NOTHING on patents** — same verdict as V3-MAX on code
+  competitions (.6846 < stack .7535). CROSS-CELL FINDING: at both data scales and
+  on two fields, the V3 fused design (scores in prompt -> LoRA) never beats
+  external stacking; the §11-style stack remains the program's fusion of record.
+  Patents VAT column unchanged: fused stack .754 pooled (.717/.791).
+- PATENTS COLUMN STATUS: V .620 / V_new .627 / V+A .668 / V_new+A .668 / fused
+  .754 / T .751; deconfounded residual +.0090 [+.0049,+.0130] (~2x eps).
+  RECOMMENDATION for the remaining (V+A)_new-mined column: the bank already
+  absorbed the dense edge down to ~.009 — a mining fleet would chase eps-scale
+  headroom. Propose declaring the cell CLOSED at phase 2 unless the formal mined
+  column is wanted; awaiting user.
