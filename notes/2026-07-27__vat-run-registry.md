@@ -3842,3 +3842,19 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   label-blind; datasets/patents/v3_claimonly/bank_v1.json): clarity/definiteness,
   antecedent basis, relative-terminology, prepositional clarity families etc.
   Next: Gemma scoring of eval+test claims (11,988 x 30 + anchors) on a free GPU.
+
+## 2026-08-13 — PATENTS V+A LANDED: the bank absorbs most of the dense residual
+- Harvest (datasets/patents/v3_claimonly/harvest_va_patents.json; bank_v1 30 criteria,
+  4 collapsed, all levels pooled eval+test grouped-OOF unless split-marked):
+  **A_nl .6648** (judged bank alone BEATS V_content .620) · **V+A_nl .6677**
+  (per-split OOF .6165 eval / .7147 test) · fused stack [VA,T] **.7544**
+  (.7171 eval / .7909 test) · honest T pooled .7513 (.7194/.7834).
+- **DECONFOUNDED RESIDUAL COLLAPSES with the bank in (c): +.0229 -> +.0090
+  [+.0049,+.0130] P=1.0** (c=V+A+confounds .7834, d=+T .7927). §102/§103 replicate
+  +.0073 [+.0036,+.0112] — stable. Reading: the 30 articulated criteria captured
+  ~60% of what dense knew beyond content+structure; the remaining dense edge on this
+  construct is tiny but real. VAT column (max-of-variants): eval .720 (V3 arm) /
+  test .791 (fused stack).
+- Ladder status: V .620 / V+A .668 / fused .754 / T .751 (pooled frame); V_new +
+  (V+A)_new = compilation + 2-family mining fleet (codex back), queued behind
+  train-side scoring (GPU6, running) and bank certification write-up.
