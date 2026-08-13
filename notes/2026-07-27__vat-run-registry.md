@@ -3946,3 +3946,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Patents arm_a2 (V3 block WITH 26 judged criteria scores, full 59,937 rows) built
   after fixing an NpzFile lazy-decompression trap (z["X"] per-access = 1.8M
   decompressions; materialize once) and TRAINING on GPU6 (~2-3h at max_len 1280).
+
+## 2026-08-13 — BBC r3 READOUT: gain +.0058, super-eps by .0008 — ROUND 4 REQUIRED
+- Track A: VA .7653 -> .7712 MONITOR; Delta .0578 -> .0520; gain +.0058 vs eps .005.
+  Gain trajectory .0084 -> .0067 -> .0058: geometric approach to the eps floor, each
+  round still individually resolvable (paired-seed noise .00252). No sub-eps round
+  yet; two-consecutive rule cannot fire before r5. Round cap = 5 (prior campaigns).
+- Spurious: joint B (34 channels) .6685 rising as B accumulates; dense over B+bank
+  +.0733 (was .0960 -> .0845 -> .0733 — the deconfounded dense edge is being eaten
+  by the growing bank+nuisance set, as designed).
+- ROUND 4 LAUNCHING (same flow).
