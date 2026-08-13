@@ -3727,3 +3727,24 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - RELAUNCHED 23:27:34Z; init 28.6s; GPU5 100%; launcher ssh severed EARLY by
   killing local client PIDs (remote setsid job survives clean disconnect —
   verified). Lesson filed: memory/reference_vllm_batch_chunking_launch_detach.md.
+
+## 2026-08-13 — PATENTS REBUILD PHASE 1 LAUNCHED (claim-only V3 + honest T)
+- User: "get me a trustworthy VAT number (preferably V3)". Design (post-mortem-
+  licensed): **construct RENAMED to what the model measurably does** — "examiner
+  rejected this claim element (any ground)", a decision-maker verdict on the claim's
+  OWN text; the 8 candidate references are DROPPED from all inputs (kills the
+  positives-carry-gold-reference construction asymmetry; placebo criticism moot
+  because no reference-reading is claimed).
+- Build: datasets/patents/v3_claimonly/ (build_patents_v3_claimonly.py) — SAME ROWS
+  as dense_standard splits (47,949/5,994/5,994, app_id-grouped, pos .6014); claims
+  median 216 chars. arm_t = claim text only -> honest T for this construct;
+  arm_a = V3 block (V_claim + STRUCT: claim ordinal DECLARED per revival cond. 4,
+  dependency flag, parent-claim number, length family, wherein/numeric counts) +
+  claim text -> fused arm, max-of-variants VAT column only. rejection_type sidecar
+  excluded from all inputs; harvest_strata_NEVER_AN_INPUT.csv holds it for the
+  §102/§103 replicate readout only.
+- Judged-A bank (revival condition 3, online-rubrics -> Gemma) = phase 2, queued on
+  GPU5 behind BBC scoring; upgrades arm_a to full V+A+T when landed.
+- Chain scripts/tools/patents_v3_chain.sh RUNNING on sk3 **GPU7** via stack runner
+  (launched 23:59:54Z; ~1-1.5h/arm at max_len 768 batch 16); launcher ssh severed
+  early per the new landmine discipline; watcher armed.
