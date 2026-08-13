@@ -3956,3 +3956,14 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   +.0733 (was .0960 -> .0845 -> .0733 — the deconfounded dense edge is being eaten
   by the growing bank+nuisance set, as designed).
 - ROUND 4 LAUNCHING (same flow).
+
+## 2026-08-13 — BBC r4 READOUT: gain +.0067 super-eps AGAIN — r5 = FINAL (cap)
+- VA .7712 -> .7779; Delta .0520 -> .0452; gain +.0067 (up-tick from r3's .0058).
+  Gains r1-r4: .0084/.0067/.0058/.0067 — NO sub-eps round in four; the bank rises
+  +.028 total while the eps floor is never crossed. With the round cap at 5 and the
+  rule needing TWO consecutive sub-eps, the rule CANNOT fire -> the campaign ends at
+  r5 as **TERMINAL BY CAP, STILL GAINING** (caption-finalist pattern; terminal bank
+  = LOWER bound on articulability).
+- Spurious: joint B (47 channels) .6884; dense over B+bank +.0676 (trajectory
+  .0960 -> .0845 -> .0733 -> .0676 — monotone consumption of the dense edge).
+- ROUND 5 (final) LAUNCHING.
