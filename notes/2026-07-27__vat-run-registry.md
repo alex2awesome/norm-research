@@ -3909,3 +3909,20 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Vocabulary note: this fills the COMPILED-columns sense of "new". The MINED sense
   ((V+A)_new via discovery fleet) is the remaining open column — 2-family fleet
   queued as the next campaign (morning item; BBC r2 has fleet priority tonight).
+
+## 2026-08-13 — BBC ROUND 2 executed end-to-end to the scoring boundary (one night)
+- Fleet: 16 sealed prompts (8 proposers x 2 tracks, codex-luna x4 + GLM x4), 200/200
+  collected (120A/80B), P x k count-check clean. Species pre-merge: A S_obs=70
+  M_hat .400 recapture .31 · B S_obs=51 M_hat .525 (masses FALLING vs r1 —
+  consumption continues).
+- Blind merge: CROSS-FAMILY BOTH TRACKS this round (sol + GLM; r1's single-judge-B
+  flag cleared for r2): strict edges A=47 / B=27; anchors 4/4 both tracks; applied
+  via species_merge dual-verdict mode (NOTE: apply takes comma-separated judge
+  files and does the strict intersection itself — my hand-rolled intersection file
+  had dropped the anchor pids, caught and redone properly).
+- Routing audit: fresh probe draw (stable-hash, prior-round ban), auditor
+  gpt-5.6-sol (family rotated from r1's GLM): misrouting 6/25, **probes 4/4**;
+  GLM arbiter ruled all 6 disputes -> **final A=14 / B=11 (6 mixed)**.
+- Gemma scoring of the 25 r2 criteria LAUNCHED (GPU6, chunked scorer). Readout r2
+  after: X2 = [V, A, A1(16), A2(14)]; Delta_2 vs Delta_1 +.0645; a sub-eps gain
+  here = FIRST sub-eps round (rule needs two consecutive).
