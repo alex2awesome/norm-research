@@ -3775,3 +3775,15 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   channel list in the caption. Ladder stays V → V+A → fused → T only.
 - Standing rule filed: memory/feedback_no_struct_tier_decorrelate.md (applies to
   ALL cells: no structural/positional/length bundle ever gets tier status).
+
+## 2026-08-13 — code_competitions V3 arm LANDED: NEGATIIVE, VAT column unchanged
+- Chain completed (5/5 folds, GPU1, ~2h) + scoring pass (score_eval_dense_v4,
+  DENSE_SCORE_MAXLEN=4096). OOF over held-out folds, order-join asserted:
+  **v3_aug .6554** vs same-rows references V_nl .7429 / VA_nl .7535 / dense .7241
+  (block_oof ensembles). Rank-avg [V3, VA_nl] .7242 — no lift anywhere.
+- Reading: on a cell already CLOSED as no-residual (bank > dense), pushing the
+  criteria into the prompt does not rescue the dense reader. CAVEAT recorded:
+  ~680 train rows/fold is thin for a LoRA arm (RR had ~1,000 and 48K-row cells
+  train the design properly) — this is a negative result AT THIS n, not a general
+  V3 verdict. **VAT column for coding curation stays fused=.7537 (max-of-variants;
+  wash vs bank).** Artifacts: code_competitions/v3aug_harvest.json + fold preds.
