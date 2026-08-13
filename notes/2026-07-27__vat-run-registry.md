@@ -3983,3 +3983,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Instrument record: anchors 4/4 x5 rounds x2 tracks; probes 4/4 x5; cross-family
   strict merges throughout; misrouting 6/25 -> 2/25. Ledger:
   closure/bbc_mostread/bbc_mostread_TERMINAL_LEDGER.json
+
+## 2026-08-13 — V3-MAX LANDED: well-powered NEGATIVE on code competitions
+- All 5 folds trained on the 6,353-row four-platform pool (~4,470 train/fold, full
+  27-V + 139-named-A block) + scored. **AC same-rows .6846** vs VA_nl .7535 / dense
+  .7241 / thin arm .6554: the data+block upgrade bought +.029 but the arm still
+  loses to BOTH parents. Thin-n caveat RESOLVED — this is now a powered negative:
+  criteria-in-prompt underperforms external stacking on this cell; §11 fused stack
+  (.7537) remains the VAT column. All-platform OOF .8180 recorded as
+  COMPOSITION-INFLATED (platform pos-rates .19-.84), never a cell number.
+  Artifacts: code_competitions/v3max_harvest.json.
