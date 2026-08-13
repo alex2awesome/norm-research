@@ -3787,3 +3787,27 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   train the design properly) — this is a negative result AT THIS n, not a general
   V3 verdict. **VAT column for coding curation stays fused=.7537 (max-of-variants;
   wash vs bank).** Artifacts: code_competitions/v3aug_harvest.json + fold preds.
+
+## 2026-08-13 — V3-MAX launched (user: "why so few training examples? train with more;
+## the V3 must see VA+VA_new scores + full coding training data")
+- Root cause of thin-n: the v3_aug arm trained only on the 999-row bank-scored AC
+  intersection (~680/fold). INVENTORY: full labeled four-platform pool = **6,353 rows**
+  (AC strict-L1 2,495 / LC 1,995 / CC 995 / CF 868; the CF-rebuild's 2,255
+  bank-scored pairs are UNLABELED — L1 labeling died at 145/2,255 in June, so
+  excluded). Judged-A coverage 1,867/6,353 (AC-999 + CF-869).
+- **V3-MAX build** (build_code_competitions_v3max.py): block = ALL 27 V/V_new
+  deterministic features (computable on every row) + ALL 139 judged criteria WITH
+  registry names (global aspect_names.json covers the competitions ids; e.g. a520
+  "Competitive-DS algorithm tag count"); real scores where judged, NA elsewhere
+  (judge-NA semantics). Folds StratifiedGroupKFold(5,shuffle,rs=0) by platform-
+  prefixed canonical_pid over the UNION -> ~4,400-4,500 train rows/fold (6.5x).
+  Readout = same-rows AC-999 OOF (primary) + all-platform OOF (secondary).
+  Block+code median 7,584 chars, p99 19,904; max_len 6144 block-first (~1% code
+  tails truncated). CHAIN RUNNING sk3 GPU5 from 00:57:39Z (~10-15h).
+- BBC r1 Gemma scoring COMPLETED (26/26 chunks; anchors pos-vs-neg .539 /
+  coherent-vs-scrambled .936 PASS; 2 collapsed criteria; NA 3.0%); scores.npz
+  landed; post-completion python reaped; round-1 readout = next CPU item.
+- Patents note: arm_a already sees the FULL available articulated set (the 8
+  content features — the ref-based V/A died with the references) and trains on all
+  47,949 rows; the judged-A upgrade (phase 2, online-rubrics -> Gemma on GPU5 after
+  v3max) triggers an arm_a_v2 retrain with criteria scores in the block.
