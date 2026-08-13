@@ -3894,3 +3894,18 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - r2 slice BUILT with corrected routing + r1 bank state + prior-round row ban
   (slice_r2.json). PATENTS train-side bank scoring COMPLETE (47,949 claims x 30) —
   arm_a_v2 refit unblocked.
+
+## 2026-08-13 — PATENTS V_new LANDED (compilation protocol; 4-column ladder complete)
+- patents_vnew.py (vnew_pilot protocol; compiler codex gpt-5.6-luna, label-blind;
+  cert on EVAL: rho>=.30 + modal<=.98): triage 18/26 codable -> 18 compiled ->
+  **8 certified** (pb04 terms-of-degree, pb06 prepositional clarity, pb07/pb17/
+  pb20/pb23/pb24/pb26). Yield 44% of compiled vs the pilot's 6.5% — structural/
+  grammatical criteria compile; the pilot's codability law replicates from the
+  opposite side.
+- Ladder (pooled eval+test OOF): **V .620 -> V_new .627** (+.008; test .651->.654).
+  **V_new+A .668 ~= V+A .667** — compiled columns are INERT on top of the judged
+  bank (pilot finding replicates: translations of judged criteria add nothing to
+  the judge). Deconf residual with V_new+A in (c): +.0110 [+.0068,+.0149].
+- Vocabulary note: this fills the COMPILED-columns sense of "new". The MINED sense
+  ((V+A)_new via discovery fleet) is the remaining open column — 2-family fleet
+  queued as the next campaign (morning item; BBC r2 has fleet priority tonight).

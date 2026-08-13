@@ -33,7 +33,7 @@ SC = HERE.parents[1] / "methods/taste_decomposition/closure/patents_claimonly"
 TD = HERE.parents[1] / "methods/taste_decomposition"
 SCRATCH = D / "vnew_scratch"
 SCRATCH.mkdir(exist_ok=True)
-MODEL = "gpt-5.6"
+MODEL = "gpt-5.6-luna"
 RHO_CERT, MODAL_MAX = 0.30, 0.98
 
 def _mod(path, alias):
@@ -74,7 +74,7 @@ def extract_module(t):
 
 # ---- 1. TRIAGE -----------------------------------------------------------------
 tri_p = SCRATCH / "out_triage.json"
-if not tri_p.exists():
+if not tri_p.exists() or len(tri_p.read_text()) < 50:
     listing = "\n".join(f'{c["id"]}\t{c["name"]}\t{c["instruction"][:200]}' for c in live)
     out = codex(
         "You are triaging evaluation criteria for CODABILITY: can the criterion be "
