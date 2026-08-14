@@ -4133,3 +4133,29 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   post-terminal probe).
 - BBC t0 scoring launched behind it (gpu_runner bbc_t0, env vllm_latest — first
   launch used a nonexistent env path, killed by PID and relaunched).
+
+## 2026-08-14/15 — UNION DENSE HARVEST: coding-curation "bank >= dense" verdict STANDS
+- code_uniont chain (plain-text Llama LoRA, ALL 6,353 four-platform rows, v3max
+  folds, max_len 4096) trained 5/5 + scored (test = held-out fifth; eval slice is
+  INSIDE train groups, so the OOF is honest — no select-on-heldout).
+- **Within-platform n-wtd .6471** (ac .651 / cf .597 / lc .687 / cc .602); pooled
+  .? NEVER QUOTED (composition). Artifact code_competitions/uniont_harvest.json.
+- **AC-999 same rows: union dense .6744 < AC-fit dense .7241 < union-fit VA .7093*
+  < AC-fit VA_nl .7535 = the bank.** (*union-fit VA recomputed on identical rows
+  from union_va_oof.npz.) 6.4x more training data made the dense arm WORSE on
+  AC — cross-platform transfer hurts; the platforms are not one construct (both
+  instrument families now agree). Data-starvation objection ANSWERED; the cell's
+  verdict does not flip. LC is the union dense's best platform (.687).
+
+## 2026-08-15 — BBC T0 COLLAPSE RESOLVED: genuine saturation, recorded not patched
+- BBC t0 p_yes was one-hot ({0,1}, 2 distinct/10,147). Differential probe
+  (t0_probe_logprobs.py; homepage-100 = known-continuous control, bbc-100, modes
+  default AND raw_logprobs): **homepage continuous in both modes (33/36 distinct),
+  BBC all-1.0 in both modes** -> the env is the same instrument; the collapse is
+  DATA-driven (base Llama hyper-confident on short headline prompts; loser-token
+  mass underflows float64 beyond ~36 nats). Same category as the original
+  battery's recorded collapses (hashtagwars 7-distinct; 4 cells median-saturated)
+  -> per that precedent the scores STAND, flagged COLLAPSE, never patched.
+- f2_deconf --cell bbc_mostread RUNNING on sk3 (n_E=10,147, bank 103, nuis 59);
+  the T0 (e) secondary will read "uninformative" — the PRIMARY (d)-(c) does not
+  touch t0. f2_evalue next on landing.
