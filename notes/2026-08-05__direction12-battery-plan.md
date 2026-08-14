@@ -1926,3 +1926,18 @@ y keeps a minority slice. Feeds the Table-2-design defense footnote + task #31.
 GLM-5.2 MATCHED TRIAL RUNNING (methods/metric_implementer/experiments/glm52_matched_trial.py,
 chain on sk3, phases A 14.4K + C ~15K calls, max-tokens 1024 after think-trap smoke): matched
 prompt-judge mention-AUC vs July grid (8B .574 / GLM-unmatched .529).
+
+### 2026-08-14 — PREREG (FROZEN before compute): Tier-1 label-hygiene dose-response, peer mention-AUC
+Instrument FIXED: frozen 8B judge scores (peer_p_scores.json); ONLY labels vary. Distinct from
+the exploratory ysplit_sweep (post-hoc positive-split selection vs MI-rho): this preregisters a
+monotone-AUC prediction and adds the NEGATIVES axis.
+- Positive tiers (nested): P0 canonical peer_y_pos / P1 high-confidence pos mentions only /
+  P2 = P1 minus (doc,aspect) pairs also carrying neg or mixed mention / P3 = P2 with >=2
+  distinct reviews positively mentioning (corroborated).
+- Negative tiers (nested): N0 all non-positive docs / N1 attentive: doc has >=2 reviews each
+  w/ >=1 real mention AND >=5 total real mentions of OTHER aspects / N2 same w/ >=10.
+- Readout per cell: per-metric AUC (>=10 pos, >=30 neg), median+mean over metrics, n_metrics.
+- FROZEN PREDICTIONS: median AUC non-decreasing P0->P3 at fixed N; non-decreasing N0->N2 at
+  fixed P. Test statistic = the monotone pattern itself (sign pattern over the nested grid);
+  no post-hoc split selection. FALSIFIER: flat or decreasing => filters are cosmetic; the
+  "label noise explains low AUC" story may NOT be quoted as corrected. Report either way.
