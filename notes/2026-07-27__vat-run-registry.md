@@ -4080,3 +4080,35 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   dense transfer can win where feature stacks lose. If union-dense > .754 the cell
   verdict flips; if ~.70 the bank>=dense verdict stands with the objection
   properly answered. Chain running; artifacts union_va_ladder.json/union_va_oof.npz.
+
+## 2026-08-14 — peer r6-ERA probe: CLEANEST AUDIT OF THE PROGRAM; scoring queued
+- Chain through routing complete under the frozen prereg (ae7b7c329): slice 60
+  cards (pre-2022 M rows, r1-r5 banned), 3-family fleet 150 proposals (12/12
+  slots; claude legs = sealed fresh `claude -p` sessions — DEVIATION from the
+  prereg'd 2-family P=8, recorded), species A .333/B .400, strict sol+GLM merge
+  (anchors TRUE, edges 33/33), audit packet 29 items (4 planted).
+- **AUDIT: misrouting 0/25, probes 4/4, disputes 0 — no arbiter round needed**
+  (first campaign round anywhere with a zero-dispute audit). final A=15 B=10
+  (4 mixed). Topic-leak gate applied: all 15 A-routed criteria passed as genuine
+  quality properties, none as era/topic markers.
+- Gemma scoring launched via gpu_runner (job peer_r6_maps, waits for a free GPU;
+  log closure/peer_revealed/peer_revealed_r6_scoring.log). Prereg'd readout
+  STAGED: peer_identity_audit/r6era_band_readout.py (both frames, banded
+  residuals + paired gboot, declared verdicts; runs on scores landing).
+
+## 2026-08-14 — BBC E-value chain STAGED (t0 rows + F2 adapter); patents E-value BLOCKED
+- fusion/t0_build_rows_bbc.py (homepage-pattern post-hoc builder): t0_rows/
+  bbc_mostread.{npz,texts.jsonl.gz,meta.json}; n_E=10,147 dense-held-out rows,
+  T(seedmean pooled) .8218; gates = dense_join order-proof + bank-id coverage +
+  split-vs-population y equality.
+- f2_cells.py: bbc_mostread SPECIAL adapter (cells.py is metadata-only; loads via
+  round0_bbc + scaleupC_layer1, shared _round_blocks). Smoke: bank 103 cols
+  ([V,A]+66 mined A over r1-r5), nuis 59 B channels, E=10,147, family
+  impute_perfold. Remaining chain: t0_score_vllm (GPU, queued BEHIND r6 scoring
+  per the one-GPU rule) -> f2_deconf -> f2_evalue (species artifacts resolve:
+  r5 strict preferred).
+- **Patents E-value: NOT COMPUTABLE under the frozen definition** — closure/
+  patents_claimonly has r0 selection artifacts only, no Good-Turing Track-B
+  species (the claim-only construct never ran a sealed mining fleet). The row is
+  contingent on the un-launched patents (V+A)_new fleet (recommendation on file:
+  CLOSED at phase 2, ~eps headroom). Folded into that open user decision.

@@ -389,8 +389,55 @@ def peer_verdict():
     )
 
 
+def bbc_mostread():
+    """bbc_mostread (2026-08-14): the campaign follows the generic routing/scores
+    contract exactly (rounds 1-5, `final_route`, `mixed`, X aligned to the population),
+    but its cells.py is metadata-only -- the population loader lives in round0_bbc.py
+    (dense-join gate) + scaleupC_layer1 (bank), so this special adapter loads through
+    THOSE modules and hands the round blocks to the shared `_round_blocks`."""
+    import pandas as pd
+    d_ = CLOSURE / "bbc_mostread"
+    R0 = _mod(d_ / "round0_bbc.py", "f2_bbc_r0", [d_])
+    SC = _mod(TD / "scaleupC_layer1.py", "f2_bbc_sc", [TD])
+    pop = pd.read_csv(R0.VA_DIR / "population.csv.gz")
+    pop["row_id"] = pop.row_id.astype(str)
+    ids = pop.row_id.tolist()
+    y = pop.judgement.astype(int).values
+    groups = np.array(pop.group.astype(str).values, dtype=object)
+    _m, A, V, _g, _s, ids_b = SC.load_scaleupC_bank("bbc_mostread", out=R0.BANK_OUT)
+    assert [str(i) for i in ids_b] == ids, "bbc: bank rows not aligned with population"
+    dj = R0.dense_join(pop)          # raises on any order-join failure
+    E = np.isin(np.array(ids, dtype=object), dj["row_ids"])
+    assert int(E.sum()) == len(dj["row_ids"]), "bbc: E mask != dense-held-out rows"
+
+    Ab, An, Bb, Bn, Bstrict, dropped = _round_blocks(
+        d_, "bbc_mostread_r%s", ("1", "2", "3", "4", "5"), set(), len(y))
+    bank = np.column_stack([V, A] + Ab)
+    nuis = np.column_stack(Bb) if Bb else np.zeros((len(y), 0))
+    return dict(
+        cell="bbc_mostread", ids=ids, y=y, groups=groups, E=E,
+        bank=bank, bank_names=["V", "A_base"] + An,
+        nuis=nuis, nuis_names=Bn,
+        nuis_strict=np.array(Bstrict, dtype=bool) if Bstrict else np.zeros(0, dtype=bool),
+        n_nuis_gemma=int(nuis.shape[1]), n_struct=0, collapse_gate_dropped=dropped,
+        provenance={
+            "bank_enriched": ("closure/bbc_mostread: [V, A_base(scaleupC)] + every "
+                              "A-ROUTED round block from bbc_mostread_rN_routing_final"
+                              ".json, rounds 1-5 (terminal by cap 2026-08-13)"),
+            "nuisance": ("every Track-B routed criterion from the same routing files, "
+                         "columns from bbc_mostread_rN_scores.npz"),
+            "conventions": [
+                "no cumulative collapse-gate artifact for this campaign -- none applied",
+                "no GEPA winner-column swap artifact for this campaign -- incumbents stand",
+                "E = the dense arm's own held-out rows, proven by round0_bbc.dense_join"],
+            "struct": "no declared STRUCT/observed-covariate column for this cell",
+        },
+    )
+
+
 ADAPTERS["cw_community"] = cw_community
 ADAPTERS["peer_verdict"] = peer_verdict
+ADAPTERS["bbc_mostread"] = bbc_mostread
 
 
 
