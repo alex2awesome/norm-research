@@ -4025,3 +4025,18 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   manufactured by missing confounds. The fleet itself mined the identity-adjacent
   channel (r1:B09 "Identity-revealing URLs, handles and organisation-named host").
   LEVELS are raw instrument AUCs (ladder convention, all cells).
+
+## 2026-08-13 — peer community: ERA-REWEIGHT + JUDGE-DRIFT hypotheses KILLED
+- era_reweight_test.py (peer_identity_audit/): bank stack FIT ONLY ON PRE-2022 rows
+  (n=1,357, full V17+A154 matrix, grouped-OOF, seeds 0-2) reads **.7165** on
+  pre-2022 — WORSE than the pooled-fit stack on the same band (.7353); dense on
+  held-out pre-2022 = .8840. **Criterion nonstationarity/re-weighting does NOT
+  explain the residual** — era-specific weights recover nothing.
+- Judge calibration by era: per-criterion dispersion pre-2022 vs 2022+ essentially
+  identical (SD .130 vs .121; NA .654 both). **Judge-drift disfavored.**
+- SURVIVING EXPLANATIONS (2): (i) era-specific MISSING VOCABULARY — the fleets
+  mined on a recent-heavy corpus; pre-2022 quality conventions may need their own
+  criteria (testable: era-targeted mining round on pre-2022 disagreement slices);
+  (ii) CONFIGURAL/GESTALT reading — quality carried by combinations/global
+  coherence no marginal criterion expresses (Noah weak-form; also fits the
+  within-positives fame-gradation anomaly rho .293 vs bank .026).
