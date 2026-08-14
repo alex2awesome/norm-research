@@ -4112,3 +4112,24 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   species (the claim-only construct never ran a sealed mining fleet). The row is
   contingent on the un-launched patents (V+A)_new fleet (recommendation on file:
   CLOSED at phase 2, ~eps headroom). Folded into that open user decision.
+
+## 2026-08-14 — r6-ERA PROBE READOUT: prereg verdict = H-CONFIGURAL STRENGTHENED
+- Scoring landed (anchors pos-vs-neg .662 / coherent-vs-scrambled .950 PASS,
+  0/25 collapsed, NA 1.6%). Readout ran under the frozen prereg (ae7b7c329);
+  artifact results/r6era_band_readout_peer_revealed.json.
+- **Baseline reproduction exact** (frame-identity gate): plain 2013-19 +.1676 vs
+  quoted +.168; kitchen-sink +.1298 exact.
+- **PRIMARY (2013-19 band residual, r6 A-routed 15 appended to (c)):**
+  plain +.1676 -> +.1692 (fall -.0016); kitchen-sink +.1298 -> +.1644 (fall
+  -.0346). Both falls < .02 -> **frozen rule fires: H-configural STRENGTHENED**.
+  SECONDARY: 2022-23 moves -.0123 / -.0165 (stable, within .04 window).
+- Sharpest descriptive fact: on 2013-19 the (c) arm is UNCHANGED at .715 with the
+  15 era-mined criteria added — the criteria mined FROM pre-2022 disagreement rows
+  add zero discrimination on that band. Partial vocabulary recovery only on
+  2020-21 (plain: bank .720->.750, residual +.135->+.105).
+- Reading (descriptive): the pre-2022 dense edge is not missing-vocabulary at
+  P=12/3-family mining strength; the configural/gestalt account is the last
+  survivor of the 8-account audit. Terminal ledger untouched (registered
+  post-terminal probe).
+- BBC t0 scoring launched behind it (gpu_runner bbc_t0, env vllm_latest — first
+  launch used a nonexistent env path, killed by PID and relaunched).
