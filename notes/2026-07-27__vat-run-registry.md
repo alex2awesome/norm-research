@@ -4040,3 +4040,25 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   (ii) CONFIGURAL/GESTALT reading — quality carried by combinations/global
   coherence no marginal criterion expresses (Noah weak-form; also fits the
   within-positives fame-gradation anomaly rho .293 vs bank .026).
+
+## 2026-08-13 — peer community: ERA-VOCABULARY-AS-LEAK tested at two strengths — disfavored
+- User concern: era-targeted mining could re-encode era voice = topic leak. Tested
+  as an explicit spurious channel BEFORE any mining:
+  (a) scalar predicted-year (grouped-OOF ridge on embeddings; rho .432 — user
+  correctly flagged coarseness): overall residual +.0728 -> +.0662; pre-2022 band
+  +.116 -> +.114 (untouched).
+  (b) STRENGTHENED subspace: 3-class era-band probabilities (OOF acc .521 vs ~.44
+  chance) + 200 topic PCs: overall +.0730 -> +.0734 (nothing); pre-2022 +.130 ->
+  +.119 (~.01, within band noise at n=134).
+- ALSO verified: y does NOT cluster by year (pos rate .475-.533 across all 11
+  years; year-alone AUC .487 = chance; label is within venue x year quartiles by
+  construction) — the E-band pos-rate wobble (.58 old band) is subset composition
+  and cancels in the paired (c)/(d) band readouts.
+- VERDICT: era-voice conditioning absorbs essentially nothing at either strength.
+  Caveat recorded: bge-large era-recoverability is modest (.52 acc) so an 8B could
+  read finer era cues — but recognition-NLL (already conditioned) covers the
+  adjacent channel. The era-targeted mining round remains the discriminator between
+  the two survivors (missing quality vocabulary vs configural), with the standing
+  instruction that any mined era-correlated criterion must pass the same routing
+  audit (quality vs incidental) as every other criterion — the audit+arbiter IS the
+  topic-leak gate. Artifacts: results/f2_eravocab{,2}_peer_revealed.json.
