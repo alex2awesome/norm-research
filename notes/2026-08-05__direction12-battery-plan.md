@@ -1941,3 +1941,19 @@ monotone-AUC prediction and adds the NEGATIVES axis.
   fixed P. Test statistic = the monotone pattern itself (sign pattern over the nested grid);
   no post-hoc split selection. FALSIFIER: flat or decreasing => filters are cosmetic; the
   "label noise explains low AUC" story may NOT be quoted as corrected. Report either way.
+
+### 2026-08-14 — TIER-1 RESULT: prereg SPLIT VERDICT (negatives axis confirmed-small; positive hygiene REFUTED)
+Grid run as preregistered (tier1_label_hygiene.py; artifact tier1_label_hygiene_result.json,
+copy notebooks/data/silver_v2_20260711/). Full-set medians: P0 .587 -> P1 .547 -> P2 .537
+(n_met 48/29/26; P3 corroboration leaves n=1 metric — prevalence too sparse, cell VOID).
+COMPOSITION-CONTROLLED (26-metric intersection, paired):
+- N-axis CONFIRMED, small: attentive negatives raise AUC at every P (P0 .5530->.5558,
+  P1 .5313->.5436, P2 .5372->.5466; +.003-.012).
+- P-axis REFUTED: high-confidence-only DROPS AUC (P0 .5530 -> P1 .5313 median; paired
+  P1>P0 on 10/26 metrics); no-contradiction (P2) does not recover. Extraction confidence
+  is evidently not label correctness (medium-conf brief-praise mentions were good labels).
+PER FROZEN FALSIFIER: the "removable label noise explains the low mention-AUC" story may
+NOT be quoted as corrected — positive-side hygiene does not lift agreement. Live remaining
+hypotheses, in test order: Tier-2 scope fix (full-paper scoring), then Tier-3 certified
+arbiter. The ~.55-.60 observed band stands as the honest floor with only ~+.01 recoverable
+from the negatives axis.
