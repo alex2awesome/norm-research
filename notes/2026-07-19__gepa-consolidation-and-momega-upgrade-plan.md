@@ -5780,3 +5780,23 @@ PUPA .906/.844/.883/.899/-.008 n.s. (caption carries the tie CI, matched-budget
 robustness note, and the sk1 box-change disclosure). Old .471/.557/+.086 and
 .883/.882/-.001 cells are gone from the draft. All six rows in the paper now match
 the certified same-session k=5 ledger.
+
+## HB207 (2026-08-14) — FULL CALL-PARITY SLATE: last two non-GLM arms LAUNCHED (user directive)
+
+User: "run GEPA for equal amounts of compute" (NB ledger phrasing ban: quote as EQUAL-CALL
+matching per benchmark, never "equal compute" — token accounting is hotpot-scoped, HB199 §1).
+State walked before launching: hotpot @16,700 DONE (HB195, +.0693; +2 seeds HB199), hover
+@10,110 DONE (HB200/204 branch A), ifbench @2,400 DONE-scoped (2/2 seeds ship-the-seed),
+aime @6,870 IN FLIGHT (prereg HB199 §2, lane alive sk1 GPU3). NEW LAUNCHES (sk1, own
+servers, arm_lane_sk1.sh): ifbench official @23,300 TRUE match tag truematch23300 (GPU4
+port 8215, 09:25Z) + livebench official @18,708 tag truematch18708 (GPU5 port 8216, 09:28Z;
+sk1 GPUs 0-3 busy w/ other users — optimization-phase load noise disclosed; row-of-record
+comes from the same-session re-mint per HB200-addendum §3 regardless). Launch bug caught:
+compound `cd && nohup A & nohup B &` puts the cd inside job A — lane B relaunched with
+absolute path. sk2 FULL (8/8 GPUs other users) — not touched; sk3 not needed (sk1 had 4
+free GPUs; user's sync-to-sk3 authorization noted for future overflow).
+REMAINING for the complete slate: pupa @29,526 = GLM-judge arm, est. 60-90M tokens ≈ the
+ENTIRE weekly Lite window — HELD FOR USER QUOTA DECISION (options: burn this window / wait
+for next window / accept pupa as disclosed-unmatched w/ the tie already certified at .906
+vs .899). Post-landing requirement per session-of-record rule: fresh same-session k=5
+re-mints (ifbench 4-cand, livebench 4-cand, aime 3-cand per prereg).
