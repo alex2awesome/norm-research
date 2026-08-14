@@ -1909,3 +1909,20 @@ glm + 15 qwen + 15 llama + 15 haiku each, 0 failures, ~5 min. FULL CHAIN LAUNCHE
 22:58 PT (wrapper pid 2261199, log ecert_slice_v1_gpu0.log, monitor armed): humor 74 ->
 CW 48 -> news 25 -> math 23 -> peer 15, ~2.5min/metric incl. 4 API families -> ETA
 ~7-8h (API latency dominates vs the 2-fam morning rate). Task #32 in_progress.
+
+### 2026-08-14 — DIRECT F1/AUC vs mention-y + DISAGREEMENT ERROR ANALYSIS (user-directed)
+F1(M_omega, y_pos) computed on all instance-level joins (artifact notebooks/data/
+silver_v2_20260711/f1_direct_20260814.json): median F1@.5 = peer .099 / crx .035 / cw .048 /
+pr .044 / humor .011 at prevalence .01-.06 (F1 ~ 2-3x the base-rate chance level; AUC .52-.60).
+NEVER headline F1 here: threshold-dependence + partial-observation y structurally deflate it.
+ERROR ANALYSIS (12 disagreement samples read manually, 3 peer metrics): judge right 9/12.
+Cell judge-YES/y=0: 6/6 label MISSES (property prominently in text, no reviewer commented).
+Cell judge-NO/y=1 VERIFIED via join polarity rows: 2/4 = genuine reviewer-vs-reviewer
+disagreement (same doc+aspect carries HIGH-conf NEG mention + pos mention; y=1 rode the pos),
+2/4 = scope mismatch (judge scores ~abstract-length text, reviewers judged full paper).
+CORPUS-WIDE: of 15,828 (doc,aspect) pairs with a real mention, 59.1% are NEG-only, 34.0%
+pos-only, 5.3% both -> peer-review mentions are predominantly CRITIQUES; the positive-only
+y keeps a minority slice. Feeds the Table-2-design defense footnote + task #31.
+GLM-5.2 MATCHED TRIAL RUNNING (methods/metric_implementer/experiments/glm52_matched_trial.py,
+chain on sk3, phases A 14.4K + C ~15K calls, max-tokens 1024 after think-trap smoke): matched
+prompt-judge mention-AUC vs July grid (8B .574 / GLM-unmatched .529).
