@@ -4062,3 +4062,21 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   instruction that any mined era-correlated criterion must pass the same routing
   audit (quality vs incidental) as every other criterion — the audit+arbiter IS the
   topic-leak gate. Artifacts: results/f2_eravocab{,2}_peer_revealed.json.
+
+## 2026-08-13/14 — code competitions FULL-UNION rebuild, part 1 (user: "use ALL the data")
+- CONFIRMED the starvation charge: canonical ladder used AC-999 only (16% of 6,353
+  labeled rows) and its dense T was ModernBERT-base 150M (not the Llama standard).
+- FIXES RUN: (a) coded-metric bank (the "A" here = 154 deterministic CPU metrics,
+  not LLM-judged) scored on ALL 6,353 rows; (b) full-union V/A/VA ladder (frozen
+  stack, folds by platform-prefixed canonical_pid, WITHIN-PLATFORM readout);
+  (c) union plain-text Llama LoRA dense TRAINING (same folds as v3max).
+- PART-1 RESULT — the union HURTS the articulated instruments: within-platform
+  n-weighted V .5994 / A .6143 / VA .6201 (per-platform VA: AC .677 / CF .523 /
+  LC .595 / CC .612). Apples-to-apples on the IDENTICAL AC-999 rows: union-fit
+  VA .7093 vs AC-fit VA .7535 (V .7150 vs .7429). **Cross-platform pooled fitting
+  degrades AC readouts — the four platforms are NOT one construct** (label
+  provenance differs: AC strict-L1 vs claude_label elsewhere; CF sits near chance).
+- OPEN (the real starvation test): the union-trained Llama dense on AC-999 —
+  dense transfer can win where feature stacks lose. If union-dense > .754 the cell
+  verdict flips; if ~.70 the bank>=dense verdict stands with the objection
+  properly answered. Chain running; artifacts union_va_ladder.json/union_va_oof.npz.
