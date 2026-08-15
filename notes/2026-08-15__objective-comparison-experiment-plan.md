@@ -198,3 +198,12 @@ E2 m_rec_ens > m_unif_ens — the MI weights carry signal beyond mere averaging 
 this isolates the objective from the ensemble effect); E3 m_rec_ens vs m_desc directional.
 Falsifier: E2 null => reconstruction weights add nothing over uniform averaging at this
 tier. Report all.
+
+## ENSEMBLE READOUT (prereg addendum, 2026-08-15) — oc_ensemble_v1.json
+E1: rec_ens vs desc -.0060 [-.0164,+.0041] (argmax was -.0116 — ensemble closes ~half the
+gap, still not positive). E2 ISOLATING TEST: rec_ens vs unif_ens +.0035 [-.0013,+.0082],
+wins 49/83 (one-sided sign p~.06) — DIRECTIONALLY POSITIVE, borderline: the MI weights
+carry real but tiny signal beyond averaging. fb_ens ~ rec_ens (n.s.). Consistent story:
+the reconstruction compass is real (within-metric +.39; E2 direction) but worth ~.003-.01
+AUC when exploited over 11 paraphrases at the strong-executor tier. Escalation paths
+unchanged: ladder (stage C running) + Tier-B seeded-delta generation.
