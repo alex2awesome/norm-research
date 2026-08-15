@@ -155,5 +155,82 @@ def s3_critic():
         print(f"{task}: critic {n} prompts over {len(sub)} probes")
 
 
+def _ibin(a, b):
+    import math
+    ab = (a >= np.median(a)).astype(int); bb = (b >= np.median(b)).astype(int)
+    P = np.zeros((2, 2))
+    for x, y in zip(ab, bb):
+        P[x, y] += 1
+    P /= P.sum()
+    mi = 0.0
+    for x in (0, 1):
+        for y in (0, 1):
+            if P[x, y] > 0:
+                mi += P[x, y] * math.log2(P[x, y] / (P[x].sum() * P[:, y].sum()))
+    return mi
+
+
+def _rankagree(a, b):
+    ra = np.argsort(np.argsort(a)); rb = np.argsort(np.argsort(b))
+    if ra.std() == 0 or rb.std() == 0:
+        return -2.0
+    return float(np.corrcoef(ra, rb)[0, 1])
+
+
+def select():
+    """Arms per prereg. m_recon computable once ocdef probes exist; m_fb once critic lands
+    (rows for a metric may be partial — require >=100 finite critic probes)."""
+    pools = json.load(open(OUT / "pools.json"))
+    crit = defaultdict(dict)
+    cf = OUT / "critic_all_results.jsonl"
+    if cf.exists():
+        for line in open(cf):
+            try:
+                r = json.loads(line)
+            except Exception:
+                continue
+            if r.get("score") is not None:
+                crit[r["aspect_id"]][r["datapoint_id"]] = float(r["score"])
+    sel = {}
+    for task, kept in pools.items():
+        ids, per = form_scores(task)
+        mi_d = json.load(open(MD / f"ocdef_{task}_probes_g4.json"))
+        mi_ids = mi_d["post_ids"]; mi_S = mi_d["scores"]
+        idx_of = {d: i for i, d in enumerate(ids)}
+        for mid, formkeys in kept.items():
+            mk = f"{mid}__-1"
+            if mk not in mi_S:
+                continue
+            Mi = np.asarray(mi_S[mk], float)
+            Mi_al = np.array([Mi[mi_ids.index(d)] if d in mi_ids else np.nan for d in ids])
+            ok = np.isfinite(Mi_al)
+            rec_best, fb_best = None, None
+            cr = crit.get(mid, {})
+            cr_al = np.array([cr.get(d, np.nan) for d in ids])
+            okc = np.isfinite(cr_al)
+            for fk in formkeys:
+                v = per[mid][fk]
+                if ok.sum() >= 100 and v[ok].std() > 0 and Mi_al[ok].std() > 0:
+                    mi = _ibin(v[ok], Mi_al[ok])
+                    if rec_best is None or mi > rec_best[1]:
+                        rec_best = (fk, round(mi, 4))
+                if okc.sum() >= 100 and v[okc].std() > 0 and cr_al[okc].std() > 0:
+                    ra = _rankagree(v[okc], cr_al[okc])
+                    if fb_best is None or ra > fb_best[1]:
+                        fb_best = (fk, round(ra, 4))
+            sel.setdefault(task, {})[mid] = {
+                "m_recon": rec_best, "m_fb": fb_best,
+                "m_desc": f"{mid}__-1", "n_critic_probes": int(okc.sum())}
+    json.dump(sel, open(OUT / "selections.json", "w"), indent=1)
+    for task, mm in sel.items():
+        nrec = sum(1 for v in mm.values() if v["m_recon"])
+        nfb = sum(1 for v in mm.values() if v["m_fb"])
+        agree = sum(1 for v in mm.values()
+                    if v["m_recon"] and v["m_fb"] and v["m_recon"][0] == v["m_fb"][0])
+        print(f"{task}: {len(mm)} metrics | m_recon selected {nrec} | m_fb selected {nfb} "
+              f"| same-form agreement {agree}")
+
+
 if __name__ == "__main__":
-    {"s1": s1, "s2_prompts": s2_prompts, "s3_critic": s3_critic}[sys.argv[1]]()
+    {"s1": s1, "s2_prompts": s2_prompts, "s3_critic": s3_critic,
+     "select": select}[sys.argv[1]]()
