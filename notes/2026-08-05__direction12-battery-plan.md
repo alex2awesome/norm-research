@@ -1995,3 +1995,27 @@ perp-verdict. RESOLUTION CAVEAT (mandatory when quoting): between-cell diffs sit
 spacing estimator's quantization floor (~.003 at N~70 prompts/300 probes; 272-bank ran
 N~640) — quote as "no agreement detected at this budget", never "disagreement proven".
 Task #32 CLOSED. Feeds #27 as a negative/underpowered cell.
+
+### 2026-08-15 — WAVE-2 CONVERGENCE: tier-3 table FINAL; tier-A first cut + two structural findings
+CERTIFICATION: wave-1 anchors 50/54 (93%), wave-2 30/32 (94%) — both certified. v1-v2
+agreement on 1,080 re-arbitrated items = 54%: construct specification (leaf-name vs
+merged-name+definition) flips ~half the arbiter verdicts — wording-sensitivity of the
+LABEL instrument itself (thematic echo of paper-#1 register result; y* is spec-relative).
+TIER-3 FINAL (canonical judge vs purified y*, confident labels): peer .933 (n=614) /
+cw .815 (163) / pr .686 (226) / humor .631 (272) / crx .668 (163). PR v1 "inversion"
+(.35) was a construct-mismatch artifact — GONE under proper specs. vs mention-AUC floor
+.52-.60: LABEL NOISE WAS THE BINDING CONSTRAINT on every task. Task #33 CLOSED.
+TIER-A FIRST CUT (n=19 two-class confident metrics; canonical __-1 form excluded from
+optimized arms after a self-selection bug — i_binary(M_i, canonical)=1.0 trivially):
+recon-fb null (mean -.036, wins 12/17); recon-desc -.070 [-.122,-.026] desc wins;
+moderator null. ORACLE BRACKET DECODES IT: median oracle .995 / m_desc .990 / random
+.836; oracle>desc only 9/19 -> (1) the paraphrase pools have NO headroom above the
+definition; (2) SPEC-ALIGNMENT CIRCULARITY: y* was arbitrated from name+definition —
+the SAME text m_desc prompts with — so the desc arm carries a structural alignment
+advantage on arbiter labels (user's Section-3 worry, now concretely instantiated on the
+label side). Tier-A CANNOT adjudicate the objectives with paraphrase pools + spec-derived
+y*. CONSEQUENCES for Tier B: (a) candidate generation must produce genuinely NEW forms
+(not paraphrases); (b) y* design needs a spec-independence arm (e.g., exemplar-grounded
+arbiter specs, or triangulation w/ attentive-negative mention-y) before the draft
+sentence's numbers can be minted. Peer is one-sided (even resampled negatives arbitrate
+positive at 83%+) — peer supports pooled but not per-metric arm AUCs.

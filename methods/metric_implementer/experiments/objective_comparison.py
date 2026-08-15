@@ -209,6 +209,8 @@ def select():
             cr_al = np.array([cr.get(d, np.nan) for d in ids])
             okc = np.isfinite(cr_al)
             for fk in formkeys:
+                if fk.endswith("__-1"):    # canonical/definition form: reserved for m_desc arm
+                    continue
                 v = per[mid][fk]
                 if ok.sum() >= 100 and v[ok].std() > 0 and Mi_al[ok].std() > 0:
                     mi = _ibin(v[ok], Mi_al[ok])
