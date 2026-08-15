@@ -1982,3 +1982,16 @@ OpenRouter, 29,550/29,550 after 3 mop-up passes for transient 400s). SELECTION F
 m_recon + m_fb + m_desc for all 197; same-form agreement recon-vs-critic 59/197 (30%) —
 objectives disagree on 70% of metrics. Corpus defpass (m_desc eval scores) running GPU0.
 Eval waits on wave-2 purified labels. Artifacts outputs/objective_comparison_v1/ on sk3.
+
+### 2026-08-15 — E-CERT SLICE HARVEST: PREREG NULLS (all three predictions), campaign CLOSED
+harvest_v1.json (sk3 outputs/ecert_slice_v1/; committed script ecert_slice_harvest.py
+re-derives the /tmp post-processors: HB138 median split, HB142 spacing ceiling, HB145
+calibration). 185/185 banks ok+mapped, 0 degenerate. Cells: A n=63 achieved .817 gap .040 /
+B n=62 .800 .043 / C n=60 .852 .037. P1/P2 gap(C)-gap(A+B) = -.0033 [-.0134,+.0000] (null,
+marginally reversed); P3 achieved(A)-achieved(B) = +.0167 [-.0100,+.0467] (null); falsifier
+(large A gap) did NOT fire. DESCRIPTIVE READING (no verdict): certified prompt-mass
+exhaustion does NOT differ across OSL verdict classes at this budget — echoes codability-
+perp-verdict. RESOLUTION CAVEAT (mandatory when quoting): between-cell diffs sit at the
+spacing estimator's quantization floor (~.003 at N~70 prompts/300 probes; 272-bank ran
+N~640) — quote as "no agreement detected at this budget", never "disagreement proven".
+Task #32 CLOSED. Feeds #27 as a negative/underpowered cell.
