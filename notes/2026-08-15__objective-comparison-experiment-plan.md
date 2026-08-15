@@ -176,3 +176,14 @@ FALSIFIERS: flat/positive P-L1 => internalization does NOT explain the tie; delt
 within noise at all rungs => selection tier is exhausted, Tier-B generation mandatory.
 Never pool across families; never quote a rung without its n. Artifacts:
 outputs/objective_comparison_v1/ladder/.
+
+## WINNER-SET AUDIT (2026-08-15, user-directed "zero in on rec winners"): NOISE VERDICT
+Strict rec-wins-both on human axis: 15/83 — BELOW 3-arm chance expectation (~28/83).
+Qualitative "text-local/checkable" reading of winner names REFUTED by blind 9-type join
+(66/83 joined): in-text win rate .14 vs beyond .29 (n=7); rec edge MORE negative in-text
+(-.038) than interface/beyond (-.008). Form-sensitivity moderator null on the cut
+(.188 vs .198). MTMM anti-agrees with human-axis winners (6/15 vs 33/68).
+VERDICT: selection tier EXHAUSTED — no identifiable subpopulation where rec-selection
+beats the definition on human labels; separation must come from the executor ladder
+(receiver-relativity, in flight) or Tier-B generation. Never quote individual winner
+metrics as evidence (below-chance set).
