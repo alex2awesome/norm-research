@@ -40,13 +40,13 @@ def done(out, want):
         return False
 
 
-def main(limit=None):
-    batches = sorted((T3 / "t3_batches").glob("batch_*.json"))
+def main(limit=None, batch_dir="t3_batches", verdict_dir="verdicts"):
+    batches = sorted((T3 / batch_dir).glob("batch_*.json"))
     if limit:
         batches = batches[:int(limit)]
-    (T3 / "verdicts").mkdir(exist_ok=True)
+    (T3 / verdict_dir).mkdir(exist_ok=True)
     for b in batches:
-        out = T3 / "verdicts" / (b.stem + "_verdicts.json")
+        out = T3 / verdict_dir / (b.stem + "_verdicts.json")
         want = len(json.load(open(b)))
         if done(out, want):
             print(f"SKIP {b.name} (complete)")
@@ -72,10 +72,12 @@ def main(limit=None):
                 except Exception:
                     continue
         print(f"{b.name}: {'OK' if done(out, want) else 'INCOMPLETE'}", flush=True)
-    n_ok = sum(1 for b in batches if done(T3 / "verdicts" / (b.stem + "_verdicts.json"),
+    n_ok = sum(1 for b in batches if done(T3 / verdict_dir / (b.stem + "_verdicts.json"),
                                           len(json.load(open(b)))))
     print(f"WAVE DONE: {n_ok}/{len(batches)} batches complete")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else None)
+    main(sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "-" else None,
+         sys.argv[2] if len(sys.argv) > 2 else "t3_batches",
+         sys.argv[3] if len(sys.argv) > 3 else "verdicts")
