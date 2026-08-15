@@ -93,3 +93,20 @@ Order: S1 -> prereg commit -> S2/S4 parallel -> S3 -> S5 -> S6.
   comparison under matched selection", upgrade path = phase 2.
 - The draft's .7/.6/.55 are placeholders; the experiment replaces them; no number from this
   plan may be quoted before S6 lands.
+
+## REVISION v2 (2026-08-15, after user pushback on the frozen pool)
+User's vision: EVOLVE prompts under {reconstruction, LLM-critic} rewards for many metrics,
+test all against y*. Resolution = TWO-TIER design:
+- Tier A (breadth, cheap): the selection sweep as specified above (~40 metrics). Role:
+  controlled mechanism probe + moderator estimation + flags where reconstruction has signal.
+- Tier B (depth, the headline): MATCHED-MACHINERY EVOLUTION — same GEPA engine, proposer,
+  budget (150-300 metric-calls), seed policy, executor; ONLY the reward differs
+  (reconstruction MI vs critic-agreement). Run on Tier-A's form-sensitive flags PLUS a
+  random control subset (selection into Tier B is moderator/random, never outcome). The
+  reward-x-search interaction is scope of the claim ("optimizing toward"), not a confound,
+  once all machinery is shared.
+- Circularity note for Section 3 (user worry, resolved): labels are used ONLY as held-out
+  one-shot calibration of the label-free instrument, never as an optimization signal
+  (evaluate-never-gate). Draft sentence provided in session. Moderator analysis doubles as
+  the anti-circularity witness: wins concentrating on form-sensitive metrics = message-side
+  mechanism, not label fitting.
