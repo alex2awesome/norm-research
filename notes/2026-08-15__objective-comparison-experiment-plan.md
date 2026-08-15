@@ -1,0 +1,95 @@
+# Objective-comparison experiment: reconstruction vs naive LLM feedback vs definition-only
+## (plan drafted 2026-08-15, user-requested; NOT YET LAUNCHED — awaiting sign-off)
+
+## The claim being tested (user's draft sentence, to be confirmed or corrected)
+"AUC(m_omega, y_true) = .7 vs AUC(m_gepa, y_true) = .6 vs AUC(m_desc, y_true) = .55."
+User's refined framing: the point is not m_omega-vs-GEPA per se; it is whether optimizing an
+articulation TOWARD THE RECONSTRUCTION BOTTLENECK beats optimizing toward (a) naive LLM
+feedback and (b) no optimization (definition only) — evaluated on PURIFIED labels.
+User's mechanism bet (ties to paper #1 register result): reconstruction wins on metrics that
+can be worded many ways AND where wording materially changes behavior.
+
+## Design principle: SELECTION, not dueling optimizers
+All three arms share ONE frozen candidate pool of prompt forms per metric and ONE frozen
+executor. Arms differ ONLY in the objective used to SELECT the shipped form:
+
+| arm | selection objective | label-free? |
+|---|---|---|
+| m_desc | none — ship form 0 (the metric's definition as prompt) | yes |
+| m_fb   | argmax critic-agreement: score candidates on probe docs; a CRITIC model scores the same docs holistically on the construct; pick the form whose scores best rank-agree with the critic | yes |
+| m_recon| argmax reconstruction MI: the pipeline's per-form i_binary(form sig, M_i) on the same probe docs (the validated within-metric instrument, CW rho=+.39) | yes |
+
+Why selection-only: (1) it isolates the OBJECTIVE — the user's actual question — from
+optimizer-dynamics confounds (budget sensitivity, acceptance rules, seed variance) that the
+parity campaign showed are large; (2) it is cheap (score the pool once, each objective reads
+the same matrix); (3) it directly extends the already-validated within-metric MI result by
+adding the competitor arm + purified-label eval. Phase 2 (optional, post-readout): full
+iterative optimization per objective, only if the selection result is positive and the user
+wants the stronger claim.
+
+## Arms, models, and independence
+- Executor (scores all candidate forms + all eval docs): frozen Llama-3.1-8B, batch vLLM, sk3.
+- Candidate pool per metric: the stored paraphrase forms (98-form sigs npz where available;
+  manifests elsewhere) + 20 fresh proposals from the 4-family proposer set (glm/qwen/llama/
+  haiku — same pool for every arm). Pool FROZEN before any objective is computed.
+- Critic for m_fb: GLM-4.7 (strong, non-arbiter family). NOT gpt-family — the arbiter that
+  makes y* is gpt-5.6-sol, and a gpt critic would gift the feedback arm arbiter-correlated
+  bias. NOT the 8B executor (self-agreement degenerates). Disclosed as a design choice.
+- M_i for m_recon: the metric's own verdict on probes by the SAME 8B executor (canonical).
+- Probes (objective computation): 150 per task, drawn from the task corpus, DISJOINT from
+  eval docs. No y of any kind touches selection.
+
+## Evaluation: purified labels (tier-3 arbiter machinery)
+- y* = gpt-5.6-sol full-document verdicts, anchor-certified per wave (existing gate).
+- Reuse wave-2 purified labels where they cover a metric (peer ~16 metrics, cw ~10, humor ~6,
+  crx ~10 after v2 lands); top up eval coverage to >=40 purified docs/metric with >=10
+  purified positives AND >=10 purified negatives (learned from the peer 83%-flip: purified
+  class balance, not raw counts, is the constraint).
+- Eval readout per metric: AUC(selected-form scores, y*) for each arm, on identical docs.
+- Also report: oracle ceiling (best form by eval AUC — selection headroom) and random-form
+  median (floor). These bracket what ANY selection objective could do.
+
+## Metric selection: broad sweep + preregistered moderator (no cherry-picking)
+Universe: every metric in {peer, cw, humor, crx} with (a) a stored multi-form pool >=15 forms,
+(b) purified-label coverage per above (after top-up). Expected n ~ 35-45 metrics.
+PREREGISTERED MODERATOR (the user's bet, formalized): per-metric FORM-SENSITIVITY =
+interquartile range of probe-score correlations between forms (how much wording changes
+behavior), computed from the frozen pool BEFORE any eval. Prediction P2 below.
+Report ALL swept metrics; the "reconstruction-favored" subset is defined by the moderator
+cut, not by outcome.
+
+## Frozen predictions (register before ANY eval scoring)
+- P1: pooled paired AUC(m_recon) > AUC(m_fb) (sign test + paired bootstrap on mean delta,
+  per standing rule).
+- P2 (mechanism): Delta(recon - fb) per metric correlates positively with form-sensitivity
+  (Spearman > 0); the high-sensitivity tercile shows the largest delta.
+- P3: on the high-sensitivity tercile, both optimized arms beat m_desc; on the LOW tercile,
+  m_desc ~= optimized arms (wording doesn't matter there -> selection can't help).
+- Falsifiers stated: P1 reversed => naive critic-agreement is the better objective — report
+  as such; P2 null => the paper-#1 register bridge does NOT carry to objective choice; the
+  draft sentence's numbers get replaced by whatever lands, including a null.
+- Phrasing discipline: never "beats GEPA" (this is not GEPA); the arm is "critic-agreement
+  selection" — name the design.
+
+## Execution stages + cost (sk3; one GPU; batch vLLM)
+- S1 (CPU): freeze pools + form-sensitivity from existing sigs; build fresh-proposal prompts.
+- S2 (GPU ~half day): executor scores pool x probes (~ 40 metrics x 70 forms x 150 probes
+  ~ 420K short calls, one batch job) + M_i verdicts; Gemma-free.
+- S3 (GLM, ~5-8M tokens): critic pass for m_fb (40 x 70 x 150 rank-subsample — subsample
+  probes to 60 for the critic to hold quota: ~170K -> subsampled ~65K calls; batch inside
+  weekly window; AFTER the pupa arm settles, or next window).
+- S4 (Codex): purified-label top-up wave (~800-1,500 arbitrations, reuse wave-2 first).
+- S5 (GPU ~2h): executor scores the 3 selected forms/metric x eval docs.
+- S6 (CPU): readout per prereg. Artifacts under outputs/analyses/objective_comparison_v1/.
+Order: S1 -> prereg commit -> S2/S4 parallel -> S3 -> S5 -> S6.
+
+## Known risks / honesty notes
+- Purified-y* is arbiter-relative; the anchor certificate + v1/v2 agreement bound its error;
+  the confusion-corrected sensitivity analysis reports how much of any arm-gap could be
+  arbiter artifact. Arbiter (gpt) shares no family with executor/critic/proposers.
+- crx purified labels depend on wave-2 (v1 voided); if wave-2 crx fails certification, crx
+  drops from the sweep (disclosed).
+- Selection-only understates what full optimization could do — stated scope: "objective
+  comparison under matched selection", upgrade path = phase 2.
+- The draft's .7/.6/.55 are placeholders; the experiment replaces them; no number from this
+  plan may be quoted before S6 lands.
