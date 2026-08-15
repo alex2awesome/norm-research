@@ -1974,3 +1974,11 @@ v2negtop 500 (peer y=0 top-up for pure-negative class) + 32 fresh sealed anchors
 agreement on redo items = free arbiter-reliability measurement. Analysis on landing:
 certification gate -> confident-only (score<=2|>=8) + all-verdict variants -> purified AUC
 per task w/ CIs -> corpus-reweighted confusion matrices.
+
+### 2026-08-15 — OBJECTIVE-COMPARISON Tier A: all passes landed except eval inputs
+S1 pools frozen (197 metrics: peer 49/humor 99/pr 26/cw 23, probe substrate, form-sensitivity
+computed). Defpass probes DONE (Gemma-4, 4 tasks, 8 min). Critic pass DONE (qwen-72b
+OpenRouter, 29,550/29,550 after 3 mop-up passes for transient 400s). SELECTION FINAL:
+m_recon + m_fb + m_desc for all 197; same-form agreement recon-vs-critic 59/197 (30%) —
+objectives disagree on 70% of metrics. Corpus defpass (m_desc eval scores) running GPU0.
+Eval waits on wave-2 purified labels. Artifacts outputs/objective_comparison_v1/ on sk3.
