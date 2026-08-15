@@ -138,3 +138,16 @@ Framing: construct validity is TRIANGULATED not measured (Cronbach-Meehl), coher
 Section 3's receiver-relativity. Purified-label table stays for JUDGE validation only
 (appendix, committed); never for arm comparison. Awaiting user sign-off before Tier-B
 build.
+
+## TIER-A CONTEST RESULT (v1, original data, 2026-08-15) — oc_contest_v1.json
+Human axis (mention-AUC, n=83): rec-fb -.002 n.s.; rec-desc -.012 [-.023,-.001] desc
+narrowly wins; fb-desc -.010 n.s. Label-free MTMM-lite (n=197): rec-fb +.012 borderline;
+others null. AXIS DIVERGENCE: 42/83 metrics flip rec-vs-desc sign between axes — the two
+validity axes are non-redundant. Moderator null at this tier.
+VERDICT (descriptive): at matched SELECTION over ~11-form paraphrase pools, objectives are
+indistinguishable; definition is a formidable baseline (rhymes with GEPA-ships-seed on
+hotpot/ifbench — cross-cutting observation: canonical descriptions hard to beat without NEW
+content). Oracle bracket explains: pools hold nothing above the definition. Attenuation
+caveats: mention-y noise symmetric (deltas shrunk, not biased); MTMM within-family v1.
+DISCRIMINATING TEST = TIER B (generation under each objective, reward-only manipulation),
+judged by this same triangulated stack. Tier-B build is the next go-decision.
