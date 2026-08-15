@@ -1957,3 +1957,20 @@ NOT be quoted as corrected — positive-side hygiene does not lift agreement. Li
 hypotheses, in test order: Tier-2 scope fix (full-paper scoring), then Tier-3 certified
 arbiter. The ~.55-.60 observed band stands as the honest floor with only ~+.01 recoverable
 from the negatives axis.
+
+### 2026-08-15 — TIER-3 PRELIM + WAVE-2 (purify-better + resample, user-directed)
+PRELIM (1,201 v1 verdicts; anchor preview 46/50=92%): stratified-sample AUC vs ARBITER-purified
+labels: peer .87 (!!) vs .503 mention-sanity — but y0->applies flip 83% leaves only 40 pure
+negatives; cw .56 / humor .59 / crx .62 / pr .35 (INVERTED — PR judge anti-correlates w/
+arbiter; PR was the null channel everywhere; scrutinize before quoting any PR number).
+TWO v1 PROTOCOL DEFECTS FOUND: (1) extension tasks went out with EMPTY definition fields;
+(2) crx items carried BARE metric ids as criterion (no form0 rubrics in its manifest) —
+crx v1 verdicts INVALID, void. cw a{N} confirmed = hierarchy group N (form0 = one leaf);
+proper construct = merged_name+merged_description; crx = code-review bank order (verified
+132/133 names in matches choices).
+WAVE-2 LAUNCHED (t3_batches_w2, 352 batches, 2,110 items, 2,078 w/ definitions): v2redo
+1,080 (all extension items re-arbitrated w/ proper constructs) + v2new 498 (to 400/task) +
+v2negtop 500 (peer y=0 top-up for pure-negative class) + 32 fresh sealed anchors. v1-vs-v2
+agreement on redo items = free arbiter-reliability measurement. Analysis on landing:
+certification gate -> confident-only (score<=2|>=8) + all-verdict variants -> purified AUC
+per task w/ CIs -> corpus-reweighted confusion matrices.
