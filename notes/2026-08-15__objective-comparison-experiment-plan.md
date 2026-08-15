@@ -110,3 +110,31 @@ test all against y*. Resolution = TWO-TIER design:
   (evaluate-never-gate). Draft sentence provided in session. Moderator analysis doubles as
   the anti-circularity witness: wins concentrating on form-sensitive metrics = message-side
   mechanism, not label fitting.
+
+## REVISION v3 (2026-08-15, after user ruling: no ground-truth switch; these metrics
+## definitionally lack outcome-style truth)
+Tier-A finding that forced this: definition-derived arbiter labels are spec-circular for
+arm comparison (m_desc structurally aligned; oracle bracket showed no pool headroom).
+NEW EVAL STACK for the objectives contest (per-construct, no definition-circularity):
+1. PRIMARY (human, per-construct): attentive-tier mention-y (corroborated positives +
+   attentive-silence negatives). Noise attenuates arms SYMMETRICALLY -> costs power not
+   validity; power comes from 197 paired metrics. Disclose matcher name-contact.
+2. LABEL-FREE PSYCHOMETRIC AXES (new instruments, machinery exists):
+   a. MTMM convergent/discriminant margin: arm's measurement should correlate with OTHER
+      measurements of the SAME construct (different judge family, different register)
+      more than with different constructs on same docs. Criterion = correlational
+      structure; no labels; no arm aligned by construction.
+   b. Mechanical-facet consistency (LLM-free, deterministic): seam-program compiled
+      sub-rules give exact partial signals for the ~44%-codable facets; arm scored by
+      structure-consistent relation to its construct's own facets. Coverage limited to
+      partially-codable metrics — the uncovered set = inarticulability suspects (report).
+   c. Reliability floor (necessary-not-sufficient screen).
+3. TERTIARY (disclosed, mitigated LLM axis): spec-ENSEMBLE arbitration — K register-
+   diverse R1 specs + exemplar-grounded variant, majority vote, any arm's exact text
+   excluded from ensemble. Never load-bearing alone. (User's R1-multiplicity idea.)
+4. Outcome anchors -> consequential-validity APPENDIX only (different estimand, per user).
+VERDICT RULE: an objective wins only if it wins axis 1 AND axes 2a/2b directionally agree.
+Framing: construct validity is TRIANGULATED not measured (Cronbach-Meehl), coherent with
+Section 3's receiver-relativity. Purified-label table stays for JUDGE validation only
+(appendix, committed); never for arm comparison. Awaiting user sign-off before Tier-B
+build.
