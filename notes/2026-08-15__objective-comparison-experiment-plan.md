@@ -207,3 +207,12 @@ carry real but tiny signal beyond averaging. fb_ens ~ rec_ens (n.s.). Consistent
 the reconstruction compass is real (within-metric +.39; E2 direction) but worth ~.003-.01
 AUC when exploited over 11 paraphrases at the strong-executor tier. Escalation paths
 unchanged: ladder (stage C running) + Tier-B seeded-delta generation.
+
+## CORRECTION (2026-08-15): instability number NOISE-CORRECTED — supersedes the .181 quote
+Bootstrap noise floor on one form-AUC: median .046. TRUE phrasing SD: median .020 (implied
+~3SD range ~.06); above-noise spread on 29/83 metrics; p90 SD .075 (tail ranges >.2).
+NEVER quote the raw .181 range as phrasing effect. Coherence check PASSES: median true
+headroom above the definition (~.01-.03) matches the E2 ensemble gain (+.0035 w/ weak
+weights) — small true headroom + weak-but-real compass = observed tiny gains. Paper phrasing
+story (honest form): phrasing effects real for ~1/3 of metrics (tail large), modest at
+median; label-instrument spec-sensitivity (54% arbiter flips) is a separate, larger effect.
