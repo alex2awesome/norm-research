@@ -53,8 +53,15 @@ def main(limit=None):
             continue
         prompt = INSTR.format(batch=b, out=out)
         print(f"=== {b.name} {time.strftime('%H:%M:%S')} ===", flush=True)
-        r = subprocess.run(["node", str(CODEX), "task", "--write", prompt, "--fresh"],
-                           timeout=1200, capture_output=True, text=True)
+        try:
+            r = subprocess.run(["node", str(CODEX), "task", "--write", prompt, "--fresh"],
+                               timeout=1200, capture_output=True, text=True)
+        except subprocess.TimeoutExpired:
+            print(f"{b.name}: TIMEOUT — skipping (re-run loop to retry)", flush=True)
+            continue
+        except Exception as e:
+            print(f"{b.name}: ERROR {e} — skipping", flush=True)
+            continue
         if not done(out, want):                     # stdout code-fence fallback
             m = re.findall(r"```(?:json)?\n(.*?)```", r.stdout or "", re.S)
             for cand in m[::-1]:
