@@ -187,3 +187,14 @@ VERDICT: selection tier EXHAUSTED — no identifiable subpopulation where rec-se
 beats the definition on human labels; separation must come from the executor ladder
 (receiver-relativity, in flight) or Tier-B generation. Never quote individual winner
 metrics as evidence (below-chance set).
+
+## PREREG ADDENDUM (2026-08-15, frozen BEFORE eval): ENSEMBLE ARMS (power upgrade, secondary)
+m_rec_ens = softmax(i_binary/tau)-weighted average of the metric's form scores (tau=0.1,
+fixed a priori; canonical __-1 excluded); m_fb_ens = same with critic rank-agreement
+weights; m_unif_ens = uniform average of forms (ablation: is any gain just averaging?).
+Endpoints: same human axis (mention-AUC), paired vs m_desc and vs m_unif_ens.
+PREDICTIONS: E1 m_rec_ens > m_rec (argmax) — averaging beats selection under noise;
+E2 m_rec_ens > m_unif_ens — the MI weights carry signal beyond mere averaging (KEY test:
+this isolates the objective from the ensemble effect); E3 m_rec_ens vs m_desc directional.
+Falsifier: E2 null => reconstruction weights add nothing over uniform averaging at this
+tier. Report all.
