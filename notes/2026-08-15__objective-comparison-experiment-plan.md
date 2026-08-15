@@ -151,3 +151,28 @@ content). Oracle bracket explains: pools hold nothing above the definition. Atte
 caveats: mention-y noise symmetric (deltas shrunk, not biased); MTMM within-family v1.
 DISCRIMINATING TEST = TIER B (generation under each objective, reward-only manipulation),
 judged by this same triangulated stack. Tier-B build is the next go-decision.
+
+## REVISION v4 — EXECUTOR-LADDER ARM (user hypothesis 2026-08-15, PREREG FROZEN before scoring)
+Hypothesis: the selection-tier three-way tie is executor-relative — Gemma-4-31B has the
+constructs internalized, so definitions suffice (cf. channel-emergence: explanation>definition
+only 32B+; names at 70B). On weaker receivers, receiver-matched reconstruction selection
+should pull ahead.
+DESIGN: full receiver-matched pipeline per executor e in the SAME-FAMILY ladder
+{Llama-3.2-1B, Llama-3.2-3B, Llama-3.1-8B} (Gemma-4-31B = existing point, separate family,
+plotted off-trend, disclosed; same-family staircase rule):
+  per e: (1) score all pooled forms x 300 probes with e; (2) defpass (M_i_e) with e;
+  (3) SELECT per objective with e's own signals (receiver-matched: M_i_e, same critic
+  scores reused — critic is receiver-independent by design); (4) score selected forms +
+  definition on corpus with e; (5) contest on the SAME triangulated axes (mention-AUC
+  human axis primary; MTMM-lite within-e).
+FROZEN PREDICTIONS:
+- P-L1: Spearman(ladder position, mean Delta_rec-desc on human axis) < 0 — the rec edge
+  grows as capability falls; equivalently Delta at 1B > Delta at 8B.
+- P-L2 (mechanism): m_desc absolute mention-AUC decays with falling capability FASTER
+  than m_rec (interaction; definitions lose transmissibility, matched forms retain it).
+- P-L3: form-sensitivity moderator strengthens as capability falls (wording matters more
+  to weaker receivers).
+FALSIFIERS: flat/positive P-L1 => internalization does NOT explain the tie; deltas stay
+within noise at all rungs => selection tier is exhausted, Tier-B generation mandatory.
+Never pool across families; never quote a rung without its n. Artifacts:
+outputs/objective_comparison_v1/ladder/.
