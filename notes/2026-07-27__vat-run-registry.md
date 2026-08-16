@@ -4183,3 +4183,31 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Order of build (dataset-first protocol each): U3 (unblocked, smallest design
   risk) -> U1 community+verdict (local parse) -> U1 curated (after toc check) ->
   U4 (behind V6) -> U2 (behind the live fetch).
+
+## 2026-08-16 — U3+U4 POPULATIONS BUILT (user: prioritize math.SE + SO, careful/precise)
+- **Bounty award-mode audit FIRST (the precision step both cells needed):** SE
+  bounties are awarded MANUALLY (full amount, deliberate curation) or AUTO at
+  expiry (system half-award to top-scored answer = community signal, NOT
+  curation). Classifier = close-amount vs start-amount join (full=manual,
+  floor(half)=auto); validated by the day-gap histogram (auto piles at day 8 =
+  expiry+grace; manual spreads 1-8). Auto-award questions DROPPED entirely.
+  * math.SE: MANUAL 8,700 / AUTO 1,248 (87/13). Winner-is-top-scored: manual .64
+    vs auto .75 — 36% of deliberate awards pick a NON-top answer = the curated-vs-
+    community divergence the cell measures. data/se_dumps/mathse_bounty_award_mode_audit.json.
+  * SO(python): MANUAL 12,214 / AUTO 2,230 (85/15) — replicates.
+- **math.SE bounty population** (U3, data/se_dumps/mathse_bounty_manual_population
+  .jsonl.gz): within-question (winner vs other answers, same design family as the
+  vote cell), 8,368 questions / 24,317 rows / pos .354 / median answer 1,525 chars;
+  16,360/37,765 close votes dropped as expired-or-question-attached (correct).
+  210 multi-winner questions (multiple bounties) retained, flagged.
+- **SO bounty population** (U4, so_bounty_manual_population.jsonl.gz): same
+  design on the V6 python corpus (so_python parquets = same X-space as so_votes):
+  7,128 questions / 23,942 rows / pos .301. BUG CAUGHT on run 1: parquet ParentId
+  is float64 -> astype(str) gives "337.0" and silently breaks the XML join (all
+  closes -> OTHER); fixed with int64 cast + notna assert. Spot-check: winner
+  score 15 beat competing score 24 — curation != votes, live in the data.
+- **SO verdict = free on V6's rows**: population.csv.gz already carries
+  y_accepted as a separate never-merged column on the same X/splits.
+- Next: text-prep MATCHED to sibling cells (check v2_va formatting), splits,
+  V features, A-bank reuse check (bounty answers may already be Gemma-scored in
+  the vote cells), then ladders.
