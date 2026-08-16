@@ -4159,3 +4159,27 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - f2_deconf --cell bbc_mostread RUNNING on sk3 (n_E=10,147, bank 103, nuis 59);
   the T0 (e) secondary will read "uninformative" — the PRIMARY (d)-(c) does not
   touch t0. f2_evalue next on landing.
+
+## 2026-08-16 — UNIFIED-X PROGRAM CUED (user directive): X -> {y_verdict, y_curated, y_community}
+- Goal (user): move away from one-domain-per-y; same corpus carries all three label
+  types. Four domains cued (tasks U1-U4):
+  * **RoyalRoad** (U1): X = fiction descriptions. 135,598 listings (community:
+    rating_pct/followers/views) + 1,584 STUB market-pickup (verdict, popularity-
+    confounded DECLARED) + magazine contest 10 editions/2,173 chapter files
+    (curated; y-definition needs toc spot-check). All local under
+    datasets/creative-writing/royalroad_expansion/. Deep pages have description +
+    full stats (verified on 100005.html.gz).
+  * **r/Jokes** (U2): X = joke text. Mod-removal verdict (wayback stageC fetch LIVE
+    on sk3: 28.8K/64K queue, 33% text recovery -> build on landing) vs kept
+    universe 184,774 w/ scores; awards metadata 999,836 rows = second community y.
+  * **math.SE** (U3): bounty-close = CURATED y (38,748) on the same answers X as
+    the existing accepted (verdict) + vote_score (community) cells. 7z EXTRACTED:
+    data/se_dumps/mathse_extracted/{Posts,Votes}.xml.
+  * **StackOverflow** (U4): accepted 12.44M (verdict) + bounty-close 290,786
+    (curated) on the V6 so_votes X. Votes.xml EXTRACTED (23GB).
+- Vote-type decode confirmed from censuses: 1=accepted, 9=bounty-close, 2=up.
+- Already-scored (NOT rebuilt): jokes_community upvotes, mathse accepted + votes,
+  so_votes community (V6 live), cw_community, Wigleaf.
+- Order of build (dataset-first protocol each): U3 (unblocked, smallest design
+  risk) -> U1 community+verdict (local parse) -> U1 curated (after toc check) ->
+  U4 (behind V6) -> U2 (behind the live fetch).
