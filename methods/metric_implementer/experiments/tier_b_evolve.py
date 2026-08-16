@@ -7,9 +7,13 @@ which uses the OFFICIAL gepa engine per standing directive):
   - engine = gepa.optimize, same proposer/reflection LM (Codex gpt-5.6-sol via companion,
     shared by BOTH arms), same budget, same seed policy, same minibatch size.
   - ONLY the reward differs:
-      reward=rec    : per-instance rank-agreement of the candidate-rubric scores with M_i
-                      (the metric's own definition-verdict by the SAME executor) on probe docs.
-      reward=critic : same, target = the frozen qwen-72b critic scores on probe docs.
+      reward=rec    : v2 TRUE THREE-HOP RECOVERY — encode candidate on probes, blind
+                      decoder (qwen-72b) reconstructs the criterion from (text, score)
+                      pairs, re-execute the reconstruction, reward = rank-agreement of
+                      the ROUND-TRIP scores with M_i. Optimum is NOT the seed.
+      reward=critic : rank-agreement with the frozen qwen-72b critic scores (one hop).
+  - seam-h1 GATE: a candidate only SHIPS if it beats the seed on a held-out probe split
+    under its own reward (train/holdout probe split; kills the collapse mode).
   - executor = one resident offline vLLM engine per run (rung model passed via --model);
     probes only — mention-y and eval corpora NEVER touched during evolution.
 Eval (separate script, after evolution): score evolved rubrics + seed on the corpus with
@@ -42,6 +46,38 @@ def codex_lm(prompt: str) -> str:
     r = subprocess.run(["node", str(CODEX), "task", prompt, "--fresh"],
                        timeout=900, capture_output=True, text=True)
     return r.stdout or ""
+
+
+OPENROUTER_KEY_FILE = Path.home() / ".openrouter-api-key-2.txt"
+
+DECODE_TMPL = """You will see excerpts from {n} documents, each with a numeric score in
+[0,1] assigned by an evaluator following ONE consistent hidden criterion. Infer the
+criterion.
+
+{pairs}
+
+Reply with ONLY your best reconstruction of the criterion as a single self-contained
+instruction (1-3 sentences)."""
+
+
+def qwen_decode(pairs_txt, n):
+    import urllib.request
+    key = open(OPENROUTER_KEY_FILE).read().strip()
+    body = {"model": "qwen/qwen-2.5-72b-instruct", "max_tokens": 200, "temperature": 0.0,
+            "messages": [{"role": "user",
+                          "content": DECODE_TMPL.format(n=n, pairs=pairs_txt)}]}
+    req = urllib.request.Request("https://openrouter.ai/api/v1/chat/completions",
+                                 data=json.dumps(body).encode(), method="POST",
+                                 headers={"Authorization": f"Bearer {key}",
+                                          "Content-Type": "application/json"})
+    for _ in range(5):
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return json.loads(r.read())["choices"][0]["message"]["content"].strip()
+        except Exception:
+            import time
+            time.sleep(4)
+    return None
 
 
 class RubricArmAdapter:
@@ -79,9 +115,47 @@ class RubricArmAdapter:
         with ThreadPoolExecutor(8) as ex:
             return np.array(list(ex.map(self._one, msgs)))
 
+    _hop_cache = {}
+
+    def three_hop(self, rubric, ids):
+        """candidate -> encode -> blind decode -> re-execute; cached per rubric."""
+        key = hash(rubric)
+        if key in self._hop_cache:
+            hat_scores = self._hop_cache[key]
+        else:
+            enc = self._score(rubric, ids)
+            fin = np.where(np.isfinite(enc))[0]
+            if len(fin) < 20:
+                self._hop_cache[key] = None
+                return None
+            order = fin[np.argsort(enc[fin])]
+            pick = list(order[:7]) + list(order[-7:])
+            pairs = "\n\n".join(
+                f"--- doc {j+1} (score {enc[i]:.2f}):\n{self.texts[ids[i]][:450]}"
+                for j, i in enumerate(pick))
+            hat = qwen_decode(pairs, len(pick))
+            if not hat or not (20 < len(hat) < 1500):
+                self._hop_cache[key] = None
+                return None
+            hat_scores = self._score(hat, ids)
+            self._hop_cache[key] = hat_scores
+        return hat_scores
+
     def evaluate(self, batch, candidate, capture_traces=False):
         from gepa.core.adapter import EvaluationBatch
-        got = self._score(candidate["rubric"], batch)
+        if getattr(self, "reward_mode", "onehop") == "threehop":
+            hs = self.three_hop(candidate["rubric"], self.all_ids)
+            if hs is None:
+                return EvaluationBatch(outputs=[None] * len(batch),
+                                       scores=[0.0] * len(batch),
+                                       trajectories=None if not capture_traces
+                                       else [{"id": b, "got": float("nan"),
+                                              "want": float("nan"), "rank_err": 1.0}
+                                             for b in batch])
+            pos = {d: i for i, d in enumerate(self.all_ids)}
+            got = np.array([hs[pos[d]] if d in pos else np.nan for d in batch])
+        else:
+            got = self._score(candidate["rubric"], batch)
         want = np.array([self.target[d] for d in batch])
         ok = np.isfinite(got) & np.isfinite(want)
         scores = [0.0] * len(batch)
@@ -187,6 +261,8 @@ def main():
             print(f"SKIP {mid} (done)")
             continue
         adapter = RubricArmAdapter(args.api_base, args.model, texts, tgt)
+        adapter.all_ids = ids
+        adapter.reward_mode = "threehop" if args.reward == "rec" else "onehop"
         print(f"=== {args.task}/{mid} reward={args.reward} budget={args.budget} ===",
               flush=True)
         try:
