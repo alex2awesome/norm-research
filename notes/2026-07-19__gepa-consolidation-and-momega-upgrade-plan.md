@@ -5800,3 +5800,14 @@ ENTIRE weekly Lite window — HELD FOR USER QUOTA DECISION (options: burn this w
 for next window / accept pupa as disclosed-unmatched w/ the tie already certified at .906
 vs .899). Post-landing requirement per session-of-record rule: fresh same-session k=5
 re-mints (ifbench 4-cand, livebench 4-cand, aime 3-cand per prereg).
+
+## HB208 (2026-08-16) — PUPA truematch29526 arm: optimization state SAVED, final scoring DIED (GLM window)
+Arm ran ~19h then mass dspy per-example errors at 21:13 PT -> "Execution cancelled";
+ARTIFACT MISSING (no result.json). gepa_logs state PRESERVED at
+runs_paperexact/pupa/Qwen3-8B/official_truematch29526/ -> RESUMABLE. Cause consistent w/
+GLM weekly-window exhaustion (pupa judge = GLM; window deliberately burned per user
+2026-08-14, shared w/ the glm52 matched trial). ACTION deferred to next weekly window
+(~2026-08-20): relaunch same tag (state resumes), then the 4-candidate same-session
+re-mint per session-of-record rule. aime/ifbench/livebench parity arms still RUNNING
+(logs current). PUPA row stands as certified tie (.906/.899) with "GLM-window" disclosure
+until then.
