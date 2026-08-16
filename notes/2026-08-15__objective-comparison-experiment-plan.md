@@ -255,3 +255,26 @@ NEXT ESCALATION if user wants (not launched): Tier-B at scale w/ the seam-h1 pro
 (train-improve + HELD-OUT gate before shipping a rubric — kills the a1 collapse mode),
 lower coverage floors via pooled-task readout, budget 500+.
 Wind-down: sk1 tier-B server stopped, tunnel closed, task #34 closed.
+
+## M_OMEGA-PROPER EXPERIMENT (prereg FROZEN 2026-08-16 before any scoring)
+The corrected test of the paper's hinge sentence — m_omega (recovery-selected unit
+assemblies from the fresh e-cert banks) vs m_llm (critic-selected) vs m_desc, + skyline.
+- UNIVERSE (frozen): 20 metrics = e-cert slice banks INTERSECT mention-y>=10pos
+  (humor 13 / cw 2 / peer 5 via name-join); momega_candidates.json on sk3.
+- CANDIDATES per metric (same 6 for every arm; label-free construction): C0 definition /
+  C1-C3 definition+top-{2,4,8} bank units / C4 top-4 units alone / C5 best single unit;
+  units pre-ranked by in-bank i_binary(unit sig, bank M_i).
+- ARMS = selection objectives over the same family:
+  m_omega: argmax THREE-HOP RECOVERY — encode candidate on the 300-probe panel (8B) ->
+    decoder (qwen-72b, family-disjoint) reconstructs the criterion from (text, score)
+    pairs -> re-execute reconstruction (8B) -> reward = rank-agreement(m_hat, M_i_8B).
+    Optimum is NOT the definition (transmissibility through a receiver is rewarded).
+  m_llm: argmax critic rank-agreement (frozen qwen critic scores on probes).
+  m_desc: C0. skyline (calibration only): argmax mention-AUC on OBJECTIVE-half corpus.
+- EVAL: mention-AUC on EVAL-half corpus docs only (hash split), same 8B scores for all.
+- PREDICTIONS: Q1 Delta(m_omega - m_desc) > 0 paired; Q2 Delta(m_omega - m_llm) > 0;
+  Q3 skyline-m_desc = reachable headroom. FALSIFIER DECODE: Q1 null + skyline>0 => the
+  recovery compass fails where terrain exists; Q1 null + skyline~0 => assemblies hold no
+  reachable headroom (terrain, not compass). Report all cells.
+- Instrument: 8B executor EVERYWHERE here (disclosed: g4 is canonical for humor/cw
+  elsewhere; internal consistency prioritized). Decoder never sees definitions or labels.
