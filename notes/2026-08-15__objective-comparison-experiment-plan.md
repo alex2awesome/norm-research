@@ -216,3 +216,21 @@ headroom above the definition (~.01-.03) matches the E2 ensemble gain (+.0035 w/
 weights) — small true headroom + weak-but-real compass = observed tiny gains. Paper phrasing
 story (honest form): phrasing effects real for ~1/3 of metrics (tail large), modest at
 median; label-instrument spec-sensitivity (54% arbiter flips) is a separate, larger effect.
+
+## LADDER READOUT (prereg P-L1..3, 2026-08-16) — ocl_readout_v1.json, n=114 metrics/rung
+| rung | desc | rec | fb | rec-desc | rec-fb |
+| 1B | .5248 | .5214 | .5183 | -.0033 [-.011,+.004] | +.0031 n.s. |
+| 3B | .5510 | .5490 | .5421 | -.0020 [-.011,+.007] | +.0069 n.s. |
+| 8B | .5616 | .5521 | .5488 | -.0095 [-.020,+.000] | +.0032 n.s. |
+P-L1: delta ordering weakly consistent (gap smallest at weak rungs: -.003 vs -.010) but
+the SUBSTANTIVE hypothesis (rec POSITIVE at weak rungs) NOT achieved — no rung shows
+rec > desc. P-L2: desc rises with capability (.525->.562); rec tracks in parallel — no
+differential decay. P-L3: moderator null at all rungs (sign flips at 8B).
+MECHANISM READING (descriptive): FLOOR EFFECT, not crossover — at 1B the whole instrument
+collapses toward chance (desc .525), so weak receivers do not create articulation headroom;
+they destroy measurement capacity (coheres w/ channel-emergence: execution turns on 1B->3B).
+Internalization hypothesis in strong form: REFUTED at selection tier. rec>=fb at all rungs
+(n.s.) — mild, consistent ordering vs the critic.
+CUMULATIVE LEDGER across selection/ensemble/ladder: m_rec > m_desc does NOT materialize in
+any tested regime over paraphrase pools; only E2 (MI-weights > uniform, +.0035, p~.06) is
+directionally positive. LAST UNTESTED PATH: Tier-B generation (seeded delta).
