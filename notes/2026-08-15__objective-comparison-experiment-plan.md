@@ -234,3 +234,24 @@ Internalization hypothesis in strong form: REFUTED at selection tier. rec>=fb at
 CUMULATIVE LEDGER across selection/ensemble/ladder: m_rec > m_desc does NOT materialize in
 any tested regime over paraphrase pools; only E2 (MI-weights > uniform, +.0035, p~.06) is
 directionally positive. LAST UNTESTED PATH: Tier-B generation (seeded delta).
+
+## TIER-B PILOT READOUT (2026-08-16) — tbeval_readout_v1.json; VERDICT + wind-down
+Evaluable n=8 (mention-y coverage floors cut 16 -> 8; humor 4/peer 3/cw 1). Budget 200/arm.
+- Delta_rec vs 0: -.0330 [-.0985,+.0017] — dominated by ONE collapsed rubric (humor a1
+  -.259; both arms collapsed there — probe-overfit/winner's curse, same lesson as the seam
+  agentic-compile: recalibration without held-out gating hurts). Median-ish deltas ~0.
+- Delta_critic vs 0: -.0565, positive on 1/7.
+- Delta_rec - Delta_critic: +.0234 [-.0029,+.0600], rec better on 6/1 decided metrics.
+CUMULATIVE CROSS-TIER LEDGER on the paper's hinge claim:
+1. m_rec > m_desc: NOT SUPPORTED in any tested regime (selection tie; ensembles -.006;
+   ladder negative at all rungs; Tier-B pilot no net gain over seed at budget 200).
+2. m_rec > m_llm(critic): CONSISTENTLY SUPPORTED, weakly, in EVERY tier — selection
+   rec>=fb all rungs (n.s. each), E2 MI-weights>uniform (+.0035, p~.06, 49/83), Tier-B
+   6/1 (+.0234, CI grazes 0). The honest supportable ordering: rec > critic-feedback as a
+   label-free guidance signal; definition remains unbeaten at tested budgets/pools.
+3. Auxiliary intact positives: within-metric MI validity +.39 (CW, p=2e-4); purified-label
+   judge validation table (appendix); phrasing-instability tail (1/3 of metrics).
+NEXT ESCALATION if user wants (not launched): Tier-B at scale w/ the seam-h1 protocol
+(train-improve + HELD-OUT gate before shipping a rubric — kills the a1 collapse mode),
+lower coverage floors via pooled-task readout, budget 500+.
+Wind-down: sk1 tier-B server stopped, tunnel closed, task #34 closed.
