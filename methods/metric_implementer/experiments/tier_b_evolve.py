@@ -144,7 +144,7 @@ class RubricArmAdapter:
     def evaluate(self, batch, candidate, capture_traces=False):
         from gepa.core.adapter import EvaluationBatch
         if getattr(self, "reward_mode", "onehop") == "threehop":
-            hs = self.three_hop(candidate["rubric"], self.all_ids)
+            hs = self.three_hop(candidate["rubric"], self.train_ids)
             if hs is None:
                 return EvaluationBatch(outputs=[None] * len(batch),
                                        scores=[0.0] * len(batch),
@@ -152,7 +152,7 @@ class RubricArmAdapter:
                                        else [{"id": b, "got": float("nan"),
                                               "want": float("nan"), "rank_err": 1.0}
                                              for b in batch])
-            pos = {d: i for i, d in enumerate(self.all_ids)}
+            pos = {d: i for i, d in enumerate(self.train_ids)}
             got = np.array([hs[pos[d]] if d in pos else np.nan for d in batch])
         else:
             got = self._score(candidate["rubric"], batch)
@@ -255,13 +255,14 @@ def main():
             print(f"{mid}: target coverage too thin ({len(ids)}), skipped")
             continue
         val = ids[::4]
-        tr = [d for d in ids if d not in set(val)]
+        tr = [d for d in ids if d not in set(val)][:150]     # cost cap, fixed a priori
         logp = out_root / f"{args.rung}_{args.task}_{mid}_{args.reward}.json"
         if logp.exists():
             print(f"SKIP {mid} (done)")
             continue
         adapter = RubricArmAdapter(args.api_base, args.model, texts, tgt)
-        adapter.all_ids = ids
+        adapter.train_ids = tr
+        adapter.val_ids = val
         adapter.reward_mode = "threehop" if args.reward == "rec" else "onehop"
         print(f"=== {args.task}/{mid} reward={args.reward} budget={args.budget} ===",
               flush=True)
@@ -274,10 +275,44 @@ def main():
             json.dump({"error": str(e)[:400]}, open(logp, "w"))
             print(f"  ERROR {str(e)[:120]}")
             continue
-        json.dump({"seed": seed, "evolved": best, "reward": args.reward,
-                   "rung": args.rung, "changed": best.strip() != seed.strip()},
+        # seam-h1 HOLDOUT GATE: best ships only if it beats the seed on VAL probes
+        # under its own reward, computed on ids never used during evolution.
+        def val_reward(rubric):
+            if args.reward == "rec":
+                hs = adapter.three_hop(rubric, val)
+                if hs is None:
+                    return -2.0
+                want = np.array([tgt[d] for d in val])
+                okm = np.isfinite(hs) & np.isfinite(want)
+                if okm.sum() < 15 or hs[okm].std() == 0:
+                    return -2.0
+                ra = np.argsort(np.argsort(hs[okm]))
+                rw = np.argsort(np.argsort(want[okm]))
+                return float(np.corrcoef(ra, rw)[0, 1])
+            got = adapter._score(rubric, val)
+            want = np.array([tgt[d] for d in val])
+            okm = np.isfinite(got) & np.isfinite(want)
+            if okm.sum() < 15 or got[okm].std() == 0:
+                return -2.0
+            ra = np.argsort(np.argsort(got[okm]))
+            rw = np.argsort(np.argsort(want[okm]))
+            return float(np.corrcoef(ra, rw)[0, 1])
+
+        gated = best.strip() != seed.strip()
+        v_seed = v_best = None
+        if gated:
+            v_seed = val_reward(seed)
+            v_best = val_reward(best)
+            if v_best <= v_seed:
+                gated = False                      # gate closes: ship the seed
+        shipped = best if gated else seed
+        json.dump({"seed": seed, "evolved": best, "shipped": shipped,
+                   "reward": args.reward, "rung": args.rung,
+                   "changed": shipped.strip() != seed.strip(),
+                   "gate": {"val_seed": v_seed, "val_best": v_best,
+                            "passed": bool(gated)}},
                   open(logp, "w"), indent=1)
-        print(f"  evolved ({'changed' if best.strip() != seed.strip() else 'UNCHANGED'})")
+        print(f"  evolved ({'SHIPPED-change' if gated else 'gated-to-seed'})")
 
 
 if __name__ == "__main__":
