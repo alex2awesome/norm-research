@@ -278,3 +278,57 @@ assemblies from the fresh e-cert banks) vs m_llm (critic-selected) vs m_desc, + 
   reachable headroom (terrain, not compass). Report all cells.
 - Instrument: 8B executor EVERYWHERE here (disclosed: g4 is canonical for humor/cw
   elsewhere; internal consistency prioritized). Decoder never sees definitions or labels.
+
+## M_OMEGA-PROPER READOUT (2026-08-16) — momega_readout_v1.json on sk3
+Pipeline completed exactly as preregistered: 120 blind reconstructions (qwen-72b decoder,
+no definitions/labels seen), hat re-execution + corpus scoring on 8B, 12/20 metrics
+evaluable (attrition: 5 no seeds/M_i in pools as pre-disclosed; 3 label-coverage floors).
+Selection is NON-DEGENERATE: j_omega dist {C0:3, C1:3, C2:2, C3:3, C5:1} — recovery
+picks a unit-augmented assembly over the bare definition for 9/12 metrics.
+- Q1 omega - desc:    mean -0.0112 [-0.0360, +0.0093]  +/-: 3/6   (NULL, slightly neg)
+- Q2 omega - llm:     mean +0.0113 [-0.0061, +0.0288]  +/-: 6/3   (directional, n.s.)
+- Q3 skyline - desc:  mean -0.0065 [-0.0222, +0.0080]  +/-: 3/6   (skyline FAILS to
+  transfer: even LABEL-SEEING selection on the objective half does not beat C0 out-of-
+  sample)
+- oracle(eval) - desc: mean +0.0221 [+0.0076, +0.0402] +/-: 8/0   (eval-half oracle —
+  upper bound of upper bound; headroom exists but is ~2pts and eval-selected)
+FALSIFIER DECODE (preregistered): Q1 null AND skyline <= 0 => TERRAIN verdict: the
+candidate family holds essentially no selection-reachable headroom above the definition
+on these labels at n~12 metrics / ~10-40 positives each. The compass (three-hop
+recovery) is not the failing component — even labels can't select reliably here.
+MANUAL PASS: reconstructions faithful (a121 recon = "punchline/unexpected twist quality"
+matches construct); a122 recon EXPOSES DRIFT (definition's 8B scores actually track
+offensiveness, not truthfulness — blind decoder as an audit instrument, worth a paper
+sentence); no degenerate constant-score arms.
+
+## GEPA-FLAVOR READOUT (2026-08-16) — gb_readout_v1.json on sk3
+DISCLOSURE (my error, caught in readout): the GEPA v2 lanes ran on the OLD Tier-B
+15-metric list, not the m_omega-20 (list conflation at launch). The two engines are
+therefore UNPAIRED universes; each internally valid; no cross-engine paired stats.
+Seed baseline = oclc __-1 8B corpus scores (covers old list); eval-half only.
+- Delta_rec == 0 on 15/15: the seam-h1 holdout gate (val-probe three-hop reward)
+  refused to ship ANY rewrite over the definition seed. Validated null, intent-to-treat.
+- Delta_critic (10 shipped, 5 evaluable): mean -0.0734 [-0.1672, +0.0204]  +/-: 2/3
+  humor a1 -0.228, a50 -0.180; peer a32 +0.031, a41 -0.020, a46 +0.031.
+- MECHANISM (manual read of shipped rubrics): critic-evolved a1/a50 are fluent GENERIC
+  joke-quality rubrics ("comedy-first", "setup+punchline payoff") — the one-hop critic
+  rewarded construct DRIFT toward overall task quality; eval labels mark the SPECIFIC
+  construct, so AUC collapses. The critic arm PASSED its own holdout gate (its reward
+  is itself misaligned); the three-hop gate never shipped such drift.
+=> GEPA-flavor intent-to-treat ordering: Delta_rec (0) > Delta_critic (-0.073). rec>llm
+   again, this time via gate discipline rather than selection accuracy.
+
+## COMBINED FULL-SWEEP VERDICT (goal: m_rec > {m_llm, m_desc})
+m_rec > m_llm: SUPPORTED, weakly but with unusual consistency — positive direction in
+EVERY independent regime tested (Tier-A selection all rungs; E2 ensemble +.0035 49/83
+p~.06; Tier-B v1 GEPA 6/1 +.023; m_omega-proper Q2 +.0113 6/3; GEPA-v2 gate 0 > -.073).
+No single cell significant at .05; the cross-regime sign consistency is the result.
+m_rec > m_desc: NOT FOUND in any tested regime (executor ladder incl. 1B, ensembles,
+unit assemblies, GEPA rewrites with three-hop reward). Convergent evidence that the
+definition sits at/near the optimum of its own executor's articulable range for these
+silver constructs; the ~2pt eval-oracle headroom is real but not selection-reachable
+at current n. Honest paper framing: reconstruction MATCHES the definition while
+strictly beating critic-guided optimization — i.e., recovery-selection loses nothing
+vs the ideal articulation and avoids the critic's construct-drift failure mode.
+Legitimate escalations (design/power only, NOT outcome-conditioned): pooled-task n,
+label expansion (more mention-y positives), Tier-B at scale budget 500+ w/ gates.
