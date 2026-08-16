@@ -45,32 +45,39 @@ def codex_lm(prompt: str) -> str:
 
 
 class RubricArmAdapter:
-    """gepa GEPAAdapter over rubric text; scores via a resident offline vLLM engine."""
+    """gepa GEPAAdapter over rubric text; scores via a remote vLLM OpenAI server
+    (--api-base), so the driver can run where the Codex reflection CLI lives."""
 
-    def __init__(self, llm, tok, probe_texts, target, sampling):
-        self.llm, self.tok, self.texts, self.target, self.sampling = \
-            llm, tok, probe_texts, target, sampling
+    def __init__(self, api_base, model, probe_texts, target):
+        self.api, self.model, self.texts, self.target = api_base, model, probe_texts, target
+
+    def _one(self, msg):
+        import urllib.request
+        body = {"model": self.model, "max_tokens": 1, "temperature": 0.0,
+                "logprobs": True, "top_logprobs": 10,
+                "messages": [{"role": "user", "content": msg}]}
+        req = urllib.request.Request(f"{self.api}/chat/completions",
+                                     data=json.dumps(body).encode(), method="POST",
+                                     headers={"Content-Type": "application/json",
+                                              "Authorization": "Bearer x"})
+        for _ in range(4):
+            try:
+                with urllib.request.urlopen(req, timeout=120) as r:
+                    obj = json.loads(r.read())
+                tls = obj["choices"][0]["logprobs"]["content"][0]["top_logprobs"]
+                lp = {t["token"].strip().upper(): math.exp(t["logprob"]) for t in tls}
+                y, n = lp.get("YES", 0.0), lp.get("NO", 0.0)
+                return y / (y + n) if (y + n) > 0 else float("nan")
+            except Exception:
+                import time
+                time.sleep(3)
+        return float("nan")
 
     def _score(self, rubric, ids):
-        prompts = []
-        for d in ids:
-            msg = TMPL.format(text=self.texts[d][:6000], rubric=rubric)
-            try:
-                prompts.append(self.tok.apply_chat_template(
-                    [{"role": "user", "content": msg}], tokenize=False,
-                    add_generation_prompt=True, enable_thinking=False))
-            except TypeError:
-                prompts.append(self.tok.apply_chat_template(
-                    [{"role": "user", "content": msg}], tokenize=False,
-                    add_generation_prompt=True))
-        outs = self.llm.generate(prompts, self.sampling, use_tqdm=False)
-        scores = []
-        for o in outs:
-            lp = {t.decoded_token.strip().upper(): math.exp(t.logprob)
-                  for t in (o.outputs[0].logprobs[0].values() if o.outputs[0].logprobs else [])}
-            y, n = lp.get("YES", 0.0), lp.get("NO", 0.0)
-            scores.append(y / (y + n) if (y + n) > 0 else np.nan)
-        return np.array(scores)
+        from concurrent.futures import ThreadPoolExecutor
+        msgs = [TMPL.format(text=self.texts[d][:6000], rubric=rubric) for d in ids]
+        with ThreadPoolExecutor(8) as ex:
+            return np.array(list(ex.map(self._one, msgs)))
 
     def evaluate(self, batch, candidate, capture_traces=False):
         from gepa.core.adapter import EvaluationBatch
@@ -125,14 +132,13 @@ def main():
     ap.add_argument("--metrics", required=True, help="comma-separated aN ids")
     ap.add_argument("--reward", required=True, choices=("rec", "critic"))
     ap.add_argument("--model", required=True)
+    ap.add_argument("--api-base", required=True, help="vLLM OpenAI base, e.g. http://sk1:8220/v1")
     ap.add_argument("--budget", type=int, default=200)
     ap.add_argument("--rung", default="llama8b")
     ap.add_argument("--out-root", default=str(MD / "tier_b"))
     args = ap.parse_args()
 
     import gepa
-    from transformers import AutoTokenizer
-    from vllm import LLM, SamplingParams
 
     texts = {}
     tf, key = {"peer": ("peer_probe_texts.jsonl", "probe_id"),
@@ -157,11 +163,6 @@ def main():
     man = {e["metric_id"]: e["rubric"] for e in
            json.load(open(MD / f"ocl_{args.task}_manifest.json")) if e["form_idx"] == -1}
 
-    llm = LLM(model=args.model,
-              gpu_memory_utilization=float(os.environ.get("VLLM_GPU_MEM_UTIL", "0.55")),
-              max_model_len=8192)
-    tok = AutoTokenizer.from_pretrained(args.model)
-    sampling = SamplingParams(max_tokens=1, temperature=0.0, logprobs=8)
 
     out_root = Path(args.out_root)
     out_root.mkdir(parents=True, exist_ok=True)
@@ -185,7 +186,7 @@ def main():
         if logp.exists():
             print(f"SKIP {mid} (done)")
             continue
-        adapter = RubricArmAdapter(llm, tok, texts, tgt, sampling)
+        adapter = RubricArmAdapter(args.api_base, args.model, texts, tgt)
         print(f"=== {args.task}/{mid} reward={args.reward} budget={args.budget} ===",
               flush=True)
         try:
