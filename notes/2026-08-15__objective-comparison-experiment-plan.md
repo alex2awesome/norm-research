@@ -375,3 +375,15 @@ via OpenRouter (alive, live-tested today) — GLM was never the decoder.
 - FALSIFIER DECODE: 0/15 ships at budget 500 => strengthens "definition ~= three-hop
   optimum in rewrite space" well beyond the budget-120 caveat; ships that pass gate but
   fail eval => the selection-noise story extends to the GEPA tier. Report every cell.
+
+## CORRECTION (2026-08-16, user-probed): oracle "+.022 headroom" OVERSTATED — NEVER QUOTE
+oracle = max eval-half AUC over 6 candidates INCLUDING C0 => oracle - desc >= 0 BY
+CONSTRUCTION; its bootstrap CI vs 0 is uninformative and the "8/0 significant" framing
+was wrong (8 = metrics where some non-C0 topped C0 on eval half; 4 exact zeros = C0 was
+the max). Winner's curse: max of 6 noisy AUCs inflates even under identical true AUCs.
+Empirical size of the inflation = oracle (+.022) minus skyline transfer (-.007) ~= .029,
+i.e. the ENTIRE apparent gap is consistent with selection noise. Honest statement:
+apparent oracle gap +.022 AUC pts (upper bound); realizable-by-label-selection headroom
+~= 0 (skyline); "no true headroom" vs "headroom masked by selection noise at 5-20
+positives/half" NOT distinguishable at current n. Units: mention-AUC points on a ~.54
+baseline. The prior phrasing "headroom is real but unfound" is RETIRED.
