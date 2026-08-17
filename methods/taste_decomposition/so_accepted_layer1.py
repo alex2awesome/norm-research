@@ -69,7 +69,7 @@ mats = {"V": V, "A": A, "VA": np.column_stack([V, A])}
 table, preds = {}, {}
 for k, M in mats.items():
     lin_auc, lin_oof = L.linear_oof_family1(M, y, groups, folds)
-    gbm_oofs = [L.gbm_oof_family1(M, y, groups, folds, seed=s)[1]
+    gbm_oofs = [L.gbm_oof_family1(M, y, groups, folds, s)["oof"]
                 for s in L.GBM_SEEDS]
     nl = np.mean(gbm_oofs, axis=0)
     table[k] = {"linear": float(lin_auc),
