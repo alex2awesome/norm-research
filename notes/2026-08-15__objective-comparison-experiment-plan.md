@@ -571,3 +571,26 @@ dose-response secondary re-run. PRE-STATED interpretation: if CE labels lift AUC
 a working regime and H1' holds -> assignment-noise diagnosis confirmed + peer result
 replicates; if AUCs stay ~.5 -> humor mention corpus itself is the limit (task-level
 null, peer result stays one-task).
+
+## USER DIRECTION (2026-08-17): paper contest = m_rec vs m_llm; MTMM promoted
+User: "maybe we just keep the m_rec vs m_llm comparison. And curious on pushing the
+MTMM forward." Context: the definition-lineage argument (silver labels are minted via
+definition-space matching -> m_desc ~ Bayes-optimal for them; m_rec > m_desc requires
+definition-independent criteria). m_desc stays as reported baseline, no directional
+claim pursued.
+
+## EXP-MTMM-1 PREREG (2026-08-17, FROZEN pre-compute): label-free MTMM margin, peer
+- UNIVERSE: the MP-1 Phase-2 14 peer metrics; ARMS FROZEN from mp2_readout_v1.json
+  (desc = C0, omega = C[j_omega], llm = C[j_llm]); scores = mp2_peer_corpus8b (1,952
+  corpus docs); reference battery = the 49 canonical judges (oclc __-1) on the same
+  corpus.
+- MTMM MARGIN per (arm, metric): corr(arm scores, canonical_m) - mean |corr(arm
+  scores, canonical_x)| over the other 48 covered metrics x != m. Convergent term
+  uses the metric's own canonical judge; discriminant battery is definition-lineage-
+  SYMMETRIC across arms, so the omega-llm comparison is unbiased (the desc arm's
+  convergent term shares lineage with the reference — desc rows reported with that
+  caveat, no directional claim per user direction).
+- READOUT (frozen): per-metric margin per arm; paired bootstrap on Delta(omega - llm)
+  margin (H-MTMM: > 0, one-sided per the user's standing expectation that
+  reconstruction should do better on MTMM); omega - desc reported descriptively.
+  Spearman corr on ranks; docs with any NaN in the pair dropped listwise per pair.
