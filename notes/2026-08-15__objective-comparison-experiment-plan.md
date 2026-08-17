@@ -594,3 +594,22 @@ claim pursued.
   margin (H-MTMM: > 0, one-sided per the user's standing expectation that
   reconstruction should do better on MTMM); omega - desc reported descriptively.
   Spearman corr on ranks; docs with any NaN in the pair dropped listwise per pair.
+
+## EXP-MTMM-1 READOUT (2026-08-17) — H-MTMM NULL + design flaw disclosed
+Executed per prereg be5d5b6f8. H-MTMM omega - llm margin: -0.0085 [-0.139,+0.115]
+4/5, p~.55 — NULL. DESIGN FLAW (mine, disclosed): conv_desc = corr(C0 corpus scores,
+canonical __-1 scores) = near-identity (.98-.999) since the canonical judge IS the
+definition prompt — the desc column is VOID and the canonical-centric battery also
+soft-favors whatever arm stays closest to the definition. omega-desc margin -0.129
+0/11 is therefore an ARTIFACT, never quote. Battery halo noted: mean discriminant
+|rho| .2-.4 across 49 canonicals (executor halo).
+
+## EXP-MTMM-2 PREREG (2026-08-17, FROZEN pre-compute): multi-FORM MTMM battery
+Proper multitrait-multimethod using the 6 candidate articulations as METHODS.
+- Data: mp2_peer_corpus8b (14 metrics x 6 forms x 1,952 docs), all on disk.
+- For arm A of metric m (frozen selections): CONVERGENT = mean Spearman rho with the
+  OTHER forms of m (excluding A's own form index); DISCRIMINANT = mean |rho| with all
+  forms of other metrics. Margin = conv - disc. Fully symmetric across arms (desc
+  excluded its own form too), no canonical judge anywhere.
+- H-MTMM2 (frozen): Delta(omega - llm) margin > 0 one-sided, paired bootstrap;
+  omega - desc reported descriptively.
