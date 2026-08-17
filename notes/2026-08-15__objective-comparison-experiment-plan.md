@@ -620,3 +620,16 @@ Multi-form battery (no canonical judge, symmetric). H-MTMM2 omega - llm margin:
 n=14. omega - desc margin -0.0419 (2/9, descriptive; forms battery centers on
 def-derived articulations so desc-adjacency is still mildly favored — noted).
 Cumulative rec-vs-llm ledger: 6/7 regimes directionally positive.
+
+## EXP-MP-2b READOUT (2026-08-17, per prereg 75926c6a1) — TASK-LEVEL NULL, humor CLOSED
+Exact instrument reproduced (match_cascade_full, 100.0% top1 agreement on the 20K
+overlap). CE-full corroboration GUTS the bge universe: 10/11 metrics fall to 0-2
+corroborated positives (bge corroboration was retrieval-artifact agreement); a34
+concentrates 15 -> 130. Readout on the survivor: a34 corr-labels desc .452 / omega
+.456 / llm .459 — ALL ARMS BELOW CHANCE even with 130 adjudicated-quality corroborated
+positives. Per the prereg's pre-stated decode: the humor mention corpus itself is the
+limit — audience comments do not encode these constructs in a way ANY prompt variant
+measures on written bits. Humor line CLOSED; MP-1 peer result stays one-task with the
+task-structural explanation (peer reviews discuss constructs of the artifact; humor
+comments are reactions/advice, predominantly about delivery-adjacent qualities).
+Artifacts: mp2b_* on sk3 + local.
