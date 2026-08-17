@@ -356,3 +356,22 @@ Question audited: "m_rec starts from m_desc — did we implement that correctly?
    the rec val-gate path would have compared train-id hat scores against val targets.
    Never executed (gate branch never ran for rec; critic val uses _score fresh).
    Fixed: cache key now (rubric, ids). No result affected.
+
+## TB3 PREREG (2026-08-16, FROZEN before launch) — rec arm at larger search budget
+User-directed escalation: "run m_rec on more GEPA tries." Decoder unchanged: qwen-2.5-72b
+via OpenRouter (alive, live-tested today) — GLM was never the decoder.
+- DESIGN: identical to v2 rec arm (tier_b_evolve.py, three-hop reward, seed = definition,
+  seam-h1 val gate, ids-aware cache FIX in) with ONE change: budget 120 -> 500
+  (~60 candidate evaluations/metric vs ~15).
+- UNIVERSE: the same old-15 list (humor a1,a2,a10,a17,a29,a32,a50,a86,a96,a119,a177;
+  peer a32,a34,a41,a46) so results PAIR with the existing v2 critic arm; disclosed:
+  still unpaired with the m_omega-20 universe.
+- INFRA: executor Llama-3.1-8B server on sk1 GPU 7 STACKED (74% util, ~36GB free;
+  stack-per-GPU per standing rule), gpu_mem_util 0.38, port 8220; driver runs locally
+  via ssh tunnel; 3 parallel lanes of 5 metrics; artifacts -> scratchpad tier_b3/.
+- PREDICTIONS: (i) intent-to-treat Delta_rec >= 0 by gate construction; (ii) open
+  question = does 4x search surface gate-passing improvements, and do shipped changes
+  transfer to eval-half mention-AUC (paired bootstrap vs seed)?
+- FALSIFIER DECODE: 0/15 ships at budget 500 => strengthens "definition ~= three-hop
+  optimum in rewrite space" well beyond the budget-120 caveat; ships that pass gate but
+  fail eval => the selection-noise story extends to the GEPA tier. Report every cell.
