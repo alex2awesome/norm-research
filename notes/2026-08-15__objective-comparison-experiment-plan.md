@@ -507,3 +507,28 @@ user asked for EXISTS on purified labels (7/14 metrics).
 CAVEATS: n=14; unconditional CI includes 0; strata descriptive (no CI at n=6-7);
 strata quoted only as the pre-frozen triple. Artifacts: mp2_* on sk3 mention_auc/ +
 local outputs/analyses/objective_comparison_v1/.
+
+## EXP-MP-2 PREREG (2026-08-17, FROZEN pre-compute): humor corroborated replication
+User-directed cross-task replication of MP-1 with the sign-flip as CONFIRMATORY.
+- LABEL LINEAGE (LLM-free layer; silver-bank aid space, NOT the menu-space humor_ypos):
+  assignment = bge-top1 over ALL 61,945 signals (uniform instrument; disclosed noisier
+  than CE — corroboration IS the noise filter); signal->norm join by UNIQUE norm text
+  (61,416/61,945; ambiguous 377 + unparsed dropped); commenter = u/<handle> regex from
+  mention context (93% parse); polarity conventions positive/negative/neutral/mixed.
+- P* = (metric, post) with >=2 DISTINCT commenters' positive-polarity mentions
+  bge-top1-assigned to the metric, and no negative/mixed mention of the pair.
+- UNIVERSE (frozen by census, floor >=8): 11 metrics — a144(73) a97(34) a164(31)
+  a6(21) a55(16) a34(15) a39(12) a42(10) a166(9) a95(9) a133(8).
+- N* = attentive posts (>=2 distinct commenters, >=5 matched mentions, zero mentions
+  of the metric any polarity), capped 600 by stable md5. Floors: >=8 pos, >=15 neg.
+- TEXTS: post-only text (filtered_threads split at [COMMENTS], 6000 cap) — exact
+  build_full_texts.py formatter; scored docs = P* union N* only (no full corpus).
+- ARMS: same family as MP-1 Phase 2 (C0 bank def / C1 hierarchy articulation via
+  name-join else C0 / C2-C3 +4/8 leaf checks / C4 leaves alone / C5 first leaf);
+  m_omega = three-hop argmax vs C0-probe M_i (humor 300-probe panel, 8B);
+  m_llm = argmax vs fresh qwen-72b critic (150-probe hash subsample/metric).
+- CONFIRMATORY (frozen): H1 pooled paired omega - llm > 0 on P*/N* labels (one-sided
+  replication of MP-1's high-signal-stratum sign). SECONDARY dose-response: the
+  omega - llm gap is LARGER on corroborated labels than on same-lineage single-mention
+  labels (>=1 commenter, not corroborated) — the within-instrument sign-flip test.
+  Q1 (omega - desc) reported, no directional claim. All cells reported.
