@@ -464,3 +464,24 @@ paper_id + review-idx source_id, choice name, confidence, polarity).
   "LLM-free" refers to the purification layer only. Conditioning a stratum on
   AUC_omega biases that stratum pro-omega; the symmetric llm-stratum + unconditional
   cells are mandatory companions in any quoted result.
+
+## EXP-MP-1 PHASE-1 RESULT + PHASE-2 ADDENDUM (2026-08-16, addendum FROZEN pre-compute)
+PHASE 1: corroboration sparse on frozen arms — a49/a50 ZERO corroborated pos, a63=3;
+only a34 evaluable (15 pos / 1508 attentive neg): desc .498 / omega .555 / llm .555,
+j_omega==j_llm==C1 (gap trivially 0; omega-desc +.057 at n=1 = anecdote). Reported.
+PHASE 2 UNIVERSE (census, frozen): the 14 peer metrics with >=8 corroborated pos:
+a47(92) a11(20) a65(18) a18(18) a77(17) a34(15) a6(14) a68(13) a10(13) a48(10)
+a53(9) a1(9) a73(9) a55(8).
+CANDIDATE FAMILY (label-free, no mined banks): C0 = bank "name: description";
+C1 = hierarchy merged_name: merged_description (independent articulation, name-join);
+C2 = C0 + 4 leaf-name checks; C3 = C0 + 8; C4 = "Evaluate:" + 4 leaf names alone;
+C5 = first leaf name; leaves ordered by stable md5("mp2leaf:{aid}:{name}").
+ARMS: m_desc = C0. m_omega = argmax three-hop recovery (encode probes 8B -> qwen-72b
+blind decode -> re-execute -> rank-agreement with C0 probe scores as M_i). m_llm =
+argmax rank-agreement with fresh qwen-72b critic scores (critic sees C0 text + doc,
+150-probe hash subsample — same protocol as OC critic). Executor Llama-3.1-8B
+offline batch, sk1 GPU7 stacked.
+EVAL (frozen): purified labels only — P* corroborated pos / N* attentive neg;
+per-metric AUC per arm; pooled paired Q2''(omega-llm) and Q1''(omega-desc); strata
+{AUC_omega>=.65} + symmetric {AUC_llm>=.65} + unconditional, all three always quoted
+together. Mention-label full-corpus AUCs reported as companion. Floors: >=8 pos.
