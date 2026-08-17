@@ -4254,3 +4254,23 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   on jokes (task #75): awards = COMMUNITY not curation (gilded .19%, median
   score of gilded 14,438 — virality function); votes community on the FULL
   184,774 kept universe; removal verdict waits on the live wayback fetch.
+
+## 2026-08-17 — SYNC TO sk1 + DENSE CHAINS LAUNCHED THERE (user directive)
+- **Who holds sk3**: all 8 GPUs occupied by other users — l1ly (6 procs) +
+  nntruong (incl. the 115GB GPU4 engine; earlier attribution of that one to us
+  was WRONG — it is nntruong's, untouched). Our bounty_smoke gpu_runner stays
+  queued on sk3 for the Gemma A-pass (Gemma-4-31b weights are sk3-only).
+- **sk1 (skampere1, A100-80GB)**: GPUs 6/7 free; norm-research checkout present;
+  Llama-3.1-8B in shared_hf_cache (HUB-layout dir -> HF_HUB_CACHE, not HF_HOME —
+  first relaunch failed on this). unified_v1 env lacked pandas/peft/sklearn/
+  datasets/accelerate -> installed. SYNCED: methods/dense, math-se +
+  stackoverflow-votes builders/scorer, all three cell dense_standard bundles
+  (sk3 -> sk1 direct rsync). sk2 untouched (no shared-code edits in its area —
+  divergence note per the sync rule).
+- **so_accepted_qtrunc bundle built**: V6's qtrunc variant data VERBATIM
+  (12,202 rows — the sibling T-frame subset), judgement=y_accepted by row_id
+  (pos .428/.451/.464 by split). Same-frame T comparability with so_votes.
+- **unified_dense_chain_sk1.sh RUNNING on sk1 GPU6** (verified: pgrep + 27.7GB
+  on GPU6 + seed42 START): mathse_bounty (3 seeds) -> so_accepted_qtrunc
+  (3 seeds), frozen scaleupC recipe, scoring pass per cell. so_bounty dense
+  deferred until its own qtrunc bundle is built with V6's builder logic.
