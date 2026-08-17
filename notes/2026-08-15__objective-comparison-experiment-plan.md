@@ -552,3 +552,22 @@ Pipeline complete: 66 candidates encoded, 65 decodes, hats re-executed, critic 1
   = first directional miss); the MP-1 peer result stands but is ONE-TASK until a task
   with adjudicated mentions + multiplicity replicates. Scope stated accordingly.
 Artifacts: mp3_* on sk3 + local outputs/analyses/objective_comparison_v1/.
+
+## MP LEG-B (press releases) — STRUCTURAL NULL (2026-08-17, census pre-prereg)
+PR corroboration infeasible: polarity dist 16,864 neg / 9,151 neutral / 981 pos;
+only 225/3,001 releases have >=2 covering articles; 2-article corroborated positive
+(metric, release) pairs across ALL metrics = 10. Journalist mentions are predominantly
+critical (mirrors peer's 59%-critiques finding). Leg dropped; recorded as corpus fact.
+
+## EXP-MP-2b PREREG (2026-08-17, FROZEN): CE-rerank assignment fix, humor
+Isolates the MP-2 diagnosis (bge-top1 assignment noise). SAME frozen 11-metric arm
+set, SAME candidate scores and selections as MP-2 (nothing re-selected); ONLY the
+label assignment changes: CE (cross_encoder_llama8b, the matches_ce instrument)
+reranks the bge top10 for ALL 61,945 signals; corroborated P*/single/N* rebuilt with
+CE-top1 under identical rules. Metrics falling below floors drop (reported); no new
+metrics added. Missing label-doc scores topped up with the same 66-rubric manifest.
+CONFIRMATORY (frozen): H1' pooled omega - llm > 0 on CE-corroborated labels; the MP-2
+dose-response secondary re-run. PRE-STATED interpretation: if CE labels lift AUCs into
+a working regime and H1' holds -> assignment-noise diagnosis confirmed + peer result
+replicates; if AUCs stay ~.5 -> humor mention corpus itself is the limit (task-level
+null, peer result stays one-task).
