@@ -485,3 +485,25 @@ EVAL (frozen): purified labels only — P* corroborated pos / N* attentive neg;
 per-metric AUC per arm; pooled paired Q2''(omega-llm) and Q1''(omega-desc); strata
 {AUC_omega>=.65} + symmetric {AUC_llm>=.65} + unconditional, all three always quoted
 together. Mention-label full-corpus AUCs reported as companion. Floors: >=8 pos.
+
+## EXP-MP-1 PHASE-2 READOUT (2026-08-17, per frozen addendum 6ef7b7b42)
+Pipeline: 84 candidates encoded+corpus-scored 8B (sk1 GPU6), 84 blind qwen decodes,
+84 hat re-executions, fresh qwen critic 2100/2100. 14/14 metrics evaluable.
+PURIFICATION WORKS (LLM-free): corroborated-P*/attentive-N* AUCs far above mention
+AUCs (a55 .996 vs .902; a65 .870 vs .716; a18 .864 vs .670) — the >=.65 regime the
+user asked for EXISTS on purified labels (7/14 metrics).
+- Q2'' omega - llm (purified, unconditional): +0.0049 [-0.0107,+0.0204] 5/4 (n=14)
+- STRATUM AUC_omega>=.65 (n=7): omega - llm = +0.0140 ; omega - desc = +0.0021
+- SYMMETRIC STRATUM AUC_llm>=.65 (n=6): omega - llm = +0.0121 (gap SURVIVES the
+  symmetric control -> not a conditioning artifact)
+- Q1'' omega - desc (unconditional): -0.0088 [-0.0294,+0.0112] 2/9 (no win vs def)
+- COMPANION mention-label omega - llm: -0.0094 [-0.0185,-0.0007] — on NOISY labels
+  omega looks worse than llm; on PURIFIED labels better. Purity flips the sign.
+- Per-metric showcases (divergent selections): a68 omega C2 .762 vs llm/desc C0 .695
+  (+.067 over both); a6 omega C4 .711 vs .660 (+.051 over both). Losses exist too
+  (a73 -.067). Selections: j_omega concentrates on assemblies (C2 x6, C4 x5, C0 only
+  x2); j_llm conservative (C0 x5) — critic prefers the definition, recovery prefers
+  unit/leaf assemblies.
+CAVEATS: n=14; unconditional CI includes 0; strata descriptive (no CI at n=6-7);
+strata quoted only as the pre-frozen triple. Artifacts: mp2_* on sk3 mention_auc/ +
+local outputs/analyses/objective_comparison_v1/.
