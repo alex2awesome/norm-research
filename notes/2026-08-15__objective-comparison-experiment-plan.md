@@ -428,3 +428,14 @@ in COMPOSITION space), the picture is: paraphrase can't improve the definition's
 transmissibility; only unit composition changes it. Delta_rec(500) = 0 intent-to-treat;
 no eval stage needed (nothing shipped). TB3 server sk1 GPU7 torn down (PIDs 1458827,
 1530257 killed explicitly; artifacts in scratchpad tier_b3/, 15 files).
+
+## EXP-EAP-1 VERDICT (2026-08-16): INSTRUMENT FAILURE — labels invalid, arms untested
+Negative-control gate 2/42 (5%) vs required 75% -> FAIL. Arbiter inferred over-generic
+qualities from 600-char excerpt anchors and marked ~applies on 93% of y1, 90% of y0,
+95% of distant-metric controls. Purified labels degenerate (all-but-applies); per-arm
+AUCs on them are meaningless and are NOT results for/against any arm. Honest reading:
+exemplar-anchored purification needs construct-contrastive anchors (pos AND neg
+exemplars) or full-doc anchors — v1 design insufficient. Artifacts: eap_v1/verdicts
+(53/53), sealed key unsealed at readout, eap_readout crash on degenerate metric noted.
+User redirect (same night): scale up + LLM-FREE purification (mention multiplicity),
+examine m_rec vs m_llm gap in the >=~.7-AUC regime.
