@@ -653,3 +653,24 @@ p=.0003), cw +0.0182 n.s., pr +0.0042 n.s. rec - desc descriptive: -0.0122 (85/1
 Reconstruction-selected prompts show significantly better convergent/discriminant
 structure than critic-selected — on the definition-lineage-free instrument, at scale.
 Ledger: rec>llm 7/8 regimes, now with a significant flagship. Artifact mtmm3_readout_v1.json.
+
+## EXP-MP-1c PREREG (2026-08-17, FROZEN pre-compute): peer scale-up, levers 1+2+3
+User approved: bigger family + symmetric selection-noise reduction + wider universe.
+- UNIVERSE (floor >=5 corroborated, from frozen census): 17 peer metrics = the MP-1 14
+  + a66(7) a41(6) a80(6).
+- FAMILY (12 candidates, label-free, stable-hash leaf order as before): C0 bank def /
+  C1 hierarchy articulation / C2 def+2 leaves / C3 def+4 / C4 def+8 / C5 4-leaves
+  alone / C6 8-leaves alone / C7 leaf#1 / C8 leaf#2 / C9 def+leaves 5-6 / C10 leaves
+  5-8 alone / C11 name-only. Forms 700-711; hats 800-811 per decode replicate.
+- SELECTION: m_rec = argmax MEAN rank-agreement over k=3 INDEPENDENT decodes
+  (temperature 0.7, distinct seeds via prompt nonce; decoder qwen-2.5-72b OpenRouter)
+  each re-executed on 8B; m_llm = argmax rank-agreement with qwen critic (existing
+  mp2_critic_results for 14 metrics + fresh 150-probe calls for a66/a41/a80);
+  m_desc = C0. M_i = C0 probe encode.
+- LABELS: corroborated P* (>=2 distinct pos reviews, no neg) floor >=5; N* attentive
+  capped 600 stable-hash; single-mention tier kept for dose-response.
+- EVAL: full-corpus scoring (mp2 pattern, forms 700-711) -> purified AUC per arm;
+  CONFIRMATORY H1c: pooled paired omega - llm > 0 one-sided; stratum triple
+  (omega>=.65 / llm>=.65 / unconditional) always together; dose-response secondary.
+- Infra: encode+hat+corpus on sk1 free GPU (stack allowed per user 2026-08-17);
+  decodes+critic OpenRouter from sk3; scripts mp5_* pattern from mp2/mp3 (committed).
