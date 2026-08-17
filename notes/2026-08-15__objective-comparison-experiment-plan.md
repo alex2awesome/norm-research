@@ -416,3 +416,15 @@ test of m_desc vs m_omega vs m_llm. User signed off 2026-08-16.
   Q1' > 0 pooled (on a set with 3 prior losses vs 2 prior wins) = genuine reversal in
   favor of m_rec, non-circular. Q1' < 0 = definition better on the purified target too.
   All cells reported.
+
+## TB3 VERDICT (2026-08-16) — budget-500 rec arm COMPLETE
+15/15 metrics, 0 errors, **0 shipped changes** — every metric gated-to-seed with
+evolved == seed (GEPA surfaced no rewrite beating the definition on the three-hop
+train reward, now at ~60 candidate evaluations/metric vs v2's ~15). Per the frozen
+falsifier decode (441c01185): this strengthens "the definition sits at/near the
+three-hop optimum in REWRITE space" well beyond the budget-120 caveat. Combined with
+the reward-landscape fact (assemblies beat the definition on three-hop reward 12/15
+in COMPOSITION space), the picture is: paraphrase can't improve the definition's
+transmissibility; only unit composition changes it. Delta_rec(500) = 0 intent-to-treat;
+no eval stage needed (nothing shipped). TB3 server sk1 GPU7 torn down (PIDs 1458827,
+1530257 killed explicitly; artifacts in scratchpad tier_b3/, 15 files).
