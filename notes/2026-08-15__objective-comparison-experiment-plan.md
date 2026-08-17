@@ -644,3 +644,12 @@ executor; within-instrument). Battery = all scored forms per metric.
 - H-MTMM3 (frozen): paired Delta(m_rec - m_llm) margin > 0 one-sided across all
   evaluable metrics (expected n~83); per-task rows + pooled; m_desc descriptive only.
 - Floors: >=3 same-metric other forms; >=60 finite probe overlap per rho.
+
+## EXP-MTMM-3 READOUT (2026-08-17, per prereg 8a6d47cbb) — FIRST SIGNIFICANT rec>llm CELL
+n=197 metrics (peer 49 / cw 23 / pr 26 / humor 99), Tier-A probe scores, label-free
+multi-form MTMM margin. POOLED rec - llm margin: +0.0333 [+0.0189,+0.0479], 99/54,
+one-sided p < .0001. Per task: peer +0.0523 (26/9, p<.0001), humor +0.0350 (50/26,
+p=.0003), cw +0.0182 n.s., pr +0.0042 n.s. rec - desc descriptive: -0.0122 (85/112).
+Reconstruction-selected prompts show significantly better convergent/discriminant
+structure than critic-selected — on the definition-lineage-free instrument, at scale.
+Ledger: rec>llm 7/8 regimes, now with a significant flagship. Artifact mtmm3_readout_v1.json.
