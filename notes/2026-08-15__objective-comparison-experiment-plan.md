@@ -332,3 +332,27 @@ strictly beating critic-guided optimization — i.e., recovery-selection loses n
 vs the ideal articulation and avoids the critic's construct-drift failure mode.
 Legitimate escalations (design/power only, NOT outcome-conditioned): pooled-task n,
 label expansion (more mention-y positives), Tier-B at scale budget 500+ w/ gates.
+
+## POST-HOC IMPLEMENTATION AUDIT (2026-08-16, user-requested double-check)
+Question audited: "m_rec starts from m_desc — did we implement that correctly?"
+1. E-CERT FLAVOR — verified mechanically from momega_readout_v1.json: C0 (the
+   definition) is in every candidate set; when the recovery selector picks C0 the
+   delta is EXACTLY 0 (3/12 metrics); every negative delta (6/12) comes from a
+   non-C0 pick. So Q1 = -.011 is pure SELECTION RISK, not sub-seed optimization.
+2. GEPA FLAVOR — verified from all 30 artifacts: rec arm seeded at the definition;
+   evolved == seed on 15/15 and shipped == seed on 15/15, so Delta_rec can never be
+   negative by construction. CORRECTION to the earlier mechanism claim: the val gate
+   never fired (val_seed=null) — GEPA's search itself found NO train-reward
+   improvement over the seed; "gate refused to ship" was imprecise. Honest caveat
+   added: budget 120 with minibatch 8 ~= only ~15 candidate evaluations — this cell
+   is "no improvement found at small budget," NOT proof the definition is optimal.
+3. REWARD MACHINERY — not degenerate: (a) live re-test of the exact qwen_decode call
+   path with the same key file succeeded; (b) reward landscape (rewardscape.py on
+   sk3): per-metric three-hop reward spreads up to .87 across candidates, and the
+   readout's j_omega matches argmax of the landscape 15/15. Notably C0 is the
+   three-hop TOP candidate only 3/15 — unit assemblies often transmit the metric's
+   scores better than the definition text (transmissibility != label AUC).
+4. LATENT BUG FOUND+FIXED: three_hop cache was keyed on rubric only, ignoring ids —
+   the rec val-gate path would have compared train-id hat scores against val targets.
+   Never executed (gate branch never ran for rec; critic val uses _score fresh).
+   Fixed: cache key now (rubric, ids). No result affected.

@@ -118,8 +118,8 @@ class RubricArmAdapter:
     _hop_cache = {}
 
     def three_hop(self, rubric, ids):
-        """candidate -> encode -> blind decode -> re-execute; cached per rubric."""
-        key = hash(rubric)
+        """candidate -> encode -> blind decode -> re-execute; cached per (rubric, ids)."""
+        key = hash((rubric, tuple(ids)))
         if key in self._hop_cache:
             hat_scores = self._hop_cache[key]
         else:
