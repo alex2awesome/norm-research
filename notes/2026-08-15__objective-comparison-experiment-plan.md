@@ -633,3 +633,14 @@ measures on written bits. Humor line CLOSED; MP-1 peer result stays one-task wit
 task-structural explanation (peer reviews discuss constructs of the artifact; humor
 comments are reactions/advice, predominantly about delivery-adjacent qualities).
 Artifacts: mp2b_* on sk3 + local.
+
+## EXP-MTMM-3 PREREG (2026-08-17, FROZEN pre-compute): multi-form MTMM at Tier-A scale
+User approved. Data = EXISTING Tier-A artifacts only: selections.json (m_recon / m_fb /
+m_desc per metric, 4 tasks) + {task}_probes_g4.json probe-panel scores (Gemma-4
+executor; within-instrument). Battery = all scored forms per metric.
+- Per (arm, metric): CONVERGENT = mean Spearman rho with OTHER forms of the same
+  metric (arm's own form excluded); DISCRIMINANT = mean |rho| with other metrics'
+  forms, capped at 200 comparison forms by stable md5 per metric; margin = conv-disc.
+- H-MTMM3 (frozen): paired Delta(m_rec - m_llm) margin > 0 one-sided across all
+  evaluable metrics (expected n~83); per-task rows + pooled; m_desc descriptive only.
+- Floors: >=3 same-metric other forms; >=60 finite probe overlap per rho.
