@@ -439,3 +439,28 @@ exemplars) or full-doc anchors — v1 design insufficient. Artifacts: eap_v1/ver
 (53/53), sealed key unsealed at readout, eap_readout crash on degenerate metric noted.
 User redirect (same night): scale up + LLM-FREE purification (mention multiplicity),
 examine m_rec vs m_llm gap in the >=~.7-AUC regime.
+
+## EXP-MP-1 PREREG (2026-08-16, FROZEN): LLM-free multiplicity purification + rec-llm gap
+User directive: biggest defensible m_rec - m_llm gap on purified labels where m_rec
+scores highly; purification must NOT be an LLM arbiter pass. Instrument = mechanical
+filters over the existing silver mention join (mention_join_peer_20260716.jsonl:
+paper_id + review-idx source_id, choice name, confidence, polarity).
+- PURIFIED POSITIVES (P*): (metric, paper) with >=2 DISTINCT reviews carrying
+  pos-polarity mentions of the metric, and NO neg/mixed mention of that (metric,paper).
+  Sensitivity tier: confidence=high only.
+- PURIFIED NEGATIVES (N*): tier-1 N1 attentive negatives (paper has >=2 reviews, each
+  >=1 real mention, >=5 total real mentions of OTHER aspects; zero mentions of m).
+- PHASE 1 (no new scoring): frozen m_omega-universe peer arms (a34, a49, a50, a63 +
+  any others evaluable; selections from momega_readout_v1.json; scores from
+  mo_peer_corpus8b.json). Readout: per-metric purified AUC per arm; pooled paired
+  Q2'' = omega - llm and Q1'' = omega - desc; STRATIFICATION (frozen): report the gap
+  within {metrics: purified AUC_omega >= .65} AND the symmetric {AUC_llm >= .65}
+  control stratum + unconditional. Floors: >=6 purified pos, >=15 purified neg.
+- PHASE 2 (scale, contingent on Phase-1 label sanity): extend arms to ALL peer bank
+  metrics with >=8 corroborated positives; candidate family from hierarchy R2-member
+  phrasings (no mined banks needed); three-hop rec selection vs fresh qwen critic;
+  encode/hat on 8B (sk1 GPU7 slot, freed); prereg addendum before launch.
+- DISCLOSURE: mention join itself is LLM-extracted silver (unavoidable paradigm);
+  "LLM-free" refers to the purification layer only. Conditioning a stratum on
+  AUC_omega biases that stratum pro-omega; the symmetric llm-stratum + unconditional
+  cells are mandatory companions in any quoted result.
