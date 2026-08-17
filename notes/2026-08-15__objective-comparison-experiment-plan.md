@@ -387,3 +387,32 @@ apparent oracle gap +.022 AUC pts (upper bound); realizable-by-label-selection h
 ~= 0 (skyline); "no true headroom" vs "headroom masked by selection noise at 5-20
 positives/half" NOT distinguishable at current n. Units: mention-AUC points on a ~.54
 baseline. The prior phrasing "headroom is real but unfound" is RETIRED.
+
+## EXP-EAP-1 PREREG (2026-08-16, FROZEN before any batch is built or judged)
+Exemplar-anchored purification on the contested set — the non-circular purified-label
+test of m_desc vs m_omega vs m_llm. User signed off 2026-08-16.
+- METRICS (disclosed as outcome-selected REPLICATION set; generalizes only to contested
+  metrics): humor a20, a263, a99; peer a49, a50 (the 2 solid wins + 3 solid losses from
+  m_omega-proper on mention labels).
+- ARMS FROZEN from momega_readout_v1.json selections (no re-selection): m_desc = C0;
+  m_omega = C[j_omega]; m_llm = C[j_llm] per metric. Scores already on disk
+  (mo_{task}_corpus8b.json); NO new executor scoring.
+- DOCS per metric: all corpus y=1 mention docs (cap 40 by stable md5 of "eap:{m}:{d}")
+  + equal-count y=0 by the same stable hash (never seeded-shuffle). Text = the exact
+  file the arms scored (humor_score_texts / peer_paper_texts), same 6000-char cap.
+- ARBITER: Codex gpt-5.6-sol via companion (judge-checks rule). Input per item: k=8
+  anchor excerpts (600 chars) = positive-labeled docs for the metric, leave-one-out for
+  y=1 candidates; candidate document; the question "do these anchors share one specific
+  quality, and does the candidate exhibit it?". NO definitions, NO reconstructions, NO
+  metric names anywhere in arbiter input — circularity guard.
+- SEALED ANCHOR-TESTS ~15%: held-out y=1 positives (expect applies) + y=1 docs of a
+  distant other-task metric (expect not-applies); key sealed on sk3, unsealed at
+  analysis only. Batch passes if anchor accuracy >= 75%, else wave re-run with k=12.
+- PURIFIED LABEL: arbiter binary "applies". Sensitivity: drop score 4-6 band.
+- READOUT (frozen): per-metric purified-AUC per arm; paired bootstrap on mean
+  per-metric delta for Q1' = omega - desc and Q2' = omega - llm; doc-level paired sign
+  test on arm-disagreement docs; SAME-subset mention-label AUCs reported alongside.
+- PREDICTION DECODE: prior wins/losses were label noise => purified deltas shrink to 0.
+  Q1' > 0 pooled (on a set with 3 prior losses vs 2 prior wins) = genuine reversal in
+  favor of m_rec, non-circular. Q1' < 0 = definition better on the purified target too.
+  All cells reported.
