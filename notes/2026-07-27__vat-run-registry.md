@@ -4274,3 +4274,19 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   on GPU6 + seed42 START): mathse_bounty (3 seeds) -> so_accepted_qtrunc
   (3 seeds), frozen scaleupC recipe, scoring pass per cell. so_bounty dense
   deferred until its own qtrunc bundle is built with V6's builder logic.
+
+## 2026-08-17 — SMOKE GATE PASSED; FULL A-PASS RUNNING STACKED (GPU5)
+- Smoke (40 items/cell, stacked GPU5 util .50): mathse_bounty NA .345 mean .726,
+  no pathological columns; so_bounty NA .487 mean .644 with 4 high-NA criteria —
+  **gate check against the SIBLING'S FULL 16K-row matrix: same profile** (sibling
+  overall NA .387; its top-NA criteria are the IDENTICAL ones — "Complexity claim
+  matches the code" .96 vs our .95, "Performance claim is substantiated" .92 vs
+  .90). Bank's known shape, not an instrument break; bountied questions read
+  slightly harder (NA +.10), consistent with construct.
+- **FULL pass launched** (1.7M prompts, both cells, one Gemma load, stacked GPU5
+  alongside l1ly's tenant, 142GB/183GB total): 8 shards/cell + anchor batteries
+  + V vectors. Watcher armed. Expect slower-than-dedicated wall clock (compute
+  contention).
+- STANDING RULE FILED (memory feedback_gpu_usage.md): co-tenant stacking OK when
+  tenant is very long-running or one user hogs 5-6/8 GPUs; size mem fraction to
+  free headroom, STACKED-ok ledger entries, co-tenants never touched.
