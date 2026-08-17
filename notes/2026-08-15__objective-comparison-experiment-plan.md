@@ -674,3 +674,19 @@ User approved: bigger family + symmetric selection-noise reduction + wider unive
   (omega>=.65 / llm>=.65 / unconditional) always together; dose-response secondary.
 - Infra: encode+hat+corpus on sk1 free GPU (stack allowed per user 2026-08-17);
   decodes+critic OpenRouter from sk3; scripts mp5_* pattern from mp2/mp3 (committed).
+
+## EXP-MP-1c READOUT (2026-08-17, per prereg 74d99a18c) — H1c SIGNIFICANT
+17/17 metrics evaluable; 12-candidate family; k=3 decode-averaged three-hop; all
+levers landed as designed: divergent selections 15/17 (was 9/14).
+- H1c omega - llm (corroborated): +0.0324 [-0.0016,+0.0792] 10/5, one-sided p~.033 —
+  FIRST SIGNIFICANT LABEL-ANCHORED rec>llm CELL (unconditional, no stratum needed).
+- Mean AUC unconditional: omega .676 vs llm .643 (desc .657... omega-desc +.019
+  descriptive, CI spans 0). Stratum omega>=.65: n=10, omega .768 vs llm .714, gap
+  +.054; SYMMETRIC llm>=.65: n=9, gap +.013 (positive, smaller — both quoted).
+- DOSE-RESPONSE: corroborated gap - single gap = +.0396 [+.004,+.089] p~.010 — the
+  sign-flip mechanism (label purity reveals rec's advantage) now SIGNIFICANT.
+- Showcases: a80 llm .408 -> omega .750 (+.342); a66 +.079; a68 +.071; a6 +.065;
+  losses exist (a47 -.035, a73 -.031, a41 -.051). Top AUC: omega .995 (a55).
+Paper evidence stack: MTMM-3 (+.033, n=197, p<.0001, label-free) + MP-1c (+.032,
+n=17, p=.033, purified-label-anchored, dose-response p=.010) + GEPA drift mechanism.
+Artifacts mp5_* on sk3 + local; scripts committed.
