@@ -4233,3 +4233,24 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - NEXT (the actual VAT runs): V features (sibling extractors), A = Gemma pass of
   the sibling banks on the new rows (one vLLM load, multi-job), T = dense chains
   (3 seeds x 3 cells, sequential one-GPU), then ladders + F2.
+
+## 2026-08-16 — VAT LAUNCHED for U3/U4 (A-pass smoke-gated); U5 WritingPrompts cued
+- **A-bank scorer** datasets/stackoverflow-votes/score_bounty_banks.py: two bank
+  jobs in ONE Gemma load — mathse_bounty scored with the mathse_multiy sibling
+  bank (SYS/trunc/ctx IMPORTED from score_scaleupC_banks, verbatim), so_bounty
+  with the so_votes sibling bank (SYS/ctx incl. load-bearing question BODY
+  imported from score_so_votes_bank). vvec = sibling v_features (V columns come
+  free from the framework). Anchors = own-y pos/neg/scram per shard.
+  Outputs -> outputs/va_gemma_banks_{mathse,so}_bounty/. **SMOKE (40 items/cell)
+  RUNNING via gpu_runner (job bounty_smoke) — full pass gated on NA/modal/anchor
+  inspection per the standing smoke rule.** so_accepted needs NO scoring (V6
+  shards cover its rows).
+- Dense chains staged conceptually; BLOCKED on one design check before launch:
+  V6's T for so_votes is the QTRUNC variant — the so_accepted/so_bounty T must
+  match the sibling convention (check dense_standard_so_votes_qtrunc args) for
+  commensurable T columns. mathse T = sibling defaults.
+- **U5 (WritingPrompts) located + cued (task #78):** datasets/creative-writing/
+  bestof_writingprompts/ (scraper + award_threads/ present). USER RULING logged
+  on jokes (task #75): awards = COMMUNITY not curation (gilded .19%, median
+  score of gilded 14,438 — virality function); votes community on the FULL
+  184,774 kept universe; removal verdict waits on the live wayback fetch.
