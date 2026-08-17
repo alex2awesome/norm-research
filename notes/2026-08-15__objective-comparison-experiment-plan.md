@@ -532,3 +532,23 @@ User-directed cross-task replication of MP-1 with the sign-flip as CONFIRMATORY.
   omega - llm gap is LARGER on corroborated labels than on same-lineage single-mention
   labels (>=1 commenter, not corroborated) — the within-instrument sign-flip test.
   Q1 (omega - desc) reported, no directional claim. All cells reported.
+
+## EXP-MP-2 READOUT (2026-08-17, per prereg 49ee95a29) — H1 NOT REPLICATED on humor
+Pipeline complete: 66 candidates encoded, 65 decodes, hats re-executed, critic 1650/1650,
+11/11 metrics evaluable, 4,785 label docs scored.
+- H1 omega - llm (corroborated): -0.0107 [-0.0543,+0.0260] 4/6, one-sided p~.68 — REFUTED.
+- Dose-response (corr gap - single gap): +0.0152, 7/3, one-sided p~.22 — DIRECTIONALLY
+  consistent with the sign-flip prediction (gap improves -.026 -> -.011 with purity)
+  but n.s.; omega - desc (corroborated): +0.0051, 4/3 (null).
+- INSTRUMENT DIAGNOSIS (key finding): humor corroborated AUCs are DISMAL — median ~.42,
+  most cells BELOW .5 in every arm. Unlike peer (where corroboration lifted AUCs to
+  .65-.996), the humor corroborated labels never produce a working measurement regime;
+  the >=.65 stratum is empty (a42 .75 flat; a55 llm-C5 .78 is the lone high cell).
+  The peer stratum claim ("where measurement works, rec>llm") is UNTESTABLE here —
+  precondition failed. Likely cause: bge-top1 assignment noise over a 285-metric bank
+  (peer mentions were arbiter-adjudicated choices; humor's are raw retrieval top1) —
+  corroboration filters commenter noise but not assignment noise.
+- Cross-task ledger update: rec>llm now 5/6 regimes directionally (humor corroborated
+  = first directional miss); the MP-1 peer result stands but is ONE-TASK until a task
+  with adjudicated mentions + multiplicity replicates. Scope stated accordingly.
+Artifacts: mp3_* on sk3 + local outputs/analyses/objective_comparison_v1/.
