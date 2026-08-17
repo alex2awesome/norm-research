@@ -106,10 +106,9 @@ def build_so_bounty():
                        "so_bounty_manual_population.jsonl.gz", "rt"):
         r = json.loads(l)
         aux[str(r["aid"])] = r
-    qs = pd.read_parquet(REPO / "datasets/stackoverflow_python/so_python_questions.parquet",
-                         columns=["Id", "Tags"])
-    qs["Id"] = qs.Id.astype("int64").astype(str)
-    tag_of = dict(zip(qs.Id, qs.Tags.astype(str)))
+    # tags pre-dumped to JSON (gemma4 env's pandas cannot load a usable parquet
+    # engine even with pyarrow installed; dumped by ai_usage env)
+    tag_of = json.load(open(REPO / "datasets/stackoverflow-votes/so_bounty/qid_tags.json"))
     items = []
     for r in df.itertuples():
         a = aux[str(r.row_id)]
