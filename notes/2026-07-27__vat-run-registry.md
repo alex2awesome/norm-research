@@ -4290,3 +4290,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - STANDING RULE FILED (memory feedback_gpu_usage.md): co-tenant stacking OK when
   tenant is very long-running or one user hogs 5-6/8 GPUs; size mem fraction to
   free headroom, STACKED-ok ledger entries, co-tenants never touched.
+
+## 2026-08-17 — FIRST UNIFIED-X LADDER LANDED: so_accepted (SO VERDICT) V/A/VA
+- CPU-only on the V6 scored matrix (16,001 rows, y=accepted; collapse gate
+  dropped 1 criterion -> 39): **V .639 / A .704 / VA .717** (nl mean-3; within-
+  question pair-weighted .654/.706/.723). vs the so_votes COMMUNITY sibling on
+  the same rows: V .638/VA .710 — verdict and community read near-identically at
+  the VA level on this corpus (the cross-y contrast sharpens at T + fused).
+  Artifacts: results/so_accepted_{ledger.json,va_oof.npz}.
+- bounty_layer1.py staged for both curated cells (community-overlap covariate
+  line = answer_score within-question); fires when the stacked A-pass lands.
