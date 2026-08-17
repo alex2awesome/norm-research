@@ -613,3 +613,10 @@ Proper multitrait-multimethod using the 6 candidate articulations as METHODS.
   excluded its own form too), no canonical judge anywhere.
 - H-MTMM2 (frozen): Delta(omega - llm) margin > 0 one-sided, paired bootstrap;
   omega - desc reported descriptively.
+
+## EXP-MTMM-2 READOUT (2026-08-17, per prereg 55f76557b)
+Multi-form battery (no canonical judge, symmetric). H-MTMM2 omega - llm margin:
++0.0128 [-0.0531,+0.0768] 5/4, one-sided p~.35 — DIRECTIONALLY positive, n.s. at
+n=14. omega - desc margin -0.0419 (2/9, descriptive; forms battery centers on
+def-derived articulations so desc-adjacency is still mildly favored — noted).
+Cumulative rec-vs-llm ledger: 6/7 regimes directionally positive.
