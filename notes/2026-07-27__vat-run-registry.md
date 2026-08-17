@@ -4211,3 +4211,25 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Next: text-prep MATCHED to sibling cells (check v2_va formatting), splits,
   V features, A-bank reuse check (bounty answers may already be Gemma-scored in
   the vote cells), then ladders.
+
+## 2026-08-16 — U3/U4 CELLS BUILT (dense_standard layout; instruments NOT yet run)
+- Sibling-convention identity enforced by IMPORT, never reimplementation:
+  math text = build_multiy_v2.clean_body + QUESTION:/ANSWER: template + 50/12,000
+  gates + sha1(qid|aid)[:20] row ids; SO text = V6 convention verbatim (body.strip,
+  answer-Id row ids; ONE deviation recorded: 12,000-char max added for math parity).
+  Splits = the frozen stable_hash_bucket_map (hashtagwars lineage) on question
+  groups, both cells.
+- **mathse_bounty** (datasets/math-se/mathse_bounty/): 23,972 rows / 8,278 q /
+  pos .3547; splits 19,177/2,399/2,396 pos-matched to 4 decimals; char gate
+  dropped 184.
+- **so_bounty** (datasets/stackoverflow-votes/so_bounty/): 23,498 rows / 7,036 q /
+  pos .3023; splits pos-matched; gate dropped 163.
+- **so_accepted** (datasets/stackoverflow-votes/so_accepted/): V6 rows/text/splits
+  VERBATIM, judgement = y_accepted (asserted: binary, exactly one accepted per
+  question); 16,001 rows, pos .375/.366/.368 by split.
+- A-score reuse checked and REJECTED for rows (overlap ~1.4% both domains:
+  math 344/24,317 by answer_id, SO 285/23,942) — criteria BANKS will be reused,
+  rows scored fresh.
+- NEXT (the actual VAT runs): V features (sibling extractors), A = Gemma pass of
+  the sibling banks on the new rows (one vLLM load, multi-job), T = dense chains
+  (3 seeds x 3 cells, sequential one-GPU), then ladders + F2.
