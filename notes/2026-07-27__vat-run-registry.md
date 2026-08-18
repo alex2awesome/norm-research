@@ -4414,3 +4414,9 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   with cleaner labels (aggregated votes) mechanically show bigger raw gaps. Raw-gap channel plot
   is attenuation-confounded; share plot is the defensible cross-channel readout.
 - 2026-08-18: articulated-share figure ORDERED curated→verdict→community (user); TikZ wrapfigure landed in paper-3 as fig:articulated-share (figures/fig_articulated_share.tex, committed inner repo; main.tex 2-line wiring left dirty for paper agent). Raw-gap boxplot cell REMOVED from notebook by user — share readout supersedes it; fig_residual_gap_distributions.png retired.
+- 2026-08-18 (cont): dense-ceiling panel (T medians .674/.751/.770 cur/ver/comm) + n-confound
+  check added to articshare0818. Channel-level n confound REAL (median n 7.5K/28K/75K) but
+  cell-level Spearman share~logn −.16 n.s.; extremes cross it (peer-cites 2.4K = largest
+  ceiling, homepage 184K dense ≤ bank). U8 scaling ladders (two curated bounty cells, running)
+  = decisive test. Gated-vs-open curated gradient noted (oral .640 / N&C .713 vs AoPS .954 /
+  homepage .954 / comps 1.0). U12 created: hard-pair stratified share.
