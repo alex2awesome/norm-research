@@ -4360,3 +4360,14 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   table updated with full ladders. NEXT: F2 deconf w/ vote-score covariate
   (does text survive the vote channel on curated y?), then (V+A)_new fleets off
   dense-vs-VA disagreement slices; Kindle Scout + RoyalRoad builds in parallel.
+
+## 2026-08-18 — CORRECTION (user catch): math.SE accepted V+A = .632, NOT .574
+- The .574 in the master ladder's Math verdict row was the E-REFIT VA (fullgrid
+  frame, 2,600 dense-held-out rows) pasted beside the full-population V (.591) —
+  frame mixing. Ledger same-frame values: V_nl .591 / **VA_nl .632** (seeds
+  .6318/.6325/.6318). VA > V holds; "VA < V pathology" retracted. Fixed in BOTH
+  notebook cells (master ladder dict + mathcs comparison). NEVER quote .574 as
+  the math verdict VA.
+- Correctness criteria on math.SE: present in the bank, JUDGE-SATURATED (means
+  .81-.84, modal .84) -> alone-AUC .525-.534 — the ceiling pattern, a measurement
+  limit not a construct verdict.
