@@ -4339,3 +4339,14 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
     bors caveat); GH PR reactions (#16) + Rust highlights (#17) — queued behind
     the CW/humor builds (code field already has 3 columns).
   * DONE/RUNNING: #14/#15 censuses (U3/U4 cells), #4/#9/#11/#12 cued in U2/U5.
+
+## 2026-08-18 — FIRST VAT V3 LANDED: mathse_bounty fused .768
+- mathse_bounty T complete (sk1, 3 seeds, ~5.8h each, scored; preds synced to
+  sk3). Fused stack on 4,795 dense-held-out rows (join 4795/4795):
+  **VA .736 / T .766 / VAT(fused) .768** (.798 eval / .737 test).
+- Math CURATED ladder now: V .691 / A .696 / VA .723 / **VAT .768** / T .766.
+  T carries +.030 over VA on held-out; fused adds only +.003 over T — thin
+  bank/dense complementarity on this cell (contrast BBC's strong swap signature).
+  The votes-channel conditioning (does T survive the vote-score covariate?) is
+  the F2 stage, queued after all three fused arms land.
+- so_accepted + so_bounty T training on sk3 GPUs 1/3; fused fires on landing.
