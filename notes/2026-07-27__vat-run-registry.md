@@ -4382,3 +4382,20 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   transition PRs (a ~3.3K-row Gemma pass, queued) then rerun the balanced arm +
   VAT (dense preds join also pending, row_id=batch:paper_id mapping).
 - results/pr_testexec_ladder.json carries the full arms incl. balanced.
+
+## 2026-08-18 — ARTICULATED-SHARE normalization of the residual-gap channel plot
+- User challenge: curated≈0 raw gap is confounded with per-channel predictability; the claim
+  we actually want is "% of recoverable shared preference that is articulated."
+- New readout (notebook cells `articshare0818md`/`articshare0818`, fig_articulated_share.png):
+  per cell, CEILING = max(all instruments)−.5; ARTICULATED SHARE = (max(V,V_new,VA,VA_new)−.5)/ceiling.
+- Medians: curated .954 / verdict .875 / community .797. Ceilings: community .280 > verdict .244 > curated .197.
+- CORRECTIONS to prior readings, on record:
+  1. Humor-verdict raw-gap outlier (.20) was an instrument-maturity artifact — raw plot used
+     pre-mining V+A (.529); mined V+A_new .703 ⇒ share .875. Never quote the .20 gap without this note.
+  2. Peer-review within-field channel contrast (raw gaps .065/.12/.23) is mostly a CEILING
+     story (.139/.277/.388), not articulation: shares nearly flat (.640/.606/.577). Retract the
+     "strongest within-field evidence that the channel drives articulability" framing (2026-08-18 chat).
+- Channel ordering survives normalization but is much softer than the raw plot suggests.
+- Caveats carried: mixed frames per master-ladder notes; 5/19 cells lack V+A_new (share = lower
+  bound there); ceiling<.15 cells (CW-Wigleaf, peer-oral, math-verdict) flagged ratio-unstable;
+  descriptive only, no deconf.
