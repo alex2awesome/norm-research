@@ -4300,3 +4300,19 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   Artifacts: results/so_accepted_{ledger.json,va_oof.npz}.
 - bounty_layer1.py staged for both curated cells (community-overlap covariate
   line = answer_score within-question); fires when the stacked A-pass lands.
+
+## 2026-08-17 — BOTH BOUNTY VA LADDERS LANDED (full-speed batch complete)
+- **mathse_bounty (math CURATED)**: V .691 / A .696 / VA .723 (within-q
+  .680/.686/.711); collapse gate dropped 1 -> 31 criteria.
+- **so_bounty (SO CURATED)**: V .739 / A .753 / VA .779 (within-q .744/.746/.779);
+  39 criteria.
+- **HEADLINE (descriptive): the community vote score predicts the manual bounty
+  award WITHIN-QUESTION better than any text instrument** — ascore w-q .776 vs
+  VA .711 (math), **.852 vs .779 (SO)**. Consistent with the award-mode audit
+  (manual winner = top-scored 64%). The curated construct is heavily community-
+  correlated; the live question for T/fused: does text add anything BEYOND the
+  vote channel (votes = observed covariate line, NEVER a feature — position-
+  ordinal discipline applies).
+- Batch of three unified-X ladders now on the board (so_accepted V .639/A .704/
+  VA .717 + these two). T columns next (sk1 chains); then VAT V3 fused; then
+  (V+A)_new fleets off the dense-vs-VA disagreement slices.
