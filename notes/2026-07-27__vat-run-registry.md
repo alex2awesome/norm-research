@@ -4350,3 +4350,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   The votes-channel conditioning (does T survive the vote-score covariate?) is
   the F2 stage, queued after all three fused arms land.
 - so_accepted + so_bounty T training on sk3 GPUs 1/3; fused fires on landing.
+
+## 2026-08-18 — ALL THREE VAT V3 ARMS LANDED (unified-X batch complete thru VAT)
+- so_accepted: VA .742 / T .752 / **VAT .772** (2,440 held-out; fusion +.020 over
+  T — the strongest complementarity of the three).
+- so_bounty: VA .790 / T .804 / **VAT .811** (4,698 held-out; +.007).
+- mathse_bounty: VA .736 / T .766 / **VAT .768** (4,795 held-out; +.003).
+- sk3 B200 chains ran 3 seeds in ~2.5-5h vs sk1 A100's 17.5h. Notebook UNIFIED-X
+  table updated with full ladders. NEXT: F2 deconf w/ vote-score covariate
+  (does text survive the vote channel on curated y?), then (V+A)_new fleets off
+  dense-vs-VA disagreement slices; Kindle Scout + RoyalRoad builds in parallel.
