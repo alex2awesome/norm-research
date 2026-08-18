@@ -4316,3 +4316,26 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Batch of three unified-X ladders now on the board (so_accepted V .639/A .704/
   VA .717 + these two). T columns next (sk1 chains); then VAT V3 fused; then
   (V+A)_new fleets off the dense-vs-VA disagreement slices.
+
+## 2026-08-18 — VAT V3 PUSH + NEW-DATASET SURVEY (user directive; "double up on sk3" OK'd)
+- **All three T legs now training in parallel**: mathse_bounty seed2 on sk1 GPU6
+  (seeds 42+1 done, ~5.8h each); so_accepted_qtrunc on sk3 GPU1; so_bounty on
+  sk3 GPU3 (its T frame = the cell's own title+answer text — differs from
+  so_votes' qtrunc frame, recorded). First stacked attempt on GPU0 OOM'd —
+  l1ly's tenant GREW to 166GB overnight (stale-survey lesson); resurvey found
+  GPUs 1/3/5 fully FREE and both chains run dedicated. sk1's so_accepted leg
+  skip-markered to prevent duplicate training.
+- **unified_fused_stack.py staged** (VAT V3 = §11 grouped-OOF stack [VA_nl, T
+  seedmean] on dense-held-out rows; no criteria-in-prompt arm per the cross-cell
+  ruling). Fires per cell as T lands.
+- **Survey of the 18 datasets — not-yet-run status:**
+  * READY NOW: Kindle Scout (U7: 726 accept/reject verdicts + ~31K-char
+    excerpts, campaigns_parsed.jsonl) — CW verdict candidate.
+  * SCRAPE LIVE: Reedsy (U6: 18,811/57,832 stories parsed so far) — build on
+    settle. RoyalRoad (U1) — data in hand, next build. Jokes removal (U2) —
+    wayback at ~63%. WP prospective (#5) — labels start Aug 21.
+  * BLOCKED/PARTIAL: McSweeney's (#13, manual TOC step pending); WP removal
+    texts (#1, n=423 — pair with kept-side contrast #3); mathlib TMIM (#18,
+    bors caveat); GH PR reactions (#16) + Rust highlights (#17) — queued behind
+    the CW/humor builds (code field already has 3 columns).
+  * DONE/RUNNING: #14/#15 censuses (U3/U4 cells), #4/#9/#11/#12 cued in U2/U5.
