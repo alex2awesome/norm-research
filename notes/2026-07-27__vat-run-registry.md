@@ -4371,3 +4371,14 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Correctness criteria on math.SE: present in the bank, JUDGE-SATURATED (means
   .81-.84, modal .84) -> alone-AUC .525-.534 — the ceiling pattern, a measurement
   limit not a construct verdict.
+
+## 2026-08-18 — F2P BALANCED ARM: UNMEASURABLE AT CURRENT INTERSECTION (n=37)
+- User asked for 50/50 transition-vs-random VAT. Finding: only **37 rows with any
+  F2P/P2F transition survive the join to A-scored PRs** (37/2,686 = 1.4%); the
+  balanced set is 74 rows over 108 repos — every AUC is noise (pre-kill checklist:
+  minority-class count fails). "F2P is useless" RETRACTED as a conclusion; the
+  correct statement is F2P utility is UNMEASURED — the 3,264-signal transition
+  universe barely overlaps the 68K A-scored universe. UNBLOCK = A-score the
+  transition PRs (a ~3.3K-row Gemma pass, queued) then rerun the balanced arm +
+  VAT (dense preds join also pending, row_id=batch:paper_id mapping).
+- results/pr_testexec_ladder.json carries the full arms incl. balanced.
