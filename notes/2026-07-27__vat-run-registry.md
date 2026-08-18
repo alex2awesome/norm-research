@@ -4399,3 +4399,17 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Caveats carried: mixed frames per master-ladder notes; 5/19 cells lack V+A_new (share = lower
   bound there); ceiling<.15 cells (CW-Wigleaf, peer-oral, math-verdict) flagged ratio-unstable;
   descriptive only, no deconf.
+
+## 2026-08-18 — articulated-share SENSITIVITY battery ("are you sure?" check)
+- Numerator variants (max / declared-single / plain-VA), d-prime rescale, MWU+KW rank tests.
+- ROBUST: curated median share .95 under every variant (curated cells never had mined columns
+  to inflate them; their shares are lower bounds). Ceiling ordering community>verdict>curated robust.
+- FRAGILE: verdict-vs-community share separation exists only via mined V+A_new columns
+  (plain-VA: .66/.66 identical); no channel ordering significant (best p=.064, n=6-7).
+- CELL CORRECTIONS: Humor .703 = campaign frame (†c); peer-community share .577 uses pooled
+  T=.888 (NEVER-QUOTE without era band) — in-band share ~.90. Post-correction low-share list:
+  CW upvotes .565, peer verdict .606, patents verdict .661.
+- Methods note on record: under symmetric label noise, AUC excess over .5 scales by (1−2·fliprate)
+  for every instrument equally ⇒ the SHARE is noise-invariant while the RAW GAP is not; channels
+  with cleaner labels (aggregated votes) mechanically show bigger raw gaps. Raw-gap channel plot
+  is attenuation-confounded; share plot is the defensible cross-channel readout.
