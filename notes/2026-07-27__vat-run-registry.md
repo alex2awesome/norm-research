@@ -4413,3 +4413,4 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   for every instrument equally ⇒ the SHARE is noise-invariant while the RAW GAP is not; channels
   with cleaner labels (aggregated votes) mechanically show bigger raw gaps. Raw-gap channel plot
   is attenuation-confounded; share plot is the defensible cross-channel readout.
+- 2026-08-18: articulated-share figure ORDERED curated→verdict→community (user); TikZ wrapfigure landed in paper-3 as fig:articulated-share (figures/fig_articulated_share.tex, committed inner repo; main.tex 2-line wiring left dirty for paper agent). Raw-gap boxplot cell REMOVED from notebook by user — share readout supersedes it; fig_residual_gap_distributions.png retired.
