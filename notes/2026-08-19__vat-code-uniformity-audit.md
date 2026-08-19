@@ -35,3 +35,8 @@ locally. Audit question: is the same statistical machinery uniform across cells?
 New cell scripts import the three canonical modules; local re-implementations of
 folds/OOF/within-group/fusion are a review-blocking defect. When a deliberately
 different statistic is needed (layer2 style), name it differently in the output JSON.
+
+## Tie-breaker rule (user, 2026-08-19)
+When implementations compete, prefer the MOST RECENT unless the older one is
+deliberately cell-specific. Current newest generation: layer1_gemma_cells /
+so_votes_layer1 / unified_fused_stack (ladders), score_scaleupC_banks (scoring).
