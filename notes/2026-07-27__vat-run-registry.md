@@ -4429,3 +4429,22 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   (d)−(c) = +.013 only — much of the climbing T rides declared channels (answer_score/
   n_answers/char_len); the paper-relevant scaling readout is (d)−(c) PER FRACTION, queued for
   chain completion. Never quote the fraction curve against the fused/same-rows frame numbers.
+
+## 2026-08-19 — PR transition FULL ladder (canonical machinery) + wave-D launches
+- pr_transition cell (results/pr_transition_full_ladder.json, va_oof saved): n=7,563 tests-ran
+  rows / 184 repos / pos .748; 83 criteria scored, collapse gate -> 49; NA .41 (Title+Diff frame).
+- WITHIN-REPO (quotable): **A .765** | V_exec .569 | VA .646. VA << A is an INSTRUMENT note:
+  exec features (esp. baseline_n = repo fingerprint) poison within-repo ranking via pooled
+  fit — quote A as the text instrument for this cell; never quote VA without this note.
+- POWERED transition answer (3,533 transition rows): f2p alone within-repo .448, p2f .425,
+  has_transition .423 — test EXECUTION outcomes are at/below chance for merge within-repo.
+  Top criterion: "Tests included with changes" .799 within-repo — reviewers reward SHIPPING
+  tests, not passing them. Balanced 50/50 arm concurs (A .755 wr).
+- dense_coverage = 0: v3 grouped test preds do not overlap this population -> VAT pending a
+  dense run on THIS population (queued); VA_new absent (no mining yet).
+- Launches: jokes_removal bank scoring sk3/GPU7 (47 rubrics, shard0 NA .308, healthy);
+  kindle_scout sk3/GPU3 (relaunch after cd-precedence path bug — first proc died on AFS path);
+  SO-bounty scaling seed2 parallel chain sk1/GPU5. All under scaleupD scorer (newest machinery).
+- Missing-value whisker (user request): Track-B Z (evalue jsons) is the SPURIOUS-side bound —
+  NOT valid as a VA upper whisker. Track-A mass exists only in raw campaign round artifacts;
+  estimator (mass x M2-backtest value-per-species) needs a frozen definition + harvest -> U13.
