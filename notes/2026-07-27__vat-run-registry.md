@@ -4420,3 +4420,12 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   ceiling, homepage 184K dense ≤ bank). U8 scaling ladders (two curated bounty cells, running)
   = decisive test. Gated-vs-open curated gradient noted (oral .640 / N&C .713 vs AoPS .954 /
   homepage .954 / comps 1.0). U12 created: hard-pair stratified share.
+- 2026-08-18 (scaling early read, NOT final — 2 of 4 fractions): mathse_bounty (CURATED) dense
+  T on the fixed 2,396-row test split, seed-mean: f12.5 .635 / f25 .660 / f100 .727 (f50 mid-run,
+  1 seed done; SO chain on sk1 still at f12.5). NO PLATEAU — T still climbing at 100% (~+.033/
+  doubling at the top end) ⇒ for this curated cell the dense ceiling IS data-limited, supporting
+  the user's n-confound concern at cell level; with more data its share (currently ~.88: VA_nl
+  .736 / best .768 same-rows) would fall. Counterweight in same cell: declared-channel deconf
+  (d)−(c) = +.013 only — much of the climbing T rides declared channels (answer_score/
+  n_answers/char_len); the paper-relevant scaling readout is (d)−(c) PER FRACTION, queued for
+  chain completion. Never quote the fraction curve against the fused/same-rows frame numbers.
