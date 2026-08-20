@@ -12,10 +12,11 @@ import requests
 API = "https://arctic-shift.photon-reddit.com/api/comments/search"
 OUT = Path(__file__).resolve().parent
 WINDOW = (1462060800, 1490918400)  # 2016-05-01 .. 2017-03-31 UTC
-# HUMOR SUBS ONLY (user clarification 2026-08-20; CW subs dropped)
+# HUMOR + CW SUBS (user 2026-08-20 final: both sets)
 TARGETS = {
     "funny": 21000, "Showerthoughts": 15000, "tifu": 10500, "nottheonion": 9700,
-    "me_irl": 7900}
+    "me_irl": 7900, "nosleep": 24000, "books": 12400, "gameofthrones": 9300,
+    "asoiaf": 7600}
 STATE = OUT / "collect_state.json"
 state = json.loads(STATE.read_text()) if STATE.exists() else {}
 

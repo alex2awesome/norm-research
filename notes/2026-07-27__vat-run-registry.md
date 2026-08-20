@@ -4610,3 +4610,6 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   vs removal bodies excluded (archive-predates-removal contamination); matched-pipeline
   rendering + char-ngram artifact probe MANDATORY before scoring (jokes-v1 lesson);
   construct = MOD CONDUCT VERDICT on comments in humor communities (≠ joke quality).
+- 2026-08-20 CHANDRA scope FINAL (user reversal): humor AND CW subs — TWO pooled cells
+  (humor-subs ~49.5K removals; CW-subs ~40.8K removals incl. nosleep/books/GoT/asoiaf),
+  same design + caveats as prior entry. Collector restored to 9 subs (cursors preserved).
