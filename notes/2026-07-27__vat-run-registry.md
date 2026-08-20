@@ -4542,3 +4542,11 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   (transport-UNSTABLE but QUALITY-loading = MIXED candidate); Trump-Election cohort spread
   .057 (unstable, as predicted); Comment-Enabled Marker dead (constant). Nuisance-factor PC1
   weakly loading everywhere — refine to per-covariate max |corr| in panel cards if needed.
+- 2026-08-20 SPUR-BATTERY COMPLETE (corrected T2; results/spur_battery_wordprobe.json):
+  DECLARED CRITERION MET — clean bimodal transport split: era-unstable {Trump .057, Forensic
+  .035, Prospective .043, Leisure .086} vs stable-weak {8 channels, .004-.020}; Comment-Enabled
+  dead (constant). KEY REINTERPRETATION: within-day ≈ pooled for ALL channels — cohort channels
+  are NOT between-day composition; they are ERA-LOCAL TOPICAL ATTENTION (predictive within-day
+  during their window, absent outside). Leisure (.378) + Prospective (.217) quality-loading =
+  MIXED per spec, never auto-verdict. Panel (3-family) waits for GLM window Fri; absorption
+  test (channels added to (c) arm vs BBC +.046 residual) = morning list.
