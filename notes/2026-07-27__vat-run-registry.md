@@ -4448,3 +4448,13 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
 - Missing-value whisker (user request): Track-B Z (evalue jsons) is the SPURIOUS-side bound —
   NOT valid as a VA upper whisker. Track-A mass exists only in raw campaign round artifacts;
   estimator (mass x M2-backtest value-per-species) needs a frozen definition + harvest -> U13.
+- 2026-08-19 LEAK CAUGHT + RETRACTED same-day: jokes_removal ladder (V .988/VA .992) INVALID —
+  source↔class perfectly confounded (removed = wayback fetch: raw HTML entities, torn fragments,
+  median 58 chars, no markdown; kept = live API: clean, 105 chars, markdown line structure).
+  Caught by post-hoc spot-check; dataset-first rule was violated (population scored before
+  text spot-check) — process note filed. A-bank scores (jokes_removal shards) also contaminated
+  (judge sees entities/fragments) — bank NOT reusable as-is. Fix path: normalize BOTH classes
+  through one renderer (unescape, whitespace/markdown collapse), drop torn fragments, re-probe
+  V locally; if fingerprint persists, matched-pipeline rebuild (fetch kept jokes via wayback too).
+  Anchor battery direction note (kept .914 > removed .619) still qualitatively fine but
+  magnitude untrustworthy. NEVER quote any jokes_removal number from the 2026-08-19 scoring.
