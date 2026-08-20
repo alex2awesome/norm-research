@@ -4570,3 +4570,25 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   cells T@1024 is NOT a ceiling — record as instrument note, NEVER quote this T as the cell's
   dense bound; the cell's headline instrument stays the A bank. Held-out n also small (1,563,
   17-repo test leg). If a real T is wanted here: longer-context dense arm (4K-8K) = new run.
+
+## 2026-08-20 — humor deep-dive (user session)
+- Humor gap row CORRECTED (caption cells dropped as quarantined): n=3 {staff picks .029,
+  removal-v2 .021, upvotes .039} mean .030 sd .009 — still lowest-tier with code/math/journ.
+- HARD-SLICE (results/jokes_removal_v2_hard_slice.json): removed 11,596 -> hard 2,452 (21%;
+  filters: lexicon 939, near-dup 923, length-out 8,833 — LENGTH dominates). Ladder: hard VA nl
+  .825 / within-month .898 vs easy .803/.952 — the "hard" (rule-clean) removals are ~AS
+  articulable as easy ones (−.05 within-month). "Too easy" concern ANSWERED at battery level;
+  residual caveats: battery ≠ ground-truth reason; latency (prospective collector) = true
+  auto/human separator, accumulating.
+- CHANDRASEKHARAN (datasets/prior_norms/reddit-norm-violations): 99-sub study INCLUDES r/funny,
+  Showerthoughts, tifu; NOT r/Jokes. Data = macro-norm-VIOLATION removals only (by violation
+  type: slurs/hate/attacks) = labeled-EASY stratum — useful as reason-labeled control, NOT a
+  hard-verdict source.
+- NEWSJACK: raw jsonl = forum CHATTER-contaminated (7/8 spot-checked rows are meta-discussion,
+  not submitted jokes) — caught PRE-scoring (dataset-first). VAT blocked on an LLM extraction
+  pass (segment submitted material from posts) — queued as the pipeline's stage 0.
+- SNL cut-for-time: STRONG design (producer accept/reject at matched production; 2,549 aired /
+  87 cut) but 38/2,636 transcripts — transcript fetch LAUNCHED (laptop, resume-state).
+- GPU BAN: sk3 GPUs 3 AND 7 off-limits few days (user); kindle VAT rebuilt (ungrouped row-hash
+  split, deviation recorded — 726 independent campaigns, genre=covariate; grouped split gave
+  24-row test leg) + requeued on excl-3/7 watcher with ATOL override; stale watchers killed.
