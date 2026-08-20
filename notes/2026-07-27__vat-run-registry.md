@@ -4602,3 +4602,11 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   headroom. logs/gpu_pick.sh = shared picker (most-free allowed GPU >= threshold); kindle
   watcher (>=60GB) + tweets-v3 chain (>=78GB, vLLM util sized to headroom) rewritten + both
   verified alive; GPUs 4/6 currently ~90GB free -> kindle should claim within minutes.
+- 2026-08-20 CHANDRA cell scoped (user): HUMOR SUBS ONLY — one pooled cell "chandra humor-subs
+  comment-removal" over {funny, Showerthoughts, tifu, nottheonion, me_irl} (~49.5K removals,
+  1:1 era-window kept via Arctic Shift, subreddit=group, within-sub readouts). CW subs
+  (nosleep/books/GoT/asoiaf) DROPPED from collection. Design caveats standing: removal log
+  has body+subreddit only (no timestamps/ids — era undated, DECLARED); kept-side text-matched
+  vs removal bodies excluded (archive-predates-removal contamination); matched-pipeline
+  rendering + char-ngram artifact probe MANDATORY before scoring (jokes-v1 lesson);
+  construct = MOD CONDUCT VERDICT on comments in humor communities (≠ joke quality).
