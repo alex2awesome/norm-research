@@ -4458,3 +4458,18 @@ Coordinator-executed (subagent cap spent; V_new agent handed off with clean stat
   V locally; if fingerprint persists, matched-pipeline rebuild (fetch kept jokes via wayback too).
   Anchor battery direction note (kept .914 > removed .619) still qualitatively fine but
   magnitude untrustworthy. NEVER quote any jokes_removal number from the 2026-08-19 scoring.
+
+## 2026-08-19 — U8 RESIDUAL SCALING CURVES (deconfounded, corrected gboot arg order)
+results/u8_scaling_residual_curves.json; frames: fixed eval+test rows, (b)/(c)/(d) arms per
+unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grouped bootstrap:
+- mathse_bounty: +.0012 [−.002,.004] → +.0027 [−.001,.006] → +.0053 [.001,.009] → +.0125 [.007,.018]
+  (f12.5→f100; significant from f50)
+- so_bounty:     −.0008 → +.0020 → +.0026 → +.0064 [.002,.011] (significant at f100; 2 seeds
+  f125-f50, 3 at f100 — seed2 chain still training, rerun readout when it lands)
+- READING: the deconfounded dense residual GROWS with dense training data on BOTH curated
+  bounty cells — near-zero at 12.5%, significant at full data, roughly doubling per doubling
+  at the top end. Raw T grew ~10x faster (+.07) — bank+declared channels absorb most of the
+  scaling, but NOT all. Articulated shares therefore fall (slowly) with data; the curated-.95
+  headline needs the data-asymptote caveat (already in fig caption as "lower bound").
+- First gboot run had (y,g,d,c) arg order — WRONG (signature y,new,old,g); numbers −.27 etc.
+  never recorded anywhere; corrected same hour.
