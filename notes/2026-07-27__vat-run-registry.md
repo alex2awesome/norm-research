@@ -4526,3 +4526,8 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   kindle_scout, jokes_removal_v2). Also still running: SO seed2 (sk1 GPU5), GLM r6 legs
   resume Fri 03:51. Morning harvest: jokes_v2 ladder (leak-fix verdict numbers), PR VAT
   column, kindle VAT column, U8 final curves.
+- 2026-08-20 U9 DESIGN (user): two arms — (1) metadata-anchored subfields (tags/sections/
+  genres/repos), per-subfield ladder w/ existing bank -> mine only where residual is large;
+  (2) residual-matched subfamilies: match items on existing-feature profile, find DISCORDANT-y
+  matched sets, cluster them, test whether newly-mined features (not existing ones) separate
+  the clusters = novel subfamilies. Permutation null per #60 recipe.
