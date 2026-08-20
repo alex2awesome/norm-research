@@ -4473,3 +4473,10 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   headline needs the data-asymptote caveat (already in fig caption as "lower bound").
 - First gboot run had (y,g,d,c) arg order — WRONG (signature y,new,old,g); numbers −.27 etc.
   never recorded anywhere; corrected same hour.
+- 2026-08-19 (paper org, user): Fig 2 REPLACED with community-channel chart from the notebook
+  master ladder (unified frame) — stacked V/V_new + VA/(VA_new increment) bars, U13 whiskers
+  (humor +.041 / BBC +.040 / math votes +.011 / peer cites +.058), fields ordered ASCENDING by
+  articulability gap (code .02 → peer .16), N&C + patents excluded; old verdict chart moved to
+  appendix; U8 residual-scaling figure added to scaling appendix (old Llama-8B sweep kept
+  provenance-only, predates current corpora). User message truncated mid-sentence ("Also,
+  please ma…") — remainder pending.
