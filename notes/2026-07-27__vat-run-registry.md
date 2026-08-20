@@ -4598,3 +4598,7 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   chain = score (homepage bank reused) -> dense bundle v3 -> 3 seeds -> layer1 v3 ledger;
   serialized behind kindle watcher; GPUs 3+7 EXCLUDED (user ban, memory filed). v1 artifacts
   untouched (va/ + old ledger stay quotable as the 31K-row version).
+- 2026-08-20 SQUEEZE POLICY (user): allowed sk3 GPUs {0,1,2,4,5,6}, stack into partial
+  headroom. logs/gpu_pick.sh = shared picker (most-free allowed GPU >= threshold); kindle
+  watcher (>=60GB) + tweets-v3 chain (>=78GB, vLLM util sized to headroom) rewritten + both
+  verified alive; GPUs 4/6 currently ~90GB free -> kindle should claim within minutes.
