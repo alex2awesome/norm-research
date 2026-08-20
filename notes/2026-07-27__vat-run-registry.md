@@ -4563,3 +4563,10 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   SO −.0001/.0007/.0038/.0064* (sig at f100). Both monotone-growing; raw T grows ~10x faster.
   HEADLINE: the dense residual beyond bank+declared channels GROWS with dense training data
   on both curated cells — small but systematic; articulated shares decline slowly with data.
+- 2026-08-20 pr_transition dense + fused COMPLETE — WEAK/UNSTABLE, instrument-limited:
+  dense test AUCs .536/.466/.581 (seed2 sub-chance), same-rows T .575 / VA .609 / fused .582
+  (fused < VA — stack hurt by noisy T). ROOT CAUSE DECLARED: dense max_length 1024 tokens on
+  Title+Diff = frame-starved (Gemma bank reads 11,600 tok; within-repo A .765). For long-doc
+  cells T@1024 is NOT a ceiling — record as instrument note, NEVER quote this T as the cell's
+  dense bound; the cell's headline instrument stays the A bank. Held-out n also small (1,563,
+  17-repo test leg). If a real T is wanted here: longer-context dense arm (4K-8K) = new run.
