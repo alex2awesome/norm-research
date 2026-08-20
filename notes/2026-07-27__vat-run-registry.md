@@ -4500,3 +4500,8 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   NEVER refill GLM slots with another family. Whisker expectation ON RECORD (backtest):
   more rounds likely will NOT shrink the bound much (Track-A mass plateaus); the round's
   real value = extending the flat-gain record + any real criteria it surfaces.
+- 2026-08-20 USER POLICY: maintain enough mining rounds that Fig-2 whiskers stay small;
+  whisker size = campaign scheduling priority. Display rule: >=2 consecutive flat rounds
+  -> calibrated tick quotable in figure, bound to appendix (never silent relabeling).
+  Widest whiskers currently: peer-citation .058 (peer_revealed campaign, 6 rounds run,
+  r6 candidacy AFTER current BBC/jokes r6), journalism .040 + humor .041 (r6 IN FLIGHT).
