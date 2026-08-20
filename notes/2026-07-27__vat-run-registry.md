@@ -4505,3 +4505,17 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   -> calibrated tick quotable in figure, bound to appendix (never silent relabeling).
   Widest whiskers currently: peer-citation .058 (peer_revealed campaign, 6 rounds run,
   r6 candidacy AFTER current BBC/jokes r6), journalism .040 + humor .041 (r6 IN FLIGHT).
+
+## 2026-08-20 — FULL-SPEED VAT sweep + kindle_scout FIRST NUMBERS
+- SPUR-BATTERY amended per user: paraphrase intervention REMOVED (kills tacit-real features
+  too); battery = invariance/transport + within-vs-between stratum + discriminant loading + panel.
+- kindle_scout (CW VERDICT, PILOT-n 726, results/kindle_scout_ledger.json): V .612 / A .729 /
+  VA .725 nl; within-genre A .719; genre-identity alone .527 (weak floor — signal is not genre
+  composition); battery passed (accept .735 anchors, 0 all-NA). FIRST CW verdict cell since
+  RoyalRoad retirement; A > V by +.12 — publisher taste substantially articulable at pilot n.
+- LAUNCHES (all verified alive, setsid detach — earlier silent deaths were ssh-timeout
+  casualties + a vanished scratchpad file, reshipped): jokes_removal_v2 rescore GPU7 (leak-fixed
+  bank, 5+ shards in); pr_transition dense arm GPU3 (seed42 training; split 7,959/171/1,221
+  grouped by repo — eval leg SMALL at 171/15 repos, selection noise flagged); kindle L1 done.
+- Two old-session background agents stopped by user ("VAT stack dense-above-bank",
+  "decorrelated-training planted battery") — noted, no orphan GPU state from either.
