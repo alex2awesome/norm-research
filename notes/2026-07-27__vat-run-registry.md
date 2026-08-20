@@ -4550,3 +4550,11 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   during their window, absent outside). Leisure (.378) + Prospective (.217) quality-loading =
   MIXED per spec, never auto-verdict. Panel (3-family) waits for GLM window Fri; absorption
   test (channels added to (c) arm vs BBC +.046 residual) = morning list.
+- 2026-08-20 jokes_removal_v2 VAT COMPLETE (chain found GPU4 free): same-rows held-out
+  (n=3,562 = KNOWN-month strata only — unknown-month stratum entirely in train by grouped
+  hash, distribution-shift caveat DECLARED): VA_nl .895 / dense T .916 / fused VAT .914
+  (stack ≈ T, wash). Full-pop pooled ladder: V .603 / A .662 / VA .701; within-month .90;
+  month-identity .857 (metadata confound: missing created_utc ↔ wayback ↔ removed — declared,
+  unfixable without capture metadata). Articulated share on held-out frame ≈ .95 — humor
+  VERDICT highly articulable, consistent with removal = offensive-content/repost signal.
+  U2 verdict leg: INSTRUMENTED end-to-end (v1 leak retracted -> v2 clean same day).
