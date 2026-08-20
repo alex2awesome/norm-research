@@ -35,3 +35,11 @@ Set: the 13 BBC word-probe channels (8 self-tagged MIXED — deliberately hard).
 Success criterion (declared): the battery separates the entity/era-cohort channels
 (predicted: transport-unstable) from the house-style channels (predicted:
 transport-stable, nuisance-loading) with panel agreement >= 2/3 on non-MIXED calls.
+
+## AMENDMENT (2026-08-20, USER-DIRECTED — recorded, not silent)
+Test 4 (paraphrase intervention) is REMOVED from the battery: paraphrasing
+destroys tacit-real features along with spurious ones, so it cannot separate
+the two classes — a channel failing the paraphrase test is uninterpretable.
+The battery is now: (1) measurement invariance / transportability,
+(2) within- vs between-stratum predictivity, (3) discriminant loading (MTMM),
+plus the multi-family evidence-based panel. Success criteria unchanged.
