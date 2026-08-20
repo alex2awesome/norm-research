@@ -4480,3 +4480,13 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   appendix; U8 residual-scaling figure added to scaling appendix (old Llama-8B sweep kept
   provenance-only, predates current corpora). User message truncated mid-sentence ("Also,
   please ma…") — remainder pending.
+- 2026-08-19 U13 whisker BACKTEST (truncation holdout, BBC+jokes, 7 truncations,
+  notes/2026-08-19__u13-whisker-backtest.json): bound holds 5/7; both violations are the
+  EARLIEST BBC truncations (tiny noisy gains); from mid-campaign the bound holds with
+  realized <= 25% of it — the figure's last-round/terminal regime is the validated regime.
+  KEY: Track-A mass does NOT fall with more rounds (BBC .45-.51 across 5 rounds; long tail
+  of rare-but-real criteria) ⇒ more mining rounds will NOT shrink these whiskers much;
+  value flow dries up while mass plateaus (mass ≠ value — same lesson as the A-bank
+  degeneracy audit). Calibrated (estimate-not-bound) alternative: terminal-regime realized
+  future gain ≈ 0-.005 — a "calibrated tick" could be drawn inside the bound whisker;
+  NEVER silently relabel the bound as an estimate.
