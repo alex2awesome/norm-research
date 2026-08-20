@@ -68,9 +68,9 @@ def _month(ts):
 
 
 # ============================== jokes_removal ================================
-def build_jokes_removal():
+def build_jokes_removal(pop="removal_cell/population.jsonl.gz", name="jokes_removal"):
     vf = S.load_module(JOKES_DIR / "va/v_features.py", "vf_jokes_removal")
-    rows = [json.loads(l) for l in gzip.open(JOKES_DIR / "removal_cell/population.jsonl.gz", "rt")]
+    rows = [json.loads(l) for l in gzip.open(JOKES_DIR / pop, "rt")]
     items = [{"id": r["row_id"], "group": _month(r.get("created_utc")),
               "text": str(r["text"])[:5000], "judgement": int(r["judgement"])}
              for r in rows]
@@ -102,13 +102,14 @@ def build_jokes_removal():
 
     ys = {"removed": np.array([r["judgement"] for r in items])}
     return dict(
-        name="jokes_removal", items=items, rubrics=rubrics, blocks=blocks,
+        name=name, items=items, rubrics=rubrics, blocks=blocks,
         sys=C.SYS_JOKES, ctx=ctx, vvec=vvec, vnames=list(vf.V_NAMES),
         anchors=anchors, ys=ys, n_shards=10,
         meta={"population": "datasets/humor/reddit_jokes/removal_cell/population.jsonl.gz",
               "y_semantics": "judgement=1 means REMOVED by moderators "
                              "(anchor_pos = a removed joke)",
               "bank": "SAME rubrics + SYS as jokes_community (scaleupC)",
+              "normalization": "v2 = matched renderer (leak fix 2026-08-19)" if name.endswith("v2") else "v1 RAW (retracted)",
               "confounds_declared": ["created era (stratified controls)", "over_18",
                                      "removal-reason mix (reposts vs rules vs quality)"],
               "group_column": "created month (era stratum)"},
@@ -131,7 +132,7 @@ def build_kindle_scout():
                        "vf_cw_ks")
 
     def vvec(r):
-        return vf.vector(r["text"])
+        return vf.feature_vector(r["text"])
 
     def anchors(shard):
         rng = random.Random(SEED + 907 * shard)
@@ -164,7 +165,9 @@ def build_kindle_scout():
     )
 
 
-BUILDERS = {"jokes_removal": build_jokes_removal, "kindle_scout": build_kindle_scout}
+BUILDERS = {"jokes_removal": build_jokes_removal, "kindle_scout": build_kindle_scout,
+            "jokes_removal_v2": lambda: build_jokes_removal(
+                "removal_cell/population_v2.jsonl.gz", "jokes_removal_v2")}
 
 
 def main():
