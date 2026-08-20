@@ -4490,3 +4490,13 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   degeneracy audit). Calibrated (estimate-not-bound) alternative: terminal-regime realized
   future gain ≈ 0-.005 — a "calibrated tick" could be drawn inside the bound whisker;
   NEVER silently relabel the bound as an estimate.
+- 2026-08-19 ROUND 6 CUED (user: shrink whiskers) for bbc_mostread + jokes_community:
+  stage-1 slices built (BBC: bank unchanged [V,A,A1-A4], bans r1-r5, assertion/ban loops
+  split since r5 kept 0; jokes: 60 rows, median gap .542, oof_fitmine refreshed); 16 sealed
+  prompts per cell; CODEX legs RUNNING (laptop, resume-safe); GLM legs RATE-LIMITED —
+  weekly quota exhausted, resets 2026-08-22 03:51 — runners checkpoint-stop; RESUME the
+  same commands after reset (resume-by-output-file, repeats nothing). Family floor: if
+  round must close before Aug 22, add sealed Claude CLI legs (precedent: unified r1);
+  NEVER refill GLM slots with another family. Whisker expectation ON RECORD (backtest):
+  more rounds likely will NOT shrink the bound much (Track-A mass plateaus); the round's
+  real value = extending the flat-gain record + any real criteria it surfaces.
