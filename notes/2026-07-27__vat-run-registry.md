@@ -4558,3 +4558,8 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   unfixable without capture metadata). Articulated share on held-out frame ≈ .95 — humor
   VERDICT highly articulable, consistent with removal = offensive-content/repost signal.
   U2 verdict leg: INSTRUMENTED end-to-end (v1 leak retracted -> v2 clean same day).
+- 2026-08-20 U8 COMPLETE (3 seeds both cells, all fractions; appendix fig refreshed):
+  deconfounded residual (d)−(c) by fraction — math .0012/.0027/.0053*/.0125* (sig from f50);
+  SO −.0001/.0007/.0038/.0064* (sig at f100). Both monotone-growing; raw T grows ~10x faster.
+  HEADLINE: the dense residual beyond bank+declared channels GROWS with dense training data
+  on both curated cells — small but systematic; articulated shares decline slowly with data.
