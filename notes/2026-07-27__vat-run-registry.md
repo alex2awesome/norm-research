@@ -4531,3 +4531,7 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   (2) residual-matched subfamilies: match items on existing-feature profile, find DISCORDANT-y
   matched sets, cluster them, test whether newly-mined features (not existing ones) separate
   the clusters = novel subfamilies. Permutation null per #60 recipe.
+- 2026-08-20 (cont): jokes_removal_v2 VAT chain armed (waits for v2 scoring -> dense splits
+  by month -> 3-seed Llama-8B max_length 512 -> score -> fused stack; GPU preference 7).
+  Jokes COMMUNITY VAT already exists (.760 fused) — this fills the VERDICT VAT. SPUR-BATTERY
+  readout (tests 1-3) launched on the 13 word-probe channels; panel deferred to GLM window.
