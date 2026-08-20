@@ -4535,3 +4535,10 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   by month -> 3-seed Llama-8B max_length 512 -> score -> fused stack; GPU preference 7).
   Jokes COMMUNITY VAT already exists (.760 fused) — this fills the VERDICT VAT. SPUR-BATTERY
   readout (tests 1-3) launched on the 13 word-probe channels; panel deferred to GLM window.
+- 2026-08-20 SPUR-BATTERY first pass: T1+T3 informative, T2 DEGENERATE (BBC section constant
+  "news") — rerun with T2 = within-DAY (primary; era-cohort channels are day-constant -> ~.5)
+  + TF-IDF KMeans-30 topic proxy (secondary), deviation recorded. First-pass signals: most
+  channels weak-alone (.50-.54); Leisure-Vertical Discount pooled .584 spread .086 q-load .378
+  (transport-UNSTABLE but QUALITY-loading = MIXED candidate); Trump-Election cohort spread
+  .057 (unstable, as predicted); Comment-Enabled Marker dead (constant). Nuisance-factor PC1
+  weakly loading everywhere — refine to per-covariate max |corr| in panel cards if needed.
