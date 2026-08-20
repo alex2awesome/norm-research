@@ -4519,3 +4519,10 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
   grouped by repo — eval leg SMALL at 171/15 repos, selection noise flagged); kindle L1 done.
 - Two old-session background agents stopped by user ("VAT stack dense-above-bank",
   "decorrelated-training planted battery") — noted, no orphan GPU state from either.
+- 2026-08-20 OVERNIGHT SUPERVISOR armed on sk3 (logs/overnight_supervisor.sh, marker-gated,
+  600s poll, 16h cap): (A) jokes_v2 scoring done -> jokes_removal_v2 layer1; (B) pr_transition
+  dense done -> unified_fused_stack --cell pr_transition -> kindle dense chain on GPU3 (bs8/
+  ga2/3ep for PILOT-n) -> kindle fused stack. CELLS registry extended (pr_transition,
+  kindle_scout, jokes_removal_v2). Also still running: SO seed2 (sk1 GPU5), GLM r6 legs
+  resume Fri 03:51. Morning harvest: jokes_v2 ladder (leak-fix verdict numbers), PR VAT
+  column, kindle VAT column, U8 final curves.

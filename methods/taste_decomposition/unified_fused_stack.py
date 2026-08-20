@@ -37,6 +37,15 @@ CELLS = {
     "so_accepted": dict(
         dense=NR / "datasets/stackoverflow-votes/so_accepted/dense_standard_so_accepted_qtrunc",
         oof=RESULTS / "so_accepted_va_oof.npz"),
+    "pr_transition": dict(
+        dense=NR / "datasets/code-review/pr_test_execution/dense_standard_pr_transition",
+        oof=RESULTS / "pr_transition_va_oof.npz"),
+    "kindle_scout": dict(
+        dense=NR / "datasets/creative-writing/kindle_scout_cell/dense_standard_kindle_scout",
+        oof=RESULTS / "kindle_scout_va_oof.npz"),
+    "jokes_removal_v2": dict(
+        dense=NR / "datasets/humor/reddit_jokes/dense_standard_jokes_removal_v2",
+        oof=RESULTS / "jokes_removal_v2_va_oof.npz"),
 }
 SEEDS = (42, 1, 2)
 
