@@ -4592,3 +4592,9 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
 - GPU BAN: sk3 GPUs 3 AND 7 off-limits few days (user); kindle VAT rebuilt (ungrouped row-hash
   split, deviation recorded — 726 independent campaigns, genre=covariate; grouped split gave
   24-row test leg) + requeued on excl-3/7 watcher with ATOL override; stale watchers killed.
+- 2026-08-20 TWEETS V3 VAT REPEAT armed (user: new drain): population v3 = 46,456 rows /
+  784 outlet-day groups (was 31,129/508); scorer + layer1 env-parameterized (TW_VA_DIR/
+  VA_OUT_TWEETS/TW_BANK_OUT/TW_DENSE_DIR — recency-canonical files get params, no forks);
+  chain = score (homepage bank reused) -> dense bundle v3 -> 3 seeds -> layer1 v3 ledger;
+  serialized behind kindle watcher; GPUs 3+7 EXCLUDED (user ban, memory filed). v1 artifacts
+  untouched (va/ + old ledger stay quotable as the 31K-row version).
