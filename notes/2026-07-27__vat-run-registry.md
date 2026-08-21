@@ -4635,3 +4635,15 @@ user reads the result.
   Ladder figs + articulated-share/ceiling figs regenerated. Post-update channel shares:
   curated .954 / verdict .876 / community .797 medians (verdict n=8; kindle enters at
   share 1.0 bank-beats-dense, ceiling .229). U7 CLOSED. Overnight monitor closed complete.
+
+## 2026-08-21 — VAT BAKEOFF (user ruling: VAT = max over methods, eval-select/test-report)
+methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
+- jokes_removal_v2: eval_weighted_rank .9232 [.908,.939] (v3 stack .914)
+- kindle_scout: rank_mean .7919 [.63,.93] (v3 stack .718 — stack UNDERFIT at n=113; audit confirmed)
+- so_bounty: eval_weighted_rank .8109 (≈ stack); so_accepted: .7640; pr_transition: .5745 (T frame-starved, unchanged verdict)
+- mathse_bounty: T_alone by eval; test-leg .7325 — NOTE FRAME: bakeoff = TEST-LEG ONLY vs v3
+  stack's pooled eval+test heldout; never compare across frames. Migration rule: NEW cells
+  quote bakeoff test-leg with variant named ("VAT (bakeoff: rank_mean)"); legacy master-dict
+  cells keep recorded frames + daggers until a full-grid re-quote pass.
+- V3 stack NEVER wins eval selection (6/6) — the stack is retired as the default; kept as a
+  candidate variant. Ruling filed to memory (feedback_vat_max_over_methods).
