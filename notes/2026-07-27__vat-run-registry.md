@@ -4672,3 +4672,11 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
 - INCIDENT: v3 layer1 run overwrote journalism_tweets_ledger.json (v1) — never-delete-data
   violation; v1 artifacts intact; regeneration RUNNING. Rule: version-suffixed outputs or
   read-only guard on prior ledgers for _vN reruns.
+- 2026-08-21 (night, user asleep, full-steam): chandra populations REBUILT with %0A-decode
+  (probes unchanged .806/.834 within-sub => separability = CONTENT (slur ngrams in funny;
+  "fake"/"story"/"mods" in nosleep = the immersion-rule construct itself), gate PASSED with
+  construct note); BOTH cells' Gemma scoring launched stacked (GPU0 humor 61,572x47 jokes
+  rubrics; GPU1 cw 62,616 x CW bank; util .43 each). GLM r6 auto-resume armed for 04:05.
+  Tweets v1 ledger regen running (CPU). PR long-context dense mid-seed (GPU4). SNL wave-1
+  audio draining. Chandra kept-side collection COMPLETE 113,690 rows (stale-exhausted-flag
+  bug was the "deaths"; fixed).

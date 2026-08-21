@@ -165,9 +165,64 @@ def build_kindle_scout():
     )
 
 
+
+
+# ============================== chandra pooled cells =========================
+def build_chandra(cell):
+    """Chandrasekharan pooled comment-removal cells (2026-08-21): humor subs use
+    the jokes rubrics + SYS_JOKES; CW subs use the CW bank + SYS_CW. CONSTRUCT
+    NOTE (declared): quality banks applied to comment-CONDUCT verdicts — norm
+    violations register as low quality; a purpose-built conduct bank is future
+    work. Population csv: row_id, text, judgement (1=REMOVED), group=subreddit."""
+    import pandas as pd
+    df = pd.read_csv(REPO / f"datasets/prior_norms_cells/{cell}_population.csv.gz")
+    items = [{"id": r.row_id, "group": r.group, "text": str(r.text)[:4000],
+              "judgement": int(r.judgement)} for r in df.itertuples()]
+    if cell == "chandra_humor":
+        vf = S.load_module(JOKES_DIR / "va/v_features.py", "vf_chandra_h")
+        rubrics = [json.loads(l) for l in open(JOKES_DIR / "va/rubrics.jsonl") if l.strip()]
+        sysp = C.SYS_JOKES
+        vvec = lambda r: vf.vector(r["text"])
+        vnames = list(vf.V_NAMES)
+    else:
+        base = S.build_creative()
+        rubrics, sysp = base["rubrics"], base["sys"]
+        vf = S.load_module(REPO / "datasets/creative-writing/va_bank_v2/v_features.py", "vf_chandra_c")
+        vvec = lambda r: vf.feature_vector(r["text"])
+        vnames = list(vf.V_NAMES)
+    blocks = [f"CRITERION: {m['name']}\nDESCRIPTION: {m['description']}\n\n"
+              "Answer with one token:" for m in rubrics]
+
+    def ctx(r):
+        return f'REDDIT COMMENT:\n"{r["text"]}"'
+
+    def anchors(shard):
+        rng = random.Random(SEED + 131 * shard)
+        pos_pool = [r for r in items if r["judgement"] == 1]
+        neg_pool = [r for r in items if r["judgement"] == 0]
+        pos, neg = dict(rng.choice(pos_pool)), dict(rng.choice(neg_pool))
+        scr = dict(neg)
+        scr["text"] = S.scramble([pos["text"][:2000], neg["text"][:2000]], rng)
+        out = []
+        for tag, r in (("anchor_pos", pos), ("anchor_neg", neg), ("anchor_scram", scr)):
+            rr = dict(r); rr["anchor_tag"] = tag; rr["id"] = f"__ANCHOR_{shard}_{tag}"
+            out.append(rr)
+        return out
+
+    ys = {"removed": np.array([r["judgement"] for r in items])}
+    return dict(name=cell, items=items, rubrics=rubrics, blocks=blocks, sys=sysp,
+                ctx=ctx, vvec=vvec, vnames=vnames, anchors=anchors, ys=ys, n_shards=16,
+                meta={"population": f"datasets/prior_norms_cells/{cell}_population.csv.gz",
+                      "y_semantics": "judgement=1 = REMOVED (macro-norm-violation log)",
+                      "construct_note": "quality bank on conduct verdicts — DECLARED frame",
+                      "group_column": "subreddit"})
+
+
 BUILDERS = {"jokes_removal": build_jokes_removal, "kindle_scout": build_kindle_scout,
             "jokes_removal_v2": lambda: build_jokes_removal(
-                "removal_cell/population_v2.jsonl.gz", "jokes_removal_v2")}
+                "removal_cell/population_v2.jsonl.gz", "jokes_removal_v2"),
+            "chandra_humor": lambda: build_chandra("chandra_humor"),
+            "chandra_cw": lambda: build_chandra("chandra_cw")}
 
 
 def main():
