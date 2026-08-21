@@ -4656,3 +4656,8 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   (GPU6). Collector had died silently — restarted (resume-safe, 8,772 rows). LONG-CONTEXT
   pr_transition dense LAUNCHED (GPU4, max_length 4096, bs4/ga4, same splits as standard arm
   => same-rows comparable; fixes the frame-starved-T verdict on that cell).
+- 2026-08-21 SNL pilot verdict: YouTube captions DISABLED on 34/40 (6 transcripts only) —
+  caption route closed. Pivot: Whisper transcription (matched-pipeline by construction).
+  Wave 1 audio fetch launched (56 cut-for-time with URLs + 300 stable-hash aired sample,
+  20s politeness, resume-safe); Whisper pass on sk3 GPUs when audio lands; note only 56/87
+  cut sketches carry URLs in the catalog — coverage caveat.
