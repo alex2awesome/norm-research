@@ -4680,3 +4680,9 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   Tweets v1 ledger regen running (CPU). PR long-context dense mid-seed (GPU4). SNL wave-1
   audio draining. Chandra kept-side collection COMPLETE 113,690 rows (stale-exhausted-flag
   bug was the "deaths"; fixed).
+- 2026-08-21 (cont): VAT bakeoff pool RESTRICTED TO FUSIONS (user: parents = baselines,
+  never the VAT quote) — mathse_bounty VAT now .7375 [.717,.759] (eval_weighted_rank),
+  above both parents; all 6 cells requoted, eval_weighted_rank wins 5/6, rank_mean 1/6.
+  Chandra VAT supervisor armed (scoring wait -> layer1 -> row-hash dense -> fused+bakeoff,
+  per cell). SNL retry from sk3 (new egress + yt-dlp 2026.08.19 + deno). vmadan GPUs noted
+  sparsely used — squeeze policy already keys on free memory.

@@ -46,6 +46,12 @@ CELLS = {
     "jokes_removal_v2": dict(
         dense=NR / "datasets/humor/reddit_jokes/dense_standard_jokes_removal_v2",
         oof=RESULTS / "jokes_removal_v2_va_oof.npz"),
+    "chandra_humor": dict(
+        dense=NR / "datasets/prior_norms_cells/dense_standard_chandra_humor",
+        oof=RESULTS / "chandra_humor_va_oof.npz"),
+    "chandra_cw": dict(
+        dense=NR / "datasets/prior_norms_cells/dense_standard_chandra_cw",
+        oof=RESULTS / "chandra_cw_va_oof.npz"),
 }
 SEEDS = (42, 1, 2)
 
