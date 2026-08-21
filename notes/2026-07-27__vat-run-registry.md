@@ -4629,3 +4629,9 @@ user reads the result.
   n_splits=max(2,min(5,n_groups)), canonical file, synced both boxes) -> rerun OK. Supervisor
   16h timeout = harmless (superseded by standalone watchers). Tweets v3 scoring live on GPU6
   at util .42 (squeeze verified working).
+- 2026-08-21 MORNING CONSOLIDATION: master ladder updated — CW VERDICT now Kindle Scout
+  (.612/.729/.718/.709, PILOT flag in note; RoyalRoad-retired note retained); Humor VERDICT
+  note carries jokes_removal_v2 as second cell (NOT canonical — user wary of removals).
+  Ladder figs + articulated-share/ceiling figs regenerated. Post-update channel shares:
+  curated .954 / verdict .876 / community .797 medians (verdict n=8; kindle enters at
+  share 1.0 bank-beats-dense, ceiling .229). U7 CLOSED. Overnight monitor closed complete.
