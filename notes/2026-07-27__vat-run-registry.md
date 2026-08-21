@@ -4661,3 +4661,14 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   Wave 1 audio fetch launched (56 cut-for-time with URLs + 300 stable-hash aired sample,
   20s politeness, resume-safe); Whisper pass on sk3 GPUs when audio lands; note only 56/87
   cut sketches carry URLs in the catalog — coverage caveat.
+
+## 2026-08-21 — TWEETS V3 COMPLETE + v1-ledger clobber incident
+- V3 ledger (46,456 rows, 784 outlet-day groups): V_nl .542 / A_nl .590 / VA_nl .590 pooled,
+  within-group median .602; dense T .623 (seeds tight); DELTA (group bootstrap, interact)
+  +.0201 P=1.0. Gates: OOF alignment exact, shuffled counterfactual .496, outlet-day identity
+  .500; per-outlet VA_nl .539-.607. Battery: shipped scramble = known headline artifact;
+  pos-vs-neg .647 PASSES; repaired v3 battery pending. Journalism community 2nd cell:
+  tweets delta +.020 vs BBC +.046 — same direction, smaller.
+- INCIDENT: v3 layer1 run overwrote journalism_tweets_ledger.json (v1) — never-delete-data
+  violation; v1 artifacts intact; regeneration RUNNING. Rule: version-suffixed outputs or
+  read-only guard on prior ledgers for _vN reruns.
