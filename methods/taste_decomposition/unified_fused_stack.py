@@ -88,7 +88,9 @@ def main():
 
     S = np.column_stack([va[idx], dense])
     oof = np.zeros(len(y))
-    for tr, te in GroupKFold(5).split(S, groups=g):
+    # adaptive folds: small pilot cells can have fewer held-out groups than 5
+    n_splits = max(2, min(5, len(np.unique(g))))
+    for tr, te in GroupKFold(n_splits).split(S, groups=g):
         clf = make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000))
         clf.fit(S[tr], y[tr])
         oof[te] = clf.predict_proba(S[te])[:, 1]

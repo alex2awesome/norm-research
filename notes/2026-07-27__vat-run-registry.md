@@ -4613,3 +4613,19 @@ unified_deconf_declared, T = per-fraction seed-mean. PRIMARY (d)−(c) with grou
 - 2026-08-20 CHANDRA scope FINAL (user reversal): humor AND CW subs — TWO pooled cells
   (humor-subs ~49.5K removals; CW-subs ~40.8K removals incl. nosleep/books/GoT/asoiaf),
   same design + caveats as prior entry. Collector restored to 9 subs (cursors preserved).
+
+## 2026-08-20 — NEW CHARGE (user-approved): gap-by-dense-confidence-decile localization
+Spec: `notes/2026-08-20__spec_gap_by_dense_confidence_deciles.md` (claude-fig).
+Purpose: localize each cell's articulability gap within dense-confidence strata
+(the "easy subpopulation" question; Fig-5 ceiling audit found raw gap~ceiling
+r=.45 p=.034 on 22 cells). CPU-only readout on existing per-row preds; cells:
+peer_revealed, cw_community, peer_verdict, mathse_vote + one null control
+(competitions/homepage). Symmetric two-arm stratification mandatory (each arm
+range-restricts the stratifying model — conservative). No paper text until the
+user reads the result.
+- 2026-08-21 KINDLE VAT COMPLETE (squeeze watcher, GPU4 stacked at 90GB free): dense test
+  .626/.783/.550 (SEED-NOISY, 60-row test leg — PILOT flag mandatory); fused stack crashed on
+  GroupKFold(5)>3 held-out genre groups -> unified_fused_stack generalized (adaptive
+  n_splits=max(2,min(5,n_groups)), canonical file, synced both boxes) -> rerun OK. Supervisor
+  16h timeout = harmless (superseded by standalone watchers). Tweets v3 scoring live on GPU6
+  at util .42 (squeeze verified working).
