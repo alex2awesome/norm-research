@@ -4686,3 +4686,11 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   Chandra VAT supervisor armed (scoring wait -> layer1 -> row-hash dense -> fused+bakeoff,
   per cell). SNL retry from sk3 (new egress + yt-dlp 2026.08.19 + deno). vmadan GPUs noted
   sparsely used — squeeze policy already keys on free memory.
+- 2026-08-21 SNL BREAKTHROUGH: last night's "403 wall" was a URL-type mix — 2,548/2,549 AIRED
+  sketches carry snltranscripts.jt.org FAN-TRANSCRIPT urls (no audio needed); cut-for-time =
+  36 YouTube (audio ALREADY downloaded) + 20 fan-transcript + 31 no-url. Fan-transcript
+  scraper LAUNCHED (all 2,568, 3s politeness, resume-safe; sample verified: real dialogue +
+  stage directions). DECLARED: transcript source is CLASS-CORRELATED (aired=fan, cut=Whisper)
+  — the 20 dual-source cut sketches = within-class pipeline-fingerprint contrast; matched
+  renderer + artifact probe gate mandatory at population build. Whisper job for the 36 audios
+  queued (small). Audio-fetch loop killed (was failing through transcript URLs).
