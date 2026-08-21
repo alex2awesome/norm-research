@@ -4647,3 +4647,12 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   cells keep recorded frames + daggers until a full-grid re-quote pass.
 - V3 stack NEVER wins eval selection (6/6) — the stack is retired as the default; kept as a
   candidate variant. Ruling filed to memory (feedback_vat_max_over_methods).
+- 2026-08-21 (empty-box sweep): sk3 co-tenants drained. Tweets-v3 SCORING COMPLETE; shipped
+  battery shows the KNOWN headline-scramble artifact (identical numbers v1/v3: pos .557/neg
+  .478/scram .608 — shared scramble helper can't destroy 14-word headlines; prior diagnosis
+  in battery_repaired.py). Repaired battery v1: scram .551, coh-vs-scram .464 — scramble gate
+  WEAK on this cell BY NATURE (news-value "unexpectedness" fires on word salad); load-bearing
+  gate = pos-vs-neg .647 PASSES. v3 repaired battery running (GPU0). Chain now in dense phase
+  (GPU6). Collector had died silently — restarted (resume-safe, 8,772 rows). LONG-CONTEXT
+  pr_transition dense LAUNCHED (GPU4, max_length 4096, bs4/ga4, same splits as standard arm
+  => same-rows comparable; fixes the frame-starved-T verdict on that cell).
