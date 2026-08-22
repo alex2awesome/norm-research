@@ -55,6 +55,9 @@ CELLS = {
     "pr_transition_lc": dict(
         dense=NR / "datasets/code-review/pr_test_execution/dense_standard_pr_transition_lc",
         oof=RESULTS / "pr_transition_va_oof.npz"),
+    "journalism_tweets": dict(
+        dense=NR / "datasets/journalism-tweets/va_v3/dense_standard_journalism_tweets_v3",
+        oof=RESULTS / "journalism_tweets_va_oof.npz"),
 }
 SEEDS = (42, 1, 2)
 

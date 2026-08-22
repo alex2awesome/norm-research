@@ -4700,3 +4700,22 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   diffs the articulated bank (strong judge + criteria, within-repo .765) >> small dense LoRA
   — instrument asymmetry, NOT a tacitness statement; the cell's dense "T" is a floor not a
   ceiling; NEVER quote pr_transition VAT as evidence of low articulability headroom.
+
+## 2026-08-22 — journalism_tweets (v3) bakeoff VAT complete + lane relaunches
+- journalism_tweets (COMMUNITY, within outlet-day engagement, n=46,456; OOF join 31,129
+  rows): assembled results/journalism_tweets_va_oof.npz from the v3 ledger artifacts
+  (mean3 VA_nl OOF + bank meta), registered cell in unified_fused_stack.py (synced sk3).
+  Same-rows: VA_nl .600, dense T .643. Fused stack .649 test. BAKEOFF: winner
+  eval_weighted_rank, **VAT test .6456 [.6268, .6648]**. Quote as "VAT (bakeoff:
+  eval_weighted_rank)". v1 ledger regen verified clean earlier (Δ_total +.059,
+  outlet-day identity .500) — v1/v3 both live, version-suffixed.
+- chandra_humor / chandra_cw Gemma scoring found DEAD since 08-21 ~03:25 (6/16 + 5/16
+  shards; supervisor idling in wait loop). RELAUNCHED 08-22: humor GPU1, cw GPU2
+  (util .43, resume-by-shard verified: engine init + SCORERS-ALIVE). Supervisor intact.
+- Round-6 mining: BOTH fleets (codex + glm legs) turn out COMPLETE on jokes_community
+  and bbc_mostread — the quota block cleared before the retry loop died. Post-fleet
+  chain (collect -> species -> Codex bmerge judges gpt-5.6-sol+luna -> audit -> arbiter
+  -> Gemma scoring -> readout) delegated to agent; judges on Codex per standing rule.
+- SNL fan-transcript scrape COMPLETE on laptop: 2,567/2,569 pages (2 fails). Population
+  build + matched renderer + char-ngram artifact gate delegated (no GPU scoring yet).
+- RoyalRoad U1: nothing running on sk2 — revival agent launched (inventory-first).
