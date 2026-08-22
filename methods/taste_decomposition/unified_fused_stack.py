@@ -52,6 +52,9 @@ CELLS = {
     "chandra_cw": dict(
         dense=NR / "datasets/prior_norms_cells/dense_standard_chandra_cw",
         oof=RESULTS / "chandra_cw_va_oof.npz"),
+    "pr_transition_lc": dict(
+        dense=NR / "datasets/code-review/pr_test_execution/dense_standard_pr_transition_lc",
+        oof=RESULTS / "pr_transition_va_oof.npz"),
 }
 SEEDS = (42, 1, 2)
 

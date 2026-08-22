@@ -4694,3 +4694,9 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   — the 20 dual-source cut sketches = within-class pipeline-fingerprint contrast; matched
   renderer + artifact probe gate mandatory at population build. Whisper job for the 36 audios
   queued (small). Audio-fetch loop killed (was failing through transcript URLs).
+- 2026-08-21 pr_transition LONG-CONTEXT dense NEGATIVE: 4096-tok test .521/.521/.582 (mean
+  .54) ≈ 1024-tok (.53) — context length was NOT the constraint; Llama-8B LoRA on raw diffs
+  does not learn merge prediction at this frame/n. FINDING (upgrade from caveat): on code
+  diffs the articulated bank (strong judge + criteria, within-repo .765) >> small dense LoRA
+  — instrument asymmetry, NOT a tacitness statement; the cell's dense "T" is a floor not a
+  ceiling; NEVER quote pr_transition VAT as evidence of low articulability headroom.
