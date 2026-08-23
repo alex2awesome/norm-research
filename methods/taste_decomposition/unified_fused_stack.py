@@ -58,6 +58,9 @@ CELLS = {
     "journalism_tweets": dict(
         dense=NR / "datasets/journalism-tweets/va_v3/dense_standard_journalism_tweets_v3",
         oof=RESULTS / "journalism_tweets_va_oof.npz"),
+    "cw_royalroad_verdict": dict(
+        dense=NR / "datasets/creative-writing/royalroad_stubs/dense_standard",
+        oof=RESULTS / "cw_royalroad_verdict_va_oof.npz"),
 }
 SEEDS = (42, 1, 2)
 

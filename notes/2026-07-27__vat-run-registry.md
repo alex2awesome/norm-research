@@ -4719,3 +4719,83 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
 - SNL fan-transcript scrape COMPLETE on laptop: 2,567/2,569 pages (2 fails). Population
   build + matched renderer + char-ngram artifact gate delegated (no GPU scoring yet).
 - RoyalRoad U1: nothing running on sk2 — revival agent launched (inventory-first).
+
+## 2026-08-22 — JOKES + BBC ROUND 6 post-fleet chain (whisker-shrink extension round)
+- Fleets were COMPLETE before this session (codex+GLM; GLM resumed after quota reset).
+- 16:4x jokes_community: harness_maps collect -> 125 proposals from 10/16 slots (Claude legs
+  absent, 2-family degradation recorded in _proposals_fleet.json report, matches freeze floor
+  precedent); species r6: A N=75 S_obs=51 f1=37 M_hat=.493 / B N=50 S_obs=36 f1=29 M_hat=.580;
+  25 selected. bmerge packet: 240 cross-proposer pairs + 2 anchors.
+- 16:5x bbc_mostread: harness_bbc collect -> 200 proposals 8/8 slots (2 families, degraded
+  vs 3-family target per manifest); normalize_r6.py created from normalize_r5.py pattern
+  (120 A + 80 B); species r6: A N=120 S_obs=78 f1=65 M_hat=.542 / B N=80 S_obs=44 f1=29
+  M_hat=.362; bmergeA/bmergeB packets 120 pairs + 2 anchors each.
+- bmerge judges = scripted ../run_bmerge_judges.py, TWO codex legs (gpt-5.6-sol +
+  gpt-5.6-luna). SAME-FAMILY HIVE-MIND CAVEAT ON RECORD: both legs share the openai/codex
+  family (runner writes single_family_pair_caveat into every verdict file); "both judges
+  SAME" is weaker than a cross-family pair (bbc r2-r5 used sol+GLM cross-family; this
+  round's pairing follows the Track-A backfill instrument).
+- 17:0x judges landed so far: jokes sol 242 verdicts 83 SAME (34.3%); bbc A sol 122
+  verdicts 73 SAME (59.8%). luna legs in flight.
+- 17:1x-17:2x all six judge legs landed (coverage 100% pass 1 everywhere): jokes sol
+  83/242 SAME, luna 67/242; bbc A sol 73/122, luna 68/122; bbc B sol 79/122, luna 49/122.
+- STRICT merges applied (--inplace, PREMERGE sidecars written; anchors 4/4 both cells
+  both tracks): jokes A 51 tau -> 47 strict (f1 30, M_hat .400), B 36 -> 30 (M_hat .380);
+  bbc A 78 tau -> 87 strict (f1 73, M_hat .6083), B 44 -> 49 (f1 34, M_hat .425) — strict
+  splits tau clusters on bbc (same direction as r5).
+- audit prompts built (29 items, 4 planted each); blind auditors = codex gpt-5.6-sol,
+  scratch workdir, prompt file verbatim (bbc r2-r5 audit_raw_sol precedent).
+- 17:2x-17:4x audits + arbiters DONE, both cells, all via codex gpt-5.6-sol (blind fresh
+  session, read-only scratch workdir, on-disk prompt verbatim; arbiter = frontier-leg with
+  full context per standing rule):
+  * jokes r6: probes 4/4, misrouting 1/25, dispute A12 ("Headline-dependence of the comic
+    engine") -> arbiter B mixed=true; FINAL A=14 / B=11 (9 mixed). routing_final ARBITER-FINAL.
+  * bbc r6: probes 4/4, misrouting 4/25, disputes A08/A03/A14/A11 (first-person testimonial,
+    explainer label, scare quotes, reader-addressing question) -> arbiter ALL B mixed=true
+    (format-marker family, consistent with the r1-r5 explainer/question ANTI family);
+    FINAL A=11 / B=14 (9 mixed).
+  * arbiter.json "arbiter" field corrected from the script's hardcoded claude-opus default
+    to gpt-5.6-sol (actual judge this round) in both cells.
+- 17:5x GPU scoring: r6 inputs synced to sk3; allowed-set stacking supervisor launched
+  (logs/run_r6_scoring_sk3.sh, sk3 PID 3861274) — pool {0,4,5,6} (3/7 banned, 1/2 chandra),
+  NEED 72GB, gpu-mem frac computed from free at launch (squeeze), jokes_community_r6 then
+  bbc_mostread_r6 sequentially in ONE lane, ledger CLAIM-STACKED/RELEASE. At launch time
+  no allowed card had >58GB free (Gemma-4-31b weights alone = 59.0 GiB) -> supervisor in
+  WAIT state, polls 120s, cap 720 min.
+
+## 2026-08-22 — U1 REVIVED: RoyalRoad unified-X triple (COMMUNITY built + gated, CURATED built + gated, VERDICT bakeoff landed)
+- INVENTORY (reuse-before-rebuild, verified before building): 135,598 listings + 1,584 stubs
+  + 10,611 deep fiction pages + 2,173 magazine chapter files + 55 blogs ALL LOCAL under
+  datasets/creative-writing/royalroad_expansion/ (nothing on sk2; sk3 has rr_v1 artifacts
+  only). rr_v1 verdict artifacts intact on sk3 (population 1,274, dense 3 seeds, ledger, oof).
+- **VERDICT (rr_v1) VAT bakeoff LANDED** (sk3 CPU; fusion-pool rule): winner_by_eval
+  eval_weighted_rank, **test .4863 [.390,.581]** (VA_alone .4732 / T_alone .5526 test) — cell
+  stays AT CHANCE on the standard-1024 frame, consistent with the retired-cell story; judge-view
+  T .5846 remains the cell's instrument note. results/cw_royalroad_verdict_vat_bakeoff.json;
+  CELLS entry cw_royalroad_verdict added to unified_fused_stack.py (adapter npz
+  cw_royalroad_verdict_va_oof.npz = VA_nl_mean3 renamed; synced all boxes).
+- **COMMUNITY cell BUILT** (plan of record 2026-08-16: X = descriptions):
+  datasets/creative-writing/royalroad_community_cell/rr_community_population.jsonl.gz —
+  n=3,604 (pos .524), universe = stable-hash RANDOM deep-fetch sample only (stubs + top-5000
+  excluded = no popularity range-restriction), y = followers > within-(genre,year)-stratum
+  median (149 strata; 751 median-ties dropped, declared), splits sha256 80/10/10
+  (2,865/383/356). PROBE GATE: char .6367 / word .6384 grouped-OOF ->
+  **PASS_WITH_CONSTRUCT_NOTE** (chandra precedent: separability = genre tropes + author
+  blurb conventions [schedule/'what to expect'/discord] = the engagement-bearing content;
+  single scrape + single renderer = no pipeline-fingerprint channel; len~y r=.158 declared
+  nuisance). parse_deep_pages.py + build_royalroad_community.py are the builders.
+- **CURATED cell BUILT**: royalroad_magazine_cell/rr_magazine_population_v3.jsonl.gz (v3
+  CANONICAL; v1/v2 kept, never-delete) — 2,103 entries / 10 editions; 8 labeled editions
+  (2,012 rows, **26 winners** = ranked blog picks 3-5/edition, verified against announcement
+  text incl. title-matched no-source-link entries; "Nana and Snarl" recovery + organizer-chapter
+  "Rules" false-positive both caught in spot-check). 2022-01/06 unlabeled (no announcement in
+  blog scrape) — flagged edition_labeled=False. PROBE GATE: char .5969 / word .5038 grouped-OOF
+  by edition -> BOUNDARY, declared with the 26-pos PILOT-power caveat (pre-kill checklist
+  applies to every future readout).
+- **SCORING QUEUED on sk2** (GPUs 4-7 idle by nvidia-smi; sk3 saturated + 3/7 banned):
+  datasets/va_gemma_banks/score_rr_unified_banks.py (wave-D pattern, SAME CW va_bank_v2
+  GEPA bank + Gemma-4-31B, K=50 battery mandatory; label-blind SYS per cell with
+  community/curated channel bans). sk2 LANDMINE FILED: default HOME=AFS -> flashinfer JIT
+  cache 'Disk quota exceeded' at engine init; fix = HOME=/lfs/skampere2/0/alexspan (same
+  class as sk3 rule). sk2 gemma4 env vLLM 0.23 OK; snapshot 518276fb. gpu_ledger.txt created
+  on sk2 (GPU4 claimed).
