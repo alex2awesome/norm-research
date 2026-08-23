@@ -220,7 +220,85 @@ def cell_homepage_curation():
                                  "only, never a gate."})
 
 
+def cell_snl_asr():
+    """SNL cut-for-time verdict, ASR lane (2026-08-22). PILOT-n: 72 rows
+    (36 cut + 36 within-season length-matched aired), 6 season groups —
+    grouped-OOF CIs only; the eval/test bakeoff is NOT run (33/3/4-per-class
+    split slices are too thin to select on). Dense T: NOT instrumentable at
+    this n (declared, not attempted) — cell enters the master ladder flagged
+    PILOT. Confound declared everywhere: cut = dress-rehearsal recordings."""
+    meta, A, V, groups, shard, ids = load_scaleupC_bank("snl_asr")
+    y = np.array(meta["ys"]["aired"])
+    return dict(
+        title="SNL cut-for-time verdict, ASR lane (aired=1 vs cut=0) — PILOT-n",
+        A=A, V=V, y=y, groups=groups, ids=ids, meta=meta, shard_of=shard,
+        group_column="season (6 groups)", T=None,
+        T_info={"note": "dense T not instrumentable at PILOT-n=72: a LoRA/dense "
+                        "arm has ~58 train rows under grouped folds — below every "
+                        "dense arm ever certified in this ladder; declared rather "
+                        "than attempted (recommendation logged in registry note "
+                        "2026-08-22)"},
+        matrix="outputs/va_gemma_banks_scaleupC/snl_asr_shard*.npz",
+        dense_dir="NONE (PILOT-n; see T_info)",
+        weak_instrument_flag="PILOT-n=72, 6 coarse season groups: all readouts "
+                             "are grouped-OOF with group-bootstrap CIs; treat as "
+                             "pilot row in the master ladder, never as a "
+                             "certified-n cell",
+        prior_published=None,
+    )
+
+
+def cell_rr_community():
+    """U1 COMMUNITY: RoyalRoad reader engagement on fiction DESCRIPTIONS."""
+    meta, A, V, groups, shard, ids = load_scaleupC_bank("rr_community")
+    y = np.array(meta["ys"]["followers_above_stratum_median"])
+    return dict(
+        title="RoyalRoad community (followers > within-(genre,year)-stratum median; "
+              "X = author blurb)",
+        A=A, V=V, y=y, groups=groups, ids=ids, meta=meta, shard_of=shard,
+        group_column="stratum (genre::year, 149)", T=None,
+        T_info={"note": "dense T not yet trained; decision gated on this ladder "
+                        "(registry 2026-08-23)"},
+        matrix="outputs/va_gemma_banks_scaleupC/rr_community_shard*.npz",
+        dense_dir="NONE yet",
+        weak_instrument_flag="K=50 battery pos-vs-neg AUC .5076 (means ordered "
+                             ".564>.552>.0005 scram; coherence 1.0): the CW craft "
+                             "bank barely separates high/low-follower blurbs on "
+                             "anchors — read A numbers with this flag",
+        prior_published=None,
+    )
+
+
+def cell_rr_magazine():
+    """U1 CURATED: Community Magazine contest picks — PILOT (26 positives).
+    Unlabeled editions (2022-01/06, no winner announcement) are EXCLUDED:
+    their y=0 rows would be silent false negatives."""
+    meta, A, V, groups, shard, ids = load_scaleupC_bank("rr_magazine")
+    y = np.array(meta["ys"]["magazine_winner"])
+    keep = ~np.isin(np.asarray(groups, dtype=object), ["2022-01", "2022-06"])
+    return dict(
+        title="RoyalRoad Community Magazine curated (ranked judge picks, 3-5 per "
+              "edition) — PILOT: 26 positives",
+        A=A[keep], V=V[keep], y=y[keep], groups=groups[keep], ids=ids[keep],
+        meta=meta, shard_of=shard[keep], group_column="edition (8 labeled)",
+        T=None,
+        T_info={"note": "dense T NOT RECOMMENDED at 26 positives (grouped folds "
+                        "put ~20 pos in train) — below every certified dense arm; "
+                        "declared rather than attempted (SNL-ASR precedent)"},
+        matrix="outputs/va_gemma_banks_scaleupC/rr_magazine_shard*.npz",
+        dense_dir="NONE (PILOT; see T_info)",
+        weak_instrument_flag="PILOT: 26 positives / 2,012 rows, 8 coarse edition "
+                             "groups; every readout grouped-OOF with group-"
+                             "bootstrap CI; pre-kill checklist applies; never a "
+                             "certified-n cell",
+        prior_published=None,
+    )
+
+
 CELLS = {"jokes_community": cell_jokes_community,
+         "rr_community": cell_rr_community,
+         "rr_magazine": cell_rr_magazine,
+         "snl_asr": cell_snl_asr,
          "aops_curation": cell_aops_curation,
          "homepage_curation": cell_homepage_curation,
          "mathse_accepted_verdict": _mathse(

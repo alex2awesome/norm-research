@@ -4843,3 +4843,49 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   the ceiling of this lane, not ~87).
 - Residual declared confound: cut uploads are dress-rehearsal recordings (audience/mix
   differ) — material property, not pipeline.
+- ATTEMPT 2 ALSO FAILED (claimed GPU0 78.3GB, frac .405): NOT memory this time —
+  "Chunked MM input disabled but max_tokens_per_mm_item (2496) > max_num_batched_tokens
+  (2048)": Gemma-4-31b's multimodal encoder floor beats the 2048 squeeze. Both engines
+  rc=1, RELEASE written. Logs archived as *_gemma.attempt1/2 logs.
+- ATTEMPT 3 (2026-08-23 ~01:2x PT): chandra abank scoring on GPUs 1/2 COMPLETE -> pool
+  widened to {0,1,2,4,5,6} (3/7 still banned; chandra dense supervisor claimed GPU0 at
+  05:32Z, respected via free-memory check), NEED 80GB, frac min(.50,(FREE-5GB)/TOTAL),
+  --max-num-batched-tokens 4096 (> 2496 MM floor) --max-num-seqs 128. Supervisor sk3 PID
+  940043 (runner3 log). Monitor pgrep self-match bug fixed ([.] bracket trick) so a dead
+  supervisor now actually fires the alarm.
+- 00:24 PT ATTEMPT 3 LAUNCH VERIFIED (pgrep + nvidia-smi + engine-init line): GPU 1
+  claimed at 91.8GB free, frac .474; EngineCore PID 941021, scorer PID 940095
+  (--max-num-seqs 128 --max-num-batched-tokens 4096); "Model loading took 58.99 GiB";
+  jokes_community_r6 = 400,000 population prompts (16,000 x 25) + anchor battery;
+  bbc_mostread_r6 queued behind it in the same lane/claim. Co-tenants untouched.
+
+## 2026-08-23 — U1 HARVEST: scoring landed, distribution check PASS, layer-1 ladders for both new cells
+- sk2 GPU4 scoring COMPLETE (~270K prompts, 17:19-18:20Z, clean shutdown; GPU released in
+  sk2 gpu_ledger.txt). DISTRIBUTION CHECK PASS both cells: 0/45 collapsed criteria, all
+  three tokens used; NA rr_community .133 (blurbs give no evidence on ending/continuity
+  criteria — coherent), rr_magazine .010. K=50 battery: rr_magazine pos-vs-neg **.787**
+  (strong), coherence 1.0; rr_community pos-vs-neg **.5076** (means ordered .564>.552>.0005
+  but chance-level ordering — BATTERY-WEAK flag carried in the cell ledger).
+- **rr_community ladder** (n=3,604, pos .524, GroupKFold by stratum(149); results/
+  rr_community_ledger.json): V_lin .6104 / **A_lin .6180** / **VA_lin .6317** [.612,.651]
+  / VA_nl .6238 (Δ_interact −.007 [-.022,+.008] ns). Top univariate: character specificity
+  .571, opening traction .571, concrete stakes .567. Descriptive note: VA_lin .632 ≈
+  word-probe .638 — the craft bank matches but does not beat the lexical floor on this
+  cell (blurb conventions carry much of the signal; construct note in probe_results.json).
+- **rr_magazine ladder** (PILOT, 26 pos / 2,012 rows, 8 editions, unlabeled editions
+  EXCLUDED; results/rr_magazine_ledger.json): V_lin .5104 (surface carries ~nothing) /
+  **A_lin .6242** [.550,.686] / VA_lin .6193 / VA_nl .6127. PRIMARY within-edition frame
+  (results/rr_magazine_within_edition.json): A mean-unweighted **.6241** (pos-weighted
+  .6338; per-edition .48-.77 — noisy at ~3 pos/edition, as declared). Battery .787 says
+  the bank separates winners strongly on anchors; ladder says moderately on the full pool.
+  ALL NUMBERS PILOT-FLAGGED (26 positives; pre-kill checklist on any future kill call).
+- **DENSE-T RECOMMENDATION (reported BEFORE launching anything, per coordinator gate):**
+  * rr_community: RECOMMEND standard 3-seed Llama-8B dense arm (n=3,604 balanced, short
+    texts ≤6K chars = no view asymmetry, stable sha256 splits already in population;
+    sk2 GPUs 4-7 free at ~53GB used by nvidia-smi). NOT launched — awaiting go.
+  * rr_magazine: DO NOT train dense at 26 positives (grouped folds leave ~20 pos in
+    train — below every certified dense arm; SNL-ASR precedent). Declared in ledger.
+- U1 triple STATUS: COMMUNITY ladder done (bank leg), VERDICT bakeoff done (rr_v1, chance),
+  CURATED ladder done (PILOT). Missing for master-ladder entry: rr_community dense T (gated
+  on approval), 2022-01/06 winner announcements (would add ~6 pos — a targeted blog/forum
+  fetch is the cheapest power upgrade for the curated cell).
