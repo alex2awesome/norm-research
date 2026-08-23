@@ -4799,3 +4799,10 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   cache 'Disk quota exceeded' at engine init; fix = HOME=/lfs/skampere2/0/alexspan (same
   class as sk3 rule). sk2 gemma4 env vLLM 0.23 OK; snapshot 518276fb. gpu_ledger.txt created
   on sk2 (GPU4 claimed).
+- 2026-08-22 (cont) LAUNCH VERIFIED on sk2: smoke gate PASSED (rr_community finite .889 /
+  mean .569 / NA .111; rr_magazine finite .983 / .588 / .017 — no collapse), then FULL
+  scoring launched GPU4 (runner PID 4015672, EngineCore 4019352, 123GB/100% util,
+  engine-init line in logs/rr_unified/full_score.log on sk2). Scale: 3,604x45 + 2,103x45
+  + 2x150x45 battery = ~270K prompts. setsid + HOME=/lfs detach (AFS landmine fix).
+  Next wake: distribution check + scaleupC_layer1 ladders for both cells (+ dense T if
+  ladders warrant), then master-ladder entry for the U1 triple.
