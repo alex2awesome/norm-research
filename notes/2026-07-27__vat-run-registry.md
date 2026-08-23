@@ -4909,3 +4909,14 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
     fetched clean (requests UA; curl blocked) = NO winner text. Conclusion: 2022-01/06
     winners were announced outside blog/fiction surfaces (likely forum, never archived).
     Editions stay edition_labeled=False; curated cell stays 8 editions / 26 pos, PILOT.
+- 01:34 PT jokes_community_r6 SCORED (rc=0, 403,750 prompts, ~70 min stacked on GPU1):
+  anchors pass (coherent-vs-scrambled .938, pos-vs-neg .622), COLLAPSED 2/25, NA .007.
+- 01:4x jokes r6 READOUT (local, gate PASS): MONITOR VA_nl .7511 -> .7515, gain +.0004
+  (< eps .005, group-boot CI [-.0016,+.0034]); HONEST .7502 -> .7511 (+.0009). FLAT
+  ROUND — with r4 +.0011 / r5 -.0003 this is the THIRD consecutive sub-eps proposing
+  round; >=2-flat display rule satisfied -> calibrated tick quotable for humor.
+- Track-A missing mass of record (merged strict, r6): .400 (f1 30 / N 75; was .564 at
+  r5, partly composition: r6 fleet 5 proposers/2 families vs r5 8/3 — recorded).
+- HUMOR WHISKER RECOMPUTED (frozen U13 estimator): (VA_new - VA) = .721 - .689 + r6
+  HONEST gain .0009 = .0329; x M/(1-M) = .400/.600 = .667 -> whisker .0219 (~.022),
+  DOWN from .041. Fig-2 inputs: mass .400, VA_new .722.
