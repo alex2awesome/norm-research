@@ -4889,3 +4889,23 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   CURATED ladder done (PILOT). Missing for master-ladder entry: rr_community dense T (gated
   on approval), 2022-01/06 winner announcements (would add ~6 pos — a targeted blog/forum
   fetch is the cheapest power upgrade for the curated cell).
+- 2026-08-23 U1 CONTINUATION (coordinator GO on both recommendations):
+  * rr_community DENSE LAUNCHED sk2 GPU0 (claimed in sk2 ledger; GPUs 4-7 taken by new
+    tenants since scoring — GPU0 stacked at 65GB/100%, verified stepping seed42, 180
+    steps/epoch x2). Bundle datasets/creative-writing/royalroad_community_cell/
+    dense_standard_rr_community/ reuses the FROZEN population sha256 split verbatim
+    (.795/.106/.099, manifest records the rule). Standard config (lora r16/a32, lr 5e-5,
+    bs16, ml512, 2ep, sel eval, seeds 42/1/2) then score_eval_dense_v4 -> fused stack +
+    bakeoff. TWO sk2 LANDMINES FILED: (1) base Llama-3.1-8B absent on sk2 -> box-to-box
+    rsync sk3->sk2 (15G, skampere2.stanford.edu reachable from sk3 with HOME pinned);
+    (2) sk2 login env pins TRANSFORMERS_CACHE/HF_HOME/HF_HUB_CACHE to shared_hf_cache
+    ROOT (models-- dirs live at root, no hub/) — first launch failed offline lookup in
+    the wrong cache; weights moved to shared root + env matched, relaunch OK.
+  * rr_magazine 2022 winner recovery CLOSED NEGATIVE after 2 attempts: (1) full local
+    corpus re-scan (all 97 2022-edition chapters incl. organizer + all 55 archived blogs
+    + cross-link scan vs 85 entry-source fids) = announcement absent, only Writathon
+    cross-links; wayback CDX = IA "Temporarily Offline" on repeated tries (one earlier
+    window showed only 2018-19 blog captures); (2) LIVE fiction pages 50199/55346
+    fetched clean (requests UA; curl blocked) = NO winner text. Conclusion: 2022-01/06
+    winners were announced outside blog/fiction surfaces (likely forum, never archived).
+    Editions stay edition_labeled=False; curated cell stays 8 editions / 26 pos, PILOT.
