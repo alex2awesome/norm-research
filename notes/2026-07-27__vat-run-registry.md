@@ -4806,3 +4806,40 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   + 2x150x45 battery = ~270K prompts. setsid + HOME=/lfs detach (AFS landmine fix).
   Next wake: distribution check + scaleupC_layer1 ladders for both cells (+ dense T if
   ladders warrant), then master-ladder entry for the U1 triple.
+- 17:48 scoring ATTEMPT 1 FAILED CLEANLY (GPU0 claimed at 78.3GB free, frac .40): vLLM
+  KV cache = -5.18 GiB — weights 58.99 + activation profile ~15.8 (max_num_seqs 256,
+  default batched tokens) + CUDA graphs 1.97 > 71.6 GiB pool. Ledger RELEASE written;
+  co-tenants untouched. FIX: --max-num-seqs / --max-num-batched-tokens knobs added to
+  BOTH cells' score_gemma_maps.py (defaults preserve r1-r5 behaviour; divergence note in
+  the argparse comment), supervisor relaunched with 64 / 2048, NEED 76GB, margin 4GB
+  (sk3 PID 4003770, runner2 log). Expected: act ~4 GiB -> KV ~7 GiB at 78GB free.
+
+## 2026-08-22 SNL cut-for-time ASR lane (identical-by-construction) — GATE PASS
+- Context: fan-transcript verdict cell FLAGGED (char probe .729 redraw-mean, transcriber
+  authorship class-correlated, only 20 cut fan transcripts). Sanctioned fix: ONE Whisper
+  pipeline over BOTH classes' audio.
+- Inventory finding: earlier wave1 "failures" were 320 snltranscripts.jt.org transcript-page
+  URLs wrongly fed to yt-dlp; all 36 real YouTube URLs (= every cut-for-time entry that has
+  one, of 87 catalog) had ALREADY downloaded fine. No 403s with yt-dlp 2026.08.19.
+- Aired side: catalog has ZERO aired YouTube URLs -> dumped official SNL channel
+  (snl_channel_videos.jsonl, 8,315 videos, flat-playlist) and exact-title-matched aired
+  catalog s42-47 -> 994 unique matches. 3 catalog LABEL CONFLICTS caught (Superhosts /
+  Splitting the Check / Boat-Guy Halloween: fandom CFT list AND snltranscripts "aired" both
+  point at the same YT video) -> kept as cut, excluded from aired pool.
+- Manifest snl_asr_manifest.jsonl: 36 cut + 108 aired (3:1 within-season, duration-matched;
+  medians 233.2s vs 233.0s) written BEFORE download. Download: 107/108 aired OK, 1 FAIL
+  (y4v96bGomC0 age-gated, needs cookies — recorded, not retried past policy).
+- ASR: faster-whisper large-v3 fp16, sk2 GPU5 (moved off GPU4 when RR-scoring EngineCore
+  landed there), envs/fwhisper venv, transcribe_asr.py — 143/143 available audio transcribed,
+  0 ASR failures. asr_json/<id>.asr.json (text+segments), synced back to laptop.
+- Cell: build_verdict_cell_asr.py (same norm renderer import, same sha256 splits, same 1:1
+  within-season length-matched draw + 25-redraw probe battery, same class-name scrub) ->
+  snl_population_asr.csv.gz (72 rows: 36 cut + 36 aired canonical draw) + snl_population_asr_meta.json.
+  Fan population UNTOUCHED.
+- PROBE GATE: char35 .5451 +/- .0536 (canonical .5949), word12 .5423 +/- .0685 — below .65
+  line, no char>>word gap -> **PASS / certified**. Fan-cell .729 char fingerprint collapses
+  to ~chance under shared-ASR: flagged signal was transcriber authorship, now discharged.
+  Cut n 20 -> 36 (S42-S47 official-upload slice; 51/87 catalog cut have no YT URL — that is
+  the ceiling of this lane, not ~87).
+- Residual declared confound: cut uploads are dress-rehearsal recordings (audience/mix
+  differ) — material property, not pipeline.
