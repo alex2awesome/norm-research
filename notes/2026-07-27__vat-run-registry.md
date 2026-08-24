@@ -4981,3 +4981,31 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   exclusion + 1:1 within-sub) PLUS mod/AutoMod-notice row strip (both classes) and
   per-row kept timestamps; then within-sub char/word probes vs v1 .806/.834.
   STOP before any GPU scoring (probe verdict first; sk3 GPUs {4,5,6} only).
+
+## 2026-08-24 — Chandra cells TWO EXTENSIONS launched (user-ordered; v1 frame)
+- FRAME on everything below: v1 populations; era channel open; v2 rescore will
+  supersede.
+- TASK A (per-subreddit ladders, CPU, sk3): chandra_layer1_persub.py (versioned
+  adaptation of chandra_layer1.py; per-sub refit of V/A/VA with within-sub
+  collapse gate; grouping DECLARED = 10 stable-row-hash pseudo-groups, removal
+  log undated so created-month bins unavailable) + chandra_vat_bakeoff_persub.py
+  (VA = per-sub refit OOF; T = POOLED dense sub-restricted readout via
+  rm_out_seed*/preds_*.csv, zero retraining; VAT = eval-selected fusion variant
+  among {rank_mean, eval_weighted_rank}, test-reported; fused_stack +
+  logistic_evalfit descriptive). 8 viable subs (humor: funny/Showerthoughts/
+  nottheonion/me_irl, tifu n=544 skipped; cw: nosleep/books/asoiaf/
+  gameofthrones). Drivers running on sk3 CPU; logs logs/chandra_*_persub_*.log.
+- TASK B (VAT V3 criteria-in-prompt arm, GPU, sk2): build_chandra_v3aug.py
+  reuses the G3 code-competitions arm-a renderer (criteria block FIRST
+  "<name>: <score>", then POST text). Frozen dense_standard row-hash splits
+  reused VERBATIM (same rows/order) so T_v3 is directly comparable to raw-text
+  T .849/.911. Top-10 = pooled collapse-kept Gemma A-criteria ranked by
+  train-rows-only permutation importance (GroupKFold(3) by subreddit, frozen
+  HistGB 31/.06/400, n_repeats=5). Leak check: no label words in any top-10
+  name; 20-row render samples eyeballed (datasets/prior_norms_cells/
+  dense_v3aug_chandra_*/render_samples.txt). Humor top1 = "Diminishment has a
+  stated reason"; CW top1 = "Conflict legibility". Training: Llama-3.1-8B LoRA
+  (r16 a32 lr5e-5 bs16 len512 2ep, selection eval), seeds 42/1/2, sk2 GPUs 1+2
+  (GPU0 = co-tenant; RoyalRoad dense COMPLETE), ledger claimed
+  agent=claude-chandra-ext; chain logs/chandra_v3aug_chain.sh; verified pgrep +
+  nvidia-smi 18.5GB/GPU + step-1 loss line. Watchers armed on both boxes.
