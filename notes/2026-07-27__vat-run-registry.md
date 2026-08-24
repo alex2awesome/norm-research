@@ -4951,3 +4951,23 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   humor .022 (mass .564->.400 post strict-merge), journalism .065 (mass .492->.608,
   bound WIDENS — mass!=value, matches backtest). Never relabeled: tick and bound are
   visually + textually distinct. Figure regenerated; caption updated (fig:vat-community).
+
+## 2026-08-24 — Chandra cells (chandra_humor/chandra_cw) LEAK AUDIT (user-ordered)
+- Manual audit (108 rows) + LR top-features + ablations; full note
+  notes/2026-08-24__chandra_leak_audit.md; artifacts sk3
+  /lfs/skampere3/0/alexspan/chandra_leak_audit/. AUDIT ONLY — populations/dense
+  outputs untouched.
+- Structural find: kept-side Arctic Shift crawl covers only 1-6 DAYS (ending
+  2017-03-30) for 8/9 subs (nosleep 29d); removed side spans 2016-05..2017-03.
+  "dragonstone"/"trailer" (S7 trailer day) and "ronaldo/statue/spicer/bamboozle"
+  are top KEPT features = the model can see the fetch date.
+- But quantified leak channels are all SMALL on within-sub LR probes (.778-.860):
+  survival edit-marker strip -.0002..-.0008; named-event strip -.003..-.004;
+  nosleep 2-week temporal holdout -.009..-.012 (control .881/.883 -> .869/.874);
+  date-from-text within kept .593. Top removed-side features = real moderation
+  content (slurs/insults, nosleep story/fake/fiction, pdf/torrent, mods-meta).
+- Results (not verdicts): >90% of dense-vs-bank gap (.156 humor / .332 cw)
+  survives every runnable control; era-scale channel for single-day subs is
+  UNTESTABLE in-place. Quote chandra dense T (.849/.911) as upper bound pending
+  kept-side era-uniform v2 recollect (+ re-pull torn tifu gzip, drop mod-notice
+  rows 0.7-1.7% both classes). No retraction supported.
