@@ -4971,3 +4971,13 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   UNTESTABLE in-place. Quote chandra dense T (.849/.911) as upper bound pending
   kept-side era-uniform v2 recollect (+ re-pull torn tifu gzip, drop mod-notice
   rows 0.7-1.7% both classes). No retraction supported.
+
+## 2026-08-24 — Chandra kept-side v2 collection LAUNCHED (era-uniform, audit follow-up)
+- collect_chandra_kept_v2.py (laptop, same Arctic Shift pacing as v1): 22 evenly
+  spaced ~fortnight strata over 2016-05-01..2017-03-31, per-window quota target/22,
+  resume state per (sub,window), gzip closed per window (v1 torn-tail fix), tifu
+  fresh. Outputs kept_v2_<sub>.jsonl.gz alongside v1 (v1 untouched).
+- Next on completion: gated v2 build (shared renderer + %0A + removal-overlap
+  exclusion + 1:1 within-sub) PLUS mod/AutoMod-notice row strip (both classes) and
+  per-row kept timestamps; then within-sub char/word probes vs v1 .806/.834.
+  STOP before any GPU scoring (probe verdict first; sk3 GPUs {4,5,6} only).
