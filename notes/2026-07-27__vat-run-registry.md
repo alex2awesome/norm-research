@@ -5009,3 +5009,11 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   (GPU0 = co-tenant; RoyalRoad dense COMPLETE), ledger claimed
   agent=claude-chandra-ext; chain logs/chandra_v3aug_chain.sh; verified pgrep +
   nvidia-smi 18.5GB/GPU + step-1 loss line. Watchers armed on both boxes.
+
+## 2026-08-24 — Chandra TASK A LANDED: per-subreddit ladders (8/8 subs, no failures)
+- Tables + readout: notes/2026-08-24__chandra_per_sub_ladders.md (v1 frame).
+- Headline: within-sub refits articulate MORE everywhere — all 8 subs beat
+  pooled V/A/VA; cw pooled A .583/VA .579 vs within-sub A .69-.82/VA .70-.83
+  (pooled cw layer-1 was fighting cross-sub norm heterogeneity). T
+  heterogeneous (.78 me_irl - .93 books). VAT>T in 3/8 (me_irl +.023, asoiaf,
+  Showerthoughts) — exactly where VA is closest to T. Winner eval_weighted_rank 8/8.
