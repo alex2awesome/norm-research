@@ -10,7 +10,12 @@ v2 (coordinator 2026-08-24): sample UNIFORMLY over 2016-05-01..2017-03-31 via
 ~22 evenly spaced fortnightly strata; per-window quota = target/22; same subs,
 same fields, same pacing as v1. Resume-state per (sub, window). tifu re-pulled
 from scratch (v1 gzip had a torn tail). Writes kept_v2_<sub>.jsonl.gz ALONGSIDE
-v1 files — v1 outputs untouched (never-delete-data rule)."""
+v1 files — v1 outputs untouched (never-delete-data rule).
+
+Coordinator addendum (2026-08-24): also persist the Arctic Shift `author` field
+(kept side) for author-disjoint readouts. Removal side has NO author anywhere
+(reddit-removal-log.csv = body+subreddit; the released macro-norm CSVs are bare
+text) — recorded as untestable in the v2 build meta."""
 import gzip, json, math, time
 from pathlib import Path
 import requests
@@ -67,7 +72,8 @@ for sub, target in TARGETS.items():
                 fh.write(json.dumps({"id": c.get("id"), "subreddit": sub,
                                      "body": body,
                                      "created_utc": c.get("created_utc"),
-                                     "score": c.get("score")}) + "\n")
+                                     "score": c.get("score"),
+                                     "author": c.get("author")}) + "\n")
                 got += 1
             before = min(int(c.get("created_utc", before)) for c in rows)
             wst.update({"got": got, "before": before, "empties": empties})

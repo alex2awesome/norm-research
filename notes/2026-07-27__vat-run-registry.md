@@ -5017,3 +5017,10 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   (pooled cw layer-1 was fighting cross-sub norm heterogeneity). T
   heterogeneous (.78 me_irl - .93 books). VAT>T in 3/8 (me_irl +.023, asoiaf,
   Showerthoughts) — exactly where VA is closest to T. Winner eval_weighted_rank 8/8.
+- ADDENDUM (coordinator 2026-08-24, mid-collection): v2 collector restarted to
+  persist Arctic Shift `author` (kept side) for author-disjoint readouts;
+  author-less ~10-min partials quarantined as *.authorless-partial.bak.* (kept,
+  not deleted). Removal side verified author-free (removal log = body+subreddit;
+  reddit-norm-violations macro CSVs = bare text) -> v2 build meta will record
+  "author channel untestable — removal corpus anonymized"; populations get
+  kept-side author_hash (sha1[:16]).
