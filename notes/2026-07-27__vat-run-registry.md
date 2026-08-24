@@ -4942,3 +4942,12 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
 - Round-6 verdicts: jokes FLAT (3rd consecutive sub-eps), bbc FLAT (2nd consecutive).
   Both campaigns remain terminal; r6 extended the flat-gain record on both and moved
   A=14 (jokes) / A=11 (bbc) new arbiter-final criteria into the banks.
+
+## 2026-08-24 — Figure-2 whisker update after round-6 closure (both cells FLAT)
+- Per frozen display rule (notes/2026-08-19__u13-va-missing-value-whisker-frozen.md +
+  mining-rounds whisker policy): humor (3 consecutive sub-eps) and journalism (2
+  consecutive sub-eps) now show the CALIBRATED tick (.005, dashed) in
+  fig2_community_stacked.pdf; Good-Turing bounds quoted in the appendix caption:
+  humor .022 (mass .564->.400 post strict-merge), journalism .065 (mass .492->.608,
+  bound WIDENS — mass!=value, matches backtest). Never relabeled: tick and bound are
+  visually + textually distinct. Figure regenerated; caption updated (fig:vat-community).
