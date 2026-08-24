@@ -118,6 +118,12 @@ def main():
     ap.add_argument("--jobs", required=True)
     ap.add_argument("--gpu-mem", type=float, default=0.85)
     ap.add_argument("--max-model-len", type=int, default=4096)
+    # 2026-08-22 r6 squeeze knobs: the activation-profile pass at max_num_seqs=256 /
+    # default max_num_batched_tokens costs ~15.8 GiB on a stacked card (KV went -5.18 GiB
+    # at frac .40, jokes_community_r6_gemma.log); shrinking the profile is how the model
+    # fits leftover headroom. Defaults preserve the r1-r5 behaviour exactly.
+    ap.add_argument("--max-num-seqs", type=int, default=256)
+    ap.add_argument("--max-num-batched-tokens", type=int, default=None)
     a = ap.parse_args()
     from vllm import LLM, SamplingParams
 
@@ -140,10 +146,13 @@ def main():
     total = sum(len(j["rows"]) * len(j["crits"]) for j in jobs)
     print(f"[maps] {len(jobs)} jobs, {total} population prompts", flush=True)
 
+    kw = {}
+    if a.max_num_batched_tokens:
+        kw["max_num_batched_tokens"] = a.max_num_batched_tokens
     llm = LLM(model=GEMMA4, dtype="bfloat16", gpu_memory_utilization=a.gpu_mem,
               max_model_len=a.max_model_len, enable_prefix_caching=True,
               trust_remote_code=True,
-              max_num_seqs=256)
+              max_num_seqs=a.max_num_seqs, **kw)
     sp = SamplingParams(temperature=0.0, max_tokens=6)
 
     for j in jobs:

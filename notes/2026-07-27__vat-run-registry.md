@@ -4920,3 +4920,25 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
 - HUMOR WHISKER RECOMPUTED (frozen U13 estimator): (VA_new - VA) = .721 - .689 + r6
   HONEST gain .0009 = .0329; x M/(1-M) = .400/.600 = .667 -> whisker .0219 (~.022),
   DOWN from .041. Fig-2 inputs: mass .400, VA_new .722.
+- 04:23Z bbc_mostread_r6 SCORED (rc=0, 1,272,775 prompts = 50,761 rows + 150 anchors x 25,
+  26 chunks): COLLAPSED 1/25, NA .016; scoring anchor battery pass_scrambled FALSE
+  (coherent-vs-scrambled .637, pos-vs-neg .401) — same regime as r2 (.666) / r3 (.695),
+  both of which the campaign proceeded through; recorded, not suppressed (headline-corpus
+  scramble is headline-like; bmerge/probe instruments this round were 4/4 regardless).
+- 2026-08-24 bbc r6 READOUT on sk3 (readout_r6_bbc.py, RC=0): MONITOR seedmean VA5 .7761
+  -> VA6 .7790, Delta .0471 -> .0441, gain +.0029 < eps .005 -> SUB-EPS. With r5 -.0019
+  that is TWO consecutive sub-eps proposing rounds -> calibrated tick quotable for
+  journalism too. Spurious: joint B (14 new B channels; 71+14 mapped) .7119; dense over
+  B+bank +.0601 (monotone consumption trajectory continues .0960->.0601); swap C+ .835 /
+  C- .376.
+- FIG-2 WHISKERS RECOMPUTED (frozen U13 estimator, masses = merged-strict f1/N of r6):
+  * humor: (VA_new .7219 - VA .689) x .400/.600 -> whisker .0219 (was .041) — SHRINKS.
+  * journalism: (VA_new .7790 - VA .737) x .6083/.3917 -> whisker .0652 (was .040) —
+    WIDENS: strict 2-family merge left f1 73/120 (mass .492 -> .6083). Exactly the
+    backtest's on-record expectation (mass plateaus/rises; mass != value). Display per
+    2026-08-20 policy: BOTH cells now >=2 consecutive flat rounds -> quote the calibrated
+    tick (realized terminal-regime gain ~0-.005) in the figure, bound whisker to appendix;
+    NEVER silently relabel the bound as an estimate.
+- Round-6 verdicts: jokes FLAT (3rd consecutive sub-eps), bbc FLAT (2nd consecutive).
+  Both campaigns remain terminal; r6 extended the flat-gain record on both and moved
+  A=14 (jokes) / A=11 (bbc) new arbiter-final criteria into the banks.
