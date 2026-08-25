@@ -5044,3 +5044,38 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   chains) untouched. Watchers armed both lanes. Next: rsync bank npz to sk3,
   layer-1 pooled+persub + era-stratified/author-grouped readouts (CPU sk3),
   v1-vs-v2 table, STOP before figure edits.
+
+## 2026-08-25 SNL ASR cell: A-bank scoring + layer-1 — PILOT ladder row, all legs ~chance
+- Scoring: snl_asr entry added to datasets/va_gemma_banks/score_scaleupD_banks.py
+  (REUSED jokes rubrics 47 + SYS_JOKES verbatim, chandra frame precedent: ctx = "SKETCH
+  TRANSCRIPT (ASR of a live comedy sketch)"; label-blind; 2 shards; declared frame note +
+  dress-rehearsal confound in meta). Smoke gate PASS (NA .258 mean .839, no collapse).
+  First full launch on sk2 GPU5 FAILED at engine init — lost the memory race to the
+  chandra engine landing on the same card (73.17GB free < 118.83GB requested at util .85);
+  ledger RELEASE written; relaunched sk2 GPU7 (empty card) -> clean: both shards anchor-valid
+  attempt 0 (s0 pos .932/neg .431/scram .045; s1 pos .919/neg .879/scram .053), NA .272/.249.
+  K=50 battery: pos .8388 / neg .8024 / scram .0430; coherent-vs-scram AUC 1.000,
+  pos-vs-neg AUC .571 (weak verdict signal at anchor level — both classes are
+  professionally written SNL sketches). Matrices: outputs/va_gemma_banks_scaleupC/
+  snl_asr_shard{0,1}.npz + snl_asr_meta.json (synced to laptop; anchor_battery.json MERGED
+  not clobbered).
+- Distribution check: value mix 0/.5/1 = .105/.139/.755 + NA .262 (no guided-JSON-style
+  collapse); NA class-balanced (.259 aired / .265 cut — no NA channel); 6/47 criteria
+  constant (joke-form criteria all pro sketches satisfy), 11 near-constant flagged by rvg.
+- Layer-1 (scaleupC_layer1.py --cell snl_asr; grouped folds by season, 6 groups; PILOT
+  frame, grouped-OOF + group-bootstrap CIs; NO eval/test bakeoff at n=72):
+  V_lin .5517 [.439,.610] | A_lin .4437 [.289,.584] | VA_lin .4938 [.389,.601] |
+  V_nl .5365 | VA_nl .5129 [seed0 CI .438,.656] | Delta_interact +.019 (CI -.141,+.246).
+  READ: every leg's CI straddles .5 — the cell is a NULL at pilot-n; the certified
+  instrument (battery ordering holds, scram floor .04) simply finds no text-quality
+  separation between aired and cut-for-time. Top univariate A criterion .599 (quotable
+  formulation) — noise-compatible at n=72.
+- DENSE-T RECOMMENDATION (given before any launch, per directive): NOT instrumentable.
+  n=72 -> ~58 train rows/fold under season-grouped folds; smallest certified dense arm in
+  the ladder is kindle_scout at 726 rows (10x). With V/A/VA all ~chance +/- .11-.15, a
+  LoRA could neither beat nor be distinguished from the null. Ledger entry carries
+  T=None + "dense T not instrumentable at PILOT-n" + weak_instrument_flag; master-ladder
+  row = PILOT, ASR-lane, dress-rehearsal confound declared.
+- Artifacts: methods/taste_decomposition/results/snl_asr_ledger.json (+ oof .npy pair);
+  logs on sk2 logs/snl_asr/{smoke,full_score,full_score_gpu7}.log; gpu_ledger CLAIM/RELEASE
+  entries for GPU5 (lost race) and GPU7 (completed).
