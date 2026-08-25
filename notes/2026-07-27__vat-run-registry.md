@@ -5033,3 +5033,14 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   corpus anonymized — recorded in manifests). STOPPED before GPU scoring per
   coordinator. chandra cells NOT yet in outputs/v2_db/cells_v1 (9 tasks, no
   prior-norms entries) — incorporation awaits v2 dense+bank rescore.
+- 2026-08-24 v2 RESCORE CHAIN LAUNCHED on sk2 (coordinator GO): A-bank Gemma-4
+  scoring of both v2 populations on GPU4 (scaleupD scorer + new tasks
+  chandra_humor_v2/chandra_cw_v2, same bank/SYS/anchors as v1; smoke NA .35/.72
+  vs v1 realized .50/.45 = in-regime, "NA" is a legitimate token here) and
+  3-seed Llama-8B LoRA dense chain on GPU5 (same recipe: row-hash 80/10/10
+  sha256 salt "<cell>_dense|", seeds 42/1/2, max_len 512, 2 epochs; splits
+  built: humor 58578/7373/7317, cw 51805/6435/6548). Ledger claims logged
+  (agent=claude-chandra-leakaudit). sk3 GPUs all busy; sk2 GPUs 1-2 (v3aug
+  chains) untouched. Watchers armed both lanes. Next: rsync bank npz to sk3,
+  layer-1 pooled+persub + era-stratified/author-grouped readouts (CPU sk3),
+  v1-vs-v2 table, STOP before figure edits.

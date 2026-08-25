@@ -178,7 +178,7 @@ def build_chandra(cell):
     df = pd.read_csv(REPO / f"datasets/prior_norms_cells/{cell}_population.csv.gz")
     items = [{"id": r.row_id, "group": r.group, "text": str(r.text)[:4000],
               "judgement": int(r.judgement)} for r in df.itertuples()]
-    if cell == "chandra_humor":
+    if cell.startswith("chandra_humor"):
         vf = S.load_module(JOKES_DIR / "va/v_features.py", "vf_chandra_h")
         rubrics = [json.loads(l) for l in open(JOKES_DIR / "va/rubrics.jsonl") if l.strip()]
         sysp = C.SYS_JOKES
@@ -215,14 +215,87 @@ def build_chandra(cell):
                 meta={"population": f"datasets/prior_norms_cells/{cell}_population.csv.gz",
                       "y_semantics": "judgement=1 = REMOVED (macro-norm-violation log)",
                       "construct_note": "quality bank on conduct verdicts — DECLARED frame",
+                      "v2_note": ("kept side era-UNIFORM (22 strata 2016-05..2017-03; v1 was "
+                                  "last 1-6 days), mod/AutoMod-notice rows stripped BOTH "
+                                  "classes, kept ts+author_hash recorded; removed side "
+                                  "anonymized (no author) — see "
+                                  "notes/2026-08-24__chandra_leak_audit.md")
+                      if cell.endswith("_v2") else "v1 (era-confounded kept side; see leak audit)",
                       "group_column": "subreddit"})
 
 
+# ============================== snl_asr ======================================
+def build_snl_asr():
+    """SNL cut-for-time VERDICT, ASR lane (2026-08-22): aired=1 vs cut_for_time=0,
+    BOTH classes transcribed by ONE Whisper large-v3 run (identical-by-construction
+    text pipeline; probe gate PASS, char .5451 redraw-mean vs fan-cell .729 —
+    see datasets/humor/snl_cut_for_time/snl_population_asr_meta.json).
+    REUSES the jokes rubrics + SYS_JOKES verbatim (same humor A-bank as
+    jokes_removal_v2 / chandra_humor; nothing mined). FRAME NOTE (declared):
+    joke-quality bank applied to full multi-speaker SKETCH TRANSCRIPTS — the
+    chandra precedent (bank same, INPUT FRAME differs). PILOT-n: 72 rows.
+    CONFOUND (declared): cut-for-time uploads are dress-rehearsal recordings
+    (audience/mix differ from broadcast) — material property, not pipeline."""
+    import pandas as pd
+    df = pd.read_csv(REPO / "datasets/humor/snl_cut_for_time/snl_population_asr.csv.gz")
+    items = [{"id": r.row_id, "group": r.group, "text": str(r.text)[:5000],
+              "judgement": int(r.judgement)} for r in df.itertuples()]
+    vf = S.load_module(JOKES_DIR / "va/v_features.py", "vf_snl_asr")
+    rubrics = [json.loads(l) for l in open(JOKES_DIR / "va/rubrics.jsonl") if l.strip()]
+    blocks = [f"CRITERION: {m['name']}\nDESCRIPTION: {m['description']}\n\n"
+              "Answer with one token:" for m in rubrics]
+
+    def ctx(r):
+        return f'SKETCH TRANSCRIPT (ASR of a live comedy sketch):\n"{r["text"]}"'
+
+    def vvec(r):
+        return vf.vector(r["text"])
+
+    def anchors(shard):
+        rng = random.Random(SEED + 557 * shard)
+        pos_pool = [r for r in items if r["judgement"] == 1]
+        neg_pool = [r for r in items if r["judgement"] == 0]
+        pos, neg = dict(rng.choice(pos_pool)), dict(rng.choice(neg_pool))
+        scr = dict(neg)
+        scr["text"] = S.scramble([pos["text"][:2500], neg["text"][:2500]], rng,
+                                 n_words=120)
+        out = []
+        for tag, r in (("anchor_pos", pos), ("anchor_neg", neg), ("anchor_scram", scr)):
+            rr = dict(r); rr["anchor_tag"] = tag; rr["id"] = f"__ANCHOR_{shard}_{tag}"
+            out.append(rr)
+        return out
+
+    ys = {"aired": np.array([r["judgement"] for r in items])}
+    return dict(
+        name="snl_asr", items=items, rubrics=rubrics, blocks=blocks,
+        sys=C.SYS_JOKES, ctx=ctx, vvec=vvec, vnames=list(vf.V_NAMES),
+        anchors=anchors, ys=ys, n_shards=2,
+        meta={"population": "datasets/humor/snl_cut_for_time/snl_population_asr.csv.gz",
+              "y_semantics": "judgement=1 means AIRED (anchor_pos = an aired sketch; "
+                             "cut_for_time = 0)",
+              "bank": "SAME jokes rubrics + SYS_JOKES as jokes_removal_v2/chandra_humor",
+              "frame_note": "joke-quality bank on multi-speaker sketch ASR transcripts "
+                            "(chandra precedent: instrument same, INPUT FRAME differs); "
+                            "texts capped at 5000 chars",
+              "pilot_note": "PILOT-n: 72 rows (36 cut + 36 matched aired), 6 season "
+                            "groups — grouped-OOF CIs only, no eval/test bakeoff",
+              "confounds_declared": [
+                  "cut-for-time uploads are dress-rehearsal recordings (audience/mix "
+                  "differ from live broadcast) — material property, not pipeline",
+                  "official-upload slice only: 36/87 catalog cut sketches have YT URLs "
+                  "(S42-S47)"],
+              "group_column": "season"},
+    )
+
+
 BUILDERS = {"jokes_removal": build_jokes_removal, "kindle_scout": build_kindle_scout,
+            "snl_asr": build_snl_asr,
             "jokes_removal_v2": lambda: build_jokes_removal(
                 "removal_cell/population_v2.jsonl.gz", "jokes_removal_v2"),
             "chandra_humor": lambda: build_chandra("chandra_humor"),
-            "chandra_cw": lambda: build_chandra("chandra_cw")}
+            "chandra_cw": lambda: build_chandra("chandra_cw"),
+            "chandra_humor_v2": lambda: build_chandra("chandra_humor_v2"),
+            "chandra_cw_v2": lambda: build_chandra("chandra_cw_v2")}
 
 
 def main():
