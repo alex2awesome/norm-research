@@ -5079,3 +5079,18 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
 - Artifacts: methods/taste_decomposition/results/snl_asr_ledger.json (+ oof .npy pair);
   logs on sk2 logs/snl_asr/{smoke,full_score,full_score_gpu7}.log; gpu_ledger CLAIM/RELEASE
   entries for GPU5 (lost race) and GPU7 (completed).
+
+## 2026-08-25 — U1 rr_community DENSE + VAT LANDED (chain completed 08-23 08:12Z; fused/bakeoff leg run today)
+- Dense 3-seed chain sk2 GPU0 finished in 34 min (chandra/V3 tenants arrived AFTER —
+  no starvation; monitor + ledger confirm clean). eval .6711/.6943/.6890 (mean .685),
+  test .6794/.7214/.6949 (mean .699, seed spread .042).
+- Fused stack (739 dense-held-out rows, join 739/739): stack .7086 (eval leg .6974 /
+  test leg .7137); same-rows VA_nl .5931 vs dense T .7117.
+- **VAT bakeoff (fusion pool, eval-select/test-report): winner eval_weighted_rank,
+  test .6983 [.6389, .7521]**. Parents: T_alone test .7183, VA_alone .5851.
+- READ WITH BOTH STANDING FLAGS: (1) BATTERY-WEAK A instrument on this population
+  (K=50 pos-vs-neg .5076) and (2) VA ≈ word-probe floor (.632 vs .638) — dense beating
+  bank by ~.12 same-rows is therefore an INSTRUMENT-limited articulability gap until a
+  stronger blurb-frame bank exists; never quote Δ_beyond +.119 as tacitness without
+  these notes. results/rr_community_{fused_stack,vat_bakeoff}.json (synced 3 boxes).
+- sk2 GPU0 dense claim RELEASED (chain done); scoring claim was already released.
