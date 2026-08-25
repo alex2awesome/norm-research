@@ -52,6 +52,12 @@ CELLS = {
     "chandra_cw": dict(
         dense=NR / "datasets/prior_norms_cells/dense_standard_chandra_cw",
         oof=RESULTS / "chandra_cw_va_oof.npz"),
+    "chandra_humor_v2": dict(
+        dense=NR / "datasets/prior_norms_cells/dense_standard_chandra_humor_v2",
+        oof=RESULTS / "chandra_humor_v2_va_oof.npz"),
+    "chandra_cw_v2": dict(
+        dense=NR / "datasets/prior_norms_cells/dense_standard_chandra_cw_v2",
+        oof=RESULTS / "chandra_cw_v2_va_oof.npz"),
     "pr_transition_lc": dict(
         dense=NR / "datasets/code-review/pr_test_execution/dense_standard_pr_transition_lc",
         oof=RESULTS / "pr_transition_va_oof.npz"),
@@ -61,6 +67,9 @@ CELLS = {
     "cw_royalroad_verdict": dict(
         dense=NR / "datasets/creative-writing/royalroad_stubs/dense_standard",
         oof=RESULTS / "cw_royalroad_verdict_va_oof.npz"),
+    "rr_community": dict(
+        dense=NR / "datasets/creative-writing/royalroad_community_cell/dense_standard_rr_community",
+        oof=RESULTS / "rr_community_va_oof.npz"),
 }
 SEEDS = (42, 1, 2)
 

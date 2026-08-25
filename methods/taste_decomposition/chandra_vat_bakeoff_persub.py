@@ -49,7 +49,9 @@ def auc_ci(y, p, n_boot=2000, seed=0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--cell", required=True, choices=["chandra_humor", "chandra_cw"])
+    ap.add_argument("--cell", required=True,
+                    choices=["chandra_humor", "chandra_cw",
+                             "chandra_humor_v2", "chandra_cw_v2"])
     ap.add_argument("--sub", required=True)
     a = ap.parse_args()
     cfg = U.CELLS[a.cell]

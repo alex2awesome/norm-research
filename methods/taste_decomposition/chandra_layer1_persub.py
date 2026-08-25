@@ -31,6 +31,10 @@ import scaleupC_layer1 as SC
 VIABLE = {
     "chandra_humor": ["funny", "Showerthoughts", "nottheonion", "me_irl"],  # tifu n=544 skipped
     "chandra_cw": ["nosleep", "books", "asoiaf", "gameofthrones"],
+    # v2 (era-uniform kept side, leak-audit rebuild 2026-08-24): tifu restored
+    # to 12,650 rows -> viable.
+    "chandra_humor_v2": ["funny", "Showerthoughts", "nottheonion", "me_irl", "tifu"],
+    "chandra_cw_v2": ["nosleep", "books", "asoiaf", "gameofthrones"],
 }
 N_PSEUDO = 10
 
