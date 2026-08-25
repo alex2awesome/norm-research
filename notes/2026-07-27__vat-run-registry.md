@@ -5024,3 +5024,12 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   reddit-norm-violations macro CSVs = bare text) -> v2 build meta will record
   "author channel untestable — removal corpus anonymized"; populations get
   kept-side author_hash (sha1[:16]).
+- 2026-08-24 v2 REBUILD COMPLETE (same day): kept_v2 era-uniform collection
+  finished (all 9 subs, author field kept), gated v2 build done on sk3.
+  HEADLINE: within-sub probe (v1 gate cfg) humor .806->.760 (-.046),
+  cw .834->.808 (-.026); era confound broken (kept med 2016-10-14, full-window
+  coverage); tifu restored 544->12,650 rows; notice rows stripped both classes;
+  populations carry kept ts + author_hash (removed side: author untestable,
+  corpus anonymized — recorded in manifests). STOPPED before GPU scoring per
+  coordinator. chandra cells NOT yet in outputs/v2_db/cells_v1 (9 tasks, no
+  prior-norms entries) — incorporation awaits v2 dense+bank rescore.

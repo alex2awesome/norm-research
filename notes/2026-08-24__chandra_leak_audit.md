@@ -196,3 +196,41 @@ Artifacts: sk3 `/lfs/skampere3/0/alexspan/chandra_leak_audit/` (audit_a_facts.py
 audit_b_lr.py + audit_b.log, audit_c_temporal.py, tell_battery.csv,
 manual_sample.jsonl, lr_results.json, temporal_results.json). Populations and dense
 outputs untouched.
+
+## POSTSCRIPT — v2 rebuild executed same day (era-uniform kept side)
+
+Recommendation above was executed (coordinator-ordered): collect_chandra_kept_v2.py
+(22 evenly spaced ~fortnight strata over 2016-05-01..2017-03-31, author field
+persisted, tifu re-pulled) + build_chandra_cells_v2.py (same gated build + mod/
+AutoMod-notice strip BOTH classes [4,023 kept + notice-matching removals dropped]
++ per-row kept ts + kept author_hash sha1[:16]; removed side author untestable —
+corpus anonymized). v2 populations/manifests alongside v1 on sk3; v1 untouched.
+
+Era confound BROKEN: kept ts coverage now min 2016-05-14/15, med 2016-10-14,
+max 2017-03-30 (28/47 distinct anchor days across the full 11-month window vs
+v1's 1-6 days). tifu restored to 12,650 rows (v1 544, torn gzip).
+n: humor 73,268 (v1 61,572), cw 64,788 (62,616).
+
+**Headline probe comparison (v1 gate config: char_wb 2-4gram, 30k, 70/30 within-sub
+mean) — v1 -> v2:**
+
+| cell | v1 within-sub | v2 within-sub | delta | v2 per-sub |
+|---|---|---|---|---|
+| chandra_humor | .806 | **.760** | -.046 | funny .717 / ST .767 / tifu .821 / notonion .757 / me_irl .735 |
+| chandra_cw | .834 | **.808** | -.026 | nosleep .850 / books .860 / got .739 / asoiaf .783 |
+
+Audit-config 5-fold within-sub (v1 numbers were train-rows-only, v2 full-pop —
+near-identical sampling frame): humor word12 .778->.742, char35 .794->.757;
+cw word12 .855->.826, char35 .860->.832. Grouped-OOF-by-sub (v1cfg):
+humor .652->.684, cw .605->.628.
+
+Reading (results, not verdicts): removing the era window + notice rows costs the
+surface probe ~.03-.05 — same order as the audit's channel-by-channel estimates —
+and the remaining .74-.83 within-sub separability is the signal whose top features
+the audit classified as predominantly moderation-relevant content. Author channel:
+kept-side author_hash coverage .992/.994, 27,065/18,572 unique authors (author-
+disjoint/grouped folds now possible on the kept side only; removed side anonymized).
+
+STOPPED here per coordinator: no dense rescore / no bank VA / no GPU work queued.
+Next gates for VAT-table incorporation: dense T + bank VA on v2 populations, then
+era-stratified and author-grouped readouts.
