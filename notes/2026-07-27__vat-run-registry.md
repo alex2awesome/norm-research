@@ -5094,3 +5094,13 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   stronger blurb-frame bank exists; never quote Δ_beyond +.119 as tacitness without
   these notes. results/rr_community_{fused_stack,vat_bakeoff}.json (synced 3 boxes).
 - sk2 GPU0 dense claim RELEASED (chain done); scoring claim was already released.
+- 2026-08-25 v2 RESCORE: A-bank + dense COMPLETE on sk2 (all claims RELEASED).
+  DENSE v1->v2 (3-seed, test): humor .837-.842 -> .807-.811 (~-.03), cw
+  .905-.906 -> .883-.884 (~-.022) — same order as the probe drops; era channel
+  was worth a few points, bulk of dense signal survives deconfounding. Anchor
+  batteries v2 = v1 regime (humor pos-vs-neg .417 vs v1 .430; coherent-vs-scram
+  .746 vs .766; quality-bank-on-conduct frame, recorded). Bank npz + dense preds
+  synced to sk3; pooled L1 running; persub L1 chains died silently under load
+  448 (not OOM; relaunched); post-supervisor (setsid) now drives pooled
+  fused+bakeoff -> persub L1 x9 -> persub bakeoffs -> era/author deconf
+  readouts -> logs/chandra_v2_post_supervisor.log on sk3.
