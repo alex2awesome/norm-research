@@ -5104,3 +5104,13 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   448 (not OOM; relaunched); post-supervisor (setsid) now drives pooled
   fused+bakeoff -> persub L1 x9 -> persub bakeoffs -> era/author deconf
   readouts -> logs/chandra_v2_post_supervisor.log on sk3.
+
+## 2026-08-26 — V3AUG (criteria-in-prompt dense) harvest: NULL over raw-text dense
+- Both chains completed sk2 05:15/05:27Z (3 seeds each, same frozen v1 splits as the
+  raw-text dense). Test seed-mean: humor T_v3 .8487 vs raw T .8485 (+.0002);
+  cw T_v3 .9135 vs raw T .9112 (+.0023). Per-seed spread ±.002. VERDICT: conditioning
+  the LoRA on the top-10 criteria scores adds nothing beyond raw text on these cells —
+  replicates the cross-cell V3-never-beats ruling (G3). The dense model already
+  extracts whatever the articulated criteria carry. v1-frame (era caveat), but the
+  comparison is split-matched so the null is internally valid.
+- Owning agent died pre-harvest (usage credits); harvested by main lane.
