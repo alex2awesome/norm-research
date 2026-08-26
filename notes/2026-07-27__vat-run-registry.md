@@ -5188,3 +5188,52 @@ published full-split T (peer_curation is SUBSET_OF_ORIGINAL at .7205 coverage) a
 - Artifacts: `results/v3_grid_{peer_curation,hashtagwars_verdict,hashtagwars_verdict_k10,
   mathse_accepted_verdict,mathse_vote_score,nc_agree}.json`; queue
   `fusion/v3_grid_queue.txt`; GPU-2 sub-claims in `gpu_ledger.txt`. GPU 2 released.
+
+## 2026-08-26 — Chandra V3AUG PER-SUBREDDIT readout (zero retraining): the "helps where dense is weak" test
+Follow-up to the pooled V3AUG null. The pooled numbers hid 9 within-corpus contrasts that
+are the CLEANEST available test of whether criteria-in-prompt gain depends on dense strength:
+same corpus, same frozen v1 row-hash splits, same 3-seed recipe, `group` column in the preds
+IS the subreddit — so the per-sub readout costs no GPU at all. Arms: `dense_v3aug_chandra_*`
+seed-mean (sk2) vs `dense_standard_chandra_*` seed-mean (sk3), test leg.
+ALIGNMENT GATE: judgement and group vectors asserted elementwise identical between the two
+arms and across all 3 seeds within each arm before differencing (frozen splits confirmed,
+n_test 6,079 humor / 6,241 cw).
+
+| corpus | sub | n | T raw | T v3 | Δ | 95% CI (row-level) | P |
+|---|---|---:|---:|---:|---:|---|---:|
+| humor | me_irl | 777 | .7806 | .7698 | −.0108 | [−.0239,+.0030] | .059 |
+| humor | tifu | 47 | .8389 | .8315 | −.0074 | [−.0600,+.0455] | .377 |
+| humor | funny | 2312 | .8439 | .8436 | −.0003 | [−.0065,+.0057] | .463 |
+| humor | Showerthoughts | 1763 | .8528 | .8578 | +.0051 | [−.0016,+.0118] | .930 |
+| cw | gameofthrones | 832 | .8668 | .8708 | +.0040 | [−.0045,+.0128] | .823 |
+| humor | nottheonion | 1180 | .8882 | .8883 | +.0001 | [−.0071,+.0068] | .510 |
+| cw | asoiaf | 1071 | .8963 | .8984 | +.0021 | [−.0047,+.0093] | .724 |
+| cw | nosleep | 2907 | .9174 | .9190 | +.0016 | [−.0014,+.0045] | .860 |
+| cw | books | 1431 | .9301 | .9325 | +.0024 | [−.0016,+.0063] | .878 |
+
+Pooled (subreddit-grouped bootstrap): humor T_v3 .8487 vs raw .8485 (+.0002);
+cw .9135 vs .9112 (+.0024). Reproduces the earlier pooled null exactly.
+
+**ROBUST finding: criteria-in-prompt is INERT across the whole chandra range.** Max |Δ| over
+all 9 subs is .0108 and EVERY per-sub CI covers zero. Nothing here helps and nothing hurts.
+
+**The "helps where dense is WEAK" hypothesis gets no support, and the raw trend runs the
+WRONG WAY.** corr(T_raw, Δ) over the 9 subs is Spearman +.567 p=.112 / Pearson +.707 p=.033 —
+positive, i.e. the weakest sub (me_irl, T=.781) has the most NEGATIVE Δ and the strongest
+(books, T=.930) is positive. But this correlation is FRAGILE and must not be quoted as a
+finding: dropping me_irl and tifu (the two smallest/most extreme subs, tifu n=47) collapses it
+to Spearman +.071 / Pearson −.115, and humor-only (+.900) vs cw-only (−.400) have opposite
+signs. The defensible statement is "flat, with no negative trend", not "positive trend".
+
+**Scope limit that matters more than the correlation:** the chandra T range is .781–.930,
+entirely in the HIGH-T regime. The nearest sub to peer_curation (T=.594, the only V3 win in
+the whole grid, +.045) is me_irl at .781 — still .19 above it. So these corpora CANNOT test
+the low-T end of the hypothesis at all; they only establish that V3 is inert once dense is
+already strong. Testing "helps where weak" needs a second genuinely low-T cell (T<.65), and
+the v3grid candidates that would have supplied it (nc_agree .603, nc_outcome .624) are the
+ones knocked out by the PREPEND truncation asymmetry. That control, not more high-T corpora,
+is the experiment that would settle it.
+- Artifact: `methods/taste_decomposition/results/chandra_v3aug_persub.json` (per-seed AUCs,
+  per-sub bootstraps, pooled subreddit-grouped bootstrap, gain-vs-T with all robustness cuts).
+- Per-sub CIs are ROW-level by necessity: the canonical grouping unit for these cells IS the
+  subreddit, so within a sub there is no coarser unit to resample. Pooled CI is subreddit-grouped.
