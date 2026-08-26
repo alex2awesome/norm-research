@@ -5114,3 +5114,77 @@ methods/taste_decomposition/vat_bakeoff.py; results/*_vat_bakeoff.json. Winners:
   extracts whatever the articulated criteria carry. v1-frame (era caveat), but the
   comparison is split-matched so the null is internally valid.
 - Owning agent died pre-harvest (usage credits); harvested by main lane.
+
+## 2026-08-26 — V3 FULL-GRID, GPU-2 chain (worker v3chain-gpu2): 6 cells + 2 landmine findings
+Frozen dense-standard recipe (Llama-3.1-8B LoRA r16/a32, lr 5e-5, bs16, max_len 1024,
+2 epochs, grad-ckpt, seed 42), `selection_split` and trainer entry read per cell from the
+builder's manifest. **No `--class_weight_auto`**, deliberately: the dense-standard T arm
+these V3 arms are differenced against does not use it (run_dense_standard_v4.sh:5), and
+matching the comparison arm dominates the imbalance default (hashtagwars is 9.6% positive).
+Bootstraps = 2,000 draws resampling the cell's canonical GROUPING UNIT, never rows.
+
+| cell | k | n_E | grp | V3 auc_E | T same-rows | V3−T [CI] P | V3−VA_nl [CI] P |
+|---|---:|---:|---:|---:|---:|---|---|
+| peer_curation | 20 | 1571 | 1571 | .6386 | .5936 | **+.0450 [+.0223,+.0672] 1.000** | **+.0495 [+.0123,+.0866] .996** |
+| hashtagwars_verdict | 20 | 924 | 8 | .7063 | .7315 | −.0253 [−.0628,+.0163] .105 | no bank vector |
+| hashtagwars_verdict_k10 | 10 | 924 | 8 | .7142 | .7315 | (k-contrast owned by main lane) | no bank vector |
+| mathse_accepted_verdict | 20 | 2600 | 992 | .6303 | .6439 | −.0136 [−.0274,+.0008] .036 | +.0144 [−.0058,+.0349] .932 |
+| mathse_vote_score | 20 | 2326 | 1140 | .6460 | .6538 | −.0077 [−.0226,+.0074] .154 | +.0108 [−.0108,+.0327] .841 |
+| nc_agree | 20 | 1009 | 498 | .5929 | .6034 | **UNINTERPRETABLE** (see below) | −.0205 [−.0651,+.0256] .188 |
+
+- k=20 CAVEAT carried in every results JSON: k20 FAILED its confirm cell (cap_finalist
+  k20 .6431 vs k10 .6707, P(>0)=.043). Do not read any V3-vs-bank gap under ~.03 as real.
+  That threshold retires the mathse V3−VA_nl gains (+.014/+.011) as noise.
+- **nc_agree is UNINTERPRETABLE vs T, not "V3 ≤ T"**: the k=20 block is PREPEND and pushes
+  truncation from .021 (raw text) to .314 (with block) at max_len 1024. On ~31% of rows the
+  V3 arm lost document tail that the T arm kept, so the two arms did not see the same text
+  and the confound runs toward making V3 look worse. Same flag applies to nc_outcome (.288),
+  nc_responded (.298), press_verdict (.451) on the other worker's lane. A matched-n
+  raw-text control is the only way to read those four.
+- **The "criteria-in-prompt helps where dense is WEAK" reading does not survive.** Across
+  the 7 interpretable v3grid cells, corr(T, V3−T) is Spearman −.143 p=.760; adding the two
+  chandra V3AUG cells gives +.200 p=.606; DROPPING peer_curation flips the sign to +.371.
+  Sorted by T there is no gradient — the second-weakest cell (mathse_accepted, T=.644) has
+  the second-most-negative gain. peer_curation is a lone outlier, not the low-T end of a
+  trend, and should be described that way until a second low-T cell replicates it.
+- What IS consistent: V3 essentially never beats T (1 win / 3 significant losses / rest
+  null across 13 cells) but usually beats the BANK (positive in 6/8 gated cells, up to
+  peer_revealed +.164). Criteria-in-prompt recovers more than the tabular V+A stack and
+  still does not reach raw-text dense.
+
+### LANDMINE 1 — set-iteration-order corruption in the N&C per-row OOF arrays
+`nc_layer1_stack.py::rows_for()` iterates `self.valid_out` / `self.valid_agr`, which are
+**Python sets**, and the `nc_*_va_nl_oof_{seed0,mean3}.npy` arrays were saved in that order.
+Set-of-strings iteration depends on per-process string-hash randomization, so the row order
+was never reproducible — not even by re-running the script. `maps_batch1/cells.py::_load_nc`
+already sorts and warns "never iterate them directly"; the layer-1 stack did exactly that.
+Five candidate orderings (sorted, reverse, X_m dict order, live set order, label-file order)
+all land at chance vs the published seed-0 AUC (nc_agree .503/.505/.503/.491/.503 vs
+published .58115; nc_outcome likewise vs .60885). Any past row-level differencing against
+those v1 arrays is invalid. FIXED for nc_agree by the regenerated
+`nc_agree_oof_ids_v2.npy` + `nc_agree_layer1_v2.json` (sorted, ids carried) — the v2 file
+reproduces its published seed-0 exactly (.5863355378295811) and is what the table above uses.
+
+### LANDMINE 2 — the row_id join that silently degrades to chance
+`fusion/dense_joins/<slug>_join.csv.gz` is NOT in the same row order as the OOF arrays; the
+arrays are in BANK `item_ids` order. Joining positionally yields a bank vector at chance
+while looking perfectly healthy (press_verdict .5071 vs true .7069; jokes .5093 vs .7322;
+mathse_accepted .5035 vs .6318; mathse_vote .5029 vs .6248 — aops_curation happens to align,
+which makes the trap worse). Correct index: `outputs/va_gemma_banks_scaleupC/<bank>_meta.json`
+`item_ids` (bank = jokes_community / mathse_multiy for BOTH mathse y's / aops_curation), and
+`results/press_verdict_pr_A_k3_scores_CACHE.npz["ids"]` for press.
+
+### THE GATE (use this, don't hand-roll joins)
+`methods/taste_decomposition/fusion/v3_grid/harvest_v3_grid_cell.py --slug X` (or
+`--gate-only`). It refuses to emit a bank CI unless
+`AUC(y, <slug>_va_nl_oof_seed0.npy) == published nonlinear.VA seed-0 AUC` to 1e-6 — an exact
+identity that CERTIFIES row order rather than failing to reject it. Use seed0, never mean3:
+mean3's AUC is not the mean of the per-seed AUCs, so it can only be checked loosely. Two
+JSON schemas exist in the wild and reading only one produces false failures:
+`nonlinear.VA.seed_aucs["0"]` (peer/press/nc layer1) vs `nonlinear.VA["0"]["auc"]`
+(scale-up wave C ledgers). The script also records `T_same_rows_at_E` separately from the
+published full-split T (peer_curation is SUBSET_OF_ORIGINAL at .7205 coverage) and emits a
+`truncation_confound` block whenever the block raises truncation by >5 points.
+- Artifacts: `results/v3_grid_{peer_curation,hashtagwars_verdict,hashtagwars_verdict_k10,
+  mathse_accepted_verdict,mathse_vote_score,nc_agree}.json`; queue
+  `fusion/v3_grid_queue.txt`; GPU-2 sub-claims in `gpu_ledger.txt`. GPU 2 released.
