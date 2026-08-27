@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_fcd9a6e8b51e.html",
+  "task": "creative-writing",
+  "source_dir": "raw",
+  "source_file": "wavee_fcd9a6e8b51e.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39996,
+  "model": "gpt-5-mini",
+  "elapsed_s": 29.833418500000334,
+  "input_tokens": 12634,
+  "output_tokens": 3445,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "creativity researchers and NLP/ML practitioners building or evaluating automated scoring systems for narrative creativity (multilingual contexts)",
+    "subtask_short": "automated_scoring_of_narrative_creativity",
+    "subtask_description": "Developing and evaluating models (LLMs) that predict human-rated originality scores for short narratives across multiple languages, comparing baselines (DSI, wordcount) and monolingual vs multilingual approaches.",
+    "subtask_keywords": [
+      "creativity",
+      "automated_scoring",
+      "narratives",
+      "multilingual",
+      "llm"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Human-rated originality (target variable)",
+        "description": "Human-rated originality scores are the ground-truth labels the models are trained to predict; originality operationalized as rater judgments.",
+        "guidance": "Use human-rated originality as the primary target for model training and evaluation. Report correlations between model predictions and these human ratings (e.g., Pearson's r) and include prediction error metrics (RMSE). Note that human ratings contain rater disagreement which adds noise and limits achievable model performance."
+      },
+      {
+        "name": "Divergent Semantic Integration (DSI) as baseline originality measure",
+        "description": "DSI scores measure conceptual divergence in text data using distributional semantic modeling and serve as a baseline automated originality measure.",
+        "guidance": "Compute DSI as a baseline to compare against LLM-based predictions. Be aware DSI uses static word embeddings (BERT-derived/word-embedding based) and thus may lack the dynamic task adaptation of fine-tuned LLMs; reported correlations with human-rated originality ranged r = .21 ~ .76 across languages in this work."
+      },
+      {
+        "name": "Wordcount (and character count for Chinese) as baseline predictor",
+        "description": "Raw length (wordcount) of stories often correlates with human-rated originality and can serve as a simple baseline; for Chinese use character count.",
+        "guidance": "Report correlations between wordcount and human-rated originality as a baseline (observed r = .26 ~ .63). Beware wordcount can confound interpretation \u2014 models outperform wordcount by measuring more than length alone."
+      },
+      {
+        "name": "Evaluation metrics: Pearson's correlation and RMSE (with p-values and CIs)",
+        "description": "Model performance quantified using Pearson's product-moment correlation (r) between predictions and human ratings and root mean squared error (RMSE); report p-values and 95% confidence intervals.",
+        "guidance": "Compute correlations at the response level. Provide RMSE alongside r, and report statistical significance (p-values) and 95% confidence intervals to characterize reliability (examples in paper: r values with 95% CIs and RMSE per language/set)."
+      },
+      {
+        "name": "k-fold validation with holdout-responses and holdout-prompts",
+        "description": "Use k-fold cross-validation (the paper used 5 folds) cycling each fold to serve as the holdout-responses set; also include holdout-prompt sets for testing generalization to unseen prompts.",
+        "guidance": "Run training/testing cycles across folds so each fold serves as holdout. Evaluate both holdout-responses and holdout-prompts to assess generalizability across items and across prompt types."
+      },
+      {
+        "name": "Hyperparameter tuning (and reuse vs manual tuning)",
+        "description": "Hyperparameter choices (e.g., epochs, learning rate) affect model performance. The English-only model was manually tuned (25 epochs; lr=5e-5); translated and multilingual models reused those settings.",
+        "guidance": "Tune hyperparameters for the specific training configuration where feasible; reusing hyperparameters from a tuned model is acceptable but note it may affect comparative results. Document tuning decisions and whether tuning was performed for each model variant."
+      },
+      {
+        "name": "Model architecture selection: monolingual vs multilingual LLMs",
+        "description": "Compare monolingual models (RoBERTa-base) with multilingual models (XLM-RoBERTa-base) to isolate the impact of multilingual pretraining on automated originality scoring.",
+        "guidance": "Select comparable architectures where possible so differences reflect pretraining/data rather than architecture. Use a regression head for score prediction. Report performance differences across architectures for the same task/data."
+      },
+      {
+        "name": "Training data strategy: English-only, English-translated multilingual, untranslated multilingual",
+        "description": "Three training strategies: (1) English-only training, (2) compile multilingual stories translated into English, (3) include multilingual stories in original languages.",
+        "guidance": "Compare models trained under these strategies to determine whether translation is necessary. The paper found both English-translated and untranslated multilingual approaches produced strong correlations (r \u2265 .72 across languages). Consider trade-offs (access, translation distortions)."
+      },
+      {
+        "name": "Equal language representation in validation folds",
+        "description": "When performing k-fold validation on multilingual data, ensure each fold contains an equal number of untranslated responses from each language.",
+        "guidance": "Balance language representation across folds to avoid folds dominated by one language, which could bias performance estimates for multilingual evaluation."
+      },
+      {
+        "name": "Generalizability testing across holdout-responses and holdout-prompts",
+        "description": "Assess model generalizability not only to unseen responses but also to unseen prompts; example: high correlations on both holdout-responses and holdout-prompts indicate robust generalization.",
+        "guidance": "Report performance separately for holdout-responses and holdout-prompts; compare with validation set performance to detect overfitting or prompt-specific behavior."
+      },
+      {
+        "name": "Assess and mitigate language representation bias",
+        "description": "Overrepresentation of English (or any language) in training data can bias models toward that language, improving performance there relative to underrepresented languages.",
+        "guidance": "Monitor per-language performance and, if bias is suspected, increase representation of underperforming languages in training data to reduce disparities."
+      },
+      {
+        "name": "Within-dataset cross-response embedding dissimilarity (CRED) to measure prototypicality",
+        "description": "CRED computes embedding dissimilarity between responses within a language dataset; low CRED suggests high similarity (prototypicality) which can make prediction easier.",
+        "guidance": "Compute CRED to quantify how similar responses are within each language dataset; interpret lower CRED as indicating possible easier prediction due to overlap between training and holdout, and higher CRED as indicating a harder test."
+      },
+      {
+        "name": "Measure story complexity via entropy and mean wordcount",
+        "description": "Compute entropy (linguistic randomness) and mean wordcount per language to investigate whether story complexity drives performance differences.",
+        "guidance": "Report these statistics and test for associations with model performance. In this study no clear pattern emerged linking mean wordcount or entropy to performance differences."
+      },
+      {
+        "name": "Performance across score distribution: average vs extreme originality scores",
+        "description": "Models tend to predict average originality scores with lower error and show larger errors for extreme (very high or very low) originality scores.",
+        "guidance": "Analyze prediction error as a function of human-rated score magnitude; be cautious interpreting model performance for extreme creativity cases and consider targeted methods or additional features for extremes."
+      },
+      {
+        "name": "Distinguish originality from quality (effectiveness) in creativity assessment",
+        "description": "Originality and quality are distinct components of creativity; this work focused on originality but acknowledges quality (aesthetics/value) is also necessary for full creativity assessment.",
+        "guidance": "When building automated creativity assessment systems, consider separate models/labels for originality and quality. Prior work suggests LLMs may predict quality differently (sometimes better) than originality; future work should evaluate both components."
+      },
+      {
+        "name": "Account for human rater disagreement as a performance ceiling",
+        "description": "Rater disagreement introduces unpredictable noise in labels, preventing perfect model performance.",
+        "guidance": "Estimate inter-rater reliability and acknowledge its effect on attainable predictive performance. Use Rater reliability metrics (e.g., ICC) and consider collecting more raters or using consensus techniques if label noise is high."
+      },
+      {
+        "name": "Make data and artifacts openly available for replication and improvement",
+        "description": "Openly releasing data enables other researchers to test different models and improve automated scoring methods.",
+        "guidance": "Share datasets, code, and model checkpoints where ethical and legal. This facilitates benchmarking progress as NLP models evolve."
+      },
+      {
+        "name": "Update methods as NLP models advance",
+        "description": "Because newer LLMs may outperform RoBERTa-family models, methods for automated creativity scoring should be revisited and updated over time.",
+        "guidance": "Periodically re-evaluate the chosen modeling approach against newer architectures and training techniques; document model selection rationale and update pipelines accordingly."
+      },
+      {
+        "name": "Language-specific measurement adjustments (e.g., Chinese character count)",
+        "description": "Certain preprocessing/evaluation choices should be language-specific (e.g., use character count for Chinese rather than wordcount).",
+        "guidance": "Adapt tokenization and length metrics to language norms when computing baselines or features to ensure fair cross-linguistic comparisons."
+      },
+      {
+        "name": "Limitations of DSI due to static embeddings",
+        "description": "DSI relies on static word embeddings and therefore may miss dynamic, task-specific associations that fine-tuned LLMs capture.",
+        "guidance": "Use DSI as a useful baseline but expect LLMs fine-tuned on human ratings to surpass it due to contextual and dynamic representation capabilities."
+      },
+      {
+        "name": "Evaluation across many languages for robustness",
+        "description": "Test models across a wide set of languages (the paper used 11) to evaluate multilingual robustness and generality.",
+        "guidance": "Report per-language results and compare to baselines (DSI, wordcount). Use untranslated and translated experiments to determine whether translation is required for good performance."
+      },
+      {
+        "name": "Report detailed statistical breakdowns per language and per fold",
+        "description": "Provide per-language r, RMSE, confidence intervals, and p-values for each model variant and cross-validation fold.",
+        "guidance": "A detailed breakdown clarifies where models succeed or fail, helps identify language-specific issues, and supports transparent comparison to baseline methods."
+      }
+    ]
+  }
+}

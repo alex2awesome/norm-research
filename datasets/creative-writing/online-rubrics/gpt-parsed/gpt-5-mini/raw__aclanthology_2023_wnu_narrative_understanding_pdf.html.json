@@ -1,0 +1,119 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/aclanthology_2023_wnu_narrative_understanding_pdf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13525,
+  "output_tokens": 3568,
+  "elapsed_s": 334.7417408749461,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "computational literary studies / digital humanities researchers and NLP practitioners modeling reader appreciation",
+    "subtask_short": "modeling_literary_quality_prediction",
+    "subtask_description": "Predict perceived literary quality of novels using text-derived features (sentiment arcs, semantic profiles, dynamic measures) and supervised regression models trained on reader ratings (GoodReads).",
+    "subtask_keywords": [
+      "computational_literary_studies",
+      "literary_quality",
+      "sentiment_arcs",
+      "roget_semantics",
+      "regression_models"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use sentiment arcs (VADER) as features",
+        "description": "Perform sentence-level sentiment analysis using VADER to obtain compound sentiment scores and derive a fine-grained sentiment arc for each novel.",
+        "guidance": "Tokenize texts into sentences with NLTK before applying VADER. VADER was chosen because it is lexicon+rules-based and relatively transparent; although developed for social media it exhibits good cross-domain performance and produces arcs comparable to Syuzhet. Manually inspect a selection of novels at sentence and arc levels to validate annotations. Be aware of limitations of word-based packages (e.g., Syuzhet) which VADER sidesteps."
+      },
+      {
+        "name": "Represent sentiment arcs by segmented statistics",
+        "description": "Divide each detrended sentiment arc into 20 segments and calculate the mean sentiment for each segment, plus the overall sentiment mean and standard deviation.",
+        "guidance": "This segmentation creates a coarse-grained representation of the narrative's emotional profile. Detrend the arc before segmentation to capture the overall evolution of the storyline. These 20-segment means plus global mean/std form the sentiment-related feature set."
+      },
+      {
+        "name": "Capture dynamic properties of sentiment arcs (Hurst exponent)",
+        "description": "Compute the Hurst exponent of each sentiment time series to quantify persistence (long-range dependence) of the arc; higher values indicate trend-following behavior.",
+        "guidance": "Hurst estimates have been shown predictive of perceived literary quality in prior work. Use Hurst to capture high-level temporal properties rather than simple static statistics."
+      },
+      {
+        "name": "Capture predictability of arcs (approximate entropy)",
+        "description": "Compute approximate entropy of sentiment arcs to measure the series' regularity and predictability, with lower values indicating more predictable/repetitive patterns.",
+        "guidance": "Approximate entropy complements Hurst by indicating randomness vs regularity; it has been linked to aspects of literary quality perception. Use both dynamic measures to model temporal complexity."
+      },
+      {
+        "name": "Use Roget thesaurus category frequencies for semantic profiling",
+        "description": "Map words in each novel to Roget 'paragraph' categories (semi-topical semantic categories) and compute frequencies to build a topical/semantic profile of the narrative (1044 categories used).",
+        "guidance": "Roget categories aim to capture ideational content and thematic motifs; prior studies found Roget can outperform LIWC/NRC in modeling literary quality. Be aware of linguistic/cognitive validity questions; Roget may act as a proxy for genre/topic diversity. Include many categories as 'minor' categories can contribute to reception."
+      },
+      {
+        "name": "Feature engineering: combine sentiment, dynamic, and Roget features",
+        "description": "Construct a featureset combining the segmented sentiment statistics, dynamic measures (Hurst, approximate entropy), and Roget category frequencies to model perceived literary quality.",
+        "guidance": "Combining semantic content with sentiment dynamics yields better predictive performance than either alone. Do not assume simple sentiment-only models suffice; Roget features significantly improved r^2 in experiments."
+      },
+      {
+        "name": "Dataset selection and corpus composition requirements",
+        "description": "Use a diverse corpus with representation of highly-regarded works across genres and periods; the paper uses the Chicago Corpus of ~9,000 English-language novels (1880\u20132000) selected by number of library holdings.",
+        "guidance": "Inclusion of top-regarded works is essential for models that aim to relate to 'highest level of literary achievement'. Note and account for cultural/geographical biases (Anglophone overrepresentation) and translation effects when generalizing."
+      },
+      {
+        "name": "Quality label: average Goodreads rating as proxy",
+        "description": "Use average book ratings on Goodreads (mean of users' scores) as an operationalization of perceived literary quality / reader appreciation.",
+        "guidance": "Goodreads ratings are an imperfect, mono-dimensional proxy: they conflate genre preferences, reflect reader demographics, and may bias results. Advantages: large, heterogeneous user base and broad coverage. Recommendation: consider multiple, complementary quality indicators (awards, anthologies, canon lists) in future work to adopt a perspectivist approach."
+      },
+      {
+        "name": "Rating count thresholds to improve label reliability",
+        "description": "Train and evaluate models on subsets of texts with minimum numbers of ratings (e.g., >=130 raters) because higher rating counts yield more reliable average scores and improve model performance.",
+        "guidance": "Relying on books with more raters systematically helps model performance; larger sample sizes lead to more accurate and consistent labels. Be aware that this filtering reduces dataset size and may bias toward popular works."
+      },
+      {
+        "name": "Baseline modeling practice",
+        "description": "Include a simple baseline model using only the novels' average sentiment (single feature) to provide a point of comparison for more complex models.",
+        "guidance": "Baselines help contextualize model performance; the sentiment-only baseline is intentionally simplistic and helps interpret gains from richer features."
+      },
+      {
+        "name": "Model architecture: stacked ensemble with SVR, Random Forest, Ridge meta-regressor",
+        "description": "Use a stacked ensemble featuring an SVR and a Random Forest as base regressors and a Ridge regressor as meta-classifier to combine predictions.",
+        "guidance": "SVR handles high-dimensional data and resists overfitting; Random Forests produce stable predictions; Ridge regularizes the meta-level to reduce multicollinearity and overfitting. Authors report these choices outperformed other preliminary models. Note: authors did not perform an exhaustive grid search due to computational cost."
+      },
+      {
+        "name": "Train/test split and evaluation metrics",
+        "description": "Train models on 80% of the corpus and test on 20%; evaluate using r^2 and mean squared error (MSE) to quantify predictive performance.",
+        "guidance": "Report performance across different dataset subsets (e.g., all titles, titles with rating>2.5, titles with many raters) and interpret improved predictability for low-rated titles and for works with more raters."
+      },
+      {
+        "name": "Feature selection: filter rank-based method and interpretability trade-offs",
+        "description": "Apply a filter method (ranking features by relevance, e.g., information gain or correlation with target) to reduce feature set size for interpretability; experiment with different maxima (e.g., max=5000) and measure effects on performance.",
+        "guidance": "Feature selection can improve interpretability but may reduce performance: limiting features to 500 decreased r^2 by ~0.02 points in experiments. The interplay of many 'minor' categories can be important \u2014 aggressive feature pruning can harm predictive power."
+      },
+      {
+        "name": "Manual inspection and validation of annotations and features",
+        "description": "Manually inspect sentiment annotations and selected features at sentence and arc levels to ensure validity and that chosen methods produce sensible arcs (example: inspection of Hemingway).",
+        "guidance": "Automatic annotations should be spot-checked, particularly when using tools adapted from other domains (VADER from social media). Visualize arcs and fits (e.g., polynomial fits) to understand patterns and anomalies."
+      },
+      {
+        "name": "Be cautious of non-textual/extrinsic confounders (author reputation, fandom, genre effects)",
+        "description": "Recognize that non-text-intrinsic factors (author public image, devoted followings, genre preferences) influence reader ratings and can make some titles poorly predictable by text-only models.",
+        "guidance": "Interpret model errors (e.g., worst-predicted canonical works or cult favorites) as potentially driven by extrinsic factors. Consider incorporating extrinsic metadata or multiple evaluation signals to address these confounders."
+      },
+      {
+        "name": "Limitations: absence of stylometric/stylistic features",
+        "description": "Acknowledge that excluding stylistic features (word choice, sentence structure, punctuation) limits the model's capacity to capture 'literariness' and certain aspects of perceived quality.",
+        "guidance": "Plan to integrate syntactic and stylistic measures in future models, since stylistics contributes significantly to the uniqueness and richness of literary works and may improve predictions for canonical/highly literary titles."
+      },
+      {
+        "name": "Interpretation caution: few predictable low-rated titles can inflate performance",
+        "description": "Be aware that a small number of exceptionally low-rated titles with highly predictable sentiment/topical profiles can artificially inflate overall model performance.",
+        "guidance": "Control analyses for low-scoring outliers; report performance with and without such subsets to avoid misleading conclusions about general predictive power."
+      },
+      {
+        "name": "Consider genre-specific analyses and potential proxying",
+        "description": "Investigate genre-specific patterns because Roget categories and the chosen features may behave differently across genres; Roget profiles may act as a proxy for genre/topic diversity.",
+        "guidance": "Perform per-genre modeling or include genre as a covariate to disentangle topical proxies from true quality signals. Genre-fiction may be more mono-topical and thus easier to predict with the given features."
+      },
+      {
+        "name": "Use multiple and richer quality indicators in future work",
+        "description": "Move beyond single-source Goodreads averages by integrating awards, anthologies, canon lists, and other markers to obtain a more perspectivist, multi-faceted account of literary quality.",
+        "guidance": "Combining disparate indicators can help account for different dimensions of 'quality' (prestige, popularity, canonicity). A richer label set can improve interpretability and generalizability."
+      }
+    ]
+  }
+}

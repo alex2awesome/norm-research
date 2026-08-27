@@ -1,0 +1,124 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_fcd9a6e8b51e.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17270,
+  "output_tokens": 4191,
+  "elapsed_s": 1245.6755322911777,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and educators in creative writing, computational creativity, and NLP interested in automated assessment of narrative originality (multilingual)",
+    "subtask_short": "automated narrative originality scoring",
+    "subtask_description": "Developing or evaluating methods (human or automated) to score the originality/creativity of short narratives (five-sentence stories) across multiple languages, including training and validating LLM-based scorers and comparing them to baseline metrics.",
+    "subtask_keywords": [
+      "creative_writing",
+      "narrative",
+      "creativity_assessment",
+      "llm",
+      "multilingual"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Five-Sentence Story Task (FSST) production constraints",
+        "description": "Prompt-based short-story production task where participants are given a three-word prompt (e.g., 'pen, paper, write') and asked to write a creative short story that includes all words in the prompt and is five sentences long.",
+        "guidance": "Use linguistically/culturally accessible prompts; ensure stories include all prompt words and adhere to the five-sentence length. The FSST is intended as a measure of verbal creativity for short narratives."
+      },
+      {
+        "name": "Human subjective scoring (Silvia et al. / derived from CAT)",
+        "description": "Subjective human ratings of narrative creativity using a 1 (very uncreative) to 5 (very creative) scale, derived from the Consensual Assessment Technique and subsequent adaptations (Silvia et al., 2008).",
+        "guidance": "Raters should compare stories to one another (not to an absolute standard). The method supports use of experts or trained non-expert raters; aim for multiple raters per language and compute inter-rater reliability."
+      },
+      {
+        "name": "Rater instructions and practical guidance (Appendix F)",
+        "description": "Specific instructions given to human raters when scoring stories: use 1\u20135 scale, consider overall creativity, and avoid over-focusing on length or language quality.",
+        "guidance": "Consider how creatively the prompt words were used; consider emotive/descriptive/humorous qualities or how much the story 'comes alive.' Use the full 1\u20135 scale; read several stories before starting; you may change ratings; mark clearly invalid or insincere responses as N/A; still rate stories that end mid-sentence. These operational tips help rater calibration and quality."
+      },
+      {
+        "name": "Rater reliability assessment (ICC)",
+        "description": "Use intra-class correlation coefficients (ICC) to quantify inter-rater agreement for ratings within each language/dataset (e.g., ICCs reported .75\u2013.88 indicating strong reliability).",
+        "guidance": "Report the ICC variant used (e.g., ICC3k or ICC2k) and confidence intervals. Strong ICCs support the validity of human ratings; collect multiple raters per language to compute reliable ICCs."
+      },
+      {
+        "name": "Baseline: Wordcount / character count",
+        "description": "Use raw wordcount (or character count for ideographic languages like Chinese) as a simple baseline predictor of originality/creativity.",
+        "guidance": "Wordcount often correlates with human originality ratings (medium-to-large correlations observed). Include as a minimal baseline when evaluating automated scoring methods."
+      },
+      {
+        "name": "Baseline: Divergent Semantic Integration (DSI)",
+        "description": "An unsupervised semantic-distance-based metric for long-form responses: DSI is the average of semantic distances computed between all possible pairs of words in a response, using context-sensitive embeddings.",
+        "guidance": "Extract word embeddings from context-sensitive layers (here, BERT-large layers 6 & 7 were used), compute cosine-based semantic distances for all word pairs, and average to produce a DSI score. Use DSI as an unsupervised baseline for narrative originality\u2014it previously explained large variance in human ratings for short stories but may be less suitable for some long-form phenomena than fine-tuned LLMs."
+      },
+      {
+        "name": "Cross-Response Embedding Dissimilarity (CRED) for dataset diversity",
+        "description": "Compute within-dataset and between-dataset dissimilarity using response-level embeddings (e.g., paraphrase-xlm-r-multilingual-v1) to quantify how semantically/syntactically diverse stories are within or between languages/datasets.",
+        "guidance": "Within-dataset CRED: average 1 \u2212 cosine_similarity across all pairwise response embeddings. Between-dataset CRED: average pairwise dissimilarities between datasets. Use CRED to analyze dataset heterogeneity and relate dataset diversity to model performance."
+      },
+      {
+        "name": "Model output format: continuous originality score (regression)",
+        "description": "Automated scorers should output a continuous originality/creativity value (e.g., via adding a regression head to an LLM) rather than coarse categorical labels.",
+        "guidance": "Train with mean squared error loss against human-rated continuous scores; continuous outputs allow correlation and RMSE evaluation against human ratings."
+      },
+      {
+        "name": "Model evaluation metrics: response-level Pearson correlation and RMSE",
+        "description": "Evaluate automated scorers by computing response-level correlations (Pearson r) between model predictions and human-rated originality scores, and report root mean squared error (RMSE).",
+        "guidance": "Response-level correlations are stricter than participant-level correlations; report confidence intervals and p-values. Use RMSE alongside correlations to communicate absolute prediction error."
+      },
+      {
+        "name": "Generalizability testing (holdout-responses and holdout-prompt)",
+        "description": "Assess model generalizability using held-out responses and a held-out prompt: reserve an unseen prompt (all responses to that prompt) to test whether the model generalizes to new prompts.",
+        "guidance": "Use a dedicated holdout-prompt set in addition to random holdout-responses to probe applicability to external data and unseen prompts; strong correlations on holdout-prompt indicate model generalizability."
+      },
+      {
+        "name": "Train/validation/test split and k-fold cross-validation",
+        "description": "Recommended data-splitting strategies: standard train/val/test split (example used: 70/10/20) for single-language data; k-fold cross-validation (example: 5-fold) for multilingual/smaller-per-language datasets to avoid spurious correlations.",
+        "guidance": "When per-language sample sizes are small, use k-fold validation ensuring each fold contains balanced representation across languages. Use validation folds for hyperparameter tuning and holdout folds for final performance reporting."
+      },
+      {
+        "name": "Hyperparameter tuning guidance (epochs, learning rate, batch size)",
+        "description": "Tune core hyperparameters for fine-tuning transformer models: number of epochs, learning rate, and training batch size, observing their effects on convergence and generalization.",
+        "guidance": "Epochs control number of full passes; learning rate controls update magnitude; batch size affects gradient stability and training speed. Example final setting reported: 25 epochs, learning rate 5e-5 for RoBERTa-base. Manual search over these parameters is recommended following best practices for BERT-like models."
+      },
+      {
+        "name": "Fine-tuning procedure for LLM scorers",
+        "description": "Fine-tune pretrained LLMs (e.g., RoBERTa-base, XLM-RoBERTa-base) by adding a regression head and training on human-rated examples to predict originality scores.",
+        "guidance": "Use mean squared error as training loss; use validation set for hyperparameter tuning; monitor holdout performance for generalizability. For multilingual evaluation, fine-tune on appropriate combinations of English and untranslated multilingual datasets as experimental conditions."
+      },
+      {
+        "name": "Validation of multilingual approaches: translation vs. multilingual model",
+        "description": "Two approaches for multilingual scoring: (1) translate non-English narratives into English and use a monolingual English LLM (e.g., RoBERTa) or (2) fine-tune a multilingual LLM (e.g., XLM-RoBERTa) on narratives in their original languages.",
+        "guidance": "Consider trade-offs: translation enables use of monolingual models but introduces translation noise; multilingual models avoid translation but may exhibit English bias depending on pretraining. Empirically compare both approaches per language and report relative performance."
+      },
+      {
+        "name": "Model selection and accessibility considerations (open-weight vs closed-source)",
+        "description": "Prefer smaller open-weight models (e.g., RoBERTa-base, GPT-2, XLM-RoBERTa-base) for accessibility, reproducibility, and local data protection; closed-source large models (e.g., GPT-3) may yield higher performance but have cost and access limitations.",
+        "guidance": "Document model weights and training procedure to support reproducibility. Note examples: GPT-3 achieved strong performance in prior tasks, but open models performed robustly and are preferable for broad accessibility and local deployment."
+      },
+      {
+        "name": "Training sample size considerations",
+        "description": "Fine-tuned LLMs can perform well even with relatively small labeled datasets; prior studies achieved strong results with a few thousand labeled examples (e.g., 2,000\u20136,000), and in-context learning can work with very few examples.",
+        "guidance": "When labeled data are scarce, consider data augmentation, translation, or in-context learning; report how performance scales with number of training examples."
+      },
+      {
+        "name": "Baseline comparison protocol",
+        "description": "Always compare fine-tuned LLM performance to unsupervised baselines (DSI) and simple heuristics (wordcount) to demonstrate added value of supervised approaches.",
+        "guidance": "Compute and report correlations and RMSE for baselines alongside model predictions for each language and dataset split. Highlight situations where LLMs substantially exceed baselines."
+      },
+      {
+        "name": "Translation procedure for multilingual datasets",
+        "description": "When using translated data, employ a high-quality machine translation tool (the paper used Google Translate) to convert non-English narratives to English prior to applying monolingual scorers.",
+        "guidance": "Acknowledge and investigate translation-induced noise or meaning shifts; where possible, compare translated-model performance to models trained on original-language data to quantify translation effects."
+      },
+      {
+        "name": "Multilingual pretraining coverage consideration",
+        "description": "When selecting a multilingual LLM, verify that its pretraining languages cover the target languages (XLM-RoBERTa was pretrained on ~100 languages and CommonCrawl).",
+        "guidance": "Pretraining coverage may influence performance per language; document the pretraining corpus and assess whether any language-specific biases (e.g., English dominance) may affect scoring."
+      },
+      {
+        "name": "Reporting recommended statistics (descriptive & error analyses)",
+        "description": "Report descriptive statistics (mean wordcounts, DSI means), correlations (with CI and p-values), RMSE, ICCs, and prediction error distributions (e.g., within \u00b12 SD) across languages and folds.",
+        "guidance": "Include appendix materials with per-language breakdowns, error analyses, and dataset statistics (entropy, wordcount) to contextualize model performance and potential language-specific effects."
+      }
+    ]
+  }
+}

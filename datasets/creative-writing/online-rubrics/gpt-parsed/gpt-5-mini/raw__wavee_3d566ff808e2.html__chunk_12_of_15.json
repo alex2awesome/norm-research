@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_3d566ff808e2.html",
+  "task": "creative-writing",
+  "source_dir": "raw",
+  "source_file": "wavee_3d566ff808e2.html",
+  "chunk_idx": 12,
+  "n_chunks": 15,
+  "chunk_chars": 39774,
+  "model": "gpt-5-mini",
+  "elapsed_s": 44.00130474999969,
+  "input_tokens": 13857,
+  "output_tokens": 3694,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "AI/ML researchers and practitioners evaluating large language models' mathematical reasoning (NLP researchers, model developers, benchmarkers)",
+    "subtask_short": "evaluating_llm_math_reasoning",
+    "subtask_description": "Criteria and failure modes for assessing LLMs (here GPT-4) on mathematical problem solving across algebra, geometry, calculus, counting, and modeling; includes categories of typical mistakes, experimental tasks, and suggestions for prompting or fine-tuning to improve reliability.",
+    "subtask_keywords": [
+      "llm",
+      "math_reasoning",
+      "evaluation",
+      "benchmarking",
+      "failure_modes"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Accuracy (exact-match percentage)",
+        "description": "Accuracy means that the percentage of the input instances where the output is an exact match.",
+        "guidance": "Used as the primary measured metric in the tables (e.g., percentage correct for tasks as L increases). Example: keeping track of array r up to 54% (exact-match). Report accuracy across varying problem lengths to reveal degradation."
+      },
+      {
+        "name": "Arithmetic mistakes",
+        "description": "GPT-4 (and older models) still struggle with arithmetic mistakes, whether working with concrete numbers or abstract expressions.",
+        "guidance": "Commonly arises when the model skips over calculation steps rather than breaking them down. Example shown where expanding and simplifying squares produced an incorrect polynomial. Mitigation: prompt to break down calculations into smaller atomic steps; inspect intermediate operations."
+      },
+      {
+        "name": "Attention errors / skipping steps",
+        "description": "Many failures come from localized mistakes attributable to errors in attention such as skipping steps in calculations or reasoning.",
+        "guidance": "These manifest when the model performs several atomic manipulations in one step. Systematic inspection (manually checking instances) shows the vast majority of certain mistakes (\u226590% in one experiment) are due to skipped merging steps. Countermeasure: force the model to show intermediate steps and merge like terms one at a time."
+      },
+      {
+        "name": "Granularity of intermediate steps (step-by-step decomposition)",
+        "description": "Breaking down the calculation into smaller steps typically improves correctness; if the model is prompted to do so it often arrives at correct solutions.",
+        "guidance": "Prompt examples: explicitly instructing the model to 'Simplify the equation, try to move each term step by step' produced a correct simplification where the one-shot expansion failed. Note: simply saying 'think step by step' is not always well-defined and can be ambiguous in context."
+      },
+      {
+        "name": "Merging like terms / combining atomic manipulations",
+        "description": "Performing several atomic manipulations (e.g., combining many like terms) in one step frequently leads to errors.",
+        "guidance": "Anti-pattern: merging multiple coefficients in a single line. Recommended: instruct the model to 'merge like terms one by one' or show intermediate sums per power of x. The paper's synthetic tasks explicitly probe this behavior (e.g., expanding multiple squared binomials then summing coefficients)."
+      },
+      {
+        "name": "Counting errors / limited counting capacity",
+        "description": "LLMs struggle with counting tasks; counting accuracy drops as sequence length increases (e.g., from length 5 to 10).",
+        "guidance": "Experiment: count distinct elements in sequences A1..AL where answers range L/2..L-1; tested L \u2208 {5,10,15,25} and digit-length k \u2208 {2,7,12}. Results show substantial accuracy drop with length. Suggested mitigation: incorporate a dedicated counting component into architecture or use specialized procedures rather than pure autoregressive text generation."
+      },
+      {
+        "name": "Reverse reasoning and verification (conclusion-first vs bottom-up)",
+        "description": "Models often present a conclusion before the reasoning (conclusion-first style) and, if the inferred conclusion is wrong, they tend to fabricate justifications rather than revise the conclusion.",
+        "guidance": "This leads to incoherent or contradictory local steps (examples include deriving '2 \u2264 0' to justify a wrong conclusion). Performance improves when the model produces bottom-up arguments (write down steps first, then draw conclusion). Encourage prompts and training that favor bottom-up derivations and explicit internal verification."
+      },
+      {
+        "name": "Local logical consistency / verification",
+        "description": "The model can favor matching a stated conclusion over checking local consistency of intermediate logic; it may produce internally inconsistent steps to fit a wrong final answer.",
+        "guidance": "Detect by checking intermediate claims against earlier steps; encourage the model to self-verify steps, perform sanity checks, or run a verification pass. Figure D.1 demonstrates how starting with a wrong conclusion can cascade into incoherence."
+      },
+      {
+        "name": "Method selection and use of appropriate mathematical techniques",
+        "description": "Correctness depends on choosing appropriate methods (e.g., substitution for polynomials, vector methods in geometry, Pythagorean theorem, Lagrange multipliers for constrained optimization).",
+        "guidance": "Examples: GPT-4 correctly used vector notation for a triangle/vector problem and Lagrange multipliers for minimizing distance under a constraint; failures often reflect inappropriate or incoherent method choice (as in ChatGPT examples). Evaluation should check whether chosen method is relevant and correctly applied."
+      },
+      {
+        "name": "Breadth across mathematical domains",
+        "description": "Evaluate model performance across branches (algebra, geometry, calculus, mathematical modeling) rather than a single topic, since capabilities vary by domain.",
+        "guidance": "The paper presents examples in algebra, geometry, calculus, and modeling to show relative strengths (e.g., geometry and vector reasoning can be handled well despite lack of diagrams) and weaknesses. Use representative problems from multiple subfields to characterize overall competence."
+      },
+      {
+        "name": "Symbolic exactness vs numerical approximation",
+        "description": "Prefer exact symbolic manipulation to avoid introducing small numeric inaccuracies; unnecessary numeric estimates can degrade correctness.",
+        "guidance": "Example: GPT-4 took a square root and later squared it, using numerical estimates and producing slight inaccuracies when exact symbolic manipulations would have sufficed. Scoring should penalize unnecessary numeric approximations when an exact symbolic route exists."
+      },
+      {
+        "name": "Handling unstructured or diagram-requiring problems (mental representation of diagrams)",
+        "description": "Assess the model's ability to reason about geometric or diagram-heavy problems without explicit visual diagrams.",
+        "guidance": "GPT-4 can sometimes succeed by mentally representing geometry (using complex numbers or vectors) and producing valid configurations up to rotation/dilation. Test with problems that usually require sketches to probe this capability."
+      },
+      {
+        "name": "Evaluation methodology and synthetic probing tasks",
+        "description": "Construct synthetic tasks (e.g., random coefficients, varying expression length L) and manual inspection to attribute error causes (arithmetic vs attention).",
+        "guidance": "Example methodology: sample L \u2208 [5], ai \u2208 {\u22121,1}, bi, ci \u2208 {\u22125..5} and ask model to expand and report |a|+|b|+|c|; manually inspect errors (\u226590% attributable to skipping steps). Use controlled parameter sweeps (L, k) and report exact-match accuracy per setting."
+      },
+      {
+        "name": "Suggested training/fine-tuning interventions",
+        "description": "Research question: is there an efficient way to train or fine-tune LLMs so they break down calculations into smaller steps, improving arithmetic accuracy?",
+        "guidance": "Page raises possibilities such as fine-tuning or reinforcement learning phases (e.g., instruct-style RL) to encourage stepwise decomposition; evaluation should measure whether such interventions reduce skipping-step errors and improve verification behavior."
+      }
+    ]
+  }
+}

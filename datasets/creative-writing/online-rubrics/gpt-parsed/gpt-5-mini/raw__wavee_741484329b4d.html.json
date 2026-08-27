@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/creative-writing/online-rubrics/raw/wavee_741484329b4d.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 18087,
+  "output_tokens": 3701,
+  "elapsed_s": 1152.9857131249737,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP/ML researchers and engineers building or evaluating LLM-based story evaluators and story generation systems",
+    "subtask_short": "LLM-based story evaluation",
+    "subtask_description": "Designing, training, and evaluating an LLM-based story evaluator (reward model) that outputs score-aligned Chain-of-Thought rationales for pairwise story comparisons and can be used to guide story generation via RL. Focuses on multi-aspect scoring, CoT synthesis/evolution, and use as a reward model.",
+    "subtask_keywords": [
+      "story_evaluation",
+      "llm",
+      "pairwise_comparison",
+      "chain_of_thought",
+      "reward_model",
+      "nlg"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pairwise comparison format",
+        "description": "Use pairwise comparison (evaluating two stories Sa, Sb together) rather than pointwise scoring, because pairwise comparison exhibits significantly higher rating consistency and captures nuanced human preferences.",
+        "guidance": "The framework is grounded in pairwise comparison; training and data synthesis produce pairs with score-aligned CoT. Empirical claim: pairwise CoT significantly outperforms pointwise CoT across models and datasets (see ablation and Table 3)."
+      },
+      {
+        "name": "Multi-dimensional evaluation aspects and score range",
+        "description": "Evaluate stories across multiple aspects k (examples: Creativity, Surprise) and produce per-aspect scores ya,k and yb,k with y \u2208 [1,5].",
+        "guidance": "Aspects are weighted by \u03b1k in the reward function. The evaluator must handle K aspects and produce per-aspect numeric scores; datasets (HANNA/StoryER/OpenMEVA) provide multi-dimensional annotations used for training and evaluation."
+      },
+      {
+        "name": "Score-aligned Chain-of-Thought (CoT) rationale",
+        "description": "The evaluator should output, for a pair and an aspect k, a textual rationale Ck that logically justifies the assigned scores: R\u03d5(Sa, Sb, k) = (Ck; ya,k; yb,k).",
+        "guidance": "Training data tuples are (Sa, Sb, k, Ck, ya,k, yb,k). CoTs must be aligned with the final numeric judgments and provide step-by-step reasoning to improve fidelity and explainability."
+      },
+      {
+        "name": "CoT logical consistency (Self-Rulecheck)",
+        "description": "A CoT must have a final conclusion explicitly consistent with the ground-truth scores; the pipeline applies a deterministic ParseScores(\u00b7) to extract final scores from the CoT and checks equality with targets.",
+        "guidance": "Operator Frule: CoT passes only if extracted scores (y') exactly match ground truth (y*). This is applied at multiple stages (e.g., initial rule-check and a subsequent rule-check after refinement)."
+      },
+      {
+        "name": "CoT clarity and improved reasoning flow (Self-Refinement)",
+        "description": "CoTs should be refined to improve logical flow and clarity while preserving the original reasoning and final conclusion.",
+        "guidance": "Operator Frefine uses a refinement agent (Arefine) to produce C'i,k from Ci,k; refined candidates replace originals for subsequent filtering. Emphasize preserving original reasoning content while enhancing readability and structure."
+      },
+      {
+        "name": "CoT robustness via adversarial contradiction detection (Self-Attack)",
+        "description": "A CoT is robust if, when the final scores are altered to contradict its rationale, the model (acting as a judge) detects the inconsistency.",
+        "guidance": "Operator Fattack: create corrupted version with contradictory final scores and prompt the model (agent Aattack) to detect the contradiction. CoTs that fail to expose the injected contradiction are filtered out."
+      },
+      {
+        "name": "CoT confidence selection (Self-Confidence)",
+        "description": "Select CoTs that lead the model to predict the ground-truth scores with high confidence: the logit corresponding to the ground-truth score must be maximal for each story.",
+        "guidance": "Operator Fconfidence inspects model logits L(y|S, C) and requires argmax_y L = y* for Sa and Sb. This ensures selected CoTs support confident model predictions."
+      },
+      {
+        "name": "Multi-persona CoT synthesis for diversity",
+        "description": "Synthesize CoTs using a multi-persona strategy where each persona (e.g., academic, artistic, sharp-tongued) generates candidate derivations to foster diverse reasoning styles and viewpoints.",
+        "guidance": "Define a set of personas P = {p1,...,pm} and prompt LLMself with each persona to produce candidate (Cm_k; ya,k; yb,k), forming a large Dpool of diverse derivations; diversity helps cover varied human perspectives."
+      },
+      {
+        "name": "CoT evolution & selection pipeline sequencing",
+        "description": "Apply a multistage evolutionary selection pipeline (P = [Frule, Frefine, Frule, Fattack, Fconfidence]) to filter noisy synthetic CoTs and produce a high-quality final pool Dfinal.",
+        "guidance": "Candidates must survive every operator in sequence; refinement operators modify CoTs (and Frule re-checks consistency post-refinement). The pipeline is algorithmically specified (Algorithm 1)."
+      },
+      {
+        "name": "Parseable numeric scoring in CoT",
+        "description": "CoTs must contain an explicit, parseable final score statement so a deterministic ParseScores function can extract numeric scores for rule-checking and downstream use.",
+        "guidance": "Scoring tokens must be unambiguous (e.g., '[1, 3]') so automatic parsing and Frule can deterministically validate alignment between rationale and numeric labels."
+      },
+      {
+        "name": "Reward composition for generation (Radv, Rabs, Rlen)",
+        "description": "When using the evaluator as a reward model, compute reward as R(Si, Sgt) = Radv + Rabs + Rlen, combining relative advantage, absolute quality, and length reward components.",
+        "guidance": "Radv measures improvement over a group reference (weighted sum of yi,k \u2212 ygt,k), Rabs measures absolute scores (weighted sum of yi,k), and Rlen is a length-based term w3\u00b7f(len(Si)). Weights w1,w2,w3 and aspect weights \u03b1k modulate importance."
+      },
+      {
+        "name": "Use of a stable high-quality anchor reference (Sgt)",
+        "description": "Compute relative advantage and some reward terms against a pre-generated, high-quality reference story Sgt (anchor) to provide a stable baseline for rewards.",
+        "guidance": "Sgt is generated from the base model and serves as a common comparator across candidate group {S1...SG} sampled by the policy for GRPO updates."
+      },
+      {
+        "name": "Aspect weighting in reward (\u03b1k) and hyperparameters (wj)",
+        "description": "Control the importance of each evaluation aspect via weights \u03b1k and tune global reward component weights w1,w2,w3 to shape generator optimization.",
+        "guidance": "Designers must set \u03b1k to reflect relative priority of aspects (e.g., Surprise vs Coherence) and choose wj to balance relative vs absolute vs length incentives."
+      },
+      {
+        "name": "GRPO training objective and safe optimization",
+        "description": "Optimize policy with Group Relative Policy Optimization (GRPO): use group-level advantage \u02c6Ai = ri \u2212 (1/G) sum rj, apply token-level policy ratios \u03c1i,t, clipping (clip(\u03c1,1\u2212\u03f5,1+\u03f5)), and a KL penalty \u2212\u03b2 DKL(\u03c0\u03b8 || \u03c0ref).",
+        "guidance": "Implement token-level advantages (\u02c6Ai,t = \u02c6Ai), clipping, and KL control to limit policy drift; be aware of reward hacking risks when applying RL to open-ended generation."
+      },
+      {
+        "name": "Evaluation metrics for evaluator accuracy",
+        "description": "Assess agreement between model-predicted ratings and human judgments using Pearson correlation (r), Spearman rank correlation (\u03c1), Kendall's \u03c4, Mean Squared Error (MSE) on normalized scores, and F1-Score.",
+        "guidance": "Report multiple correlation coefficients (\u2191 better) and MSE (\u2193 better) to provide complementary views of correlation, ranking, and absolute accuracy; follow prior-work protocols (e.g., Coke)."
+      },
+      {
+        "name": "Human evaluation protocol for generated stories",
+        "description": "Use expert human judges (panel of four professional screenwriters) who rate generated stories on a 1\u20135 scale across six dimensions: Relevance, Coherence, Empathy, Surprise, Engagement, and Complexity. Report Average Score and Win Rate.",
+        "guidance": "Average Score: mean across six dimensions for each model. Win Rate: head-to-head comparisons against baseline generated stories and human dataset stories. Use domain experts for nuanced judgments."
+      },
+      {
+        "name": "No-reference / reference-free evaluation preference",
+        "description": "Prefer evaluators that do not require a ground-truth reference text, since creative scenarios often lack a single correct reference and reference-based methods are impractical.",
+        "guidance": "The paper emphasizes that models like TIGERScore/InstructScore requiring references are constrained; EvolvR is reference-free and thus more applicable to open-ended creative evaluation."
+      },
+      {
+        "name": "Use official dataset splits and zero-shot generalization testing",
+        "description": "Follow official train/test splits for benchmarks (StoryER, HANNA) to ensure reproducibility; report zero-shot performance on additional benchmarks (OpenMEVA) to evaluate generalization.",
+        "guidance": "Adhere to publicly released splits; include cross-dataset zero-shot tests because OpenMEVA uses a single holistic score and is a more challenging generalization check."
+      },
+      {
+        "name": "Component ablation and incremental validation",
+        "description": "Validate the contribution of system components (multi-persona, rule-check, refinement agent, attack agent, confidence agent) via incremental ablation studies to quantify each module's effect on correlation metrics.",
+        "guidance": "Conduct controlled experiments adding components one-by-one and report Pearson/Spearman/Kendall to demonstrate individual and synergistic gains (see Table 6)."
+      },
+      {
+        "name": "Avoid reward hacking and monitor optimization artifacts",
+        "description": "When applying RL (GRPO) with evaluator rewards, monitor for reward hacking and limited performance gains; careful reward engineering and evaluation are required to prevent optimization shortcuts.",
+        "guidance": "The paper notes GRPO applied directly to base models yields limited gains in some cases due to reward hacking; include diagnostics and safeguards in RL training."
+      }
+    ]
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "source_file": "/Users/spangher/Projects/stanford-research/norm-research/datasets/claim-matching/guidelines/raw/academic/citation_integrity_nlp_annotation_scheme.md",
+  "domain": "academic",
+  "title": "Assessing citation integrity in biomedical publications: corpus annotation and NLP models",
+  "extracted": {
+    "subtask_short": "8-way citation accuracy label taxonomy",
+    "subtask_description": "Builds a labeled corpus and models for automatically detecting whether a citing sentence's claim is accurately supported by its cited reference article, via an eight-category annotation scheme collapsible to a 3-way SUPPORT/REFUTE/NEI scheme.",
+    "rubrics_metrics": [
+      {
+        "name": "ACCURATE - citation context consistent with evidence segment",
+        "description": "'The citation context is consistent with an evidence segment in the reference article.' There exists a sentence/segment in the cited paper that entails the citing sentence's claim.",
+        "guidance": ""
+      },
+      {
+        "name": "CONTRADICT - citation context contradicts reference",
+        "description": "'The citation context contradicts a statement made in the reference article.' The cited source actively says the opposite of what's claimed. A major error, taking precedence over any minor-error label.",
+        "guidance": ""
+      },
+      {
+        "name": "NOT_SUBSTANTIATE - relevant reference fails to back the specific claim",
+        "description": "'The citation is relevant to the content of the reference article but the cited reference fails to substantiate all statements made in the citing paper.' Topically on-target, but the specific claim isn't actually backed by anything in the source.",
+        "guidance": "A common real-world failure mode: right paper, wrong/absent evidence. Distinct from IRRELEVANT - 'the right paper but no actual evidence for this specific claim' is a materially different and probably more common failure mode than 'wrong paper entirely.'"
+      },
+      {
+        "name": "IRRELEVANT - no information in reference bears on claim",
+        "description": "'There is no information in the reference article relevant to the citation.' Wrong source entirely; nothing in the cited work bears on the claim.",
+        "guidance": ""
+      },
+      {
+        "name": "OVERSIMPLIFY - findings oversimplified or overgeneralized",
+        "description": "'The findings of the reference article are oversimplified or overgeneralized.' The cited evidence is real but the citing sentence stretches it beyond its actual scope/conditions - e.g., turning a conditional/qualified finding into an unconditional one.",
+        "guidance": "A very common quotation-error subtype."
+      },
+      {
+        "name": "MISQUOTE - numbers or percentages misquoted",
+        "description": "'The numbers or percentages are misquoted.' A specific quantitative distortion category, kept separate from qualitative oversimplification.",
+        "guidance": ""
+      },
+      {
+        "name": "INDIRECT - reference is not the original source",
+        "description": "'The evidence segment includes a citation to other articles, indicating that the reference article is not the original source.' The cited paper is itself just citing someone else for the evidence (secondary/chained sourcing), mirroring the 'indirect reference' category found in the medical quotation-accuracy literature.",
+        "guidance": ""
+      },
+      {
+        "name": "ETIQUETTE - ambiguous citation style",
+        "description": "'The citation style is ambiguous and it is unclear what is being cited from the reference article.' A citation-practice/clarity problem (e.g., citing an entire paper for a specific number) rather than a truth-value problem per se.",
+        "guidance": ""
+      },
+      {
+        "name": "Collapsed 3-way mapping for claim-verification modeling",
+        "description": "Support = ACCURATE + INDIRECT (indirect/secondary sourcing is still counted as 'supported,' just flagged for provenance, not truth). Refute = CONTRADICT + NOT_SUBSTANTIATE + OVERSIMPLIFY + MISQUOTE + ETIQUETTE. Not Enough Information = IRRELEVANT.",
+        "guidance": "The Refute bucket lumps genuine contradiction together with overgeneralization, quantitative misquotation, and mere citation-style ambiguity into one bucket - a modeling simplification worth flagging if reusing this mapping, since these are substantively different failure types."
+      },
+      {
+        "name": "Major-error precedence over minor-error labeling",
+        "description": "The scheme is organized hierarchically: one 'accurate' label, three major-error labels, and four minor-error labels; if a citation instance qualifies for a major-error label, that takes precedence over any minor-error label in annotation.",
+        "guidance": ""
+      },
+      {
+        "name": "Evidence-sentence retrieval as the labeling bottleneck",
+        "description": "Evidence-sentence retrieval (finding which sentence(s) in the cited paper are the relevant evidence) achieved only κ = 0.20 (phase 1) → 0.37 (phase 2) agreement, and accuracy-label assignment (choosing among the 8 categories) κ = 0.18-0.31, both far below the κ = 0.96 for citation-context identification (finding the sentence(s) that constitute the citing claim).",
+        "guidance": "Even trained domain-expert annotators achieve only fair agreement on fine-grained accuracy labeling and on locating supporting evidence within a long source. Oracle condition (given gold evidence sentences) reaches Macro-F1 0.78 vs. realistic-retrieval Macro-F1 0.52, showing most of the current performance ceiling is bottlenecked by evidence retrieval, not the final support/no-support judgment itself."
+      }
+    ]
+  }
+}
