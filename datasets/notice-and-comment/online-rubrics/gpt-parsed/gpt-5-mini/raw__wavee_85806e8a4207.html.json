@@ -1,0 +1,109 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_85806e8a4207.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 10124,
+  "output_tokens": 4471,
+  "elapsed_s": 1625.234702249989,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP / argument mining researchers and engineers developing or evaluating argument classification systems",
+    "subtask_short": "argument_classification_for_nlp",
+    "subtask_description": "Designing, training, and evaluating models to classify argumentative components and relations (e.g., claims/premises, support/attack/no-relation) using compact transformer models (BERT/DistilBERT) with selective LLM (GPT-4) refinement.",
+    "subtask_keywords": [
+      "argument_mining",
+      "argument_classification",
+      "nlp",
+      "bert",
+      "llm_refinement"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Argument mining subtask decomposition",
+        "description": "The whole task can be decomposed into three main sub-tasks: (1) identification of argument components \u2014 distinguishing argumentative propositions from non-argumentative propositions (segmentation); (2) identification of clausal properties \u2014 finding premises or conclusions among the argumentative propositions; (3) identification of relational properties \u2014 given two argumentative propositions, identify which type of relation links them (support, attack, no relation).",
+        "guidance": "Design datasets, models, and evaluation to reflect these three distinct subtasks (component detection, clause-type classification, pairwise relation classification). Each subtask can be solved with classification models and may require different inputs (e.g., single sentence vs. (thesis, claim) pair)."
+      },
+      {
+        "name": "Use diverse, comparative datasets",
+        "description": "Conduct comparative studies across a wide spectrum of datasets rather than on a single dataset; this paper uses Args.me, UKP, and US2016.",
+        "guidance": "Cross-dataset evaluation helps reveal model generality and dataset-specific issues. When possible include multiple domains (debate portals, online comments, debate transcripts)."
+      },
+      {
+        "name": "Dataset label schemes and class definitions",
+        "description": "Adopt and report the dataset-specific label schemes: US2016 uses RA (Inference), CA (Conflict), MA (Rephrase), NO (No Relation); UKP uses supporting / opposing / non-argument; Args.me annotations include conclusions and premises, split into PRO premises and CON premises (and PRO/CON conclusions).",
+        "guidance": "Be explicit about the label set used for each dataset and ensure the model output dimension matches the number of classes. Report experiments both with and without conclusion context where relevant."
+      },
+      {
+        "name": "Annotator agreement threshold",
+        "description": "For UKP the sentences were annotated by 7 annotators and 'for each classification, it was necessary to achieve agreement, as measured by Cohen\u2019s kappa (\u03ba), at the level of 0.723; this exceeds the commonly used threshold of 0.7 for assuming the results are reliable.'",
+        "guidance": "Use Cohen's kappa (or another agreement measure) and target \u03ba \u2265 0.7 as a minimum reliability threshold for annotation quality; report inter-annotator agreement."
+      },
+      {
+        "name": "Compact language model classifier architecture",
+        "description": "Classifiers are built by adding fully connected layers at the output of transformer-based models (DistilBERT, BERT). Two fully connected layers are added at the top of the Transformer blocks; the output size of the last fully connected layer equals the number of classes to recognize. (C_\u0398c(X) = f_\u03b82(f_\u03b81(T_\u0398(X))))",
+        "guidance": "When using CLMs, implement small classification heads (e.g., two dense layers) on the transformer encoder output; ensure final layer dimension equals class count and follow standard fine-tuning steps (compute loss, backpropagate gradients, update \u0398c)."
+      },
+      {
+        "name": "Hybrid CLM + LLM refinement algorithm (uncertainty routing)",
+        "description": "Train a compact classifier C_\u0398c on the dataset; compute per-instance uncertainty/loss differences \u039b = {|C_\u0398c(Xb) - Yb|} across training (or validation) to select a threshold \u03b3; for instances with model uncertainty above \u03b3, route them to a large language model (LLM) (ChatGPT-4) for re-evaluation; otherwise use the CLM's prediction. (Algorithm 1)",
+        "guidance": "Implement a pipeline that (1) builds/trains the base CLM, (2) computes an uncertainty measure for instances, (3) chooses \u03b3 to select the top-k uncertain instances, and (4) delegates those to an LLM while letting CLM handle the rest. Log delegation rates and downstream effect on accuracy."
+      },
+      {
+        "name": "Gamma selection / delegation rate guideline",
+        "description": "Set \u03b3 so that a limited fraction of instances with highest uncertainty are delegated to the LLM. Example settings used: Args.me \u2014 approximately 20% of arguments delegated; US2016 \u2014 \u03b3 set so that 25% of the data with lowest confidence were delegated to ChatGPT-4.",
+        "guidance": "Tune \u03b3 (delegation fraction) to trade off improved accuracy versus LLM usage cost. Typical explored ranges in this work were ~20\u201325% of highest-uncertainty examples. Report the chosen \u03b3 and its effect on both accuracy and LLM call volume."
+      },
+      {
+        "name": "LLM prompting template for refinement",
+        "description": "Use a simple input-output prompting template for GPT-4: \"This is a thesis '...'. And this is a claim '...'. Is the claim an argument for or contra the thesis? Write a one-sentence answer.\"",
+        "guidance": "Provide both thesis and claim as input (rather than claim alone) \u2014 experiments showed better results when the argument and a thesis were given as input. Keep the prompt concise and task-focused; consider more advanced prompting later (e.g., Tree of Thoughts) for improved reasoning."
+      },
+      {
+        "name": "Evaluation metrics to report",
+        "description": "Report Top-1 accuracy and F1 (mean F1 where appropriate) as primary evaluation metrics (tables show top1 and F1 across datasets and models).",
+        "guidance": "Provide both Top-1 accuracy and class-balanced F1 (or mean F1) to capture overall correctness and per-class performance; show results per-dataset and aggregated (e.g., mean F1 across thematic subsets)."
+      },
+      {
+        "name": "Include context (thesis/conclusion) when available",
+        "description": "Providing an argument together with its thesis (conclusion) as input produced better results in experiments than providing only the argument text.",
+        "guidance": "When dataset affords a thesis/conclusion, include it in the model input for classification tasks (e.g., pair (thesis, claim)); compare performance with argument-only inputs and report gains."
+      },
+      {
+        "name": "Benchmark and expected performance improvements",
+        "description": "The hybrid BERT+ChatGPT-4 model outperformed DistilBERT and BERT standalone models across datasets; improvements reported often exceeded ~10% in F1 and substantial Top-1 gains (e.g., Args.me top1: DistilBERT 65.1 \u2192 BERT 76.22 \u2192 BERT+ChatGPT-4 85.87; F1: 68.9 \u2192 71.5 \u2192 87.2).",
+        "guidance": "Use the hybrid approach as a baseline when reporting results; report absolute values and percentage improvements over base CLMs. Provide per-dataset numbers and the delegation rate used."
+      },
+      {
+        "name": "Common LLM error modes to analyze and report",
+        "description": "Observed GPT-4 failure modes include: difficulty processing logical connectives; failure to detect sarcasm/irony; incorrect classification on sentences with multiple negations; mistakes arising from context mismatch (issues placed in atypical contexts); cases where the LLM contradicts itself when asked to justify an incorrect answer.",
+        "guidance": "Perform qualitative error analysis on LLM-refined predictions, document typical failure patterns with examples, and consider these patterns when designing prompts and post-processing checks."
+      },
+      {
+        "name": "Dataset quality and label noise considerations",
+        "description": "Some datasets contain incorrect or controversial human labels (e.g., UKP contains ~10% incorrect/problematic classifications). In some such cases, GPT's evaluations appeared more consistent with reality.",
+        "guidance": "Assess dataset label quality; consider auditing or relabeling noisy subsets; report label-noise estimates and analyze how label noise affects both CLM and LLM behavior."
+      },
+      {
+        "name": "Data size effect on fine-tuning",
+        "description": "Results are generally better for the largest subsets (more training examples). The paper notes better results for larger UKP thematic subsets (e.g., abortion, nuclear energy) because 'the model has a larger number of training courses, which allows it to better perform the fine-tuning process.'",
+        "guidance": "Expect performance to scale with available labeled data. When possible, augment smaller domains or perform transfer/cross-domain learning; report per-subset sizes alongside performance."
+      },
+      {
+        "name": "Efficiency / resource trade-offs",
+        "description": "Compact language models (CLMs) have fewer parameters, making them faster to run and easier to deploy in resource-constrained environments; LLMs are computationally expensive. The hybrid approach aims to minimize LLM usage by invoking the LLM only for a selected subset of uncertain inputs.",
+        "guidance": "Design systems to prioritize CLM inference and selectively call LLMs for uncertain cases to reduce latency and cost. Report compute and latency trade-offs as well as total percentage of instances delegated to LLM."
+      },
+      {
+        "name": "Reproducibility: report compute environment",
+        "description": "All experiments were executed on a workstation equipped with Nvidia Tesla V100-SXM2-32GB GPUs.",
+        "guidance": "Report hardware used for training and inference (GPU type and memory) to aid reproducibility and to contextualize training/fine-tuning speed claims."
+      },
+      {
+        "name": "Consider future improvements in LLM prompting and open-source options",
+        "description": "Future work recommends exploring open-source large models (e.g., Llama-2) and more advanced prompting techniques (e.g., Tree of Thoughts) to enhance GPT-based refinement.",
+        "guidance": "When extending the pipeline, evaluate open-source LLMs for cost/accessibility and test structured prompting or multi-step reasoning prompts to reduce LLM error modes and improve reasoning on complex argument structures."
+      }
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_853dba289154.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 7956,
+  "output_tokens": 3161,
+  "elapsed_s": 1598.7740227920003,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in NLP/financial text analysis (central bank communication analysts)",
+    "subtask_short": "sentiment_analysis_of_fomc_minutes",
+    "subtask_description": "Methods and evaluation criteria for sentence-level sentiment analysis of FOMC meeting minutes, including dataset preparation, annotation aspects, model selection, and performance metrics.",
+    "subtask_keywords": [
+      "sentiment_analysis",
+      "fomc",
+      "financial_text",
+      "nlp",
+      "evaluation_metrics"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Pre-processing pipeline (splitting, stopword removal, filtering, inspection)",
+        "description": "The pre-processing steps used in this study included four main stages: splitting, removing stopwords, filtering for short-length sentences, and inspection.",
+        "guidance": "Split longer paragraphs into individual sentences to enable sentence-level analysis; remove stopwords that do not carry significant meaning; filter out sentences too short to be meaningful (typically those with fewer than 8 words or 43 characters); conduct manual inspection to identify errors introduced by automated steps."
+      },
+      {
+        "name": "Short-sentence filtering threshold",
+        "description": "Filter out sentences that were too short to provide meaningful insights.",
+        "guidance": "Typically exclude sentences with fewer than 8 words or fewer than 43 characters."
+      },
+      {
+        "name": "Annotation aspects (Growth / Employment / Inflation)",
+        "description": "During labeling, three key aspects of FOMC minutes were considered: Growth, Employment, and Inflation.",
+        "guidance": "Annotators assign sentiment labels per aspect (e.g., Growth, Employment, Inflation) because FOMC sentences can convey different sentiments for different economic aspects; use these aspect labels as the basis for 'Actual sentiment' ground truth."
+      },
+      {
+        "name": "Manual annotation as gold standard ('Actual sentiment')",
+        "description": "Researchers meticulously annotated sentences (1,065 sentences) to serve as the 'Actual sentiment' for evaluation.",
+        "guidance": "Use rigorous human labeling, accounting for domain-specific meanings and multiple aspects, as the evaluation benchmark for model comparison."
+      },
+      {
+        "name": "Aggregate/average aspect scores to determine overall sentiment",
+        "description": "To compare model performance, the study computed the average sentiment scores of three aspects and categorized the result as the overall sentiment.",
+        "guidance": "Averaging aspect-level sentiment scores (e.g., Growth, Employment, Inflation) can provide a more accurate overall sentiment for sentences where different aspects have different polarities (example: average of -0.33 categorized as Negative)."
+      },
+      {
+        "name": "Model/domain training-data suitability",
+        "description": "Model performance depends on the compatibility between the model's training data and the target domain; FinBERT was trained on datasets like Financial PhraseBank and FiQA and may not be well-suited for FOMC minutes.",
+        "guidance": "Assess whether pretraining/fine-tuning corpora reflect the textual style and vocabulary of FOMC minutes; domain mismatch can cause extreme or directionally incorrect predictions (example: FinBERT scoring -0.964 on a sentence interpreted as positive)."
+      },
+      {
+        "name": "Account for FOMC text characteristics (template-based, low emotional content, condensed economic info)",
+        "description": "FOMC minutes follow templates, avoid expressing emotion, and are highly condensed with dense economic information.",
+        "guidance": "Design models and preprocessing to handle low affect/emotion, templated phrasing, and compact sentences; expect basic language models to struggle without domain-aware features or contextual matching."
+      },
+      {
+        "name": "Contextual matching between syntactic elements",
+        "description": "Propose 'contextual matching' between nouns and verbs, adjectives and verbs, adverbs and nouns, etc., to better capture language nuances.",
+        "guidance": "Incorporate methods that match related tokens/phrases (syntactic/semantic relationships) rather than only word-level co-occurrence to capture subtle sentiment cues in economic text."
+      },
+      {
+        "name": "Sentence vs. statement-level context requirement",
+        "description": "Sentence-level sentiment prediction can be insufficient; some sentences require the context of the entire released statement for accurate sentiment interpretation.",
+        "guidance": "When possible, evaluate sentences in their broader statement context or supplement sentence-level predictions with statement-level features to improve accuracy."
+      },
+      {
+        "name": "Model bias profiling (class and score distribution)",
+        "description": "Identify and account for systematic biases in models' score distributions: FinBERT showed a negative/excessively-extreme bias; VADER showed an extremely centered/neutral distribution; GPT-4 produced many 'Neutral' classifications.",
+        "guidance": "Inspect class-wise distributions and tendencies (e.g., skew toward negative or neutral), and consider recalibration, threshold adjustment, or ensembling to mitigate biases."
+      },
+      {
+        "name": "Neutral-threshold adjustment for lexicon/rule-based models (VADER)",
+        "description": "VADER demonstrated a highly centered sentiment distribution; the study allocated a neutral sentiment rate of approximately 10% between -0.05 to 0.05 to enhance classification power.",
+        "guidance": "Adjust neutral thresholds for rule-based models (e.g., treat scores between -0.05 and 0.05 as neutral) to better align their output distribution with human-labeled distributions."
+      },
+      {
+        "name": "Use confusion matrix elements for multi-class evaluation",
+        "description": "Evaluate models using confusion matrices summarizing true positives (TP), true negatives (TN), false positives (FP), and false negatives (FN) for positive/neutral/negative classes.",
+        "guidance": "Report per-class TP/TN/FP/FN counts to understand where models misclassify (e.g., FinBERT strong on negative detection; VADER better at neutral detection but worse on positive/negative)."
+      },
+      {
+        "name": "ROC / AUC as performance metric (per class)",
+        "description": "Use ROC curves and area under the curve (AUC) to quantify a model's ability to distinguish classes; AUC values reported per class (negative/neutral/positive).",
+        "guidance": "Interpret AUC values with domain thresholds (note: Fawcett 2006 suggests AUC >= 0.7 is generally considered good); use per-class AUC (e.g., FinBERT AUC=0.73 for negative class indicates strong negative detection)."
+      },
+      {
+        "name": "Per-class performance interpretation and selection",
+        "description": "Model selection should consider which sentiment class matters most: e.g., FinBERT performed better detecting positive and negative sentiments but worse for neutral; VADER centered on neutral.",
+        "guidance": "Choose or ensemble models based on class-wise strengths depending on downstream objectives (e.g., prioritize negative-detection if that is most consequential)."
+      },
+      {
+        "name": "Limitations of large language models: interpretability and compute/data cost",
+        "description": "Large language models (e.g., GPT-4) can be hard to interpret and require enormous computing power and data to train; fine-tuning can be opaque.",
+        "guidance": "Factor in interpretability, reproducibility, and resource costs when choosing LLMs; supplement LLM outputs with interpretable methods or expert review when necessary."
+      },
+      {
+        "name": "Sampling for representativeness",
+        "description": "The study randomly selected 1,065 sentences from 64 FOMC 'Minutes' between 2006/01/03 and 2014/10/08 to form the dataset.",
+        "guidance": "Ensure temporal and document coverage when sampling (random selection across meetings and years) to capture variability in language and avoid selection bias."
+      },
+      {
+        "name": "Compare multiple models and use ensemble or hybrid approaches",
+        "description": "The study compares rule-based (VADER), domain-fine-tuned transformers (FinBERT), and LLMs (GPT-4) and suggests combining NLP techniques with statistical models or expert opinions.",
+        "guidance": "Empirically compare models on the human-labeled gold set and consider ensembles or hybrid pipelines (domain-tuned models + statistical methods + human expertise) to overcome individual model limitations."
+      }
+    ]
+  }
+}

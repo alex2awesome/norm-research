@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/libgober_meetings_comments_distributive_politics_rulemaking.pdf",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "libgober_meetings_comments_distributive_politics_rulemaking.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39721,
+  "model": "gpt-5-mini",
+  "elapsed_s": 50.27427729201736,
+  "input_tokens": 10915,
+  "output_tokens": 3774,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "empirical researchers and scholars studying regulatory rulemaking, political scientists, economists, and data scientists conducting event studies of lobbying/notice-and-comment effects",
+    "subtask_short": "event study of notice-and-comment effects",
+    "subtask_description": "Design and implementation guidance for an event-study analysis of how participating in rulemaking (meetings, comments) affects firm market outcomes; includes data collection, variable definitions, matching, coding, and robustness/validation procedures. Geared to empirical studies of regulatory lobbying and distributive consequences.",
+    "subtask_keywords": [
+      "notice_and_comment",
+      "rulemaking",
+      "event_study",
+      "regulatory_lobbying",
+      "matching_methods"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Null hypothesis for no market effect of lobbying (H0)",
+        "description": "H0 : E(Yit | \u03c4it = 1) = 0 \u2014 the hypothesis that firms that engage in a lobbying action (meeting or comment) do not experience systematically higher returns.",
+        "guidance": "Use this as a baseline benchmark in the market setting; rejecting it provides limited evidence of particularistic benefit and should be complemented with comparisons to plausible counterfactual firms."
+      },
+      {
+        "name": "Test for differential returns via participation (H1)",
+        "description": "Estimate Yit \u223c average returns + \u03b2 \u03c4it + \u03b3 \u00b7 controls + noise and test H1 : \u03b2 = 0, which implies no differential returns through participation.",
+        "guidance": "Interpret \u03b2 (in the event-study/difference-in-differences framing) as the average differential return associated with the lobbying action. Graphical illustrations are favored in the main text, with formal regressions in appendices for robustness."
+      },
+      {
+        "name": "Define treatment indicators \u03c4it for lobbying actions",
+        "description": "Treat \u03c4it as dichotomous indicators for distinct actions: whether the firm commented on rule t (\u03c4C_it), attended a meeting prior to notice (\u03c4\u2212_it), or attended a meeting during the notice-and-comment period (\u03c4+_it).",
+        "guidance": "Optionally treat \u03c4it as a vector of actions rather than a single indicator; then \u03b2 becomes a vector whose components indicate whether forms of participation are complements or substitutes."
+      },
+      {
+        "name": "Outcome variable: standardized returns (formula and rationale)",
+        "description": "Use standardized returns Y_dt_it defined by the simple formula in the text (standardizing price changes by minute-to-minute volatility \u03c3_i and scaling by \u221adt) to measure abnormal returns after an event.",
+        "guidance": "Standardization is necessary to address heteroskedasticity of returns: failing to adjust overweight volatile stocks and underweight less volatile ones. The Appendix should include alternative parametric and non-parametric measures and market controls; focus in main text on the simplest formula if conclusions are robust."
+      },
+      {
+        "name": "Choice of time-delta dt for event window",
+        "description": "Consider multiple dt (e.g., 1 minute, 20 minutes, 3 hours) as proxies for the primary outcome; smaller dt preferred to reduce confounding, but very short dt can attenuate effects due to market frictions.",
+        "guidance": "Be principled about the trade-off; the author focuses on a one-hour time domain as a reasonable compromise. Report results across a range of dt and discuss sensitivity."
+      },
+      {
+        "name": "Precise identification of announcement time",
+        "description": "Identify the announcement time as the moment a regulator's press release appears online (here, Federal Reserve press release), determined via FOIA and scraping server-imprinted RSS timestamps.",
+        "guidance": "Whenever possible, validate press-release times with internal scheduling information. Note that not all rules receive press releases during trading hours; document sample sizes and any pattern in timing."
+      },
+      {
+        "name": "Distinguish proposed vs final rules and use separate panels",
+        "description": "Rules have at least two announcement types (proposal at tp and final at tf); construct separate panels for proposed-rule announcements and final-rule announcements because impacts may occur at different times.",
+        "guidance": "Be mindful of interim final rules, proposals without finals, or multiple finals after one proposal; sequencing may be ambiguous and should be documented."
+      },
+      {
+        "name": "Acquire and preprocess meeting logs carefully",
+        "description": "Scrape agency meeting logs (e.g., Federal Reserve logs), which may be detailed about attendees but vague about content and may not explicitly identify the rule; matching logs to rules requires human coding.",
+        "guidance": "Use clues like meeting date, preamble stakeholder outreach descriptions, and key phrases (e.g., 'interchange fee provisions') to attribute logs to rules. Document ambiguous cases and the coding procedures."
+      },
+      {
+        "name": "Comment acquisition and rule association",
+        "description": "Scrape public comments from rule dockets and associate them with particular rules; board practices often make comment organization more consistent than meetings.",
+        "guidance": "Document how commenters were identified (e.g., public companies vs others) and note the skewness of commenter attention across rules."
+      },
+      {
+        "name": "Attribution rule for ambiguous organizational relationships",
+        "description": "When meetings or comments involve subsidiaries or private affiliates, resolve whether to attribute to a publicly traded parent.",
+        "guidance": "The author resolved ambiguities in favor of attribution; make and report a consistent rule and sensitivity checks if attribution decisions could affect results."
+      },
+      {
+        "name": "Define competitor sets and pooled matched set U",
+        "description": "Let At be firms that lobbied about rule t; let Ct(i) be competitors of firm i; define matched set Mt = \u222ai\u2208At Ct(i) \\ At; pool across rules to form U = \u222at (At \u222a Mt) as initial matched units.",
+        "guidance": "Operationalize competitor links using a data source (Morningstar used here) that identifies competitors from public filings and quantitative metrics; document the provenance of competitor links."
+      },
+      {
+        "name": "Refine matches to most similar competitors using Mahalanobis distance",
+        "description": "Define U* as the set of most similar competitors according to Mahalanobis distance on selected covariates.",
+        "guidance": "Selected covariates used here: market capitalization, lobbying spending (LDA), PAC spending (2008\u20132010), number of JDs in upper management, number of JDs on board, and number of equity analysts covering the firm. Explain motivation for each covariate (resources, legal expertise, coverage)."
+      },
+      {
+        "name": "Matching implementation: nearest-neighbor with replacement",
+        "description": "Implement nearest neighbor matching with replacement using the Mahalanobis distance metric; in panel data the best match for firm i may vary by rule t.",
+        "guidance": "Report match quality distribution (e.g., top-quintile vs bottom-quintile matches), check covariate balance (e.g., Love plot), and consider industry-classification checks as additional reassurance."
+      },
+      {
+        "name": "Propensity modeling for participation",
+        "description": "Estimate a logistic regression of the propensity to participate using logged explanatory variables; units are active engaging firms and their competitors.",
+        "guidance": "Use the propensity model to motivate covariate selection for matching. Note potential limitations (e.g., modeling by rule may be infeasible when active firms per rule are few). Report coefficient significance and interpretation (e.g., coverage variable negative here)."
+      },
+      {
+        "name": "Content-analysis triage for comment letters",
+        "description": "Given large volumes of text, adopt a triage strategy: code the first three requests in each comment because longer letters usually summarize key points early and attention constraints make early points most important.",
+        "guidance": "Code each request's outcome as: 'granted in full', 'granted with minor qualifications', 'granted with major qualifications', or 'denied in full'. Justify triage approach and report inter-coder reliability if available."
+      },
+      {
+        "name": "Measure and report concessions in final rules",
+        "description": "Assess whether comment requests were granted in final rules and quantify concession distributions (e.g., fraction with first three requests denied vs some granted).",
+        "guidance": "Use these content-analysis results to link regulatory concessions to market returns (e.g., compare hour returns for firms with any concession vs none); report statistical tests (t-tests) for differences."
+      },
+      {
+        "name": "Robustness and falsification checks",
+        "description": "Perform placebo/falsification tests such as (1) selecting announcement times at random to compare return paths, and (2) examining returns of firms that lobbied on other rules where they did not lobby as a control.",
+        "guidance": "Also include robustness checks in appendices: alternative return calculations, different market controls, non-parametric measures, regressions with covariate controls and fixed effects. Use these to assess whether observed returns are unusual relative to baseline."
+      },
+      {
+        "name": "Interpretation caveats regarding causal inference",
+        "description": "Recognize that event-study results are descriptive of mean tendencies and not definitive causal estimates; similar firms may experience different outcomes and assumptions about counterfactuals are required for causal claims.",
+        "guidance": "Discuss plausible counterfactuals (e.g., competitors' outcomes, no-return baseline), limitations of market efficiency assumptions, and potential omitted variables or selection concerns."
+      },
+      {
+        "name": "Trade-offs in selecting estimation window and standardization",
+        "description": "Smaller dt reduces confounding but risks attenuation from market frictions; standardize returns to account for heteroskedasticity using minute-to-minute volatility \u03c3i and scaling by \u221adt.",
+        "guidance": "When fixing dt, justify the choice (author uses 1 hour). Include sensitivity to varying dt and alternative standardization or market-model approaches in appendices."
+      }
+    ]
+  }
+}

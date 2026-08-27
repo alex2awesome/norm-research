@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "nou_nyarko_regulatory_diffusion_stan_lrev.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 7,
+  "chunk_chars": 39901,
+  "model": "gpt-5-mini",
+  "elapsed_s": 50.98037450000993,
+  "input_tokens": 13132,
+  "output_tokens": 3673,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "legal scholars, empirical researchers, and computational social scientists studying administrative law, regulatory text reuse, and regulatory diffusion (also useful to agency drafters and policy analysts)",
+    "subtask_short": "measuring regulatory text diffusion",
+    "subtask_description": "Empirical methods and normative framing for observing, measuring, and interpreting the reuse of codified regulatory text across U.S. federal agencies using Federal Register XML and text-as-data techniques. Includes definitions of diffusion forms, dataset construction, filtering rules, classification procedures, similarity metrics, and thresholds for calling reuse.",
+    "subtask_keywords": [
+      "regulatory_diffusion",
+      "text-as-data",
+      "federal_register",
+      "paragraph_level",
+      "jaccard_similarity"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of regulatory diffusion",
+        "description": "Regulatory diffusion, as understood here, refers to the use of substantially similar codified texts across agencies. With this focus, we are interested in two related phenomena: (1) the interagency spread of policy choices; and (2) the reuse of regulatory language.",
+        "guidance": "Focuses on the operative text as codified in the Code of Federal Regulations (not preambles or accompanying analyses). Texts serve as an \"aggregate representation\" of domain, ideological position, specificity, and other salient policy features communicated through the text."
+      },
+      {
+        "name": "Forms of diffusion: joint, common, successive",
+        "description": "Regulatory diffusion can occur in different forms: through joint, common, or \"successive\" rulemaking.",
+        "guidance": "Joint: agencies issue a single rule signed by the participating agencies and codified in the same place in the CFR. Common: highly similar or virtually identical rules concurrently published in each agency's portion of the CFR. Successive: agencies reuse texts of published rules from other agencies months or years later (mirror texts). These categories help distinguish drafting-stage diffusion from later borrowing."
+      },
+      {
+        "name": "Choice of data source: Federal Register XML over the CFR",
+        "description": "Create dataset from the electronic version of the Federal Register rather than the CFR.",
+        "guidance": "Rationale: Federal Register provides precise publication dates (allowing temporal analysis), clearly designates agencies/subagencies, and includes rich structured metadata (statutory authorities, summaries, amendatory instructions, headings, etc.). CFR has organizational advantages but lacks consistent agency designation and precise publication dates."
+      },
+      {
+        "name": "Unit of analysis: paragraph-level",
+        "description": "The appropriate unit of analysis is not necessarily the entire rule; split rules into paragraphs to identify text reuse at finer granularity.",
+        "guidance": "Only certain portions of a rule are typically copied. Using larger units like section or part risks missing meaningful examples of diffusion. Paragraph splitting is consistent with prior literature and allows detection of partial reuse."
+      },
+      {
+        "name": "Definition of \"significant\" paragraph",
+        "description": "A regulatory paragraph is \"significant\" only if it contains a substantive or procedural policy choice.",
+        "guidance": "Exclude framing or boilerplate language that likely does not reflect a conscious decision to specify legal obligations (e.g., definition headings like \"For purposes of this section, the following definitions apply\" or simple framing). The aim is to capture the spread of policy choices; borderline cases exist and require careful labeling."
+      },
+      {
+        "name": "Heuristic filtering for non-meaningful paragraphs",
+        "description": "Remove paragraphs that are unlikely to contain substantive regulatory text by simple heuristics.",
+        "guidance": "Specifically, remove observations for which the text contained fewer than 20 characters (including spaces) and the proportion of special characters to letters was less than or equal to 30%. Also account for cases where agencies use symbols (\"* * *\") or tables to indicate unchanged paragraphs; such non-text observations should be excluded."
+      },
+      {
+        "name": "Manual labeling and supervised machine-learning classification",
+        "description": "Use a supervised machine-learning approach to automate identification of significant paragraphs because manual coding of >1M paragraphs is infeasible.",
+        "guidance": "Begin with a manually labeled sample (authors used 400 paragraphs for significance labeling), balance imbalanced labels using SMOTE, split into training (80%) and test (20%), and train multiple classifiers (Bernoulli NB, Multinomial NB, AdaBoost, Gradient Boosting). Use five-fold cross-validation to evaluate performance and minimize overfitting. Choose best-performing classifier and apply it to the full dataset."
+      },
+      {
+        "name": "Classifier performance and selection",
+        "description": "Select classifier based on cross-validated performance metrics and use it to label all paragraphs.",
+        "guidance": "Authors' best-performing classifier (Gradient Boosting) correctly predicted 83% of all texts (Accuracy), with AUC = 0.86 and F1 = 0.83. Report those metrics and note that even human annotators disagree at times, so performance near these values approaches practical limits."
+      },
+      {
+        "name": "Separate classification for procedural vs substantive policy choices",
+        "description": "Distinguish paragraphs that impose procedural policy choices from those imposing substantive choices using a separate labeled dataset and classifier.",
+        "guidance": "Authors used a dataset of 699 manually labeled paragraphs to train classifiers that achieved 93% accuracy on this distinction. Final dataset breakdown: 651,164 paragraphs identified as significant, of which 63,540 (~10%) were procedural."
+      },
+      {
+        "name": "Similarity measure: Jaccard similarity over 5-gram shingles",
+        "description": "Measure textual similarity by splitting paragraphs into sequences of five consecutive words (5-gram shingles) and computing the Jaccard similarity (intersection over union of unique 5-grams).",
+        "guidance": "This assigns high similarity to paragraphs that use the same words in the same order. Authors chose 5-grams for computational feasibility and interpretability; example provided with \"the quick brown fox...\" split into five 5-grams."
+      },
+      {
+        "name": "Threshold for declaring text reuse (reuse = similarity \u2265 0.5)",
+        "description": "Define a similarity threshold above which it is 'almost impossible' to assume an agency did not model a paragraph after existing text; authors set threshold at Jaccard similarity \u2265 0.5.",
+        "guidance": "A similarity score of 1.0 indicates exact copying (template). Scores below 0.5 make it increasingly difficult to assume modeling. Manual inspection of examples guided choosing 0.5 as the cutoff; include examples illustrating differences at this threshold."
+      },
+      {
+        "name": "Computational scalability / pair selection",
+        "description": "Avoid explicit computation of Jaccard similarity for every possible pair of paragraphs (computationally infeasible) by using big-data techniques to identify likely similar pairs and compute similarity only for those.",
+        "guidance": "Authors note the combinatorial explosion (e.g., ~212 billion comparisons) and therefore use techniques to limit pairwise comparisons. Also note that more precise local-alignment algorithms (e.g., Smith\u2013Waterman) are conceptually popular but not suitable for very large datasets due to computational cost."
+      },
+      {
+        "name": "Limitation: incorporation by reference (cross-referencing) not captured",
+        "description": "The measure does not capture regulatory borrowing by cross-reference (incorporation by reference), because such references do not reproduce the referenced text in the Federal Register.",
+        "guidance": "Incorporation by reference is explicitly regulated (1 C.F.R. \u00a7 21.21(c)) with narrow exceptions; because the dataset picks up only text that is actually printed in the Federal Register, incorporation-by-reference cases will be missed. This constitutes a transparency and measurement limitation and argues for reforms to increase transparency of incorporated material."
+      },
+      {
+        "name": "Dataset scope and rule selection criteria",
+        "description": "Collect entries from the Federal Register API for a defined timeframe and isolate final rules that amend CFR text.",
+        "guidance": "Authors scraped every Federal Register entry from Jan 1, 2000 to Dec 31, 2020 via the FR API, started with 'Rule' entries (77,944), isolated final rules that add or amend regulatory text (yielding 36,042 final rules), and then split those rules into paragraphs (initially 1,753,458 paragraphs, filtered to 1,578,332 by heuristics, and then 651,164 significant paragraphs after ML classification)."
+      },
+      {
+        "name": "Paragraph-level metadata to collect",
+        "description": "For each paragraph, collect contextual metadata to support analysis of diffusion sources and patterns.",
+        "guidance": "Authors collected: (1) part, title, and section number; (2) number of words in the regulatory text; (3) names of participating agencies and subagencies; (4) statutory authority; (5) subject; (6) amendatory instructions; (7) summary description; (8) publication date; (9) heading where available; and derived fields such as whether amendment was joint and whether the amendment was a republication (detected by searching for 'republish' in summary text)."
+      }
+    ]
+  }
+}

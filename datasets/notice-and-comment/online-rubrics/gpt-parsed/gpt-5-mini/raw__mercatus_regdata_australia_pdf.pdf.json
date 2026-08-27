@@ -1,0 +1,130 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/mercatus_regdata_australia_pdf.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 15216,
+  "output_tokens": 3697,
+  "elapsed_s": 864.026501666056,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers, data scientists, and policymakers constructing or using regulatory measurement datasets (RegData users; regulatory economists)",
+    "subtask_short": "building_regdata_panel_australia",
+    "subtask_description": "Creating a national RegData panel by applying machine\u2011learning text analysis to Australian acts and legislative instruments to quantify regulatory restrictiveness and enable comparative/regression analysis. Includes corpus collection, cleaning, keyword selection, industry classification, and analytic normalizations (per capita, log transformations).",
+    "subtask_keywords": [
+      "regdata",
+      "regulation",
+      "dataset_construction",
+      "text_analysis",
+      "australia",
+      "restrictive_clauses"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Regulatory restrictions metric (restrictive clauses)",
+        "description": "Counts the number of keywords likely to impose binding constraints on citizens or businesses \u2014 RDAU1.0 uses five such words: 'shall,' 'must,' 'may not,' 'prohibited,' and 'required.' These are the 'regulatory restrictions' that measure the extent to which a regulation prohibits or requires certain acts or behaviors.",
+        "guidance": "Outputs are 'restriction counts' within a given document of the federal corpus; considered the closest measure to real regulatory effect (more accurate than word or page counts)."
+      },
+      {
+        "name": "Word count as a proxy for regulatory content",
+        "description": "Word count is closer to a measure of legislative and regulatory content than page counts but includes explanatory content, preambles, appendices, and other extraneous material.",
+        "guidance": "Word counts validate and complement restrictive clause counts but are less accurate because they don't distinguish between restrictive and explanatory language."
+      },
+      {
+        "name": "Page count / file size measures (baseline)",
+        "description": "Measuring regulation by number of regulations, page counts, or file size provides a crude quantification but maps imperfectly to economic consequences because of layout/font/format differences.",
+        "guidance": "Page/file size measures are the least accurate and should be treated as supportive rather than primary evidence of restrictiveness."
+      },
+      {
+        "name": "Selection of keyword suite (carefully selected verbs and adjectives)",
+        "description": "Use a carefully selected suite of verbs/adjectives to identify restrictions (RegData examples: 'shall', 'must', 'may not', 'prohibited', 'required').",
+        "guidance": "Keywords should capture binding constraints; selection determines what is counted as a restriction and therefore affects measurement validity."
+      },
+      {
+        "name": "Industry decomposition via industry-specific training documents",
+        "description": "Identify relevance of regulatory text to industries using industry-specific training documents (intended for two- through six-digit industry codes; for Australia, ANZSIC codes are appropriate).",
+        "guidance": "Accurate industry attribution requires locally relevant training docs (ANZSIC-based); using NAICS training materials for Australia yields results of unknown accuracy and should be replaced by Australian training documents for reliable decomposition."
+      },
+      {
+        "name": "Attribution of regulations to acts (vs agencies)",
+        "description": "In Australia, attribute regulations to particular acts rather than to agencies because Australian regulations originate in parliamentary acts and ministerial instruments.",
+        "guidance": "Treat the act and its legislative instruments as one regulatory regime when decomposing origin-of-regulation; this differs from the US approach that attributes to agencies."
+      },
+      {
+        "name": "Manual corpus collection from ComLaw with reaggregation",
+        "description": "Collect the corpus by downloading acts and legislative instruments from the ComLaw repository and reaggregate multipart volumes into single analytical units (e.g., Corporations Act 2001 \u2014 five volumes \u2192 one document).",
+        "guidance": "Manual download was required because no CFR-like centralized annual compilation exists; reaggregation avoids under- or double-counting caused by split volumes."
+      },
+      {
+        "name": "Recognize start and end dates to avoid double-counting",
+        "description": "Enable RDAU1.0 to recognize start and end dates of acts and regulations to avoid double- or triple-counting content when successive acts update/replace earlier acts.",
+        "guidance": "Many historical acts lack listed end dates in ComLaw; without date recognition the system may treat obsolete and superseded acts as concurrently current, inflating restriction counts."
+      },
+      {
+        "name": "Exclude repealed/cancelled/expired documents (red-flag filtering)",
+        "description": "Examine document index labels for red-flag words like 'repealed,' 'cancelled,' or 'expired' and filter such documents out of a corpus intended to represent current law.",
+        "guidance": "These documents often have very low word counts (only a sentence or two) and should be removed during download or cleaning to avoid contaminating time-series measures."
+      },
+      {
+        "name": "Minimum word count quality check",
+        "description": "Determine the minimum word count of the corpus and count how many documents are at that level; many low-word-count documents indicate compromised text quality.",
+        "guidance": "Low word counts often result from difficulties converting originals into digitized text (OCR or scraping errors); flag and remediate conversion issues before analysis."
+      },
+      {
+        "name": "Duplicate detection and resolution in metadata",
+        "description": "Check the metadata file for duplicates, which may indicate insufficiently specific indexing, mixed versions, or human processing errors.",
+        "guidance": "Investigate duplicate causes (appendices, mixed versions, out-of-date text not deleted) and clean metadata to ensure each analytical unit is unique and correctly versioned."
+      },
+      {
+        "name": "Ensure numeric index elements are numeric",
+        "description": "If corpus index elements are intended to be numeric (integers/floats), coerce or clean values to numeric types to detect unwanted characters or text in numeric fields.",
+        "guidance": "Programmatic enforcement of numeric types reveals indexing errors; fix by reorganizing/cleaning index values for consistent numeric treatment."
+      },
+      {
+        "name": "Handle historical coverage and digitization limitations",
+        "description": "Recognize that older acts/regulations (pre-1970s/early years) may be missing from the online repository because they were not digitized, limiting historical coverage.",
+        "guidance": "Be cautious interpreting long-run series; treat data before reliable digitization (authors: late 1990s / 1997 onward) as lower quality and document gaps."
+      },
+      {
+        "name": "Limitations: exclude state/territory legislation in federal panel",
+        "description": "RDAU1.0 covers federal (Commonwealth) acts and instruments only and does not include state and territory legislation, which causes underestimation of total national regulatory volume.",
+        "guidance": "Acknowledge scope limitation; future extensions should add subnational corpora for comprehensive national measures."
+      },
+      {
+        "name": "Manual sifting for obsolete or obviously incorrect documents",
+        "description": "After initial download, manually sift and remove obviously obsolete or erroneous documents that were stored on the official site.",
+        "guidance": "Manual review is required to remove obsolete documents and to correct repository artifacts not handled by automated collection."
+      },
+      {
+        "name": "Reaggregate multipart acts/volumes into single analytical units",
+        "description": "Some large acts are split into multiple volumes which should be reaggregated to avoid undercounting or treating volumes as separate acts.",
+        "guidance": "Identify multi-volume acts (e.g., Corporations Act 2001) and combine volumes into a single document for consistent treatment in counts and time-series."
+      },
+      {
+        "name": "Exclusion of guidance documents and soft law",
+        "description": "RegData explicitly does not include guidance documents, memos of interpretation, or other forms of 'soft law'; it covers only actual regulations (administrative law) in the corpus.",
+        "guidance": "Researchers should note this limitation: de facto regulation via guidance is not captured and may require separate effort to quantify."
+      },
+      {
+        "name": "Confidence window / trusted years (digitization-based)",
+        "description": "Because digitization is uneven, treat RegData estimates as most reliable from the late 1990s/1997 onward when regulatory data were reliably digitized.",
+        "guidance": "When comparing jurisdictions or time-series, truncate or weight analyses to years with reliable digital records to avoid artifacts from missing historical data."
+      },
+      {
+        "name": "Words per restrictive clause (wordiness metric)",
+        "description": "Compute words per restrictive clause to capture changes in legislative wordiness (authors observe words per restriction roughly doubled since 1975 and shifted in the 1990s).",
+        "guidance": "Use this metric to analyze shifts in drafting style, bureaucratic expansion, or explanatory vs. restrictive content; interpret increases with caution and consider multiple hypotheses (supply-side, demand-side, bureaucratic incentives)."
+      },
+      {
+        "name": "Normalization and comparative analytic choices (per capita & log transformations)",
+        "description": "Normalize restriction counts by population (per capita) and consider log-log transformations for regression analysis when testing scaling hypotheses (e.g., Mulligan and Shleifer's fixed-cost population hypothesis).",
+        "guidance": "Per capita and logged analyses help test scaling relationships; authors use both level-level and log-log regressions and report correlations and elasticity estimates (e.g., 10% population \u2192 ~1.87% restrictions)."
+      },
+      {
+        "name": "Scalable granularity of search results & search-term weightings",
+        "description": "RegData supports scalable granularity for search results (title-level to paragraph-level) and uses search-term weightings (e.g., derived from Google Ngram in earlier RegData versions) to refine counts.",
+        "guidance": "Adjust granularity and term weightings to match the corpus structure and analytic goals; document the chosen granularity for reproducibility."
+      }
+    ]
+  }
+}

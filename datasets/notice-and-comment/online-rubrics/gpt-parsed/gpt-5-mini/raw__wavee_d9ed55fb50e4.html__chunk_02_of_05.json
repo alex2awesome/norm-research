@@ -1,0 +1,125 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_d9ed55fb50e4.html",
+  "task": "notice-and-comment",
+  "source_dir": "raw",
+  "source_file": "wavee_d9ed55fb50e4.html",
+  "chunk_idx": 2,
+  "n_chunks": 5,
+  "chunk_chars": 39664,
+  "model": "gpt-5-mini",
+  "elapsed_s": 47.23793412500527,
+  "input_tokens": 13008,
+  "output_tokens": 4058,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on automated compliance checking, requirements engineers, legal-tech developers, and legal experts evaluating DPAs for GDPR compliance",
+    "subtask_short": "DPA GDPR compliance checking",
+    "subtask_description": "Automated and semi-automated verification of Data Processing Agreements (DPAs) against a defined set of GDPR-derived compliance requirements (45 'shall' requirements), including annotation protocols, evaluation metrics, and heuristics for analyst review.",
+    "subtask_keywords": [
+      "gdpr",
+      "dpa",
+      "compliance_checking",
+      "requirements_engineering",
+      "semantic_frames"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Requirement satisfaction decision (statement\u2192requirement)",
+        "description": "A requirement is marked as satisfied in the DPA if there is at least one statement satisfying the requirement. Otherwise, the requirement is marked as violated.",
+        "guidance": "When multiple statements can satisfy a requirement, assign to the requirement the maximum matching-degree score across those statements. Use these per-requirement satisfaction labels to produce the DPA-level report."
+      },
+      {
+        "name": "DPA-level compliance decision rule (mandatory vs optional)",
+        "description": "DERECHA recommends that the DPA should be considered not compliant when at least one mandatory requirement is violated. When optional requirements are violated, DERECHA raises a warning to draw the analyst's attention to missing common practices.",
+        "guidance": "Mandatory requirements are R1\u2013R26 (boldface in the paper); optional requirements are R27\u2013R45. Report violations and warnings separately in the generated report."
+      },
+      {
+        "name": "Matching-degree as confidence indicator",
+        "description": "Matching degree (a score computed per statement-requirement alignment) indicates the confidence level at which a statement satisfies a requirement; low scores reflect lack of matching arguments though predicates may be similar.",
+        "guidance": "Analysts should use matching-degree values to prioritize manual verification: low-scoring matches deserve review. The system assigns the maximum matching-degree among statements to the requirement; use thresholds to decide which predictions to inspect."
+      },
+      {
+        "name": "Use maximum matching-degree across statements",
+        "description": "When multiple statements in a DPA could satisfy a requirement, the requirement's assigned score equals the maximum matching-degree among those statements.",
+        "guidance": "This approach treats the highest-confidence evidence as decisive for marking a requirement satisfied; report the statement(s) with highest score for analyst validation."
+      },
+      {
+        "name": "Analyst review heuristic based on score threshold",
+        "description": "Heuristic: for each requirement, only analyze the statement with maximum score if it is below a selected threshold (e.g., 0.5).",
+        "guidance": "Example: selecting threshold 0.5 improved recall from 82.4% to 93.9% at the cost of reviewing \u22486% of statements (\u224812 statements for a 200-statement DPA). Users can trade manual effort vs recall by adjusting threshold; reviewing all max-scoring statements yields near-perfect recall while requiring reviewing \u22489% of statements in this dataset."
+      },
+      {
+        "name": "Evaluation metrics and their definitions",
+        "description": "Use TP/FP/FN/TN at the requirement level to compute Accuracy (A), Precision (P), Recall (R), and F-score. Formulas: A = (TP+TN)/(TP+FP+FN+TN), P = TP/(TP+FP), R = TP/(TP+FN).",
+        "guidance": "Report F\u03b2 scores; in this work F0.5 is used (\u03b2 = 1/2) to weigh precision more than recall because precision is prioritized for practical use."
+      },
+      {
+        "name": "Design choice: prioritize precision over recall",
+        "description": "In this study precision is considered more important than recall: F0.5 was chosen and system design favors high precision to avoid overwhelming analysts with unreliable predicted violations.",
+        "guidance": "Rationale: low precision forces analysts to check many statements to find actual violations (defeats automation purpose). Lower recall can be partially mitigated by reviewing a small subset of low-confidence matches."
+      },
+      {
+        "name": "Baseline (B1) matching-proportion threshold (\u03b8B1 = 0.30)",
+        "description": "Baseline B1 computes SF-based representations via off-the-shelf SRL (AllenNLP/BERT) and concludes a statement satisfies a requirement if the proportion of predicates in the statement that match the requirement's predicates exceeds \u03b8B1 (empirically tuned to 0.30).",
+        "guidance": "B1 limits matching to exact text overlap for predicates/aligned arguments and generates multiple SF-based representations per statement (one per verb) which increases computation and false matches."
+      },
+      {
+        "name": "SF-based representations applicability (metadata exception)",
+        "description": "SF-based (semantic frame / SR-based) representations do not apply for metadata requirements; therefore baseline B1 and SF-based matching are applied only to the other requirement categories (processor obligations, controller obligations, controller rights).",
+        "guidance": "Handle metadata requirements separately (they require different operationalization than SF-based matching)."
+      },
+      {
+        "name": "Annotation protocol: sentence-level mapping to requirements",
+        "description": "Annotators examine each sentence (statement) in a DPA and select all requirements (from the 45 defined) that the statement satisfies.",
+        "guidance": "First phase: three authors independently analyzed five DPAs then reached agreement and split remaining DPAs so each was annotated by two authors; second phase: three law-student annotators (half-day training) annotated 30 DPAs using the guidelines from phase one. Annotators recommended to limit work to max two hours per day to mitigate fatigue."
+      },
+      {
+        "name": "Interrater agreement measurement and observed \u03ba values",
+        "description": "Measure annotation quality with Cohen's Kappa (\u03ba) on a sample; observed average \u03ba values across categories: metadata 0.77, processor\u2019s obligations 0.72, controller\u2019s obligations 0.82, controller\u2019s rights 0.79.",
+        "guidance": "Interpretation: controller's obligations \u03ba indicates 'almost perfect' agreement, others indicate 'moderate' agreement. Resolve disagreements in adjudication sessions with legal experts when needed."
+      },
+      {
+        "name": "Root causes of false positives (C1\u2013C3)",
+        "description": "Identified error categories that cause false positives: C1 inconsistent reference to controller/processor (aliases like 'data importer/exporter'); C2 loss of context for itemized/enumerated list fragments leading to grammatically incomplete sentences; C3 noisy/verbose statements causing poor syntactic parsing.",
+        "guidance": "Mitigations include allowing user-provided aliases for controller/processor, heuristics to detect/concatenate or paraphrase itemized list fragments, and filtering or simplifying noisy content before SR extraction."
+      },
+      {
+        "name": "Guideline for handling inconsistent actor references",
+        "description": "Because DPAs may refer to controller/processor using varied terms (e.g., 'data importer', 'data exporter', 'contractor', 'service provider'), mapping these to canonical roles is required for correct matching (otherwise many FPs occur).",
+        "guidance": "Allow the user to input multiple names/aliases for controller and processor so the tool can recognize references beyond the formal entity name."
+      },
+      {
+        "name": "Handling loss of context in itemized lists",
+        "description": "Sentence splitting that treats each list item as a separate statement can produce grammatically incomplete fragments that lose context necessary to satisfy requirements when considered alone.",
+        "guidance": "Apply heuristics to identify and recompose itemized/enumerated lists (e.g., combine adjacent fragments) or paraphrase incomplete clauses before extracting semantic roles."
+      },
+      {
+        "name": "Mitigating noisy/verbose text parsing errors",
+        "description": "Long, multi-clause or verbose statements in DPAs can produce poor performance in syntactic parsing and therefore inaccurate SR extraction, contributing to false positives/negatives.",
+        "guidance": "Use preprocessing heuristics to detect and simplify noisy clauses, or paraphrase long statements into simpler sub-sentences prior to SR extraction; consider filtering irrelevant clauses."
+      },
+      {
+        "name": "One-off manual step A: define SF-based representations for requirements",
+        "description": "Step A requires manually defining SF-based representations for the GDPR-derived requirements; this step took about a month in the study and is performed only occasionally when regulation changes.",
+        "guidance": "Because it's a one-off (or infrequent) task, invest effort to produce accurate semantic-role-based representations and a well-defined set of SRs (the paper refines/adapts a set of 10 SRs from literature)."
+      },
+      {
+        "name": "Performance / runtime benchmarks for practicability",
+        "description": "Empirical runtimes reported: analyzing 30 DPAs (7048 statements) required \u224890 minutes total (\u22480.77 second per statement). For an average-sized DPA (200 statements) the system takes \u22482.5 minutes to verify compliance against all 45 requirements.",
+        "guidance": "Breakdown: preprocessing \u22480.009s/statement (1 min total), SR identification \u22480.44s/statement (52 min total), enrichment+matching \u22480.32s/statement (37 min total). DERECHA runs \u224810\u00d7 faster than baseline B1 due to more efficient matching strategy."
+      },
+      {
+        "name": "Reporting and interpretation of results (per-requirement counts)",
+        "description": "When reporting dataset results, present for each requirement the number of DPAs (D) in which the requirement was found satisfied and the total number of statements (S) used to satisfy it; categorize requirements by category (MD, PO, CR, CO) and mark mandatory ones.",
+        "guidance": "Use the per-requirement D and S counts to highlight which requirements are commonly satisfied or often missing; this informs priorities and expected training data sparsity for ML approaches."
+      },
+      {
+        "name": "Design recommendation: do not rely solely on off-the-shelf SRL for legal text",
+        "description": "Off-the-shelf NLP/SRL tools (e.g., AllenNLP/BERT) produce SRs for each verb and often fail to extract meaningful semantic roles from legal text, leading to poor compliance checking performance when used without tailored rules.",
+        "guidance": "Prefer a rule-based SR extraction and enrichment pipeline tuned to legal text structure, or augment SRL outputs with domain-specific rules and paraphrasing strategies as DERECHA does."
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/notice-and-comment/online-rubrics/raw/wavee_787ca0183ba7.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 14666,
+  "output_tokens": 4239,
+  "elapsed_s": 1605.3919375000987,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "Researchers and practitioners in Regulatory NLP, information retrieval and QA for regulatory compliance; dataset creators and evaluation/benchmark designers for compliance-oriented QA systems",
+    "subtask_short": "RIRAG: regulatory retrieval+answering",
+    "subtask_description": "Designing, building and evaluating retrieval-augmented question-answering systems for regulatory compliance queries (passage retrieval across regulatory documents and generation of comprehensive, non-contradictory answers that cover all obligations). Includes dataset construction (ObliQA) and a reference-free evaluation metric (RePASs).",
+    "subtask_keywords": [
+      "regulatory_nlp",
+      "riraq",
+      "qa",
+      "dataset",
+      "evaluation",
+      "compliance"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "RePASs: Regulatory Passage Answer Stability Score",
+        "description": "A reference-free metric tailored to regulatory compliance that evaluates generated answers based on entailment, contradiction, and obligation coverage to ensure answers capture all relevant obligations and avoid contradictions.",
+        "guidance": "RePASs integrates three components (Entailment Score Es, Contradiction Score Cs, Obligation Coverage Score OCs) and computes RePASs = (Es - Cs + OCs + 1) / 3. It is designed to prefer answers that are accurate, non-contradictory, and comprehensive with respect to regulatory obligations."
+      },
+      {
+        "name": "Entailment support for every answer sentence (Es)",
+        "description": "Every answer sentence must be supported (entailed) by at least one sentence in the source passage(s).",
+        "guidance": "Generate an entailment matrix comparing each passage sentence (premise) with each answer sentence (hypothesis) using a cross-encoder (nli-deberta-v3-xsmall). Reduce the matrix by taking, for each answer sentence, the maximum entailment probability across passage sentences. Compute Es as the average of these maximum entailment probabilities (Es = (1/N) sum_i max_j Pentailment(p_j, a_i))."
+      },
+      {
+        "name": "Absence/penalty of contradictions (Cs)",
+        "description": "The answer must not contain sentences that contradict the information in the source passage(s).",
+        "guidance": "Generate a contradiction matrix (same model) and reduce by taking the maximum contradiction probability per answer sentence across passage sentences. Compute Cs as the average of these maximum contradiction probabilities (Cs = (1/N) sum_i max_j Pcontradiction(p_j, a_i)). RePASs penalizes contradictions via the (Es - Cs) term."
+      },
+      {
+        "name": "Obligation coverage (OCs)",
+        "description": "The answer must cover all obligations present in the source passage(s); each regulatory obligation sentence should be reflected in the answer.",
+        "guidance": "Detect obligation sentences in source passages using a LegalBERT-based obligation classifier (fine-tuned on a dataset produced via GPT-4 zero-shot extraction). Tokenize both source and answer into sentences. For each obligation sentence ok, check whether any answer sentence al attains an entailment probability > 0.7 (using microsoft/deberta-large-mnli) with ok. Count obligations with max entailment > 0.7 as covered. Compute OCs as covered_obligations / total_obligations."
+      },
+      {
+        "name": "NLI-based question-passage validation",
+        "description": "Validate automatically generated question\u2013passage(s) pairs by assessing the semantic relation between the question and its source passage(s) via NLI.",
+        "guidance": "Use nli-deberta-v3-xsmall with passages as premise and question as hypothesis. Categorize per passage as Entailment (retain), Contradiction (eliminate), or Neutral (retain only if |neutral - entailment| < |neutral - contradiction|; otherwise discard). This is used during ObliQA creation to keep only aligned pairs."
+      },
+      {
+        "name": "Question generation constraints and prompts",
+        "description": "Questions should be realistic, applied, and grounded in passages containing obligations; for single-passage questions context must implicitly contain the answer; multi-passage questions should be framed as regulator-directed clarifications and avoid implying company self-descriptions.",
+        "guidance": "Use GPT-4 (gpt-4-turbo-1106) with explicit prompts: single-passage prompt - 'generate realistic and applied questions... Ensure that the context implicitly contains the answer.' Multi-passage prompt - frame questions a compliance officer would ask a regulator, be direct and practical, avoid implying the company is describing its processes. Only passages containing obligations are considered; multi-passage inputs grouped by topic (69 topics) and randomly sub-grouped to create broader queries."
+      },
+      {
+        "name": "Passage retrieval primary metric: Recall@10",
+        "description": "The retrieval module should retrieve all relevant obligations; recall@10 is the main evaluation metric to ensure coverage of relevant information.",
+        "guidance": "Use recall@10 to maximize coverage and leave noise filtering to the answer generation module. Use MAP@10 (mean averaged precision within top-10) as a diagnostic for ranking quality. Truncate queries and passages to 512 tokens for retrieval."
+      },
+      {
+        "name": "Document-aware passage retrieval and rank fusion",
+        "description": "Consider document context when retrieving passages (Document-Aware Passage Retrieval \u2014 DAPR) by fusing passage and document rankings.",
+        "guidance": "Compute convex combination: s_convex(q,p,d) = \u03b1 * s\u0302_BM25(q,p) + (1-\u03b1) * s\u0302_neural(q,d). Normalize scores per query via s\u0302 = (s - m_q) / (M_q - m_q); fuse top-100 passages and all documents; use a document-side fusion weight of 0.1. For missing candidates on one side, assign zero score. Rank fusion is applied to improve retrieval for long-document corpora; fusion details (\u03b1, cutoffs) should be reported."
+      },
+      {
+        "name": "Post-retrieval filtering thresholds for answer generation",
+        "description": "After retrieving top-k passages (k=10), filter passages by score drops and minimum relevance to select passages used for generation.",
+        "guidance": "Apply a score-based filtering approach: detect significant drops in relevance between consecutive passages using a threshold of 0.2; enforce a minimum score of 0.7 so only highly relevant passages are considered for generating answers. Then synthesize filtered passages into an answer using LLM (GPT-4 prompt described below)."
+      },
+      {
+        "name": "Answer generation requirements and prompt",
+        "description": "Generated answers must synthesize all relevant obligations from retrieved passages into a cohesive, concise, and comprehensive regulatory response without contradictions.",
+        "guidance": "Use tailored prompts for a regulatory compliance assistant (example provided): 'Provide a detailed answer for the question that fully integrates all the obligations and best practices from the given passages. Ensure your response is cohesive and directly addresses the question. Synthesize the information from all passages into a single, unified answer.' Format responses in JSON for evaluation."
+      },
+      {
+        "name": "Passage relevance labeling scheme (human evaluation)",
+        "description": "Human/expert annotation of passage relevance categorizes passages as Relevant, Irrelevant, Null, or Relevant but Indirect; questions are labeled 'Expected Question' if they align with real-world compliance scenarios.",
+        "guidance": "Use expert assessment to compute relevance statistics (counts/percentages per category) and to validate dataset quality. The paper reports metrics (e.g., 86.91% relevant, 3.52% irrelevant, 0.43% null, 9.14% relevant but indirect in a subset)."
+      },
+      {
+        "name": "Document standardization and structuring requirements",
+        "description": "Regulatory documents must be standardized and structured to enable dataset creation and retrieval, including tagging tables/figures and preserving hierarchical passage IDs.",
+        "guidance": "Convert documents to .txt; delimit tables with \\Table Start and \\Table End tags; transcribe figures into text (manually-corrected GPT-4 outputs) enclosed in \\Figure Start/End tags; convert .txt into structured JSON with fields like ID, DocumentID, PassageID, Passage. Note significant manual effort (e.g., ~300 person-hours for 40 documents)."
+      },
+      {
+        "name": "Obligation sentence detection pipeline",
+        "description": "Automatically extract and label sentences as obligations or non-obligations to enable obligation coverage scoring.",
+        "guidance": "Use a GPT-4-driven zero-shot pipeline to extract and label sentences, then fine-tune a LegalBERT-based classifier (ObligationClassifier) on that data. Use the classifier to identify obligation sentences in source passages prior to sentence-level NLI comparisons for OCs computation."
+      },
+      {
+        "name": "Conventional text-generation metrics are insufficient for regulatory QA",
+        "description": "Standard evaluation metrics (BLEU, ROUGE, BERTScore, FactCC, SummaC, etc.) do not adequately measure obligation coverage or the absence of contradictions required in regulatory compliance contexts.",
+        "guidance": "Avoid relying solely on n-gram overlap or semantic similarity metrics for compliance tasks; instead use obligation-aware, NLI-based metrics like RePASs that explicitly evaluate entailment, contradiction, and obligation coverage."
+      },
+      {
+        "name": "Matrix reduction / max-aggregation principle in NLI comparisons",
+        "description": "When comparing answer sentences to source passage sentences, reduce pairwise NLI matrices by taking, for each answer (or each obligation), the maximum NLI probability across all passage (or answer) sentences.",
+        "guidance": "This max-aggregation ensures only the strongest support or conflict is considered for each answer or obligation sentence; used in computing Es, Cs (max over passage sentences per answer sentence), and OCs (max over answer sentences per obligation sentence)."
+      },
+      {
+        "name": "Entailment threshold for marking an obligation as covered",
+        "description": "An obligation sentence is considered covered by an answer if the maximum entailment probability between that obligation and any answer sentence exceeds 0.7.",
+        "guidance": "Use microsoft/deberta-large-mnli for obligation-answer NLI comparisons and apply the 0.7 threshold as the coverage decision rule; document and justify threshold choice in evaluations."
+      }
+    ]
+  }
+}
