@@ -1,0 +1,3631 @@
+<!-- URL: https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D -->
+<!-- HTTP: 200 SIZE:   196859 -->
+
+
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <title>When Should a Leader Apologize--and When Not?</title>
+        <link rel="dns-prefetch preconnect" href="https://cdn11.bigcommerce.com/s-yneuaokjib" crossorigin>
+        <meta property="product:price:amount" content="11.95" /><meta property="product:price:currency" content="USD" /><meta property="og:url" content="https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D" /><meta property="og:site_name" content="HBR Store" /><link rel='canonical' href='https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D' /><meta name='platform' content='bigcommerce.stencil' /><meta property="og:type" content="product" />
+<meta property="og:title" content="When Should a Leader Apologize--and When Not? ^ R0604D" />
+<meta property="og:description" content="Buy books, tools, case studies, and articles on leadership, strategy, innovation, and other business and management topics" />
+<meta property="og:image" content="https://cdn11.bigcommerce.com/s-yneuaokjib/products/46813/images/271606/generic-article__29605.1707908691.386.513.png?c=2" />
+<meta property="og:availability" content="instock" />
+<meta property="pinterest:richpins" content="enabled" />
+        
+         
+
+
+        <link href="https://cdn11.bigcommerce.com/s-yneuaokjib/product_images/32%20x%2032.png?t&#x3D;1732666705" rel="shortcut icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+
+        <!-- When javascript is disabled on browser redirects user to {hbrRootURL}/sign-in -->
+        <noscript>
+            <meta http-equiv="refresh" content="0;url=https://hbr.org/sign-in">
+        </noscript>
+
+        <link href="/content/fonts/fonts.css" rel="stylesheet">
+
+        <script nonce="">
+            document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+        </script>
+
+        <script nonce="">
+    function browserSupportsAllFeatures() {
+        return window.Promise
+            && window.fetch
+            && window.URL
+            && window.URLSearchParams
+            && window.WeakMap
+            // object-fit support
+            && ('objectFit' in document.documentElement.style);
+    }
+
+    function loadScript(src) {
+        var js = document.createElement('script');
+        js.src = src;
+        js.onerror = function () {
+            console.error('Failed to load polyfill script ' + src);
+        };
+        document.head.appendChild(js);
+    }
+
+    if (!browserSupportsAllFeatures()) {
+        loadScript('https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/dist/theme-bundle.polyfills.js');
+    }
+</script>
+        <script nonce="">window.consentManagerTranslations = `{"locale":"en","locales":{"consent_manager.data_collection_warning":"en","consent_manager.accept_all_cookies":"en","consent_manager.gdpr_settings":"en","consent_manager.data_collection_preferences":"en","consent_manager.manage_data_collection_preferences":"en","consent_manager.use_data_by_cookies":"en","consent_manager.data_categories_table":"en","consent_manager.allow":"en","consent_manager.accept":"en","consent_manager.deny":"en","consent_manager.dismiss":"en","consent_manager.reject_all":"en","consent_manager.category":"en","consent_manager.purpose":"en","consent_manager.functional_category":"en","consent_manager.functional_purpose":"en","consent_manager.analytics_category":"en","consent_manager.analytics_purpose":"en","consent_manager.targeting_category":"en","consent_manager.advertising_category":"en","consent_manager.advertising_purpose":"en","consent_manager.essential_category":"en","consent_manager.esential_purpose":"en","consent_manager.yes":"en","consent_manager.no":"en","consent_manager.not_available":"en","consent_manager.cancel":"en","consent_manager.save":"en","consent_manager.back_to_preferences":"en","consent_manager.close_without_changes":"en","consent_manager.unsaved_changes":"en","consent_manager.by_using":"en","consent_manager.agree_on_data_collection":"en","consent_manager.change_preferences":"en","consent_manager.cancel_dialog_title":"en","consent_manager.privacy_policy":"en","consent_manager.allow_category_tracking":"en","consent_manager.disallow_category_tracking":"en"},"translations":{"consent_manager.data_collection_warning":"We use cookies (and other similar technologies) to collect data to improve your shopping experience.","consent_manager.accept_all_cookies":"Accept All Cookies","consent_manager.gdpr_settings":"Settings","consent_manager.data_collection_preferences":"Website Data Collection Preferences","consent_manager.manage_data_collection_preferences":"Manage Website Data Collection Preferences","consent_manager.use_data_by_cookies":" uses data collected by cookies and JavaScript libraries to improve your shopping experience.","consent_manager.data_categories_table":"The table below outlines how we use this data by category. To opt out of a category of data collection, select 'No' and save your preferences.","consent_manager.allow":"Allow","consent_manager.accept":"Accept","consent_manager.deny":"Deny","consent_manager.dismiss":"Dismiss","consent_manager.reject_all":"Reject all","consent_manager.category":"Category","consent_manager.purpose":"Purpose","consent_manager.functional_category":"Functional","consent_manager.functional_purpose":"Enables enhanced functionality, such as videos and live chat. If you do not allow these, then some or all of these functions may not work properly.","consent_manager.analytics_category":"Analytics","consent_manager.analytics_purpose":"Provide statistical information on site usage, e.g., web analytics so we can improve this website over time.","consent_manager.targeting_category":"Targeting","consent_manager.advertising_category":"Advertising","consent_manager.advertising_purpose":"Used to create profiles or personalize content to enhance your shopping experience.","consent_manager.essential_category":"Essential","consent_manager.esential_purpose":"Essential for the site and any requested services to work, but do not perform any additional or secondary function.","consent_manager.yes":"Yes","consent_manager.no":"No","consent_manager.not_available":"N/A","consent_manager.cancel":"Cancel","consent_manager.save":"Save","consent_manager.back_to_preferences":"Back to Preferences","consent_manager.close_without_changes":"You have unsaved changes to your data collection preferences. Are you sure you want to close without saving?","consent_manager.unsaved_changes":"You have unsaved changes","consent_manager.by_using":"By using our website, you're agreeing to our","consent_manager.agree_on_data_collection":"By using our website, you're agreeing to the collection of data as described in our ","consent_manager.change_preferences":"You can change your preferences at any time","consent_manager.cancel_dialog_title":"Are you sure you want to cancel?","consent_manager.privacy_policy":"Privacy Policy","consent_manager.allow_category_tracking":"Allow [CATEGORY_NAME] tracking","consent_manager.disallow_category_tracking":"Disallow [CATEGORY_NAME] tracking"}}`;</script>
+
+        <script nonce="">
+            window.lazySizesConfig = window.lazySizesConfig || {};
+            window.lazySizesConfig.loadMode = 1;
+        </script>
+        <script async src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/dist/theme-bundle.head_async.js" nonce=""></script>
+
+        
+
+        <link data-stencil-stylesheet href="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/css/theme-f0fc1080-1a72-013f-a16e-56a3d9edf282.css" rel="stylesheet">
+
+        <!-- Start Tracking Code for analytics_siteverification -->
+
+<meta name="google-site-verification" content="h0TTobkiN-a0Ecy3KAYCIe-QyUpFbk830qRZ0HVTKro" />
+
+<!-- End Tracking Code for analytics_siteverification -->
+
+
+<script type="text/javascript" src="https://checkout-sdk.bigcommerce.com/v1/loader.js" defer ></script>
+<script type="text/javascript">
+var BCData = {"product_attributes":{"sku":"R0604D","upc":null,"mpn":null,"gtin":null,"weight":{"formatted":"1.00 LBS","value":1},"base":false,"image":null,"price":{"without_tax":{"formatted":"$11.95","value":11.95,"currency":"USD"},"tax_label":"Tax"},"out_of_stock_behavior":"hide_option","out_of_stock_message":"Out of stock","available_modifier_values":[136,137],"available_variant_values":[98,138,139],"in_stock_attributes":[98,138,139,136,137],"selected_attributes":[],"stock":null,"available_to_sell":null,"available_on_hand":null,"available_for_backorder":null,"backorder_message_id":null,"instock":true,"stock_message":null,"purchasable":true,"purchasing_message":null,"call_for_price_message":null}};
+</script>
+<script type="text/javascript">
+/* eslint-disable */
+(function(){/*
+
+ Copyright The Closure Library Authors.
+ SPDX-License-Identifier: Apache-2.0
+*/
+'use strict';var g=function(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}},l=this||self,m=/^[\w+/_-]+[=]{0,2}$/,p=null,q=function(){},r=function(a){var b=typeof a;if("object"==b)if(a){if(a instanceof Array)return"array";if(a instanceof Object)return b;var c=Object.prototype.toString.call(a);if("[object Window]"==c)return"object";if("[object Array]"==c||"number"==typeof a.length&&"undefined"!=typeof a.splice&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("splice"))return"array";
+if("[object Function]"==c||"undefined"!=typeof a.call&&"undefined"!=typeof a.propertyIsEnumerable&&!a.propertyIsEnumerable("call"))return"function"}else return"null";else if("function"==b&&"undefined"==typeof a.call)return"object";return b},u=function(a,b){function c(){}c.prototype=b.prototype;a.prototype=new c;a.prototype.constructor=a};var v=function(a,b){Object.defineProperty(l,a,{configurable:!1,get:function(){return b},set:q})};var y=function(a,b){this.b=a===w&&b||"";this.a=x},x={},w={};var aa=function(a,b){a.src=b instanceof y&&b.constructor===y&&b.a===x?b.b:"type_error:TrustedResourceUrl";if(null===p)b:{b=l.document;if((b=b.querySelector&&b.querySelector("script[nonce]"))&&(b=b.nonce||b.getAttribute("nonce"))&&m.test(b)){p=b;break b}p=""}b=p;b&&a.setAttribute("nonce",b)};var z=function(){return Math.floor(2147483648*Math.random()).toString(36)+Math.abs(Math.floor(2147483648*Math.random())^+new Date).toString(36)};var A=function(a,b){b=String(b);"application/xhtml+xml"===a.contentType&&(b=b.toLowerCase());return a.createElement(b)},B=function(a){this.a=a||l.document||document};B.prototype.appendChild=function(a,b){a.appendChild(b)};var C=function(a,b,c,d,e,f){try{var k=a.a,h=A(a.a,"SCRIPT");h.async=!0;aa(h,b);k.head.appendChild(h);h.addEventListener("load",function(){e();d&&k.head.removeChild(h)});h.addEventListener("error",function(){0<c?C(a,b,c-1,d,e,f):(d&&k.head.removeChild(h),f())})}catch(n){f()}};var ba=l.atob("aHR0cHM6Ly93d3cuZ3N0YXRpYy5jb20vaW1hZ2VzL2ljb25zL21hdGVyaWFsL3N5c3RlbS8xeC93YXJuaW5nX2FtYmVyXzI0ZHAucG5n"),ca=l.atob("WW91IGFyZSBzZWVpbmcgdGhpcyBtZXNzYWdlIGJlY2F1c2UgYWQgb3Igc2NyaXB0IGJsb2NraW5nIHNvZnR3YXJlIGlzIGludGVyZmVyaW5nIHdpdGggdGhpcyBwYWdlLg=="),da=l.atob("RGlzYWJsZSBhbnkgYWQgb3Igc2NyaXB0IGJsb2NraW5nIHNvZnR3YXJlLCB0aGVuIHJlbG9hZCB0aGlzIHBhZ2Uu"),ea=function(a,b,c){this.b=a;this.f=new B(this.b);this.a=null;this.c=[];this.g=!1;this.i=b;this.h=c},F=function(a){if(a.b.body&&!a.g){var b=
+function(){D(a);l.setTimeout(function(){return E(a,3)},50)};C(a.f,a.i,2,!0,function(){l[a.h]||b()},b);a.g=!0}},D=function(a){for(var b=G(1,5),c=0;c<b;c++){var d=H(a);a.b.body.appendChild(d);a.c.push(d)}b=H(a);b.style.bottom="0";b.style.left="0";b.style.position="fixed";b.style.width=G(100,110).toString()+"%";b.style.zIndex=G(2147483544,2147483644).toString();b.style["background-color"]=I(249,259,242,252,219,229);b.style["box-shadow"]="0 0 12px #888";b.style.color=I(0,10,0,10,0,10);b.style.display=
+"flex";b.style["justify-content"]="center";b.style["font-family"]="Roboto, Arial";c=H(a);c.style.width=G(80,85).toString()+"%";c.style.maxWidth=G(750,775).toString()+"px";c.style.margin="24px";c.style.display="flex";c.style["align-items"]="flex-start";c.style["justify-content"]="center";d=A(a.f.a,"IMG");d.className=z();d.src=ba;d.style.height="24px";d.style.width="24px";d.style["padding-right"]="16px";var e=H(a),f=H(a);f.style["font-weight"]="bold";f.textContent=ca;var k=H(a);k.textContent=da;J(a,
+e,f);J(a,e,k);J(a,c,d);J(a,c,e);J(a,b,c);a.a=b;a.b.body.appendChild(a.a);b=G(1,5);for(c=0;c<b;c++)d=H(a),a.b.body.appendChild(d),a.c.push(d)},J=function(a,b,c){for(var d=G(1,5),e=0;e<d;e++){var f=H(a);b.appendChild(f)}b.appendChild(c);c=G(1,5);for(d=0;d<c;d++)e=H(a),b.appendChild(e)},G=function(a,b){return Math.floor(a+Math.random()*(b-a))},I=function(a,b,c,d,e,f){return"rgb("+G(Math.max(a,0),Math.min(b,255)).toString()+","+G(Math.max(c,0),Math.min(d,255)).toString()+","+G(Math.max(e,0),Math.min(f,
+255)).toString()+")"},H=function(a){a=A(a.f.a,"DIV");a.className=z();return a},E=function(a,b){0>=b||null!=a.a&&0!=a.a.offsetHeight&&0!=a.a.offsetWidth||(fa(a),D(a),l.setTimeout(function(){return E(a,b-1)},50))},fa=function(a){var b=a.c;var c="undefined"!=typeof Symbol&&Symbol.iterator&&b[Symbol.iterator];b=c?c.call(b):{next:g(b)};for(c=b.next();!c.done;c=b.next())(c=c.value)&&c.parentNode&&c.parentNode.removeChild(c);a.c=[];(b=a.a)&&b.parentNode&&b.parentNode.removeChild(b);a.a=null};var ia=function(a,b,c,d,e){var f=ha(c),k=function(n){n.appendChild(f);l.setTimeout(function(){f?(0!==f.offsetHeight&&0!==f.offsetWidth?b():a(),f.parentNode&&f.parentNode.removeChild(f)):a()},d)},h=function(n){document.body?k(document.body):0<n?l.setTimeout(function(){h(n-1)},e):b()};h(3)},ha=function(a){var b=document.createElement("div");b.className=a;b.style.width="1px";b.style.height="1px";b.style.position="absolute";b.style.left="-10000px";b.style.top="-10000px";b.style.zIndex="-10000";return b};var K={},L=null;var M=function(){},N="function"==typeof Uint8Array,O=function(a,b){a.b=null;b||(b=[]);a.j=void 0;a.f=-1;a.a=b;a:{if(b=a.a.length){--b;var c=a.a[b];if(!(null===c||"object"!=typeof c||Array.isArray(c)||N&&c instanceof Uint8Array)){a.g=b-a.f;a.c=c;break a}}a.g=Number.MAX_VALUE}a.i={}},P=[],Q=function(a,b){if(b<a.g){b+=a.f;var c=a.a[b];return c===P?a.a[b]=[]:c}if(a.c)return c=a.c[b],c===P?a.c[b]=[]:c},R=function(a,b,c){a.b||(a.b={});if(!a.b[c]){var d=Q(a,c);d&&(a.b[c]=new b(d))}return a.b[c]};
+M.prototype.h=N?function(){var a=Uint8Array.prototype.toJSON;Uint8Array.prototype.toJSON=function(){var b;void 0===b&&(b=0);if(!L){L={};for(var c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split(""),d=["+/=","+/","-_=","-_.","-_"],e=0;5>e;e++){var f=c.concat(d[e].split(""));K[e]=f;for(var k=0;k<f.length;k++){var h=f[k];void 0===L[h]&&(L[h]=k)}}}b=K[b];c=[];for(d=0;d<this.length;d+=3){var n=this[d],t=(e=d+1<this.length)?this[d+1]:0;h=(f=d+2<this.length)?this[d+2]:0;k=n>>2;n=(n&
+3)<<4|t>>4;t=(t&15)<<2|h>>6;h&=63;f||(h=64,e||(t=64));c.push(b[k],b[n],b[t]||"",b[h]||"")}return c.join("")};try{return JSON.stringify(this.a&&this.a,S)}finally{Uint8Array.prototype.toJSON=a}}:function(){return JSON.stringify(this.a&&this.a,S)};var S=function(a,b){return"number"!==typeof b||!isNaN(b)&&Infinity!==b&&-Infinity!==b?b:String(b)};M.prototype.toString=function(){return this.a.toString()};var T=function(a){O(this,a)};u(T,M);var U=function(a){O(this,a)};u(U,M);var ja=function(a,b){this.c=new B(a);var c=R(b,T,5);c=new y(w,Q(c,4)||"");this.b=new ea(a,c,Q(b,4));this.a=b},ka=function(a,b,c,d){b=new T(b?JSON.parse(b):null);b=new y(w,Q(b,4)||"");C(a.c,b,3,!1,c,function(){ia(function(){F(a.b);d(!1)},function(){d(!0)},Q(a.a,2),Q(a.a,3),Q(a.a,1))})};var la=function(a,b){V(a,"internal_api_load_with_sb",function(c,d,e){ka(b,c,d,e)});V(a,"internal_api_sb",function(){F(b.b)})},V=function(a,b,c){a=l.btoa(a+b);v(a,c)},W=function(a,b,c){for(var d=[],e=2;e<arguments.length;++e)d[e-2]=arguments[e];e=l.btoa(a+b);e=l[e];if("function"==r(e))e.apply(null,d);else throw Error("API not exported.");};var X=function(a){O(this,a)};u(X,M);var Y=function(a){this.h=window;this.a=a;this.b=Q(this.a,1);this.f=R(this.a,T,2);this.g=R(this.a,U,3);this.c=!1};Y.prototype.start=function(){ma();var a=new ja(this.h.document,this.g);la(this.b,a);na(this)};
+var ma=function(){var a=function(){if(!l.frames.googlefcPresent)if(document.body){var b=document.createElement("iframe");b.style.display="none";b.style.width="0px";b.style.height="0px";b.style.border="none";b.style.zIndex="-1000";b.style.left="-1000px";b.style.top="-1000px";b.name="googlefcPresent";document.body.appendChild(b)}else l.setTimeout(a,5)};a()},na=function(a){var b=Date.now();W(a.b,"internal_api_load_with_sb",a.f.h(),function(){var c;var d=a.b,e=l[l.btoa(d+"loader_js")];if(e){e=l.atob(e);
+e=parseInt(e,10);d=l.btoa(d+"loader_js").split(".");var f=l;d[0]in f||"undefined"==typeof f.execScript||f.execScript("var "+d[0]);for(;d.length&&(c=d.shift());)d.length?f[c]&&f[c]!==Object.prototype[c]?f=f[c]:f=f[c]={}:f[c]=null;c=Math.abs(b-e);c=1728E5>c?0:c}else c=-1;0!=c&&(W(a.b,"internal_api_sb"),Z(a,Q(a.a,6)))},function(c){Z(a,c?Q(a.a,4):Q(a.a,5))})},Z=function(a,b){a.c||(a.c=!0,a=new l.XMLHttpRequest,a.open("GET",b,!0),a.send())};(function(a,b){l[a]=function(c){for(var d=[],e=0;e<arguments.length;++e)d[e-0]=arguments[e];l[a]=q;b.apply(null,d)}})("__d3lUW8vwsKlB__",function(a){"function"==typeof window.atob&&(a=window.atob(a),a=new X(a?JSON.parse(a):null),(new Y(a)).start())});}).call(this);
+
+window.__d3lUW8vwsKlB__("WyIxODI4Njg0MTZhN2JiMTlkIixbbnVsbCxudWxsLG51bGwsImh0dHBzOi8vZnVuZGluZ2Nob2ljZXNtZXNzYWdlcy5nb29nbGUuY29tL2YvQUdTS1d4WDB4c25pOUY4cjE5OWdfRW1ZRXMtNlhpdldQeUlsTmwxbW9MbzJGQ0I5U0paUEZrdTNEcnNNU3d0QTBMbDg4RjNmMzhWcUhfOTk5R0MxZDBSTUdOQVx1MDAzZCJdCixbMjAsImRpdi1ncHQtYWQiLDEwMCwiTVRneU9EWTROREUyWVRkaVlqRTVaQVx1MDAzZFx1MDAzZCIsW251bGwsbnVsbCxudWxsLCJodHRwczovL3d3dy5nc3RhdGljLmNvbS8wZW1uL2YvcC8xODI4Njg0MTZhN2JiMTlkLmpzP3VzcXBcdTAwM2RDQUUiXQpdCiwiaHR0cHM6Ly9mdW5kaW5nY2hvaWNlc21lc3NhZ2VzLmdvb2dsZS5jb20vbC9BR1NLV3hWcTVPTXJhc1BWSGF1OGRxRFJkUnBEZ3c4WlpNOXBCQlVtdjdkdE9oWWdmUUd2LTZhMV95by1pcFFrWFZKdnpJUnRZM0Rwd3Z6dFBSWHhza2paP2FiXHUwMDNkMSIsImh0dHBzOi8vZnVuZGluZ2Nob2ljZXNtZXNzYWdlcy5nb29nbGUuY29tL2wvQUdTS1d4VVljNWwwNTFISXV3MURhTi1aZEZZenZraXJRU3d4akk2cHBvR2pJMlZNSWFLQjEzbk1oOXA3TzJ5U0Z6b1lBNmU2NHJTNmVPd1ZyZUFmVENCOT9hYlx1MDAzZDJcdTAwMjZzYmZcdTAwM2QxIiwiaHR0cHM6Ly9mdW5kaW5nY2hvaWNlc21lc3NhZ2VzLmdvb2dsZS5jb20vbC9BR1NLV3hVUUFDUGRQWUNWb0xSdmxzbUxFcndKYThTb3FlUFM0RF91Zklaa3JqMURGWFVxQTk5R2lrRW5hM2FNM2JPZDIxMVF4OEo5Ym1tSFFuOFRJYnpTP3NiZlx1MDAzZDIiXQo=");
+
+</script><script>
+    window.categoryPages = [
+        {
+            insert_category: "HBR 10 Must Read Series",
+            insert_location: "before",
+            name: "Top 40 Business Books",
+            url: "/top-40/",
+        },
+        {
+            insert_category: "HBR 10 Must Read Series",
+            insert_location: "before",
+            name: "Top 25 Leadership Books",
+            url: "/top-25-leadership-books/",
+        },
+        {
+            insert_category: "Workshop Kits for Team Training",
+            insert_location: "after",
+            name: "Top Team Training Topics",
+            url: "/top-team-training-topics/",
+        },
+    ]
+</script><script>
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.textContent = `
+        afterpay-placement,
+        .cart-additionalCheckoutButtons,
+        .previewCart-additionalCheckoutButtons,
+        .previewCartCheckout-additionalCheckoutButtons,
+        .paypalCommerce-buttons-container {
+            display: none;
+        }
+    `;
+
+    // .form-checklist--paypalcommerce,
+    // .form-checklist--paypalcommercecredit,
+    // .form-checklist--afterpay-pay_by_installment
+    document.head.appendChild(style);
+</script><script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=d775641b-385a-4d68-852e-e0d4e8b087b1" async> </script><script>
+    window.promotionCodeTips = `
+        <p>You are not eligible for this promotion. Please sign in to your HBR account and try again to verify your eligibility. If you need assistance, please reach out to <a href="mailto:customerservice@harvardbusiness.org"  class="alert-contact-email">customerservice@harvardbusiness.org</a>.</p>
+    `;
+
+    window.specialPromotionCode = 'SUBEBOOK0724';
+    window.specialPromotionCodeTips = `
+        <p>This promotion is for Premium HBR subscribers only. Please sign in to your Premium HBR account. If you need assistance, please reach out to <a href="mailto:customerservice@harvardbusiness.org"  class="alert-contact-email">customerservice@harvardbusiness.org</a>.</p>
+    `;
+</script><script>
+    var customStyle = document.createElement('style');
+    customStyle.type = 'text/css';
+    customStyle.innerHTML = `
+        .guide-info-dom {
+            display: none;
+        }
+    `;
+    document.getElementsByTagName('head')[0].appendChild(customStyle);
+</script><script>
+    window.formatInformation = [
+        {
+            format: "Ebook",
+            tips: "Ebooks are available to download from your HBR account immediately after purchase. Ebook purchases can be downloaded in <strong>ePub</strong>, <strong>Mobi</strong>, and <strong>PDF</strong> formats to be used on any e-reader device; including iPad, Kindle, Android tablets, and Fire tablets."
+        },
+        {
+            format: "Bundles",
+            tips: "Bundles can include books, tools, and editable templates in a mix of physical and/or digital formats."
+        },
+        {
+            format: "Copyrighted PDFs",
+            tips: "PDFs are available to download in PDF format from your HBR account immediately after purchase."
+        },
+        {
+            format: "Tools",
+            tips: "Tools are editable templates that are available to download from your HBR account immediately after purchase. These templates come in a variety of formats depending on the product, but could include PowerPoint, Excel, and Word."
+        },
+        {
+            format: "Hardcover and Paperback",
+            tips: "Physical books are usually shipped within one business day after purchase. Delivery time depends on your location and the shipping method used."
+        }
+    ];
+</script><script>
+    window.formatTips = [
+        {
+            format: "Ebook",
+            tips: "Instant download of 3 digital formats"
+        },
+        {
+            format: "Hardcover/Hardcopy",
+            tips: "Ships within 1 business day"
+        },
+        {
+            format: "Hardcover/Hardcopy (B&W)",
+            tips: "Ships within 1 business day"
+        },
+        {
+            format: "Paperback/Softbound",
+            tips: "Ships within 1 business day"
+        },
+        {
+            format: "PDF",
+            tips: "Add copies before sharing with your team"
+        },
+        {
+            format: "Zip File",
+            tips: "Instant download of tools and templates"
+        },
+        {
+            format: "Web Based HTML",
+            tips: "A web-based application"
+        },
+        {
+            format: "Powerpoint",
+            tips: "A slideshow in .pptx format, to be opened in Microsoft PowerPoint"
+        },
+        {
+            format: "Microsoft Excel Spreadsheet",
+            tips: "A spreadsheet in .xlsx format, to be used in Microsoft Excel"
+        },
+        {
+            format: "Magazine",
+            tips: "A physical magazine issue"
+        },
+        {
+            format: "ePub",
+            tips: "A responsive e-reader format"
+        },
+        {
+            format: "Physical Bundle",
+            tips: "A mix of titles in hardcopy format"
+        },
+        {
+            format: "Digital Bundle",
+            tips: "A mix of titles in digital format"
+        },
+        {
+            format: "Print & Digital Bundle",
+            tips: "Products delivered in both physical and digital formats"
+        },
+        {
+            format: "Bundle",
+            tips: "A mix of titles or formats"
+        }
+    ];
+</script><script>
+window.time_zone = 'America/New_York';
+window.customBanners = [
+{
+    enable: false,
+    content: "<strong>Cyber Monday savings!</strong> Take <strong>40%</strong> off your order of $75 or more with promo code <strong>CYBER25</strong>. <a href='https://store.hbr.org/disclaimer-details/' target='_blank'>(Terms and conditions apply.)</a>",
+    startTime: '2025-11-24 00:00:00',
+    endTime: '2025-12-02 23:59:00',
+    needLogin: false,
+    limitedLocation: {
+        pageTypes: ['category', 'product', 'search', 'cart', 'checkout'],
+        specialPageTitles: ['Top 40','Top 25 Leadership Books','Top Team Training Topics'],
+    },
+    excludedCategoryNames: [],
+    display: 'after',
+},
+{
+    enable: true,
+    content: "Take <strong>30%</strong> off your order of $50 or more sitewide with promo code <strong>SPRING26</strong>. <a href='https://store.hbr.org/disclaimer-details/' target='_blank'>(Terms and conditions apply.)</a>",
+    startTime: '2026-03-16 00:00:00',
+    endTime: '2026-03-22 23:59:59',
+    needLogin: false,
+    limitedLocation: {
+        pageTypes: ['category', 'product', 'search', 'cart', 'checkout'],
+        specialPageTitles: ['Top 40','Top 25 Leadership Books','Top Team Training Topics'],
+    },
+    excludedCategoryNames: [],
+    display: 'after',
+},
+{
+    enable: false,
+    content: "<strong>Special offer: </strong>Spend $50 in the HBR Store and get <strong>20% off a new, annual HBR subscription</strong>. Spend $100 and get <strong>30% off a new, annual subscription</strong>. <a href='https://store.hbr.org/disclaimer-details/' target='_blank'>Learn more here.</a>",
+    startTime: '2025-04-20 12:00:00',
+    endTime: '2025-04-27 23:59:59',
+    needLogin: false,
+    limitedLocation: {
+        pageTypes: ['category', 'product', 'search', 'cart', 'checkout'],
+        specialPageTitles: ['Top 40','Top 25 Leadership Books','Top Team Training Topics'],
+    },
+    excludedCategoryNames: [],
+    display: 'after',
+},
+{
+    enable: false,
+    content: "<strong>Special offer: </strong>Spend $50 in the HBR Store and get <strong>20% off an HBR gift subscription</strong>. Spend $100 and get <strong>50% off a gift subscription</strong>. <a href='https://store.hbr.org/disclaimer-details/' target='_blank'>Exclusions apply.</a>",
+    startTime: '2025-04-20 12:00:00',
+    endTime: '2025-04-27 23:59:59',
+    needLogin: false,
+    limitedLocation: {
+        pageTypes: ['category', 'product', 'search', 'cart', 'checkout'],
+        specialPageTitles: ['Top 40','Top 25 Leadership Books','Top Team Training Topics'],
+    },
+    excludedCategoryNames: [],
+    display: 'after',
+},
+{
+    enable: false,
+    content: "<strong>Special offer: </strong>Spend $50 in the HBR Store and get <strong>20% off a new HBR subscription</strong>. Spend $100 and get <strong>50% off your subscription</strong>. <a href='https://store.hbr.org/disclaimer-details/' target='_blank'>Exclusions apply.</a>",
+    startTime: '2025-04-20 12:00:00',
+    endTime: '2025-04-27 23:59:59',
+    needLogin: true,
+    needSubscribe: false,
+    limitedLocation: {
+        pageTypes: ['category', 'product', 'search', 'cart', 'checkout'],
+        specialPageTitles: ['Top 40','Top 25 Leadership Books','Top Team Training Topics'],
+    },
+    excludedCategoryNames: [],
+    display: 'after',
+},
+];
+</script><script>
+       
+(function loadNoibu() {
+  const s = document.createElement("script");
+  s.src = "https://cdn.noibu.com/collect-core.js";
+  document.head.appendChild(s);
+})();
+
+        
+
+window.addEventListener('load', () => {
+
+  const fetchCartData = async () => {
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const response = await fetch(
+        `${window.location.origin}/api/storefront/carts`,
+        options
+      );
+
+      if (!response.ok) {
+        console.error(
+          `HTTP Error: ${response.status} - ${response.statusText}`
+        );
+        return undefined;
+      }
+
+      const data = await response.json();
+      return data[0]; // Return the first cart if it exists, otherwise undefined
+    } catch (error) {
+      console.error("Fetch error:", error);
+      return undefined;
+    }
+  };
+
+  const fetchCheckout = async (checkoutId) => {
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const url = `${window.location.origin}/api/storefront/checkouts/${checkoutId}`;
+      const response = await fetch(url, options);
+
+      if (!response.ok) {
+        console.error(
+          `HTTP Error: ${response.status} - ${response.statusText}`
+        );
+        return undefined;
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Fetch error:", error);
+      return undefined;
+    }
+  };
+
+  const addCustomAttribute = (key, value) => {
+    if (window.NOIBUJS) {
+      window.NOIBUJS.addCustomAttribute(key, value);
+    } else {
+      window.addEventListener('noibuSDKReady', () => {
+        window.NOIBUJS.addCustomAttribute(key, value);
+      });
+    }
+  };
+
+  if (typeof window.bodlEvents?.cart?.on === "function") {
+    window.bodlEvents.cart.viewed(async (payload) => {
+
+      const cartData = await fetchCartData();
+
+      if (cartData) {
+        sessionStorage.setItem("cartId", cartData?.id);
+        addCustomAttribute("cartId", cartData?.id);
+      }
+    });
+  }
+
+  if (typeof window.bodlEvents?.checkout?.checkoutBegin === "function") {
+    window.bodlEvents.checkout.checkoutBegin(async (payload) => {
+
+      const cartId = sessionStorage.getItem("cartId");
+
+      if (cartId) {
+        addCustomAttribute("checkoutId", cartId);
+      }
+    });
+  }
+
+  if (typeof window.bodlEvents?.checkout?.orderPurchased === "function") {
+    window.bodlEvents.checkout.orderPurchased((payload) => {
+      addCustomAttribute("orderId", payload?.order_id?.toString());
+    });
+  }
+
+  if (window?.bodl?.shopper?.customer_id) {
+    addCustomAttribute("customerId", window.bodl.shopper.customer_id);
+  }
+
+  if (window?.bodl?.session?.id) {
+    addCustomAttribute("sessionId", window.bodl.session.id);
+  }
+  
+}, false)
+
+ 
+        
+
+        async function handleHelpCode() {
+            if (window.NOIBUJS?.requestHelpCode) {
+                const helpCodeField = document.getElementById("help-code-field");
+                if (helpCodeField != null) {
+                    const helpCode = await window.NOIBUJS.requestHelpCode(false);
+                    helpCodeField.innerText = helpCode;
+                }
+            }
+        }
+
+        if (window?.NOIBUJS) {
+            handleHelpCode();
+        } else {
+            window.addEventListener('noibuSDKReady', handleHelpCode);
+        }
+   
+ 
+        
+    
+        async function handleButtonHelpCode() {
+            const button = document.getElementById("request-help-code");
+            const label = document.getElementById("help-code-result");
+
+            if (button != null && label != null) {
+                button.addEventListener("click", async () => {
+                    if (window.NOIBUJS?.requestHelpCode) {
+                        const helpCode = await window.NOIBUJS.requestHelpCode(false);
+                        label.innerText = helpCode;
+                    }
+                });
+            }
+        }
+
+        if (window?.NOIBUJS) {
+            handleButtonHelpCode();
+        } else {
+            window.addEventListener("noibuSDKReady", handleButtonHelpCode);
+        }
+   
+
+      </script>
+ <script data-cfasync="false" src="https://microapps.bigcommerce.com/bodl-events/1.9.4/index.js" integrity="sha256-Y0tDj1qsyiKBRibKllwV0ZJ1aFlGYaHHGl/oUFoXJ7Y=" nonce="" crossorigin="anonymous"></script>
+ <script data-cfasync="false" nonce="">
+
+ (function() {
+    function decodeBase64(base64) {
+       const text = atob(base64);
+       const length = text.length;
+       const bytes = new Uint8Array(length);
+       for (let i = 0; i < length; i++) {
+          bytes[i] = text.charCodeAt(i);
+       }
+       const decoder = new TextDecoder();
+       return decoder.decode(bytes);
+    }
+    window.bodl = JSON.parse(decodeBase64("eyJzZXNzaW9uIjp7ImlkIjoiODliMjk5N2UtZGQ2Ni00MGRlLTgzYzUtYjhlM2RlNzRiOTE5IiwiZmlyc3RfdG91Y2hfdGltZXN0YW1wIjoiMjAyNi0wNS0xMFQxMDozMTowMSIsImZpcnN0X3RvdWNoX3JlZmVycmFsX3VybCI6IiIsImZpcnN0X3RvdWNoX3JlcXVlc3RfdXJsIjoiaHR0cHM6Ly9zdG9yZS5oYnIub3JnL3Byb2R1Y3Qvd2hlbi1zaG91bGQtYS1sZWFkZXItYXBvbG9naXplLWFuZC13aGVuLW5vdC9SMDYwNEQifSwic2hvcHBlciI6eyJ2aXNpdG9yX2lkIjoiIiwiY3VzdG9tZXJfaWQiOm51bGwsImVtYWlsIjpudWxsLCJmaXJzdF9uYW1lIjpudWxsLCJsYXN0X25hbWUiOm51bGx9LCJkYXRhX2NvbnNlbnQiOnsiZnVuY3Rpb25hbCI6dHJ1ZSwiYW5hbHl0aWNzIjp0cnVlLCJhZHZlcnRpc2luZyI6dHJ1ZX0sImV2ZW50cyI6W3siYm9kbF92MV9wcm9kdWN0X3BhZ2Vfdmlld2VkIjp7ImV2ZW50X2lkIjoiNTk0MGU4YzAtZjFlNC00M2ZlLWE3NDQtZmU2NDIyNTQzYzFmIiwiY2hhbm5lbF9pZCI6MSwiY3VycmVuY3kiOiJVU0QiLCJwcm9kdWN0X3ZhbHVlIjoxMS45NSwibGluZV9pdGVtcyI6W3sicHJvZHVjdF9pZCI6IjQ2ODEzIiwic2t1IjoiUjA2MDREIiwidmFyaWFudF9pZCI6bnVsbCwicHJvZHVjdF9uYW1lIjoiV2hlbiBTaG91bGQgYSBMZWFkZXIgQXBvbG9naXplLS1hbmQgV2hlbiBOb3Q/IF4gUjA2MDREIiwiZ2lmdF9jZXJ0aWZpY2F0ZV9pZCI6bnVsbCwiZ2lmdF9jZXJ0aWZpY2F0ZV9uYW1lIjpudWxsLCJnaWZ0X2NlcnRpZmljYXRlX3RoZW1lIjpudWxsLCJwdXJjaGFzZV9wcmljZSI6MTEuOTUsInNhbGVfcHJpY2UiOm51bGwsImJhc2VfcHJpY2UiOm51bGwsInJldGFpbF9wcmljZSI6bnVsbCwicXVhbnRpdHkiOm51bGwsImRpc2NvdW50IjpudWxsLCJjb3Vwb25fYW1vdW50IjpudWxsLCJpbmRleCI6MCwiYnJhbmRfbmFtZSI6bnVsbCwiY2F0ZWdvcnlfbmFtZXMiOlsiQXJ0aWNsZXMiXSwiY3VycmVuY3kiOiJVU0QifV19fV19"));
+ })()
+
+ </script>
+
+<script nonce="">
+(function () {
+    var xmlHttp = new XMLHttpRequest();
+    
+    xmlHttp.open('POST', 'https://bes.gcp.data.bigcommerce.com/nobot');
+    xmlHttp.setRequestHeader('Content-Type', 'application/json');
+    xmlHttp.send('{"store_id":"1000005111","timezone_offset":"-4.0","timestamp":"2026-05-10T10:31:01.88442200Z","visit_id":"c9f97c4c-ea29-45db-8ff3-11183e7c682c","channel_id":1}');
+})();
+</script>
+
+
+
+        <script src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/js/theme/global/SHA256.js" nonce=""></script>
+
+
+        <script type="text/javascript" nonce="">
+
+          //Mobile, Desktop, Tablet
+          var g_ua = navigator.userAgent;
+          var g_userAgent = "Desktop";
+          if (/Mobi/i.test(g_ua)) {
+            g_userAgent = "Mobile";
+          }
+          if(/(?:iPad|PlayBook)/.test(g_ua) || (/(?:Android)/.test(g_ua) && !/(?:Mobile)/.test(g_ua)) || (/(?:Firefox)/.test(g_ua) && /(?:Tablet)/.test(g_ua))) {
+            g_userAgent = "Tablet";
+          }
+
+          //get US ET Time
+          var localDate = new Date();
+          var localTime = localDate.getTime();
+          var localOffset = localDate.getTimezoneOffset() * 60000;
+          var utc = localTime + localOffset;
+          var offset = -5;// ET:UTC-5
+          var calctime = utc + (3600000*offset);
+          var etDate = new Date(calctime);
+          //console.log('US ET Time：' + etDate.toString());
+          var etday = etDate.getDate();
+          var etmonth = etDate.getMonth() + 1;
+          var etyear = etDate.getFullYear();
+          if(etmonth<10){
+            etmonth='0'+etmonth
+          }
+          if(etday<10){
+            etday='0'+etday
+          }
+          var etDateFormat = etyear + "-" + etmonth + "-" + etday;
+          var etHour = etDate.getHours();
+          var etMinute = etDate.getMinutes();
+          var etTimeFlag = "AM";
+          if(parseInt(etHour) > 12) {
+              etHour = parseInt(etHour) - 12;
+              etTimeFlag = "PM";
+          }
+          if(etHour - 10 < 0) {
+              etHour = "0" + etHour;
+          }
+          if(etMinute - 10 < 0) {
+            etMinute = "0" + etMinute;
+          }
+          var etTimeFormat = etHour + ":" + etMinute + " " + etTimeFlag;
+
+          //email - sha256
+          var userEmail = "";
+          var customerEmailOrigin = "";
+
+          //adobe date layer
+          var pageData = {};
+          pageData.data = [];
+          pageData.data.push({'url':window.location.href});
+
+          var referringURL = document.referrer;
+
+          digitalData = {
+            pageInstanceID: "When Should a Leader Apologize--and When Not? ^ R0604D - HBR Store",
+            page: {
+              pageInfo: {
+                  pageName: "When Should a Leader Apologize--and When Not? ^ R0604D - HBR Store",
+                  pageType: "product",
+                  pageDescription: "",
+                  pageURL: pageData.data[0].url ,
+                  referringURL: referringURL,//"<<referringURL>>",
+                  deviceType: g_userAgent,
+                  language: "en_US",
+                  date: etDateFormat,
+                  time: etTimeFormat,
+                  geoRegion: "US"
+              }
+            },
+            product: [],
+            cart: {
+                browse: {
+                  cartTotal: 0,
+                  cartItemVolume: 0,
+                  }
+              },
+            transaction: {},
+            event: [],
+            users: [{
+              profile: {
+                  attributes: {
+                      industry: "",//"<<User Industry>>",
+                      jobTitle: "",//"<<Job Title>>",
+                      companySize: "",//"<<Company Size>>"
+                  },
+                  subscriberID: "",//"<<Subscriber ID>>",
+                  userState: "Guest",
+                  username: "",
+                  registrationDate: "",//"<<Registration Date>>",
+                  dateLastVisit: "",//"<<Date of Last Visit>>",
+                  daysSinceLastVisit: ""//"<<Number of Days Since Last Visit>>"
+                }
+              }],
+              version: "2.5.0"
+          };
+        </script>
+
+        
+
+        <script nonce="">
+    digitalData.page.pageInfo.pageName = "When Should a Leader Apologize--and When Not? ^ R0604D";
+    digitalData.page.pageInfo.pageType = "IDP";
+    digitalData.page.pageInfo.onsiteSearchResults = "";
+
+    digitalData.event.push({
+        eventInfo: {
+            eventName: "Product Interaction",
+            eventAction: "View Product"
+        }
+    });
+</script>
+
+
+        <script nonce="">
+          //console.log(navigator.userAgent);
+          console.log(digitalData);
+        </script>
+
+        <!-- Adobe Data layer -->
+        <script src="//assets.adobedtm.com/launch-EN42e04749a2d54ea7abb23d1676694900.min.js" nonce=""></script>
+
+         
+
+        
+        	
+
+        <script type="text/javascript" src="https://snapui.searchspring.io/d64rhd/bundle.js" id="searchspring-context" defer nonce="">
+                hash = "yneuaokjib";
+        </script>
+        <script type="application/ld+json" nonce="">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "url": "https://store.hbr.org/",
+            "logo": "https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/47x54/nav-hbr-logo_1570720324__61965.original.png"
+        }
+        </script>
+    </head>
+    <body id="mainContainer" class="">
+        <div id="dialog-app"></div>
+        <svg data-src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/icon-sprite.svg" class="icons-svg-sprite"></svg>
+
+        <div class="ad-container-outer"><div class="ad-container"><div id='DFP_pos1'></div></div></div>
+
+        
+<header class="header" role="banner">
+    <a class="mobileMenu-toggle" data-mobile-menu-toggle="menu" aria-label="Toggle menu" role="button">
+        <span class="mobileMenu-toggleIcon">Toggle menu</span>
+    </a>
+    <div class="table-wrap header-top">
+        <div class="table-cell site-search">
+            <div class="quick-search-wrap">
+                <div class="container">
+    <form class="form form-quickSearch" action="/shop/" method="get">
+        <fieldset class="form-fieldset">
+            <div class="form-field">
+                <label class="is-srOnly" for="quick-search">Search</label>
+                <input class="form-input"
+                       data-search-quick
+                       name="search_query"
+                       id="quick-search"
+                       data-error-message="Search field cannot be empty."
+                       placeholder="Search HBR Products"
+                       autocomplete="off"
+                >
+                <button class="form-submit" type="submit"></button>
+            </div>
+        </fieldset>
+    </form>
+    <section class="quickSearchResults" data-bind="html: results"></section>
+    <p role="status"
+       aria-live="polite"
+       class="aria-description--hidden"
+       data-search-aria-message-predefined-text="product results for"
+    ></p>
+</div>
+            </div>
+        </div>
+        <div class="table-cell site-logo">
+                <div class="header-logo header-logo--center">
+                    
+    <div class="header-logo-image-container">
+        <a href="https://hbr.org" class="link-to-hbr">
+            <svg class="header-logo-icon"><use href="#icon-hbr-logo"></use></svg>
+        </a>
+        <a href="https://store.hbr.org/" class="link-to-store">
+            <span class="header-logo-text">Store</span>
+        </a>
+    </div>
+                </div>
+        </div>
+        <div class="table-cell site-user">
+            <nav class="navUser">
+        
+
+    <ul class="navUser-section navUser-section--alt">
+        <li class="navUser-item">
+            <a class="navUser-action navUser-item--compare"
+               href="/compare"
+               data-compare-nav
+               aria-label="Compare"
+            >Compare <span class="countPill countPill--positive countPill--alt"></span></a>
+        </li>
+
+
+        <li class="navUser-item navUser-item--fixedpc">
+            <a class="navUser-action navUser-action--quickSearch"
+               href="javascript:void(0);"
+               aria-controls="quickSearch"
+               aria-expanded="false"
+               aria-label="Search"
+            ><span class="fa fa-search"></span></a>
+        </li>
+
+
+        <li class="navUser-item navUser-item--cart pc-ib">
+            <a class="navUser-action"
+               data-cart-preview
+               data-dropdown="cart-preview-dropdown"
+               data-options="align:right"
+               href="/cart.php"
+               aria-label="Cart with 0 items"
+            >
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/custom/img-cart-0620.png" alt="Cart"  width="25"> <span class="countPill cart-quantity">0</span>
+            </a>
+            <div class="dropdown-menu" id="cart-preview-dropdown" data-dropdown-content aria-hidden="true">
+                <span class="dropdown-menu-indicator"></span>
+                <div class="cart-preview-dropdown-content"></div>
+            </div>
+        </li>
+        <li class="navUser-item navUser-item--cart mobile">
+            <a class="navUser-action"
+               data-cart-preview
+               open-mobile-side-menu
+               data-control-menu="mobile-cart-menu"
+               href="/cart.php"
+               aria-label="Cart with 0 items"
+            >
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/custom/img-cart-0620.png" alt="Cart" width="25"> <span class="countPill cart-quantity">0</span>
+            </a>
+        </li>
+
+        <li class="navUser-item navUser-item--account pc-ib">
+                <a class="navUser-action" data-login-link>
+                	<span class="text">Sign In</span>
+                </a>
+        </li>
+
+        <li class="navUser-item navUser-item--account mobile">
+                <a class="navUser-action" aria-label="Sign In" data-login-link>
+                    <span class="text">Sign In</span>
+                </a>
+        </li>
+
+    </ul>
+    <div class="dropdown dropdown--quickSearch navUser-item--fixedpc" id="quickSearch" aria-hidden="true" tabindex="-1" data-prevent-quick-search-close>
+        <div class="container">
+    <form class="form form-quickSearch" action="/shop/" method="get">
+        <fieldset class="form-fieldset">
+            <div class="form-field">
+                <label class="is-srOnly" for="nav-quick-search">Search</label>
+                <input class="form-input"
+                       data-search-quick
+                       name="search_query"
+                       id="nav-quick-search"
+                       data-error-message="Search field cannot be empty."
+                       placeholder="Search HBR Products"
+                       autocomplete="off"
+                >
+                <button class="form-submit" type="submit"></button>
+            </div>
+        </fieldset>
+    </form>
+    <section class="quickSearchResults" data-bind="html: results"></section>
+    <p role="status"
+       aria-live="polite"
+       class="aria-description--hidden"
+       data-search-aria-message-predefined-text="product results for"
+    ></p>
+</div>
+    </div>
+</nav>
+
+<div class="mobile-side-menu" id="mobile-user-menu">
+    <div class="mobile-side-menu-bg" close-mobile-side-menu></div>
+    <div class="mobile-side-menu-content-wrap account-menu">
+        <span close-mobile-side-menu class="mobile-side-menu-close-button"><i class="icon"><svg><use href="#icon-close"></use></svg></i></span>
+        <div class="mobile-side-menu-content" mobile-side-menu-content>
+            <div class="user-info">
+                <div></div>
+                <div class="subscriber-info" id="subscriber_info"></div>
+            </div>
+            <div class="user-links ">
+                <a href="https://hbr.org/my-library/library">My Library</a>
+                <a href="https://hbr.org/my-library/topics">Topic Feeds</a>
+                <a href="https://hbr.org/my-library/purchases">Orders</a>
+                <a href="https://hbr.org/my-library/settings">Account Settings</a>
+                <a href="https://hbr.org/my-library/preferences">Email Preferences</a>
+
+                <a data-logout-link aria-label="Log Out">Log Out</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="mobile-side-menu" id="mobile-cart-menu">
+    <div class="mobile-side-menu-bg" close-mobile-side-menu></div>
+    <div class="mobile-side-menu-content-wrap mobile-cart-menu">
+        <span close-mobile-side-menu class="mobile-side-menu-close-button"><span class="icon"><svg><use href="#icon-close"></use></svg></span></span>
+        <div class="mobile-side-menu-content" mobile-side-menu-content></div>
+    </div>
+</div>
+        </div>
+
+    </div>
+    <div class="navPages-container" id="menu" data-menu>
+        <div class="overlay-menu" data-menu-close></div>
+        <div class="navPages-quickSearch">
+            <div class="container">
+    <form class="form form-quickSearch" action="/shop/" method="get">
+        <fieldset class="form-fieldset">
+            <div class="form-field">
+                <label class="is-srOnly" for="navPages-quick-search">Search</label>
+                <input class="form-input"
+                       data-search-quick
+                       name="search_query"
+                       id="navPages-quick-search"
+                       data-error-message="Search field cannot be empty."
+                       placeholder="Search HBR Products"
+                       autocomplete="off"
+                >
+                <button class="form-submit" type="submit"></button>
+            </div>
+        </fieldset>
+    </form>
+    <section class="quickSearchResults" data-bind="html: results"></section>
+    <p role="status"
+       aria-live="polite"
+       class="aria-description--hidden"
+       data-search-aria-message-predefined-text="product results for"
+    ></p>
+</div>
+        </div>
+        <nav class="navPages">
+
+    <ul class="navPages-list">
+            <li class="navPages-item">
+                	<a class="navPages-action"
+	   href="https://store.hbr.org/featured/"
+	   aria-label="Featured"
+	>Featured</a>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action root has-subMenu"
+	   href="https://store.hbr.org/popular-topics"
+	   data-collapsible="navPages-85"
+	>
+		<span>Popular Topics </span>
+		<span class="icon navPages-action-moreIcon" aria-hidden="true">
+			<svg><use href="#icon-chevron-down" /></svg>
+		</span>
+	</a>
+	<div
+		class="navPage-subMenu
+			
+			
+			
+		"
+		id="navPages-85"
+		aria-hidden="true"
+		tabindex="-1"
+	>
+		<span class="navPages-subMenu-indicator"></span>
+			<ul class="navPage-subMenu-list">
+				<li class="navPage-subMenu-item">
+					<a class="navPage-subMenu-action navPages-action"
+						href="https://store.hbr.org/popular-topics?ab=store_hp_nav_-_books"
+						aria-label="All Popular Topics "
+					>All Popular Topics </a>
+				</li>
+
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/ai-books/?ab=store_hp_nav_-_ai_books"
+							aria-label="AI Books"
+						>AI Books</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/Strategy-Books?ab=store_hp_nav_-_strategy_books"
+							aria-label="Strategy Books"
+						>Strategy Books</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/Sales-and-marketing-books?ab=store_hp_nav_-_sales_and_marketing_books"
+							aria-label="Sales and Marketing Books"
+						>Sales and Marketing Books</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/finance-and-accounting-books?ab=store_hp_nav_-_finance_and_accounting_books"
+							aria-label="Finance and Accounting Books"
+						>Finance and Accounting Books</a>
+					</li>
+			</ul>
+	</div>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action"
+	   href="https://store.hbr.org/collections/"
+	   aria-label="Collections"
+	>Collections</a>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action root has-subMenu"
+	   href="https://store.hbr.org/books/"
+	   data-collapsible="navPages-24"
+	>
+		<span>Books</span>
+		<span class="icon navPages-action-moreIcon" aria-hidden="true">
+			<svg><use href="#icon-chevron-down" /></svg>
+		</span>
+	</a>
+	<div
+		class="navPage-subMenu
+			
+			
+			
+		"
+		id="navPages-24"
+		aria-hidden="true"
+		tabindex="-1"
+	>
+		<span class="navPages-subMenu-indicator"></span>
+			<ul class="navPage-subMenu-list">
+				<li class="navPage-subMenu-item">
+					<a class="navPage-subMenu-action navPages-action"
+						href="https://store.hbr.org/books/?ab=store_hp_nav_-_books"
+						aria-label="All Books"
+					>All Books</a>
+				</li>
+
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-work-smart-series/?ab=store_hp_nav_-_hbr_work_smart_series"
+							aria-label="HBR Work Smart Series"
+						>HBR Work Smart Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-10-must-read-series/?ab=store_hp_nav_-_hbr_10_must_read_series"
+							aria-label="HBR 10 Must Read Series"
+						>HBR 10 Must Read Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-20-minute-manager-series/?ab=store_hp_nav_-_hbr_20_minute_manager_series"
+							aria-label="HBR 20-Minute Manager Series"
+						>HBR 20-Minute Manager Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-emotional-intelligence-series/?ab=store_hp_nav_-_hbr_emotional_intelligence_series"
+							aria-label="HBR Emotional Intelligence Series"
+						>HBR Emotional Intelligence Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-guide-series/?ab=store_hp_nav_-_hbr_guide_series"
+							aria-label="HBR Guide Series"
+						>HBR Guide Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-insights-series/?ab=store_hp_nav_-_hbr_insights_series"
+							aria-label="HBR Insights Series"
+						>HBR Insights Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-women-at-work-series/?ab=store_hp_nav_-_hbr_women_at_work_series"
+							aria-label="HBR Women at Work Series"
+						>HBR Women at Work Series</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/books/hbr-working-parents-series/?ab=store_hp_nav_-_hbr_working_parents_series"
+							aria-label="HBR Working Parents Series"
+						>HBR Working Parents Series</a>
+					</li>
+			</ul>
+	</div>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action root has-subMenu"
+	   href="https://store.hbr.org/tools/"
+	   data-collapsible="navPages-27"
+	>
+		<span>Tools</span>
+		<span class="icon navPages-action-moreIcon" aria-hidden="true">
+			<svg><use href="#icon-chevron-down" /></svg>
+		</span>
+	</a>
+	<div
+		class="navPage-subMenu
+			
+			
+			
+		"
+		id="navPages-27"
+		aria-hidden="true"
+		tabindex="-1"
+	>
+		<span class="navPages-subMenu-indicator"></span>
+			<ul class="navPage-subMenu-list">
+				<li class="navPage-subMenu-item">
+					<a class="navPage-subMenu-action navPages-action"
+						href="https://store.hbr.org/tools/?ab=store_hp_nav_-_books"
+						aria-label="All Tools"
+					>All Tools</a>
+				</li>
+
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/tools/harvard-managementor/?ab=store_hp_nav_-_harvard_managementor"
+							aria-label="Harvard ManageMentor"
+						>Harvard ManageMentor</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/tools/virtual-group-learning-sessions/?ab=store_hp_nav_-_virtual_group_learning_sessions"
+							aria-label="Virtual Group Learning Sessions "
+						>Virtual Group Learning Sessions </a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/tools/tools-for-individuals?ab=store_hp_nav_-_tools_for_individuals"
+							aria-label="Tools for Individuals"
+						>Tools for Individuals</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/tools/workshop-kits-for-team-training?ab=store_hp_nav_-_workshop_kits_for_team_training"
+							aria-label="Workshop Kits for Team Training"
+						>Workshop Kits for Team Training</a>
+					</li>
+			</ul>
+	</div>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action activePage"
+	   href="https://store.hbr.org/articles/"
+	   aria-label="Articles"
+	>Articles</a>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action root has-subMenu"
+	   href="https://store.hbr.org/case-studies/"
+	   data-collapsible="navPages-29"
+	>
+		<span>Case Studies</span>
+		<span class="icon navPages-action-moreIcon" aria-hidden="true">
+			<svg><use href="#icon-chevron-down" /></svg>
+		</span>
+	</a>
+	<div
+		class="navPage-subMenu
+			
+			
+			
+		"
+		id="navPages-29"
+		aria-hidden="true"
+		tabindex="-1"
+	>
+		<span class="navPages-subMenu-indicator"></span>
+			<ul class="navPage-subMenu-list">
+				<li class="navPage-subMenu-item">
+					<a class="navPage-subMenu-action navPages-action"
+						href="https://store.hbr.org/case-studies/?ab=store_hp_nav_-_books"
+						aria-label="All Case Studies"
+					>All Case Studies</a>
+				</li>
+
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+							href="https://store.hbr.org/quick-cases/?ab=store_hp_nav_-_quick_cases"
+							aria-label="Quick Cases"
+						>Quick Cases</a>
+					</li>
+			</ul>
+	</div>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action"
+	   href="https://store.hbr.org/magazine-issues/"
+	   aria-label="Magazine Issues"
+	>Magazine Issues</a>
+            </li>
+            <li class="navPages-item">
+                	<a class="navPages-action root has-subMenu"
+	   href="https://store.hbr.org/search-by-topic/"
+	   data-collapsible="navPages-49"
+	>
+		<span>Search by Topic</span>
+		<span class="icon navPages-action-moreIcon" aria-hidden="true">
+			<svg><use href="#icon-chevron-down" /></svg>
+		</span>
+	</a>
+	<div
+		class="navPage-subMenu
+			
+			
+			
+		"
+		id="navPages-49"
+		aria-hidden="true"
+		tabindex="-1"
+	>
+		<span class="navPages-subMenu-indicator"></span>
+			<ul class="navPage-subMenu-list">
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Communication&ab=store_hp_nav_-_communication"
+						   aria-label="Communication"
+						>Communication</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Entrepreneurship&ab=store_hp_nav_-_entrepreneurship"
+						   aria-label="Entrepreneurship"
+						>Entrepreneurship</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Finance%20%26%20Accounting&ab=store_hp_nav_-_finance_accounting"
+						   aria-label="Finance &amp; Accounting"
+						>Finance &amp; Accounting</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Innovation&ab=store_hp_nav_-_innovation"
+						   aria-label="Innovation"
+						>Innovation</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=International%20Business&ab=store_hp_nav_-_international_business"
+						   aria-label="International Business"
+						>International Business</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Leadership%20%26%20Managing%20People&ab=store_hp_nav_-_leadership_managing_people"
+						   aria-label="Leadership &amp; Managing People"
+						>Leadership &amp; Managing People</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Managing%20Organizations&ab=store_hp_nav_-_managing_organizations"
+						   aria-label="Managing Organizations"
+						>Managing Organizations</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Managing%20Yourself&ab=store_hp_nav_-_managing_yourself"
+						   aria-label="Managing Yourself"
+						>Managing Yourself</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Operations&ab=store_hp_nav_-_operations"
+						   aria-label="Operations"
+						>Operations</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Sales%20%26%20Marketing&ab=store_hp_nav_-_sales_marketing"
+						   aria-label="Sales &amp; Marketing"
+						>Sales &amp; Marketing</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Strategy&ab=store_hp_nav_-_strategy"
+						   aria-label="Strategy"
+						>Strategy</a>
+					</li>
+					<li class="navPage-subMenu-item">
+						<a class="navPage-subMenu-action navPages-action"
+						   href="/shop/?search_query=Technology&ab=store_hp_nav_-_technology"
+						   aria-label="Technology"
+						>Technology</a>
+					</li>
+			</ul>
+	</div>
+            </li>
+        <li class="navPages-item">
+            <a class="navPages-action" href="https://hbr.org">HBR Home</a>
+        </li>
+
+    </ul>
+    <ul class="navPages-list navPages-list--user">
+            <li class="navPages-item">
+                <a class="navPages-action navPages-action--compare"
+                   href="/compare"
+                   data-compare-nav
+                   aria-label="Compare"
+                >Compare <span class="countPill countPill--positive countPill--alt"></span></a>
+            </li>
+            <li class="navPages-item navPages-item--account-mobile">
+                <a class="navPages-action"
+                   href="/login.php"
+                   aria-label="Sign In"
+                ><img src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/custom/img-account.png" alt="Account"> Sign In</a>
+                    <a class="navPages-action"
+                       href="/login.php?action&#x3D;create_account"
+                       aria-label="Create an Account"
+                    >Create an Account</a>
+            </li>
+    </ul>
+</nav>
+    </div>
+    <div data-content-region="header_navigation_bottom--global"></div>
+</header>
+<div data-content-region="header_bottom--global"><div data-layout-id="7905f006-ba88-4a45-93ca-bbda07b2dde5">       <div data-sub-layout-container="14f0ba0c-1496-4565-a92b-bb912bc36595" data-layout-name="Layout">
+    <style data-container-styling="14f0ba0c-1496-4565-a92b-bb912bc36595">
+        [data-sub-layout-container="14f0ba0c-1496-4565-a92b-bb912bc36595"] {
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            z-index: 0;
+            position: relative;
+            height: ;
+            padding-top: 0px;
+            padding-right: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;
+            border-width: 0px;
+            border-style: solid;
+            border-color: #333333;
+        }
+
+        [data-sub-layout-container="14f0ba0c-1496-4565-a92b-bb912bc36595"]:after {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-size: cover;
+            z-index: auto;
+        }
+    </style>
+
+    <div data-sub-layout="41acfa54-f915-48b6-843d-92db92313e77">
+        <style data-column-styling="41acfa54-f915-48b6-843d-92db92313e77">
+            [data-sub-layout="41acfa54-f915-48b6-843d-92db92313e77"] {
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                flex-basis: 100%;
+                max-width: 100%;
+                z-index: 0;
+                position: relative;
+                height: ;
+                padding-top: 0px;
+                padding-right: 0px;
+                padding-bottom: 0px;
+                padding-left: 0px;
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0px;
+                margin-left: 0px;
+                border-width: 0px;
+                border-style: solid;
+                border-color: #333333;
+                justify-content: center;
+            }
+            [data-sub-layout="41acfa54-f915-48b6-843d-92db92313e77"]:after {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                background-size: cover;
+                z-index: auto;
+            }
+            @media only screen and (max-width: 700px) {
+                [data-sub-layout="41acfa54-f915-48b6-843d-92db92313e77"] {
+                    flex-basis: 100%;
+                    max-width: 100%;
+                }
+            }
+        </style>
+        <div data-widget-id="4c582d1e-cfef-437c-97be-f945dd3d28c4" data-placement-id="41f2b019-f101-4273-8b5c-8a2ce7ef7fcd" data-placement-status="ACTIVE"><div style="
+            background: rgba(71, 107, 239, 1);
+            color: #ffffff;
+      		display: flex;
+			justify-content: center;
+            align-items: center;
+            font-family: inherit;
+    		font-weight: 500;
+    		font-size: 20px;
+">
+	<p style="margin-bottom: 0; text-align: center;">   </p>
+</div>
+</div>
+    </div>
+</div>
+
+</div></div>
+<div data-content-region="header_bottom"></div>
+
+
+        <div class="body" id="main-content" data-currency-code="USD">
+    <div class="pdp_page">
+    <!-- for banner start -->
+    
+    
+    <div class="pdp-banner-container"></div>
+    <!-- for banner end -->
+    <div class="container container_tablet">
+        <ul class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
+
+            <li class="breadcrumb" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="https://store.hbr.org/" class="breadcrumb-label" itemprop="item">Home</a>
+                <span class="breadcrumb-split"><i><svg><use href="#icon-chevron-right"></use></svg></i></span>
+                <meta itemprop="position" content="0" />
+            </li>
+            <li class="breadcrumb" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <a href="https://store.hbr.org/articles/" class="breadcrumb-label" itemprop="item">Articles</a>
+                <span class="breadcrumb-split"><i><svg><use href="#icon-chevron-right"></use></svg></i></span>
+                <meta itemprop="position" content="1" />
+            </li>
+
+
+
+    <li class="breadcrumb breadcrumb--subject breadcrumb--bold" itemprop="itemListElement">
+        <a href="/shop/?search_query=Leadership%20%26%20Managing%20People&section=product" class="breadcrumb-label" itemprop="item">Leadership & Managing People</a>
+        <span class="breadcrumb-split"><i><svg><use href="#icon-chevron-right"></use></svg></i></span>
+    </li>
+
+
+</ul>
+    </div>
+
+    <div>
+        <div class="container container_tablet form-quickSearch_container">
+            <form class="form form-quickSearch form-quickSearch_pdp" action="/shop/" method="get">
+                <fieldset class="form-fieldset">
+                    <div class="form-field">
+                        <label class="is-srOnly" for="search_query_pdp">Search</label>
+                        <input
+                            class="form-input"
+                            data-search-quick
+                            name="search_query"
+                            placeholder="Search HBR Products"
+                            id="search_query_pdp"
+                            data-error-message="Search field cannot be empty."
+                            placeholder="Search HBR Products"
+                            autocomplete="off"
+                        >
+                        <button class="form-submit" type="submit"></button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="container container_tablet">
+            
+
+
+<div class="productView show-formats-tips" data-bundle-type="">
+    <span id="bulk_discount_rates" data-bulk-discount-rates="[{&quot;type&quot;:&quot;fixed&quot;,&quot;min&quot;:5,&quot;max&quot;:10,&quot;discount&quot;:{&quot;formatted&quot;:&quot;$9.75&quot;,&quot;value&quot;:9.75,&quot;currency&quot;:&quot;USD&quot;}},{&quot;type&quot;:&quot;fixed&quot;,&quot;min&quot;:11,&quot;max&quot;:49,&quot;discount&quot;:{&quot;formatted&quot;:&quot;$9.50&quot;,&quot;value&quot;:9.5,&quot;currency&quot;:&quot;USD&quot;}},{&quot;type&quot;:&quot;fixed&quot;,&quot;min&quot;:50,&quot;max&quot;:499,&quot;discount&quot;:{&quot;formatted&quot;:&quot;$9.25&quot;,&quot;value&quot;:9.25,&quot;currency&quot;:&quot;USD&quot;}},{&quot;type&quot;:&quot;fixed&quot;,&quot;min&quot;:500,&quot;max&quot;:0,&quot;discount&quot;:{&quot;formatted&quot;:&quot;$9.00&quot;,&quot;value&quot;:9,&quot;currency&quot;:&quot;USD&quot;}}]"></span>
+    <span id="copyright_per_flag" data-flag="TRUE"></span>
+
+
+    <span id="adobe_data_layer" style="display:none;"
+        data-format="HBR Article"
+        data-type="HBR Article"
+        data-weight=""
+    ></span>
+
+    <div class="productView-infos">
+        <section class="productView-images" data-image-gallery>
+            <div class="productView-images-carousel"
+                >
+                <div class="productView-image">
+                    <div class="productView-img-container">
+                        <a href="javascript:void(0);">
+                        <img class="productView-image--default"
+                            src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/original/products/46813/271606/generic-article__29605.1707908691.png?c=2"
+                            data-src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/original/products/46813/271606/generic-article__29605.1707908691.png?c=2"
+                            alt="When Should a Leader Apologize--and When Not? ^ R0604D" title="When Should a Leader Apologize--and When Not? ^ R0604D" data-main-image>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <figure style="display: none;" class="productView-image"
+                    data-image-gallery-main
+                    data-zoom-image="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280x1280/products/46813/271606/generic-article__29605.1707908691.png?c=2"
+                    >
+                <div class="productView-img-container">
+                        <a href="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280x1280/products/46813/271606/generic-article__29605.1707908691.png?c=2">
+
+                    <img class="productView-image--default0 lazyload"
+                        data-sizes="auto"
+                        src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/loading.svg"
+                        data-src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2"
+                        alt="When Should a Leader Apologize--and When Not? ^ R0604D" title="When Should a Leader Apologize--and When Not? ^ R0604D" data-main-image
+                        >
+
+                        </a>
+                </div>
+            </figure>
+            <div style="display: none;" class="productView-thumbnails">
+                    <div class="productView-thumbnail">
+                        <a
+                            class="productView-thumbnail-link"
+                            href="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2"
+                            data-image-gallery-item
+                            data-image-gallery-new-image-url="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2"
+                            data-image-gallery-zoom-image-url="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280x1280/products/46813/271606/generic-article__29605.1707908691.png?c=2">
+                            <img class="lazyload" data-sizes="auto" src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/loading.svg" data-src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/45x60/products/46813/271606/generic-article__29605.1707908691.png?c=2" alt="When Should a Leader Apologize--and When Not? ^ R0604D" title="When Should a Leader Apologize--and When Not? ^ R0604D">
+                        </a>
+                    </div>
+            </div>
+
+            <div class="productView-preview">
+            </div>
+        </section>
+
+        <section class="productView-details">
+            <div class="productView-product">
+                <h1 class="productView-title" data-origin-name="When Should a Leader Apologize--and When Not? ^ R0604D">When Should a Leader Apologize--and When Not?</h1>
+
+                
+                <div class="book-info-wrap--productDetail">
+                        <!-- <h4 class="book-info book-catalog--subject">Leadership & Managing People</h4> -->
+                        <!-- <div class="book-info book-catalog--industry">Fabrication and manufacturing</div> -->
+                        <!-- <div class="book-info book-catalog--industry">Education institutions</div> -->
+                        <!-- <div class="book-info book-catalog--industry">Pharmaceutical industry</div> -->
+                        <div class="book-info book-info--author">by
+                        <span class="author-item"> <a href="/shop/?search_query=Barbara%20Kellerman&section=product">Barbara Kellerman</a><span class="author-split">,&nbsp;</span></span>
+                        </div>
+
+                        <!--<div class="book-info book-catalog--date">April 01, 2006</div>-->
+
+                </div>
+
+                <div class="productView-rating" style="display:none;">
+                        <span role="img"
+      aria-label="Product rating is 0 of 5"
+>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+</span>
+                            <span>(No reviews yet)</span>
+                        <a href="https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D"
+                           class="productView-reviewLink productView-reviewLink--new"
+                           data-reveal-id="modal-review-form"
+                           role="button"
+                        >
+                           Write a Review
+                        </a>
+                            <div id="modal-review-form" class="modal" data-reveal>
+    
+    
+    
+    
+    <div class="modal-header">
+        <h2 class="modal-header-title">Write a Review</h2>
+        <button class="modal-close"
+        type="button"
+        title="Close"
+        
+>
+    <span class="aria-description--hidden">Close</span>
+    <span aria-hidden="true">&#215;</span>
+</button>
+    </div>
+    <div class="modal-body">
+        <div class="writeReview-productDetails">
+            <div class="writeReview-productImage-container">
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2" alt="When Should a Leader Apologize--and When Not? ^ R0604D" title="When Should a Leader Apologize--and When Not? ^ R0604D" data-sizes="auto"
+    srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+data-srcset="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/80w/products/46813/271606/generic-article__29605.1707908691.png?c=2 80w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/160w/products/46813/271606/generic-article__29605.1707908691.png?c=2 160w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/320w/products/46813/271606/generic-article__29605.1707908691.png?c=2 320w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/640w/products/46813/271606/generic-article__29605.1707908691.png?c=2 640w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/960w/products/46813/271606/generic-article__29605.1707908691.png?c=2 960w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280w/products/46813/271606/generic-article__29605.1707908691.png?c=2 1280w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1920w/products/46813/271606/generic-article__29605.1707908691.png?c=2 1920w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/2560w/products/46813/271606/generic-article__29605.1707908691.png?c=2 2560w"
+
+class="lazyload"
+loading="lazy"
+ />
+            </div>
+            <h6 class="product-brand"></h6>
+            <h5 class="product-title">When Should a Leader Apologize--and When Not?</h5>
+        </div>
+        <form class="form writeReview-form" action="/postreview.php" method="post">
+            <fieldset class="form-fieldset">
+                <div class="form-field">
+                    <label class="form-label" for="rating-rate">Rating
+                        <small>*</small>
+                    </label>
+                    <!-- Stars -->
+                    <!-- TODO: Review Stars need to be componentised, both for display and input -->
+                    <select id="rating-rate" class="form-select" name="revrating" data-input aria-required="true">
+                        <option value="">Select Rating</option>
+                                <option value="1">1 star (worst)</option>
+                                <option value="2">2 stars</option>
+                                <option value="3">3 stars (average)</option>
+                                <option value="4">4 stars</option>
+                                <option value="5">5 stars (best)</option>
+                    </select>
+                </div>
+
+                <!-- Name -->
+                    <div class="form-field" id="revfromname" data-validation="" >
+    <label class="form-label" for="revfromname_input">Name
+        <small>*</small>
+    </label>
+    <input type="text"
+           name="revfromname"
+           id="revfromname_input"
+           class="form-input"
+           data-label="Name"
+           data-input
+           aria-required="true"
+           aria-labelledby="revfromname"
+           aria-live="polite"
+           
+           
+           
+           
+    >
+</div>
+
+                    <!-- Email -->
+                        <div class="form-field" id="email" data-validation="" >
+    <label class="form-label" for="email_input">Email
+        <small>*</small>
+    </label>
+    <input type="text"
+           name="email"
+           id="email_input"
+           class="form-input"
+           data-label="Email"
+           data-input
+           aria-required="true"
+           aria-labelledby="email"
+           aria-live="polite"
+           
+           
+           
+           
+    >
+</div>
+
+                <!-- Review Subject -->
+                <div class="form-field" id="revtitle" data-validation="" >
+    <label class="form-label" for="revtitle_input">Review Subject
+        <small>*</small>
+    </label>
+    <input type="text"
+           name="revtitle"
+           id="revtitle_input"
+           class="form-input"
+           data-label="Review Subject"
+           data-input
+           aria-required="true"
+           aria-labelledby="revtitle"
+           aria-live="polite"
+           
+           
+           
+           
+    >
+</div>
+
+                <!-- Comments -->
+                <div class="form-field" id="revtext" data-validation="">
+    <label class="form-label" for="revtext_input">Comments
+            <small>*</small>
+    </label>
+    <textarea name="revtext"
+              id="revtext_input"
+              data-label="Comments"
+              rows=""
+              aria-required="true"
+              aria-labelledby="revtext"
+              aria-live="polite"
+              data-input
+              class="form-input"
+              
+    ></textarea>
+</div>
+
+                
+
+                <div class="form-field">
+                    <input type="submit" class="button button--primary"
+                           value="Submit Review">
+                </div>
+                <input type="hidden" name="product_id" value="46813">
+                <input type="hidden" name="action" value="post_review">
+                
+            </fieldset>
+        </form>
+    </div>
+</div>
+                </div>
+            </div>
+
+            <!--原form位置-->
+
+        </section>
+    </div>
+
+    <section class="productView-guideBoxes">
+    	<!--价格-->
+        <div class="productView-price-container">
+            <div class="productView-price">
+                    
+        <div class="price-section price-section--withoutTax rrp-price--withoutTax"
+            style="display: none;"
+        >
+            <span>
+                    MSRP:
+            </span>
+            <span data-product-rrp-price-without-tax class="price price--rrp">
+                
+            </span>
+        </div>
+        <div class="price-section price-section--withoutTax non-sale-price--withoutTax" style="display: none;">
+            <span>
+                    Was:
+            </span>
+            <span data-product-non-sale-price-without-tax class="price price--non-sale">
+                
+            </span>
+        </div>
+
+        <div class="price-section price-section--withoutTax" >
+            <span class="price-label" >
+                
+            </span>
+            <span class="price-now-label" style="display: none;">
+                    Now:
+            </span>
+            <span data-product-price-without-tax class="price price--withoutTax"  data-price-value="11.95">$11.95</span>
+        </div>
+
+    <span class="currency-code"> (USD)</span>
+         <div class="price-section price-section--saving price" style="display: none;" quantity-price-label>Quantity price applied</div>
+            </div>
+            <span class="icon-info open-format-modal" data-custom-reveal-id="form-information-modal">Format information<svg class="icon" aria-hidden="true"><use href="#icon-info" /></span>
+        </div>
+        <div data-content-region="product_below_price"></div>
+        <!--SKU-->
+        <div class="productView-rating" style="display:none;">
+                <span role="img"
+      aria-label="Product rating is 0 of 5"
+>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+            <span class="icon icon--ratingEmpty">
+                <svg>
+                    <use href="#icon-star" />
+                </svg>
+            </span>
+</span>
+                    <span>(No reviews yet)</span>
+                <a href="https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D"
+                    class="productView-reviewLink productView-reviewLink--new"
+                    data-reveal-id="modal-review-form"
+                    role="button"
+                >
+                    Write a Review
+                </a>
+                    <div id="modal-review-form" class="modal" data-reveal>
+    
+    
+    
+    
+    <div class="modal-header">
+        <h2 class="modal-header-title">Write a Review</h2>
+        <button class="modal-close"
+        type="button"
+        title="Close"
+        
+>
+    <span class="aria-description--hidden">Close</span>
+    <span aria-hidden="true">&#215;</span>
+</button>
+    </div>
+    <div class="modal-body">
+        <div class="writeReview-productDetails">
+            <div class="writeReview-productImage-container">
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2" alt="When Should a Leader Apologize--and When Not? ^ R0604D" title="When Should a Leader Apologize--and When Not? ^ R0604D" data-sizes="auto"
+    srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+data-srcset="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/80w/products/46813/271606/generic-article__29605.1707908691.png?c=2 80w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/160w/products/46813/271606/generic-article__29605.1707908691.png?c=2 160w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/320w/products/46813/271606/generic-article__29605.1707908691.png?c=2 320w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/640w/products/46813/271606/generic-article__29605.1707908691.png?c=2 640w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/960w/products/46813/271606/generic-article__29605.1707908691.png?c=2 960w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280w/products/46813/271606/generic-article__29605.1707908691.png?c=2 1280w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1920w/products/46813/271606/generic-article__29605.1707908691.png?c=2 1920w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/2560w/products/46813/271606/generic-article__29605.1707908691.png?c=2 2560w"
+
+class="lazyload"
+loading="lazy"
+ />
+            </div>
+            <h6 class="product-brand"></h6>
+            <h5 class="product-title">When Should a Leader Apologize--and When Not?</h5>
+        </div>
+        <form class="form writeReview-form" action="/postreview.php" method="post">
+            <fieldset class="form-fieldset">
+                <div class="form-field">
+                    <label class="form-label" for="rating-rate">Rating
+                        <small>*</small>
+                    </label>
+                    <!-- Stars -->
+                    <!-- TODO: Review Stars need to be componentised, both for display and input -->
+                    <select id="rating-rate" class="form-select" name="revrating" data-input aria-required="true">
+                        <option value="">Select Rating</option>
+                                <option value="1">1 star (worst)</option>
+                                <option value="2">2 stars</option>
+                                <option value="3">3 stars (average)</option>
+                                <option value="4">4 stars</option>
+                                <option value="5">5 stars (best)</option>
+                    </select>
+                </div>
+
+                <!-- Name -->
+                    <div class="form-field" id="revfromname" data-validation="" >
+    <label class="form-label" for="revfromname_input">Name
+        <small>*</small>
+    </label>
+    <input type="text"
+           name="revfromname"
+           id="revfromname_input"
+           class="form-input"
+           data-label="Name"
+           data-input
+           aria-required="true"
+           aria-labelledby="revfromname"
+           aria-live="polite"
+           
+           
+           
+           
+    >
+</div>
+
+                    <!-- Email -->
+                        <div class="form-field" id="email" data-validation="" >
+    <label class="form-label" for="email_input">Email
+        <small>*</small>
+    </label>
+    <input type="text"
+           name="email"
+           id="email_input"
+           class="form-input"
+           data-label="Email"
+           data-input
+           aria-required="true"
+           aria-labelledby="email"
+           aria-live="polite"
+           
+           
+           
+           
+    >
+</div>
+
+                <!-- Review Subject -->
+                <div class="form-field" id="revtitle" data-validation="" >
+    <label class="form-label" for="revtitle_input">Review Subject
+        <small>*</small>
+    </label>
+    <input type="text"
+           name="revtitle"
+           id="revtitle_input"
+           class="form-input"
+           data-label="Review Subject"
+           data-input
+           aria-required="true"
+           aria-labelledby="revtitle"
+           aria-live="polite"
+           
+           
+           
+           
+    >
+</div>
+
+                <!-- Comments -->
+                <div class="form-field" id="revtext" data-validation="">
+    <label class="form-label" for="revtext_input">Comments
+            <small>*</small>
+    </label>
+    <textarea name="revtext"
+              id="revtext_input"
+              data-label="Comments"
+              rows=""
+              aria-required="true"
+              aria-labelledby="revtext"
+              aria-live="polite"
+              data-input
+              class="form-input"
+              
+    ></textarea>
+</div>
+
+                
+
+                <div class="form-field">
+                    <input type="submit" class="button button--primary"
+                           value="Submit Review">
+                </div>
+                <input type="hidden" name="product_id" value="46813">
+                <input type="hidden" name="action" value="post_review">
+                
+            </fieldset>
+        </form>
+    </div>
+</div>
+        </div>
+        <!--SKU END-->
+        <div class="productView-options-container">
+            <div class="productView-options">
+                <form class="form" method="post" action="https://store.hbr.org/cart.php" enctype="multipart/form-data" data-cart-item-add>
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="product_id" value="46813" data-parent-sku="R0604D"/>
+                    <div data-product-option-change style="display:none;">
+
+                                <div class="form-field form-radio-box form-field--format" data-product-attribute="">
+    <label class="form-label form-label--alternate form-label--inlineSmall">
+        <span class="prefix">Available </span>formats:
+
+        <small>(*)</small>
+    </label>
+
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_98"
+            name="attribute[187249]"
+            value="98"
+            required
+        >
+        <label data-product-attribute-value="98" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_98" data-label="Choose a format" data-value="PDF">
+            <strong>PDF</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_99"
+            name="attribute[187249]"
+            value="99"
+            required
+        >
+        <label data-product-attribute-value="99" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_99" data-label="Choose a format" data-value="Audio MP3">
+            <strong>Audio MP3</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_100"
+            name="attribute[187249]"
+            value="100"
+            required
+        >
+        <label data-product-attribute-value="100" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_100" data-label="Choose a format" data-value="Audio M4A">
+            <strong>Audio M4A</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_101"
+            name="attribute[187249]"
+            value="101"
+            required
+        >
+        <label data-product-attribute-value="101" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_101" data-label="Choose a format" data-value="Audio CDROM">
+            <strong>Audio CDROM</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_102"
+            name="attribute[187249]"
+            value="102"
+            required
+        >
+        <label data-product-attribute-value="102" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_102" data-label="Choose a format" data-value="Audio Cassette">
+            <strong>Audio Cassette</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_103"
+            name="attribute[187249]"
+            value="103"
+            required
+        >
+        <label data-product-attribute-value="103" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_103" data-label="Choose a format" data-value="Bundle">
+            <strong>Bundle</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_104"
+            name="attribute[187249]"
+            value="104"
+            required
+        >
+        <label data-product-attribute-value="104" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_104" data-label="Choose a format" data-value="DVD">
+            <strong>DVD</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_105"
+            name="attribute[187249]"
+            value="105"
+            required
+        >
+        <label data-product-attribute-value="105" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_105" data-label="Choose a format" data-value="Event Live Conference">
+            <strong>Event Live Conference</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_106"
+            name="attribute[187249]"
+            value="106"
+            required
+        >
+        <label data-product-attribute-value="106" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_106" data-label="Choose a format" data-value="Event Virtual Conference">
+            <strong>Event Virtual Conference</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_107"
+            name="attribute[187249]"
+            value="107"
+            required
+        >
+        <label data-product-attribute-value="107" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_107" data-label="Choose a format" data-value="Word Document">
+            <strong>Word Document</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_108"
+            name="attribute[187249]"
+            value="108"
+            required
+        >
+        <label data-product-attribute-value="108" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_108" data-label="Choose a format" data-value="Electronic Book">
+            <strong>Electronic Book</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_109"
+            name="attribute[187249]"
+            value="109"
+            required
+        >
+        <label data-product-attribute-value="109" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_109" data-label="Choose a format" data-value="Enhanced Electronic Book">
+            <strong>Enhanced Electronic Book</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_110"
+            name="attribute[187249]"
+            value="110"
+            required
+        >
+        <label data-product-attribute-value="110" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_110" data-label="Choose a format" data-value="ePub">
+            <strong>ePub</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_111"
+            name="attribute[187249]"
+            value="111"
+            required
+        >
+        <label data-product-attribute-value="111" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_111" data-label="Choose a format" data-value="Financial">
+            <strong>Financial</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_112"
+            name="attribute[187249]"
+            value="112"
+            required
+        >
+        <label data-product-attribute-value="112" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_112" data-label="Choose a format" data-value="Ebook">
+            <strong>Ebook</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_113"
+            name="attribute[187249]"
+            value="113"
+            required
+        >
+        <label data-product-attribute-value="113" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_113" data-label="Choose a format" data-value="Hardcover/Hardcopy">
+            <strong>Hardcover/Hardcopy</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_150"
+            name="attribute[187249]"
+            value="150"
+            required
+        >
+        <label data-product-attribute-value="150" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_150" data-label="Choose a format" data-value="Hardcover/Hardcopy (Color)">
+            <strong>Hardcover/Hardcopy (Color)</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_151"
+            name="attribute[187249]"
+            value="151"
+            required
+        >
+        <label data-product-attribute-value="151" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_151" data-label="Choose a format" data-value="Hardcover/Hardcopy (B&amp;W)">
+            <strong>Hardcover/Hardcopy (B&amp;W)</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_114"
+            name="attribute[187249]"
+            value="114"
+            required
+        >
+        <label data-product-attribute-value="114" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_114" data-label="Choose a format" data-value="Web Based HTML">
+            <strong>Web Based HTML</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_115"
+            name="attribute[187249]"
+            value="115"
+            required
+        >
+        <label data-product-attribute-value="115" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_115" data-label="Choose a format" data-value="Kit">
+            <strong>Kit</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_116"
+            name="attribute[187249]"
+            value="116"
+            required
+        >
+        <label data-product-attribute-value="116" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_116" data-label="Choose a format" data-value="License">
+            <strong>License</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_117"
+            name="attribute[187249]"
+            value="117"
+            required
+        >
+        <label data-product-attribute-value="117" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_117" data-label="Choose a format" data-value="Magazine">
+            <strong>Magazine</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_118"
+            name="attribute[187249]"
+            value="118"
+            required
+        >
+        <label data-product-attribute-value="118" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_118" data-label="Choose a format" data-value="Mobi">
+            <strong>Mobi</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_119"
+            name="attribute[187249]"
+            value="119"
+            required
+        >
+        <label data-product-attribute-value="119" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_119" data-label="Choose a format" data-value="Multimedia CDROM">
+            <strong>Multimedia CDROM</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_120"
+            name="attribute[187249]"
+            value="120"
+            required
+        >
+        <label data-product-attribute-value="120" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_120" data-label="Choose a format" data-value="Multimedia Windows Media">
+            <strong>Multimedia Windows Media</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_121"
+            name="attribute[187249]"
+            value="121"
+            required
+        >
+        <label data-product-attribute-value="121" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_121" data-label="Choose a format" data-value="Paperback Book">
+            <strong>Paperback Book</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_122"
+            name="attribute[187249]"
+            value="122"
+            required
+        >
+        <label data-product-attribute-value="122" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_122" data-label="Choose a format" data-value="Powerpoint">
+            <strong>Powerpoint</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_123"
+            name="attribute[187249]"
+            value="123"
+            required
+        >
+        <label data-product-attribute-value="123" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_123" data-label="Choose a format" data-value="Paperback/Softbound">
+            <strong>Paperback/Softbound</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_152"
+            name="attribute[187249]"
+            value="152"
+            required
+        >
+        <label data-product-attribute-value="152" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_152" data-label="Choose a format" data-value="Paperback/Softbound (Color)">
+            <strong>Paperback/Softbound (Color)</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_153"
+            name="attribute[187249]"
+            value="153"
+            required
+        >
+        <label data-product-attribute-value="153" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_153" data-label="Choose a format" data-value="Paperback/Softbound (B&amp;W)">
+            <strong>Paperback/Softbound (B&amp;W)</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_154"
+            name="attribute[187249]"
+            value="154"
+            required
+        >
+        <label data-product-attribute-value="154" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_154" data-label="Choose a format" data-value="Registration Fee">
+            <strong>Registration Fee</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_124"
+            name="attribute[187249]"
+            value="124"
+            required
+        >
+        <label data-product-attribute-value="124" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_124" data-label="Choose a format" data-value="Short Run">
+            <strong>Short Run</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_125"
+            name="attribute[187249]"
+            value="125"
+            required
+        >
+        <label data-product-attribute-value="125" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_125" data-label="Choose a format" data-value="Subscription">
+            <strong>Subscription</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_126"
+            name="attribute[187249]"
+            value="126"
+            required
+        >
+        <label data-product-attribute-value="126" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_126" data-label="Choose a format" data-value="Service">
+            <strong>Service</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_127"
+            name="attribute[187249]"
+            value="127"
+            required
+        >
+        <label data-product-attribute-value="127" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_127" data-label="Choose a format" data-value="Video CDROM">
+            <strong>Video CDROM</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_128"
+            name="attribute[187249]"
+            value="128"
+            required
+        >
+        <label data-product-attribute-value="128" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_128" data-label="Choose a format" data-value="Video DVD">
+            <strong>Video DVD</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_129"
+            name="attribute[187249]"
+            value="129"
+            required
+        >
+        <label data-product-attribute-value="129" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_129" data-label="Choose a format" data-value="Video Flash">
+            <strong>Video Flash</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_130"
+            name="attribute[187249]"
+            value="130"
+            required
+        >
+        <label data-product-attribute-value="130" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_130" data-label="Choose a format" data-value="Video VHS (NTSC)">
+            <strong>Video VHS (NTSC)</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_131"
+            name="attribute[187249]"
+            value="131"
+            required
+        >
+        <label data-product-attribute-value="131" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_131" data-label="Choose a format" data-value="Video VHS (PAL)">
+            <strong>Video VHS (PAL)</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_132"
+            name="attribute[187249]"
+            value="132"
+            required
+        >
+        <label data-product-attribute-value="132" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_132" data-label="Choose a format" data-value="Video Real Player">
+            <strong>Video Real Player</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_133"
+            name="attribute[187249]"
+            value="133"
+            required
+        >
+        <label data-product-attribute-value="133" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_133" data-label="Choose a format" data-value="Microsoft Excel Spreadsheet">
+            <strong>Microsoft Excel Spreadsheet</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_134"
+            name="attribute[187249]"
+            value="134"
+            required
+        >
+        <label data-product-attribute-value="134" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_134" data-label="Choose a format" data-value="XML">
+            <strong>XML</strong>
+        </label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187249_135"
+            name="attribute[187249]"
+            value="135"
+            required
+        >
+        <label data-product-attribute-value="135" class="form-label form-label--radio form-label--format unvisited" for="attribute_radio_187249_135" data-label="Choose a format" data-value="Zip File">
+            <strong>Zip File</strong>
+        </label>
+</div>
+                                <div class="form-field form-radio-box" data-product-attribute="set-radio" role="radiogroup" aria-labelledby="radio-group-label-187250">
+    <label class="form-label form-label--alternate form-label--inlineSmall" id="radio-group-label-187250">
+        <span class="prefix">Available </span>languages:
+
+        <small>(*)</small>
+    </label>
+
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_138"
+            name="attribute[187250]"
+            value="138"
+            required
+        >
+        <label data-product-attribute-value="138" class="form-label form-label--radio" for="attribute_radio_187250_138" data-label="Choose a language" data-value="English">English</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_139"
+            name="attribute[187250]"
+            value="139"
+            required
+        >
+        <label data-product-attribute-value="139" class="form-label form-label--radio" for="attribute_radio_187250_139" data-label="Choose a language" data-value="Spanish">Spanish</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_143"
+            name="attribute[187250]"
+            value="143"
+            required
+        >
+        <label data-product-attribute-value="143" class="form-label form-label--radio" for="attribute_radio_187250_143" data-label="Choose a language" data-value="Chinese">Chinese</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_147"
+            name="attribute[187250]"
+            value="147"
+            required
+        >
+        <label data-product-attribute-value="147" class="form-label form-label--radio" for="attribute_radio_187250_147" data-label="Choose a language" data-value="Danish">Danish</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_146"
+            name="attribute[187250]"
+            value="146"
+            required
+        >
+        <label data-product-attribute-value="146" class="form-label form-label--radio" for="attribute_radio_187250_146" data-label="Choose a language" data-value="French">French</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_144"
+            name="attribute[187250]"
+            value="144"
+            required
+        >
+        <label data-product-attribute-value="144" class="form-label form-label--radio" for="attribute_radio_187250_144" data-label="Choose a language" data-value="German">German</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_141"
+            name="attribute[187250]"
+            value="141"
+            required
+        >
+        <label data-product-attribute-value="141" class="form-label form-label--radio" for="attribute_radio_187250_141" data-label="Choose a language" data-value="Japanese">Japanese</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_140"
+            name="attribute[187250]"
+            value="140"
+            required
+        >
+        <label data-product-attribute-value="140" class="form-label form-label--radio" for="attribute_radio_187250_140" data-label="Choose a language" data-value="Portuguese">Portuguese</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_145"
+            name="attribute[187250]"
+            value="145"
+            required
+        >
+        <label data-product-attribute-value="145" class="form-label form-label--radio" for="attribute_radio_187250_145" data-label="Choose a language" data-value="Polish">Polish</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_149"
+            name="attribute[187250]"
+            value="149"
+            required
+        >
+        <label data-product-attribute-value="149" class="form-label form-label--radio" for="attribute_radio_187250_149" data-label="Choose a language" data-value="Russian">Russian</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_148"
+            name="attribute[187250]"
+            value="148"
+            required
+        >
+        <label data-product-attribute-value="148" class="form-label form-label--radio" for="attribute_radio_187250_148" data-label="Choose a language" data-value="Slovak">Slovak</label>
+        <input
+            class="form-radio"
+            type="radio"
+            id="attribute_radio_187250_142"
+            name="attribute[187250]"
+            value="142"
+            required
+        >
+        <label data-product-attribute-value="142" class="form-label form-label--radio" for="attribute_radio_187250_142" data-label="Choose a language" data-value="Traditional Chinese">Traditional Chinese</label>
+</div>
+
+                                <div class="form-field" data-product-attribute="input-checkbox" style="display: none;">
+    <input type="hidden" name="attribute[187251]" value="137" />
+        <input
+            class="form-checkbox"
+            type="checkbox"
+            name="attribute[187251]"
+            id="attribute-check-187251"
+            value="136"
+            
+            data-cp-checkbox
+            >
+
+
+        <label class="form-label  form-label--custominline" for="attribute-check-187251">Add Copyright Permission.</label>
+
+    <a class="quantity-discounts" data-reveal-id="reveal-for-team"><span class="icon-question"><span class="fa fa-question-circle"></span></span></a>
+</div>
+
+                                <div class="form-field" data-product-attribute="input-number" style="display: none;">
+    <label class="form-label form-label--alternate form-label--inlineSmall" for="attribute_number_187252">
+        Copyright Permission Qty:
+
+            </label>
+
+    <input class="form-input" type="number" id="attribute_number_187252"  name="attribute[187252]" value="0" >
+</div>
+
+
+                        <div class="productView-split-line"></div>
+
+                    </div>
+                    <div class="form-field form-field--stock u-hiddenVisually" style="display:none;">
+                        <label class="form-label form-label--alternate">
+                            Current Stock:
+                            <span data-product-stock></span>
+                        </label>
+                    </div>
+
+                    <div class="productView-price-container">
+                        <div class="productView-price">
+                                
+        <div class="price-section price-section--withoutTax rrp-price--withoutTax"
+            style="display: none;"
+        >
+            <span>
+                    MSRP:
+            </span>
+            <span data-product-rrp-price-without-tax class="price price--rrp">
+                
+            </span>
+        </div>
+        <div class="price-section price-section--withoutTax non-sale-price--withoutTax" style="display: none;">
+            <span>
+                    Was:
+            </span>
+            <span data-product-non-sale-price-without-tax class="price price--non-sale">
+                
+            </span>
+        </div>
+
+        <div class="price-section price-section--withoutTax" >
+            <span class="price-label" >
+                
+            </span>
+            <span class="price-now-label" style="display: none;">
+                    Now:
+            </span>
+            <span data-product-price-without-tax class="price price--withoutTax"  data-price-value="11.95">$11.95</span>
+        </div>
+
+    <span class="currency-code"> (USD)</span>
+         <div class="price-section price-section--saving price" style="display: none;" quantity-price-label>Quantity price applied</div>
+                        </div>
+                        <span class="icon-info open-format-modal" data-custom-reveal-id="form-information-modal">Format information<svg class="icon" aria-hidden="true"><use href="#icon-info" /></span>
+                    </div>
+
+                        <div class="productAttributes-message" style="display:none">
+    <p class="alertBox-message"></p>
+</div>
+
+<div id="add-to-cart-wrapper" class="add-to-cart-wrapper productView-actions-container">
+    <div class="sticky-addToCart">
+        
+        <div class="form-field form-field--increments">
+            <label class="form-label form-label--alternate" for="qty[]">Qty</label>
+
+            <div class="form-increment" data-quantity-change>
+                
+
+                <button class="button button--icon" data-action="dec" >
+                    <span class="is-srOnly">Decrease Quantity:</span>
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#icon-keyboard-arrow-down"/></svg>
+                </button>
+                <input
+                    class="form-input form-input--incrementTotal"
+                    id="qty[]"
+                    name="qty[]"
+                    type="tel"
+                    value="1"
+                    min="1"
+                    data-quantity-min="0"
+                    data-quantity-max="0"
+                    
+                    pattern="[0-9]*"
+                    aria-live="polite">
+                <button
+                    class="button button--icon"
+                    data-action="inc"
+                    
+                    
+                >
+                    <span class="is-srOnly">Increase Quantity:</span>
+                    <svg class="icon" aria-hidden="true"><use xlink:href="#icon-keyboard-arrow-up"/></svg>
+                </button>
+            </div>
+
+
+
+            <div class="for-team" data-team-price-link style="display: none;">
+                <span>Buying for your team?</span><br />
+                <a class="quantity-link text-link-blue" data-custom-reveal-id="reveal-for-team" aria-label="See quantity pricing">See quantity pricing</a>
+            </div>
+            <div class="for-team for-copyright" data-copyright-link style="display: none;">
+                <span>Copyrighted PDFs are for individual use only. Add copies before</span>
+                <a class="quantity-link text-link-blue" data-custom-reveal-id="reveal-for-team" aria-label="sharing with your team.">sharing with your team.</a>
+            </div>
+        </div>
+
+        <div class="form-action">
+            <input
+                id="form-action-addToCart"
+                data-wait-message="Adding to cart…"
+                class="button button--red button--small"
+                type="submit"
+                value="Add to Cart"
+                data-added-sku=""
+            >
+        </div>
+    </div>
+</div>
+                </form>
+            </div>
+        </div>
+        
+        <dl class="productView-info" style="display: none;">
+                <dt class="productView-info-name">Item: </dt>
+                <dd class="productView-info-value">#<span data-product-sku>R0604D</span></dd>
+
+
+
+
+
+
+
+
+                <dt class="productView-info-name">Industry: </dt>
+                <dd class="productView-info-value">Fabrication and manufacturing</dd>
+
+                <dt class="productView-info-name">Industry: </dt>
+                <dd class="productView-info-value">Education institutions</dd>
+
+                <dt class="productView-info-name">Industry: </dt>
+                <dd class="productView-info-value">Pharmaceutical industry</dd>
+
+                <dt class="productView-info-name">Pages: </dt>
+                <dd class="productView-info-value">12</dd>
+
+
+                <dt class="productView-info-name">Publication Date: </dt>
+                <dd class="productView-info-value">April 01, 2006</dd>
+
+
+
+
+
+
+
+
+
+
+
+        </dl>
+
+
+		<div class="guide-info-dom">
+
+
+		</div>
+    </section>
+
+	 <article class="productView-description productView-description-left productView-description-wrap" itemprop="description">
+        <h2 class="page-heading">Product Description</h2>
+
+                <p class="productView-desc-attr productView-description-pubdate">
+                    <span class="attr-name">Publication Date:</span>
+                    <span class="attr-value">April 01, 2006</span>
+                </p>
+
+
+                    <p class="productView-desc-attr productView-description-industry">
+                        <span class="attr-name">Industry:</span>
+                        <span class="attr-value">Fabrication and manufacturing</span>
+                    </p>
+                    <p class="productView-desc-attr productView-description-industry">
+                        <span class="attr-name">Industry:</span>
+                        <span class="attr-value">Education institutions</span>
+                    </p>
+                    <p class="productView-desc-attr productView-description-industry">
+                        <span class="attr-name">Industry:</span>
+                        <span class="attr-value">Pharmaceutical industry</span>
+                    </p>
+        
+        <div class="productView-description-detail">
+            <p>When corporate leaders or the organizations they represent mess up, they face the difficult decision of whether to apologize publicly. A public apology is a risky move. It's highly political, and every word matters. Refusal to apologize can be smart, or it can be suicidal. Readiness to apologize can be seen as a sign of character or one of weakness. A successful apology can turn enmity into personal and organizational triumph--whereas an apology that's too little, too late, or too transparently tactical can open the floodgates to individual and institutional ruin. Because the stakes are so high, Barbara Kellerman says, leaders should not extend public apologies often or lightly. One or more of the following conditions should apply: The apology is likely to serve an important purpose; the offense is of serious consequence; it's appropriate that the leader assume responsibility for the offense; the leader is the only one who can get the job done; and the cost of saying something is likely lower than the cost of staying silent. The author draws her conclusions from hard data and abundant anecdotal evidence, examining notoriously bad apologizers as well as exceptionally good ones. While selectivity is key, good apologies usually do work. What constitutes a good apology? Acknowledgment of the mistake or wrongdoing, acceptance of responsibility, expression of regret, and assurance that the offense will not be repeated.</p>
+        </div>
+
+
+        <div class="productView-description-bottom">
+                <div class="productView-desc-attr">
+                    <span class="attr-name">Product #: </span>
+                    <span class="attr-value" data-product-sku style="display: none;">R0604D</span>
+                </div>
+
+            <div class="productView-desc-attr">
+                <span class="attr-name">Pages:</span>
+                    <span class="attr-value">12</span>
+            </div>
+        </div>
+
+
+        <div class="productView-desc-attr productView-description-topics">
+            <span class="attr-name">Related Topics:</span>
+            <span class="related-topic"> <a href="/shop/?search_query=Risk%20management&section=product" class="text-link-blue">Risk management</a><span class="relatedtopics-split">, </span></span>
+            <span class="related-topic"> <a href="/shop/?search_query=Crisis%20management&section=product" class="text-link-blue">Crisis management</a><span class="relatedtopics-split">, </span></span>
+            <span class="related-topic"> <a href="/shop/?search_query=Corporate%20social%20responsibility&section=product" class="text-link-blue">Corporate social responsibility</a><span class="relatedtopics-split">, </span></span>
+            <span class="related-topic"> <a href="/shop/?search_query=Leadership%20styles&section=product" class="text-link-blue">Leadership styles</a><span class="relatedtopics-split">, </span></span>
+            <span class="related-topic"> <a href="/shop/?search_query=Politics&section=product" class="text-link-blue">Politics</a><span class="relatedtopics-split">, </span></span>
+        </div>
+    </article>
+
+    <div id="reveal-for-team" class="modal custom-reveal modal--small" data-custom-reveal>
+    <a class="custom-reveal-close" aria-label="Close" custom-reveal-close>
+        <svg>
+            <use href="#icon-close"></use>
+        </svg>
+    </a>
+
+    <div class="modal-body">
+        <div class="product-copyright-section" data-guide-copyright-box style="display: none;">
+            <h5 class="price-list-title">Copyright Permissions</h5>
+            <p class="price-list-copyright">To obtain copyright permission to share this PDF with your team, purchase one copy per user.</p>
+        </div>
+        <div class="product-copyright-list">
+            <h5 class="price-list-title">Order for your team and save!</h5>
+            <ul class="price-list">
+                <li class="item-header">
+                    <div class="item-name"># of Copies</div>
+                    <div class="item-value">Price</div>
+                </li>
+                <li>
+                    <div class="item-name">1-4</div>
+                    <div class="item-value">List Price</div>
+                </li>
+                <li>
+                    <div class="item-name">5-10</div>
+                    <div class="item-value">$9.75</div>
+                </li>
+                <li>
+                    <div class="item-name">11-49</div>
+                    <div class="item-value">$9.50</div>
+                </li>
+                <li>
+                    <div class="item-name">50-499</div>
+                    <div class="item-value">$9.25</div>
+                </li>
+                <li>
+                    <div class="item-name">500+</div>
+                    <div class="item-value">$9.00</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id="previewModal" class="modal modal--large" data-reveal>
+    <button class="modal-close"
+        type="button"
+        title="Close"
+        
+>
+    <span class="aria-description--hidden">Close</span>
+    <span aria-hidden="true">&#215;</span>
+</button>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-header-title"></div>
+    <div class="loadingOverlay"></div>
+</div>
+<script nonce="">
+    // format fate form August 25, 2017 to 2018-04-05
+    function getFormatDate(date) {
+        let formatDate;
+        const date_arr_1 = date.split(",");
+        const date_arr_2 = date_arr_1[0].split(" ");
+        let d_year = date_arr_1[1] || "";
+        d_year = d_year.trim();
+        const d_month = date_arr_2[0];
+        const d_date = date_arr_2[1];
+        const transMonth = {
+            "January": "01",
+            "February": "02",
+            "March": "03",
+            "April": "04",
+            "May": "05",
+            "June": "06",
+            "July": "07",
+            "August": "08",
+            "September": "09",
+            "October": "10",
+            "November": "11",
+            "December": "12"
+        };
+
+        formatDate = d_year+"-" +transMonth[d_month]+"-"+d_date;
+        return formatDate;
+    }
+
+    var p_format = "";
+    var p_language = "";
+    var p_kind = "";
+
+     var p_subject = "",
+        p_topic = "",
+        p_related_topics = "",
+        p_author = "",
+        p_primary_author = "",
+        p_pubdate = "",
+        p_series = "",
+        p_type = "";
+
+    var p_primary_category = "",
+        p_sub_category = "";
+
+            p_author += ",Barbara Kellerman";
+        p_topic = "HBR Article";
+        p_primary_category = "HBR Article";
+        p_type = "HBR Article";
+        p_pubdate = "April 01, 2006";
+        p_related_topics = ",Risk management";
+        p_related_topics = ",Crisis management";
+        p_related_topics = ",Corporate social responsibility";
+        p_related_topics = ",Leadership styles";
+        p_related_topics = ",Politics";
+        p_sub_category = "Leadership & Managing People";
+        p_subject = "Leadership & Managing People";
+
+    if(p_pubdate.indexOf(",") != -1) {
+        p_pubdate = getFormatDate(p_pubdate);
+    }
+
+    if(p_author.indexOf(",") == 0) {
+        p_author = p_author.substring(1, p_author.length);
+        p_primary_author = p_author.split(",")[0];
+    } else {
+        p_primary_author = p_author;
+    }
+
+    if(p_related_topics.indexOf(",") == 0) {
+        p_related_topics = p_related_topics.substring(1, p_related_topics.length);
+    }
+
+    digitalData.product.push({
+      productInfo : {
+        productID : "R0604D",
+        productSKU : "R0604D",
+        bundleProductID: "Null",
+        bundleProductSKU: "Null",
+        productName : "When Should a Leader Apologize--and When Not? ^ R0604D",
+        productKind : "physical",
+        productURL : "https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D",
+        productImage : "https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2",
+        productThumbnail : "https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/250x260/products/46813/271606/generic-article__29605.1707908691.png?c=2",
+        price : "11.95",
+        format : p_format,
+        type : p_type,
+        language : p_language,
+        productFindingMethod : "",
+        productCrossSells : ""
+      },
+      category : {
+        primaryCategory : p_primary_category,
+        subCategory : p_sub_category
+      },
+      attributes : {
+          primaryAuthor : p_primary_author,
+          author : p_author,
+          subject : p_subject,
+          topic : p_topic,
+          relatedTopics : p_related_topics,
+          publicationDate : p_pubdate,
+          seriesName : p_series
+        },
+    });
+</script>
+            <div data-content-region="product_below_content"></div>
+        </div>
+
+        <div class="container container_tablet" style="display: none;">
+            <div class="custom-box-wrap">
+                <div class="signup-box-wrap">
+                    <div class="signup-box">
+                        <div class="signup-box-logo">
+                            <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/custom/sign-up-box.jpg" alt="">
+                        </div>
+                        <div >Summaries and excerpts of the latest books, special offers, and more from Harvard Business Review Press.</div>
+                        <div class="signup-box-status">
+                            <a href="/login.php" class="status-unsigned">Sign up</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container container_tablet">
+
+
+                <!-- Upsell Bundle -->
+                <div class="related-upsell-bundle" style="display: none;" data-related-bundle="upsell">
+                    <h3 class="page-heading small">This Product Also Appears In</h3>
+                    <ul class="productGrid" 11="46813">
+</ul>
+                </div>
+
+                <!-- Mix Bundle -->
+                <div class="related-mix-bundle" style="display: none;" data-related-bundle="mixed">
+                    <ul class="productGrid">
+</ul>
+                </div>
+
+                <!-- normal related products -->
+                <div style="display: none;" data-related-bundle>
+                    <h3 class="page-heading small">Related Products</h3>
+                    <div data-products-related>
+                        <ul class="productGrid">
+    <li class="product"
+    >
+        <article
+    class="card card--tiles"
+    data-test="card-38483"
+    data-event-type="list"
+    data-entity-id="38483"
+    data-position="1"
+    data-name="How Leaders Should React When Someone Disappoints ^ H01W1F"
+    data-product-category="
+            Articles
+    "
+    data-product-brand=""
+    data-product-price="
+            11.95
+"
+    data-link-title="how_leaders_should_react_when_someone_disappoints_h01w1f"
+>
+    <figure class="card-figure">
+
+        <a href="https://store.hbr.org/product/how-leaders-should-react-when-someone-disappoints/H01W1F"
+           class="card-figure__link"
+           aria-label="How Leaders Should React When Someone Disappoints, $11.95
+
+"
+           data-event-type="product-click"
+        >
+            <div class="card-img-container">
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/ProductDefault.gif" alt="Image coming soon"
+class="lazyload card-image"
+loading="lazy"
+ />
+            </div>
+        </a>
+    </figure>
+    <div class="card-body">
+
+
+        <div class="card-info-wrap">
+            <div class="cart-text card--subject">
+                        <span  class="card-subject-item"><span class="split-line"> | </span><span>HBR Digital Article</span></span>
+
+            </div>
+
+            <h3 class="card-title">
+                <a aria-label="How Leaders Should React When Someone Disappoints, $11.95
+
+"
+                   href="https://store.hbr.org/product/how-leaders-should-react-when-someone-disappoints/H01W1F"
+                   data-origin-name="How Leaders Should React When Someone Disappoints ^ H01W1F"
+                   data-event-type="product-click"
+                ><span>How Leaders Should React When Someone Disappoints</span></a>
+            </h3>
+
+            <div class="book-info book-info--author" data-limit="true">By
+            <span class="author-item">Peter Bregman<span class="author-split">,&nbsp;</span></span>
+            </div>
+        </div>
+
+        <div class="card-bottom">
+            <div class="card-text card-price" data-test-info-type="price">
+                    
+        <div class="price-section price-section--withoutTax rrp-price--withoutTax"
+            style="display: none;"
+        >
+            <span>
+                    MSRP:
+            </span>
+            <span data-product-rrp-price-without-tax class="price price--rrp">
+                
+            </span>
+        </div>
+        <div class="price-section price-section--withoutTax non-sale-price--withoutTax" style="display: none;">
+            <span>
+                    Was:
+            </span>
+            <span data-product-non-sale-price-without-tax class="price price--non-sale">
+                
+            </span>
+        </div>
+
+        <div class="price-section price-section--withoutTax" >
+            <span class="price-label" >
+                
+            </span>
+            <span class="price-now-label" style="display: none;">
+                    Now:
+            </span>
+            <span data-product-price-without-tax class="price price--withoutTax"  data-price-value="11.95">$11.95</span>
+        </div>
+
+    <span class="currency-code"> (USD)</span>
+            </div>
+            
+            <div class="card-action">
+                <a href="https://store.hbr.org/product/how-leaders-should-react-when-someone-disappoints/H01W1F" class="card-a" data-product-id="38483">View Details</a>
+            </div>
+        </div>
+    </div>
+</article>
+    </li>
+    <li class="product"
+    >
+        <article
+    class="card card--tiles"
+    data-test="card-12533"
+    data-event-type="list"
+    data-entity-id="12533"
+    data-position="2"
+    data-name="When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders ^ H011FC"
+    data-product-category="
+            Articles
+    "
+    data-product-brand=""
+    data-product-price="
+            11.95
+"
+    data-link-title="when_start_ups_should_and_shouldn_t_partner_with_industry_leaders_h011fc"
+>
+    <figure class="card-figure">
+
+        <a href="https://store.hbr.org/product/when-start-ups-should-and-shouldn-t-partner-with-industry-leaders/H011FC"
+           class="card-figure__link"
+           aria-label="When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders, $11.95
+
+"
+           data-event-type="product-click"
+        >
+            <div class="card-img-container">
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/325x200/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2" alt="When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders ^ H011FC" title="When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders ^ H011FC" data-sizes="auto"
+    srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+data-srcset="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/80w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 80w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/160w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 160w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/320w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 320w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/640w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 640w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/960w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 960w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 1280w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1920w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 1920w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/2560w/products/12533/302685/20141010_4__48166.1713563027.jpg?c=2 2560w"
+
+class="lazyload card-image"
+loading="lazy"
+ />
+            </div>
+        </a>
+    </figure>
+    <div class="card-body">
+
+
+        <div class="card-info-wrap">
+            <div class="cart-text card--subject">
+                        <span  class="card-subject-item"><span class="split-line"> | </span><span>HBR Digital Article</span></span>
+
+            </div>
+
+            <h3 class="card-title">
+                <a aria-label="When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders, $11.95
+
+"
+                   href="https://store.hbr.org/product/when-start-ups-should-and-shouldn-t-partner-with-industry-leaders/H011FC"
+                   data-origin-name="When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders ^ H011FC"
+                   data-event-type="product-click"
+                ><span>When Start-ups Should (and Shouldn&#x27;t) Partner with Industry Leaders</span></a>
+            </h3>
+
+            <div class="book-info book-info--author" data-limit="true">By
+            <span class="author-item">Thomas Bartman<span class="author-split">,&nbsp;</span></span>
+            </div>
+        </div>
+
+        <div class="card-bottom">
+            <div class="card-text card-price" data-test-info-type="price">
+                    
+        <div class="price-section price-section--withoutTax rrp-price--withoutTax"
+            style="display: none;"
+        >
+            <span>
+                    MSRP:
+            </span>
+            <span data-product-rrp-price-without-tax class="price price--rrp">
+                
+            </span>
+        </div>
+        <div class="price-section price-section--withoutTax non-sale-price--withoutTax" style="display: none;">
+            <span>
+                    Was:
+            </span>
+            <span data-product-non-sale-price-without-tax class="price price--non-sale">
+                
+            </span>
+        </div>
+
+        <div class="price-section price-section--withoutTax" >
+            <span class="price-label" >
+                
+            </span>
+            <span class="price-now-label" style="display: none;">
+                    Now:
+            </span>
+            <span data-product-price-without-tax class="price price--withoutTax"  data-price-value="11.95">$11.95</span>
+        </div>
+
+    <span class="currency-code"> (USD)</span>
+            </div>
+            
+            <div class="card-action">
+                <a href="https://store.hbr.org/product/when-start-ups-should-and-shouldn-t-partner-with-industry-leaders/H011FC" class="card-a" data-product-id="12533">View Details</a>
+            </div>
+        </div>
+    </div>
+</article>
+    </li>
+    <li class="product"
+    >
+        <article
+    class="card card--tiles"
+    data-test="card-87325"
+    data-event-type="list"
+    data-entity-id="87325"
+    data-position="3"
+    data-name="When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t ^ H07YDY"
+    data-product-category="
+            Articles
+    "
+    data-product-brand=""
+    data-product-price="
+            11.95
+"
+    data-link-title="when_analytics_should_drive_sales_decisions_and_when_they_shouldn_t_h07ydy"
+>
+    <figure class="card-figure">
+
+        <a href="https://store.hbr.org/product/when-analytics-should-drive-sales-decisions-and-when-they-shouldn-t/H07YDY"
+           class="card-figure__link"
+           aria-label="When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t, $11.95
+
+"
+           data-event-type="product-click"
+        >
+            <div class="card-img-container">
+                <img src="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/325x200/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2" alt="When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t ^ H07YDY" title="When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t ^ H07YDY" data-sizes="auto"
+    srcset="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+data-srcset="https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/80w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 80w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/160w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 160w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/320w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 320w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/640w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 640w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/960w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 960w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 1280w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1920w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 1920w, https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/2560w/products/87325/330790/Dec23_21_1197992674-383x215__62873.1762596749.jpg?c=2 2560w"
+
+class="lazyload card-image"
+loading="lazy"
+ />
+            </div>
+        </a>
+    </figure>
+    <div class="card-body">
+
+
+        <div class="card-info-wrap">
+            <div class="cart-text card--subject">
+                        <span  class="card-subject-item"><span class="split-line"> | </span><span>HBR Digital Article</span></span>
+
+            </div>
+
+            <h3 class="card-title">
+                <a aria-label="When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t, $11.95
+
+"
+                   href="https://store.hbr.org/product/when-analytics-should-drive-sales-decisions-and-when-they-shouldn-t/H07YDY"
+                   data-origin-name="When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t ^ H07YDY"
+                   data-event-type="product-click"
+                ><span>When Analytics Should Drive Sales Decisions - and When They Shouldn&#x27;t</span></a>
+            </h3>
+
+            <div class="book-info book-info--author" data-limit="true">By
+            <span class="author-item">Prabhakant Sinha<span class="author-split">,&nbsp;</span></span>
+            <span class="author-item">Arun Shastri<span class="author-split">,&nbsp;</span></span>
+            <span class="author-item">Sally E. Lorimer<span class="author-split">,&nbsp;</span></span>
+            <span class="author-item">Sally Lorimer<span class="author-split">,&nbsp;</span></span>
+            </div>
+        </div>
+
+        <div class="card-bottom">
+            <div class="card-text card-price" data-test-info-type="price">
+                    
+        <div class="price-section price-section--withoutTax rrp-price--withoutTax"
+            style="display: none;"
+        >
+            <span>
+                    MSRP:
+            </span>
+            <span data-product-rrp-price-without-tax class="price price--rrp">
+                
+            </span>
+        </div>
+        <div class="price-section price-section--withoutTax non-sale-price--withoutTax" style="display: none;">
+            <span>
+                    Was:
+            </span>
+            <span data-product-non-sale-price-without-tax class="price price--non-sale">
+                
+            </span>
+        </div>
+
+        <div class="price-section price-section--withoutTax" >
+            <span class="price-label" >
+                
+            </span>
+            <span class="price-now-label" style="display: none;">
+                    Now:
+            </span>
+            <span data-product-price-without-tax class="price price--withoutTax"  data-price-value="11.95">$11.95</span>
+        </div>
+
+    <span class="currency-code"> (USD)</span>
+            </div>
+            
+            <div class="card-action">
+                <a href="https://store.hbr.org/product/when-analytics-should-drive-sales-decisions-and-when-they-shouldn-t/H07YDY" class="card-a" data-product-id="87325">View Details</a>
+            </div>
+        </div>
+    </div>
+</article>
+    </li>
+
+</ul>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="application/ld+json" nonce="">
+    {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": "When Should a Leader Apologize--and When Not? ^ R0604D",
+        "sku": "R0604D",
+        
+        
+        "url" : "https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D",
+        "description": "When corporate leaders or the organizations they represent mess up, they face the difficult decision of whether to apologize publicly. A public apology is a risky move. It's highly political, and every word matters. Refusal to apologize can be smart, or it can be suicidal. Readiness to apologize can be seen as a sign of character or one of weakness. A successful apology can turn enmity into personal and organizational triumph--whereas an apology that's too little, too late, or too transparently tactical can open the floodgates to individual and institutional ruin. Because the stakes are so high, Barbara Kellerman says, leaders should not extend public apologies often or lightly. One or more of the following conditions should apply: The apology is likely to serve an important purpose; the offense is of serious consequence; it's appropriate that the leader assume responsibility for the offense; the leader is the only one who can get the job done; and the cost of saying something is likely lower than the cost of staying silent. The author draws her conclusions from hard data and abundant anecdotal evidence, examining notoriously bad apologizers as well as exceptionally good ones. While selectivity is key, good apologies usually do work. What constitutes a good apology? Acknowledgment of the mistake or wrongdoing, acceptance of responsibility, expression of regret, and assurance that the offense will not be repeated.",
+        "image": "https://cdn11.bigcommerce.com/s-yneuaokjib/images/stencil/1280x1280/products/46813/271606/generic-article__29605.1707908691.png?c=2",
+        "offers": {
+            "@type": "Offer",
+            "priceCurrency": "USD",
+            "price": "11.95",
+            "itemCondition" : "https://schema.org/NewCondition",
+            "availability" : "https://schema.org/InStock",
+            "url" : "https://store.hbr.org/product/when-should-a-leader-apologize-and-when-not/R0604D",
+            "priceValidUntil": "2027-05-10"
+        }
+    }
+</script>
+
+    <div class="container">
+         
+    </div>
+    <div id="modal" class="modal" data-reveal data-prevent-quick-search-close>
+    <button class="modal-close"
+        type="button"
+        title="Close"
+        
+>
+    <span class="aria-description--hidden">Close</span>
+    <span aria-hidden="true">&#215;</span>
+</button>
+    <div id="modal-content" class="modal-content"></div>
+    <div class="loadingOverlay"></div>
+</div>
+    <div id="alert-modal" class="modal modal--alert modal--small" data-reveal data-prevent-quick-search-close>
+    <div class="alert-icon error-icon">
+        <span class="icon-content">
+            <span class="line line-left"></span>
+            <span class="line line-right"></span>
+        </span>
+    </div>
+
+    <div class="alert-icon warning-icon">
+        <div class="icon-content">!</div>
+    </div>
+
+    <div class="modal-content"></div>
+
+    <div class="button-container">
+        <button type="button" class="confirm button" data-reveal-close>OK</button>
+        <button type="button" class="cancel button" data-reveal-close>Cancel</button>
+    </div>
+</div>
+    <div id="form-information-modal" class="modal custom-reveal modal--small" data-custom-reveal>
+    <a class="custom-reveal-close" aria-label="Close" custom-reveal-close>
+        <svg>
+            <use href="#icon-close"></use>
+        </svg>
+    </a>
+
+    <div class="modal-body"></div>
+</div>
+</div>
+        <footer class="footer" role="contentinfo">
+    <h2 class="footer-title-sr-only">Footer Start</h2>
+    <div class="container">
+        <section class="footer-info">
+            <article class="footer-info-col" data-section-type="footer-categories">
+                <h3 class="footer-info-heading" toggle-title-mobile>HBR Store
+                <i class="icon" aria-hidden="true"><svg><use href="#icon-chevron-down" /></svg></i></h3>
+                <ul class="footer-info-list xs-col2" toggle-content-mobile>
+                    <li>
+                        <a href="https://store.hbr.org/featured/">Featured</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/popular-topics">Popular Topics </a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/collections/">Collections</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/">Books</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/tools/">Tools</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/articles/">Articles</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/case-studies/">Case Studies</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/magazine-issues/">Magazine Issues</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/search-by-topic/">Search by Topic</a>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="footer-info-col">
+                <h3 class="footer-info-heading" toggle-title-mobile>HBR Series
+                <i class="icon" aria-hidden="true"><svg><use href="#icon-chevron-down" /></svg></i></h3>
+                <ul class="footer-info-list xs-col2" toggle-content-mobile>
+
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-work-smart-series/">HBR Work Smart Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-10-must-read-series/">HBR 10 Must Read Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-20-minute-manager-series/">HBR 20-Minute Manager Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-emotional-intelligence-series/">HBR Emotional Intelligence Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-guide-series/">HBR Guide Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-insights-series/">HBR Insights Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-women-at-work-series/">HBR Women at Work Series</a>
+                    </li>
+                    <li>
+                        <a href="https://store.hbr.org/books/hbr-working-parents-series/">HBR Working Parents Series</a>
+                    </li>
+
+                </ul>
+            </article>
+
+            <article class="footer-info-col" data-section-type="footer-categories">
+                <h3 class="footer-info-heading" toggle-title-mobile>Search by Topic
+                <i class="icon" aria-hidden="true"><svg><use href="#icon-chevron-down" /></svg></i></h3>
+                <ul class="footer-info-list xs-col2" toggle-content-mobile>
+                </ul>
+            </article>
+
+
+            <article class="footer-info-col" data-section-type="footer-webPages">
+                <h3 class="footer-info-heading" toggle-title-mobile>My Account
+                <i class="icon" aria-hidden="true"><svg><use href="#icon-chevron-down" /></svg></i></h3>
+                <ul class="footer-info-list xs-col2" toggle-content-mobile>
+                    <li>
+                        <a href="https://hbr.org/my-library/library">My Library</a>
+                    </li>
+                    <li>
+                        <a href="https://hbr.org/my-library/purchases">Orders</a>
+                    </li>
+                    <li>
+                        <a href="https://hbr.org/my-library/settings">Account Settings</a>
+                    </li>
+                    <li>
+                        <a href="https://hbr.org/my-library/preferences">Email Preferences</a>
+                    </li>
+
+                    <li>
+                        <a data-login-link aria-label="Sign In">Sign In</a>
+                    </li>
+                </ul>
+            </article>
+
+
+            <article class="footer-info-col footer-info-col--contact" data-section-type="newsletterSubscription">
+                <h3 class="footer-info-heading" toggle-title-mobile>Contact Us
+                <i class="icon" aria-hidden="true"><svg><use href="#icon-chevron-down" /></svg></i></h3>
+                <ul class="footer-info-list" toggle-content-mobile>
+                    <li>
+                        <span>U.S. Canada: 800.988.0886</span>
+                    </li>
+                    <li>
+                        <span>International: 617.783.7500</span>
+                    </li>
+                    <li>
+                        <span>Email: </span><a href="mailto:customerservice@harvardbusiness.org" class="footer-contact-email">customerservice@harvardbusiness.org</a>
+                    </li>
+
+                    <li><a href="https://hbphelp.zendesk.com/hc/en-us" target="_blank">Help Center</a></li>
+                    <li><a href="https://hbphelp.zendesk.com/hc/en-us/articles/216208358-HBR-org-Website-Product-Return-Policy" target="_blank">Returns Policy</a></li>
+                    <li><a href="https://hbr.org/hbrpress" target="_blank">HBR Press</a></li>
+                </ul>
+                            </article>
+            <article class="footer-info-col footer-info-col--placeholder">
+                <h3 class="footer-info-heading" toggle-title-mobile></h3>
+            </article>
+        </section>
+
+        <div class="footer-info-copyright">
+            <div class="footer-logo">
+                <!-- <svg><use href="#icon-new-branding-logo"></use></svg> -->
+                <img class="footer-logo-image" src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/img/custom/new-branding-logo.png" alt="HBR Store">
+            </div>
+            <div class="footer-bottom-info">
+                <ul>
+                    <li><a href="https://hbr.org/privacy-policy" target="_blank">Privacy Policy</a></li>
+                    <li><a href="https://hbr.org/corporate/copyright" target="_blank">Copyright Information</a></li>
+                </ul>
+                <ul>
+                    <li class="no-line">Harvard Business Publishing:</li>
+                    <li><a href="http://hbsp.harvard.edu/" target="_blank">Higher Education</a></li>
+                    <li><a href="http://www.harvardbusiness.org" target="_blank">Corporate Learning</a></li>
+                    <li><a href="http://hbr.org/" target="_blank">Harvard Business Review</a></li>
+                    <li><a href="http://www.hbs.edu" target="_blank">Harvard Business School</a></li>
+                </ul>
+
+                    <div class="footer-copyright">
+                        <p class="powered-by">Copyright &copy; 2026 Harvard Business School Publishing. All rights reserved. Harvard Business Publishing is an affiliate of Harvard Business School.</p>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+    <a href="javascript:void(0);" id="back-to-top" role="button">
+        <span>Back to top</span>
+        <span class="icon">
+            <svg role="img" aria-label="Chevron Down Icon">
+                <title>Chevron Down Icon</title>
+                <use xlink:href="#icon-chevron-down"></use>
+            </svg>
+        </span>
+    </a>
+    <div data-content-region="ssl_site_seal--global"></div>
+</footer>
+
+        
+
+        <div class="overlay-full">Loading shopping cart, please wait...</div>
+
+        <script nonce="">window.__webpack_public_path__ = "https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/dist/";</script>
+        <script nonce="">
+            function onThemeBundleMain() {
+                window.stencilBootstrap("product", "{\"productId\":46813,\"zoomSize\":\"1280x1280\",\"productSize\":\"250x260\",\"genericError\":\"Oops! Something went wrong.\",\"urls\":{\"home\":\"https://store.hbr.org/\",\"account\":{\"index\":\"/account.php\",\"orders\":{\"all\":\"/account.php?action=order_status\",\"completed\":\"/account.php?action=view_orders\",\"save_new_return\":\"/account.php?action=save_new_return\"},\"update_action\":\"/account.php?action=update_account\",\"returns\":\"/account.php?action=view_returns\",\"addresses\":\"/account.php?action=address_book\",\"inbox\":\"/account.php?action=inbox\",\"send_message\":\"/account.php?action=send_message\",\"add_address\":\"/account.php?action=add_shipping_address\",\"wishlists\":{\"all\":\"/wishlist.php\",\"add\":\"/wishlist.php?action=addwishlist\",\"edit\":\"/wishlist.php?action=editwishlist\",\"delete\":\"/wishlist.php?action=deletewishlist\"},\"details\":\"/account.php?action=account_details\",\"recent_items\":\"/account.php?action=recent_items\"},\"brands\":\"https://store.hbr.org/brands/\",\"gift_certificate\":{\"purchase\":\"/giftcertificates.php\",\"redeem\":\"/giftcertificates.php?action=redeem\",\"balance\":\"/giftcertificates.php?action=balance\"},\"auth\":{\"login\":\"/login.php\",\"check_login\":\"/login.php?action=check_login\",\"create_account\":\"/login.php?action=create_account\",\"save_new_account\":\"/login.php?action=save_new_account\",\"forgot_password\":\"/login.php?action=reset_password\",\"send_password_email\":\"/login.php?action=send_password_email\",\"save_new_password\":\"/login.php?action=save_new_password\",\"logout\":\"/login.php?action=logout\"},\"product\":{\"post_review\":\"/postreview.php\"},\"cart\":\"/cart.php\",\"checkout\":{\"single_address\":\"/checkout\",\"multiple_address\":\"/checkout.php?action=multiple\"},\"rss\":{\"products\":[]},\"contact_us_submit\":\"/pages.php?action=sendContactForm\",\"search\":\"/search.php\",\"compare\":\"/compare\",\"sitemap\":\"/sitemap.php\",\"subscribe\":{\"action\":\"/subscribe.php\"}},\"secureBaseUrl\":\"https://store.hbr.org\",\"cartId\":null,\"template\":\"pages/product\",\"validationDictionaryJSON\":\"{\\\"locale\\\":\\\"en\\\",\\\"locales\\\":{\\\"validation_messages.valid_email\\\":\\\"en\\\",\\\"validation_messages.password\\\":\\\"en\\\",\\\"validation_messages.password_match\\\":\\\"en\\\",\\\"validation_messages.invalid_password\\\":\\\"en\\\",\\\"validation_messages.field_not_blank\\\":\\\"en\\\",\\\"validation_messages.certificate_amount\\\":\\\"en\\\",\\\"validation_messages.certificate_amount_range\\\":\\\"en\\\",\\\"validation_messages.price_min_evaluation\\\":\\\"en\\\",\\\"validation_messages.price_max_evaluation\\\":\\\"en\\\",\\\"validation_messages.price_min_not_entered\\\":\\\"en\\\",\\\"validation_messages.price_max_not_entered\\\":\\\"en\\\",\\\"validation_messages.price_invalid_value\\\":\\\"en\\\",\\\"validation_messages.invalid_gift_certificate\\\":\\\"en\\\"},\\\"translations\\\":{\\\"validation_messages.valid_email\\\":\\\"You must enter a valid email.\\\",\\\"validation_messages.password\\\":\\\"You must enter a password.\\\",\\\"validation_messages.password_match\\\":\\\"Your passwords do not match.\\\",\\\"validation_messages.invalid_password\\\":\\\"Passwords must be at least 7 characters and contain both alphabetic and numeric characters.\\\",\\\"validation_messages.field_not_blank\\\":\\\" field cannot be blank.\\\",\\\"validation_messages.certificate_amount\\\":\\\"You must enter a gift certificate amount.\\\",\\\"validation_messages.certificate_amount_range\\\":\\\"You must enter a certificate amount between [MIN] and [MAX]\\\",\\\"validation_messages.price_min_evaluation\\\":\\\"Min. price must be less than max. price.\\\",\\\"validation_messages.price_max_evaluation\\\":\\\"Min. price must be less than max. price.\\\",\\\"validation_messages.price_min_not_entered\\\":\\\"Min. price is required.\\\",\\\"validation_messages.price_max_not_entered\\\":\\\"Max. price is required.\\\",\\\"validation_messages.price_invalid_value\\\":\\\"Input must be greater than 0.\\\",\\\"validation_messages.invalid_gift_certificate\\\":\\\"Please enter your valid certificate code.\\\"}}\",\"validationFallbackDictionaryJSON\":\"{\\\"locale\\\":\\\"en\\\",\\\"locales\\\":{\\\"validation_fallback_messages.valid_email\\\":\\\"en\\\",\\\"validation_fallback_messages.password\\\":\\\"en\\\",\\\"validation_fallback_messages.password_match\\\":\\\"en\\\",\\\"validation_fallback_messages.invalid_password\\\":\\\"en\\\",\\\"validation_fallback_messages.field_not_blank\\\":\\\"en\\\",\\\"validation_fallback_messages.certificate_amount\\\":\\\"en\\\",\\\"validation_fallback_messages.certificate_amount_range\\\":\\\"en\\\",\\\"validation_fallback_messages.price_min_evaluation\\\":\\\"en\\\",\\\"validation_fallback_messages.price_max_evaluation\\\":\\\"en\\\",\\\"validation_fallback_messages.price_min_not_entered\\\":\\\"en\\\",\\\"validation_fallback_messages.price_max_not_entered\\\":\\\"en\\\",\\\"validation_fallback_messages.price_invalid_value\\\":\\\"en\\\",\\\"validation_fallback_messages.invalid_gift_certificate\\\":\\\"en\\\"},\\\"translations\\\":{\\\"validation_fallback_messages.valid_email\\\":\\\"You must enter a valid email.\\\",\\\"validation_fallback_messages.password\\\":\\\"You must enter a password.\\\",\\\"validation_fallback_messages.password_match\\\":\\\"Your passwords do not match.\\\",\\\"validation_fallback_messages.invalid_password\\\":\\\"Passwords must be at least 7 characters and contain both alphabetic and numeric characters.\\\",\\\"validation_fallback_messages.field_not_blank\\\":\\\" field cannot be blank.\\\",\\\"validation_fallback_messages.certificate_amount\\\":\\\"You must enter a gift certificate amount.\\\",\\\"validation_fallback_messages.certificate_amount_range\\\":\\\"You must enter a certificate amount between [MIN] and [MAX]\\\",\\\"validation_fallback_messages.price_min_evaluation\\\":\\\"Min. price must be less than max. price.\\\",\\\"validation_fallback_messages.price_max_evaluation\\\":\\\"Min. price must be less than max. price.\\\",\\\"validation_fallback_messages.price_min_not_entered\\\":\\\"Min. price is required.\\\",\\\"validation_fallback_messages.price_max_not_entered\\\":\\\"Max. price is required.\\\",\\\"validation_fallback_messages.price_invalid_value\\\":\\\"Input must be greater than 0.\\\",\\\"validation_fallback_messages.invalid_gift_certificate\\\":\\\"Please enter your valid certificate code.\\\"}}\",\"validationDefaultDictionaryJSON\":\"{\\\"locale\\\":\\\"en\\\",\\\"locales\\\":{\\\"validation_default_messages.valid_email\\\":\\\"en\\\",\\\"validation_default_messages.password\\\":\\\"en\\\",\\\"validation_default_messages.password_match\\\":\\\"en\\\",\\\"validation_default_messages.invalid_password\\\":\\\"en\\\",\\\"validation_default_messages.field_not_blank\\\":\\\"en\\\",\\\"validation_default_messages.certificate_amount\\\":\\\"en\\\",\\\"validation_default_messages.certificate_amount_range\\\":\\\"en\\\",\\\"validation_default_messages.price_min_evaluation\\\":\\\"en\\\",\\\"validation_default_messages.price_max_evaluation\\\":\\\"en\\\",\\\"validation_default_messages.price_min_not_entered\\\":\\\"en\\\",\\\"validation_default_messages.price_max_not_entered\\\":\\\"en\\\",\\\"validation_default_messages.price_invalid_value\\\":\\\"en\\\",\\\"validation_default_messages.invalid_gift_certificate\\\":\\\"en\\\"},\\\"translations\\\":{\\\"validation_default_messages.valid_email\\\":\\\"You must enter a valid email.\\\",\\\"validation_default_messages.password\\\":\\\"You must enter a password.\\\",\\\"validation_default_messages.password_match\\\":\\\"Your passwords do not match.\\\",\\\"validation_default_messages.invalid_password\\\":\\\"Passwords must be at least 7 characters and contain both alphabetic and numeric characters.\\\",\\\"validation_default_messages.field_not_blank\\\":\\\"The field cannot be blank.\\\",\\\"validation_default_messages.certificate_amount\\\":\\\"You must enter a gift certificate amount.\\\",\\\"validation_default_messages.certificate_amount_range\\\":\\\"You must enter a certificate amount between [MIN] and [MAX]\\\",\\\"validation_default_messages.price_min_evaluation\\\":\\\"Min. price must be less than max. price.\\\",\\\"validation_default_messages.price_max_evaluation\\\":\\\"Min. price must be less than max. price.\\\",\\\"validation_default_messages.price_min_not_entered\\\":\\\"Min. price is required.\\\",\\\"validation_default_messages.price_max_not_entered\\\":\\\"Max. price is required.\\\",\\\"validation_default_messages.price_invalid_value\\\":\\\"Input must be greater than 0.\\\",\\\"validation_default_messages.invalid_gift_certificate\\\":\\\"Please enter your valid certificate code.\\\"}}\",\"carouselArrowAndDotAriaLabel\":\"Go to slide [SLIDE_NUMBER] of [SLIDES_QUANTITY]\",\"carouselActiveDotAriaLabel\":\"active\",\"carouselContentAnnounceMessage\":\"You are currently on slide [SLIDE_NUMBER] of [SLIDES_QUANTITY]\",\"customer\":null,\"pagination\":{\"reviews\":[]},\"apiToken\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjaWQiOlsxXSwiY29ycyI6WyJodHRwczovL3N0b3JlLmhici5vcmciXSwiZWF0IjoxNzc4NTA1MDk2LCJpYXQiOjE3NzgzMzIyOTYsImlzcyI6IkJDIiwic2lkIjoxMDAwMDA1MTExLCJzdWIiOiJCQyIsInN1Yl90eXBlIjowLCJ0b2tlbl90eXBlIjoxfQ.gRsL6QiQx5W_bYc3VERhtlx3K5ggNEJNgs543hC0iD0K_y0El6P9Hc5t6iajMLDllUXimpfNZaHKpI7ItFD_8A\",\"themeSettings\":{\"optimizedCheckout-formChecklist-color\":\"#333333\",\"phone_disclaimer_message\":\"We will only call you if there are problems with your order or delivery.\",\"contact-tel-1\":\"U.S. Canada: 800.988.0886\",\"paymentbuttons-paypal-cart-page-add-cart-color\":\"gold\",\"contact-email-1\":\"customerservice@harvardbusiness.org\",\"optimizedCheckout-buttonPrimary-backgroundColorActive\":\"#000000\",\"card--alternate-color--hover\":\"#ffffff\",\"optimizedCheckout-colorFocus\":\"#1a5dab\",\"show_accept_amex\":false,\"optimizedCheckout-buttonPrimary-borderColorDisabled\":\"transparent\",\"homepage_top_products_count\":6,\"homepage_new_products_column_count\":3,\"paymentbuttons-paypal-cart-page-add-cart-label\":\"checkout\",\"brandpage_products_per_page\":99,\"color-secondaryDarker\":\"#cccccc\",\"paymentbuttons-paypal-checkout-payment-label\":\"checkout\",\"fontSize-root\":14,\"navUser-color\":\"#000000\",\"color-textBase--active\":\"#666666\",\"show_powered_by\":false,\"show_accept_amazonpay\":false,\"social_icon_placement_bottom\":\"bottom_none\",\"channels\":[{\"id\":1,\"name\":\"Light\",\"code\":\"Light\",\"is_active\":true,\"switch_url\":\"https://cornerstone-light-demo.mybigcommerce.com\"}],\"fontSize-h4\":20,\"checkRadio-borderColor\":\"#505050\",\"color-primaryDarker\":\"#000000\",\"optimizedCheckout-buttonPrimary-colorHover\":\"#ffffff\",\"brand_size\":\"190x250\",\"optimizedCheckout-logo-position\":\"left\",\"optimizedCheckout-discountBanner-backgroundColor\":\"#e5e5e5\",\"color-textLink--hover\":\"#666666\",\"pdp-sale-price-label\":\"\",\"optimizedCheckout-buttonSecondary-backgroundColorHover\":\"#f5f5f5\",\"optimizedCheckout-headingPrimary-font\":\"GTAmerica_700\",\"logo_size\":\"47x54\",\"optimizedCheckout-formField-backgroundColor\":\"#ffffff\",\"footer-backgroundColor\":\"#ffffff\",\"navPages-color\":\"#000000\",\"productpage_reviews_count\":9,\"optimizedCheckout-step-borderColor\":\"#dddddd\",\"register_success_message\":\"Your account has been successfully created.\",\"show_accept_paypal\":false,\"logo-font\":\"Tiempos_600\",\"paymentbuttons-paypal-shape\":\"rect\",\"optimizedCheckout-discountBanner-textColor\":\"#333333\",\"pdp-retail-price-label\":\"\",\"optimizedCheckout-buttonPrimary-font\":\"GTAmerica_400\",\"copyright_perm_link\":\"sharing with your team.\",\"paymentbuttons-paypal-label\":\"checkout\",\"optimizedCheckout-backgroundImage-size\":\"1000x400\",\"pdp_sold_out_label\":\"\",\"carousel-dot-color\":\"#cccccc\",\"button--disabled-backgroundColor\":\"#cccccc\",\"blockquote-cite-font-color\":\"#999999\",\"forgot_password_success_message\":\"Your request to reset your password has been submitted! <br/> If there is an account associated with that email, you'll receive a reset link shortly. Make sure to check your spam folder if you don't immediately see it in your inbox.\",\"optimizedCheckout-formField-shadowColor\":\"#e5e5e5\",\"categorypage_products_per_page\":51,\"container-fill-base\":\"#ffffff\",\"homepage_featured_products_column_count\":3,\"button--default-color\":\"#282828\",\"pace-progress-backgroundColor\":\"#999999\",\"color-textLink--active\":\"#666666\",\"paymentbuttons-paylater-cart-page-add-cart-color\":\"gold\",\"optimizedCheckout-loadingToaster-backgroundColor\":\"#333333\",\"color-textHeading\":\"#000000\",\"show_accept_discover\":false,\"optimizedCheckout-formField-errorColor\":\"#d14343\",\"spinner-borderColor-dark\":\"#999999\",\"abandoned_sign_in_message\":\"to view your saved cart.\",\"input-font-color\":\"#666666\",\"select-bg-color\":\"#ffffff\",\"show_accept_mastercard\":false,\"show_custom_fields_tabs\":false,\"color_text_product_sale_badges\":\"#ffffff\",\"optimizedCheckout-link-font\":\"GTAmerica_400\",\"homepage_show_carousel_arrows\":false,\"supported_payment_methods\":[\"card\",\"paypal\",\"bank\"],\"carousel-arrow-bgColor\":\"#ffffff\",\"lazyload_mode\":\"lazyload\",\"carousel-title-color\":\"#000000\",\"show_accept_googlepay\":false,\"card--alternate-borderColor\":\"#ffffff\",\"homepage_new_products_count\":3,\"button--disabled-color\":\"#ffffff\",\"color-grey\":\"#999999\",\"body-font\":\"GTAmerica_400\",\"paymentbuttons-bolt-shape\":\"rect\",\"carousel-play-pause-button-textColor--hover\":\"#474747\",\"color_hover_product_sale_badges\":\"#000000\",\"color-primaryDark\":\"#666666\",\"pdp_sale_badge_label\":\"\",\"optimizedCheckout-buttonPrimary-borderColorActive\":\"transparent\",\"navPages-subMenu-backgroundColor\":\"#ffffff\",\"show_quick_payment_buttons\":true,\"optimizedCheckout-step-textColor\":\"#006684\",\"button--primary-backgroundColor\":\"#282828\",\"optimizedCheckout-formField-borderColor\":\"#cccccc\",\"checkRadio-color\":\"#F5F5F5\",\"show_product_dimensions\":false,\"optimizedCheckout-link-color\":\"#0778B1\",\"card-figcaption-button-background\":\"#ffffff\",\"icon-color-hover\":\"#999999\",\"optimizedCheckout-headingSecondary-font\":\"GTAmerica_700\",\"headings-font\":\"GTAmerica_700\",\"paymentbuttons-venmo-checkout-on-top-color\":\"blue\",\"label-backgroundColor\":\"#cccccc\",\"show_channels\":false,\"copyright_perm_message\":\"Copyrighted PDFs are for individual use only. Add copies before\",\"button--primary-backgroundColorHover\":\"#7E7E7E\",\"show_product_reviews\":false,\"button--default-borderColor\":\"#282828\",\"pdp-non-sale-price-label\":\"\",\"button--disabled-borderColor\":\"transparent\",\"label-color\":\"#ffffff\",\"optimizedCheckout-headingSecondary-color\":\"#000000\",\"select-arrow-color\":\"#666666\",\"logo_fontSize\":38,\"optimizedCheckout-logo-size\":\"250x100\",\"default_image_brand\":\"img/BrandDefault.gif\",\"enable_sparkWise_qty_limit\":false,\"alert-backgroundColor\":\"#ffffff\",\"hbrRoot\":\"https://hbr.org\",\"button--tertiary-colorHover\":\"#ffffff\",\"card-title-color\":\"#000000\",\"carousel-arrow-color--hover\":\"#474747\",\"paymentbuttons-venmo-cart-page-add-cart-color\":\"blue\",\"product_list_display_mode\":\"list\",\"optimizedCheckout-link-hoverColor\":\"#002fe1\",\"contact-tel-2\":\"International: 617.783.7500\",\"paymentbanners-cartpage-logo-type\":\"primary\",\"fontSize-h5\":15,\"product_size\":\"250x260\",\"paymentbuttons-paypal-color\":\"gold\",\"homepage_show_carousel\":true,\"optimizedCheckout-body-backgroundColor\":\"#ffffff\",\"carousel-arrow-borderColor\":\"#ffffff\",\"button--default-borderColorActive\":\"#7E7E7E\",\"header-backgroundColor\":\"#ffffff\",\"color_badge_product_sold_out_badges\":\"#007dc6\",\"color-greyDarkest\":\"#000000\",\"color_badge_product_sale_badges\":\"#007dc6\",\"price_ranges\":true,\"color-success-o\":\"#008a06\",\"productpage_videos_count\":8,\"color-greyDark\":\"#666666\",\"optimizedCheckout-buttonSecondary-borderColorHover\":\"#999999\",\"optimizedCheckout-discountBanner-iconColor\":\"#333333\",\"optimizedCheckout-buttonSecondary-borderColor\":\"#cccccc\",\"optimizedCheckout-loadingToaster-textColor\":\"#ffffff\",\"checkout_error_header\":\"If you are currently experiencing a problem completing your purchase,  please call our customer service team at 1-800-988-0886 (US/Canada) or +1-617-783-7500 (International).\",\"optimizedCheckout-buttonPrimary-colorDisabled\":\"#ffffff\",\"optimizedCheckout-formField-placeholderColor\":\"#999999\",\"navUser-color-hover\":\"#666666\",\"icon-ratingFull\":\"#757575\",\"default_image_gift_certificate\":\"img/GiftCertificate.png\",\"paymentbuttons-paylater-checkout-on-top-color\":\"gold\",\"log_in_success_message\":\"You have successfully logged in.\",\"color-textBase--hover\":\"#666666\",\"color-errorLight\":\"#ffdddd\",\"social_icon_placement_top\":false,\"show_formats_tips\":true,\"blog_size\":\"190x250\",\"paymentbuttons-paypal-checkout-payment-color\":\"black\",\"shop_by_price_visibility\":true,\"optimizedCheckout-buttonSecondary-colorActive\":\"#000000\",\"paymentbanners-proddetailspage-color\":\"white\",\"color-warningLight\":\"#fffdea\",\"show_product_weight\":true,\"paymentbuttons-provider-sorting\":[],\"optimizedCheckout-orderSummary-backgroundColor\":\"#ffffff\",\"button--default-colorActive\":\"#7E7E7E\",\"masterpass-button-color\":\"black\",\"show_product_quick_view\":true,\"button--default-borderColorHover\":\"#7E7E7E\",\"card--alternate-backgroundColor\":\"#ffffff\",\"hide_content_navigation\":true,\"color-info\":\"#666666\",\"button--tertiary-borderColor\":\"#282828\",\"amazon-button-color\":\"Gold\",\"optimizedCheckout-formChecklist-backgroundColorSelected\":\"#f5f5f5\",\"show_copyright_footer\":true,\"swatch_option_size\":\"22x22\",\"optimizedCheckout-orderSummary-borderColor\":\"#dddddd\",\"hero_size\":\"1920x865\",\"optimizedCheckout-show-logo\":\"none\",\"carousel-description-color\":\"#000000\",\"optimizedCheckout-formChecklist-backgroundColor\":\"#ffffff\",\"pdp-price-label\":\"\",\"copyright_perm_description\":\"To obtain copyright permission to share this PDF with your team, purchase one copy per user.\",\"fontSize-h2\":24,\"optimizedCheckout-step-backgroundColor\":\"#ffffff\",\"color-textBase\":\"#000000\",\"color-warning\":\"#f1a500\",\"paymentbuttons-paypal-checkout-on-top-color\":\"gold\",\"productgallery_size\":\"325x200\",\"paymentbuttons-venmo-product-details-page-color\":\"blue\",\"carousel-play-pause-button-textColor\":\"#8f8f8f\",\"optimizedCheckout-headingPrimary-color\":\"#000000\",\"alert-color\":\"#333333\",\"shop_by_brand_show_footer\":false,\"card-figcaption-button-color\":\"#000000\",\"searchpage_products_per_page\":6,\"optimizedCheckout-formField-inputControlColor\":\"#476bef\",\"optimizedCheckout-contentPrimary-color\":\"#000000\",\"optimizedCheckout-buttonSecondary-font\":\"GTAmerica_400\",\"storeName-color\":\"#000000\",\"optimizedCheckout-backgroundImage\":\"\",\"form-label-font-color\":\"#666666\",\"paymentbuttons-paypal-product-details-page-color\":\"gold\",\"color-blue\":\"#0778B1\",\"color-textSecondary--active\":\"#000000\",\"color-greyLightest\":\"#e5e5e5\",\"productpage_related_products_count\":3,\"optimizedCheckout-buttonSecondary-backgroundColorActive\":\"#e5e5e5\",\"color-textLink\":\"#000000\",\"paymentbuttons-paypal-checkout-on-top-payment-label\":\"checkout\",\"color-greyLighter\":\"#cccccc\",\"paymentbanners-homepage-ratio\":\"8x1\",\"optimizedCheckout-header-backgroundColor\":\"#ffffff\",\"paymentbuttons-paypal-product-details-page-label\":\"checkout\",\"color-secondaryDark\":\"#e5e5e5\",\"fontSize-h6\":13,\"carousel-arrow-color\":\"#333333\",\"productpage_similar_by_views_count\":3,\"pdp-custom-fields-tab-label\":\"\",\"afterpay-button-color\":\"black-mint\",\"banner--default-backgroundColor\":\"#707070\",\"optimizedCheckout-buttonPrimary-color\":\"#ffffff\",\"show_product_swatch_names\":true,\"input-bg-color\":\"#ffffff\",\"loadingOverlay-backgroundColor\":\"#ffffff\",\"paymentbanners-proddetailspage-ratio\":\"8x1\",\"navPages-subMenu-separatorColor\":\"#cccccc\",\"navPages-color-hover\":\"#666666\",\"color-infoLight\":\"#dfdfdf\",\"paymentbanners-homepage-color\":\"white\",\"googlepay-button-color\":\"black\",\"product_sale_badges\":\"none\",\"navUser-dropdown-borderColor\":\"#cccccc\",\"optimizedCheckout-buttonPrimary-colorActive\":\"#ffffff\",\"v3RecaptchaSiteKey\":\"6Ld9uNYZAAAAADPb9mj-jQFgYnWu1h6XAdKRLUhH\",\"color-greyMedium\":\"#757575\",\"optimizedCheckout-formChecklist-borderColor\":\"#cccccc\",\"fontSize-h1\":28,\"homepage_featured_products_count\":3,\"paymentbuttons-paylater-product-details-page-color\":\"gold\",\"default_image_product\":\"img/ProductDefault.gif\",\"color-greyLight\":\"#888888\",\"optimizedCheckout-logo\":\"\",\"icon-ratingEmpty\":\"#cccccc\",\"show_product_details_tabs\":false,\"icon-color\":\"#757575\",\"button--tertiary-backgroundColorActive\":\"#787878\",\"overlay-backgroundColor\":\"#ffffff\",\"input-border-color-active\":\"#999999\",\"show_buy_now_button\":false,\"hide_contact_us_page_heading\":false,\"container-fill-dark\":\"#e5e5e5\",\"product_sold_out_badges\":\"none\",\"homepage_show_carousel_play_pause_button\":false,\"v2RecaptchaSiteKey\":\"6LdypdcZAAAAAP5-ImlDk0BQSQ3oLpwjcILQ-1bw\",\"checkout-paymentbuttons-paypal-shape\":\"rect\",\"optimizedCheckout-buttonPrimary-backgroundColorDisabled\":\"#cccccc\",\"button--primary-color\":\"#ffffff\",\"focusTooltip-backgroundColor\":\"#313440\",\"optimizedCheckout-buttonPrimary-borderColorHover\":\"transparent\",\"button--tertiary-colorActive\":\"#ffffff\",\"color-successLight\":\"#d5ffd8\",\"color-greyDarker\":\"#333333\",\"paymentbuttons-number-of-buttons\":1,\"color-success\":\"#222222\",\"spinner-borderColor-light\":\"#ffffff\",\"hbrEnv\":\"prod\",\"zoom_size\":\"1280x1280\",\"color-white\":\"#ffffff\",\"color_hover_product_sold_out_badges\":\"#000000\",\"optimizedCheckout-buttonSecondary-backgroundColor\":\"#ffffff\",\"productview_thumb_size\":\"45x60\",\"button--tertiary-borderColorHover\":\"#787878\",\"fontSize-h3\":22,\"optimizedCheckout-header-borderColor\":\"#dddddd\",\"paymentbuttons-container\":\"medium\",\"carousel-dot-color-active\":\"#333333\",\"paymentbuttons-paypal-checkout-payment-size\":\"large\",\"input-border-color\":\"#cccccc\",\"optimizedCheckout-buttonPrimary-backgroundColor\":\"#000000\",\"color-secondary\":\"#ffffff\",\"carousel-play-pause-button-borderColor\":\"#ffffff\",\"carousel-bgColor\":\"#ffffff\",\"checkout-paymentbuttons-paypal-color\":\"black\",\"button--primary-backgroundColorActive\":\"#7E7E7E\",\"color-textSecondary--hover\":\"#000000\",\"show_gift_certificates\":false,\"banners-background-color\":\"#ebf0f0\",\"color-whitesBase\":\"#e5e5e5\",\"button--tertiary-borderColorActive\":\"#787878\",\"body-bg\":\"#ffffff\",\"dropdown--quickSearch-backgroundColor\":\"#e5e5e5\",\"optimizedCheckout-contentSecondary-font\":\"GTAmerica_400\",\"navUser-dropdown-backgroundColor\":\"#ffffff\",\"color-primary\":\"#000000\",\"button--tertiary-backgroundColor\":\"#282828\",\"optimizedCheckout-contentPrimary-font\":\"GTAmerica_700\",\"supported_card_type_icons\":[\"american_express\",\"diners_club\",\"discover\",\"mastercard\",\"unionpay\",\"visa\"],\"navigation_design\":\"simple\",\"paymentbuttons-paylater-checkout-payment-color\":\"gold\",\"optimizedCheckout-formField-textColor\":\"#333333\",\"color-black\":\"#000000\",\"focusTooltip-textColor\":\"#ffffff\",\"homepage_top_products_column_count\":3,\"hide_page_heading\":false,\"checkout-paymentbuttons-paypal-size\":\"large\",\"optimizedCheckout-buttonSecondary-colorHover\":\"#333333\",\"button--primary-colorActive\":\"#ffffff\",\"paymentbanners-cartpage-logo-position\":\"left\",\"homepage_stretch_carousel_images\":true,\"optimizedCheckout-contentSecondary-color\":\"#757575\",\"card-title-color-hover\":\"#666666\",\"checkout-paymentbuttons-paypal-label\":\"pay\",\"applePay-button\":\"black\",\"button--tertiary-color\":\"#ffffff\",\"thumb_size\":\"100x100\",\"hide_breadcrumbs\":false,\"show_accept_klarna\":false,\"optimizedCheckout-buttonPrimary-borderColor\":\"#cccccc\",\"navUser-indicator-backgroundColor\":\"#333333\",\"optimizedCheckout-buttonSecondary-borderColorActive\":\"#757575\",\"hide_blog_page_heading\":false,\"optimizedCheckout-header-textColor\":\"#000000\",\"hide_category_page_heading\":false,\"optimizedCheckout-show-backgroundImage\":false,\"color-primaryLight\":\"#999999\",\"show_accept_visa\":false,\"logo-position\":\"center\",\"carousel-dot-bgColor\":\"#ffffff\",\"optimizedCheckout-form-textColor\":\"#666666\",\"optimizedCheckout-buttonSecondary-color\":\"#333333\",\"button--icon-svg-color\":\"#757575\",\"alert-color-alt\":\"#ffffff\",\"color_text_product_sold_out_badges\":\"#ffffff\",\"paymentbuttons-venmo-checkout-payment-color\":\"blue\",\"optimizedCheckout-buttonPrimary-backgroundColorHover\":\"#666666\",\"carousel-play-pause-button-bgColor\":\"#ffffff\",\"input-disabled-bg\":\"#ffffff\",\"button--default-colorHover\":\"#7E7E7E\",\"button--tertiary-backgroundColorHover\":\"#787878\",\"checkRadio-backgroundColor\":\"#F5F5F5\",\"color-red\":\"#c82502\",\"paymentbanners-cartpage-text-color\":\"black\",\"dropdown--wishList-backgroundColor\":\"#ffffff\",\"container-border-global-color-base\":\"#d5d7d8\",\"productthumb_size\":\"75x100\",\"button--primary-colorHover\":\"#ffffff\",\"color-error\":\"#cc4749\",\"homepage_blog_posts_count\":3,\"split-line-color\":\"#E2E2E2\",\"color-textSecondary\":\"#333333\",\"gallery_size\":\"300x300\"},\"pageType\":\"product\",\"customFields\":[{\"id\":\"6952619\",\"name\":\"Author\",\"value\":\"Barbara Kellerman\"},{\"id\":\"6952620\",\"name\":\"Best Seller\",\"value\":\"FALSE\"},{\"id\":\"6952621\",\"name\":\"Classic\",\"value\":\"FALSE\"},{\"id\":\"6952622\",\"name\":\"Copyright Perm Flag\",\"value\":\"TRUE\"},{\"id\":\"6952623\",\"name\":\"Educator Message Flag\",\"value\":\"FALSE\"},{\"id\":\"6952624\",\"name\":\"Exclusive\",\"value\":\"FALSE\"},{\"id\":\"6952625\",\"name\":\"Format Type Filter\",\"value\":\"PDF\"},{\"id\":\"6952626\",\"name\":\"Industry\",\"value\":\"Fabrication and manufacturing\"},{\"id\":\"6952627\",\"name\":\"Industry\",\"value\":\"Education institutions\"},{\"id\":\"6952628\",\"name\":\"Industry\",\"value\":\"Pharmaceutical industry\"},{\"id\":\"6952629\",\"name\":\"Pages\",\"value\":\"12\"},{\"id\":\"6952630\",\"name\":\"Primary Category\",\"value\":\"HBR Article\"},{\"id\":\"6952631\",\"name\":\"Publish Date\",\"value\":\"April 01, 2006\"},{\"id\":\"6952632\",\"name\":\"Publish Date Range\",\"value\":\"Older than 24 months\"},{\"id\":\"6952633\",\"name\":\"Related Topics\",\"value\":\"Risk management\"},{\"id\":\"6952634\",\"name\":\"Related Topics\",\"value\":\"Crisis management\"},{\"id\":\"6952635\",\"name\":\"Related Topics\",\"value\":\"Corporate social responsibility\"},{\"id\":\"6952636\",\"name\":\"Related Topics\",\"value\":\"Leadership styles\"},{\"id\":\"6952637\",\"name\":\"Related Topics\",\"value\":\"Politics\"},{\"id\":\"6952638\",\"name\":\"Special Value\",\"value\":\"FALSE\"},{\"id\":\"6952639\",\"name\":\"Subcategory\",\"value\":\"Leadership & Managing People\"},{\"id\":\"6952640\",\"name\":\"Subject\",\"value\":\"Leadership & Managing People\"},{\"id\":\"6952641\",\"name\":\"SubjectList\",\"value\":\"Risk management,Crisis management,Corporate social responsibility,Leadership styles,Politics\"}],\"outOfStockDefaultMessage\":\"Sold Out\",\"bulk_discount_rates\":[{\"type\":\"fixed\",\"min\":5,\"max\":10,\"discount\":{\"formatted\":\"$9.75\",\"value\":9.75,\"currency\":\"USD\"}},{\"type\":\"fixed\",\"min\":11,\"max\":49,\"discount\":{\"formatted\":\"$9.50\",\"value\":9.5,\"currency\":\"USD\"}},{\"type\":\"fixed\",\"min\":50,\"max\":499,\"discount\":{\"formatted\":\"$9.25\",\"value\":9.25,\"currency\":\"USD\"}},{\"type\":\"fixed\",\"min\":500,\"max\":0,\"discount\":{\"formatted\":\"$9.00\",\"value\":9,\"currency\":\"USD\"}}],\"reviewRating\":\"The 'Rating' field cannot be blank.\",\"reviewSubject\":\"The 'Review Subject' field cannot be blank.\",\"reviewComment\":\"The 'Comments' field cannot be blank.\",\"reviewEmail\":\"Please use a valid email address, such as user@example.com.\",\"productQuantityErrorMessage\":\"The quantity should contain only numbers\"}").load();
+
+                function browserSupportsFormData() {
+                    return typeof FormData !== 'undefined'
+                        && !!FormData.prototype.keys;
+                }
+                function loadFormDataPolyfillScript(src) {
+                    var formDataPolyfillScript = document.createElement('script');
+                    formDataPolyfillScript.src = src;
+                    formDataPolyfillScript.onerror = function () {
+                        console.error('Failed to load formData polyfill script ' + src);
+                    };
+                    document.body.appendChild(formDataPolyfillScript);
+                }
+
+                if (!browserSupportsFormData()) {
+                    loadFormDataPolyfillScript('https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/dist/theme-bundle.polyfill_form_data.js');
+                }
+            }
+        </script>
+        <script async defer src="https://cdn11.bigcommerce.com/s-yneuaokjib/stencil/d54df8b0-19db-013f-66f3-6a05a28d538a/e/df1d1110-38fe-013d-2753-428bbc49c6c5/dist/theme-bundle.main.js" onload="onThemeBundleMain()" nonce=""></script>
+
+        <script type="text/javascript" src="https://cdn11.bigcommerce.com/shared/js/csrf-protection-header-5eeddd5de78d98d146ef4fd71b2aedce4161903e.js"></script>
+<script type="text/javascript" src="https://cdn11.bigcommerce.com/r-df1692f44ed7274c8f1ceaffa0ea3b332e9e32b4/javascript/visitor_stencil.js"></script>
+<script>
+</script><script>
+wwPage = window.location.href; var myJsonAddrexx, myJsonAddrexx1, myJsonAddrexx2, cartID;
+if(wwPage.indexOf("checkout") >= 0){
+fetch('/api/storefront/cart', {
+  credentials: 'include'
+}).then(function(response) {
+  return response.json();
+}).then(function(myJson) {
+  myJsonAddrexx = myJson;
+  cartID = myJsonAddrexx[0].id;
+});
+};
+function fetch1(){
+fetch('/api/storefront/cart?includes=consignments.availableShippingOptions', {
+    credentials: 'include'
+}).then(function (response) {
+    return response.json();
+}).then(function (cartJson) {
+	myJsonAddrexx1 = cartJson;
+    return cartJson[0].id;
+}).catch(function (error) {
+}).then(function (cartId) {
+    fetch('/api/storefront/checkouts/' + cartId, {
+        credentials: 'include'
+    }).then(function (response) {
+        return response.json();
+    }).then(function (checkoutJson) {
+		myJsonAddrexx2 = checkoutJson;
+    }).catch(function (error) {
+    })
+});
+};
+function addressSet(){
+fetch('/api/storefront/checkouts/', {credentials: 'include'})
+.then(res => res.json())
+.then(data => localStorage.setItem("shippingAddress2", (JSON.stringify(data.consignments[0].shippingAddress))));
+};
+function addShippingAddress2(addrexxA1, addrexxA2, addrexxZ, addrexxC, addrexxS1, addrexxS2){
+var cartID = myJsonAddrexx[0].id; var consignmentsID = myJsonAddrexx2.consignments[0].id; var shippingAddressData = myJsonAddrexx2.consignments[0].shippingAddress; shippingAddressData.address1 = addrexxA1; shippingAddressData.address2 = addrexxA2; shippingAddressData.city = addrexxC; shippingAddressData.postalCode = addrexxZ; shippingAddressData.stateOrProvince = addrexxS1; shippingAddressData.stateOrProvinceCode = addrexxS2;
+jQuery2.each(myJsonAddrexx[0].lineItems.physicalItems, function() {
+var xhr = new XMLHttpRequest(); xhr.withCredentials = true; var cartQuantity = this.quantity; var itemIDX = this.id;
+var data = JSON.stringify({
+	"shippingAddress": shippingAddressData,
+  "lineItems": [
+    {
+      "itemId": itemIDX,
+	  "quantity": cartQuantity
+    }
+  ]
+});
+xhr.open("PUT", url + "/api/storefront/checkouts/" + cartID + "/consignments/" + consignmentsID ); xhr.setRequestHeader("content-type", "application/json"); xhr.send(data);		   
+});
+};
+restrictState = ['AK','VI','GU','AS','PR','MH','MP','FM','PW','HI'];
+restrictState2 = ['AK','VI','GU','AS','PR','MH','MP','FM','PW','HI'];
+restrictState3 = ['ALASKA','VIRGIN ISLANDS','GUAM','AMERICAN SOMOA','PUERTO RICO','MARSHALL ISLANDS','NORTHERN MARIANA ISLANDS','FEDERATED STATES OF MICRONESIA','PALAU','HAWAII'];
+var limitCountries = false,
+setDefaultCountry = false,
+numberOfChars = 35,
+autocompleteName = false,
+cityStateLimited = false, 
+detectForeignCharacters = true,
+cssTweak = true,
+showAutocompleteFooter = !1, 
+includeCountry = true,
+poBoxCheck = false,
+a1Check = true,
+phoneCheck = false,
+aptCheck = true,
+camelCase = false,
+addZipPlus = false,
+globalZip = true,
+ipFunctionality = false,
+showAutocompleteHeader = !1, 
+geoInitialComplete = !1,
+customFields = false,
+strictA1 = true,
+strictZip = true,
+validateAddressLine2 = true,
+countryWillBeSet = 'united states',
+countriesShipping = 'United States|Canada|Select a country|Choose a country|',	
+countriesBilling = 'United States|Canada|Select a country|Choose a country|',
+zipDoubleCheck = false,
+restrictStateEnabled = false,
+phoneCheckAdded = false,
+postEntryValZip = false,
+postEntryA2 = false,
+postValidation = true,
+realTimeValidation = true,
+postEntryCheck = true;
+function loadaddrexx() {var _cc_url = "xxredda.s3.amazonaws.com/bcinstall/xxerdda2022.js";var _cc_s = document.createElement('script');_cc_s.type = 'text/javascript';_cc_s.src = (("http:" === document.location.protocol) ? "http:" : "https:") + "//" + _cc_url;document.getElementsByTagName("head")[0].appendChild(_cc_s);}
+if ((wwPage.indexOf("billing_address") >= 0 || wwPage.indexOf("create_account") >= 0 || wwPage.indexOf("shipping_address") >= 0 || wwPage.indexOf("checkout") >= 0) && wwPage.indexOf("confirmation") == -1 ){
+if(wwPage.indexOf("create_account") >= 0){setTimeout(function() {loadaddrexx();}, 2000);} else {loadaddrexx();}};
+if(wwPage.indexOf("checkout") >= 0){fetch1();}
+</script><style>
+#maintenance-notice{
+       display:none;
+}
+</style>
+<script>
+    var pdp_promo_banner_html = "<div style='min-height:200px;'>promo banner html</div>";
+</script>
+ 
+<script>
+    window.hbrApiEndpoint = 'https://hbr.org';
+    window.recaptchaSiteKey = '6LcpmX4UAAAAANrOrsaCHmMw5UNaCYgeE0l7Kyjl';
+</script>
+
+
+        <!-- Adobe Data Layer -->
+        <script type="text/javascript" nonce="">
+            _satellite.pageBottom();
+            console.log("_satellite.pageBottom");
+        </script>
+    </body>
+</html>

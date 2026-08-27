@@ -1,0 +1,1170 @@
+<!-- URL: https://www.cnrs.fr/en/news -->
+<!-- HTTP: 200 SIZE: 78245 -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+<script type="text/javascript">
+(function(){
+window["loaderConfig"] = "/TSPD/?type=21";
+})();
+
+</script>
+
+<script type="text/javascript" src="/TSPD/?type=18"></script>
+
+        <!-- Matomo Tag Manager -->
+    <script type="text/javascript">
+      window._mtm = window._mtm || [];
+      window._mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+      (function() {
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.src='https://www.statistiques.cnrs.fr/js/container_OYTiSMwj.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Tag Manager -->
+        <meta charset="utf-8" />
+<noscript><style>form.antibot * :not(.antibot-message) { display: none !important; }</style>
+</noscript><script type="text/javascript">
+  var _paq = window._paq || [];
+
+  _paq.push([function() {
+var self = this;
+function getOriginalVisitorCookieTimeout() {
+ var now = new Date(),
+ nowTs = Math.round(now.getTime() / 1000),
+ visitorInfo = self.getVisitorInfo();
+ var createTs = parseInt(visitorInfo[2]);
+ var cookieTimeout = 33696000; // 13 mois en secondes
+ var originalTimeout = createTs + cookieTimeout - nowTs;
+ return originalTimeout;
+}
+this.setVisitorCookieTimeout( getOriginalVisitorCookieTimeout() );
+}]);
+
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//statistiques.cnrs.fr/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();</script>
+<meta name="description" content="Acteur majeur de la recherche fondamentale et de l’innovation à l’échelle mondiale, le Centre national de la recherche scientifique (CNRS) est le seul organisme français actif dans tous les domaines scientifiques. Ensemble, les sciences se mettent au service d’un progrès durable qui bénéficie à toute la société." />
+<meta name="robots" content="index, follow" />
+<link rel="shortlink" href="https://www.cnrs.fr/en" />
+<link rel="canonical" href="https://www.cnrs.fr/en" />
+<link rel="image_src" href="https://www.cnrs.fr/sites/default/files/newsroom/logo-4-3-min_2.jpg" />
+<meta property="og:site_name" content="Centre national de la recherche scientifique (CNRS)" />
+<meta property="og:type" content="Homepage" />
+<meta property="og:url" content="https://www.cnrs.fr/" />
+<meta property="og:title" content="Centre national de la recherche scientifique (CNRS)" />
+<meta property="og:image" content="https://www.cnrs.fr/sites/default/files/newsroom/logo-4-3-min_2.jpg" />
+<meta property="og:image:url" content="https://www.cnrs.fr/sites/default/files/newsroom/logo-4-3-min_2.jpg" />
+<meta property="fb:app_id" content="912338625489846" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Homepage CNRS (CNRS)" />
+<meta name="twitter:site" content="@CNRS" />
+<meta name="twitter:image" content="https://www.cnrs.fr/sites/default/files/newsroom/logo-4-3-min_2.jpg" />
+<meta name="google-site-verification" content="JmSEzu5Tq57DFbCkMU7E1VuY4dK3LKrFAykFBlCFtVA" />
+<meta name="Generator" content="Drupal 10 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="/themes/custom/cnrs/favicon.ico" type="image/vnd.microsoft.icon" />
+<link rel="alternate" hreflang="fr" href="https://www.cnrs.fr/fr" />
+<link rel="alternate" hreflang="en" href="https://www.cnrs.fr/en" />
+
+    <title>Centre national de la recherche scientifique (CNRS)</title>
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_Q4OVqXPi3xfG5mG06xoE72PhfSOI1P3Gcu-KCUlRikc.css?delta=0&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_tmWL4l4gyK-hJkxomNYfR_usgi9D7gMAaW3vp8TgW90.css?delta=1&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_HqMrH59vUPM3oHJY3bRGzLg2euR-LvxgvCdnCXNsXAE.css?delta=2&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_Dy7MjGdYFSZ_3nzCP6WqsDOmSv887liAExm1RqDBGcQ.css?delta=3&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_jMgVFcoSMyAPdDpQJf0CawXllwpNqYfmPHv8SRqGxlk.css?delta=4&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+<link rel="stylesheet" media="print" href="/sites/default/files/css/css_YLZaIkZr_Wn3j0RK2qQ_9GmctZHte2EQOQTJ54esFPg.css?delta=5&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_K2eY2aFs3JCXtciFNpgaNMiNZu6LGDcvngTkpcJCj5Y.css?delta=6&amp;language=en&amp;theme=cnrs&amp;include=eJxFj1EOgzAMQy9U0SOhQA10C02VtIPt9OvGGD_Rs-NIzoBSoD32LIbQT5GbND8jQYndyGT29AMZTl5hRjPs1ElC26V2dKQ-ZAspghuFRQfZfcBElUszFD5ozcQd3Wg_jCS6EscXHPbCMd3PyE-6SaQkKTD_J5dJaVbKi53py-lqynXgaEsrkRcpYlvM8Bd2LGN7z55WsB7FHxGb-e_sVgmV8QbBi29H" />
+
+    
+  </head>
+  <body class="path-frontpage front page-node-type-homepage">
+        <a href="#main-content" class="visually-hidden focusable skip-link">
+      Skip to main content
+    </a>
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    <div class="layout-container">
+
+	<header >
+		<div class="inner">
+			<div class="header-page">  <div class="region region-header-page-title">
+    <div id="block-pageheadertitle" class="block block-cnrs-common block-page-header-title-block">
+  
+    
+      <span>Homepage CNRS</span>
+  </div>
+
+  </div>
+</div>
+			<div class="header-rwd">  <div class="region region-header-rwd">
+    <div class="language-switcher-language-url block block-cnrs-common block-cnrs-language-blocklanguage-interface" id="block-selecteurdelangue-2">
+  
+    
+      <ul class="links"><li hreflang="fr" data-drupal-link-system-path="&lt;front&gt;" class="fr"><a href="/fr" class="language-link" hreflang="fr" data-drupal-link-system-path="&lt;front&gt;">Fr</a></li><li hreflang="en" data-drupal-link-system-path="&lt;front&gt;" class="en is-active" aria-current="page"><a href="/en" class="language-link is-active" hreflang="en" data-drupal-link-system-path="&lt;front&gt;">En</a></li></ul>
+  </div>
+<div id="block-cnrsheadersearch" class="block block-cnrs-search block-cnrs-header-search">
+  
+    
+      <div class="header-search">
+  <a href="/en/search">
+    <span>Search</span>
+    <img src="/themes/custom/cnrs/img/icons/search.svg" alt="Search">
+  </a>
+</div>
+
+  </div>
+
+  </div>
+</div>
+			<div class="burger">Menu</div>
+			  <div class="region region-header">
+    <div id="block-logo" class="block block-iptools block-iptools-logo">
+  
+    
+    <div id="logo" >
+    <a href="/en" title="Home" rel="home">
+              <img class="logo-main" src="/sites/default/files/logo/logo.svg" width="115" height="115" alt="Accueil">
+                </a>
+  </div>
+</div>
+
+  </div>
+
+			<div id="menu">
+          <div class="region region-menu">
+    <nav role="navigation" aria-labelledby="block-navigationprincipale-2-menu" id="block-navigationprincipale-2" class="block block-menu navigation menu--main">
+            
+  <h2 class="visually-hidden" id="block-navigationprincipale-2-menu">Navigation principale</h2>
+  
+
+        
+              <ul class="menu">
+                                  <li class="menu-item">
+                          <a href="/en" data-drupal-link-system-path="&lt;front&gt;" class="is-active" aria-current="page">Home</a>
+                                  </li>
+                            <li class="menu-item menu-item--expanded">
+                          <div class="menu-item__wrapper">
+                <a href="/en/our-research" title="" class="menu-item__link">Our research</a>
+                <button class="menu-item__button js-toggle-nav" aria-expanded="false"><span class="out">See more</span></button>
+              </div>
+                                                      <ul class="menu">
+                                    <li class="menu-item">
+                          <a href="/en/our-research/partnerships" data-drupal-link-system-path="node/8007">Partnerships</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/our-research/disciplines" data-drupal-link-system-path="node/8006">Disciplines</a>
+                                  </li>
+                            <li class="menu-item menu-item--collapsed">
+                          <a href="/en/our-research/france-2030" data-drupal-link-system-path="node/8918">France 2030</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/our-research/assessment" data-drupal-link-system-path="node/8008">Assessment</a>
+                                  </li>
+                            <li class="menu-item menu-item--collapsed">
+                          <a href="/en/our-research/collective-scientific-expertise" data-drupal-link-system-path="node/8009">Collective scientific expertise</a>
+                                  </li>
+              </ul>
+      
+                      </li>
+                            <li class="menu-item menu-item--expanded">
+                          <div class="menu-item__wrapper">
+                <a href="/en/our-innovations" title="" class="menu-item__link">Our innovations</a>
+                <button class="menu-item__button js-toggle-nav" aria-expanded="false"><span class="out">See more</span></button>
+              </div>
+                                                      <ul class="menu">
+                                    <li class="menu-item">
+                          <a href="/en/our-innovations/protection" data-drupal-link-system-path="node/8023">Protection</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/our-innovations/entrepreneurship" data-drupal-link-system-path="node/8010">Entrepreneurship</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/our-innovations/joint-creation" data-drupal-link-system-path="node/8027">Joint creation</a>
+                                  </li>
+              </ul>
+      
+                      </li>
+                            <li class="menu-item menu-item--expanded">
+                          <div class="menu-item__wrapper">
+                <a href="/en/our-challenges" title="" class="menu-item__link">Our challenges</a>
+                <button class="menu-item__button js-toggle-nav" aria-expanded="false"><span class="out">See more</span></button>
+              </div>
+                                                      <ul class="menu">
+                                    <li class="menu-item">
+                          <a href="/en/our-challenges/transversal-challenges" data-drupal-link-system-path="node/9496">Transversal challenges</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/our-challenges/sustainable-development" data-drupal-link-system-path="node/8012">Sustainable development</a>
+                                  </li>
+                            <li class="menu-item menu-item--collapsed">
+                          <a href="/en/our-challenges/sharing-knowledge" data-drupal-link-system-path="node/8897">Sharing knowledge</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/our-challenges/open-science" data-drupal-link-system-path="node/8900">Open science</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/node/13453" data-drupal-link-system-path="node/13453">Appui à la décision</a>
+                                  </li>
+              </ul>
+      
+                      </li>
+                            <li class="menu-item menu-item--expanded">
+                          <div class="menu-item__wrapper">
+                <a href="https://www.cnrs.fr/en/the-cnrs" title="" class="menu-item__link">The CNRS</a>
+                <button class="menu-item__button js-toggle-nav" aria-expanded="false"><span class="out">See more</span></button>
+              </div>
+                                                      <ul class="menu">
+                                    <li class="menu-item">
+                          <a href="/en/le-cnrs/missions" data-drupal-link-system-path="node/8015">Missions</a>
+                                  </li>
+                            <li class="menu-item menu-item--collapsed">
+                          <a href="/en/the-cnrs/responsibilities" data-drupal-link-system-path="node/8016">Responsibilities</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/le-cnrs/organisation" data-drupal-link-system-path="node/8028">Organisation</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/the-cnrs/europe-and-international" data-drupal-link-system-path="node/8022">Europe and International</a>
+                                  </li>
+                            <li class="menu-item">
+                          <a href="/en/le-cnrs/distinctions" data-drupal-link-system-path="node/8029">Distinctions</a>
+                                  </li>
+              </ul>
+      
+                      </li>
+              </ul>
+      
+
+  <div id="block-cnrsheadersearch-2" class="block block-cnrs-search block-cnrs-header-search">
+  
+    
+      <div class="header-search">
+  <a href="/en/search">
+    <span>Search</span>
+    <img src="/themes/custom/cnrs/img/icons/search.svg" alt="Search">
+  </a>
+</div>
+
+  </div>
+</nav>
+
+  </div>
+
+				<div id="header-top">
+            <div class="region region-menu-top">
+    <div aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="block-cnrs-votreprofil-2-menu" id="block-profile"  id="block-cnrs-votreprofil-2" class="block block-menu navigation menu--votre-profil profile-dropdown block-cnrs-common">
+      <ul class="links" role="menu">
+      <li role="none">
+        <div class="is-active">Your profile</div>
+      </li>
+      
+                    <li class="text-black" role="none">
+        <a href="/en/press" role="menuitem" data-drupal-link-system-path="node/8021">Press</a>
+      </li>
+                <li class="text-black" role="none">
+        <a href="https://carrieres.cnrs.fr/en/" target="_blank" role="menuitem" rel="noopener noreferrer">Recruitment</a>
+      </li>
+                <li class="text-black" role="none">
+        <a href="https://www.cnrs.fr/en/industry" role="menuitem" rel="noreferrer">Industry</a>
+      </li>
+                <li class="text-black" role="none">
+        <a href="https://www.cnrs.fr/en/in-house" title="Outils internes et élections" role="menuitem" rel="noreferrer">In-house</a>
+      </li>
+      
+
+
+    </ul>
+  </div>
+<div id="block-cnrsheaderontheweb" class="block block-cnrs-ontheweb block-cnrs-header-ontheweb">
+  
+    
+      <div class="header-link">
+  <a href="/en/cbox/ontheweb" class="colorbox">CNRS On the web</a>
+</div>
+
+  </div>
+<div id="block-cnrs-cnrsdirectory" class="block block-cnrs-common block-cnrs-directory">
+  
+    
+      <a href="https://annuaire.cnrs.fr/" target="_blank" rel="noopener noreferrer">Directory</a>
+  </div>
+<div id="block-cnrsfoundationlogo" class="block block-cnrs-common block-cnrs-foundation">
+  
+    
+      <a href="https://fondation-cnrs.org/faire-un-don/" target="_blank" rel="noopener noreferrer">Donate</a>
+  </div>
+<div class="language-switcher-language-url block block-cnrs-common block-cnrs-language-blocklanguage-interface" id="block-selecteurdelangue">
+  
+    
+      <ul class="links"><li hreflang="fr" data-drupal-link-system-path="&lt;front&gt;" class="fr"><a href="/fr" class="language-link" hreflang="fr" data-drupal-link-system-path="&lt;front&gt;">Fr</a></li><li hreflang="en" data-drupal-link-system-path="&lt;front&gt;" class="en is-active" aria-current="page"><a href="/en" class="language-link is-active" hreflang="en" data-drupal-link-system-path="&lt;front&gt;">En</a></li></ul>
+  </div>
+
+  </div>
+
+				</div>
+			</div>
+		</div>
+	</header>
+
+			<main role="main">
+      <a id="main-content" tabindex="-1"></a>      			
+			  <div class="region region-content">
+    <div data-drupal-messages-fallback class="hidden"></div>
+<div id="block-contenudelapageprincipale-2" class="block block-system block-system-main-block">
+  
+    
+      &#10&#10<article>&#10&#10
+	&#10
+	&#10
+	&#10&#10
+	<div>&#10
+		
+      <div class="field field--name-field-paragraphs field--type-entity-reference-revisions field--label-hidden field__items">
+              <div class="field__item">	<div class="home feature paragraph paragraph--type--block-featured paragraph--view-mode--default">
+		            <section class="inner">
+				<div class="feature__img">
+          
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/desktop_banner/public/2026-05/%C2%A9%20Vivatech%202023%5B1%5D.jpg.webp?itok=NFK4vUf8 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/mobile_banner/public/2026-05/%C2%A9%20Vivatech%202023%5B1%5D.jpg.webp?itok=baEQbOpe 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/desktop_banner/public/2026-05/%C2%A9%20Vivatech%202023%5B1%5D.jpg?itok=NFK4vUf8 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/mobile_banner/public/2026-05/%C2%A9%20Vivatech%202023%5B1%5D.jpg?itok=baEQbOpe 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="eager" width="768" height="384" src="/sites/default/files/styles/mobile_banner/public/2026-05/%C2%A9%20Vivatech%202023%5B1%5D.jpg?itok=baEQbOpe" alt="Signe &quot;Viva&quot;" />
+
+  </picture>
+
+
+
+  
+
+				</div>
+				<div class="feature__content article">
+					<span class="feature__tag">Hot news</span>
+					<div class="feature__background">
+							<div class="feature__headings">
+							<span class="feature__date"><time datetime="2026-05-07T12:00:00Z" class="datetime">05.07.2026</time>
+</span>
+							<span class="article__source">Press</span>
+						</div>
+						<div class="feature__themes article__themes">
+																							<a href="/en/newsroom?field_theme_target_id%5B345%5D=345" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Innovation</div>
+      </a>
+																							<a href="/en/newsroom?field_theme_target_id%5B346%5D=346" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Corporate</div>
+      </a>
+													</div>
+						<h1 class="feature__title">
+							<a target="_self" href="/en/press/cnrs-vivatech-2026-basic-research-central-technological-sovereignty" class="link-icon" >The CNRS at VivaTech 2026: basic research central to technological sovereignty</a>
+						</h1>
+					</div>
+				</div>
+			</section>
+			</div>
+</div>
+              <div class="field__item">	<div class="home highlights paragraph paragraph--type--block-highlight paragraph--view-mode--default">
+					<section class="inner">
+				<div class="highlights__content home__small-inner">
+            
+          
+<article class="highlights__card article">
+      <div class="highlights__img">
+      <a href="/en/press/pancreatic-cancer-antibody-proves-itself-early-clinical-trial">
+                  
+            <div class="field field--name-field-entity-block-image field--type-entity-reference field--label-hidden field__item">
+<div class="content-visual entity-block">
+  <span>    <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/image/amazing%20studio_AdobeStock.jpeg.webp?itok=bwxTJR9u 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/image/amazing%20studio_AdobeStock.jpeg.webp?itok=sOiZoS_N 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/image/amazing%20studio_AdobeStock.jpeg.webp?itok=pLLqiO-q 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/image/amazing%20studio_AdobeStock.jpeg?itok=bwxTJR9u 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/image/amazing%20studio_AdobeStock.jpeg?itok=sOiZoS_N 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/image/amazing%20studio_AdobeStock.jpeg?itok=pLLqiO-q 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/image/amazing%20studio_AdobeStock.jpeg?itok=pLLqiO-q" alt="" />
+
+  </picture>
+
+</span>
+  <div class="visual-desc">©amazing studio/AdobeStock</div>
+
+  </div>
+</div>
+      
+              </a>
+    </div>
+    <div class="highlights__blue-line">
+      <div class="article__headings highlights__headings">
+        <span class="highlights__date"><time datetime="2026-04-22T15:00:00Z" class="datetime">04.22.2026</time>
+</span>
+        <span class="article__source">
+            <div class="field field--name-field-source field--type-entity-reference field--label-hidden field__item">Press</div>
+      </span>
+      </div>
+      <div class="highlights__themes article__themes">
+                            <a href="/en/newsroom?field_theme_target_id%5B351%5D=351" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Health</div>
+      </a>
+              </div>
+      <h2 class="highlights__title"><span class="field field--name-title field--type-string field--label-hidden">Pancreatic cancer: an antibody proves itself in an early clinical trial</span>
+</h2>
+    </div>
+    <a href="/en/press/pancreatic-cancer-antibody-proves-itself-early-clinical-trial" class="highlights__link article__link link-icon">Read more</a>
+  </article>
+
+
+  
+          
+<article class="highlights__card article">
+      <div class="highlights__img">
+      <a href="/en/update/reunion-island-laboratory-one-health-approach">
+                  
+            <div class="field field--name-field-entity-block-image field--type-entity-reference field--label-hidden field__item">
+<div class="content-visual entity-block">
+  <span>    <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/image/cnrs_20180088_0056_MD.jpg.webp?itok=HdenSusB 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/image/cnrs_20180088_0056_MD.jpg.webp?itok=zOksa5Dr 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/image/cnrs_20180088_0056_MD.jpg.webp?itok=RdYz2BQf 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/image/cnrs_20180088_0056_MD.jpg?itok=HdenSusB 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/image/cnrs_20180088_0056_MD.jpg?itok=zOksa5Dr 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/image/cnrs_20180088_0056_MD.jpg?itok=RdYz2BQf 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/image/cnrs_20180088_0056_MD.jpg?itok=RdYz2BQf" alt="Un scientifique relève des échantillons dans une forêt de La Réunion" />
+
+  </picture>
+
+</span>
+  <div class="visual-desc">© Thibaut VERGOZ / IGE / CNRS Images</div>
+
+  </div>
+</div>
+      
+              </a>
+    </div>
+    <div class="highlights__blue-line">
+      <div class="article__headings highlights__headings">
+        <span class="highlights__date"><time datetime="2026-04-17T12:00:00Z" class="datetime">04.17.2026</time>
+</span>
+        <span class="article__source">
+            <div class="field field--name-field-source field--type-entity-reference field--label-hidden field__item">Update</div>
+      </span>
+      </div>
+      <div class="highlights__themes article__themes">
+                            <a href="/en/newsroom?field_theme_target_id%5B346%5D=346" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Corporate</div>
+      </a>
+              </div>
+      <h2 class="highlights__title"><span class="field field--name-title field--type-string field--label-hidden">Réunion Island, a laboratory for the One Health approach</span>
+</h2>
+    </div>
+    <a href="/en/update/reunion-island-laboratory-one-health-approach" class="highlights__link article__link link-icon">Read more</a>
+  </article>
+
+
+  
+          
+<article class="highlights__card article">
+      <div class="highlights__img">
+      <a href="/en/update/cnrs-spotlight-how-international-collaboration-reinforces-our-health-strategies">
+                  
+            <div class="field field--name-field-entity-block-image field--type-entity-reference field--label-hidden field__item">
+<div class="content-visual entity-block">
+  <span>    <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg.webp?itok=l04n_yfl 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg.webp?itok=RdvOgZyT 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg.webp?itok=8Q6NKJak 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg?itok=l04n_yfl 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg?itok=RdvOgZyT 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg?itok=8Q6NKJak 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/image/%C5%93il-du-CNRS-300x300%5B2%5D.jpg?itok=8Q6NKJak" alt="" />
+
+  </picture>
+
+</span>
+  <div class="visual-desc">L’œil du CNRS : la collaboration internationale renforce nos stratégies de santé© Brice Marchal/CNRS</div>
+
+  </div>
+</div>
+      
+              </a>
+    </div>
+    <div class="highlights__blue-line">
+      <div class="article__headings highlights__headings">
+        <span class="highlights__date"><time datetime="2026-04-14T12:00:00Z" class="datetime">04.14.2026</time>
+</span>
+        <span class="article__source">
+            <div class="field field--name-field-source field--type-entity-reference field--label-hidden field__item">Update</div>
+      </span>
+      </div>
+      <div class="highlights__themes article__themes">
+                            <a href="/en/newsroom?field_theme_target_id%5B346%5D=346" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Corporate</div>
+      </a>
+              </div>
+      <h2 class="highlights__title"><span class="field field--name-title field--type-string field--label-hidden">CNRS Spotlight: How international collaboration reinforces our health strategies</span>
+</h2>
+    </div>
+    <a href="/en/update/cnrs-spotlight-how-international-collaboration-reinforces-our-health-strategies" class="highlights__link article__link link-icon">Read more</a>
+  </article>
+
+
+  
+
+				</div>
+			</section>
+			</div>
+</div>
+              <div class="field__item">	<div class="home news paragraph paragraph--type--block-our-news-by-theme paragraph--view-mode--default">
+		      <section class="inner">
+        <h2 class="home__title">
+          
+            <div class="clearfix text-formatted field field--name-field-label field--type-text field--label-hidden field__item"><div class="tex2jax_process"><span class="home__title--blue">News</span><br> round-up</div></div>
+      
+        </h2>
+      </section>
+      <div class="views-element-container"><section  class="view view-newsroom view-id-newsroom view-display-id-block_1 js-view-dom-id-6706be939c9f8d8403a458e02c1e924160081122a3a241223aaedc885b52b10d inner">
+  <div class="home__small-inner">
+              <div class="view-filters article__themes">
+        <form class="views-exposed-form bef-exposed-form" data-bef-auto-submit-full-form="" data-bef-auto-submit="" data-bef-auto-submit-delay="500" data-drupal-selector="views-exposed-form-newsroom-block-1" action="/en/newsroom" method="get" id="views-exposed-form-newsroom-block-1" accept-charset="UTF-8">
+  <div class="form--inline clearfix">
+  <fieldset data-drupal-selector="edit-field-theme-target-id" id="edit-field-theme-target-id--wrapper" class="fieldgroup form-composite js-form-item form-item js-form-wrapper form-wrapper">
+      <legend>
+    <span class="fieldset-legend">Select a theme</span>
+  </legend>
+  <div class="fieldset-wrapper">
+                <div id="edit-field-theme-target-id" class="form-radios"><div class="form-radios form--inline">
+                  <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-all" type="radio" id="edit-field-theme-target-id-all" name="field_theme_target_id" value="All" checked="checked" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-all" class="option">All</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-346" type="radio" id="edit-field-theme-target-id-346" name="field_theme_target_id" value="346" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-346" class="option">Corporate</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-343" type="radio" id="edit-field-theme-target-id-343" name="field_theme_target_id" value="343" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-343" class="option">Digital</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-344" type="radio" id="edit-field-theme-target-id-344" name="field_theme_target_id" value="344" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-344" class="option">Earth</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-353" type="radio" id="edit-field-theme-target-id-353" name="field_theme_target_id" value="353" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-353" class="option">Engineering</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-352" type="radio" id="edit-field-theme-target-id-352" name="field_theme_target_id" value="352" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-352" class="option">Environment</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-351" type="radio" id="edit-field-theme-target-id-351" name="field_theme_target_id" value="351" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-351" class="option">Health</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-345" type="radio" id="edit-field-theme-target-id-345" name="field_theme_target_id" value="345" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-345" class="option">Innovation</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-350" type="radio" id="edit-field-theme-target-id-350" name="field_theme_target_id" value="350" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-350" class="option">Life</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-348" type="radio" id="edit-field-theme-target-id-348" name="field_theme_target_id" value="348" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-348" class="option">Matter</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-349" type="radio" id="edit-field-theme-target-id-349" name="field_theme_target_id" value="349" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-349" class="option">Society</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-field-theme-target-id form-item-field-theme-target-id">
+        <input data-drupal-selector="edit-field-theme-target-id-347" type="radio" id="edit-field-theme-target-id-347" name="field_theme_target_id" value="347" class="form-radio" />
+
+        <label for="edit-field-theme-target-id-347" class="option">Space</label>
+      </div>
+
+      </div>
+</div>
+
+          </div>
+</fieldset>
+<div class="js-form-item form-item js-form-type-select form-type-select js-form-item-newsroom-month form-item-newsroom-month">
+      <label for="edit-newsroom-month">Mois</label>
+        <select data-drupal-selector="edit-newsroom-month" id="edit-newsroom-month" name="newsroom_month" class="form-select"><option value="All" selected="selected">- Any -</option><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+        </div>
+<div class="js-form-item form-item js-form-type-select form-type-select js-form-item-newsroom-year form-item-newsroom-year">
+      <label for="edit-newsroom-year">Année</label>
+        <select data-drupal-selector="edit-newsroom-year" id="edit-newsroom-year" name="newsroom_year" class="form-select"><option value="All" selected="selected">- Any -</option><option value="2026">2026</option><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option><option value="2019">2019</option><option value="2018">2018</option><option value="2017">2017</option><option value="2016">2016</option><option value="2014">2014</option><option value="2008">2008</option><option value="2005">2005</option></select>
+        </div>
+<div data-drupal-selector="edit-field-press-info-diffusiondate-value-wrapper" id="edit-field-press-info-diffusiondate-value-wrapper" class="js-form-wrapper form-wrapper"><fieldset data-drupal-selector="edit-field-press-info-diffusiondate-value-wrapper" id="edit-field-press-info-diffusiondate-value-wrapper--2" class="js-form-item form-item js-form-wrapper form-wrapper">
+      <legend>
+    <span class="fieldset-legend">Mise en ligne (field_press_info_diffusiondate)</span>
+  </legend>
+  <div class="fieldset-wrapper">
+                <div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-field-press-info-diffusiondate-value-min form-item-field-press-info-diffusiondate-value-min">
+      <label for="edit-field-press-info-diffusiondate-value-min">Min</label>
+        <input data-drupal-selector="edit-field-press-info-diffusiondate-value-min" type="text" id="edit-field-press-info-diffusiondate-value-min" name="field_press_info_diffusiondate_value[min]" value="1970-01-01 00:00:00" size="30" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-field-press-info-diffusiondate-value-max form-item-field-press-info-diffusiondate-value-max">
+      <label for="edit-field-press-info-diffusiondate-value-max">Max</label>
+        <input data-drupal-selector="edit-field-press-info-diffusiondate-value-max" type="text" id="edit-field-press-info-diffusiondate-value-max" name="field_press_info_diffusiondate_value[max]" value="2026-05-10 12:31:37" size="30" maxlength="128" class="form-text" />
+
+        </div>
+
+          </div>
+</fieldset>
+</div>
+<div data-drupal-selector="edit-field-page-date-value-wrapper" id="edit-field-page-date-value-wrapper" class="js-form-wrapper form-wrapper"><fieldset data-drupal-selector="edit-field-page-date-value-wrapper" id="edit-field-page-date-value-wrapper--2" class="js-form-item form-item js-form-wrapper form-wrapper">
+      <legend>
+    <span class="fieldset-legend">Date du contenu (field_page_date)</span>
+  </legend>
+  <div class="fieldset-wrapper">
+                <div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-field-page-date-value-min form-item-field-page-date-value-min">
+      <label for="edit-field-page-date-value-min">Min</label>
+        <input data-drupal-selector="edit-field-page-date-value-min" type="text" id="edit-field-page-date-value-min" name="field_page_date_value[min]" value="1970-01-01 00:00:00" size="30" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-field-page-date-value-max form-item-field-page-date-value-max">
+      <label for="edit-field-page-date-value-max">Max</label>
+        <input data-drupal-selector="edit-field-page-date-value-max" type="text" id="edit-field-page-date-value-max" name="field_page_date_value[max]" value="2026-05-10 23:59:59" size="30" maxlength="128" class="form-text" />
+
+        </div>
+
+          </div>
+</fieldset>
+</div>
+<div data-drupal-selector="edit-field-publication-date-value-wrapper" id="edit-field-publication-date-value-wrapper" class="js-form-wrapper form-wrapper"><fieldset data-drupal-selector="edit-field-publication-date-value-wrapper" id="edit-field-publication-date-value-wrapper--2" class="js-form-item form-item js-form-wrapper form-wrapper">
+      <legend>
+    <span class="fieldset-legend">Date de publication (field_publication_date)</span>
+  </legend>
+  <div class="fieldset-wrapper">
+                <div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-field-publication-date-value-min form-item-field-publication-date-value-min">
+      <label for="edit-field-publication-date-value-min">Min</label>
+        <input data-drupal-selector="edit-field-publication-date-value-min" type="text" id="edit-field-publication-date-value-min" name="field_publication_date_value[min]" value="1970-01-01 00:00:00" size="30" maxlength="128" class="form-text" />
+
+        </div>
+<div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-field-publication-date-value-max form-item-field-publication-date-value-max">
+      <label for="edit-field-publication-date-value-max">Max</label>
+        <input data-drupal-selector="edit-field-publication-date-value-max" type="text" id="edit-field-publication-date-value-max" name="field_publication_date_value[max]" value="2026-05-10 23:59:59" size="30" maxlength="128" class="form-text" />
+
+        </div>
+
+          </div>
+</fieldset>
+</div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions"><input data-bef-auto-submit-click="" class="js-hide button js-form-submit form-submit" data-drupal-selector="edit-submit-newsroom" type="submit" id="edit-submit-newsroom" value="Apply" />
+</div>
+
+</div>
+
+</form>
+
+      </div>
+        
+            <div class="news__featured">
+
+<div class="news__featured--content">
+  <div class="featured featured__img">
+    <a href="/en/taxonomy/term/356/maths-piece-cake" class="article__link" target="_blank">
+              
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/1_istock-1130530775_vp.jpg.webp?itok=GU0_CTrQ 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/1_istock-1130530775_vp.jpg.webp?itok=eWzTvUEx 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/1_istock-1130530775_vp.jpg.webp?itok=8yuMuZXj 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/1_istock-1130530775_vp.jpg?itok=GU0_CTrQ 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/1_istock-1130530775_vp.jpg?itok=eWzTvUEx 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/1_istock-1130530775_vp.jpg?itok=8yuMuZXj 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/imported_images/1_istock-1130530775_vp.jpg?itok=8yuMuZXj" alt="" />
+
+  </picture>
+
+
+
+  
+
+          </a>
+  </div>
+  <div class="news-content">
+    <div class="article__headings">
+      <span>
+            <div class="field field--name-field-publication-date field--type-datetime field--label-hidden field__item"><time datetime="2026-05-07T11:10:24Z" class="datetime">05.07.2026</time>
+</div>
+      </span>
+      <span class="article__source">
+            <div class="field field--name-field-source field--type-entity-reference field--label-hidden field__item">Le Journal</div>
+      </span>
+    </div>
+    <div class="article__themes">
+                      <a href="/en/newsroom?field_theme_target_id%5B343%5D=343" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Digital</div>
+      </a>
+          </div>
+    <a href="/en/taxonomy/term/356/maths-piece-cake" target="_blank">
+      <h2 class="article__title"><span class="field field--name-title field--type-string field--label-hidden">Maths is a piece of cake</span>
+</h2>
+    </a>
+    <div class="featured">
+      <p> 
+            <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">Mixing cake batter, following a recipe, cutting a Yule log. These everyday gestures in cooking actually conceal complex concepts from mathematics and…</div>
+       </p>
+      <a href="/en/taxonomy/term/356/maths-piece-cake" class="article__link link-icon" target="_blank">Discover</a>
+    </div>
+  </div>
+</div>
+</div>
+<div class="news__next">
+  
+<div class="news__featured--content">
+  <div class="featured featured__img">
+    <a href="/en/taxonomy/term/356/shedding-coherent-light-brain" class="article__link" target="_blank">
+              
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg.webp?itok=WkqovoPI 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg.webp?itok=3C7DAZcV 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg.webp?itok=EK_M0Gla 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg?itok=WkqovoPI 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg?itok=3C7DAZcV 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg?itok=EK_M0Gla 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/imported_images/valentina_emiliani_su_lardhuin_mel_72dpi.jpg?itok=EK_M0Gla" alt="" />
+
+  </picture>
+
+
+
+  
+
+          </a>
+  </div>
+  <div class="news-content">
+    <div class="article__headings">
+      <span>
+            <div class="field field--name-field-publication-date field--type-datetime field--label-hidden field__item"><time datetime="2026-04-30T11:33:09Z" class="datetime">04.30.2026</time>
+</div>
+      </span>
+      <span class="article__source">
+            <div class="field field--name-field-source field--type-entity-reference field--label-hidden field__item">Le Journal</div>
+      </span>
+    </div>
+    <div class="article__themes">
+                      <a href="/en/newsroom?field_theme_target_id%5B350%5D=350" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Life</div>
+      </a>
+          </div>
+    <a href="/en/taxonomy/term/356/shedding-coherent-light-brain" target="_blank">
+      <h2 class="article__title"><span class="field field--name-title field--type-string field--label-hidden">Shedding coherent light on the brain</span>
+</h2>
+    </a>
+    <div class="featured">
+      <p> 
+            <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">The physicist Valentina Emiliani has been awarded the 2026 Irène Joliot-Curie Female Scientist of the Year prize, in recognition of her work in…</div>
+       </p>
+      <a href="/en/taxonomy/term/356/shedding-coherent-light-brain" class="article__link link-icon" target="_blank">Discover</a>
+    </div>
+  </div>
+</div>
+
+<div class="news__featured--content">
+  <div class="featured featured__img">
+    <a href="/en/taxonomy/term/356/magic-sound-and-light-physics" class="article__link" target="_blank">
+              
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg.webp?itok=YjdWd8c7 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg.webp?itok=71BxMkvk 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg.webp?itok=DqDhiqKP 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg?itok=YjdWd8c7 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg?itok=71BxMkvk 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg?itok=DqDhiqKP 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/imported_images/photo-2026-01-23-18-14-11_vp.jpg?itok=DqDhiqKP" alt="" />
+
+  </picture>
+
+
+
+  
+
+          </a>
+  </div>
+  <div class="news-content">
+    <div class="article__headings">
+      <span>
+            <div class="field field--name-field-publication-date field--type-datetime field--label-hidden field__item"><time datetime="2026-04-28T16:53:51Z" class="datetime">04.28.2026</time>
+</div>
+      </span>
+      <span class="article__source">
+            <div class="field field--name-field-source field--type-entity-reference field--label-hidden field__item">Le Journal</div>
+      </span>
+    </div>
+    <div class="article__themes">
+                      <a href="/en/newsroom?field_theme_target_id%5B349%5D=349" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Society</div>
+      </a>
+                      <a href="/en/newsroom?field_theme_target_id%5B343%5D=343" alt="" class="article__theme">
+            <div class="field field--name-name field--type-string field--label-hidden field__item">Digital</div>
+      </a>
+          </div>
+    <a href="/en/taxonomy/term/356/magic-sound-and-light-physics" target="_blank">
+      <h2 class="article__title"><span class="field field--name-title field--type-string field--label-hidden">The magic of sound and light physics</span>
+</h2>
+    </a>
+    <div class="featured">
+      <p> 
+            <div class="clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item">Maïmouna Bocoum, a physicist specialising in acousto-optics at the Paris-based Langevin Institute, develops imaging technologies for the early…</div>
+       </p>
+      <a href="/en/taxonomy/term/356/magic-sound-and-light-physics" class="article__link link-icon" target="_blank">Discover</a>
+    </div>
+  </div>
+</div>
+
+      <a href="/en/newsroom" class="news__all-link link-font link-icon">All articles on this topic</a>
+    
+                      </div>
+</section>
+</div>
+
+			</div>
+</div>
+              <div class="field__item">  <div class="home zoom paragraph paragraph--type--block-zoom-on paragraph--view-mode--default">
+          <section class="inner">
+        <h2 class="home__title">
+          
+            <div class="clearfix text-formatted field field--name-field-label field--type-text field--label-hidden field__item"><div class="tex2jax_process"><span class="home__title--blue">Focus</span> on...</div></div>
+      
+        </h2>
+        <div class="home__small-inner">
+          <div class="zoom__content">
+            
+    <div class="zoom__card paragraph paragraph--type--element-block-zoom-on paragraph--view-mode--default">
+                <a target="_blank" href="https://images.cnrs.fr/en/scientific-news/complexities-brain" target="_blank" >
+        
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/2026-03/cnrs_20210072_0001_MD.jpg.webp?itok=Y_e-NqiQ 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/2026-03/cnrs_20210072_0001_MD.jpg.webp?itok=b_fqEfYG 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/2026-03/cnrs_20210072_0001_MD.jpg.webp?itok=rhC12hYc 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/2026-03/cnrs_20210072_0001_MD.jpg?itok=Y_e-NqiQ 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/2026-03/cnrs_20210072_0001_MD.jpg?itok=b_fqEfYG 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/2026-03/cnrs_20210072_0001_MD.jpg?itok=rhC12hYc 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/2026-03/cnrs_20210072_0001_MD.jpg?itok=rhC12hYc" alt="human brain" />
+
+  </picture>
+
+
+
+  
+
+        <h3 class="zoom__title">In the complexities of the brain</h3>
+        <p class="zoom__text">Our brain is an incredibly fascinating area of research : let’s  explore its multiple aspects with the scientists who study it on a daily basis.</p>
+        <span class="zoom__link link-icon link-icon--ext">Discover</span>
+      </a>
+      </div>
+
+    <div class="zoom__card paragraph paragraph--type--element-block-zoom-on paragraph--view-mode--default">
+                <a target="_blank" href="https://images.cnrs.fr/en/scientific-news/frozen-archives-heart-antarctica" target="_blank" >
+        
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg.webp?itok=uzpI4obu 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg.webp?itok=FLa-auPC 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg.webp?itok=K8XeiEpm 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg?itok=uzpI4obu 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg?itok=FLa-auPC 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg?itok=K8XeiEpm 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/imported_images/Entrance%2520Ice%2520Cave%2520Ice%2520Cave%25202022-12-09_credit_Vito%2520Stonzione%2520PNRA%2520ENEA_0.jpg?itok=K8XeiEpm" alt="" />
+
+  </picture>
+
+
+
+  
+
+        <h3 class="zoom__title">Frozen archives in the heart of Antarctica</h3>
+        <p class="zoom__text">The Ice Memory Foundation opens the first-ever sanctuary of mountain ice cores in Antarctica, storing these climate archives for centuries.</p>
+        <span class="zoom__link link-icon link-icon--ext">Discover</span>
+      </a>
+      </div>
+
+    <div class="zoom__card paragraph paragraph--type--element-block-zoom-on paragraph--view-mode--default">
+                <a target="_blank" href="https://images.cnrs.fr/en/scientific-news/piton-de-la-fournaise-erupting-volcano" target="_blank" >
+        
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/cnrs_20220065_0031_HD.jpg.webp?itok=xlEUn55K 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/cnrs_20220065_0031_HD.jpg.webp?itok=_7YUokQV 1x" media="(min-width: 769px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/cnrs_20220065_0031_HD.jpg.webp?itok=n0PA_f-b 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_1001_min/public/imported_images/cnrs_20220065_0031_HD.jpg?itok=xlEUn55K 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_zoom_769_min/public/imported_images/cnrs_20220065_0031_HD.jpg?itok=_7YUokQV 1x" media="(min-width: 769px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_news_mobile/public/imported_images/cnrs_20220065_0031_HD.jpg?itok=n0PA_f-b 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="728" height="543" src="/sites/default/files/styles/homepage_news_mobile/public/imported_images/cnrs_20220065_0031_HD.jpg?itok=n0PA_f-b" alt="" />
+
+  </picture>
+
+
+
+  
+
+        <h3 class="zoom__title">Piton de la Fournaise, an erupting volcano</h3>
+        <p class="zoom__text">Since 19 January 2026, a volcanic eruption has been underway at Piton de la Fournaise, an active shield volcano located on the island of Réunion.</p>
+        <span class="zoom__link link-icon link-icon--ext">Discover </span>
+      </a>
+      </div>
+
+
+          </div>
+        </div>
+      </section>
+      </div>
+</div>
+              <div class="field__item">  <div class="home videos paragraph paragraph--type--block-our-videos paragraph--view-mode--default">
+          <section class="inner">
+        <h2 class="home__title">
+          
+            <div class="clearfix text-formatted field field--name-field-label field--type-text field--label-hidden field__item"><div class="tex2jax_process"><span class="home__title--blue">Videos</span></div></div>
+      
+        </h2>
+        <div class="home__small-inner">
+          <div class="videos__content">
+            
+    <div class="videos__card paragraph paragraph--type--element-block-our-videos paragraph--view-mode--default">
+                <a target="_blank" href="https://www.youtube.com/watch?v=V_PCPdWDbRs" target="_blank" >
+        <div class="videos__img blue-line">
+          
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2025-04/A7CC3CF3-F5E3-40D9-BD82-F8DC09D9D6E9.png.webp?itok=xf9H0BKP 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2025-04/A7CC3CF3-F5E3-40D9-BD82-F8DC09D9D6E9.png.webp?itok=fE6CZWv- 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2025-04/A7CC3CF3-F5E3-40D9-BD82-F8DC09D9D6E9.png?itok=xf9H0BKP 1x" media="(min-width: 1001px)" type="image/png"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2025-04/A7CC3CF3-F5E3-40D9-BD82-F8DC09D9D6E9.png?itok=fE6CZWv- 1x" media="(max-width: 768px)" type="image/png"/>
+                  <img loading="lazy" width="468" height="323" src="/sites/default/files/styles/homepage_videos_mobile/public/2025-04/A7CC3CF3-F5E3-40D9-BD82-F8DC09D9D6E9.png?itok=fE6CZWv-" alt="Susan Conway, planetary scientist" />
+
+  </picture>
+
+
+
+  
+
+          <span class="videos__counter">1 video</span>
+        </div>
+        <span class="videos__title link-icon link-icon--ext">Alaska on shifting ground</span>
+      </a>
+      </div>
+
+    <div class="videos__card paragraph paragraph--type--element-block-our-videos paragraph--view-mode--default">
+                <a target="_blank" href="https://www.youtube.com/watch?v=xUBbwPtB83Y&amp;t=186s" target="_blank" >
+        <div class="videos__img blue-line">
+          
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2024-05/ok-1802_MAG_Frontdeck_cropee_ok.jpg.webp?itok=5cMLq4CI 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2024-05/ok-1802_MAG_Frontdeck_cropee_ok.jpg.webp?itok=ICurxstR 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2024-05/ok-1802_MAG_Frontdeck_cropee_ok.jpg?itok=5cMLq4CI 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2024-05/ok-1802_MAG_Frontdeck_cropee_ok.jpg?itok=ICurxstR 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="468" height="323" src="/sites/default/files/styles/homepage_videos_mobile/public/2024-05/ok-1802_MAG_Frontdeck_cropee_ok.jpg?itok=ICurxstR" alt="Atalante ship on the sea" />
+
+  </picture>
+
+
+
+  
+
+          <span class="videos__counter">1 video</span>
+        </div>
+        <span class="videos__title link-icon link-icon--ext">Sicilian fault under close surveillance</span>
+      </a>
+      </div>
+
+    <div class="videos__card paragraph paragraph--type--element-block-our-videos paragraph--view-mode--default">
+                <a target="_blank" href="https://youtu.be/p-2J0H5i6-4?si=HIVQw9TS5nu5IfHq" target="_blank" >
+        <div class="videos__img blue-line">
+          
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2024-04/cnrs_20210063_0020_MD.jpg.webp?itok=vi3i32eN 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2024-04/cnrs_20210063_0020_MD.jpg.webp?itok=m-o-IPLY 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2024-04/cnrs_20210063_0020_MD.jpg?itok=vi3i32eN 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2024-04/cnrs_20210063_0020_MD.jpg?itok=m-o-IPLY 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="468" height="323" src="/sites/default/files/styles/homepage_videos_mobile/public/2024-04/cnrs_20210063_0020_MD.jpg?itok=m-o-IPLY" alt="La cathédrale de Notre-Dame en 3D" />
+
+  </picture>
+
+
+
+  
+
+          <span class="videos__counter">1 video</span>
+        </div>
+        <span class="videos__title link-icon link-icon--ext">Notre-Dame: building a digital twin</span>
+      </a>
+      </div>
+
+    <div class="videos__card paragraph paragraph--type--element-block-our-videos paragraph--view-mode--default">
+                <a target="_blank" href="https://youtube.com/playlist?list=PL-GL80g2OlE3YlQnh1vN7K3loxTVkYDaT&amp;feature=shared" target="_blank" >
+        <div class="videos__img blue-line">
+          
+    
+      <picture>
+                  <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2024-01/vig_LEI_playlist.jpg.webp?itok=bOiDVNoF 1x" media="(min-width: 1001px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2024-01/vig_LEI_playlist.jpg.webp?itok=gvmXRoCc 1x" media="(max-width: 768px)" type="image/webp"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_1001_min/public/2024-01/vig_LEI_playlist.jpg?itok=bOiDVNoF 1x" media="(min-width: 1001px)" type="image/jpeg"/>
+              <source srcset="/sites/default/files/styles/homepage_videos_mobile/public/2024-01/vig_LEI_playlist.jpg?itok=gvmXRoCc 1x" media="(max-width: 768px)" type="image/jpeg"/>
+                  <img loading="lazy" width="468" height="323" src="/sites/default/files/styles/homepage_videos_mobile/public/2024-01/vig_LEI_playlist.jpg?itok=gvmXRoCc" alt="fig" />
+
+  </picture>
+
+
+
+  
+
+          <span class="videos__counter">35 videos</span>
+        </div>
+        <span class="videos__title link-icon link-icon--ext">Science told by the CNRS</span>
+      </a>
+      </div>
+
+
+          </div>
+        </div>
+      </section>
+      </div>
+</div>
+          </div>
+  &#10
+	</div>&#10&#10</article>&#10
+
+  </div>
+
+  </div>
+
+		</main>
+	
+			<footer class="footer" role="contentinfo">
+			<div class="inner">
+				<div class="home__small-inner footer__content">
+            <img src="/themes/custom/cnrs/logo-footer.svg" alt="Home" />
+
+
+
+          <div class="footer__child">
+      
+                                          <a href="https://fondation-cnrs.org/" target="_blank" class="link-font link-icon link-icon--ext" title="Faire un don à la Fondation" rel="noopener noreferrer">Fondation CNRS</a>
+                                      <a href="https://www.cnrsinnovation.com/" target="_blank" class="link-font link-icon link-icon--ext" title="En savoir plus sur l&#039;innovation au CNRS" rel="noopener noreferrer">CNRS Innovation</a>
+                                      <a href="https://www.cnrseditions.fr/" target="_blank" class="link-font link-icon link-icon--ext" title="Découvrir la maison d&#039;édition du CNRS" rel="noopener noreferrer">CNRS Editions</a>
+                                      <a href="https://alumni.cnrs.fr/fr/" target="_blank" class="link-font link-icon link-icon--ext" rel="noopener noreferrer">CNRS Alumni</a>
+      
+
+
+  </div>
+<div class="footer__child">
+  <h3 class="footer__title">Your profile</h3>
+
+        
+                    <li class="text-black" role="none">
+        <a href="/en/press" role="menuitem" data-drupal-link-system-path="node/8021">Press</a>
+      </li>
+                <li class="text-black" role="none">
+        <a href="https://carrieres.cnrs.fr/en/" target="_blank" role="menuitem" rel="noopener noreferrer">Recruitment</a>
+      </li>
+                <li class="text-black" role="none">
+        <a href="https://www.cnrs.fr/en/industry" role="menuitem" rel="noreferrer">Industry</a>
+      </li>
+                <li class="text-black" role="none">
+        <a href="https://www.cnrs.fr/en/in-house" title="Outils internes et élections" role="menuitem" rel="noreferrer">In-house</a>
+      </li>
+      
+
+
+  </div>
+<div class="footer__child">
+        <h3 class="footer__title">Follow us</h3>
+<ul class="footer__social">
+          <li><a href="https://bsky.app/profile/cnrs.fr" target="_blank" class="bluesky" rel="noopener noreferrer">bluesky</a></li>
+          <li><a href="https://twitter.com/cnrs?lang=fr " target="_blank" class="twitter" rel="noopener noreferrer">twitter</a></li>
+          <li><a href="https://www.linkedin.com/company/cnrs/" target="_blank" class="linkedin" rel="noopener noreferrer">linkedin</a></li>
+          <li><a href="https://fr-fr.facebook.com/cnrs.fr/" target="_blank" class="facebook" rel="noopener noreferrer">facebook</a></li>
+          <li><a href="https://www.instagram.com/cnrs/" target="_blank" class="instagram" rel="noopener noreferrer">instagram</a></li>
+          <li><a href="https://www.youtube.com/@CNRS" target="_blank" class="youtube" rel="noopener noreferrer">youtube</a></li>
+    </ul>
+
+
+<a href="/en/all-our-social-networks" class="link-font link-icon">All our social networks</a>
+
+  </div>
+
+
+        </div>
+			</div>
+        
+              <ul class="credits">
+                    <li class="menu-item">
+        <a href="/en/accessibility" target="_self" data-drupal-link-system-path="node/1717" rel="noopener">Accessibility</a>
+              </li>
+                <li class="menu-item">
+        <a href="/en/credits" data-drupal-link-system-path="node/1685">Credits</a>
+              </li>
+                <li class="menu-item">
+        <a href="/en/management-cookies" data-drupal-link-system-path="node/5633">Cookies</a>
+              </li>
+                <li class="menu-item">
+        <a href="/en/rgpd" target="_self" data-drupal-link-system-path="node/3179" rel="noopener">GDPR</a>
+              </li>
+                <li class="menu-item">
+        <a href="/en/legal-notice" data-drupal-link-system-path="node/1707">Legal Notice</a>
+              </li>
+        </ul>
+  
+
+
+
+
+    </footer>
+	
+</div>
+
+  </div>
+
+    
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"en\/","currentPath":"node\/8072","currentPathIsAdmin":false,"isFront":true,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"ajaxPageState":{"libraries":"eJx1kFFuxCAMRC-E4EiRE5xACxjZppvt6UvCZtN-9Ac9j2HGBnasGsnNIGhmVEWecK8k6Kc1pl6Kg6Y0SZtz1P-ubFiQIZklgchzuL04owhsKFddyPdeOX0lwMDx4KAuMfqTp4VypuJ-sV2JtJAedofKW_XuTRbGNmahRDzT7i64FY8rtKRdYOyzcIYUv9HgrimWT-e5VUj2VZp3nLuDYz2mHSNn0PABuxNqvKCpwLAx1CCX0a3YVmqbU5TQ16uBlOQRK7obbSz9h-UpinnYf0V8iDtPCz3nj5DJt4Q_TEiwhQ","theme":"cnrs","theme_token":null},"ajaxTrustedUrl":{"\/en\/newsroom":true},"axeptio":{"clientId":"6038bc3fd5519d568bc15187","userCookiesDuration":180,"userCookiesSecure":true,"cookiesVersion":"version-cnrs-en"},"mathjax":{"config_type":1,"config":{"TeX":{"extensions":["mhchem.js"]},"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"processEscapes":"true"},"showProcessingMessages":"false","messageStyle":"none"}},"photoswipe":{"options":{"showHideAnimationType":"zoom","showAnimationDuration":333,"hideAnimationDuration":333,"zoomAnimationDuration":333,"maxWidthToAnimate":4000,"easing":"cubic-bezier(.4,0,.22,1)","bgOpacity":0.8,"spacing":0.1,"initialZoomLevel":"fit","secondaryZoomLevel":"2.5","maxZoomLevel":"4","allowPanToNext":true,"loop":true,"wheelToZoom":false,"pinchToClose":true,"clickToCloseNonZoomable":true,"closeOnVerticalDrag":true,"trapFocus":true,"returnFocus":true,"escKey":true,"arrowKeys":true,"imageClickAction":"zoom-or-close","tapAction":"toggle-controls","doubleTapAction":"zoom","bgClickAction":"close","closeTitle":"Close","zoomTitle":"Zoom","arrowPrevTitle":"Previous","arrowNextTitle":"Next","indexIndicatorSep":" \/ ","errorMsg":"The image could not be loaded.","preload":[1,2],"preloaderDelay":2000,"mainClass":"photoswipemainclass"}},"data":{"extlink":{"extTarget":true,"extTargetAppendNewWindowLabel":"(opens in a new window)","extTargetNoOverride":true,"extNofollow":false,"extTitleNoOverride":false,"extNoreferrer":false,"extFollowNoOverride":false,"extClass":"ext","extLabel":"(link is external)","extImgClass":false,"extSubdomains":false,"extExclude":"","extInclude":"","extCssExclude":".sharing .item-list","extCssInclude":"","extCssExplicit":".main-column .field, .tender-list-bloc h2, .tender-list-bloc .field, .header-menu .menu-item, .footer-nav ul.menu, .view-research .item-list, .join .link-all,  #mag-slide .items .link-all, .left-column .links-related, .other-resources .item-list, .press_slide__main .media-link, .press_slide__main .visual-link, #news-list .link-all","extAlert":false,"extAlertText":"This link will take you to an external web site. We are not responsible for their content.","extHideIcons":false,"mailtoClass":"0","telClass":"tel","mailtoLabel":"(link sends email)","telLabel":"(link is a phone number)","extUseFontAwesome":false,"extIconPlacement":"append","extPreventOrphan":false,"extFaLinkClasses":"ext","extFaMailtoClasses":"fa fa-envelope-o","extAdditionalLinkClasses":"","extAdditionalMailtoClasses":"","extAdditionalTelClasses":"","extFaTelClasses":"fa fa-phone","whitelistedDomains":[],"extExcludeNoreferrer":""}},"views":{"ajax_path":"\/en\/views\/ajax","ajaxViews":{"views_dom_id:6706be939c9f8d8403a458e02c1e924160081122a3a241223aaedc885b52b10d":{"view_name":"newsroom","view_display_id":"block_1","view_args":"","view_path":"\/node\/8072","view_base_path":"newsroom","view_dom_id":"6706be939c9f8d8403a458e02c1e924160081122a3a241223aaedc885b52b10d","pager_element":0}}},"colorbox":{"opacity":"0.85","current":"{current} of {total}","previous":"\u00ab Prev","next":"Next \u00bb","close":"Close","maxWidth":"98%","maxHeight":"98%","fixed":true,"mobiledetect":true,"mobiledevicewidth":"480px"},"user":{"uid":0,"permissionsHash":"0162fc16cdcb29b8ba53bb931a599005c8c635665e626f3d872c067244581883"}}</script>
+<script src="/sites/default/files/js/js_0TMPZn6D2NI-MJWHk51yLCFB0j4agMXhKddNBajEHsQ.js?scope=footer&amp;delta=0&amp;language=en&amp;theme=cnrs&amp;include=eJx1j1ESgzAIRC-UCUdyMEGljSETSM3xa7Wt_ekP85ZZYMFOxVhgRCU3khnVgXoRpThMnHapgM1k0DaubP8sM2WqmFzIh18XPPFY-6IhyLpKhh_2k4hlMdLTUecS4Usez2QuSJI6SocPXJ1IE7ZkjrolzneItRVM_i0dl9f5M8OKttywg0qrgVxZxEQ3LgQXes77hw-mTeGoHveRJ0tVcno"></script>
+<script src="https://player.ausha.co/ausha-player.js"></script>
+<script src="/sites/default/files/js/js_aAJjDYyF0qLfKGR7EGkrAZZEr83nHqligfw5kyojdBc.js?scope=footer&amp;delta=2&amp;language=en&amp;theme=cnrs&amp;include=eJx1j1ESgzAIRC-UCUdyMEGljSETSM3xa7Wt_ekP85ZZYMFOxVhgRCU3khnVgXoRpThMnHapgM1k0DaubP8sM2WqmFzIh18XPPFY-6IhyLpKhh_2k4hlMdLTUecS4Usez2QuSJI6SocPXJ1IE7ZkjrolzneItRVM_i0dl9f5M8OKttywg0qrgVxZxEQ3LgQXes77hw-mTeGoHveRJ0tVcno"></script>
+<script src="/sites/default/files/js/js_P6EHghF-bDtriCWcl1MXoxzr6w6zYMwy7E8k7ADx_ts.js?scope=footer&amp;delta=3&amp;language=en&amp;theme=cnrs&amp;include=eJx1j1ESgzAIRC-UCUdyMEGljSETSM3xa7Wt_ekP85ZZYMFOxVhgRCU3khnVgXoRpThMnHapgM1k0DaubP8sM2WqmFzIh18XPPFY-6IhyLpKhh_2k4hlMdLTUecS4Usez2QuSJI6SocPXJ1IE7ZkjrolzneItRVM_i0dl9f5M8OKttywg0qrgVxZxEQ3LgQXes77hw-mTeGoHveRJ0tVcno"></script>
+<script src="/libraries/MathJax/es5/tex-mml-chtml.js"></script>
+<script src="/sites/default/files/js/js_njb19_Z1fFefGsgFBHozijSv-XrOR65P6pMWhfKaoK4.js?scope=footer&amp;delta=5&amp;language=en&amp;theme=cnrs&amp;include=eJx1j1ESgzAIRC-UCUdyMEGljSETSM3xa7Wt_ekP85ZZYMFOxVhgRCU3khnVgXoRpThMnHapgM1k0DaubP8sM2WqmFzIh18XPPFY-6IhyLpKhh_2k4hlMdLTUecS4Usez2QuSJI6SocPXJ1IE7ZkjrolzneItRVM_i0dl9f5M8OKttywg0qrgVxZxEQ3LgQXes77hw-mTeGoHveRJ0tVcno"></script>
+<script src="/sites/default/files/js/js_Jle1kxhoqwhXXaiW-G0UaNbiW1KFuM6zY_1byVaD4zA.js?scope=footer&amp;delta=6&amp;language=en&amp;theme=cnrs&amp;include=eJx1j1ESgzAIRC-UCUdyMEGljSETSM3xa7Wt_ekP85ZZYMFOxVhgRCU3khnVgXoRpThMnHapgM1k0DaubP8sM2WqmFzIh18XPPFY-6IhyLpKhh_2k4hlMdLTUecS4Usez2QuSJI6SocPXJ1IE7ZkjrolzneItRVM_i0dl9f5M8OKttywg0qrgVxZxEQ3LgQXes77hw-mTeGoHveRJ0tVcno"></script>
+
+  </body>
+</html>

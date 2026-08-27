@@ -1,0 +1,115 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/press-releases/online-rubrics/raw/wavee_e3af2925f980.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 23927,
+  "output_tokens": 4049,
+  "elapsed_s": 1536.3234202091116,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP researchers and computational social scientists studying framing, narrative analysis, and media differences (conspiracy vs mainstream)",
+    "subtask_short": "amr-based framing analysis",
+    "subtask_description": "Extracting narrative-imbued semantic frames from text using Abstract Meaning Representation (AMR), mining narrative elements (characters, plot, setting, moral), and comparing over-represented elements between corpora (conspiracy vs mainstream) using smoothed log-odds and embedding visualizations.",
+    "subtask_keywords": [
+      "amr",
+      "frame_extraction",
+      "framing",
+      "health_narratives",
+      "nlp",
+      "corpus_comparison"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of AMR as basis for frame extraction",
+        "description": "We utilize abstract meaning representations (AMR; Banarescu et al., 2013) as a means to transform textual content into semantic graphs.",
+        "guidance": "AMR provides structured, graph-based representations (rooted, directed, acyclic, labeled graphs) that capture concepts and relations beyond surface syntax and allow extraction of semantic frames and narrative subgraphs. Prefer AMR when you need normalization (e.g., remove tenses, singularize nouns, map word senses, and abstract named entities) and reentrancy (co-reference)."
+      },
+      {
+        "name": "AMR parsing with pretrained BART model and Penman decoder",
+        "description": "AMR parsing with a pretrained BART-based model (parse_xfm_bart_base-v0_1_0) and Penman decoder; model trained on AMR Annotation Release 3.0 (LDC2020T02).",
+        "guidance": "Use a high-quality pretrained AMR parser; authors report a SMATCH score of 82.3 for the chosen model. Output in PENMAN notation is transformed into graphs via the Penman library. Ensure parser was trained on a suitable AMR release (PropBank-linked) for consistent frame senses."
+      },
+      {
+        "name": "Extract narrative elements (characters, plot, setting, moral of the story)",
+        "description": "Mining narrative elements based on the narrative policy framework: characters (agents/objects), plot (events/actions), setting/context (time/location), and moral/reason (purpose/cause).",
+        "guidance": "Use AMR edge information to identify elements. Ground extraction in an explicit narrative theory (here Jones & McBeth, 2010 and Piper et al., 2021). Consider perspective implicitly by contrasting sources; focus on content elements for frame analysis."
+      },
+      {
+        "name": "Characters: extract ARG0 and ARG1 instances",
+        "description": "For the characters (orange), consider instances of ARG0 or ARG1 roles.",
+        "guidance": "Frame arguments that occupy ARG0/ARG1 are taken as characters; due to AMR reentrancies, same entity may play multiple roles. The authors do not distinguish hero/villain/victim subtypes in this work, but the narrative policy framework allows such categorization if desired."
+      },
+      {
+        "name": "Plot extraction: use predicates of semantic frames",
+        "description": "For the plot (blue), use the predicates of the semantic frames directly by reverse traversal from ARG0/ARG1 to parent nodes (predicates).",
+        "guidance": "Plots are driven by verbs encoded as frame predicates (e.g., prevent-01, spread-03). Reverse graph traversal identifies predicates and associated ARGs; missing ARG0 indicates plot without an explicit agent."
+      },
+      {
+        "name": "Setting extraction: use time and location relations and attributes",
+        "description": "For the setting (green), consider the special time and location relations and associated attributes (e.g., year, named entities).",
+        "guidance": "Differentiate between types of setting (e.g., 'year' vs specific calendar date) and their specific attribute values (e.g., 2021). Settings are unbounded in variety; analyze both type frequency and specific attribute frequency."
+      },
+      {
+        "name": "Moral of the story extraction: use purpose and cause relations (root of subgraph)",
+        "description": "The moral (reason) relies on purpose and cause relations; use the top element (root of the subgraph) to represent it.",
+        "guidance": "Purpose/cause relations are sparse in many sentences but carry important narrative information. Extract the root of such subgraphs when available; expect low coverage but high interpretive value."
+      },
+      {
+        "name": "Focus on ARG0 and ARG1 (ignore ARG2+ for simplicity)",
+        "description": "Frame arguments can have ARG2 and beyond but they appear less often; the highest-ranked (lowest numbered) arguments precede according to PropBank guidelines, hence focus on ARG0 and ARG1.",
+        "guidance": "For simplicity and robustness, limit character extraction to ARG0/ARG1. If the task requires finer-grained roles, extend to ARG2+ but expect diminishing returns and more noise."
+      },
+      {
+        "name": "Corpus comparison metric: smoothed log-odds ratio with Z-score normalization",
+        "description": "Use smoothed log-odds ratio (authors' variant) with Z-score normalization to measure over-representation of words/elements between sub-corpora.",
+        "guidance": "Equation provided (zw = ...). Frequencies fi(w) and fj(w) and totals ni and nj are used; add-one smoothing is applied. Interpretation: sign indicates dominant sub-corpus, magnitude indicates degree of over-representation and is symmetric across corpora. Use this metric to diminish influence of highly frequent common elements."
+      },
+      {
+        "name": "Visualization: UMAP-reduced embeddings and force-adjusted labels",
+        "description": "Plot over-represented words/elements in a shared two-dimensional embedding space using UMAP-reduced embeddings of the model's input layer; position labels with force-adjustment for readability.",
+        "guidance": "Use the model input-layer embeddings to position semantically similar words close together. Declutter by removing sense tags and simplifying compounds (e.g., government-organization -> government). Use top/bottom N elements and force-adjust labels; include lines if labels are moved off points."
+      },
+      {
+        "name": "Notation for frames: ARG0 \u2190 FRAME \u2192 ARG1 with z-score annotations",
+        "description": "Denote frames with ARG0 1.0\u2190\u2212\u2212 FRAME-01 and FRAME-01 1.0\u2212\u2212\u2192 ARG1, combining to an ARG0\u2013FRAME\u2013ARG1 triplet; provide z-score of log-odds above arrows.",
+        "guidance": "This concise notation facilitates comparison across corpora (e.g., doctor 1.0\u2190\u2212\u2212 prevent-01 1.0\u2212\u2212\u2192 spread-03). Place comparative z-score values above arrows to indicate over-representation direction and magnitude."
+      },
+      {
+        "name": "Dataset selection and labeling (LOCO and source labeling)",
+        "description": "Use LOCO dataset (Miani et al., 2021) containing mainstream and conspiracy documents collected May\u2013July 2020 (with older conspiracy docs back to 2004). Documents labeled as conspiracy if from sites known to publish 'unverifiable information' per Media Bias/Fact Check; mainstream otherwise. Exclude non-English domains.",
+        "guidance": "Select thematic seeds for subcorpora (COVID-19 seeds: vaccine.covid, covid.19, coronavirus; disease seeds: aids, cancer, zika.virus, ebola; pharmacology seeds: vaccine, pharma, drug). Report document counts and temporal distribution; be transparent about labeling source and exclusion criteria."
+      },
+      {
+        "name": "Aggregation and selection for analysis: use top-N and bottom-N elements",
+        "description": "Aggregate extracted elements by label and select top-N (positive score) and bottom-N (negative score) over-represented elements for plotting and interpretation.",
+        "guidance": "Choose N to balance readability and coverage; authors use top-15 per corpus per element type in supplemental materials. Ensure consistent N across comparisons and document selection thresholds."
+      },
+      {
+        "name": "AMR normalization/abstraction advantages",
+        "description": "AMR normalizes linguistic variation by removing tenses, singularizing nouns, mapping word senses, and abstracting named entities (e.g., company instead of 'Pfizer').",
+        "guidance": "Rely on AMR normalization to reduce sparsity from morphological variation (e.g., vaccinating vs vaccination) and named-entity variation. Be aware that this abstraction can hide important surface details when names matter; decide whether to keep or generalize attributes based on research goals."
+      },
+      {
+        "name": "AMR parsing evaluation metric: SMATCH",
+        "description": "SMATCH is used as the semantic matching score (F1) for AMR parsers; the cited model has SMATCH 82.3.",
+        "guidance": "Evaluate AMR parser quality via SMATCH; higher SMATCH indicates better alignment with gold AMR graphs. Choose parsers with validated SMATCH performance on relevant AMR releases."
+      },
+      {
+        "name": "Pipeline components: three-stage pipeline",
+        "description": "Pipeline comprises three main components: (1) AMR parsing with pretrained BART model and Penman decoder; (2) Mining narrative elements (characters, plot, setting, moral); (3) Analysis of narrative information (differences in word usage, embeddings, and subgraphs).",
+        "guidance": "Implement components modularly: parsing -> frame/miner extraction -> statistical comparison & visualization. The pipeline can be extended (e.g., sentiment injection) without changing core AMR-based extraction."
+      },
+      {
+        "name": "Extensibility: option to inject sentiment or dictionary-based value analysis",
+        "description": "Approach is easily extensible; one can inject sentiment information to distinguish character sentiment (hero vs villain) or include dictionaries for value-based analyses.",
+        "guidance": "While AMR-based extraction is the core, consider adding sentiment models or lexicons to enrich narrative roles. The authors note these extensions are beyond their scope but feasible."
+      },
+      {
+        "name": "Frame semantics grounding: use PropBank senses and roles",
+        "description": "Semantic frames are defined in a language resource (here, PropBank), with predicates including their sense and associated frame arguments (ARG0, ARG1, etc.).",
+        "guidance": "Leverage PropBank senses for predicate disambiguation (e.g., spread-03 vs spread-01) and argument ordering. Use PropBank conventions when mapping AMR predicates and arguments to narrative elements for consistency and interpretability."
+      }
+    ]
+  }
+}

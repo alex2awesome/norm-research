@@ -1,0 +1,436 @@
+<!-- URL: https://gcjt.org/topic/interviewing -->
+<!-- HTTP: 200 SIZE:    36171 -->
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en" dir="ltr"
+  xmlns:og="http://ogp.me/ns#"
+  xmlns:article="http://ogp.me/ns/article#"
+  xmlns:book="http://ogp.me/ns/book#"
+  xmlns:profile="http://ogp.me/ns/profile#"
+  xmlns:video="http://ogp.me/ns/video#"
+  xmlns:product="http://ogp.me/ns/product#"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="en" dir="ltr"
+  xmlns:og="http://ogp.me/ns#"
+  xmlns:article="http://ogp.me/ns/article#"
+  xmlns:book="http://ogp.me/ns/book#"
+  xmlns:profile="http://ogp.me/ns/profile#"
+  xmlns:video="http://ogp.me/ns/video#"
+  xmlns:product="http://ogp.me/ns/product#"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en" dir="ltr"
+  xmlns:og="http://ogp.me/ns#"
+  xmlns:article="http://ogp.me/ns/article#"
+  xmlns:book="http://ogp.me/ns/book#"
+  xmlns:profile="http://ogp.me/ns/profile#"
+  xmlns:video="http://ogp.me/ns/video#"
+  xmlns:product="http://ogp.me/ns/product#"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" dir="ltr"
+  xmlns:og="http://ogp.me/ns#"
+  xmlns:article="http://ogp.me/ns/article#"
+  xmlns:book="http://ogp.me/ns/book#"
+  xmlns:profile="http://ogp.me/ns/profile#"
+  xmlns:video="http://ogp.me/ns/video#"
+  xmlns:product="http://ogp.me/ns/product#"> <!--<![endif]-->
+<head itemscope itemtype="http://schema.org/WebSite">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="What is different about interviewing survivors of violence and tragedy? Is it possible to re-traumatize a person during an interview? How can reporters avoid causing further harm to vulnerable contributors? What are special techniques and ethical obligations one must take when interviewing a survivor of trauma? These resources provide evidence-informed guidance on challenges" />
+<meta name="generator" content="Drupal 7 (https://www.drupal.org)" />
+<link rel="canonical" href="https://gcjt.org/topic/interviewing" />
+<link rel="shortlink" href="https://gcjt.org/taxonomy/term/76" />
+<meta property="og:site_name" content="Global Center for Journalism &amp; Trauma" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gcjt.org/topic/interviewing" />
+<meta property="og:title" content="Interviewing" />
+<meta property="og:description" content="What is different about interviewing survivors of violence and tragedy? Is it possible to re-traumatize a person during an interview? How can reporters avoid causing further harm to vulnerable contributors? What are special techniques and ethical obligations one must take when interviewing a survivor of trauma? These resources provide evidence-informed guidance on challenges such as language usage, ethics, and securing interviews. This page incorporates selected resources from the archives of the Dart Center for Journalism and Trauma, which operated from 1999-2009 as a project of the University of Washington and from 2009-2025 as a project of Columbia University. These materials, originally published by UW and Columbia under a Creative Commons license, are presented here as a public service to the journalism community." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:url" content="https://gcjt.org/topic/interviewing" />
+<meta name="twitter:title" content="Interviewing" />
+<meta name="twitter:description" content="What is different about interviewing survivors of violence and tragedy? Is it possible to re-traumatize a person during an interview? How can reporters avoid causing further harm to vulnerable" />
+  <title itemprop="name">Interviewing - Global Center for Journalism &amp; Trauma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="apple-touch-icon" href="/sites/all/themes/dartcenter/apple-touch-icon.png">
+  <link rel="shortcut icon" href="/sites/all/themes/dartcenter/favicon.ico?v=001" />
+  <link type="text/css" rel="stylesheet" href="https://gcjt.org/sites/default/files/css/css_xE-rWrJf-fncB6ztZfd2huxqgxu4WO-qwma6Xer30m4.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://gcjt.org/sites/default/files/css/css__r408iefJFDp7tkJY64xde0BtyLdHU1-GytpTja6H4w.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://gcjt.org/sites/default/files/css/css_GDZ1W5kWk3V5ySd4Tx7voRD1UshmjxJJaU46rfYocU0.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://gcjt.org/sites/default/files/css/css_49uy_30227jCGtNMGBx__iYVkKknIeaYqMsmDwg-h5c.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://gcjt.org/sites/default/files/css/css_WffeweapuArAxtvhZiy3AkyZX19CFot9-b-T8MCbxNQ.css" media="print" />
+  <script src="//use.typekit.net/xlc3ynu.js"></script>
+  <script>try{Typekit.load();}catch(e){}</script>
+  <script src="/sites/all/themes/dartcenter/js/min/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+  <script src="/sites/all/themes/dartcenter/js/min/respond.min.js"></script>
+  <![endif]-->
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-5Z3PTGQ');</script>
+  <!-- End Google Tag Manager -->
+</head>
+<body class="html not-front not-logged-in no-sidebars page-taxonomy page-taxonomy-term page-taxonomy-term- page-taxonomy-term-76 page-topic page-topic-interviewing term-interviewing vocabulary-topic" >
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5Z3PTGQ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <div id="fb-root"></div>
+
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+  </div>
+    
+<header id="header">
+
+  <div class="inner">
+                  <div id="site-name"><strong>
+          <a href="/" title="Home" rel="home">
+            <span>Global Center for Journalism &amp; Trauma</span>
+          </a>
+        </strong></div>
+          
+    <a id="burger"></a>
+
+      </div><!-- /.inner -->
+
+  <nav id="main-menu">
+    <div class="wrapper">
+      <form class="dart-resources-keyword-form" action="/topic/interviewing" method="post" id="dart-resources-keyword-form--2" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-keyword">
+  <label class="element-invisible" for="edit-keyword--2">Keyword </label>
+ <input placeholder="Search" type="text" id="edit-keyword--2" name="keyword" value="" size="60" maxlength="128" class="form-text" />
+</div>
+<button><input type="submit" id="edit-submit--4" name="op" value="Search" class="form-submit" /></button><input type="hidden" name="form_build_id" value="form-2569bQsx4Uma7oqqem7Jpal1YH-9zPoUeMh37FtLzss" />
+<input type="hidden" name="form_id" value="dart_resources_keyword_form" />
+</div></form>      <div class="item-list"><ul id="header-menu"><li class="branch menu-home first"><a href="/">Home</a></li>
+<li class="branch menu-resources expandable"><a href="/resources">Resources</a><span class="dropdown"></span><div class="item-list"><ul class="branch menu-resources expandable"><li class="first"><a href="https://gcjt.org/resources?type[0]=19">Classroom Resources</a></li>
+<li><a href="https://gcjt.org/resources?type[0]=14">Featured Resources</a></li>
+<li><a href="https://gcjt.org/resources?type[0]=17">Multimedia</a></li>
+<li><a href="https://gcjt.org/resources?type[0]=15">Outside Resources</a></li>
+<li><a href="https://gcjt.org/resources?type[0]=18">Publications</a></li>
+<li><a href="http://dart.jrn.columbia.edu/">Research Database</a></li>
+<li class="last"><a href="https://gcjt.org/resources?type[0]=16">Tip Sheets</a></li>
+</ul></div></li>
+<li class="branch menu-topics expandable"><a href="/topics">Topics</a><span class="dropdown"></span><div class="item-list"><ul class="branch menu-topics expandable"><li class="first"><a href="/topic/aftermath-anniversaries">Aftermath &amp; Anniversaries</a></li>
+<li><a href="/topic/children-youth">Children &amp; Youth</a></li>
+<li><a href="/classroom-resources">Classroom Resources</a></li>
+<li><a href="/topic/disaster">Disaster</a></li>
+<li><a href="/topic/homicide-mass-shooting">Homicide &amp; Mass Shooting</a></li>
+<li><a href="/topics/immigrants-refugees">Immigrants &amp; Refugees</a></li>
+<li><a href="/topic/interviewing" class="active">Interviewing</a></li>
+<li><a href="/topic/intimate-partner-violence">Intimate Partner Violence</a></li>
+<li><a href="/topics/press-freedom">Press Freedom</a></li>
+<li><a href="/topic/ptsd-mental-health">PTSD &amp; Mental Health</a></li>
+<li><a href="/topic/self-care-peer-support">Self-Care &amp; Peer Support</a></li>
+<li><a href="/topic/sexual-violence">Sexual Violence</a></li>
+<li><a href="/topic/suicide">Suicide</a></li>
+<li><a href="/topic/terrorism">Terrorism</a></li>
+<li><a href="/topic/veterans">Veterans</a></li>
+<li class="last"><a href="/topic/war-civil-conflict">War &amp; Civil Conflict</a></li>
+</ul></div></li>
+<li class="branch menu-programs"><a href="/programs">Programs</a></li>
+<li class="branch menu-about expandable last"><a href="/about-us">About</a><span class="dropdown"></span><div class="item-list"><ul class="branch menu-about expandable"><li class="first"><a href="/about/mission-history">History: GCJT and Trauma Aware Journalism</a></li>
+<li><a href="/about/people">People</a></li>
+<li><a href="/press-inquiries">Press Inquiries</a></li>
+<li><a href="/about/funding">Funders</a></li>
+<li class="last"><a href="/about/contact">Contact Us</a></li>
+</ul></div></li>
+</ul></div>      <div class="corner">
+        <div class="item-list"><ul id="social"><li class="contact first"><a href="/about/contact"><span>Contact</span></a></li>
+<li class="facebook"><a href="https://www.facebook.com/JournalismandTrauma/" class="external"><span>Facebook</span></a></li>
+<li class="instagram"><a href="https://www.instagram.com/trauma.journalism/" class="external"><span>Instgram</span></a></li>
+<li class="twitter"><a href="https://x.com/traumajourno" class="external"><span>Twitter</span></a></li>
+<li class="bluesky last"><a href="https://bsky.app/profile/traumajournalism.bsky.social" class="external"><span>Bluesky</span></a></li>
+</ul></div>        <div class="language">
+          <div class="english"><span class="lang">English</span> <span class="icon-triangle-down"></span></div>
+          <div id="google_translate_element"></div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+</header> <!-- /#header -->
+
+  <div id="breadcrumb"><h2 class="element-invisible">You are here</h2><div class="breadcrumb"><a href="/">Home</a> › <a href="/topics">Topics</a> › Interviewing</div></div>
+  
+  
+
+  
+
+  <div id="main">
+    <div class="clearfix">
+    
+    <div id="content" class="column">
+      <a id="main-content"></a>
+                                <div class="tabs"></div>
+              <div class="region region-content">
+    <div id="block-system-main" class="block block-system">
+
+    
+  <div class="content block-content">
+    <div class="term-listing-heading"><div id="taxonomy-term-76" class="taxonomy-term vocabulary-topic topic-interviewing">
+
+      <header class="header clearfix divider">
+      <section class="content">
+                  <h1>Interviewing</h1>
+                <div class="taxonomy-term-description"><p dir="ltr" style="text-align:justify"><span id="docs-internal-guid-2f042006-7fff-b718-244d-e3bbb8550b5c"><span>What is different about interviewing survivors of violence and tragedy? Is it possible to re-traumatize a person during an interview? How can reporters avoid causing further harm to vulnerable contributors? What are special techniques and ethical obligations one must take when interviewing a survivor of trauma? These resources provide evidence-informed guidance on challenges such as language usage, ethics, and securing interviews.</span></span></p>
+<p><em style="text-align:justify">This page incorporates selected resources from the archives of the Dart Center for Journalism and Trauma, which operated from 1999-2009 as a project of the University of Washington and from 2009-2025 as a project of Columbia University. These materials, originally published by UW and Columbia under a Creative Commons license, are presented here as a public service to the journalism community.</em></p></div>      </section>
+      <section class="top-tags">
+              </section>
+    </header>
+
+    <div class="clearfix divider">
+
+              <section class="resources">
+          <h2>Resources on Interviewing</h2>
+          <form action="/topic/interviewing" method="post" id="dart-resources-topic-filter-form" accept-charset="UTF-8"><div><div class="form-item form-type-select form-item-tab">
+ <select id="edit-tab" name="tab" class="form-select"><option value="tab-all">All Resources</option><option value="tab-tip-sheets">Tips</option><option value="tab-audiovideo">Audio/Video</option><option value="tab-publications">Publications</option><option value="tab-outside-resources">Outside Resources</option></select>
+</div>
+<input type="submit" id="edit-submit" name="op" value="Submit" class="form-submit" /><input type="hidden" name="form_build_id" value="form-4Oe0RCmv9Y-JR0Iy1y4ojmA9n6Hgl9lw9-0wicnQ9FY" />
+<input type="hidden" name="form_id" value="dart_resources_topic_filter_form" />
+</div></form><form class="dart-resources-keyword-form" action="/topic/interviewing" method="post" id="dart-resources-keyword-form" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-keyword">
+  <label class="element-invisible" for="edit-keyword">Keyword </label>
+ <input placeholder="Search Interviewing Resources" type="text" id="edit-keyword" name="keyword" value="" size="60" maxlength="128" class="form-text" />
+</div>
+<button><input type="submit" id="edit-submit--2" name="op" value="Search" class="form-submit" /></button><input type="hidden" name="form_build_id" value="form-4utJPHbaqSEOHMntqZeYxs1fbPv517iPKPiuAyw2_uQ" />
+<input type="hidden" name="form_id" value="dart_resources_keyword_form" />
+</div></form><div class="item-list"><ul class="tabs"><li class="first"><a href="/topic/interviewing#tab-all" class="tab-all active">All Resources</a></li>
+<li><a href="/topic/interviewing#tab-tip-sheets" class="tab-tip-sheets active">Tips</a></li>
+<li><a href="/topic/interviewing#tab-audiovideo" class="tab-audiovideo active">Audio/Video</a></li>
+<li><a href="/topic/interviewing#tab-publications" class="tab-publications active">Publications</a></li>
+<li class="last"><a href="/topic/interviewing#tab-outside-resources" class="tab-outside-resources active">Outside Resources</a></li>
+</ul></div><div class="item-list"><h3>All Resources</h3><ul id="tab-all" class="tab-content"><li class="first"><a href="/events/2024/04/journalism-and-crisis">Journalism and Crisis</a></li>
+<li><a href="/resources/best-practices-reporting-children-families-and-caregivers">Best Practices in Reporting on Children, Families, and Caregivers</a></li>
+<li><a href="/events/2023/09/qa-palestinian-journalist-shatha-hanaysha">Q&amp;A with Palestinian Journalist Shatha Hanaysha</a></li>
+<li><a href="/resources/preparing-assignments-unstable-and-unpredictable-environments-ten-tips-dart-centre-asia">Preparing for assignments in unstable and unpredictable environments: Ten tips from Dart Centre Asia Pacific</a></li>
+<li><a href="/resources/2022-dart-awards-reporting-tips-our-honorees">2022 Dart Awards: Reporting Tips from our Honorees</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76" rel="nofollow">View All Interviewing Resources</a></li>
+</ul></div><div class="item-list"><h3>Tip Sheets</h3><ul id="tab-tip-sheets" class="tab-content"><li class="first"><a href="/resources/best-practices-reporting-children-families-and-caregivers">Best Practices in Reporting on Children, Families, and Caregivers</a></li>
+<li><a href="/resources/preparing-assignments-unstable-and-unpredictable-environments-ten-tips-dart-centre-asia">Preparing for assignments in unstable and unpredictable environments: Ten tips from Dart Centre Asia Pacific</a></li>
+<li><a href="/resources/2022-dart-awards-reporting-tips-our-honorees">2022 Dart Awards: Reporting Tips from our Honorees</a></li>
+<li><a href="/resources/reporting-advice-chris-benderev-2022-dart-award-honoree">Reporting Advice from Chris Benderev: 2022 Dart Award Honoree</a></li>
+<li><a href="/resources/reporting-advice-ian-urbina-and-joe-sexton-2022-dart-award-honorees">Reporting Advice from Ian Urbina and Joe Sexton: 2022 Dart Award Honorees</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76&amp;type%5B0%5D=16" rel="nofollow">View all Interviewing Tip Sheets</a></li>
+</ul></div><div class="item-list"><h3>Multimedia</h3><ul id="tab-audiovideo" class="tab-content"><li class="first"><a href="/resources/trauma-informed-interviewing-techniques-clinician%E2%80%99s-toolkit">Trauma-Informed Interviewing: Techniques from a Clinician’s Toolkit</a></li>
+<li><a href="/resources/interviewing-children-multi-disciplinary-approaches">Interviewing Children: Multi-disciplinary Approaches</a></li>
+<li><a href="/resources/lets-talk-personal-boundaries-safety-women-journalism">Let&#039;s Talk: Personal Boundaries, Safety &amp; Women in Journalism</a></li>
+<li><a href="/content/symposium-sandy-hook-and-beyond">Symposium: Sandy Hook and Beyond</a></li>
+<li><a href="/content/human-rights-reporting-without-infringing">Human Rights: Reporting Without Infringing</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76&amp;type%5B0%5D=17" rel="nofollow">View all Interviewing Multimedia</a></li>
+</ul></div><div class="item-list"><h3>Publications</h3><ul id="tab-publications" class="tab-content"><li class="first"><a href="/resources/occupational-distress-factual-tv">Occupational Distress in Factual TV</a></li>
+<li><a href="/content/covering-children-trauma">Covering Children and Trauma</a></li>
+<li><a href="/content/covering-violence-guide-to-ethical-reporting-about-victims-trauma">Covering Violence</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76&amp;type%5B0%5D=18" rel="nofollow">View all Interviewing Publications</a></li>
+</ul></div><div class="item-list"><h3>Outside Resources</h3><ul id="tab-outside-resources" class="tab-content"><li class="first"><a href="https://victimsandthepast.org/outputs/media-training-workshops/">Tip Sheet Collection: Victims and Dealing with the Past</a></li>
+<li><a href="https://www.ovcttac.gov/taskforceguide/eguide/5-building-strong-cases/53-victim-interview-preparation/trauma-informed-victim-interviewing/">Trauma-Informed Victim Interviewing</a></li>
+<li><a href="https://library.witness.org/product-category/video/">Witness: See It, Film It, Change It - Working with Survivors of Sexual and Gender-based Violence </a></li>
+<li><a href="https://cpj.org/2014/02/attacks-on-the-press-security-sexual-assault.php">Finding the Courage to Cover Sexual Violence</a></li>
+<li><a href="http://www.nvlsp.org/news-room/tips-for-interviewing-truma/">What Reporters Need to Know about Interviewing Trauma Survivors</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76&amp;type%5B0%5D=15" rel="nofollow">View all Interviewing Outside Resources</a></li>
+</ul></div>        </section>
+      
+              <section class="featured-resources">
+          <div class="item-list"><h3>Featured Resources</h3><ul><li class="first"><a href="/content/ethics-and-practice-interviewing-victims">Ethics and Practice: Interviewing Victims</a></li>
+<li><a href="/resources/essential-tips-interviewing-children">Essential Tips for Interviewing Children</a></li>
+<li><a href="/content/conducting-interviews-with-survivors-sexual-and-gender-based-violence-by-witness">Conducting Interviews with Survivors of Sexual and Gender-Based Violence</a></li>
+<li><a href="/content/dvd-launched-ethical-reporting-people-affected-by-trauma">Ethical Reporting on Traumatised People</a></li>
+<li class="last"><a href="/content/human-rights-reporting-without-infringing">Human Rights: Reporting Without Infringing</a></li>
+</ul></div>        </section>
+      
+    </div>
+    
+          <section class="posts">
+        <div class="item-list"><h3>Recent Posts</h3><ul><li class="first"><article id="node-20927" class="node node-article node-teaser teaser node-resource large clearfix">
+
+  
+          <figure class="featured">
+        <img src="https://gcjt.org/sites/default/files/styles/blog_teaser/public/gettyimages-526690202.jpg?itok=65xmdsGm" alt="" />      </figure>
+    
+    <div class="content clearfix">
+
+            <h2><a href="/resources/best-practices-reporting-children-families-and-caregivers">Best Practices in Reporting on Children, Families, and Caregivers</a></h2>
+      
+      <div class="submitted">
+        February 2, 2024 by <a href="/about/people/paola-santos">Paola Santos</a>      </div>
+
+              <div class="terms">
+          <div class="item-list"><ul><li class="first"><a href="/resources?topic%5B0%5D=65" rel="nofollow">Children &amp; Youth</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76" rel="nofollow">Interviewing</a></li>
+</ul></div>        </div>
+      
+      <p dir="ltr"><span id="docs-internal-guid-83c97d22-7fff-3007-fb3c-29cbd994a99a"><span>This tipsheet was drawn from a panel discussion focused on best practices in reporting on refugee children and families. The discussion was part of a 2019 Dart Center reporting institute called “</span><a href="https://gcjt.org/events/2019/09/resources-reporting-refugees-and-migration-through-eyes-young-children"><u>Reporting on Refugees and Migration Through the Eyes of Young Children</u></a><span>.” </span></span></p>
+<p dir="ltr"><span id="docs-internal-guid-83c97d22-7fff-3007-fb3c-29cbd994a99a"><span>The panel was moderated by Dart Center Early Childhood Development expert, </span><a href="https://gcjt.org/about/people/karen-brown"><u>Karen Brown</u></a><span>. The speakers were:</span></span></p>
+<p dir="ltr"><span id="docs-internal-guid-83c97d22-7fff-3007-fb3c-29cbd994a99a"><a href="https://gcjt.org/bio/sarah-stillman-0"><u>Sarah Stillman</u></a><span>; Journalism professor and New Yorker staff writer who focuses on the intersection between human rights, the criminal justice system and migration. </span></span></p>
+<p dir="ltr"><span id="docs-internal-guid-83c97d22-7fff-3007-fb3c-29cbd994a99a"><a href="https://twitter.com/gingerthomp1?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor"><u>Ginger Thompson</u></a><span>; Chief of Correspondents at ProPublica and Pulitzer Prize winner who has reported extensively on migration. </span></span></p>
+<p dir="ltr"> </p>
+<p> </p>
+    </div>
+  
+</article>
+</li>
+<li><article id="node-20782" class="node node-article node-teaser teaser node-resource medium clearfix">
+
+  
+          <figure class="featured">
+        <img src="https://gcjt.org/sites/default/files/styles/blog_teaser/public/engin_akyurt_tip_sheet_unstable_unpredictable_environments.jpg?itok=JDjhnK9i" alt="" />      </figure>
+    
+    <div class="content clearfix">
+
+            <h2><a href="/resources/preparing-assignments-unstable-and-unpredictable-environments-ten-tips-dart-centre-asia">Preparing for assignments in unstable and unpredictable environments: Ten tips from Dart Centre Asia Pacific</a></h2>
+      
+      <div class="submitted">
+        February 13, 2023 by <a href="/about/people/helen-zahos">Helen Zahos</a>, <a href="/about/people/erin-smith">Erin Smith</a>, <a href="/bio/amantha-perera">Amantha Perera</a>, <a href="/about/people/trina-mclellan">Trina McLellan</a>      </div>
+
+              <div class="terms">
+          <div class="item-list"><ul><li class="first"><a href="/resources?topic%5B0%5D=66" rel="nofollow">Disaster</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76" rel="nofollow">Interviewing</a></li>
+</ul></div>        </div>
+      
+      <p>Journalists covering the recent earthquake in Turkey and war-ravaged Syria are witnessing widespread devastation and destruction, where tangled piles of metal and concrete are spread across a region beset by Syria’s 12-year civil war and refugee crisis.</p>
+<p>Working in frigid temperatures and confronting escalating dangers, journalists are documenting history from the frontline of the disaster. </p>
+<p><span>There are many other areas around the world, particularly in humanitarian crisis and conflict zones, where it is dangerous, even life-threatening, to practice journalism. The war in Ukraine provides another recent illustration of the vulnerability of journalists covering crisis situations. While it is impossible to mitigate all of the risks journalists on the frontline will be exposed to, there are certain things they can do to prepare for assignments in unstable and unpredictable environments.</span></p>
+<p>This tip sheet from Dart Centre Asia Pacific provides ten tips for journalists and media workers that have been developed in conversation with experts who have responded to conflicts, disasters, and humanitarian disasters around the globe. </p>
+    </div>
+  
+</article>
+</li>
+<li><article id="node-20768" class="node node-article node-teaser teaser node-resource large clearfix">
+
+  
+          <figure class="featured">
+        <img src="https://gcjt.org/sites/default/files/styles/blog_teaser/public/221201-05734.jpg?itok=pXlVQkKp" alt="" />      </figure>
+    
+    <div class="content clearfix">
+
+            <h2><a href="/resources/2022-dart-awards-reporting-tips-our-honorees">2022 Dart Awards: Reporting Tips from our Honorees</a></h2>
+      
+      <div class="submitted">
+        December 8, 2022 by <a href="/about/people/chris-benderev">Chris Benderev</a>, <a href="/about/people/claire-landsbaum">Claire Landsbaum</a>, <a href="/about/people/zahara-g%C3%B3mez-lucini">Zahara Gómez Lucini</a>, <a href="/about/people/joe-mozingo">Joe Mozingo</a>, <a href="/about/people/ed-ou">Ed Ou</a>, <a href="/about/people/joe-sexton">Joe Sexton</a>      </div>
+
+              <div class="terms">
+          <div class="item-list"><ul><li class="first"><a href="/resources?topic%5B0%5D=75" rel="nofollow">Aftermath &amp; Anniversaries</a></li>
+<li><a href="/resources?topic%5B0%5D=65" rel="nofollow">Children &amp; Youth</a></li>
+<li><a href="/resources?topic%5B0%5D=68" rel="nofollow">Homicide &amp; Mass Shooting</a></li>
+<li><a href="/resources?topic%5B0%5D=25" rel="nofollow">Immigrants &amp; Refugees</a></li>
+<li><a href="/resources?topic%5B0%5D=76" rel="nofollow">Interviewing</a></li>
+<li><a href="/resources?topic%5B0%5D=70" rel="nofollow">PTSD &amp; Mental Health</a></li>
+<li><a href="/resources?topic%5B0%5D=74" rel="nofollow">Self-Care &amp; Peer Support</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=73" rel="nofollow">War &amp; Civil Conflict</a></li>
+</ul></div>        </div>
+      
+      <p dir="ltr"><span id="docs-internal-guid-8f525bf0-7fff-271f-80dd-a046d319f676">On December 1st, the 2022 Dart Awards honorees participated in a roundtable discussion about their craft, and approach to reporting complex stories.</span></p>
+    </div>
+  
+</article>
+</li>
+<li><article id="node-20763" class="node node-article node-teaser teaser node-resource large clearfix">
+
+  
+          <figure class="featured">
+        <img src="https://gcjt.org/sites/default/files/styles/blog_teaser/public/3_10.png?itok=yAYjCPds" alt="" />      </figure>
+    
+    <div class="content clearfix">
+
+            <h2><a href="/resources/reporting-advice-chris-benderev-2022-dart-award-honoree">Reporting Advice from Chris Benderev: 2022 Dart Award Honoree</a></h2>
+      
+      <div class="submitted">
+        November 24, 2022 by <a href="/about/people/chris-benderev">Chris Benderev</a>      </div>
+
+              <div class="terms">
+          <div class="item-list"><ul><li class="first"><a href="/resources?topic%5B0%5D=75" rel="nofollow">Aftermath &amp; Anniversaries</a></li>
+<li><a href="/resources?topic%5B0%5D=68" rel="nofollow">Homicide &amp; Mass Shooting</a></li>
+<li class="last"><a href="/resources?topic%5B0%5D=76" rel="nofollow">Interviewing</a></li>
+</ul></div>        </div>
+      
+      <p>Reporting Advice from NPR's Chris Benderev</p>
+    </div>
+  
+</article>
+</li>
+<li class="last"><a href="/resources?topic%5B0%5D=76" rel="nofollow">View More Posts On Interviewing</a></li>
+</ul></div>      </section>
+        
+  </div>
+</div>  </div>
+</div>
+  </div>
+    </div> <!-- /#content -->
+
+        </div>
+  </div> <!-- /#main -->
+
+  
+  <footer id="footer">
+    <div class="inner clearfix">
+            <nav id="footer-menu" class="col-l">
+        <div class="item-list"><ul><li class="branch menu-topics first"><a href="/topics">Topics</a><div class="item-list"><ul class="branch menu-topics"><li class="first"><a href="/topic/aftermath-anniversaries">Aftermath &amp; Anniversaries</a></li>
+<li><a href="/topic/children-youth">Children &amp; Youth</a></li>
+<li><a href="/classroom-resources">Classroom Resources</a></li>
+<li><a href="/topic/disaster">Disaster</a></li>
+<li><a href="/topic/homicide-mass-shooting">Homicide &amp; Mass Shooting</a></li>
+<li><a href="/topics/immigrants-refugees">Immigrants &amp; Refugees</a></li>
+<li><a href="/topic/interviewing" class="active">Interviewing</a></li>
+<li><a href="/topic/intimate-partner-violence">Intimate Partner Violence</a></li>
+<li><a href="/topics/press-freedom">Press Freedom</a></li>
+<li><a href="/topic/ptsd-mental-health">PTSD &amp; Mental Health</a></li>
+<li><a href="/topic/self-care-peer-support">Self-Care &amp; Peer Support</a></li>
+<li><a href="/topic/sexual-violence">Sexual Violence</a></li>
+<li><a href="/topic/suicide">Suicide</a></li>
+<li><a href="/topic/terrorism">Terrorism</a></li>
+<li><a href="/topic/veterans">Veterans</a></li>
+<li class="last"><a href="/topic/war-civil-conflict">War &amp; Civil Conflict</a></li>
+</ul></div></li>
+<li class="branch menu-resources"><a href="/resources">Resources</a></li>
+<li class="branch menu-programs"><a href="/programs">Programs</a><div class="item-list"><ul class="branch menu-programs"><li class="first"><a href="/programs/fellowships">Fellowships</a></li>
+<li><a href="/research">Research Center</a></li>
+<li class="last"><a href="/programs/training">Trainings</a></li>
+</ul></div></li>
+<li class="branch menu-about last"><a href="/about-us">About</a><div class="item-list"><ul class="branch menu-about"><li class="first"><a href="/about/contact">Contact Us</a></li>
+<li><a href="/about/funding">Funding</a></li>
+<li><a href="/about/mission-history">Mission &amp; History</a></li>
+<li><a href="/press-inquiries">Press Inquiries</a></li>
+<li class="last"><a href="/about/people">People</a></li>
+</ul></div></li>
+</ul></div>      </nav>
+      <div class="col-m">
+        <h2 class="block-title">Newsletter Signup</h2>
+        <form action="/topic/interviewing" method="post" id="dart-newsletter-form" accept-charset="UTF-8"><div><div class="form-item form-type-textfield form-item-email">
+  <label class="element-invisible" for="edit-email">Email Address <span class="form-required" title="This field is required.">*</span></label>
+ <input placeholder="Email Address" required="" type="text" id="edit-email" name="email" value="" size="60" maxlength="128" class="form-text required" />
+</div>
+<div class="form-item form-type-checkbox form-item-consent">
+ <input required="" type="checkbox" id="edit-consent" name="consent" value="1" class="form-checkbox required" />  <label class="option" for="edit-consent">I give my consent to be emailed <span class="form-required" title="This field is required.">*</span></label>
+
+</div>
+<div class="form-item form-type-checkbox form-item-consenttotrack">
+ <input type="checkbox" id="edit-consenttotrack" name="consenttotrack" value="1" class="form-checkbox" />  <label class="option" for="edit-consenttotrack">I give my consent for my email activity to be tracked </label>
+
+</div>
+<input type="submit" id="edit-submit--3" name="op" value="Go" class="form-submit" /><input type="hidden" name="form_build_id" value="form-YBIYMWIwDv05aUeYqpZxyHosnRNXitkKFK77-04F-zk" />
+<input type="hidden" name="form_id" value="dart_newsletter_form" />
+</div></form>        <a href="/contribute" class="donate">Donate</a>      </div>
+      <div class="col-r">
+        <div class="project">
+                  </div>
+        <div class="item-list"><ul id="disclaimers"><li class="first"><a href="/rss.xml">RSS</a></li>
+<li class="last"><a href="/privacy-policy">Privacy Policy</a></li>
+</ul></div>        <div class="copyright">
+          &copy; Global Center for Journalism and Trauma under Creative Commons license BY-NC-SA.
+        </div>
+      </div>
+    </div><!-- /.inner -->
+  </footer> <!-- /#footer -->
+  <script type="text/javascript" src="https://gcjt.org/sites/default/files/js/js_HAgR4VZXnDyz-IHgZHTndd-kRJ-zMK6E_Y1RnZPxSNQ.js"></script>
+<script type="text/javascript" src="https://gcjt.org/sites/default/files/js/js_onbE0n0cQY6KTDQtHO_E27UBymFC-RuqypZZ6Zxez-o.js"></script>
+<script type="text/javascript" src="https://gcjt.org/sites/default/files/js/js_gPqjYq7fqdMzw8-29XWQIVoDSWTmZCGy9OqaHppNxuQ.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-8265647-1", {"cookieDomain":"auto"});ga("set", "anonymizeIp", true);ga("send", "pageview");
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://gcjt.org/sites/default/files/js/js_plumqIuHrQpe-ZFI-PjuuCHaEgbROe_sXYz2mfDu_R8.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","setHasJsCookie":0,"ajaxPageState":{"theme":"dartcenter","theme_token":"Oc1IV8uf78QwpLmFbhtak_JyMwPGFQK4QYjkRk8JpNc","js":{"sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.10\/jquery.min.js":1,"misc\/jquery-extend-3.4.0.js":1,"misc\/jquery-html-prefilter-3.5.0-backport.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"misc\/form-single-submit.js":1,"sites\/all\/modules\/contrib\/google_analytics\/googleanalytics.js":1,"0":1,"sites\/all\/themes\/dartcenter\/bower_components\/cookieconsent\/build\/cookieconsent.min.js":1,"sites\/all\/themes\/dartcenter\/js\/min\/plugins.min.js":1,"sites\/all\/themes\/dartcenter\/js\/min\/main.min.js":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"sites\/all\/modules\/contrib\/date\/date_api\/date.css":1,"sites\/all\/modules\/contrib\/date\/date_popup\/themes\/datepicker.1.7.css":1,"modules\/field\/theme\/field.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/contrib\/views\/css\/views.css":1,"sites\/all\/modules\/contrib\/ctools\/css\/ctools.css":1,"modules\/taxonomy\/taxonomy.css":1,"sites\/all\/themes\/dartcenter\/bower_components\/normalize-css\/normalize.css":1,"sites\/all\/themes\/dartcenter\/bower_components\/cookieconsent\/build\/cookieconsent.min.css":1,"sites\/all\/themes\/dartcenter\/css\/main.css":1,"sites\/all\/themes\/dartcenter\/css\/printer.css":1}},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip"},"urlIsAjaxTrusted":{"\/topic\/interviewing":true}});
+//--><!]]>
+</script>
+  </body>
+</html>

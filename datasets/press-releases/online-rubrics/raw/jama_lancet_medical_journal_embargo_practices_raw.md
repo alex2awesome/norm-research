@@ -1,0 +1,399 @@
+<!-- URL: https://media.jamanetwork.com/embargo-policy/ -->
+<!-- HTTP: 200 SIZE:    51765 -->
+<!doctype html>
+
+<!--[if lt IE 7]><html lang="en-US" class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html lang="en-US" class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html lang="en-US" class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-US" class="no-js">
+<!--<![endif]-->
+
+
+
+<head>
+  <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Embargo Policy - For the Media - The JAMA Network</title>
+
+    <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="apple-touch-icon" href="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/images/apple-icon-touch.png">
+  <link rel="icon" href="https://media.jamanetwork.com/wp-content/themes/ama_ftm/favicon.png">
+  <!--[if IE]>
+			<link rel="shortcut icon" href="https://media.jamanetwork.com/wp-content/themes/ama_ftm/favicon.ico">
+		<![endif]-->
+    <meta name="msapplication-TileColor" content="#f01d4f">
+  <meta name="msapplication-TileImage"
+    content="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/images/win8-tile-icon.png">
+
+  <link rel="pingback" href="https://media.jamanetwork.com/xmlrpc.php">
+  
+  <script src="https://r451.jamanetwork.com/script.js"></script>
+
+
+    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+	<!-- This site is optimized with the Yoast SEO plugin v25.4 - https://yoast.com/wordpress/plugins/seo/ -->
+	<meta name="description" content="Read the policy The JAMA Network follows for providing access to embargoed journal article and JAMA Report Video content." />
+	<link rel="canonical" href="https://media.jamanetwork.com/embargo-policy/" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Embargo Policy - For the Media - The JAMA Network" />
+	<meta name="twitter:description" content="Read the policy The JAMA Network follows for providing access to embargoed journal article and JAMA Report Video content." />
+	<meta name="twitter:label1" content="Est. reading time" />
+	<meta name="twitter:data1" content="3 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://media.jamanetwork.com/embargo-policy/","url":"https://media.jamanetwork.com/embargo-policy/","name":"Embargo Policy - For the Media - The JAMA Network","isPartOf":{"@id":"https://media.jamanetwork.com/#website"},"datePublished":"2011-12-05T20:52:16+00:00","dateModified":"2026-02-11T21:38:27+00:00","description":"Read the policy The JAMA Network follows for providing access to embargoed journal article and JAMA Report Video content.","breadcrumb":{"@id":"https://media.jamanetwork.com/embargo-policy/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https://media.jamanetwork.com/embargo-policy/"]}]},{"@type":"BreadcrumbList","@id":"https://media.jamanetwork.com/embargo-policy/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://media.jamanetwork.com/"},{"@type":"ListItem","position":2,"name":"Embargo Policy"}]},{"@type":"WebSite","@id":"https://media.jamanetwork.com/#website","url":"https://media.jamanetwork.com/","name":"For The Media - JAMA Network","description":"News releases &amp; journal articles from  the JAMA Network","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://media.jamanetwork.com/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel="alternate" type="application/rss+xml" title="For The Media - JAMA Network &raquo; Feed" href="https://media.jamanetwork.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="For The Media - JAMA Network &raquo; Comments Feed" href="https://media.jamanetwork.com/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://media.jamanetwork.com/api/oembed/1.0/embed?url=https%3A%2F%2Fmedia.jamanetwork.com%2Fembargo-policy%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://media.jamanetwork.com/api/oembed/1.0/embed?url=https%3A%2F%2Fmedia.jamanetwork.com%2Fembargo-policy%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='ftm-stylesheet-css' href='https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/css/style.css' type='text/css' media='all' />
+<link rel='stylesheet' id='ftm-copy-link-css' href='https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/css/copy-link.css' type='text/css' media='all' />
+<script type="text/javascript" src="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/js/libs/modernizr.custom.min.js" id="ftm-modernizr-js"></script>
+<script type="text/javascript" src="https://media.jamanetwork.com/wp-includes/js/jquery/jquery.min.js" id="jquery-core-js"></script>
+<script type="text/javascript" src="https://media.jamanetwork.com/wp-includes/js/jquery/jquery-migrate.min.js" id="jquery-migrate-js"></script>
+<link rel="https://api.w.org/" href="https://media.jamanetwork.com/api/" /><link rel="alternate" title="JSON" type="application/json" href="https://media.jamanetwork.com/api/wp/v2/pages/1747" /><link rel='shortlink' href='https://media.jamanetwork.com/?p=1747' />
+<!-- Stream WordPress user activity plugin v4.1.1 -->
+  
+
+  <!--[if lt IE 9]>
+			<script type='text/javascript' src='https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/js/libs/respond.min.js'></script>
+		<![endif]-->
+
+    <style type="text/css" media="screen">
+  /* Will: Custom CSS to override section */
+.a4a-checkbox .ginput_container_checkbox,
+.a4a-checkbox {
+	margin-top: 0px !important;
+}
+
+.a4a-checkbox input#choice_1_15_1 {
+	-webkit-appearance: checkbox !important;
+	margin-top: 0px !important;
+	font-size: 14px !important;
+	margin-right: 10px;
+}
+
+.a4a-checkbox label#label_1_15_1 {
+	font-size: 14px !important;
+}
+
+#post-39275 .script-trigger {
+      display: none !important;
+}  </style>
+    <link rel='stylesheet' href='https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/css/print.css' type='text/css'
+    media='print' />
+      </head>
+
+<body class="wp-singular page-template-default page page-id-1747 wp-theme-ama_ftm">
+	
+	
+
+      <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MHD6KQ');</script>
+<!-- End Google Tag Manager -->
+    <div id="container">
+    <div id="top-bar">
+      <div class="wrap row">
+        <div class="row">
+          <div class="small-6 columns">
+                                    <a href="https://jamanetwork.com/"
+              target="_blank" >              <img class="header--logo"
+                src="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/images/jn-logotype-Reverse-cmyk®.svg'"
+                alt="JAMA Logo" />
+              </a>                        
+
+          </div>
+          <div class="small-6 columns sign-in">
+            <a href="/api/plugin/ssoEngage">Sign In</a>
+          </div>
+        </div>
+      </div>
+    </div><!-- /#top-bar -->
+
+    <header class="header">
+      <div class="header-menu-wrap">
+
+        <div class="wrap">
+          <div class="masthead">
+            <h1><a href="https://media.jamanetwork.com" rel="nofollow"
+                class="logo-for-the-media">For The Media &#8211; JAMA Network</a></h1>
+            <p class="slogan">News releases &amp; journal articles from  the JAMA Network</p>
+          </div><!-- /.masthead -->
+        </div><!-- /.wrap -->
+
+        <div class="site-actions">
+          <a href="" class="menu-toggle"><span></span></a>
+          <div class="search">
+            <form action="/" method="get">
+              <input type="text" name="s" id="search"
+                placeholder="Search Releases" />
+              <button alt="Search" class="search-btn">
+                <i class="icon-search"></i>
+              </button>
+            </form>
+          </div><!-- /.search -->
+        </div><!-- /.site-actions -->
+
+        <nav class="main-nav clearfix" role="navigation">
+	        
+
+
+          <ul id="menu-global-navigation-unauthenticated" class="nav top-nav cf"><li class=""><a href="https://media.jamanetwork.com/post-embargo-news-releases/">Post-Embargo News Releases</a></li><li class=""><a href="https://media.jamanetwork.com/faqs/">FAQ</a></li><li class=""><a href="https://media.jamanetwork.com/contact-us-2/">Contact Us</a></li><li class=""><a href="https://media.jamanetwork.com/welcome-to-jama-network-media-relations/">Apply For Access</a></li></ul>
+
+        </nav>
+      </div><!-- /.header-menu-wrap -->
+    </header>
+			<div id="content">
+
+				<div id="inner-content" class="wrap row">
+
+						<div id="main" class="row" role="main">
+
+							<div class="medium-8 column">
+																	<article id="post-1747" class="post-1747 page type-page status-publish hentry" role="article" itemscope itemtype="http://schema.org/BlogPosting">
+										<header class="article-header">
+											<h1>Embargo Policy</h1>
+										</header>
+										<section class="entry-content" itemprop="articleBody">
+											<p>JAMA Network<sup>®</sup> grants prepublication access to articles to selected members of the media who agree not to publish, broadcast, post online, or otherwise place information about embargoed content in the public domain until the time of their publication by the JAMA Network. During this embargo period individuals granted access to articles may read them, discuss their findings with the authors, and consult with other experts for the purpose of drafting reports, news stories, or other coverage for release at the time of article publication. The rationale for maintaining an embargo system is summarized by the International Committee of Medical Journal Editors (<a href="https://tinyurl.com/pdcntkg">https://tinyurl.com/pdcntkg</a>):</p>
+<p>“Doctors in practice need to have research reports available in full detail before they can advise patients about the reports&#8217; conclusions…. For the media, the embargo creates a ‘level playing field,’ which most reporters and writers appreciate since it minimizes the pressure on them to publish stories before competitors when they have not had time to prepare carefully. Consistency in the timing of public release of biomedical information is also important in minimizing economic chaos, since some articles contain information that has potential to influence financial markets.”</p>
+<p><span data-olk-copy-source="MessageBody">In addition to the PDF of the full article scheduled for publication, the JAMA Network can provide images from an article. </span>All of this material is subject to the embargo and is furnished exclusively for use in coverage of JAMA Network articles, and for no other purpose.</p>
+<p>By requesting access to JAMA Network embargoed materials, members of the media agree to adhere to the above restrictions and also to the following specific policies. For additional questions regarding JAMA Network embargo policies, call JAMA Network Media Relations at 312-464-JAMA (5262) or e-mail mediarelations@jamanetwork.org.</p>
+<p><strong>Embargo Times</strong><br />
+Embargoes vary and lift the time and day articles are published online.</p>
+<p><strong>JAMA Network will grant credentials to its embargoed content to:</strong></p>
+<ul>
+<li>Reporters, writers, editors, and producers with staff credentials from newspapers, magazines, online news services, wire services, radio or television networks and stations</li>
+<li>Independent journalists (including bloggers) and editors who regularly cover health-related topics (Note: Individuals will be required to provide examples of recent work)</li>
+<li>Representatives of some academic, government, or hospital media/public relations departments</li>
+</ul>
+<p><strong>JAMA Network will not grant access to its embargoed content to:</strong></p>
+<ul>
+<li>Public relations firms, advertising agencies, or production companies with no immediate affiliation to the authors or a specific article</li>
+<li>Writers/editors or other contributors for patient publications created and distributed by industry, such as pharmaceutical companies or device manufacturers</li>
+<li>Representatives of industry including pharmaceutical companies or device manufacturers</li>
+<li>Financial or industry analysts</li>
+<li>Publications or websites supported by industry, including patient advocacy groups</li>
+<li>Representatives of corporate media/public relations, advertising, or marketing departments</li>
+</ul>
+<p><strong>Penalties for Breaking Embargo</strong></p>
+<p>JAMA Network reviews embargo breaks on a case-by-case basis. Circumstances of the embargo violation will be evaluated before a determination is made regarding appropriate penalties. Penalties for breaking an embargo may include but are not limited to loss of access to embargoed materials and loss of media credentials to JAMA Network events. The media outlet that employs the reporter also may be suspended from receiving embargoed materials. If a media outlet/reporter has been suspended, it will be the responsibility of the reporter and media outlet to reapply for access to embargoed materials after the suspension period ends.</p>
+<p>&nbsp;</p>
+<p>Copyright © 2016 American Medical Association. All Rights Reserved.</p>
+<p>Powered by Silverchair Information Systems</p>
+<p>&nbsp;</p>
+										</section>
+									</article>
+															</div>
+
+															<div id="sidebar1" class="sidebar medium-4 column" role="complementary">
+
+									
+								</div>
+							
+						</div>
+
+				</div>
+
+			</div>
+
+			<footer class="footer" role="contentinfo">
+
+				<div id="inner-footer" class="wrap">
+					<div class="row">
+						
+<nav class="row" data-equal-height>
+	<section class="footer-col medium-3 column collapse" data-equal-height-watch>	
+		<h4>For The Media</h4>
+									<ul>
+					<li id="nav_menu-4" class="widget-container widget_nav_menu"><h3 class="widget-title">Content</h3><div class="menu-content-container"><ul id="menu-content" class="menu"><li id="menu-item-12961" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-12961"><a href="https://media.jamanetwork.com/">Home</a></li>
+<li id="menu-item-12964" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12964"><a href="https://media.jamanetwork.com/post-embargo-news-releases/">Past News Releases</a></li>
+<li id="menu-item-46700" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-46700"><a href="https://media.jamanetwork.com/api/oauth/login/?return_url=https://media.jamanetwork.com/apply-for-access/">Apply For Access</a></li>
+<li id="menu-item-12953" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12953"><a href="https://media.jamanetwork.com/faqs/">FAQ</a></li>
+<li id="menu-item-12952" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12952"><a href="https://media.jamanetwork.com/contact-us-2/">Contact Us</a></li>
+</ul></div></li>				</ul>
+						</section>
+	<section class="footer-col medium-6 column" data-equal-height-watch>
+		<div class="row">		
+			<div class="medium-12 column"><h4>JAMA Network</h4></div>
+			<div class="medium-6 column">
+							<ul>	
+					<li id="nav_menu-8" class="widget-container widget_nav_menu"><h3 class="widget-title">JOURNALS</h3><div class="menu-sites-container"><ul id="menu-sites" class="menu"><li id="menu-item-12916" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12916"><a target="_blank" href="https://jamanetwork.com/journals/jama">JAMA</a></li>
+<li id="menu-item-42572" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-42572"><a href="https://jamanetworkopen.com">JAMA Network Open</a></li>
+<li id="menu-item-19163" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-19163"><a target="_blank" href="https://jamanetwork.com/journals/jamacardiology">JAMA Cardiology</a></li>
+<li id="menu-item-12917" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12917"><a target="_blank" href="https://jamanetwork.com/journals/jamadermatology">JAMA Dermatology</a></li>
+<li id="menu-item-59206" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59206"><a href="https://jamanetwork.com/journals/jama-health-forum">JAMA Health Forum</a></li>
+<li id="menu-item-12921" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12921"><a target="_blank" href="https://jamanetwork.com/journals/jamainternalmedicine">JAMA Internal Medicine</a></li>
+<li id="menu-item-12922" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12922"><a target="_blank" href="https://jamanetwork.com/journals/jamaneurology">JAMA Neurology</a></li>
+<li id="menu-item-12973" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12973"><a href="https://jamanetwork.com/journals/jamaoncology">JAMA Oncology</a></li>
+<li id="menu-item-12923" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12923"><a target="_blank" href="https://jamanetwork.com/journals/jamaophthalmology">JAMA Ophthalmology</a></li>
+<li id="menu-item-12924" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12924"><a target="_blank" href="https://jamanetwork.com/journals/jamaotolaryngology" title="JAMA Otolaryngology–Head">JAMA Otolaryngology–Head &#038; Neck Surgery</a></li>
+<li id="menu-item-12925" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12925"><a target="_blank" href="https://jamanetwork.com/journals/jamapediatrics">JAMA Pediatrics</a></li>
+<li id="menu-item-12919" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12919"><a target="_blank" href="https://jamanetwork.com/journals/jamapsychiatry">JAMA Psychiatry</a></li>
+<li id="menu-item-12926" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12926"><a target="_blank" href="https://jamanetwork.com/journals/jamasurgery">JAMA Surgery</a></li>
+<li id="menu-item-12920" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12920"><a target="_blank" href="https://jamanetwork.com/journals/archneurpsyc" title="Archives of Neurology and Psychiatry">Archives of Neurology and Psychiatry (1919-1959)</a></li>
+</ul></div></li><li id="nav_menu-9" class="widget-container widget_nav_menu"><h3 class="widget-title">SITES</h3><div class="menu-revised-sites-container"><ul id="menu-revised-sites" class="menu"><li id="menu-item-43284" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43284"><a href="https://sites.jamanetwork.com/art-and-images-in-psychiatry/">Art and Images in Psychiatry</a></li>
+<li id="menu-item-28301" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28301"><a href="https://jamanetwork.com/journals/jama/pages/2020-most-viewed-jama" title="Breast Cancer Screening Guidelines">Best of the JAMA Network</a></li>
+<li id="menu-item-28302" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28302"><a href="https://jamanetwork.com/journals/jama/pages/crosswords" title="Colorectal Screening Guidelines">Clinical Crosswords from JAMA</a></li>
+<li id="menu-item-28304" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28304"><a href="https://jamanetwork.com/journals/jama/pages/coronavirus-alert" title="Declaration of Helsinki">Coronavirus Resource Center</a></li>
+<li id="menu-item-43295" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43295"><a href="https://jamanetwork.com/pages/digital-media-editorial-fellowship">Digital Media Editorial Fellowship</a></li>
+<li id="menu-item-28305" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28305"><a href="https://ebm.jamanetwork.com/index.html">Evidence Based Medicine: An Oral History</a></li>
+<li id="menu-item-43285" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43285"><a href="https://sites.jamanetwork.com/fishbein/">Fishbein Fellowship</a></li>
+<li id="menu-item-43286" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43286"><a href="https://sites.jamanetwork.com/genetics/">Genomics and Precision Health</a></li>
+<li id="menu-item-28308" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28308"><a href="https://jamanetwork.com/channels/hypertension" title="Hypertension Guidelines">Hypertension</a></li>
+<li id="menu-item-43289" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43289"><a href="https://jamanetwork.com/channels/health-forum/archive">JAMA Forum Archive</a></li>
+<li id="menu-item-43287" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43287"><a href="https://sites.jamanetwork.com/audio">JAMA Network Audio</a></li>
+<li id="menu-item-43288" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43288"><a href="https://jamanetwork.com/pages/conferences">JAMA Network Conferences</a></li>
+<li id="menu-item-28309" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-28309"><a href="https://jamanetwork.com/channels/machine-learning" title="Medical Education">Machine Learning</a></li>
+<li id="menu-item-43292" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43292"><a href="https://sites.jamanetwork.com/research-ethics/">Research Ethics</a></li>
+<li id="menu-item-43294" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43294"><a href="https://jamanetwork.com/pages/collections">Topics and Collections</a></li>
+</ul></div></li><li id="nav_menu-15" class="widget-container widget_nav_menu"><h3 class="widget-title">Special Collections</h3><div class="menu-special-collections-container"><ul id="menu-special-collections" class="menu"><li id="menu-item-77564" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77564"><a href="https://jamanetwork.com/journals/jama/fullarticle/2758605">FDA Approval and Regulation of Pharmaceuticals, 1983-2018</a></li>
+<li id="menu-item-77565" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77565"><a href="https://jamanetwork.com/journals/jamaoncology/fullarticle/2752381">Global Burden of Cancer, 1990-2017</a></li>
+<li id="menu-item-77566" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77566"><a href="https://jamanetwork.com/journals/jamadermatology/fullarticle/2767074">Global Burden of Skin Diseases, 1990-2017</a></li>
+<li id="menu-item-77567" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77567"><a href="https://jamanetwork.com/journals/jama/fullarticle/2698492">Global Firearm Mortality, 1990-2016</a></li>
+<li id="menu-item-77568" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77568"><a href="https://jamanetwork.com/journals/jama/fullarticle/2674671">Health Care Spending in the US and Other High-Income Countries</a></li>
+<li id="menu-item-77569" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77569"><a href="https://jamanetwork.com/journals/jama/fullarticle/2756187">Life Expectancy and Mortality Rates in the United States, 1959-2017</a></li>
+<li id="menu-item-77570" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77570"><a href="https://jamanetwork.com/journals/jama/fullarticle/2720029">Medical Marketing in the United States, 1997-2016</a></li>
+<li id="menu-item-77571" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77571"><a href="https://jamanetwork.com/journals/jama/fullarticle/2758456">Practices to Foster Physician Presence and Connection With Patients in the Clinical Encounter</a></li>
+<li id="menu-item-77572" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77572"><a href="https://jamanetwork.com/journals/jama/fullarticle/2533698">President Obama on US Health Care Reform</a></li>
+<li id="menu-item-77573" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77573"><a href="https://jamanetwork.com/journals/jama/fullarticle/2678018">The State of US Health, 1990-2016</a></li>
+<li id="menu-item-77574" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77574"><a href="https://jamanetwork.com/journals/jamacardiology/fullarticle/2678113">US Burden of Cardiovascular Disease, 1990-2016</a></li>
+<li id="menu-item-77575" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77575"><a href="https://jamanetwork.com/journals/jamaneurology/fullarticle/2772579">US Burden of Neurological Disease, 1990-2017</a></li>
+<li id="menu-item-77576" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77576"><a href="https://jamanetwork.com/journals/jama/fullarticle/2752664">Waste in the US Health Care System: Estimated Costs and Potential for Savings</a></li>
+</ul></div></li><li id="nav_menu-16" class="widget-container widget_nav_menu"><h3 class="widget-title">Blogs</h3><div class="menu-blogs-container"><ul id="menu-blogs" class="menu"><li id="menu-item-77577" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77577"><a href="https://amastyleinsider.com/">AMA Style Insider</a></li>
+</ul></div></li>				</ul>
+						</div>
+			<div class="medium-6 column">
+							<ul>
+					<li id="nav_menu-2" class="widget-container widget_nav_menu"><h3 class="widget-title">Information For</h3><div class="menu-information-for-container"><ul id="menu-information-for" class="menu"><li id="menu-item-43298" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43298"><a href="https://jamanetwork.com/pages/for-authors">Authors</a></li>
+<li id="menu-item-43299" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43299"><a href="https://jamanetwork.com/pages/institutions-and-librarians">Institutions &#038; Librarians</a></li>
+<li id="menu-item-43300" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43300"><a href="https://jamanetwork.com/pages/advertisers">Advertisers</a></li>
+<li id="menu-item-43301" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43301"><a href="https://jamanetwork.com/pages/subscription-agents">Subscription Agents</a></li>
+<li id="menu-item-43302" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43302"><a href="https://www.jamacareercenter.com/">Employers &#038; Job Seekers</a></li>
+<li id="menu-item-43303" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-43303"><a href="https://media.jamanetwork.com/">Media</a></li>
+</ul></div></li><li id="nav_menu-11" class="widget-container widget_nav_menu"><h3 class="widget-title">JAMA Network Products</h3><div class="menu-jama-network-products-container"><ul id="menu-jama-network-products" class="menu"><li id="menu-item-43305" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43305"><a href="https://www.amamanualofstyle.com/">AMA Manual of Style</a></li>
+<li id="menu-item-43306" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43306"><a href="https://jamaevidence.mhmedical.com/">JAMAevidence</a></li>
+<li id="menu-item-43308" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43308"><a href="https://jamanetwork.com/pages/listen">JN Listen</a></li>
+<li id="menu-item-43310" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43310"><a href="https://www.peerreviewcongress.org/">Peer Review Congress</a></li>
+</ul></div></li><li id="nav_menu-12" class="widget-container widget_nav_menu"><h3 class="widget-title">JN Learning</h3><div class="menu-jn-learning-container"><ul id="menu-jn-learning" class="menu"><li id="menu-item-77555" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77555"><a href="https://edhub.ama-assn.org/jn-learning">Home</a></li>
+<li id="menu-item-43313" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43313"><a href="https://edhub.ama-assn.org/jn-learning/by-topic?page=1&#038;hd=edhub&#038;f_SiteDisplayNames=JN+Learning&#038;f_CmeCreditTypeGroupNames=CME">CME Quizzes</a></li>
+<li id="menu-item-77556" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77556"><a href="https://edhub.ama-assn.org/jn-learning/state-cme">State CME</a></li>
+<li id="menu-item-77557" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77557"><a href="https://edhub.ama-assn.org/jn-learning/by-topic?hd=edhub&#038;f_SiteDisplayNames=JN+Learning&#038;f_ContentFormat=Audio&#038;page=1">Audio / Podcast Courses</a></li>
+<li id="menu-item-77558" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77558"><a href="https://edhub.ama-assn.org/jn-learning/pages/clinical-challenge-courses">Clinical Challenge CME</a></li>
+<li id="menu-item-77559" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77559"><a href="https://edhub.ama-assn.org/jn-learning/pages/atrial-fibrillation-cme-course">Atrial Fibrillation Course</a></li>
+<li id="menu-item-77560" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77560"><a href="https://edhub.ama-assn.org/jn-learning/pages/marijuana-cme-course">Marijuana Course</a></li>
+<li id="menu-item-77561" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77561"><a href="https://edhub.ama-assn.org/jn-learning/pages/penicillin-allergy-testing">Penicillin Allergy Course</a></li>
+<li id="menu-item-77562" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77562"><a href="https://edhub.ama-assn.org/jn-learning/pages/cervical-cancer-cme">Cervical Cancer Screening Course</a></li>
+<li id="menu-item-43314" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43314"><a href="https://jamanetwork.com/learning/pages/about-cme">About CME &#038; MOC</a></li>
+<li id="menu-item-77563" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-77563"><a href="https://edhub.ama-assn.org/pages/auto-credit-reporting">CME / MOC Reporting Preferences</a></li>
+</ul></div></li>				</ul>
+						</div>
+		</div>
+	</section>
+	<section class="footer-col medium-3 column" data-equal-height-watch>
+					<ul>
+				<li id="nav_menu-13" class="widget-container widget_nav_menu"><div class="menu-help-container"><ul id="menu-help" class="menu"><li id="menu-item-43317" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43317"><a href="https://store.jamanetwork.com/">Subscriptions &#038; Renewals</a></li>
+<li id="menu-item-43318" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43318"><a href="https://jamanetwork.com/oauthsignin?return_url=http%3A%2F%2Fjamanetwork.com%2Fmyaccount%23my-alerts">Email Subscriptions</a></li>
+<li id="menu-item-43319" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43319"><a href="https://jamanetwork.com/oauthsignin?return_url=http%3A%2F%2Fjamanetwork.com%2Fmyaccount%23my-profile">Update Your Address</a></li>
+<li id="menu-item-43320" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43320"><a href="https://sites.jamanetwork.com/help/">Contact Us</a></li>
+<li id="menu-item-43321" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-43321"><a href="https://sites.jamanetwork.com/help/">Frequently Asked Questions</a></li>
+</ul></div></li><li id="nav_menu-14" class="widget-container widget_nav_menu"><h3 class="widget-title">JAMA Career Center</h3><div class="menu-other-resources-container"><ul id="menu-other-resources" class="menu"><li id="menu-item-12932" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12932"><a target="_blank" href="https://www.jamacareercenter.com/">Physician Job Listings</a></li>
+</ul></div></li>			</ul>
+			</section>
+</nav>
+						<div class="row">
+							<div class="medium-3 large-3 columns logo">
+								<span>Journal of the American Medial Association</span>
+							</div>
+							<div class="medium-9 large-6 large-pull-3 columns copyright">
+								Copyright &copy; 2026 American Medical Association. All rights reserved, including those for text and data mining, AI training, and similar technologies.<br />
+								<a href="https://jamanetwork.com/pages/conditions-of-use" rel="nofollow">Terms of Use</a> | <a href="https://jamanetwork.com/pages/privacy-policy" rel="nofollow">Privacy Policy</a> |
+<a href="https://jamanetwork.com/pages/accessibility-statement" rel="nofollow">Accessibility Statement</a> | <a onclick="OneTrust.ToggleInfoDisplay()" rel="nofollow" id="CookieFooter">Cookie Settings</a>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+
+			</footer>
+
+		</div><!-- /#container -->
+
+		<!-- MODAL -->
+		<div class="modal-overlay">
+			<div class="modal">
+				<a href="" class="modal-close">Close</a>
+				<div class="modal-content">
+					<!-- CONTENT HERE -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div><!-- /.modal-overlay -->
+		
+
+				<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/ama_ftm/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript" src="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/js/libs/jquery.simplemodal.js" id="jquery-simplemodal-js"></script>
+<script type="text/javascript" src="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/js/min/scripts-min.js" id="ftm-js-js"></script>
+<script type="text/javascript" src="https://media.jamanetwork.com/wp-content/themes/ama_ftm/library/js/libs/copy-link.js" id="ftm-copy-link-js"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://media.jamanetwork.com/wp-includes/js/wp-emoji-release.min.js"}}
+</script>
+<script type="module">
+/* <![CDATA[ */
+/*! This file is auto-generated */
+const a=JSON.parse(document.getElementById("wp-emoji-settings").textContent),o=(window._wpemojiSettings=a,"wpEmojiSettingsSupports"),s=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const a=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===a[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,a){let r;const o=(r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),s=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(e=>{s[e]=t(o,e,n,a)}),s}function r(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}a.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),c.toString(),p.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"});const r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=e=>{i(n=e.data),r.terminate(),t(n)})}catch(e){}i(n=f(s,u,c,p))}t(n)}).then(e=>{for(const n in e)a.supports[n]=e[n],a.supports.everything=a.supports.everything&&a.supports[n],"flag"!==n&&(a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&a.supports[n]);var t;a.supports.everythingExceptFlag=a.supports.everythingExceptFlag&&!a.supports.flag,a.supports.everything||((t=a.source||{}).concatemoji?r(t.concatemoji):t.wpemoji&&t.twemoji&&(r(t.twemoji),r(t.wpemoji)))});
+//# sourceURL=https://media.jamanetwork.com/wp-includes/js/wp-emoji-loader.min.js
+/* ]]> */
+</script>
+
+	</body>
+
+</html> <!-- end of site. what a ride! -->

@@ -1,0 +1,1175 @@
+<!-- URL: https://centerforhealthjournalism.org/our-work/insights/post-not-embargoed-what-you-need-know-about-embargo-policies -->
+<!-- HTTP: 200 SIZE:    45827 -->
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="We have a guest post today from Ivan Oransky, executive editor of Reuters Health and co-author of the newish Embargo Watch and Retraction Watch blogs. Here, he has some tips for dealing with embargoed medical research." />
+<meta name="abstract" content="We have a guest post today from Ivan Oransky, executive editor of Reuters Health and co-author of the newish Embargo Watch and Retraction Watch blogs. Here, he has some tips for dealing with embargoed medical research." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://centerforhealthjournalism.org/our-work/insights/post-not-embargoed-what-you-need-know-about-embargo-policies" />
+<meta property="og:site_name" content="USC Center for Health Journalism" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://centerforhealthjournalism.org/our-work/insights/post-not-embargoed-what-you-need-know-about-embargo-policies" />
+<meta property="og:title" content="This post is not embargoed: What you need to know about embargo policies" />
+<meta property="og:description" content="We have a guest post today from Ivan Oransky, executive editor of Reuters Health and co-author of the newish Embargo Watch and Retraction Watch blogs. Here, he has some tips for dealing with embargoed medical research." />
+<meta property="og:image:url" content="https://centerforhealthjournalism.org[node:field_social_share_image:social_share_image:url]" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="We have a guest post today from Ivan Oransky, executive editor of Reuters Health and co-author of the newish Embargo Watch and Retraction Watch blogs. Here, he has some tips for dealing with embargoed medical research." />
+<meta name="twitter:site" content="@ReportingHealth" />
+<meta name="twitter:title" content="This post is not embargoed: What you need to know about embargo policies" />
+<script async defer data-domain="centerforhealthjournalism.org" src="https://plausible.io/js/plausible.js"></script>
+<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+<meta name="Generator" content="Drupal 10 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="/themes/custom/chj2023/favicon.ico" type="image/vnd.microsoft.icon" />
+
+    <title>This post is not embargoed: What you need to know about embargo policies | USC Center for Health Journalism</title>
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_7Cdbgcc5mW_wHBAYRMlEL5yQhE-_dobDo7v4gdrijdE.css?delta=0&amp;language=en&amp;theme=chj2023&amp;include=eJxljUEOAiEQBD-EYtbHeCQD20F0YBJmWMPvXfWgiZdOperQ6XpbTsvZZ5ZIfFCbXFp2WSQzQlL4D-50IUOv1O-_tclXM00ZFtaiSTb06aUhCTudaqg-ksJZDBWZKtr4F693qNsKHurfe6yyDsYTusxAXA" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_YuRJ2yjhmlkczHPKMLzNhUiYqUGlLx22htxoabgZLRs.css?delta=1&amp;language=en&amp;theme=chj2023&amp;include=eJxljUEOAiEQBD-EYtbHeCQD20F0YBJmWMPvXfWgiZdOperQ6XpbTsvZZ5ZIfFCbXFp2WSQzQlL4D-50IUOv1O-_tclXM00ZFtaiSTb06aUhCTudaqg-ksJZDBWZKtr4F693qNsKHurfe6yyDsYTusxAXA" />
+
+    
+  </head>
+  <body class="page-node-10030 page-node-type-column  our-work insights post-not-embargoed-what-you-need-know-about-embargo-policies layout-no-sidebars">
+        <a href="#main-content" class="visually-hidden focusable">
+      Skip to main content
+    </a>
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    
+
+<div class="layout-container">
+
+  <header role="banner" id="header">
+                  <div id="leaderboard" class="leaderboard">
+          <div class="region region-leaderboard">
+
+    
+           
+
+<div id="block-chj2023-sitewidealerts" class="block block__sitewide-alert-block block__">
+  
+    
+      <div class="content">
+      <div data-sitewide-alert role="banner"></div>
+    </div>
+  </div>
+
+      </div>
+
+      </div>
+    
+    <div class="header__main">
+      <div class="container">
+        <div class="header__main-inner">
+            <div class="region region-branding">
+
+    
+           
+
+<div id="block-chj2023-site-branding" class="block__site-branding block block__system block__">
+  
+    
+      <a href="/" class="home-link" rel="home">
+      <img class="logo_img" src="/themes/custom/chj2023/logo.svg" alt="USC" />
+      <img class="logo_motif" src="/themes/custom/chj2023/images/21-years.png" alt="21 Years!" />
+      <span class="logo_text"><span>USC </span>Center <i>for</i> Health Journalism</span>
+    </a>
+</div>
+
+      </div>
+
+            <div class="region region-main-menu">
+
+    
+           
+
+<div id="block-search" class="block__search-menu--tablet block block__tb-megamenu block__search">
+  
+    
+      <div class="content">
+      <nav  class="tbm tbm-search tbm-arrows" id="72c252b5-1d9e-498b-aada-e3dd33fe33fe" data-breakpoint="0" aria-label="search navigation">
+      <button class="tbm-button" type="button">
+      <span class="visually-hidden">Toggle menu</span>
+      <span class="tbm-button-container">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+    <div class="tbm-collapse ">
+    <ul  class="tbm-nav level-0 items-1" >
+          <li  class="tbm-item level-1 tbm-justify tbm-item--has-dropdown" aria-level="1" >
+      <div class="tbm-link-container">
+            <button class="tbm-link level-1 no-link tbm-toggle menu-item__search--tablet" tabindex="0" aria-expanded="false">
+                        <span class="visually-hidden">Toggle&nbsp;</span>
+            Search
+              <span class="visually-hidden">&nbsp;submenu</span>
+                </button>
+                          </div>
+    <div  class="tbm-submenu tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span12 block__search-form">
+  <div class="tbm-column-inner">
+                 <div  class="tbm-block">
+    <div class="block-inner">
+      
+
+<div id="block-search-form-block" role="search" class="block block__search block__">
+  
+    
+      <div class="content">
+      <form class="search-block-form google-cse" data-drupal-selector="search-block-form-2" action="/search/content" method="get" id="search-block-form--2" accept-charset="UTF-8">
+  <div class="js-form-item form-item form-type-search js-form-type-search form-item-keys js-form-item-keys form-no-label">
+      <label for="edit-keys--2" class="visually-hidden">Search</label>
+        <input title="Enter the terms you wish to search for." placeholder="Search term" data-drupal-selector="edit-keys" type="search" id="edit-keys--2" name="keys" value="" size="15" maxlength="128" class="form-search" />
+
+        </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--2"><input data-drupal-selector="edit-submit" type="submit" id="edit-submit--2" value="Search" class="button js-form-submit form-submit" />
+</div>
+
+</form>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+  </ul>
+
+      </div>
+  </nav>
+
+<script>
+if (window.matchMedia("(max-width: 0px)").matches) {
+  document.getElementById("72c252b5-1d9e-498b-aada-e3dd33fe33fe").classList.add('tbm--mobile')
+}
+</script>
+
+    </div>
+  </div>
+
+
+<div id="block-mainmenu" class="block block__tb-megamenu block__main">
+  
+    
+      <div class="content">
+      <nav  class="tbm tbm-main tbm-arrows" id="f05b7577-119a-49c9-9702-8a6fde699263" data-breakpoint="1424" aria-label="main navigation">
+      <button class="tbm-button" type="button">
+      <span class="visually-hidden">Toggle menu</span>
+      <span class="tbm-button-container">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+    <div class="tbm-collapse ">
+    <ul  class="tbm-nav level-0 items-6" >
+          <li  class="tbm-item level-1 tbm-justify tbm-item--has-dropdown" aria-level="1" >
+      <div class="tbm-link-container">
+            <button class="tbm-link level-1 no-link tbm-toggle" tabindex="0" aria-expanded="false">
+                        <span class="visually-hidden">Toggle&nbsp;</span>
+            About
+              <span class="visually-hidden">&nbsp;submenu</span>
+                </button>
+                          </div>
+    <div  class="tbm-submenu tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span6">
+  <div class="tbm-column-inner">
+               <ul  class="tbm-subnav level-1 items-6">
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/about/our-mission"  class="tbm-link level-2">
+                      Our Mission
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/about/our-reporting-model"  class="tbm-link level-2">
+                      Our Reporting Model
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/about/our-leadership-funders"  class="tbm-link level-2">
+                      Our Leadership and Funders
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/about/center-news"  class="tbm-link level-2">
+                      Center News
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/about/history"  class="tbm-link level-2">
+                      Our History
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/about/contact-us"  class="tbm-link level-2">
+                      Contact Us
+                </a>
+                          </div>
+    
+</li>
+
+  </ul>
+
+      </div>
+</div>
+
+      <div  class="tbm-column span6 hidden-collapse">
+  <div class="tbm-column-inner">
+                 <div  class="tbm-block">
+    <div class="block-inner">
+      
+
+<div id="block-views-blocktopics-block" class="block block__views block__topics-block">
+  
+      <h2 class="block-title">Reporting Topics</h2>
+    
+      <div class="content">
+      <div class="views-element-container"><div class="js-view-dom-id-9e6616c9b60c5d7884ec40e3711e45f98a8dfc05c911cd6376209bef87e3f659">
+  
+  
+  
+
+      <header>
+      <p><em>Explore our articles database by topic:</em></p>
+
+    </header>
+  
+  
+  
+
+      <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/environment-climate" hreflang="en">Environment &amp; Climate</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/health-equity-social-justice" hreflang="en">Health Equity &amp; Social Justice</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/healthcare-systems-policy" hreflang="en">Healthcare Systems &amp; Policy</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/community-public-health" hreflang="en">Community &amp; Public Health</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/children-families" hreflang="en">Children &amp; Families</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/mental-health-trauma" hreflang="en">Mental Health &amp; Trauma</a></span></div></div>
+
+    
+
+  
+  
+
+  
+  
+</div>
+</div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+          <li  class="tbm-item level-1 tbm-justify tbm-item--has-dropdown" aria-level="1" >
+      <div class="tbm-link-container">
+            <button class="tbm-link level-1 no-link tbm-toggle menu-item__fellowship-grants" tabindex="0" aria-expanded="false">
+                        <span class="visually-hidden">Toggle&nbsp;</span>
+            Fellowships &amp; Grants
+              <span class="visually-hidden">&nbsp;submenu</span>
+                </button>
+                          </div>
+    <div  class="tbm-submenu tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span6">
+  <div class="tbm-column-inner">
+               <ul  class="tbm-subnav level-1 items-9">
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/fellowships-grants/our-fellowships-grants"  class="tbm-link level-2 bold">
+                      Our Fellowships and Grants
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/fellowships-grants/national-fellowship"  class="tbm-link level-2">
+                      National Fellowship
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/fellowships-grants/california-fellowship"  class="tbm-link level-2">
+                      California Health Equity Fellowship
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/fellowships-grants/data-fellowship"  class="tbm-link level-2">
+                      Data Fellowship
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/fellowships-grants/impact-fund-reporting-health-equity-health-systems"  class="tbm-link level-2">
+                      Impact Fund for Reporting on Equity in Health and Health Care
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="https://centerforhealthjournalism.org/health-and-climate-change-reporting-fellowship"  class="tbm-link level-2">
+                      Health and Climate Change Reporting Fellowship
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/domestic-violence-symposium-and-impact-reporting-fund"  class="tbm-link level-2">
+                      Domestic Violence Symposium and Impact Reporting Fund
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/child-welfare-symposium-and-impact-reporting-fund"  class="tbm-link level-2">
+                      Child Welfare Symposium and Impact Reporting Fund
+                </a>
+                          </div>
+    
+</li>
+
+  </ul>
+
+      </div>
+</div>
+
+      <div  class="tbm-column span6 hidden-collapse">
+  <div class="tbm-column-inner">
+                 <div  class="tbm-block">
+    <div class="block-inner">
+      
+
+<div id="block-views-blocktopics-block--2" class="block block__views block__topics-block">
+  
+      <h2 class="block-title">Reporting Topics</h2>
+    
+      <div class="content">
+      <div class="views-element-container"><div class="js-view-dom-id-4d3471cd5b38135fb2a919567763aad75bea7dc1b1c1d814761d26ebc29dfc45">
+  
+  
+  
+
+      <header>
+      <p><em>Explore our articles database by topic:</em></p>
+
+    </header>
+  
+  
+  
+
+      <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/environment-climate" hreflang="en">Environment &amp; Climate</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/health-equity-social-justice" hreflang="en">Health Equity &amp; Social Justice</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/healthcare-systems-policy" hreflang="en">Healthcare Systems &amp; Policy</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/community-public-health" hreflang="en">Community &amp; Public Health</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/children-families" hreflang="en">Children &amp; Families</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/mental-health-trauma" hreflang="en">Mental Health &amp; Trauma</a></span></div></div>
+
+    
+
+  
+  
+
+  
+  
+</div>
+</div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+          <li  class="tbm-item level-1 tbm-justify tbm-item--has-dropdown" aria-level="1" >
+      <div class="tbm-link-container">
+            <button class="tbm-link level-1 no-link tbm-toggle" tabindex="0" aria-expanded="false">
+                        <span class="visually-hidden">Toggle&nbsp;</span>
+            Our Work
+              <span class="visually-hidden">&nbsp;submenu</span>
+                </button>
+                          </div>
+    <div  class="tbm-submenu tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span6">
+  <div class="tbm-column-inner">
+               <ul  class="tbm-subnav level-1 items-5">
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-work/reporting"  class="tbm-link level-2">
+                      Reporting
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-work/insights"  class="tbm-link level-2">
+                      Insights
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-work/webinars"  class="tbm-link level-2">
+                      Webinars
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2 tbm-left tbm-group" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-work/collaboratives"  class="tbm-link level-2 tbm-group-title" aria-expanded="false">
+                      Collaboratives
+                </a>
+                          </div>
+    <div  class="tbm-group-container tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span12">
+  <div class="tbm-column-inner">
+               <ul  class="tbm-subnav level-2 items-3">
+        <li  class="tbm-item level-3" aria-level="3" >
+      <div class="tbm-link-container">
+            <a href="/our-work/collaboratives/just-one-breath"  class="tbm-link level-3">
+                      Just One Breath
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-3" aria-level="3" >
+      <div class="tbm-link-container">
+            <a href="/our-work/collaboratives/living-shadows"  class="tbm-link level-3">
+                      Living in the Shadows
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-3" aria-level="3" >
+      <div class="tbm-link-container">
+            <a href="/our-work/collaboratives/uncovered-california"  class="tbm-link level-3">
+                      Uncovered California
+                </a>
+                          </div>
+    
+</li>
+
+  </ul>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-work/community-engagement"  class="tbm-link level-2">
+                      Engagement
+                </a>
+                          </div>
+    
+</li>
+
+  </ul>
+
+      </div>
+</div>
+
+      <div  class="tbm-column span6 hidden-collapse">
+  <div class="tbm-column-inner">
+                 <div  class="tbm-block">
+    <div class="block-inner">
+      
+
+<div id="block-views-blocktopics-block--3" class="block block__views block__topics-block">
+  
+      <h2 class="block-title">Reporting Topics</h2>
+    
+      <div class="content">
+      <div class="views-element-container"><div class="js-view-dom-id-1e27072e392e8f85b47f17810ea08ffcd54d65e891cbdf19dd833c1d0eaee344">
+  
+  
+  
+
+      <header>
+      <p><em>Explore our articles database by topic:</em></p>
+
+    </header>
+  
+  
+  
+
+      <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/environment-climate" hreflang="en">Environment &amp; Climate</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/health-equity-social-justice" hreflang="en">Health Equity &amp; Social Justice</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/healthcare-systems-policy" hreflang="en">Healthcare Systems &amp; Policy</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/community-public-health" hreflang="en">Community &amp; Public Health</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/children-families" hreflang="en">Children &amp; Families</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/mental-health-trauma" hreflang="en">Mental Health &amp; Trauma</a></span></div></div>
+
+    
+
+  
+  
+
+  
+  
+</div>
+</div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+          <li  class="tbm-item level-1 tbm-justify tbm-item--has-dropdown" aria-level="1" >
+      <div class="tbm-link-container">
+            <button class="tbm-link level-1 no-link tbm-toggle" tabindex="0" aria-expanded="false">
+                        <span class="visually-hidden">Toggle&nbsp;</span>
+            Our Impact
+              <span class="visually-hidden">&nbsp;submenu</span>
+                </button>
+                          </div>
+    <div  class="tbm-submenu tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span6">
+  <div class="tbm-column-inner">
+               <ul  class="tbm-subnav level-1 items-3">
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-impact/out-impact-glance"  class="tbm-link level-2">
+                      Our Impact at a Glance
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-impact/case-studies"  class="tbm-link level-2">
+                      Case Studies
+                </a>
+                          </div>
+    
+</li>
+
+        <li  class="tbm-item level-2" aria-level="2" >
+      <div class="tbm-link-container">
+            <a href="/our-impact/support-us"  class="tbm-link level-2">
+                      Support Us
+                </a>
+                          </div>
+    
+</li>
+
+  </ul>
+
+      </div>
+</div>
+
+      <div  class="tbm-column span6 hidden-collapse">
+  <div class="tbm-column-inner">
+                 <div  class="tbm-block">
+    <div class="block-inner">
+      
+
+<div id="block-views-blocktopics-block--4" class="block block__views block__topics-block">
+  
+      <h2 class="block-title">Reporting Topics</h2>
+    
+      <div class="content">
+      <div class="views-element-container"><div class="js-view-dom-id-ceba06bfd9f06baa406258ec24675a8b9ea44586d18868dd9f4ce549563a4894">
+  
+  
+  
+
+      <header>
+      <p><em>Explore our articles database by topic:</em></p>
+
+    </header>
+  
+  
+  
+
+      <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/environment-climate" hreflang="en">Environment &amp; Climate</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/health-equity-social-justice" hreflang="en">Health Equity &amp; Social Justice</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/healthcare-systems-policy" hreflang="en">Healthcare Systems &amp; Policy</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/community-public-health" hreflang="en">Community &amp; Public Health</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/children-families" hreflang="en">Children &amp; Families</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/mental-health-trauma" hreflang="en">Mental Health &amp; Trauma</a></span></div></div>
+
+    
+
+  
+  
+
+  
+  
+</div>
+</div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+        <li  class="tbm-item level-1 search--mobile" aria-level="1" >
+      <div class="tbm-link-container">
+            <a href="https://bit.ly/2026DonationButton"  class="tbm-link level-1 menu-item__search--mobile">
+                      Donate
+                </a>
+                          </div>
+    
+</li>
+
+          <li  class="tbm-item level-1 search--desktop tbm-justify tbm-item--has-dropdown" aria-level="1" >
+      <div class="tbm-link-container">
+            <button class="tbm-link level-1 no-link tbm-toggle menu-item__search--desktop" tabindex="0" aria-expanded="false">
+                        <span class="visually-hidden">Toggle&nbsp;</span>
+            Search
+              <span class="visually-hidden">&nbsp;submenu</span>
+                </button>
+                          </div>
+    <div  class="tbm-submenu tbm-item-child">
+      <div  class="tbm-row">
+      <div  class="tbm-column span12 block__search-form hidden-collapse">
+  <div class="tbm-column-inner">
+                 <div  class="tbm-block">
+    <div class="block-inner">
+      
+
+<div id="block-search-form-block--2" role="search" class="block block__search block__">
+  
+    
+      <div class="content">
+      <form class="search-block-form google-cse" data-drupal-selector="search-block-form-4" action="/search/content" method="get" id="search-block-form--4" accept-charset="UTF-8">
+  <div class="js-form-item form-item form-type-search js-form-type-search form-item-keys js-form-item-keys form-no-label">
+      <label for="edit-keys--4" class="visually-hidden">Search</label>
+        <input title="Enter the terms you wish to search for." placeholder="Search term" data-drupal-selector="edit-keys" type="search" id="edit-keys--4" name="keys" value="" size="15" maxlength="128" class="form-search" />
+
+        </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--4"><input data-drupal-selector="edit-submit" type="submit" id="edit-submit--4" value="Search" class="button js-form-submit form-submit" />
+</div>
+
+</form>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+      </div>
+</div>
+
+  </div>
+
+  </div>
+
+</li>
+
+  </ul>
+
+      </div>
+  </nav>
+
+<script>
+if (window.matchMedia("(max-width: 1424px)").matches) {
+  document.getElementById("f05b7577-119a-49c9-9702-8a6fde699263").classList.add('tbm--mobile')
+}
+</script>
+
+    </div>
+  </div>
+
+
+<div class="views-element-container block__views-topics block block__views block__topics-block" id="block-chj2023-views-block-topics-block">
+  
+      <h2 class="block-title">Reporting Topics</h2>
+    
+      <div class="content">
+      <div><div class="js-view-dom-id-22463a3f704454c37aa17c54b77bb6a51c7c2bafc9bf8e55d681829853a4cd54">
+  
+  
+  
+
+      <header>
+      <p><em>Explore our articles database by topic:</em></p>
+
+    </header>
+  
+  
+  
+
+      <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/environment-climate" hreflang="en">Environment &amp; Climate</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/health-equity-social-justice" hreflang="en">Health Equity &amp; Social Justice</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/healthcare-systems-policy" hreflang="en">Healthcare Systems &amp; Policy</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/community-public-health" hreflang="en">Community &amp; Public Health</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/children-families" hreflang="en">Children &amp; Families</a></span></div></div>
+    <div class="views-row"><div class="views-field views-field-name"><span class="field-content"><a href="/topics/mental-health-trauma" hreflang="en">Mental Health &amp; Trauma</a></span></div></div>
+
+    
+
+  
+  
+
+  
+  
+</div>
+</div>
+
+    </div>
+  </div>
+
+      </div>
+
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <main id="content" role="main"  class="content-main ">
+
+    <a id="main-content" tabindex="-1"></a>
+    
+      <div class="region region-highlighted">
+
+    
+           <div data-drupal-messages-fallback class="hidden"></div>
+
+      </div>
+
+
+    
+
+
+    
+          <div class="section--content-top">
+                  <div class="region region-breadcrumb">
+
+    
+           
+
+<div id="block-chj2023-breadcrumbs" class="block__breadcrumbs block block__system block__">
+    <div class="block__decoration"></div>
+  
+    
+      <div class="content">
+        <nav role="navigation" aria-labelledby="system-breadcrumb">
+    <h2 id="system-breadcrumb" class="visually-hidden">Breadcrumb</h2>
+    <ol>
+          <li>
+                  <a href="/">Home</a>
+              </li>
+        </ol>
+  </nav>
+
+    </div>
+  </div>
+
+      </div>
+
+        
+      </div>
+    
+    <div class="layout-content">
+        <div class="region region-content">
+
+    
+           
+
+<div id="block-chj2023-content" class="block__main-content block block__system block__">
+  
+    
+      <div class="content">
+      <article class="node--type--column node--view-mode--full">
+
+  
+    
+
+  
+        <div class="content__header layout layout--onecol">
+    <div  class="layout__region layout__region--content">
+      
+
+<div class="block block__layout-builder block__node-column-links">
+  
+    
+      <div class="content">
+      
+    </div>
+  </div>
+
+    </div>
+  </div>
+  <div class="layout layout--onecol">
+    <div  class="layout__region layout__region--content">
+      
+
+<div class="block block__layout-builder block__node-column-title">
+  
+    
+      <div class="content">
+        
+            <div class="field field--name-title field--type-string field--label-hidden field__item"><h1>This post is not embargoed: What you need to know about embargo policies</h1></div>
+      
+    </div>
+  </div>
+
+
+<div class="block block__layout-builder block__node-column-field-authors">
+  
+    
+      <div class="content">
+      
+  <div class="field field--name-field-authors field--type-entity-reference field--label-visually_hidden">
+    <div class="field__label visually-hidden">Author(s)</div>
+          <div class="field__items">
+              <div class="field__item"><article class="node--type--person node--view-mode--byline">
+
+  
+    
+
+  
+        <div class="layout layout--onecol">
+    <div  class="layout__region layout__region--content">
+      
+
+<div class="block block__layout-builder block__node-person-field-profile-picture">
+  
+    
+      <div class="content">
+      
+            <div class="field field--name-field-profile-picture field--type-entity-reference field--label-hidden field__item"><article class="media media--type-image media--view-mode-byline-image">
+  
+      
+  <div class="field field--name-field-media-image field--type-image field--label-visually_hidden">
+    <div class="field__label visually-hidden">Image</div>
+              <div class="field__item">  <img loading="lazy" src="/sites/default/files/styles/byline_image/public/pictures/picture-47-1339368025.jpg?itok=46sexJ59" width="80" height="80" />
+
+
+</div>
+          </div>
+
+  </article>
+</div>
+      
+    </div>
+  </div>
+
+
+<div class="block block__layout-builder block__basic">
+  
+    
+      <div class="content">
+      
+            <div class="field field--name-field-block-body field--type-text-long field--label-hidden field__item">by </div>
+      
+    </div>
+  </div>
+
+
+ 
+          <span>&nbsp;CHJ Fellow</span>
+  
+
+
+
+<div class="block block__layout-builder block__node-person-title">
+  
+    
+      <div class="content">
+      
+
+<div class="field field--name-title field--type-string field--label-inline clearfix">
+  <div class="field__label"></div>
+      <div class="field__item"><span><a href="/barbara-feder-ostrov" hreflang="en">Barbara Feder Ostrov</a></span></div>
+  </div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+  
+</article>
+</div>
+              </div>
+      </div>
+
+    </div>
+  </div>
+
+
+<div class="block block__layout-builder block__node-column-published-at">
+  
+    
+      <div class="content">
+      
+  <div class="field field--name-published-at field--type-published-at field--label-visually_hidden">
+    <div class="field__label visually-hidden">Published on</div>
+              <div class="field__item">October 20, 2010</div>
+          </div>
+
+    </div>
+  </div>
+
+
+<div class="block block__layout-builder block__node-column-field-body">
+  
+    
+      <div class="content">
+      
+            <div class="field field--name-field-body field--type-text-long field--label-hidden field__item"><p><em>We have a guest post today from <a href="http://www.reportingonhealth.org/users/ivanoransky">Ivan Oransky</a>, executive editor of Reuters Health and co-author of the newish Embargo Watch and Retraction Watch blogs. Here, he has some tips for dealing with embargoed medical research. </em></p> <p>If you don't spend much of your time on the health beat covering studies – and <a href="http://www.healthjournalism.org/blog/2009/03/schwitzer-reliance-on-journals-hinders-coverage/">some would say that's a good thing</a> – you may wonder why every newspaper, wire service, and radio and TV station seems to report on the same studies at the same time every week.</p> <p>That's because so many of the journals and scientific societies that publish findings release material to reporters on an embargoed basis, often using a service such as <a href="http://www.eurekalert.org/">Eurekalert</a>. Journalists who publish stories before those embargoes lift can be punished by losing access to future materials.</p> <p>As I noted in my <a href="http://embargowatch.wordpress.com/2010/02/23/why-do-blog-on-embargoes/">introductory blog post</a> at Embargo Watch:</p> <p><em>That would seem to be a good thing for science and health journalism, much of which is reliant on journals for news because it's peer-reviewed - in other words, it's not just a researcher shouting from a mountaintop - and punctuates the scientific process with "news events."</em></p> <p><em>Vincent Kiernan doesn't agree. In his book, <a href="http://www.press.uillinois.edu/books/catalog/97yhb3wm9780252030970.html">Embargoed Science</a>, Kiernan argues that embargoes make journalists lazy, always chasing that week's big studies. They become addicted to the journal hit, afraid to divert their attention to more original and enterprising reporting because their editors will give them grief for not covering that study everyone else seems to have covered.</em></p> <p>And if that weren't enough, an extension of embargoes – known as the <a href="http://embargowatch.wordpress.com/2010/03/05/a-surgery-trade-newspaper-gets-ingelfingered/">Ingelfinger Rule</a> – can really stymie reporters' attempts to cover unpublished research. That rule is named for the late Dr. Franz Ingelfinger, who was editor of <em>The New England Journal of Medicine</em> from 1967-1977. Ingelfinger began a policy there – now taken up by many other journals – that said the journal would reject papers if their findings had been reported by the media first.</p> <p>Journals and societies all deal with embargoes – and what happens when they're broken – differently. Two of the most consistent are the <em>Journal of the American Medical Association (JAMA)</em> and the Archives journals, all published by the American Medical Association, and <em>Nature</em> and other journals published by the Nature Publishing Group.</p> <p>Others are less consistent. Some <a href="http://embargowatch.wordpress.com/2010/04/08/now-it-can-be-told-my-take-on-the-science-hominid-missing-link-study-embargo/">refuse to lift embargoes</a> even when some outlets have reported on studies. Others – notably the <em>New England Journal of Medicine</em> – insist on some <a href="http://embargowatch.wordpress.com/2010/09/15/nejm-breaks-its-own-short-embargo-record-again-this-time-49-minutes/">ridiculously short embargoes</a>, which for me calls into question whether they should claim their policy is in place to help journalists.</p> <p>Then there are journals that <a href="http://embargowatch.wordpress.com/2010/07/09/gastroenterology-journals-twist-on-available-for-subscribers-but-embargoed/">embargo materials that are actually already published</a>, or <a href="http://embargowatch.wordpress.com/2010/04/06/an-embargo-that-lifts-every-hour-for-a-day/">set an embargo that lifts at a reporter's local time</a> – which means a website in New York gets a jump over one in Los Angeles. One journal, the <em>American Journal of Kidney Diseases</em>, recently did <a href="http://embargowatch.wordpress.com/2010/10/01/american-journal-of-kidney-diseases-pulls-a-two-fer-a-groundhog-day-embargo-of-a-study-thats-freely-available/">both at once</a>.</p> <p>All of that inconsistency is great fodder for Embargo Watch, but more importantly, it suggests that the real purpose of embargoes is to control the flow of information. Journals and societies don't like hearing that, but journalists who cover health and medicine should at least consider the big picture before agreeing to a particular policy.</p> <p>So what should you do if confronted with a problematic or restrictive embargo? You could do <a href="http://embargowatch.wordpress.com/2010/09/08/usa-today-turns-the-tables-using-a-publicly-available-but-embargoed-pediatrics-flu-guideline-into-an-exclusive/">what <em>USA Today's</em> Steve Sternberg did last month</a>, and turn the tables after doing a bit of digging.</p> <p>Sometimes it works to just discuss the policy with the embargoing institution and get them to change it. Just remember this mantra: You can't embargo something that is already in the public domain.</p> <p>If that fails, <a href="http://embargowatch.wordpress.com/about/">get in touch with me</a>. At least two societies have <a href="http://embargowatch.wordpress.com/2010/08/10/american-thoracic-society-changes-its-policy-no-more-available-but-embargoed/">done away with problematic policies</a> about which I wrote posts. And the Association of Health Care Journalists is looking for examples of restrictive policies at medical conferences, so let me know about those too.</p> <p><em>Ivan Oransky, MD, is executive editor of </em><a href="http://www.reutershealth.com/en/index.html"><em>Reuters Health</em></a><em> and teaches medical journalism at </em><a href="http://journalism.nyu.edu/prospectivestudents/coursesofstudy/serp/"><em>New York University's Science, Health, and Environmental Reporting Program</em></a><em>. He is also treasurer of the </em><a href="http://www.healthjournalism.org/"><em>Association of Health Care Journalists</em></a><em>. You can find his blogs at </em><a href="http://embargowatch.wordpress.com/"><em>Embargo Watch</em></a><em> and </em><a href="http://retractionwatch.wordpress.com/"><em>Retraction Watch</em></a><em>, and </em><a href="http://twitter.com/ivanoransky"><em>follow him on Twitter</em></a><em>.</em></p></div>
+      
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+  
+</article>
+
+    </div>
+  </div>
+
+
+<div class="views-element-container block block__views block__related-reporting-block-2" id="block-views-block-related-reporting-block-2">
+  
+    
+      <div class="content">
+      <div><div class="js-view-dom-id-0f54af387bb50bd4117f5be8a5bc9f29b8aa7b92f1a025995d753d32e0b14a6c">
+  
+  
+  
+
+  
+  
+  
+
+      <div class="views-row"></div>
+
+    
+
+  
+  
+
+  
+  
+</div>
+</div>
+
+    </div>
+  </div>
+
+      </div>
+
+    </div>
+    
+    
+    
+  </main>
+
+      <footer role="contentinfo" id="footer">
+      <div class="container">
+          <div class="region region-footer-first">
+
+    
+           
+
+<div id="block-contactinfofooter" class="block__contact-info block block__block-content block__50b27040-2835-4b66-a299-41b7d8109f01">
+  
+    
+      <div class="content">
+      
+            <div class="field field--name-field-block-body field--type-text-long field--label-hidden field__item"><p><b>The Center for Health Journalism</b> at the USC Annenberg School for Communication and Journalism </p>
+<p class="address">3630 Watt Way, Los Angeles, CA 90089</p>
+<p class="phone">Phone: <a href="tel:213-821-8824">(213) 821-8824</a></p>
+</div>
+      
+    </div>
+  </div>
+
+      </div>
+
+          <div class="region region-footer-second">
+
+    
+           <nav role="navigation" aria-labelledby="block-chj2023-socialmedia-menu" id="block-chj2023-socialmedia" class="block__follow-us block">
+      
+  <h2 id="block-chj2023-socialmedia-menu" class="block-title">Follow Us</h2>
+  
+
+        
+              <ul>
+              <li>
+        <a href="https://www.facebook.com/ReportingonHealth" class="social--facebook">Facebook</a>
+              </li>
+          <li>
+        <a href="https://twitter.com/ReportingHealth" class="social--twitter">Twitter</a>
+              </li>
+          <li>
+        <a href="https://www.youtube.com/user/ReportingonHealth/featured" class="social--youtube">YouTube</a>
+              </li>
+          <li>
+        <a href="https://www.instagram.com/chjreportinghealth/" title="Follow us on Instagram">Instagram</a>
+              </li>
+          <li>
+        <a href="https://www.linkedin.com/company/centerforhealthjournalism">LinkedIn</a>
+              </li>
+        </ul>
+  
+
+
+  </nav>
+
+
+<div id="block-mailinglistfooter" class="block__mailing-list block block__block-content block__3d3e826f-1963-4f6b-8215-acd459eed5e0">
+  
+    
+      <div class="content">
+      
+            <div class="field field--name-field-block-body field--type-text-long field--label-hidden field__item"><a href="/mailing-list-signup">Newsletter sign up</a></div>
+      
+    </div>
+  </div>
+<nav role="navigation" aria-labelledby="block-footer-menu" id="block-footer" class="block__footer-menu block">
+            
+  <h2 class="visually-hidden block-title" id="block-footer-menu">Footer Menu</h2>
+  
+
+        
+              <ul>
+              <li>
+        <a href="/privacy-policy" data-drupal-link-system-path="node/31">Privacy Policy</a>
+              </li>
+          <li>
+        <a href="/site-credits" data-drupal-link-system-path="node/30">Site Credits</a>
+              </li>
+          <li>
+        <a href="/terms-conditions" data-drupal-link-system-path="node/32">Terms &amp; Conditions</a>
+              </li>
+        </ul>
+  
+
+
+  </nav>
+
+      </div>
+
+      </div>
+    </footer>
+  
+</div>
+
+  </div>
+
+    
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"","currentPath":"node\/10030","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"TBMegaMenu":{"TBElementsCounter":{"column":null},"theme":"chj2023","f05b7577-119a-49c9-9702-8a6fde699263":{"arrows":"1"},"72c252b5-1d9e-498b-aada-e3dd33fe33fe":{"arrows":"1"}},"googlePSE":{"language":"en","displayWatermark":0},"ajaxTrustedUrl":{"\/search\/content":true},"sitewideAlert":{"refreshInterval":120000,"automaticRefresh":false},"user":{"uid":0,"permissionsHash":"ff814d4677f14bbf9b4f72845beeccb9b2e00b332b93135ca264ebf4f8cddb3f"}}</script>
+<script src="/sites/default/files/js/js_WitwZS9ivBnRlq_QXiwSaLWe6T7lREqttYhQLlj-3eA.js?scope=footer&amp;delta=0&amp;language=en&amp;theme=chj2023&amp;include=eJwlxkEOgCAMBMAPYTD4GI-k4AarBQyt8fuaOKfJ-xHmsPgiPZFMmgdfpq70XgQxK_zfbysZRqVxOmXDwxsiCYZ5bmzOUqwoVNFun0jxAtnwIgg"></script>
+
+  </body>
+</html>

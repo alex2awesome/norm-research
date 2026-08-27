@@ -1,0 +1,1017 @@
+<!-- URL: https://www.odwyerpr.com/ -->
+<!-- HTTP: 200 SIZE:    80795 -->
+
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+
+<meta http-equiv="content-type"  content="text/html; charset=ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PR News & PR Firm Rankings | O'Dwyer's PR News</title>
+
+<meta name="description" content="O'Dwyer's is your #1 resource for the PR industry. Our directory & rankings help you find top PR firms near you. Browse our PR resources today!">
+<meta name="keywords" content="pr firm directory, pr agency directory, public relations news agency, pr news agency, pr resources, pr services">
+<meta name="language" content="EN">
+<meta name="author" content="John O'Dwyer">
+<meta name="copyright" content=" Copyright 2006 J.R. O'Dwyer Co., Inc.">
+<meta name="revisit-after" content="3 days">
+<meta name="robots" content="index, follow">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="google-site-verification" content="hWs5UFG9m-Sc-1yj0b8ANT3OE0mPUpTv_zfGuoRpP-0" />
+<meta name="msvalidate.01" content="FFFC4A4530AE82E14AB85FDAD7629E46" />
+
+
+<link rel="canonical" href="https://www.odwyerpr.com">
+
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="icon" sizes="16x16 32x32 64x64" href="/images/favicons/favicon.ico">
+<link rel="icon" type="image/png" sizes="196x196" href="/images/favicons/favicon-jun2021-192.png">
+<link rel="icon" type="image/png" sizes="160x160" href="/images/favicons/favicon-jun2021-160.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/images/favicons/favicon-jun2021-96.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/images/favicons/favicon-jun2021-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-jun2021-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-jun2021-16.png">
+<link rel="apple-touch-icon" href="/images/favicons/favicon-jun2021-57.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/favicon-jun2021-114.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/favicon-jun2021-72.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/favicon-jun2021-144.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/favicon-jun2021-60.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/favicon-jun2021-120.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/favicon-jun2021-76.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/favicon-jun2021-152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/favicon-jun2021-180.png">
+<meta name="msapplication-TileColor" content="#FFFFFF">
+<meta name="msapplication-TileImage" content="/images/favicons/favicon-jun2021-144.png">
+<meta name="msapplication-config" content="/images/favicons/browserconfig.xml">
+
+<!-- Bootstrap -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- add Typekit -->
+<link rel="stylesheet" href="https://use.typekit.net/nup7bwo.css">
+
+<!-- Core styles -->
+<link rel="stylesheet" href="/css/main-v2.css">
+<link rel="stylesheet" href="/css/main-custom-v2.css">
+
+<!--load font awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!--Google Recaptcha -->
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+	<!-- Google Analytics -->
+	<script>
+	  (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+	  function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+	  e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+	  e.src='https://www.google-analytics.com/analytics.js';
+	  r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+	  ga('create','UA-11669433-1');ga('send','pageview');
+	</script>
+	
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-B44Y3ZQY2W"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'G-B44Y3ZQY2W');
+	</script>
+
+
+
+
+
+
+
+</head>
+<body>
+
+	<!-- Header Start -->
+	    <!--[if lt IE 10]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+<nav class="navbar navbar-default">
+  <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="row">
+      <div class="navbar-header col-md-7">
+        <div class="row">
+          <div class="col-md-7">
+            <a class="navbar-brand" href="https://www.odwyerpr.com"><img class="img-responsive logo-image" src="https://www.odwyerpr.com/images/odwyers-website-logo.webp" alt="Public Relations & Marketing Communications News & Resources - O'Dwyer's" height="241" width="912"></a>
+          </div>
+          <div class="col-md-5" style='padding:0px;'>
+            <ul class="nav navbar-nav social-nav hidden-sm hidden-xs social">
+
+          		<li><a href="http://www.x.com/odwyerpr" target="_blank" alt="X" title="X"><i class="fab fa-x-twitter"></i></a></li>
+              <li><a href="https://www.facebook.com/odwyerpr" target="_blank" alt="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+          		<li><a href="https://www.linkedin.com/in/odwyerpr/" target="_blank" alt="Linked In" title="Linked In"><i class="fab fa-linkedin-in"></i></a></li>
+              <li><a href="https://bsky.app/profile/odwyerpr.bsky.social" target="_blank" alt="Bluesky" title="Bluesky" ><i class="fab fa-bluesky"></i></a></li>
+          		<li><a href="https://www.instagram.com/odwyersprnews/" target="_blank" title="Instagram" alt="Instagram"><i class="fab fa-instagram"></i></a></li> 
+              <li><a href="https://www.youtube.com/@odwyerpr/videos" target="_blank" alt="Youtube" title="Youtube"><i class="fab fa-youtube"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-5">
+        <div class="col-md-12 col-xs-10">
+			<div class="social-row-mobile social">
+          <a href="http://www.x.com/odwyerpr" target="_blank"><i class="fab fa-x-twitter"></i></a>				
+			 		<a href="https://www.facebook.com/odwyerpr" target="_blank" alt="Facebook" title="Facebook" style='margin-left: 0px;'><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.linkedin.com/in/odwyerpr/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://bsky.app/profile/odwyerpr.bsky.social" target="_blank" title="Bluesky" ><span class="social bluesky-icon"><i class="fab fa-bluesky"></i></a> 
+          <a href="https://www.instagram.com/odwyersprnews/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/@odwyerpr/videos" target="_blank"><i class="fab fa-youtube"></i></a>
+			</div>
+          <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
+							<li style="margin-right:10px"><div><a href="https://www.odwyerpr.com/order_form/member_signup.html"  class="header_odwyerButton_orange">Subscribe</a></div></li>
+				<li style="margin-right:10px"><div><a href="https://www.odwyerpr.com/pr_firms_database/index_form.php" class="header_odwyerButton_orange">List Your PR Firm</a></div></li>
+				<li><div><a href="https://www.odwyerpr.com/members/index.html" class="header_odwyerButton_blue">Sign In</a></div></li>
+			          </ul>
+        </div>
+        <div class="col-xs-2">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="row">        
+
+		<div class="mobile-nav-area"><!-- START MOBILE NAV AREA -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+				  <li><a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Find a PR Firm</a>
+						<div class="menu-panel-sub-items visible-sm visible-xs">
+							<a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Overall</a><BR><BR><a href="https://www.odwyerpr.com/pr_firms_database/index_alphabetical.htm">Alphabetically</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_firms_database/index_geographical.htm">Geographically</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_firms_database/index_specialty.htm">By PR Specialty</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_firms_database/index_form.php">Get Listed</a><BR><BR>
+							</div>
+				  </li>
+				  
+				  <li><a href="https://www.odwyerpr.com/pr_firm_rankings/independents.htm">PR Firm Rankings</a>
+					  <div class="menu-panel-sub-items visible-sm visible-xs">
+							<a href="https://www.odwyerpr.com/pr_firm_rankings/independents.htm">Overall</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_firm_rankings/health.htm">By Specialty</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_firm_rankings/newyork.htm">By City/Region</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_firm_rankings/pr_firm_rankings_instructions.htm">Get Ranked</a><BR><BR>
+						  <a href="https://www.odwyerpr.com/pr_firm_rankings/pr_firm_rankings_instructions.htm"></a><BR><BR>
+						</div>
+				  </li>
+
+				  <li><a href="https://www.odwyerpr.com/pr_services_database/index.htm">Find a PR Service</a>
+					  <div class="menu-panel-sub-items visible-sm visible-xs">
+							<a href="https://www.odwyerpr.com/pr_services_database/index.htm">Overall</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_services_database/prservices_index_list.html">Alphabetical Index</a><BR><BR>
+							<a href="https://www.odwyerpr.com/pr_services_database/index_form.php">Add Your Service</a><BR><BR>
+						</div>
+				  </li> <li><a href="https://www.odwyerpr.com/pr_experts/">PR Experts</a>
+					  <div class="menu-panel-sub-items visible-sm visible-xs">
+							<a href="https://www.odwyerpr.com/pr_experts/">Most Recent Topics</a><BR><BR>
+						    <a href="https://www.odwyerpr.com/pr_experts/experts_list/name_a.html">Experts A - Z</a><BR><BR><a href="https://www.odwyerpr.com/pr_experts/prexperts_form.html">Add Your Bio</a><BR><BR>
+							
+						</div>
+				  </li>	
+				  
+				  
+				  <li><a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">PR Magazine</a>
+					  <div class="menu-panel-sub-items visible-sm visible-xs">
+							<a href="https://www.odwyerpr.com/magazine/pr-agencies.htm">Rankings Issue</a><BR><BR>
+						    <a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">Editorial Calendar</a><BR><BR>
+							<a href="https://www.odwyerpr.com/magazine/magazine-profile-form.html">Submit Profile</a><BR><BR><a href="https://www.odwyerpr.com/order_form/orderform.html">Subscribe to Mag.</a><BR><BR><a href="https://www.odwyerpr.com/site_info/advertising.htm">Advertise</a><BR><BR>
+						</div>
+				  </li>			
+				  
+				  <li><a href="https://www.odwyerpr.com/rfps/index.html">PR RFPs</a>
+						<div class="menu-panel-sub-items visible-sm visible-xs">
+							<a href="https://www.odwyerpr.com/rfps/list/srt/do/pg/1/index.html">By Due Date</a><BR><BR>
+						    <a href="https://www.odwyerpr.com/rfps/list/srt/ty/pg/1/index.html">By Type</a><BR><BR>
+							<a href="https://www.odwyerpr.com/rfps/list/srt/rg/pg/1/index.html">By Region</a><BR><BR>
+						</div></li>
+				  
+				  <li class="visible-sm visible-xs"><a href="https://www.odwyerpr.com/order_form/member_signup.html">Subscribe</a></li>
+				  <li class="visible-sm visible-xs"><a href="https://www.odwyerpr.com/email_nl_signup/email_signup_form.html">Daily PR News Blast</a></li>
+				  <li class="visible-sm visible-xs"><a href="https://www.odwyerpr.com/contact_odwyers/contact_odwyers.htm">Contact Us</a></li>
+				  <li class="visible-sm visible-xs"><a href="https://www.odwyerpr.com/members/index.html">Sign In</a></li>
+				</ul>
+				<form action="/search_results.html" class="form-inline pull-right">
+				  <div class="form-group">
+					<label class="sr-only" for="exampleInputEmail3"></label>
+					<input type=text name="q" class="form-control" id="exampleInputEmail3" placeholder="Search O'Dwyer's" >
+				  </div>
+				  <button type="submit" class="btn btn-default">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				  </button>
+				</form>
+			</div>
+		</div><!-- END MOBILE NAV AREA -->
+	
+		<div class="desktop-menu"> 
+			<div class="desktop-nav-area"><!-- START DESKTOP NAV AREA -->
+				<div id="navigation">
+					<div class="desktop-menu-line-left-area">
+						<ul id="main-menu"> 
+							<li><a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Find a PR Firm</a>
+								<ul class=main-menu-dropdown>
+									<li class="main-menu-dropdown-top-li"><a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Overall</a></li>
+									<li> <a href="https://www.odwyerpr.com/pr_firms_database/index_alphabetical.htm">Alphabetically</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_firms_database/index_geographical.htm">Geographically</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_firms_database/index_specialty.htm">By PR Specialty</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_firms_database/index_form.php">Get Listed</a></li>
+									<li class="main-menu-dropdown-bottom-li"><a href="https://www.odwyerpr.com/order_form/orderform.html">Order '25 Dir.</a></li>
+									</ul>
+							</li>
+							<li><a href="https://www.odwyerpr.com/pr_firm_rankings/independents.htm">PR Firm Rankings</a>
+								<ul class=main-menu-dropdown>
+									<li class="main-menu-dropdown-top-li"><a href="https://www.odwyerpr.com/pr_firm_rankings/independents.htm">Overall</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_firm_rankings/health.htm">By Specialty</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_firm_rankings/newyork.htm">By City/Region</a></li>
+									<li class="main-menu-dropdown-bottom-li"><a href="https://www.odwyerpr.com/pr_firm_rankings/pr_firm_rankings_instructions.htm">Get Ranked</a></li>
+								</ul>
+							</li>
+							<li><a href="https://www.odwyerpr.com/pr_services_database/index.htm">Find a PR Service</a>
+								<ul class=main-menu-dropdown>
+									<li class="main-menu-dropdown-top-li"><a href="https://www.odwyerpr.com/pr_services_database/index.htm">Overall</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_services_database/prservices_index_list.html">Alphabetical Index</a></li>
+									<li class="main-menu-dropdown-bottom-li"><a href="https://www.odwyerpr.com/pr_services_database/index_form.php">Add Your Service</a></li>
+								</ul>
+							</li><li><a href="https://www.odwyerpr.com/pr_experts/">PR Experts</a>
+								<ul class=main-menu-dropdown>
+									<li class="main-menu-dropdown-top-li"><a href="https://www.odwyerpr.com/pr_experts/">Most Recent Topics</a></li>
+									<li><a href="https://www.odwyerpr.com/pr_experts/experts_list/name_a.html">Experts A - Z</a></li>
+									<li class="main-menu-dropdown-bottom-li"><a href="https://www.odwyerpr.com/pr_experts/prexperts_form.html">Add Your Bio</a></li>
+								</ul>
+							</li>
+						
+							<li><a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">PR Magazine</a>
+								<ul class=main-menu-dropdown>
+									<li class="main-menu-dropdown-top-li"><a href="https://www.odwyerpr.com/magazine/pr-agencies.htm">Rankings Issue</a></li>
+									<li><a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">Editorial Calendar</a></li>
+									<li><a href="https://www.odwyerpr.com/magazine/magazine-profile-form.html">Submit Profile</a></li>
+									<li><a href="https://www.odwyerpr.com/order_form/orderform.html">Subscribe to Mag.</a></li>
+									<li class="main-menu-dropdown-bottom-li"><a href="https://www.odwyerpr.com/site_info/advertising.htm">Advertise</a></li>
+								</ul>
+							</li>
+							
+							<li><a href="https://www.odwyerpr.com/rfps/index.html">PR RFPs</a>
+							  <ul class=main-menu-dropdown>
+									<li class="main-menu-dropdown-top-li"><a href="https://www.odwyerpr.com/rfps/list/srt/do/pg/1/index.html">By Due Date</a></li>
+									<li><a href="https://www.odwyerpr.com/rfps/list/srt/ty/pg/1/index.html">By Type</a></li>
+									<li class="main-menu-dropdown-bottom-li"><a href="https://www.odwyerpr.com/rfps/list/srt/rg/pg/1/index.html">By Region</a></li>
+								</ul></li>
+							
+						</ul>
+					</div>
+					<div class="desktop-menu-line-right-area" >
+						<form action="/search_results.html" class="form-inline pull-right">
+							<div class="form-group">
+								<label class="sr-only" for="exampleInputEmail3"></label>
+								<input type=text name="q" class="form-control" id="exampleInputEmail3" placeholder="Search O'Dwyer's">
+							 </div>
+							 <button type="submit" class="btn btn-default">
+								<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+							 </button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div><!-- END DESKTOP NAV AREA -->
+		
+    </div><!-- End row -->
+  </div>
+</nav>
+	<!-- Header End -->
+
+
+<div class="container text-center header-ad-area-728w">
+				<div align=center>
+  <p><a href="https://hubs.ly/Q04dY-0x0" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Laughlin Constable PR')""><img src="https://www.odwyerpr.com/banners/laughlin_constable_revised_728x90.gif" width="728" height="90" alt="Lauglin Constable PR"/></a></p>
+  
+</div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 home-story">
+
+		<h1>Public Relations News & PR Firms Coverage</h1>
+<h3 style='font-size:16px; font-weight: 600;'>Latest PR firm news, commentary &amp;  professional development.</h3>		<h4>Last Updated: Fri., May 8, 2026 @ 5:05 pm</h4>
+	</div>
+
+    <div class="col-sm-8">
+
+      <div class="row">
+
+        <div class="col-md-9 col-sm-12">
+          <section>
+			<article class='home-story'>
+	<div class='col-xs-12'>
+	  <div class='row p-story'>
+			<div class='home-annoucement-area' style='padding:5px;border:0px solid #999999;color:#000000;background-color:#ffffff;border-radius:5px;margin-bottom: 15px;'> <strong><img src="https://www.odwyerpr.com/pr_firm_rankings/rankings_seal_2026.gif" alt="" width="90" height="90" align="left"/><font color="#D80408">Only O'Dwyer's ranks PR firms by 23 specialties. Check out the latest charts for healthcare, finance, technology and many more areas now &quot;live&quot; for 2026: </font> </strong><a href="https://odwpr.us/Top-Ranked-PR-Firms-for-2026"><strong>odwpr.us/Top-Ranked-PR-Firms-for-2026</strong></a></div></div></div></article>			<P><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24724/2026-05-08/napa-needs-destination-marketing-support.html"><h2>Napa Needs Destination Marketing Support</h2></a>
+			<h4>Fri., May 8, 2026</h4><h4>By Kevin McCauley</h4>
+			<p><p><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260508112225_120525Napa.webp" alt="Napa" />The City of Napa wants a marketing partner to position it as the approachable hub of California's Napa Valley, offering diverse experiences beyond wine that appeal to both existing and emerging target markets.</p></p>
+		</div>
+	</div>
+</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24728/2026-05-08/how-corporate-dei-executives-should-be-advising-c-suite-leaders.html"><h2>How Corporate DEI Executives Should Be Advising C-Suite Leaders</h2></a>
+			<h4>Fri., May 8, 2026</h4><h4>By Ken Jacobs</h4>
+			<p><p><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260508133537_050826soon-mee-kim.webp" alt="Soon Mee Kim" />In recognition of AANHPI Heritage Month, in this episode of Taking the Lead, Soon Mee Kim, Board Chair of Diversity Action Alliance and newly appointed CMO of Zero RFI, shares how DEI executives should be advising C-Suite Leaders in polarizing times.</p></p>
+		</div>
+	</div>
+</article>
+<div class=mobile-only-banner-area><!-- Mobile Block 1 Info -->
+<div align=center style="margin-top:20px;margin-bottom:20px;">
+<a href="http://www.edelman.com" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Edelman')""><img src="https://www.odwyerpr.com/banners/edelman_act_with_certainty_300x250.gif" width="300" height="250" alt="Edelman"/></a>
+</div></div><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24727/2026-05-08/blueshirt-group-works-limes-ipo.html"><h2>Blueshirt Group Works Lime's IPO</h2></a>
+			<h4>Fri., May 8, 2026</h4><h4>By Kevin McCauley</h4>
+			<p><p><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260508134432_050826Lime.webp" alt="Lime" />The Blueshirt Group handles Lime as the San Francisco-based electric bike/scooter company has filed paperwork for an initial public offering, which will have an expected valuation in the $2B range.</p></p>
+		</div>
+	</div>
+</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story'>
+			<div class="home-story-banner-image">
+				<a href="https://pphcompany.com/" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'PPHC')""><img src="https://www.odwyerpr.com/banners/pphc_2026_500x250.gif" width="500" height="250" alt="PPHC"/></a>
+				
+			</div>
+		</div>
+	</div>
+	</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story'>
+			<div class='home-annoucement-area' style='padding:10px;border:1px solid #999999;color:#3E3E3B;background-color:#f5f5f5;border-radius:10px;margin-bottom: 10px;'>
+
+				<h2>May Spotlight on the Top PR firms for 2026:</h2>
+
+  <p class="home-story-banner-image" "text-align: left;"><a href="https://e.issuu.com/embed.html?d=o_dwyer_s_may_2026_pr_firm_rankings_magazine&amp;hideIssuuLogo=true&amp;showOtherPublicationsAsSuggestions=true&amp;u=odwyers-pr-magazine" sandbox="allow-top-navigation allow-top-navigation-by-user-activation allow-downloads allow-scripts allow-same-origin allow-popups allow-modals allow-popups-to-escape-sandbox allow-forms" allowfullscreen="allowfullscreen"" target="_blank"><img src="https://www.odwyerpr.com/site_images/20260507110850_050726pr-firm-rankings-magazine-social.jpg" width="500" alt="O'Dwyer's Jan. '26 Crisis Communications & PR Buyer's Guide Magazine" /></a></p>
+  <p><strong>Articles from execs at the top PR agencies ranked by O'Dwyer's:</strong></p>
+  <p><span style="text-align: left;"><img src="https://www.odwyerpr.com/site_images/20260507152353_050726anton-nicholas.webp" alt="Anton Nicholas" width="100" style="float: left; margin: 3px 5px 3px 5px;" align="left" /></strong><span class="verdanadarkgrey14pxbold"><strong><a href="https://www.odwyerpr.com/story/public/24707/2026-05-06/integration-advantage.html">The Integration Advantage</a></strong></span><span class="verdanadarkgrey14pxbold"><strong>:</strong> Why CEOs need their CFOs and CCOs on the same page.-- <strong>Anton Nicholas, ICR</strong></span></span></p>
+  <p><span style="text-align: left;"><span class="verdanadarkgrey14pxbold"><strong><img src="https://www.odwyerpr.com/site_images/20260507152815_050726felicia-pullam.webp" alt="Felicia Pullam" width="100" style="float: right; margin: 3px 5px 3px 5px;" align="right" /><a href="https://www.odwyerpr.com/story/public/24716/2026-05-07/trump-trade-policy-year-two.html">Trump Trade Policy, Year Two</a></strong></span><span class="verdanadarkgrey14pxbold"><strong>:</strong> How risks and opportunities have evolved for communicators in the second Trump administration.-- <strong>Felicia Pullam, APCO</strong></span></span></p>
+  <p><strong>View ranking of 140 firms: </strong><a href="https://odwpr.us/Top-Ranked-PR-Firms-for-2026"><strong>odwpr.us/Top-Ranked-PR-Firms-for-2026</strong></a> </p>
+          </div>
+		</div>
+	</div>
+</article><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'><b><font color="#D80408">O'Dwyer's Sponsored Content</font></b><a href="/story/public/24705/2026-05-06/fenton-tops-odwyers-ranking-pr-firms-for-nonprofits.html">
+	    <h2>Fenton Tops O'Dwyer's Ranking of PR Firms for Nonprofits</h2>
+		  </a>
+				<h4>By Fenton Sponsored Post</h4>
+				<p><table>
+<tbody>
+<tr>
+<td style="width: 100%; padding-left: 0px; padding-right: 0px;"><img align=left style="width: 100%; height: auto;" src="https://www.odwyerpr.com/site_images/20260505154643_050626fenton-social.jpg" alt="enton has earned the #1 spot in O'Dwyer's annual ranking of PR firms serving the nonprofit sector, solidifying its position as a top PR firm in one of the industry's most demanding and fast-growing categories." width="401" height="205" align="&rdquo;left&rdquo;/" /></td>
+</tr>
+<tr style="height: 10px;">
+<td> </td>
+</tr>
+<tr>
+<td style="padding-left: 0px; padding-right: 0px;">
+<p><a href="https://fenton.com/" target="_blank" rel="noopener">Fenton</a> has earned the #1 spot in O'Dwyer's annual ranking of <a href="https://www.odwyerpr.com/pr_firm_rankings/non_profits.htm" target="_blank" rel="noopener">PR firms serving the nonprofit sector</a>, solidifying its position as a top PR firm in one of the industry's most demanding and fast-growing categories.</p>
+</td>
+</tr>
+</tbody>
+</table></p>
+				<!--<p>Uncomment this line and add text here to allow it to appear</p>-->
+		</div>
+	</div>
+</article>
+
+<!--
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+-->
+
+<!--
+		</div>
+	</div>
+</article>
+--><!--
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+-->
+
+<!--
+		</div>
+	</div>
+</article>
+-->
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24729/2026-05-08/move-dezenhall-resources-hires-deloach.html"><h2>On the Move: Dezenhall Resources Hires DeLoach</h2></a>
+			<h4>Fri., May 8, 2026</h4><h4>By Steve Barnes</h4>
+			<p><p style="font-weight: 400;"><strong><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260508151525_050826JessicaDeLoach.webp" alt="Jessica DeLoach" />Dezenhall Resources</strong> brings on <strong>Jessica DeLoach</strong> as VP. DeLoach was previously deputy director of public and media relations at the Southern Poverty Law Center... <strong>Crowe Media</strong> hires <strong>Alissa Kasawdish</strong> as senior integrated PR manager. Kasawdish was previously an account supervisor at J/PR... <strong>Benefitbay</strong>, an SaaS platform that lets users make their own benefit decisions, names <strong>Lindsey Unterberge</strong>r as VP of marketing.</p></p>
+		</div>
+	</div>
+</article>
+<!--
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story'>
+			<div class="home-story-banner-image">
+				<a href="https://teamavoq.com" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Avoq')""><img src="https://www.odwyerpr.com/banners/avoq_jun_500x250.gif" width="500" height="250" alt="Avoq"/></a>
+			</div>
+		</div>
+	</div>
+	</article>--><div class=mobile-only-banner-area><!-- Mobile Block 1 Info -->
+<div align=center style="margin-top:20px;margin-bottom:20px;">
+<a href="https://www.coynepr.com/generative-engine-optimization/?utm_source=od&utm_medium=banner&utm_campaign=bta-300x250&utm_id=bta-300x250" target=_blank onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Coyne Main Page')""><img src="https://www.odwyerpr.com/banners/coyne_300x250_2026.gif" width="300" height="250" alt="Coyne - Be The Answer"/></a>
+</div></div><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24725/2026-05-08/pr-firm-news-bgr-analytics-rates-texas-tops-for-ai.html"><h2>PR Firm News: BGR Analytics Rates Texas Tops for AI Investments</h2></a>
+			<h4>Fri., May 8, 2026</h4><h4>By Steve Barnes</h4>
+			<p><p style="font-weight: 400;"><strong><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260508112847_050826BGR.webp" alt="BGR" />BGR Analytics </strong>rates Texas as the best state for AI investors to place their money, according to its newly launched BGR Best States for AI Investment Index... <strong>Pierpont Communications</strong>, a PR and integrated digital marketing agency headquartered in Houston, expands into South Florida...<strong> </strong><strong>The Pollack Group</strong> names Project Petals as the recipient of its 2026 Big Red Grant.</p></p>
+		</div>
+	</div>
+</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24722/2026-05-08/accounts-transit-ciic-pr-picks-up-nuba-travel.html"><h2>Accounts in Transit: CIIC PR Picks Up NUBA Travel</h2></a>
+			<h4>Fri., May 8, 2026</h4><h4>By Steve Barnes</h4>
+			<p><p style="font-weight: 400;"><strong><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260508095124_050826NUBA.webp" alt="NUBA" />CIIC PR</strong> picks up PR duties for <strong>NUBA Travel</strong>, a luxury travel design company specializing in curated journeys around the world... <strong>Magrino PR</strong> gains AOR status for <strong>M Social New York Downtown</strong>, a hotel that opened in Lower Manhattan... <strong>RG2 Communications</strong> checks in at <strong>Hotel Milu Florence.</strong></p></p>
+		</div>
+	</div>
+</article>
+<div class=mobile-only-banner-area><!-- Mobile Block 1 Info -->
+<div align=center style="margin-top:20px;margin-bottom:20px;">
+<a href="https://icrinc.com" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'ICR')""><img src="https://www.odwyerpr.com/banners/icr_2025_300x250.gif" width="300" height="250" alt="ICR Strategic Communications"/></a>
+</div></div><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24717/2026-05-07/nys-wants-lure-british-travelers.html"><h2>NYS Wants to Lure British Travelers</h2></a>
+			<h4>Thu., May 7, 2026</h4><h4>By Kevin McCauley</h4>
+			<p><p><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260507103456_050726NYDevelopment.webp" alt="Development" />The New York State Department of Economic Development is looking to hire a travel and tourism representative in the UK.</p></p>
+		</div>
+	</div>
+</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24718/2026-05-07/burson-cco-sullivan-exits.html"><h2>Burson CCO Sullivan Exits</h2></a>
+			<h4>Thu., May 7, 2026</h4><h4>By Kevin McCauley</h4>
+			<p><p><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260507111514_050726CatherineSullivan.webp" alt="Catherine Sullivan" />Catherine Sullivan, global chief communications officer at Burson, has exited the WPP unit after a 12-year run.</p></p>
+		</div>
+	</div>
+</article>
+<div class=mobile-only-banner-area><!-- Mobile Block 1 Info -->
+<div align=center style="margin-top:20px;margin-bottom:20px;">
+<a href="https://www.gscommunications.com/?utm_campaign=we-are-gs&utm_medium=display&utm_source=odwyers&utm_content=purpose-statement" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'G&S')""><img src="https://www.odwyerpr.com/banners/gs_bus_comms_2026_300x250.jpg" width="300" height="250" alt="G&S Business Communications"/></a>
+</div></div><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+			<P style='padding-bottom:0px;margin-bottom:0px;'><B>Commentary</B></p>			<a href="/story/public/24721/2026-05-07/who-are-these-people.html"><h2>Who Are These People?</h2></a>
+			<h4>Thu., May 7, 2026</h4><h4>By Kevin McCauley</h4>
+			<p><p><strong><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260507151549_050725TrumpJesus.webp" alt="TrumpJesus" />Nine percent of US adults</strong> think it was okay for Donald Trump to post an image depicting himself as Jesus Christ. Oh Lord!... <strong>It&rsquo;s hard to shed a tear</strong> for a billionaire, especially one with a thin skin like Citadel chief Ken Griffin... <strong>A Republican group plans</strong> to support GOP candidates who want to restore foreign aid cuts made by Elon Musk's DOGE.</p></p>
+		</div>
+	</div>
+</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24716/2026-05-07/trump-trade-policy-year-two.html"><h2>Trump Trade Policy, Year Two</h2></a>
+			<h4>Thu., May 7, 2026</h4><h4>By Felicia Pullam</h4>
+			<p><p class="p1"><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260507100131_050726felicia-pullam.webp" alt="Felicia Pullam" />How risks and opportunities have evolved for communicators in the second Trump administration.</p></p>
+		</div>
+	</div>
+</article>
+<div class=mobile-only-banner-area><!-- Mobile Block 1 Info -->
+<div align=center style="margin-top:20px;margin-bottom:20px;">
+<a href="http://www.peppercomm.com/?utm_source=Odwyers&utm_medium=2025ad&utm_campaign=ODwyers_ad" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Peppercomm')""><img src="https://www.odwyerpr.com/banners/peppercomm_300x250.gif" width="300" height="250" alt="Peppercomm"/></a>
+</div></div><article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24720/2026-05-07/pr-firm-news-lavoie-launches-integrated-platform-revamped-site.html"><h2>PR Firm News: LaVoie Launches Integrated Platform, Revamped Site</h2></a>
+			<h4>Thu., May 7, 2026</h4><h4>By Steve Barnes</h4>
+			<p><p style="font-weight: 400;"><strong><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260507131600_050726LaVoie.webp" alt="LaVoie" />LaVoie Strategic Communications Group</strong> launches an integrated market platform and redesigned website meant to reflect the agency&rsquo;s evolving role advising healthcare, life sciences and government organizations... <strong>Highwire</strong> publishes &ldquo;Passing the Torch: A Framework for CEO Transition Communication for Professional Services Businesses"... <strong>Auris</strong>, a communications lab backed by a strategic investment from Helios &amp; Partners, launches.</p></p>
+		</div>
+	</div>
+</article>
+<article class='home-story'>
+	<div class='col-xs-12'>
+		<div class='row p-story' style='padding-bottom:15px;'>
+						<a href="/story/public/24719/2026-05-07/move-six-flags-hires-carnival-cruise-vet.html"><h2>On the Move: Six Flags Hires Carnival Cruise Vet</h2></a>
+			<h4>Thu., May 7, 2026</h4><h4>By Steve Barnes</h4>
+			<p><p style="font-weight: 400;"><strong><img align=left style="float: left;" src="https://www.odwyerpr.com/site_images/20260507112417_050726AmyMartinZiegenfuss.webp" alt="Amy Martin Ziegenfuss" />Six Flags Entertainment Corporation </strong>hires <strong>Amy Martin Ziegenfuss </strong>as CMO, effective June 3.  Ziegenfuss was most recently CMO at Carnival Cruise Line... <strong>Narrative Strategies</strong> brings on <strong>Hanna Beckman</strong> and <strong>Rich Casale</strong> as senior directors... <strong>Grayling</strong> has appointed <strong>Maury Postal</strong> as EVP, creative strategy and innovation services... <strong>HMH (Houghton Mifflin Harcourt)</strong>, an educational publisher and technology company focused on K&ndash;12 education, assessments and professional learning, names <strong>Jessica Naeve</strong> CMO.</p></p>
+		</div>
+	</div>
+</article>
+<div class=mobile-only-banner-area><!-- Mobile Block 1 Info -->
+<div align=center style="margin-top:20px;margin-bottom:20px;">
+<a href="https://padillaco.com/padilla-pov?utm_source=odwyers&utm_medium=banner&utm_campaign=pov " target="_blank"><img src="https://www.odwyerpr.com/banners/padilla_2026_300x250.jpg" width="300" height="250" alt="Padilla - Curated thoughts from curious thinkers"/></a>
+</div></div><article class='home-story'>
+	<div class='col-xs-12'>	
+		<div class='row p-story' style='padding-bottom:1px;'><p><a href="https://www.odwyerpr.com/email_nl_signup/email_signup_form.html" target="_blank"><img src="https://www.odwyerpr.com/site_images/20230224223306_daily-blast-signup-image.gif" style="width: 100%; height: auto;" alt="Sign up for O'Dwyer's daily eblast" /></a></p>
+	</div>
+	</div>
+</article>
+<!-- Start Category Selection Code -->
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function JumpToIt(frm) {
+    var newPage = frm.story_category_nav.options[frm.story_category_nav.selectedIndex].value
+    if (newPage != "None") {
+        location.href=newPage
+    }
+}
+//-->
+</SCRIPT>
+
+	<!--<div class="col-md-4 hidden-sm">
+      <h4>Look Up Stories</h4>
+    </div>
+    <div class="col-md-8 col-sm-12">-->
+
+		<div style="background-color: #05468a;padding:20px;margin-bottom:20px; border-radius: 20px;color:#ffffff;clear: both;">
+      <form class="form-inline">
+        <div class="row" style="margin-bottom:15px;">
+		          <div class="col-xs-12" style="margin-top:15px;padding-left:5px;padding-right:0px;">
+            <div class="form-group form-group-full">
+              <label class="sr-only" for="exampleInputAmount">&nbsp;</label>
+              <div class="input-group input-group-full">
+				<table style="width:100%;">
+				<tr><td>
+                <select  id='story_category_nav' class="form-control control-full category-dropdown" style='font-size:18px; height:40px; width:100%;' >
+                  <option value='' selected="selected" >Find Stories By Category</option>
+		<option value='https://www.odwyerpr.com/story/category/101/acquisitions.html' >Acquisitions</option><option value='https://www.odwyerpr.com/story/category/84/advertising.html' >Advertising</option><option value='https://www.odwyerpr.com/story/category/125/agency-mgmt.html' >Agency Mgmt.</option><option value='https://www.odwyerpr.com/story/category/129/anti-semitism.html' >Anti-Semitism</option><option value='https://www.odwyerpr.com/story/category/41/apr.html' >APR</option><option value='https://www.odwyerpr.com/story/category/114/artificial-intelligence.html' >Artificial Intelligence</option><option value='https://www.odwyerpr.com/story/category/100/arts-culture.html' >Arts & Culture</option><option value='https://www.odwyerpr.com/story/category/56/associations.html' >Associations</option><option value='https://www.odwyerpr.com/story/category/93/awards.html' >Awards</option><option value='https://www.odwyerpr.com/story/category/81/awards-events.html' >Awards & Events</option><option value='https://www.odwyerpr.com/story/category/16/beauty-fashion-pr.html' >Beauty & Fashion PR</option><option value='https://www.odwyerpr.com/story/category/78/big-data.html' >Big Data</option><option value='https://www.odwyerpr.com/story/category/48/book-review.html' >Book Review</option><option value='https://www.odwyerpr.com/story/category/122/branding.html' >Branding</option><option value='https://www.odwyerpr.com/story/category/92/cannibis.html' >Cannibis</option><option value='https://www.odwyerpr.com/story/category/118/career-advice.html' >Career Advice</option><option value='https://www.odwyerpr.com/story/category/70/consumer.html' >Consumer</option><option value='https://www.odwyerpr.com/story/category/51/content.html' >Content</option><option value='https://www.odwyerpr.com/story/category/15/corporate-communications.html' >Corporate Communications</option><option value='https://www.odwyerpr.com/story/category/103/covid-19.html' >COVID-19</option><option value='https://www.odwyerpr.com/story/category/4/crisis-communications.html' >Crisis Communications</option><option value='https://www.odwyerpr.com/story/category/107/cryptocurrency.html' >Cryptocurrency</option><option value='https://www.odwyerpr.com/story/category/53/csr-corp-social-responsibility.html' >CSR - Corp. Social Responsibility</option><option value='https://www.odwyerpr.com/story/category/77/cybersecurity.html' >Cybersecurity</option><option value='https://www.odwyerpr.com/story/category/50/data.html' >Data</option><option value='https://www.odwyerpr.com/story/category/96/dei.html' >DEI</option><option value='https://www.odwyerpr.com/story/category/82/digital.html' >Digital</option><option value='https://www.odwyerpr.com/story/category/142/digital-pr.html' >Digital PR</option><option value='https://www.odwyerpr.com/story/category/112/disinformation.html' >Disinformation</option><option value='https://www.odwyerpr.com/story/category/131/earned-media.html' >Earned Media</option><option value='https://www.odwyerpr.com/story/category/44/economic-development.html' >Economic Development</option><option value='https://www.odwyerpr.com/story/category/80/education-pr.html' >Education PR</option><option value='https://www.odwyerpr.com/story/category/127/elon-musk.html' >Elon Musk</option><option value='https://www.odwyerpr.com/story/category/132/employee-training.html' >Employee Training</option><option value='https://www.odwyerpr.com/story/category/69/energy-pr.html' >Energy PR</option><option value='https://www.odwyerpr.com/story/category/17/entertainment-sports-pr.html' >Entertainment & Sports PR</option><option value='https://www.odwyerpr.com/story/category/83/entertainment-pr.html' >Entertainment PR</option><option value='https://www.odwyerpr.com/story/category/18/environmental-pr.html' >Environmental PR</option><option value='https://www.odwyerpr.com/story/category/102/environmental-social-governance.html' >Environmental, Social & Governance</option><option value='https://www.odwyerpr.com/story/category/104/esg.html' >ESG</option><option value='https://www.odwyerpr.com/story/category/136/event-planning.html' >Event Planning</option><option value='https://www.odwyerpr.com/story/category/90/events.html' >Events</option><option value='https://www.odwyerpr.com/story/category/52/financial-management.html' >Financial Management</option><option value='https://www.odwyerpr.com/story/category/21/financial-pr-investor-relations.html' >Financial PR & Investor Relations</option><option value='https://www.odwyerpr.com/story/category/19/food-beverage-pr.html' >Food & Beverage PR</option><option value='https://www.odwyerpr.com/story/category/130/foreign-affairs.html' >Foreign Affairs</option><option value='https://www.odwyerpr.com/story/category/106/foreign-company.html' >Foreign Company</option><option value='https://www.odwyerpr.com/story/category/67/foreign-government.html' >Foreign Government</option><option value='https://www.odwyerpr.com/story/category/62/freelance.html' >Freelance</option><option value='https://www.odwyerpr.com/story/category/87/gender-equality.html' >Gender Equality</option><option value='https://www.odwyerpr.com/story/category/143/geo-generative-engine-optimization.html' >GEO (Generative Engine Optimization)</option><option value='https://www.odwyerpr.com/story/category/65/government.html' >Government</option><option value='https://www.odwyerpr.com/story/category/20/healthcare-pr.html' >Healthcare PR</option><option value='https://www.odwyerpr.com/story/category/73/hispanic-pr.html' >Hispanic PR</option><option value='https://www.odwyerpr.com/story/category/58/home-furnishings-pr.html' >Home Furnishings PR</option><option value='https://www.odwyerpr.com/story/category/128/humor.html' >Humor</option><option value='https://www.odwyerpr.com/story/category/47/iabc.html' >IABC</option><option value='https://www.odwyerpr.com/story/category/89/influencer-marketing.html' >Influencer Marketing</option><option value='https://www.odwyerpr.com/story/category/75/internal-communications.html' >Internal Communications</option><option value='https://www.odwyerpr.com/story/category/35/international.html' >International</option><option value='https://www.odwyerpr.com/story/category/79/job-search-advice.html' >Job Search Advice</option><option value='https://www.odwyerpr.com/story/category/123/leadership.html' >Leadership</option><option value='https://www.odwyerpr.com/story/category/57/legal-pr.html' >Legal PR</option><option value='https://www.odwyerpr.com/story/category/94/lgbtq.html' >LGBTQ+</option><option value='https://www.odwyerpr.com/story/category/64/lifestyle-pr.html' >Lifestyle PR</option><option value='https://www.odwyerpr.com/story/category/5/lobbying.html' >Lobbying</option><option value='https://www.odwyerpr.com/story/category/33/ma.html' >M&A</option><option value='https://www.odwyerpr.com/story/category/36/marketing-communications.html' >Marketing Communications</option><option value='https://www.odwyerpr.com/story/category/25/media-news.html' >Media News</option><option value='https://www.odwyerpr.com/story/category/124/media-relations.html' >Media Relations</option><option value='https://www.odwyerpr.com/story/category/97/military-outreach.html' >Military Outreach</option><option value='https://www.odwyerpr.com/story/category/71/multicultural-pr.html' >Multicultural PR</option><option value='https://www.odwyerpr.com/story/category/14/news-accounts.html' >News of Accounts</option><option value='https://www.odwyerpr.com/story/category/98/nonprofits.html' >Nonprofits</option><option value='https://www.odwyerpr.com/story/category/95/odwyers-podcast.html' >O'Dwyer's Podcast</option><option value='https://www.odwyerpr.com/story/category/34/obituary.html' >Obituary</option><option value='https://www.odwyerpr.com/story/category/13/personnel-appointments.html' >Personnel Appointments</option><option value='https://www.odwyerpr.com/story/category/88/podcasting.html' >Podcasting</option><option value='https://www.odwyerpr.com/story/category/85/politics.html' >Politics</option><option value='https://www.odwyerpr.com/story/category/119/pr-agency-search.html' >PR Agency Search</option><option value='https://www.odwyerpr.com/story/category/42/pr-awards.html' >PR Awards</option><option value='https://www.odwyerpr.com/story/category/8/pr-commentary.html' >PR Commentary</option><option value='https://www.odwyerpr.com/story/category/38/pr-ethics.html' >PR Ethics</option><option value='https://www.odwyerpr.com/story/category/49/pr-events.html' >PR Events</option><option value='https://www.odwyerpr.com/story/category/99/pr-firm-news.html' >PR Firm News</option><option value='https://www.odwyerpr.com/story/category/1/pr-firms.html' >PR Firms</option><option value='https://www.odwyerpr.com/story/category/45/pr-groups.html' >PR Groups</option><option value='https://www.odwyerpr.com/story/category/140/pr-history.html' >PR History</option><option value='https://www.odwyerpr.com/story/category/46/pr-higher-education.html' >PR in Higher Education</option><option value='https://www.odwyerpr.com/story/category/31/pr-jobs.html' >PR Jobs</option><option value='https://www.odwyerpr.com/story/category/39/pr-library.html' >PR Library</option><option value='https://www.odwyerpr.com/story/category/32/pr-links.html' >PR Links</option><option value='https://www.odwyerpr.com/story/category/60/pr-measurement-analytics.html' >PR Measurement & Analytics</option><option value='https://www.odwyerpr.com/story/category/68/pr-research.html' >PR Research</option><option value='https://www.odwyerpr.com/story/category/12/pr-school.html' >PR School</option><option value='https://www.odwyerpr.com/story/category/2/pr-services.html' >PR Services</option><option value='https://www.odwyerpr.com/story/category/7/pr-videos.html' >PR Videos</option><option value='https://www.odwyerpr.com/story/category/133/presidential-election-2024.html' >Presidential Election 2024</option><option value='https://www.odwyerpr.com/story/category/28/professional-development.html' >Professional Development</option><option value='https://www.odwyerpr.com/story/category/22/professional-services-pr.html' >Professional Services PR</option><option value='https://www.odwyerpr.com/story/category/30/prsa.html' >PRSA</option><option value='https://www.odwyerpr.com/story/category/134/psas.html' >PSAs</option><option value='https://www.odwyerpr.com/story/category/29/public-affairs.html' >Public Affairs</option><option value='https://www.odwyerpr.com/story/category/9/public-affairs-commentary.html' >Public Affairs Commentary</option><option value='https://www.odwyerpr.com/story/category/54/public-diplomacy.html' >Public Diplomacy</option><option value='https://www.odwyerpr.com/story/category/138/public-policy.html' >Public Policy</option><option value='https://www.odwyerpr.com/story/category/3/public-relations.html' >Public Relations</option><option value='https://www.odwyerpr.com/story/category/10/public-relations-society.html' >Public Relations Society</option><option value='https://www.odwyerpr.com/story/category/121/public-speaking.html' >Public Speaking</option><option value='https://www.odwyerpr.com/story/category/55/reputation-mgmt.html' >Reputation Mgmt.</option><option value='https://www.odwyerpr.com/story/category/111/request-for-expressions-interest.html' >Request for Expressions of Interest</option><option value='https://www.odwyerpr.com/story/category/139/retirement-planning.html' >Retirement Planning</option><option value='https://www.odwyerpr.com/rfps/index.html'>RFPs, RFIs and RFQs</option><option value='https://www.odwyerpr.com/story/category/137/satellite-media-tours.html' >Satellite Media Tours</option><option value='https://www.odwyerpr.com/story/category/76/seo-search-engine-optimization.html' >SEO (Search Engine Optimization)</option><option value='https://www.odwyerpr.com/story/category/27/social-media.html' >Social Media</option><option value='https://www.odwyerpr.com/story/category/113/sources-sought-notice.html' >Sources Sought Notice</option><option value='https://www.odwyerpr.com/story/category/66/sports-pr.html' >Sports PR</option><option value='https://www.odwyerpr.com/story/category/59/sustainability.html' >Sustainability</option><option value='https://www.odwyerpr.com/story/category/23/technology-pr.html' >Technology PR</option><option value='https://www.odwyerpr.com/story/category/135/thought-leadership.html' >Thought Leadership</option><option value='https://www.odwyerpr.com/story/category/141/throwback-thursday.html' >Throwback Thursday</option><option value='https://www.odwyerpr.com/story/category/40/trade-associations.html' >Trade Associations</option><option value='https://www.odwyerpr.com/story/category/86/transportation.html' >Transportation</option><option value='https://www.odwyerpr.com/story/category/24/travel-pr.html' >Travel PR</option><option value='https://www.odwyerpr.com/story/category/126/trump.html' >Trump</option><option value='https://www.odwyerpr.com/story/category/11/upcoming-events.html' >Upcoming Events</option><option value='https://www.odwyerpr.com/story/category/120/virtual-meetings.html' >Virtual Meetings</option><option value='https://www.odwyerpr.com/story/category/43/wikipedia.html' >Wikipedia</option><option value='https://www.odwyerpr.com/story/category/91/women.html' >Women</option>                </select>
+				</td>
+				<td>
+				  <button type="button" class="btn btn-default" style='font-size:18px; height:40px; width:100%;' onClick="JumpToIt(this.form)">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+				  </button>
+				 </td></tr></table>
+			  </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+     </div> <!-- end blue box -->
+			    <!--</div>-->
+
+<!-- End Category Selection Code -->
+	<table cellspacing=0 border=0 cellspacing=0 width=100% style='margin-top:30px;margin-bottom:30px;padding-top:20px;padding-bottom:20px;'>
+	<tr><td><table width='100%'><tr class=page_nav><td width=50% align=left valign=center class=page_nav>&nbsp;</td><td width=50% align=right valign=center class=page_nav><a href='/story/list/pg/2/index.html' class=''>More  &raquo;</a></td></tr></table></td></tr></table>
+			</section>
+        </div>
+        <div class="col-md-3 hidden-sm hidden-xs text-center home-center-narrow-column">
+
+
+						<section>
+	<div align=center>
+    <div class="h4">
+	<div align=center>
+ 
+  
+	    <p><a href="https://e.issuu.com/embed.html?d=o_dwyer_s_may_2026_pr_firm_rankings_magazine&amp;hideIssuuLogo=true&amp;showOtherPublicationsAsSuggestions=true&amp;u=odwyers-pr-magazine" sandbox="allow-top-navigation allow-top-navigation-by-user-activation allow-downloads allow-scripts allow-same-origin allow-popups allow-modals allow-popups-to-escape-sandbox allow-forms" allowfullscreen="allowfullscreen"" target="_blank"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_may_2026.webp" width="135" height="176" alt=""/></a></p>
+        <p><a href="https://e.issuu.com/embed.html?d=o_dwyer_s_may_2026_pr_firm_rankings_magazine&amp;hideIssuuLogo=true&amp;showOtherPublicationsAsSuggestions=true&amp;u=odwyers-pr-magazine" sandbox="allow-top-navigation allow-top-navigation-by-user-activation allow-downloads allow-scripts allow-same-origin allow-popups allow-modals allow-popups-to-escape-sandbox allow-forms" allowfullscreen="allowfullscreen"" target="_blank"><strong>May '26<br>
+          Top PR Firms<br>
+          for 2026
+        </strong></a></p>
+	    
+	    <p><a href="https://www.odwyerpr.com/members/jack_odwyers_nl/odwyers_newsletter_pg1.html" class="home-magazine"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/site_images/20220725170013_odwyers_newsletter_2022.webp"></a></p>
+	    <p><a href="https://www.odwyerpr.com/members/jack_odwyers_nl/odwyers_newsletter_pg1.html"><strong> May 4th<br>
+	      O'Dwyer's Weekly<br>
+	      Newsletter</strong></a>	    </p>
+	    <p>&nbsp;        </p>
+	    <table class="narrow-center-table">
+	      <tbody>
+	        <tr>
+	          <td class="narrow-center-table-header">PR RFPs:</td>
+            </tr>
+	        <tr>
+	          <td align="left" valign="top"><table  class="narrow-center-table-inside" >
+	            <tbody>
+	              <tr>
+	                <td width="1482">
+
+						<p><span class="narrow-text-date">Fri, May 8, 2026</span><BR>
+<a href="/story/public/24724/2026-05-08/napa-needs-destination-marketing-support.html" class='narrow-text-title'>Napa Needs Destination Marketing Support</a>
+<img src="https://www.odwyerpr.com/site_images/20260508112225_120525Napa.webp" alt="Napa Needs Destination Marketing Support" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Thu, May 7, 2026</span><BR>
+<a href="/story/public/24717/2026-05-07/nys-wants-lure-british-travelers.html" class='narrow-text-title'>NYS Wants to Lure British Travelers</a>
+<img src="https://www.odwyerpr.com/site_images/20260507103456_050726NYDevelopment.webp" alt="NYS Wants to Lure British Travelers" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Tue, May 5, 2026</span><BR>
+<a href="/story/public/24709/2026-05-05/nonprofit-needs-awards-support.html" class='narrow-text-title'>Nonprofit Needs Awards Support</a>
+<img src="https://www.odwyerpr.com/site_images/20260505163804_050526rosietheriveter.webp" alt="Nonprofit Needs Awards Support" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Tue, May 5, 2026</span><BR>
+<a href="/story/public/24703/2026-05-05/pr-needed-kick-off-anti-pollution-push.html" class='narrow-text-title'>PR Needed to Kick Off Anti-Pollution Push</a>
+<img src="https://www.odwyerpr.com/site_images/20260505131153_050526OKI.webp" alt="PR Needed to Kick Off Anti-Pollution Push" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Mon, May 4, 2026</span><BR>
+<a href="/story/public/24695/2026-05-04/houston-school-system-looks-for-marketing-firm.html" class='narrow-text-title'>Houston School System Looks for Marketing Firm</a>
+<img src="https://www.odwyerpr.com/site_images/20260504124241_050426Houston.webp" alt="Houston School System Looks for Marketing Firm" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Fri, May 1, 2026</span><BR>
+<a href="/story/public/24688/2026-05-01/bcs-mission-shops-for-trash-pr.html" class='narrow-text-title'>BC's Mission Shops for Trash PR</a>
+<img src="https://www.odwyerpr.com/site_images/20260501123015_050126city-of-mission.webp" alt="BC's Mission Shops for Trash PR" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Thu, Apr. 30, 2026</span><BR>
+<a href="/story/public/24683/2026-04-30/dublin-rape-crisis-centre-offers-rebranding-work.html" class='narrow-text-title'>Dublin Rape Crisis Centre Offers Rebranding Work</a>
+<img src="https://www.odwyerpr.com/site_images/20260430212054_043026dublin-rape-crisis-centre.webp" alt="Dublin Rape Crisis Centre Offers Rebranding Work" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Wed, Apr. 29, 2026</span><BR>
+<a href="/story/public/24675/2026-04-29/imageshield-seeks-paid-media-partner.html" class='narrow-text-title'>ImageShield Seeks 'Paid Media' Partner</a>
+<img src="https://www.odwyerpr.com/site_images/20260429091742_042926ImageShield.webp" alt="ImageShield Seeks 'Paid Media' Partner" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Tue, Apr. 28, 2026</span><BR>
+<a href="/story/public/24668/2026-04-28/tx-water-district-requires-redevelopment-pr.html" class='narrow-text-title'>TX Water District Requires Redevelopment PR</a>
+<img src="https://www.odwyerpr.com/site_images/20260428112015_042826Tarrant.webp" alt="TX Water District Requires Redevelopment PR" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Mon, Apr. 27, 2026</span><BR>
+<a href="/story/public/24664/2026-04-27/ca-central-coast-community-energy-looks-for-pr-boost.html" class='narrow-text-title'>CA Central Coast Community Energy Looks for PR Boost</a>
+<img src="https://www.odwyerpr.com/site_images/20260427101610_042726CentralCoast.webp" alt="CA Central Coast Community Energy Looks for PR Boost" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Fri, Apr. 24, 2026</span><BR>
+<a href="/story/public/24659/2026-04-24/wusata-wants-marketing-partner.html" class='narrow-text-title'>WUSATA Wants Marketing Partner</a>
+<img src="https://www.odwyerpr.com/site_images/20260424141943_042426WUSATA.webp" alt="WUSATA Wants Marketing Partner" border=0 width='100' class='rfp-image-spacing'></p>
+
+<p><span class="narrow-text-date">Fri, Apr. 24, 2026</span><BR>
+<a href="/story/public/24658/2026-04-24/az-school-district-shops-for-marketing-help.html" class='narrow-text-title'>AZ School District Shops for Marketing Help</a>
+<img src="https://www.odwyerpr.com/site_images/20260424121114_042426Glendale.webp" alt="AZ School District Shops for Marketing Help" border=0 width='100' class='rfp-image-spacing'></p>
+
+    
+						
+                      <p class="h4"> <em>*For a full list of RFPs, go to: <a href="https://www.odwyerpr.com/rfps/index.html">O'Dwyer's RFP
+                      archive</a></em></p></td>
+	                </tr>
+	              </tbody>
+	            </table></td>
+            </tr>
+          </tbody>
+        </table>
+	    <p>&nbsp;</p>
+	    <p><a href="https://www.odwyerpr.com/magazine/food-public-relations.htm"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_mar_2026.webp" width="135" height="176" alt=""/></a></p>
+        <p><a href="https://www.odwyerpr.com/magazine/food-public-relations.htm"><strong>Mar. '26<br>
+          Top Food &amp;<br>
+          Beverage PR<br>
+          Firms</strong></a></p>
+	    <p><a href="https://www.odwyerpr.com/magazine/pr-services-crisis-communications.htm"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_jan_2026.webp" width="135" height="176" alt=""/></a></p>
+        <p><a href="https://www.odwyerpr.com/magazine/pr-services-crisis-communications.htm"><strong>Jan. '26<br>
+          Top Crisis<br>
+          Comms 
+          Firms</strong></a></p>
+	    <p><a href="https://www.odwyerpr.com/magazine/technology-pr.htm"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_november_2025.webp" alt="O'Dwyer's Oct. '25 Healthcare & Medical PR Magazine"></a></p>
+        <p><a href="https://www.odwyerpr.com/magazine/technology-pr.htm"><strong>Nov. '25 <br>
+          Top Technology<br>
+          PR Firms</strong></a></p>
+	    <p><a href="https://www.odwyerpr.com/magazine/medical-pr.htm"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_october_2025.webp" width="135" height="176" alt=""/></a></p>
+        <p><a href="https://www.odwyerpr.com/magazine/medical-pr.htm"><strong>Oct. '24<br>
+          Top Healthcare<br>
+          PR Firms</strong></a></p>
+	    <p><a href="https://www.odwyerpr.com/magazine/financial-pr.htm"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_august_2025.webp" width="135" height="176" alt=""/></a></p>
+        <p><a href="https://www.odwyerpr.com/magazine/financial-pr.htm"><strong>Aug. '25<br>
+          Top Financial<br>
+          PR/IR &amp;          Prof.<br>
+          Svcs. 
+          PR Firms</strong></a></p>
+	    <p><a href="https://www.odwyerpr.com/magazine/travel-pr.htm"><img class="img-responsive magazine-images-index" src="https://www.odwyerpr.com/magazine/mag_cover_july_2025.webp" alt="O'Dwyer's Jul. '25 Travel & Tourism PR Magazine"></a></p>
+        <p><a href="https://www.odwyerpr.com/magazine/travel-pr.htm"><strong>Jul. '25 <br>
+          Top Travel<br>
+&amp;          Tourism <br>
+          PR Firms</strong></a>	</p>
+	</div>
+  </div>
+  </div>
+</section>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4 left-border">
+		<aside>
+			<style type="text/css">
+.verdananocolor11pxnormal {font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-weight: normal}
+</style>
+<div class="right-col-area">
+	<div class=square-ad-area-left><a href="http://www.edelman.com" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Edelman')""><img src="https://www.odwyerpr.com/banners/edelman_act_with_certainty_300x250.gif" width="300" height="250" alt="Edelman"/></a></div>
+	
+	<div class=square-ad-area-right><a href="https://www.coynepr.com/generative-engine-optimization/?utm_source=od&utm_medium=banner&utm_campaign=bta-300x250&utm_id=bta-300x250" target=_blank onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Coyne Main Page')""><img src="https://www.odwyerpr.com/banners/coyne_300x250_2026.gif" width="300" height="250" alt="Coyne - Be The Answer"/></a></div>
+</div>
+
+
+<div class=html-area-300w>
+  <h3><a href="https://www.odwyerpr.com/pr_firm_rankings/independents.htm">Top PR Firms - 2026 Rankings </a></h3>
+  <p>1. Edelman, New York - $950.4M<br>
+    2. Real Chemistry, San Fran. - $560M<br>
+    3. Inizio Evoke, New York - $347M<br>
+    4. APCO, D.C. - $238.9M
+<BR>
+    5. Ruder Finn, New York - $203M<BR>
+    6. Finn Partners, New York - $199.1M<br>
+ 7. ICR, New York - $188.6M
+    <BR>
+  8. Orchestra, New York - $177M<br>
+  9. Zeno Group, New York - $140.5M<br>
+    10. Prosek, New York - $140.5M</p>
+  <p><a href="https://www.odwyerpr.com/pr_firm_rankings/pr_firm_rankings_instructions.htm" class="odwyerButton" alt="" OnClick="ga('send', 'event', { eventCategory: 'Become an O'Dwyer's Ranked Firm', eventAction: 'View PDF', eventLabel: 'Become an O'Dwyer's Ranked Firm'});">Become an O'Dwyer's Ranked PR Firm</a></p>
+</div>
+	  
+<div class=html-area-300w> 
+	<div class=square-ad-area-left><a href="https://icrinc.com" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'ICR')""><img src="https://www.odwyerpr.com/banners/icr_2025_300x250.gif" width="300" height="250" alt="ICR Strategic Communications"/></a></div>
+	
+	<div class=square-ad-area-right><a href="https://www.gscommunications.com/?utm_campaign=we-are-gs&utm_medium=display&utm_source=odwyers&utm_content=purpose-statement" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'G&S')""><img src="https://www.odwyerpr.com/banners/gs_bus_comms_2026_300x250.jpg" width="300" height="250" alt="G&S Business Communications"/></a></div>
+</div>
+
+
+<div class=html-area-300w>
+	<h3><a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">O'Dwyer's PR Magazine</a></H3>
+  <div align=left>
+	  <p><a href="https://www.odwyerpr.com/magazine/pr-agencies.htm"><img src="/magazine/cover_may_2026.webp" class="img-responsive" border=0 alt="May '26 PR Firm Rankings Magazine'" width="300" height="229"></a></p>
+      <p><strong><a href="https://www.odwyerpr.com/magazine/pr-agencies.htm">May '26 PR Firm Rankings Magazine</a></strong></p>
+      <p><strong>2026 Editorial Calendar:</strong><br>
+        <strong>Jan.</strong>, <em><a href="https://www.odwyerpr.com/magazine/pr-services-crisis-communications.htm">Crisis Comms. &amp; PR Buyer's Guide</a></em><br>
+        <strong>Mar.</strong>, <em><a href="https://www.odwyerpr.com/magazine/food-public-relations.htm">Food &amp; Beverage PR</a></em><br>
+        <strong>May</strong>, <em><a href="https://www.odwyerpr.com/magazine/pr-agencies.htm">PR Firm Rankings</a></em><br>
+        <strong>Jul.</strong>, <em><a href="https://www.odwyerpr.com/magazine/travel-pr.htm">Travel &amp; Tourism PR</a></em><strong>
+          </style>
+          </strong><br>
+        <strong>Aug.</strong>, <em><a href="https://www.odwyerpr.com/magazine/financial-pr.htm">Financial PR/IR &amp; Prof. Svcs. PR</a></em><br>
+        <strong>Oct.</strong>, <em><a href="https://www.odwyerpr.com/magazine/medical-pr.htm">Healthcare &amp; Medical PR</a></em><br>
+        <strong>Nov.</strong>, <em><a href="https://www.odwyerpr.com/magazine/technology-pr.htm">Technology PR &amp; AI</a></em></p>
+    <p><a class="odwyerButton" href="https://www.odwyerpr.com/magazine/magazine-profile-form.html" alt="">Submit  Profile for PR Magazine</a></p>
+  </div>
+</div>
+
+
+<div class=html-area-300w>
+	<div class=square-ad-area-left>
+		
+		<a href="http://www.peppercomm.com/?utm_source=Odwyers&utm_medium=2025ad&utm_campaign=ODwyers_ad" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Peppercomm')""><img src="https://www.odwyerpr.com/banners/peppercomm_reputation_is_everything_300x250.gif" width="300" height="250" alt="Peppercomm"/></a>
+		
+	</div>
+
+	<div class=square-ad-area-right>
+		<a href="https://padillaco.com/padilla-pov?utm_source=odwyers&utm_medium=banner&utm_campaign=pov " target="_blank"><img src="https://www.odwyerpr.com/banners/padilla_2026_300x250.jpg" width="300" height="250" alt="Padilla - Curated thoughts from curious thinkers"/></a>
+	</div>
+</div>
+	  
+	  
+<div class=html-area-300w>
+  <h3><a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Find The Right PR Firm</a></h3>
+  <p><strong>O'Dwyer's is the #1 source for researching public relations firms and outside PR counsel.</strong></p><p><a href="https://www.odwyerpr.com/pr_firms_database/index.htm"><img src="https://www.odwyerpr.com/pr_firms_database/prd_cover_art_2025.webp" class="img-responsive" border=0 alt="PR Firm Directory" width="300" height="229"></a></p>
+  <p><strong>Search PR Firms:</strong><BR>
+    - <a href="https://www.odwyerpr.com/pr_firms_database/index_alphabetical.htm"> Alphabetically</a><br>
+    - <a href="https://www.odwyerpr.com/pr_firms_database/index_geographical.htm">Geographically</a><br>
+    - <a href="https://www.odwyerpr.com/pr_firms_database/index_specialty.htm"> PR Specialty</a>
+  </p>
+  <div align=left>
+    <p><a class="odwyerButton" href="https://www.odwyerpr.com/pr_firms_database/index_form.php" alt="">List Your Firm With O'Dwyer's</a>  </p>
+  </div>
+</div>
+
+<div class=html-area-300w>
+	<div class=square-ad-area-left>
+		<a href="https://www.hoffman.com/?utm_source=tpr_list&utm_medium=odwyer&utm_campaign=backlinks" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Hoffman Agency')""><img src="https://www.odwyerpr.com/banners/hoffman_agency_300x250.gif" width="300" height="250" alt="The Hoffman Agency"/></a>
+	</div>
+
+	<div class=square-ad-area-right>
+		<a href="https://hubs.ly/Q049JMK20" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'American Business Awards')""><img src="https://www.odwyerpr.com/banners/intl_bus_awards_jun_17_2026_300x250.jpg" width="300" height="250" alt="2026 International Business Awards - Jun. 17 Final Entry Deadline"/></a>
+	</div>
+</div>  
+	
+<div class=html-area-300w>
+	<h3><a href="/pr_services_database/index.htm">Top PR Products &amp; Services for 2026</a></h3>
+    <div align=left>
+
+		<p><a href="/pr_services_database/index.htm"><img src="/pr_services_database/cover_buyers_guide_2026.webp" class="img-responsive" border=0 alt="Jan. '26 PR Buyer's Guide" width="300" height="229"></a></p>
+      <p><strong><a href="/pr_services_database/index.htm">2026 PR Buyer's Guide</a></strong></p>
+      <p><a href="/pr_services_database/index.htm">Shop for PR products &amp; services in 40+ categories &gt;&gt;</a></p>
+      <p><a href="https://www.odwyerpr.com/pr_services_database/index_form.php"  class="odwyerButton" alt="">Add Your PR  Service or Product</a></p>
+    </div>
+    
+ 
+
+</div>
+
+<div class=html-area-300w>
+  <h3><a href="https://www.odwyerpr.com/members/jack_odwyers_nl/odwyers_newsletter_pg1.html">O'Dwyer's PR Newsletter</a></h3>
+  <p><img src="https://www.odwyerpr.com/site_images/newsletter_pages.webp" class="img-responsive image-bottom-space" width="300" height="204" alt="" /></p>
+  <p><a href="https://www.odwyerpr.com/members/jack_odwyers_nl/odwyers_newsletter_pg1.html">NL Archives 2000 - present &gt;&gt;</a> </p>
+  <div align=left><a href="https://www.odwyerpr.com/order_form/member_signup.html" target="_blank" class="odwyerButton" alt="" OnClick="ga('send', 'event', { eventCategory: 'Become an O'Dwyer's Ranked Firm', eventAction: 'View PDF', eventLabel: 'Become an O'Dwyer's Ranked Firm'});">Subscribe to O'Dwyer's Newsletter</a></div>
+</div>
+		</aside>
+    </div>
+  </div>
+
+</div>
+
+		<div class=footer-ad-area-728w>
+		<div class="container">
+			<div align=center><p><a href="https://www.coynepr.com/generative-engine-optimization/?utm_source=od&utm_medium=banner&utm_campaign=bta-728x90&utm_id=bta-728x90" target="_blank" onClick="ga('send', 'event', 'Outbound Link', 'clicked ad', 'Coyne - Be the Answer')""><img src="https://www.odwyerpr.com/banners/coyne_728x90_2026.gif" width="728" height="90" alt="Coyne - Be the Answer"/></a></p></div>
+		</div>
+	</div>	<BR>
+
+<footer class="footer">
+	<!-- Footer Start -->
+		<div class="container" style='margin-top:20px;'>
+
+
+		  <div class="row footer-blue-row">
+			
+			<div class="col-lg-6 col-sm-6 col-xs-12 footer-blue-div-left-50">
+				<img src='/site_shared_images/ODwyers-Logo-White-footer.png' class="img_responsive" style='max-width: 300px;width:100%;'align=left>
+			</div>
+
+			<div class="col-lg-6 col-sm-6 col-xs-12 footer-blue-div-right-50">
+				Questions and support: <a href="/cdn-cgi/l/email-protection#375d585f59775853404e524547451954585a" align=right valign=center><span class="__cf_email__" data-cfemail="deb4b1b6b09eb1baa9a7bbacaeacf0bdb1b3">[email&#160;protected]</span></a>
+			</div>
+
+		</div>
+
+
+	  <div class="row footer-blue-row">
+		
+		<div class="col-sm-6 col-xs-12 col-md-3 footer-div-bottom-margin">
+			<div class="social-footer-row social">
+		          <a href="http://www.x.com/odwyerpr" target="_blank" style='margin-left: 0px;margin-right:0px;'><i class="fab fa-x-twitter"></i></a>
+			 	  <a href="https://www.facebook.com/odwyerpr" target="_blank" alt="Facebook" title="Facebook" style='margin-left: 0px;margin-right:0px;'><i class="fab fa-facebook-f"></i></a>
+		          <a href="https://www.linkedin.com/in/odwyerpr/" target="_blank" style='margin-left: 0px;margin-right:0px;' title="Linked In"><i class="fab fa-linkedin-in"></i></a>
+		  	     <a href="https://bsky.app/profile/odwyerpr.bsky.social" target="_blank" style='margin-left: 0px;margin-right:0px;' title="Bluesky"><span class="social bluesky-icon"><img src="/images/Bluesky_Logowhite.png" alt="Bluesky Logo" /></span></a>
+		          <a href="https://www.instagram.com/odwyersprnews/" target="_blank" style='margin-left: 0px;margin-right:0px;' title="Instagram"><i class="fab fa-instagram"></i></a>
+		          <a href="https://www.youtube.com/@odwyerpr/videos" target="_blank" style='margin-left: 0px;margin-right:0px;' title="YouTube"><i class="fab fa-youtube"></i></a>
+        	</div>
+
+
+			<p>Copyright &copy; 1998-2026<br>
+		  	J.R. O'Dwyer Company, Inc.<br>
+		  	271 Madison Ave., #1500<br>
+			New York, NY 10016<br>
+			Tel: 212/679-2471<br>
+			<a href="https://www.odwyerpr.com/terms_conditions.htm">Terms &amp; Conditions</a>			</p>
+
+		</div>
+
+
+		<div class="col-sm-6 col-xs-12 col-md-3 footer-div-bottom-margin">
+			<h4>Company</h4>
+			<a href="https://www.odwyerpr.com/contact_odwyers/contact.htm">History &amp; Staff</a><br>
+			<a href="https://www.odwyerpr.com/site_info/advertising.htm">Advertising Opportunities</a><BR>
+				<a href="https://www.odwyerpr.com/terms_conditions.htm"></a>
+
+
+		  <h4 style="margin-top:15px;">Publications</h4>
+				<p><a href="https://www.odwyerpr.com/email_nl_signup/email_signup_form.html">Free Daily eNewsletter<br>
+				</a><a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Directory of PR Firms</a><a href="https://www.odwyerpr.com/order_form/member_signup.html"></a><br>
+		  <a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">PR Magazine<br>
+		  </a><a href="https://www.odwyerpr.com/order_form/orderform.html">Order Printed Publications</a><a href="https://www.odwyerpr.com/magazine/pr-magazine.htm">		  </a></p>
+				<p><a href="https://www.odwyerpr.com/order_form/member_signup.html"><strong>Subscribe to Exclusive Content</strong></a><br>
+		  </p>
+
+		</div>
+
+
+		<div class="col-sm-6 col-xs-12 col-md-3 footer-div-bottom-margin">
+			<h4>Tools</h4>
+		  <p><a href="https://www.odwyerpr.com/pr_firm_rankings/independents.htm">2025 PR Firm Rankings</a><br>				
+		  <a href="https://www.odwyerpr.com/rfps/index.html">PR RFPs</a><br>
+				  <a href="https://www.odwyerpr.com/pr_firms_database/index.htm">Find a PR Firm<br>
+			      </a><a href="https://www.odwyerpr.com/pr_experts/">Search PR Experts</a><a href="https://www.odwyerpr.com/pr_firms_database/index.htm">				</a><br>
+				  <a href="https://www.odwyerpr.com/pr_services_database/index.htm">Shop for PR Services</a><br>
+				  <a href="https://jobs.odwyerpr.com" target="_blank">PR Jobs		  </a><br>
+				  <a href="https://www.odwyerpr.com/pr_experts/"></a><br>
+		  </p>
+		</div>
+
+
+
+		<div class="col-sm-6 col-xs-12 col-md-3">				
+	<h4>Contact Us</h4>
+<div class="form-container-simple-contact">
+    <form action="/contact_odwyers/contact_submit.html" method="post">
+        <!-- Inline the first and last name fields -->
+        <div class="inline-fields">
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+        </div>
+        <input type="text" name="company" placeholder="Company" required>
+        <input type="text" name="title" placeholder="Title" required>            
+        <input type="email" name="email" placeholder="Email" required>
+        
+        <!-- Add the message textarea -->
+        <textarea name="contact_message" placeholder="Enter your message here..." rows="4" maxlength="500" required></textarea>
+
+        <!-- Inline the label with the reCAPTCHA to reduce space -->
+        <div class="g-recaptcha" data-sitekey="6LeYKQsUAAAAAL9eGWoLD6H_OHa3ZGbXIYyy3EWK"></div>
+
+		<div style="display:none;">
+		    <input type="text" name="contact_website" value="">
+		</div>
+
+        <input type="submit" value="Submit" align="center">
+    </form>
+</div>
+<!-- End Small Contact Form Code -->
+
+
+		</div>
+
+	</div>
+	</div>
+
+	
+
+
+<!-- Google Code for Online Content Remarketing List -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1071414764;
+var google_conversion_language = "en";
+var google_conversion_format = "3";
+var google_conversion_color = "666666";
+var google_conversion_label = "LoFLCIKC8gEQ7Pvx_gM";
+var google_conversion_value = 0;
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/1071414764/?label=LoFLCIKC8gEQ7Pvx_gM&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+
+	<!-- Footer End -->
+</footer>
+
+
+	<!-- End Page Footer -->
+	<!-- Bootstrap -->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '742966518439422');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=742966518439422&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+
+
+
+
+<!-- Linked In -->
+<script type="text/javascript"> _linkedin_partner_id = "7417001"; window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || []; window._linkedin_data_partner_ids.push(_linkedin_partner_id); </script><script type="text/javascript"> (function(l) { if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])}; window.lintrk.q=[]} var s = document.getElementsByTagName("script")[0]; var b = document.createElement("script"); b.type = "text/javascript";b.async = true; b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js"; s.parentNode.insertBefore(b, s);})(window.lintrk); </script> <noscript> <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=7417001&fmt=gif" /> </noscript>
+
+
+<!-- Accessibe -->
+
+<script> (function(){ var s = document.createElement('script'); var h = document.querySelector('head') || document.body; s.src = 'https://acsbapp.com/apps/app/dist/js/app.js'; s.async = true; s.onload = function(){ acsbJS.init({ statementLink : '', footerHtml : '', hideMobile : false, hideTrigger : false, disableBgProcess : false, language : 'en', position : 'right', leadColor : '#146FF8', triggerColor : '#146FF8', triggerRadius : '50%', triggerPositionX : 'right', triggerPositionY : 'bottom', triggerIcon : 'people', triggerSize : 'bottom', triggerOffsetX : 20, triggerOffsetY : 20, mobile : { triggerSize : 'small', triggerPositionX : 'right', triggerPositionY : 'bottom', triggerOffsetX : 10, triggerOffsetY : 10, triggerRadius : '20' } }); }; h.appendChild(s); })();</script>
+
+
+<!-- Active Campaign Code as per js --> 
+<script>
+    (function(e,t,o,n,p,r,i){e.visitorGlobalObjectAlias=n;e[e.visitorGlobalObjectAlias]=e[e.visitorGlobalObjectAlias]||function(){(e[e.visitorGlobalObjectAlias].q=e[e.visitorGlobalObjectAlias].q||[]).push(arguments)};e[e.visitorGlobalObjectAlias].l=(new Date).getTime();r=t.createElement("script");r.src=o;r.async=true;i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(r,i)})(window,document,"https://diffuser-cdn.app-us1.com/diffuser/diffuser.js","vgo");
+    vgo('setAccount', '609456326');
+    vgo('setTrackByDefault', true);
+ 
+    vgo('process');
+</script>
+
+	<!-- Footer End -->
+
+	</body>
+</html>

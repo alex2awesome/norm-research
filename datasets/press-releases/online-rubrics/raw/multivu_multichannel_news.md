@@ -1,0 +1,581 @@
+<!-- URL: https://www.multivu.com/multichannel-news-release -->
+<!-- HTTP: 200 SIZE:    39993 -->
+<!DOCTYPE html>
+<html lang="en" data-cm-hook="1"><head>
+<!-- begin spin_special_output(head_start) -->
+<script>
+if (typeof cookieurl === "undefined") {
+    let cookieurl = "https://cookiechimp.com/widget/Ev2tEaY.js"; 
+
+    if (!document.querySelector(`script[src="${cookieurl}"]`)) {
+        var script = document.createElement("script");
+        script.src = cookieurl;
+        document.head.appendChild(script);
+    }
+}
+</script>   
+<link href="css/wd_categories.css" type="text/css" rel="stylesheet" wd_script_id="wd_categories.css">
+<script type="text/javascript" wd_script_id="view_printable_script" nonce="YmJiZDZkMjdmOTUyYTkzNjI5YTRlODAwMWI4ODIxOGFhYjI3MWVmMA==">
+	function view_printable() {
+		var loc = window.location;
+		var sep = (loc.search == "") ? "?" : "&";
+		var url = loc.protocol+"//"+loc.host+loc.pathname+loc.search+sep+"printable"+loc.hash;
+		window.open(url, "_blank", "");
+	}
+</script>
+<link href="thirdparty/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" wd_script_id="font-awesome.min.css">
+<style type="text/css" wd_script_id="toolbar_style" nonce="YmJiZDZkMjdmOTUyYTkzNjI5YTRlODAwMWI4ODIxOGFhYjI3MWVmMA==">
+			div.wd_toolbar {
+				border-top: 1px solid #cccccc;
+				border-bottom: 1px solid #cccccc;
+				margin: 15px 0px 15px 0px;
+				padding: 5px;
+				line-height: 1;
+			}
+			div.wd_toolbar-page {
+				clear: both;
+			}
+			div.wd_toolbar ul.wd_tools {
+				display: inline-block;
+				width: 100%;
+				margin: 0;
+				padding: 5px 0;
+			}
+			div.wd_toolbar ul.wd_tools li.wd_tool {
+				display: block;
+				list-style-type: none;
+				margin-right: 5px;
+				padding: 0;
+				float: right;
+			}
+			span.wd_tool_icon > a:link,
+			span.wd_tool_icon > a:visited {
+				border-radius: 2px;
+				display: inline-block;
+				width: 30px;
+				height: 30px;
+				box-sizing: border-box;
+				margin: 0;
+				padding: 7px;
+				font-size: 16px;
+				line-height: 1;
+				text-align: center;
+				color: #ffffff;
+				background-color: #767676;
+			} 
+			span.wd_tool_icon > a:hover {
+				color: #ffffff;
+				background-color: #666666;
+				text-decoration: none;
+			}
+			div.wd_toolbar ul.wd_tools li.wd_tool-addthis {
+				float: left;
+			}
+		</style>
+<link href="css/wd_wcag.css" type="text/css" rel="stylesheet" wd_script_id="wd_wcag.css">
+<style type="text/css" wd_script_id="featureboxes_style" nonce="YmJiZDZkMjdmOTUyYTkzNjI5YTRlODAwMWI4ODIxOGFhYjI3MWVmMA==">
+		.wd_featurebox_icon {
+			display: inline;
+		}
+		.wd_featurebox_icon img {
+			vertical-align: middle;
+		}
+		div.wd_featurebox_group div.wd_tabs_wrapper {
+			border: none;
+			border-bottom: 1px solid #E1E1E1;
+			padding: 0 0 5px 0;
+		}
+		div.wd_featurebox_group div.wd_featurebox {
+			border: none;
+			padding: 8px 0 0 0;
+		}
+		div.wd_featurebox_group li.wd_tab {
+			float: none;
+			color: #666666;
+		}
+		div.wd_featurebox_group li.wd_tab-active {
+			border: none;
+			background-color: transparent;
+			color: #000000;
+			font-weight: bold;
+		}
+		div.wd_featurebox_group li.wd_tab-inactive {
+			cursor: auto;
+		}
+	</style>
+
+<!-- end spin_special_output(head_start) -->
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>MultiVu: Multimedia Production & Strategic Distribution - Multichannel News Releases</title>
+	
+ <meta name="keywords" content="" />
+ <meta name="description" content="" />
+ <meta name="twitter:card" content="summary" />
+ <meta property="og:site_name" content="MultiVu: Multimedia Production &amp; Strategic Distribution" />
+ <meta property="og:url" content="https://www.multivu.com/multichannel-news-release" />
+	<link rel="alternate" href="https://www.multivu.com/news?pagetemplate=rss" type="application/rss+xml" title="MultiVu: Multimedia Production & Strategic Distribution">	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="mv_template" content="room">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/font-awesome-6.css">
+	<link rel="stylesheet" href="css/mdb.css">        
+	<link rel="stylesheet" href="css/ixp-microthemes.min.css">        
+	<link rel="stylesheet" href="css/animate.min.css">        
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image/x-icon" href="mvu.ico">
+	<link href="css/wdcontent.css" rel="stylesheet">
+		<style type="text/css">
+	.container a,
+	.wd_nav li a,
+	.wd_newsfeed_releases .wd_title a,
+	.wd_newsfeed_releases-teaser .item_name a {
+		color: #5D5D5D;
+	}
+	.wd_footer,
+	.wd_featurebox_title:after,
+	#single_slider_responsive .single_slider_carousel_caption h4:after,
+	.wd_nav li:hover, 
+	.wd_nav li.on,
+	.wd_footer,
+	.wd_featurebox p.more,
+	.wd_subscribe_btn {
+		background: #5D5D5D;
+	}
+	</style>
+	<style>
+	/* .webinar-details-full, .webinar-details-small {
+		background: rgb(26,54,98);
+		background: linear-gradient(40deg, rgb(26 54 98 / 56%) 20%, rgb(0 150 136 / 66%) 100%),url(/img/webinars/reinventing-your-media-strategy-for-the-virtual-world/details-bg.jpg);
+		color: #fff;
+		background-size: cover;
+		background-position: center left;
+	} */
+	.modal-backdrop{
+		background-color: rgb(0 0 0 / 80%);
+	}
+	.modal-bg {
+		background: rgb(26,54,98);
+		background: linear-gradient(rgb(26 54 98 / 90%), rgb(26 54 98 / 85%)),url(/img/mnr-promo-bg4.jpg);
+		color: #fff;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	.promo-left{
+		height: 100%;
+		background: rgb(0 0 0 / 37%);
+		color: #424242;
+		color: #fff;
+		padding: 3em;
+		font-size: 16px;
+	}
+	.hover-dropdown .dropdown-menu {
+		width: 100%;
+		top: -3px;
+		left: -99%;
+	}
+	.hover-dropdown:hover > .dropdown-menu {
+		display: block;
+		margin-top: 0;
+	}
+	.hover-dropdown .dropdown-menu ul>li>a:focus, .hover-dropdown .dropdown-menu ul>li>a:hover {
+		color: #fff;
+		background-color: #1A3662;
+	}
+	#footer-wrapper .social-list{
+		width: initial;
+	}
+	#footer-wrapper .social-list .fab {
+		font-size: 1.3rem;
+	}
+	#footer-container ul.social-list li{
+		padding: 0 5px;
+	}
+	#footer-container ul.social-list li:first-of-type{
+		font-size: 12px;
+	}
+	.footer-social-list a {
+		color: #fff;
+		font-size: 1.2rem;
+		margin-right: 10px;
+	}
+	</style>
+	<link id="sa-css" rel="stylesheet" type="text/css" href="css/sa.css" media="all">
+
+<!-- begin spin_special_output(head_end) -->
+<link rel="canonical" href="https://www.multivu.com/multichannel-news-release" />
+<!-- end spin_special_output(head_end) -->
+</head>
+<body class="home-page wd_pageid_34349">
+<!-- Google tag (gtag.js) -->
+<script type="text/plain" data-category="analytics" async src="https://www.googletagmanager.com/gtag/js?id=G-5VGC3ZS5WM"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-5VGC3ZS5WM');
+</script>        
+<div id="site-container">
+<!--Navigation-->
+	<nav id="mainNav" class="navbar navbar-fixed-top affix-top wd_affix " role="navigation">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="modal" data-target="#mobileNavModal">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand waves-effect waves-light" href="https://www.multivu.com/overview" title="Home Page"><img src="images/MultiVu+Logo+White-png.png" class="logo" alt="Multivu Logo"></a>
+			<a class="navbar-brand waves-effect waves-light mobile-logo" href="https://www.multivu.com/overview" title="Home Page"><img src="images/mobile-logo.png" alt="MultiVu Logo"></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="dropdown"><a href="https://www.multivu.com/solutions" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" role="button" aria-expanded="false">Solutions <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a class="nav-highlight-orange" href="https://www.multivu.com/multivu-subscription-services" target="_self" title="Subscription">Subscription</a></li>
+<li><a class="" href="https://www.multivu.com/media-tours" target="_self" title="Media Tours">Media Tours</a></li>
+ 
+<li><a class="" href="https://www.multivu.com/multichannel-news-release" target="_self" title="Multichannel News Releases">Multichannel News Releases</a></li>
+<li><a class="" href="https://www.multivu.com/media-placements" target="_self" title="Media Placements">Media Placements</a></li>
+<li><a class="" href="https://www.multivu.com/podcasts" target="_self" title="Podcasts">Podcasts</a></li>
+<li><a class="" href="https://www.multivu.com/creative-video-production" target="_self" title="Creative">Creative</a></li>
+<li><a class="" href="https://www.multivu.com/webcast-services" target="_self" title="Webcast Services">Webcast Services</a></li>
+<li><a class="" href="https://www.multivu.com/guaranteed-paid-placement" target="_self" title="Guaranteed Paid Placement">Guaranteed Paid Placement</a></li>
+<li><a class="" href="https://www.multivu.com/social-video" target="_self" title="Social Video">Social Video</a></li>
+</ul>
+</li>
+<li><a href="https://www.multivu.com/blog" class="waves-effect waves-light" target="_self" title="Blog">Blog</a></li>
+<li class="dropdown"><a href="https://www.multivu.com/resources" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" role="button" aria-expanded="false">Resources <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a class="" href="https://www.multivu.com/success-stories" target="_self" title="Success Stories">Success Stories</a></li>
+<li><a class="" href="https://www.multivu.com/webinar-archive" target="_self" title="Webinars">Webinars</a></li>
+</ul>
+</li>
+<li><a href="https://www.multivu.com/news" class="waves-effect waves-light" target="_self" title="News">News</a></li>
+<li><a href="https://www.multivu.com/about-multivu" class="waves-effect waves-light" target="_self" title="About">About</a></li>
+				<li>
+					<a href="contact-us" title="Contact" class="nav-cta">Contact Us</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<nav class="modal fade" id="mobileNavModal" tabindex="-1" role="dialog" aria-labelledby="mobileNavModal" aria-hidden="true">
+		<div class="modal-dialog" role="navigation">
+			<div class="modal-content">
+				<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				</div>
+				<div class="modal-body">
+					<ul class="nav mobile-nav">
+						<li class="dropdown"><a href="https://www.multivu.com/solutions" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" role="button" aria-expanded="false">Solutions <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a class="nav-highlight-orange" href="https://www.multivu.com/multivu-subscription-services" target="_self" title="Subscription">Subscription</a></li>
+<li><a class="" href="https://www.multivu.com/media-tours" target="_self" title="Media Tours">Media Tours</a></li>
+ 
+<li><a class="" href="https://www.multivu.com/multichannel-news-release" target="_self" title="Multichannel News Releases">Multichannel News Releases</a></li>
+<li><a class="" href="https://www.multivu.com/media-placements" target="_self" title="Media Placements">Media Placements</a></li>
+<li><a class="" href="https://www.multivu.com/podcasts" target="_self" title="Podcasts">Podcasts</a></li>
+<li><a class="" href="https://www.multivu.com/creative-video-production" target="_self" title="Creative">Creative</a></li>
+<li><a class="" href="https://www.multivu.com/webcast-services" target="_self" title="Webcast Services">Webcast Services</a></li>
+<li><a class="" href="https://www.multivu.com/guaranteed-paid-placement" target="_self" title="Guaranteed Paid Placement">Guaranteed Paid Placement</a></li>
+<li><a class="" href="https://www.multivu.com/social-video" target="_self" title="Social Video">Social Video</a></li>
+</ul>
+</li>
+<li><a href="https://www.multivu.com/blog" class="waves-effect waves-light" target="_self" title="Blog">Blog</a></li>
+<li class="dropdown"><a href="https://www.multivu.com/resources" class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" role="button" aria-expanded="false">Resources <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a class="" href="https://www.multivu.com/success-stories" target="_self" title="Success Stories">Success Stories</a></li>
+<li><a class="" href="https://www.multivu.com/webinar-archive" target="_self" title="Webinars">Webinars</a></li>
+</ul>
+</li>
+<li><a href="https://www.multivu.com/news" class="waves-effect waves-light" target="_self" title="News">News</a></li>
+<li><a href="https://www.multivu.com/about-multivu" class="waves-effect waves-light" target="_self" title="About">About</a></li>
+						<li>
+							<a href="contact-us" title="Contact" class="scroll-cta">Contact Us</a>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div>
+						<a href="https://twitter.com/multivu" target="_blank" rel="nofollow" title="MultiVu Twitter"><i class="fab fa-twitter" aria-hidden="true"></i> |</a>
+						<a href="https://www.instagram.com/multivusocial/" target="_blank" rel="nofollow" title="MultiVu Instagram"><i class="fab fa-instagram" aria-hidden="true"></i> |</a>
+						<a href="https://www.facebook.com/PRNMultiVu/" target="_blank" rel="nofollow" title="MultiVu Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i> |</a>
+						<a href="https://www.linkedin.com/company-beta/11138736/" target="_blank" rel="nofollow" title="MultiVu LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<!--Navigation-->
+	<!--- content --->
+<div style="background-color:#063369;" class="align-center ixp-container">
+	<img src="/image/multivu-mock-up+banner.png" class="ixp-image" alt="">
+	<div style="padding:40px 10%;" class="color-a align-left ixp-animated-scroll ixp-scroll-aware ixp-scroll-in-once ixp-scroll-fade ixp-text ixp-scroll-in">
+	<div class="header_description">
+	<h2></h2>
+			</div>
+	</div>
+</div>
+    
+<div class="client-container " id="">
+			<div class="container">
+		<div class="row">
+						<div class="col-md-12">
+								<div id="wd_printable_content" class="fr-view"><p>The Multichannel News Release (MNR) is a branded landing page and content distribution solution, which serves as the hub for your multichannel promotion program. Every MNR includes multimedia assets, company branding and guaranteed distribution. Browse our suite of MNRs and features here.</p>
+
+<ul class="wd_blue_buttons">
+	<li><a href="#multichannel-news-release">Standard MNR</a></li>
+	<li><a href="#mnr-pro">MNR Pro</a></li>
+	<li><a href="#basic-mnr">Basic MNR</a></li>
+</ul>
+
+<div class="wd_standard">
+<div class="wd_category wd_category_3232"><div class="wd_category_info"><h1 class="category_header">STANDARD MNR</h1><div class="category_intro"><div class="category_summary"><p>Our most popular option combines paid, owned, shared and earned media strategies to help you reach target audiences, drive engagement and promote content. A mainstay for communicators, the MNR elevates your messaging from a simple press release to a shareable pitching tool, creating a stronger impact. Hover over the images to see what&#39;s included.&nbsp;<br />
+&nbsp;</p>
+</div>
+</div></div><div class="wd_category_items wd_category_items_3232"><div class="item"><table width="1920" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/Custom+Landing+Page.png" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Custom Landing Page</div><p>Showcase your content with a custom-branded landing page built by a dedicated team of web designers and project managers</p>
+</div>
+<div class="item"><table width="1000" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/Marketing.jpg" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Press Release Distribution</div><p>Full national wire transmission to 14,500 websites, media outlets and journalists, with international distribution options available as well</p>
+</div>
+<div class="item"><table width="1000" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/six+assets.png" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Multimedia Assets</div><p>Display up to 6 multimedia assets</p>
+</div>
+<div class="item"><table width="1000" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/influencer+list.jpg" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Choice of Influencer List
+</div><p>We can distribute the MNR to an additional Cision Influencer list</p>
+</div>
+<div class="item"><table width="1000" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/leadgennew.jpg" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Lead Generation/Call-to-Action</div><p>Integrate your own or have one built for your calls-to-action; click-throughs to your site, social channels and more</p>
+</div>
+<div class="item"><table width="1000" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/pageviews.jpg" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">10,000 Guaranteed Page Views
+</div><p>Reach new audiences through contextual audience targeting</p>
+</div>
+<div class="item"><table width="1000" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/online+video+distribution.jpg" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Online Video Distribution</div><p>Distribution of one video file to top video portals (YouTube, Vimeo and AP Video Hub)</p>
+</div>
+</div></div><div class="wd_category wd_category_3226"><div class="wd_category_info"><h1 class="category_header">STANDARD MNR EXAMPLES </h1><div class="category_intro"><div class="category_summary"></div>
+</div></div><div class="wd_category_items wd_category_items_3226"><div class="item"><table width="1508" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/sharpie-s-gel/9333251-en-sharpie-s-gel-pen-rookies-of-the-year-draft-picks" target="_blank"><img src="/image/sharpie+screengrab.jpg" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">Sharpie</div></div>
+<div class="item"><table width="1508" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/bushs-beans/9329551-en-bushs-beans-and-bluey-launch-new-bushs-bluey-baked-beans" target="_blank"><img src="/image/Screenshot+2025-09-15+at+11-57-15+Bush%E2%80%99s+Beans%C2%AE+and+Bluey%C2%AE+Team+Up+to+Launch+New+Bush%E2%80%99s+Bluey+Baked+Beans%E2%80%A6+For+REAL+LIFE.png" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">Bush's Beans</div></div>
+<div class="item"><table width="1508" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/diageo/9321851-en-orphan-barrel-whiskey-co-introduces-fanged-pursuit-kentucky-straight-bourbon-whiskey" target="_blank"><img src="/image/orphan+barrel+screengrab.jpg" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">Orphan Barrel</div></div>
+</div></div><div class="wd_category wd_category_3227"><div class="wd_category_info"><h1 class="category_header">MNR PRO</h1><div class="category_intro"><div class="category_summary"><p>Leverage the full power of the MNR by coupling it with Guaranteed Paid Placement, the most effective placement format in digital media for reaching sites that can&rsquo;t be reached by wire alone. Guaranteed Paid Placement guarantees coverage in top online media outlets to tell powerful brand stories directly on publisher sites in your industry target. The combination of an MNR + Guaranteed Paid Placement, MNR Pro, gives you an earned and paid distribution solution that powers your messaging across online audiences and delivers powerful editorial style content to your targets on sites they&rsquo;re already visiting for trusted media coverage. With the MNR Pro you get all the features of an MNR with the added benefits of Guaranteed Paid Placement.</p>
+</div>
+</div></div></div><div class="wd_category wd_category_3228"><div class="wd_category_info"><h1 class="category_header">MNR PRO EXAMPLES</h1><div class="category_intro"><div class="category_summary"></div>
+</div></div><div class="wd_category_items wd_category_items_3228"><div class="item"><table width="1505" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/bestway/9328151-en-bestway-launches-first-ever-outdoor-trampoline-xtreme-air" target="_blank"><img src="/image/Screenshot+2025-09-15+at+12-10-39+Bestway+Launches+First-Ever+Outdoor+Trampoline+Xtreme+Air.jpg" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">MNR</div></div>
+<div class="item"><table width="653" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/sfgate+in+feed+image+-+Bestway+Xtreme.png" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">In Unit Image</div></div>
+<div class="item"><table width="508" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/sfgate+Native+Article+-+Bestway+Xtreme.png" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Guaranteed Paid Placement
+</div></div>
+</div></div><div class="wd_category wd_category_3224"><div class="wd_category_info"><h1 class="category_header">BASIC MNR</h1><div class="category_intro"><div class="category_summary"><p>A pared down and more budget friendly version of the Standard MNR, the Basic MNR includes 5,000 guaranteed page views, 3 multimedia assets, press release distribution, lead generation, influencer list and a branded landing page.&nbsp;</p>
+</div>
+</div></div></div><div class="wd_category wd_category_3233"><div class="wd_category_info"><h1 class="category_header">BASIC MNR EXAMPLES</h1><div class="category_intro"><div class="category_summary"></div>
+</div></div><div class="wd_category_items wd_category_items_3233"><div class="item"><table width="398" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/miu-miu-beauty/9349051-en-introducing-miutine-new-irreverent-fragrance-by-miu-miu" target="_blank"><img src="/image/Screenshot+2025-09-18+at+13-37-49+Introducing+Miutine+the+new+irreverent+fragrance+by+Miu+Miu.jpeg" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">Miu Miu</div></div>
+<div class="item"><table width="464" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/cohen-veterans-network/9351951-en-cohen-vet-network-have-her-six-campaign-combats-military-women-suicide" target="_blank"><img src="/download/Screenshot+2025-09-19+at+12-25-04+Cohen+Veterans+Network+Unveils+%E2%80%9CHave+Her+Six%E2%80%9D+Campaign+to+Combat+Suicide+Crisis+Among+Military" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">Cohen Veterans Network</div></div>
+<div class="item"><table width="680" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><a href="https://www.multivu.com/tym-tractors/9346651-en-tym-awarded-2025-dealers-choice-award-naeda" target="_blank"><img src="/download/Screenshot+2025-09-18+at+13-43-16+TYM+awarded+the+2025+Dealer%E2%80%99s+Choice+Award+by+the+North+American+Equipment+Dealers+Association" border="0" alt="" title=""  /></a></td></tr></table>
+<div class="item_name">TYM</div></div>
+</div></div><div class="wd_category wd_category_3230"><div class="wd_category_info"><h1 class="category_header">FEATURES</h1><div class="category_intro"><div class="category_summary"></div>
+</div></div><div class="wd_category_items wd_category_items_3230"><div class="item"><div class="item_name">Autoplay Video</div><p>
+<video autoplay="1" controls="" controlslist="nodownload" loop="1" muted="1" poster="image/2025-09-26_8-58-49.png" src="https://prnewswire2-a.akamaihd.net/p/1893751/sp/189375100/serveFlavor/entryId/1_dsczk3rb/flavorId/1_9nrin7lw/prn_folder/MNR/prn_id/MVP/prn_flavor/Source/prn_filename/MNR_Autoplay.mp4" style="width:100%; height: auto;">Your browser does not support the video tag.</video>
+</p>
+
+<p>Drive views and engagement with automatically playing video clips on page load.</p>
+
+<p><a class="button button-e button-small ixp-link" href="https://www.multivu.com/marina_bay_sands/9344151-en-lasvegas-sands-new-ultra-luxury-development" style="margin-top:5%;" target="_blank">View Example<span class="sr-only">Opens in a new window.</span></a></p>
+</div>
+<div class="item"><table width="656" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/mouseover-low.gif" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Mouseovers</div><p>Dynamic image animations that encourage clicks and engagement.</p>
+
+<p><a class="button button-e button-small ixp-link" href="https://www.multivu.com/cdc/9346151-en-cdc-launches-new-campaign-address-youth-substance-use-mental-health" style="margin-top:5%;" target="_blank">View Example<span class="sr-only">Opens in a new window.</span></a></p>
+</div>
+<div class="item"><table width="10" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/content+blocks-hi.gif" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Content Blocks </div><p>Layout for mixed media content &ndash; text and assets. Great for posting event calendars, food menus.</p>
+
+<p><a class="button button-e button-small ixp-link" href="https://www.multivu.com/dev_kevinb/2222222-en-grid-2-mnr-example" style="margin-top:5%;" target="_blank">View Example<span class="sr-only">Opens in a new window.</span></a></p>
+</div>
+<div class="item"><table width="1840" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/page+load+animations-low.gif" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Page Load Animations</div><p>Fades, slide-in animation encourage the visitor to scroll through the page.</p>
+
+<p><a class="button button-e button-small ixp-link" href="http://multivu.com/purina/9343451-en-purina-pro-plan-fueled-by-video-series" style="margin-top:5%;" target="_blank">View Example<span class="sr-only">Opens in a new window.</span></a></p>
+</div>
+<div class="item"><table width="1838" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/infographic-hi.gif" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Animated Infographics    </div><p>Animate static data into a wide variety of animated displays for bar graphs, line graphs, pie charts, and more. </p>
+
+<p><a class="button button-e button-small ixp-link" href="https://www.multivu.com/dev_kevinb/082025-hc-demo" style="margin-top:5%;" target="_blank">View Example<span class="sr-only">Opens in a new window.</span></a></p>
+</div>
+<div class="item"><div class="item_name">Custom Icons</div><p>
+<video autoplay="1" controls="" controlslist="nodownload" loop="1" muted="1" poster="image/2025-11-10_8-57-18.png" src="https://prnewswire2-a.akamaihd.net/p/1893751/sp/189375100/serveFlavor/entryId/1_von14o73/flavorId/1_29d6m85m/prn_folder/MNR/prn_id/MVP/prn_flavor/Source/prn_filename/social-icons-mnr.mp4" style="width:100%; height: auto;">Your browser does not support the video tag.</video>
+</p>
+
+<p>We now have play buttons social share buttons that match the client&rsquo;s brand.</p>
+
+<p><a class="button button-e button-small ixp-link" href="https://www.multivu.com/danone/9359951-en-danone-happy-baby-organics-jenna-dewan-happy-babies-poop" style="margin-top:5%;" target="_blank">View Example<span class="sr-only">Opens in a new window.</span></a></p>
+</div>
+<div class="item"><table width="1999" class="wd_imagetable" border="0" cellpadding="0" cellspacing="0" align="left" style="margin: 10px 10px 10px 0px;" role="presentation"><tr><td><img src="/image/font+match.png" border="0" alt="" title=""  /></td></tr></table>
+<div class="item_name">Font matching  </div><p>Ability to use client provided fonts to tailor the look and feel of the page. </p>
+</div>
+</div></div><div class="wd_toolbar wd_toolbar-main"><ul class="wd_tools"><li class="wd_tool wd_tool-print"><span class="wd_tool_icon"><a onclick="view_printable(); return false;" rel="nofollow" href="#print" title="Open a printable version of this page"><span class="fa fa-print"></span><span class="wd_sr-only wd_sr-only-focusable">Open a printable version of this page</span></a></span></li><li class="wd_tool wd_tool-email"><span class="wd_tool_icon"><a onclick="window.location.href = 'mailto:?subject=MultiVu%3A%20Multimedia%20Production%20%26%20Strategic%20Distribution%20-%20Multichannel%20News%20Releases&amp;body='+encodeURIComponent(window.location.href);return false;" href="#email" title="Email the URL of this page to a friend"><span class="fa fa-envelope"></span><span class="wd_sr-only wd_sr-only-focusable">Email the URL of this page to a friend</span></a></span></li><li class="wd_tool wd_tool-rss"><span class="wd_tool_icon"><a href="https://www.multivu.com/multichannel-news-release?pagetemplate=rss" title="Get the RSS feed for this page"><span class="fa fa-rss"></span><span class="wd_sr-only wd_sr-only-focusable">Get the RSS feed for this page</span></a></span></li><li class="wd_tool wd_tool-socialshare_twitter"><span class="wd_tool_icon">
+                    <a href="https://twitter.com/share?url=https%3A%2F%2Fwww.multivu.com%2Findex.php%3Fs%3D34349" target="_blank" title="Twitter Share" style="background-color:#000;">
+                    <span class="fa fa-twitter"></span>
+		    <span class="wd_sr-only wd_sr-only-focusable">Share this page on Twitter</span>
+                    </a>
+                </span></li><li class="wd_tool wd_tool-socialshare_linkedin"><span class="wd_tool_icon">
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.multivu.com%2Findex.php%3Fs%3D34349" target="_blank" title="Linkedin Share" style="background-color:#0077B5;">
+                    <span class="fa fa-linkedin"></span>
+		    <span class="wd_sr-only wd_sr-only-focusable">Share this page on LinkedIn</span>
+                    </a>
+                </span></li><li class="wd_tool wd_tool-socialshare_facebook"><span class="wd_tool_icon">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.multivu.com%2Findex.php%3Fs%3D34349" target="_blank" title="Facebook Share" style="background-color:#4267B2;">
+                    <span class="fa fa-facebook"></span>
+		    <span class="wd_sr-only wd_sr-only-focusable">Share this page on Facebook</span>
+                    </a>
+                </span></li></ul></div>
+</div>
+</div>			</div>
+					</div>        
+						<div class="row wd_bottom_white">
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+			<div class="col-xs-12 col-sm-6 col-md-6 text-center">
+				<h3>Get Started Today</h3>
+				<div class="wd_featureboxes_bottom_white wd_featureboxes-vertical fr-view">
+<div id="wd_featurebox-standard_3539" class="wd_featurebox_container wd_featurebox-standard"><div class="wd_featurebox_title"></div><div class="wd_featurebox"><p><iframe border="0" height="800" src="contact-2?pagetemplate=iframe" width="100%"></iframe></p>
+</div></div></div>
+			</div>
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+		</div>
+			</div>
+	</div>
+ 
+<div id="social-icon-container">
+	<div id="social-wrapper">
+		<ul class="social-list">
+			<li><h5>Connect with us:</h5></li>
+			<li><a href="https://twitter.com/multivu" target="_blank" rel="nofollow" title="MultiVu Twitter"><i class="fab fa-twitter fa-3x" aria-hidden="true"></i></a></li>
+			<li><a href="https://www.instagram.com/multivusocial/" target="_blank" rel="nofollow" title="MultiVu Instagram"><i class="fab fa-instagram fa-3x" aria-hidden="true"></i></a></li>
+			<li><a href="https://www.facebook.com/PRNMultiVu/" target="_blank" rel="nofollow" title="MultiVu Facebook"><i class="fab fa-facebook-f fa-3x" aria-hidden="true"></i></a></li>
+			<li><a href="https://www.linkedin.com/company/multivu/" target="_blank" rel="nofollow" title="MultiVu LinkedIn"><i class="fab fa-linkedin-in fa-3x" aria-hidden="true"></i></a></li>
+		</ul>
+	</div>
+</div>
+<!--- end of content --->
+<div id="footer-container">
+	<div id="footer-wrapper">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">                        
+					<div class="col-md-3">
+						<ul>
+							<li>Solutions</li>
+							<li><a href="multivu-subscription-services" title="Subscription" class="nav-highlight-orange">Subscription</a></li>
+							<li><a href="media-tours" title="Media Tours">Media Tours</a></li>
+							<li><a href="multichannel-news-release" title="Multichannel News Releases">Multichannel News Releases</a></li>
+							<li><a href="media-placements" title="Media Placements">Media Placements</a></li>
+							<li><a href="podcasts" title="Podcasts">Podcasts</a></li>
+							<li><a href="creative-video-production" title="Creative">Creative</a></li>
+							<li><a href="webcast-services" title="Webcast Services">Webcast Services</a></li>
+							<li><a href="guaranteed-paid-placement" title="Guaranteed Paid Placement">Guaranteed Paid Placement</a></li>
+							
+							<li><a href="social-video" title="Social Video">Social Video</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul>
+							<li>Resources</li>                                
+							<li><a href="success-stories" title="Success Stories">Success Stories</a></li>
+							<li><a href="webinar-archive" title="Webinars">Webinars</a></li>
+							<li><a href="http://www.psaroom.com/" target="_blank" rel="nofollow" title="MultiVu PSA Room">MultiVu PSA Room</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul>
+							<li>About</li>
+							<li><a href="about-multivu" title="About MultiVu">About MultiVu</a></li>
+							<li><a href="http://www.cision.com/us/" target="_blank" rel="nofollow" title="About Cision">About Cision</a></li>
+							<li><a href="https://www.prnewswire.com/" target="_blank" rel="nofollow" title="About PR Newswire">About PR Newswire</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="under-footer">
+	<div id="under-footer-wrapper" class="container">
+		<div class="row">
+			<div class="col-md-6 text-mobile-center">
+				<p><a href="privacy-policy" title="Privacy Policy">Privacy Policy</a> <span class="divider">|</span> <a href="cookie-policy" title="Cookie Policy">Cookie Policy</a> <span class="divider">|</span> <a href="cookie-settings" title="Cookie Settings">Cookie Settings</a></p>
+			</div>
+			<div class="col-md-6 text-right text-mobile-center">
+				<p> &copy; Copyright 2026 MultiVu, a PR Newswire company. All Rights Reserved</p>
+			</div>
+			<div class="col-md-12 text-mobile-center">
+				<div>
+					<h6 class="mv-inline-block">Do not sell my personal information: </h6>
+					<ul class="mv-inline-block">
+						<li class="mv-inline-block">Submit via <a href="/cdn-cgi/l/email-protection#104062796671736950737963797f7e3e737f7d"><span class="__cf_email__" data-cfemail="1c4c6e756a7d7f655c7f756f757372327f7371">[email&#160;protected]</span></a><span class="divider">|</span></li>
+						<li class="mv-inline-block">Call Privacy toll-free number: 877-297-8921</li>
+					</ul>
+				 </div>
+			</div>
+		</div>
+	</div>
+</div>
+	<div class="mobile-ctab-container">
+		<a href="contact-us" title="Get Started!" target="" rel="nofollow" class="mobile-cta">Get Started!</a>
+	</div>
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/moment.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/wd_js.js"></script>
+<script>
+	$('#webinarModalSmall').modal({
+		backdrop: false,
+		show: false
+	});
+	$('#webinarModalFull').modal({
+		show: false,
+	});
+</script>
+<script>
+	$('#mainNav').affix({
+		offset: {
+			top: 100
+		}
+	});
+</script>
+<script>
+setTimeout(function() {
+	var playModalVideo = document.getElementById('modal-video');
+	if (playModalVideo != null || playModalVideo != undefined) {
+		playModalVideo.muted = true;
+		$('#hero-video').on('hidden.bs.modal', function () {
+			playModalVideo.pause();
+		});
+		$('#hero-video').on('shown.bs.modal', function () {
+			playModalVideo.muted = false;
+			playModalVideo.play();
+		});
+	}
+}, 1500);
+</script>
+
+<!-- begin spin_special_output(body_end) -->
+<script wd_script_id="piwik_tracking_code"></script>
+<!-- end spin_special_output(body_end) -->
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9845aa8ad85c1f',t:'MTc3ODQwOTA2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

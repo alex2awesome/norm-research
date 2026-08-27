@@ -1,0 +1,1056 @@
+<!-- URL: https://en.wikipedia.org/wiki/Situational_crisis_communication_theory -->
+<!-- HTTP: 200 SIZE:   105258 -->
+<!DOCTYPE html>
+<html class="client-nojs vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<title>Situational crisis communication theory - Wikipedia</title>
+<script>(function(){var className="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-menu-disabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-day vector-sticky-header-enabled vector-toc-available skin-theme-clientpref-thumb-standard";var cookie=document.cookie.match(/(?:^|; )enwikimwclientpreferences=([^;]+)/);if(cookie){cookie[1].split('%2C').forEach(function(pref){className=className.replace(new RegExp('(^| )'+pref.replace(/-clientpref-\w+$|[^\w-]+/g,'')+'-clientpref-\\w+( |$)'),'$1'+pref+'$2');});}document.documentElement.className=className;}());RLCONF={"wgBreakFrames":false,"wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgRequestId":"cf56136c-05eb-4c74-a084-bbbed564894d","wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"Situational_crisis_communication_theory","wgTitle":"Situational crisis communication theory","wgCurRevisionId":1320108134,"wgRevisionId":1320108134,"wgArticleId":35157384,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Articles with short description","Short description is different from Wikidata","All articles with unsourced statements","Articles with unsourced statements from March 2021","Emergency management","Crisis","Mass media theories","Communication theory"],"wgPageViewLanguage":"en","wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgRelevantPageName":"Situational_crisis_communication_theory","wgRelevantArticleId":35157384,"wgTempUserName":null,"wgIsProbablyEditable":true,"wgRelevantPageIsProbablyEditable":true,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgNoticeProject":"wikipedia","wgFlaggedRevsParams":{"tags":{"status":{"levels":1}}},"wgConfirmEditCaptchaNeededForGenericEdit":"hcaptcha","wgConfirmEditForceShowCaptcha":false,"wgConfirmEditHCaptchaVisualEditorOnLoadIntegrationEnabled":false,"wgConfirmEditHCaptchaSiteKey":"5d0c670e-a5f4-4258-ad16-1f42792c9c62","wgMediaViewerOnClick":true,"wgMediaViewerEnabledByDefault":true,"wgPopupsFlags":0,"wgVisualEditor":{"pageLanguageCode":"en","pageLanguageDir":"ltr","pageVariantFallbacks":"en"},"wgMFDisplayWikibaseDescriptions":{"search":true,"watchlist":true,"tagline":false,"nearby":true},"wgWMESchemaEditAttemptStepOversample":false,"wgWMEPageLength":20000,"wgTestKitchenUserExperiments":{"overrides":[],"enrolled":[],"assigned":[],"subject_ids":[]},"wgEditSubmitButtonLabelPublish":true,"wgVisualEditorPageIsDisambiguation":false,"wgULSPosition":"interlanguage","wgULSisCompactLinksEnabled":false,"wgVector2022LanguageInHeader":true,"wgULSisLanguageSelectorEmpty":false,"wgULSLanguageSelectorV2Enabled":false,"wgWikibaseItemId":"Q17081053","wgCheckUserClientHintsHeadersJsApi":["brands","architecture","bitness","fullVersionList","mobile","model","platform","platformVersion"],"GEHomepageSuggestedEditsEnableTopics":true,"wgGESuggestedEditsTaskTypes":{"taskTypes":["copyedit","link-recommendation"],"unavailableTaskTypes":[]},"wgGETopicsMatchModeEnabled":false,"wgGELevelingUpEnabledForUser":false,"wgPersonalDashboardMenuVisible":false};
+RLSTATE={"ext.globalCssJs.user.styles":"ready","site.styles":"ready","user.styles":"ready","ext.globalCssJs.user":"ready","user":"ready","user.options":"loading","ext.wikimediamessages.styles":"ready","ext.cite.styles":"ready","skins.vector.search.codex.styles":"ready","skins.vector.styles":"ready","skins.vector.icons":"ready","ext.visualEditor.desktopArticleTarget.noscript":"ready","ext.uls.interlanguage":"ready","wikibase.client.init":"ready"};RLPAGEMODULES=["ext.parsermigration.survey","ext.cite.ux-enhancements","site","mediawiki.page.ready","mediawiki.toc","skins.vector.js","ext.centralNotice.geoIP","ext.centralNotice.startUp","ext.gadget.ReferenceTooltips","ext.gadget.switcher","ext.urlShortener.toolbar","ext.centralauth.centralautologin","ext.testKitchen","mmv.bootstrap","ext.popups","ext.visualEditor.desktopArticleTarget.init","ext.echo.centralauth","ext.eventLogging","ext.wikimediaEvents","ext.navigationTiming","ext.uls.interface","ext.cx.eventlogging.campaigns","ext.cx.uls.quick.actions","wikibase.client.vector-2022","wikibase.databox.fromWikidata","ext.checkUser.clientHints","ext.quicksurveys.init","ext.growthExperiments.SuggestedEditSession"];</script>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.loader.impl(function(){return["user.options@12s5i",function($,jQuery,require,module){mw.user.tokens.set({"patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});
+}];});});</script>
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=ext.cite.styles%7Cext.uls.interlanguage%7Cext.visualEditor.desktopArticleTarget.noscript%7Cext.wikimediamessages.styles%7Cskins.vector.icons%2Cstyles%7Cskins.vector.search.codex.styles%7Cwikibase.client.init&amp;only=styles&amp;skin=vector-2022">
+<script async="" src="/w/load.php?lang=en&amp;modules=startup&amp;only=scripts&amp;raw=1&amp;skin=vector-2022"></script>
+<meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="/w/load.php?lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector-2022">
+<meta name="generator" content="MediaWiki 1.47.0-wmf.1">
+<meta name="referrer" content="origin">
+<meta name="referrer" content="origin-when-cross-origin">
+<meta name="robots" content="max-image-preview:standard">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=1120">
+<meta property="og:title" content="Situational crisis communication theory - Wikipedia">
+<meta property="og:type" content="website">
+<link rel="alternate" type="application/x-wiki" title="Edit this page" href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit">
+<link rel="apple-touch-icon" href="/static/apple-touch/wikipedia.png">
+<link rel="icon" href="/static/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="/w/rest.php/v1/search" title="Wikipedia (en)">
+<link rel="EditURI" type="application/rsd+xml" href="//en.wikipedia.org/w/api.php?action=rsd">
+<link rel="canonical" href="https://en.wikipedia.org/wiki/Situational_crisis_communication_theory">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.en">
+<link rel="alternate" type="application/atom+xml" title="Wikipedia Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom">
+<link rel="dns-prefetch" href="//meta.wikimedia.org" />
+<link rel="dns-prefetch" href="auth.wikimedia.org">
+</head>
+<body class="skin--responsive skin-vector skin-vector-search-vue mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Situational_crisis_communication_theory rootpage-Situational_crisis_communication_theory skin-vector-2022 action-view">
+<div id="mw-aria-live-region" class="mw-aria-live-region" aria-live="polite"></div><a class="mw-jump-link" href="#bodyContent">Jump to content</a>
+<div class="vector-header-container">
+	<header class="vector-header mw-header no-font-mode-scale">
+		<div class="vector-header-start">
+			<nav class="vector-main-menu-landmark" aria-label="Site">
+				
+<div id="vector-main-menu-dropdown" class="vector-dropdown vector-main-menu-dropdown vector-button-flush-left vector-button-flush-right"  title="Main menu" >
+	<input type="checkbox" id="vector-main-menu-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-main-menu-dropdown" class="vector-dropdown-checkbox "  aria-label="Main menu"  >
+	<label id="vector-main-menu-dropdown-label" for="vector-main-menu-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-menu mw-ui-icon-wikimedia-menu"></span>
+
+<span class="vector-dropdown-label-text">Main menu</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+				<div id="vector-main-menu-unpinned-container" class="vector-unpinned-container">
+		
+<div id="vector-main-menu" class="vector-main-menu vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-main-menu-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="main-menu-pinned"
+	data-pinnable-element-id="vector-main-menu"
+	data-pinned-container-id="vector-main-menu-pinned-container"
+	data-unpinned-container-id="vector-main-menu-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Main menu</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-main-menu.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-main-menu.unpin">hide</button>
+</div>
+
+	
+<div id="p-navigation" class="vector-menu mw-portlet mw-portlet-navigation"  >
+	<div class="vector-menu-heading">
+		Navigation
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-mainpage-description" class="mw-list-item"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z"><span>Main page</span></a></li><li id="n-contents" class="mw-list-item"><a href="/wiki/Wikipedia:Contents" title="Guides to browsing Wikipedia"><span>Contents</span></a></li><li id="n-currentevents" class="mw-list-item"><a href="/wiki/Portal:Current_events" title="Articles related to current events"><span>Current events</span></a></li><li id="n-randompage" class="mw-list-item"><a href="/wiki/Special:Random" title="Visit a randomly selected article [x]" accesskey="x"><span>Random article</span></a></li><li id="n-aboutsite" class="mw-list-item"><a href="/wiki/Wikipedia:About" title="Learn about Wikipedia and how it works"><span>About Wikipedia</span></a></li><li id="n-contactpage" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us" title="How to contact Wikipedia"><span>Contact us</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-interaction" class="vector-menu mw-portlet mw-portlet-interaction"  >
+	<div class="vector-menu-heading">
+		Contribute
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="n-help" class="mw-list-item"><a href="/wiki/Help:Contents" title="Guidance on how to use and edit Wikipedia"><span>Help</span></a></li><li id="n-introduction" class="mw-list-item"><a href="/wiki/Help:Introduction" title="Learn how to edit Wikipedia"><span>Learn to edit</span></a></li><li id="n-portal" class="mw-list-item"><a href="/wiki/Wikipedia:Community_portal" title="The hub for editors"><span>Community portal</span></a></li><li id="n-recentchanges" class="mw-list-item"><a href="/wiki/Special:RecentChanges" title="A list of recent changes to Wikipedia [r]" accesskey="r"><span>Recent changes</span></a></li><li id="n-upload" class="mw-list-item"><a href="/wiki/Wikipedia:File_upload_wizard" title="Add images or other media for use on Wikipedia"><span>Upload file</span></a></li><li id="n-specialpages" class="mw-list-item"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q"><span>Special pages</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+				</div>
+
+	</div>
+</div>
+
+		</nav>
+			
+<a href="/wiki/Main_Page" class="mw-logo">
+	<img class="mw-logo-icon" src="/static/images/icons/enwiki-25.svg" alt="" aria-hidden="true" height="50" width="50">
+	<span class="mw-logo-container skin-invert">
+		<img class="mw-logo-wordmark" alt="Wikipedia" src="/static/images/mobile/copyright/wikipedia-wordmark-en-25.svg" style="width: 8.75em; height: 1.375em;">
+		<img class="mw-logo-tagline" alt="The Free Encyclopedia" src="/static/images/mobile/copyright/wikipedia-tagline-en-25.svg" width="140" height="11" style="width: 8.75em; height: 0.6875em;">
+	</span>
+</a>
+
+		</div>
+		<div class="vector-header-end">
+			
+<div id="p-search" role="search" class="vector-search-box-vue  vector-search-box-collapses vector-search-box-show-thumbnail vector-search-box-auto-expand-width vector-search-box">
+	<a href="/wiki/Special:Search" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only search-toggle" title="Search Wikipedia [f]" accesskey="f"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+	</a>
+	<div class="vector-typeahead-search-container">
+		<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail cdx-typeahead-search--auto-expand-width">
+			<form action="/w/index.php" id="searchform" class="cdx-search-input cdx-search-input--has-end-button">
+				<div id="simpleSearch" class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+					<div class="cdx-text-input cdx-text-input--has-start-icon">
+						<input
+							class="cdx-text-input__input mw-searchInput" autocomplete="off"
+							 type="search" name="search" placeholder="Search Wikipedia" aria-label="Search Wikipedia" autocapitalize="none" spellcheck="false" title="Search Wikipedia [f]" accesskey="f" id="searchInput"
+							>
+						<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+					</div>
+					<input type="hidden" name="title" value="Special:Search">
+				</div>
+				<button class="cdx-button cdx-search-input__end-button">Search</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+			<nav class="vector-user-links vector-user-links-wide" aria-label="Personal tools">
+	<div class="vector-user-links-main">
+	
+<div id="p-vector-user-menu-preferences" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-userpage" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	<nav class="vector-appearance-landmark" aria-label="Appearance">
+		
+<div id="vector-appearance-dropdown" class="vector-dropdown "  title="Change the appearance of the page&#039;s font size, width, and color" >
+	<input type="checkbox" id="vector-appearance-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-appearance-dropdown" class="vector-dropdown-checkbox "  aria-label="Appearance"  >
+	<label id="vector-appearance-dropdown-label" for="vector-appearance-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-appearance mw-ui-icon-wikimedia-appearance"></span>
+
+<span class="vector-dropdown-label-text">Appearance</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+			<div id="vector-appearance-unpinned-container" class="vector-unpinned-container">
+				
+			</div>
+		
+	</div>
+</div>
+
+	</nav>
+	
+<div id="p-vector-user-menu-notifications" class="vector-menu mw-portlet emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+<div id="p-vector-user-menu-overflow" class="vector-menu mw-portlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=" cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet"><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=Situational+crisis+communication+theory" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span>Create account</span></a>
+</li>
+<li id="pt-login-2" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=Situational+crisis+communication+theory" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	</div>
+	
+<div id="vector-user-links-dropdown" class="vector-dropdown vector-user-menu vector-button-flush-right vector-user-menu-logged-out user-links-collapsible-item"  title="Log in and more options" >
+	<input type="checkbox" id="vector-user-links-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-user-links-dropdown" class="vector-dropdown-checkbox "  aria-label="Personal tools"  >
+	<label id="vector-user-links-dropdown-label" for="vector-user-links-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-ellipsis mw-ui-icon-wikimedia-ellipsis"></span>
+
+<span class="vector-dropdown-label-text">Personal tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+		
+<div id="p-personal" class="vector-menu mw-portlet mw-portlet-personal user-links-collapsible-item"  title="User menu" >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			<li id="pt-sitesupport" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="https://donate.wikimedia.org/?wmf_source=donate&amp;wmf_medium=sidebar&amp;wmf_campaign=en.wikipedia.org&amp;uselang=en" class=""><span class="vector-icon mw-ui-icon-heart mw-ui-icon-wikimedia-heart"></span>
+
+<span>Donate</span></a>
+</li>
+<li id="pt-createaccount" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:CreateAccount&amp;returnto=Situational+crisis+communication+theory" title="You are encouraged to create an account and log in; however, it is not mandatory" class=""><span class="vector-icon mw-ui-icon-userAdd mw-ui-icon-wikimedia-userAdd"></span>
+
+<span>Create account</span></a>
+</li>
+<li id="pt-login" class="mw-list-item user-links-collapsible-item"><a data-mw-interface  href="/w/index.php?title=Special:UserLogin&amp;returnto=Situational+crisis+communication+theory" title="You&#039;re encouraged to log in; however, it&#039;s not mandatory. [o]" accesskey="o" class=""><span class="vector-icon mw-ui-icon-logIn mw-ui-icon-wikimedia-logIn"></span>
+
+<span>Log in</span></a>
+</li>
+
+			
+		</ul>
+		
+	</div>
+</div>
+
+	
+	</div>
+</div>
+
+</nav>
+
+		</div>
+	</header>
+</div>
+<div class="mw-page-container">
+	<div class="mw-page-container-inner">
+		<div class="vector-sitenotice-container">
+			<div id="siteNotice"><!-- CentralNotice --></div>
+		</div>
+		<div class="vector-column-start">
+			<div class="vector-main-menu-container">
+		<div id="mw-navigation">
+			<nav id="mw-panel" class="vector-main-menu-landmark" aria-label="Site">
+				<div id="vector-main-menu-pinned-container" class="vector-pinned-container">
+				
+				</div>
+		</nav>
+		</div>
+	</div>
+	<div class="vector-sticky-pinned-container">
+				<nav id="mw-panel-toc" aria-label="Contents" data-event-name="ui.sidebar-toc" class="mw-table-of-contents-container vector-toc-landmark">
+					<div id="vector-toc-pinned-container" class="vector-pinned-container">
+					<div id="vector-toc" class="vector-toc vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-toc-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="toc-pinned"
+	data-pinnable-element-id="vector-toc"
+	data-pinned-container-id="vector-toc-pinned-container"
+	data-unpinned-container-id="vector-toc-unpinned-container"
+>
+	<h2 class="vector-pinnable-header-label">Contents</h2>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-toc.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-toc.unpin">hide</button>
+</div>
+
+
+	<ul class="vector-toc-contents" id="mw-panel-toc-list">
+		<li id="toc-mw-content-text"
+			class="vector-toc-list-item vector-toc-level-1">
+			<a href="#" class="vector-toc-link">
+				<div class="vector-toc-text">(Top)</div>
+			</a>
+		</li>
+		<li id="toc-SCCT_crisis_response_strategy_guidelines"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#SCCT_crisis_response_strategy_guidelines">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">1</span>
+				<span>SCCT crisis response strategy guidelines</span>
+			</div>
+		</a>
+		
+		<ul id="toc-SCCT_crisis_response_strategy_guidelines-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Theoretical_framework"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Theoretical_framework">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">2</span>
+				<span>Theoretical framework</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Theoretical_framework-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Crisis_responsibility_and_reputational_threat"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Crisis_responsibility_and_reputational_threat">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">3</span>
+				<span>Crisis responsibility and reputational threat</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Crisis_responsibility_and_reputational_threat-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Types_of_crises"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Types_of_crises">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">4</span>
+				<span>Types of crises</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Types_of_crises-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Crisis_history_and_relational_reputation"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Crisis_history_and_relational_reputation">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">5</span>
+				<span>Crisis history and relational reputation</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Crisis_history_and_relational_reputation-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Crisis_response_strategies"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Crisis_response_strategies">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">6</span>
+				<span>Crisis response strategies</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Crisis_response_strategies-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-References_and_further_reading"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#References_and_further_reading">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">7</span>
+				<span>References and further reading</span>
+			</div>
+		</a>
+		
+		<ul id="toc-References_and_further_reading-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+	<li id="toc-Sources"
+		class="vector-toc-list-item vector-toc-level-1 vector-toc-list-item-expanded">
+		<a class="vector-toc-link" href="#Sources">
+			<div class="vector-toc-text">
+				<span class="vector-toc-numb">8</span>
+				<span>Sources</span>
+			</div>
+		</a>
+		
+		<ul id="toc-Sources-sublist" class="vector-toc-list">
+		</ul>
+	</li>
+</ul>
+</div>
+
+					</div>
+		</nav>
+			</div>
+		</div>
+		<div class="mw-content-container">
+			<main id="content" class="mw-body">
+				<header class="mw-body-header vector-page-titlebar no-font-mode-scale">
+					<nav aria-label="Contents" class="vector-toc-landmark">
+						
+<div id="vector-page-titlebar-toc" class="vector-dropdown vector-page-titlebar-toc vector-button-flush-left"  title="Table of Contents" >
+	<input type="checkbox" id="vector-page-titlebar-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-titlebar-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+	<label id="vector-page-titlebar-toc-label" for="vector-page-titlebar-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+							<div id="vector-page-titlebar-toc-unpinned-container" class="vector-unpinned-container">
+			</div>
+		
+	</div>
+</div>
+
+					</nav>
+					<h1 id="firstHeading" class="firstHeading mw-first-heading"><span lang="en" dir="ltr"><span class="mw-page-title-main">Situational crisis communication theory</span></span></h1>
+							
+<div id="p-lang-btn" class="vector-dropdown mw-portlet mw-portlet-lang"  >
+	<input type="checkbox" id="p-lang-btn-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-p-lang-btn" class="vector-dropdown-checkbox mw-interlanguage-selector" aria-label="This article is only available in this language. Add the article for other languages"   >
+	<label id="p-lang-btn-label" for="p-lang-btn-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive mw-portlet-lang-heading-0" aria-hidden="true"  ><span class="vector-icon mw-ui-icon-language-progressive mw-ui-icon-wikimedia-language-progressive"></span>
+
+<span class="vector-dropdown-label-text">Add languages</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+		<div class="vector-menu-content">
+			
+			<ul class="vector-menu-content-list">
+				
+				
+			</ul>
+			<div class="after-portlet after-portlet-lang"><span class="uls-after-portlet-link"></span><span class="wb-langlinks-add wb-langlinks-link"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q17081053#sitelinks-wikipedia" title="Add interlanguage links" class="wbc-editpage">Add links</a></span></div>
+		</div>
+
+	</div>
+</div>
+</header>
+				<div class="vector-page-toolbar vector-feature-custom-font-size-clientpref--excluded">
+					<div class="vector-page-toolbar-container">
+						<div id="left-navigation">
+							<nav aria-label="Namespaces">
+								
+<div id="p-associated-pages" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-associated-pages"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-nstab-main" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/Situational_crisis_communication_theory" title="View the content page [c]" accesskey="c"><span>Article</span></a></li><li id="ca-talk" class="vector-tab-noicon mw-list-item"><a href="/wiki/Talk:Situational_crisis_communication_theory" rel="discussion" title="Discuss improvements to the content page [t]" accesskey="t"><span>Talk</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+								
+<div id="vector-variants-dropdown" class="vector-dropdown emptyPortlet"  >
+	<input type="checkbox" id="vector-variants-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-variants-dropdown" class="vector-dropdown-checkbox " aria-label="Change language variant"   >
+	<label id="vector-variants-dropdown-label" for="vector-variants-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">English</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+					
+<div id="p-variants" class="vector-menu mw-portlet mw-portlet-variants emptyPortlet"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			
+		</ul>
+		
+	</div>
+</div>
+
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+						<div id="right-navigation" class="vector-collapsible">
+							<nav aria-label="Views">
+								
+<div id="p-views" class="vector-menu vector-menu-tabs mw-portlet mw-portlet-views"  >
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-view" class="selected vector-tab-noicon mw-list-item"><a href="/wiki/Situational_crisis_communication_theory"><span>Read</span></a></li><li id="ca-edit" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-history" class="vector-tab-noicon mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=history" title="Past revisions of this page [h]" accesskey="h"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+							</nav>
+				
+							<nav class="vector-page-tools-landmark" aria-label="Page tools">
+								
+<div id="vector-page-tools-dropdown" class="vector-dropdown vector-page-tools-dropdown"  >
+	<input type="checkbox" id="vector-page-tools-dropdown-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-page-tools-dropdown" class="vector-dropdown-checkbox "  aria-label="Tools"  >
+	<label id="vector-page-tools-dropdown-label" for="vector-page-tools-dropdown-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet" aria-hidden="true"  ><span class="vector-dropdown-label-text">Tools</span>
+	</label>
+	<div class="vector-dropdown-content">
+
+
+									<div id="vector-page-tools-unpinned-container" class="vector-unpinned-container">
+						
+<div id="vector-page-tools" class="vector-page-tools vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-page-tools-pinnable-header vector-pinnable-header-unpinned"
+	data-feature-name="page-tools-pinned"
+	data-pinnable-element-id="vector-page-tools"
+	data-pinned-container-id="vector-page-tools-pinned-container"
+	data-unpinned-container-id="vector-page-tools-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Tools</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-page-tools.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-page-tools.unpin">hide</button>
+</div>
+
+	
+<div id="p-cactions" class="vector-menu mw-portlet mw-portlet-cactions emptyPortlet vector-has-collapsible-items"  title="More options" >
+	<div class="vector-menu-heading">
+		Actions
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="ca-more-view" class="selected vector-more-collapsible-item mw-list-item"><a href="/wiki/Situational_crisis_communication_theory"><span>Read</span></a></li><li id="ca-more-edit" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit" title="Edit this page [e]" accesskey="e"><span>Edit</span></a></li><li id="ca-more-history" class="vector-more-collapsible-item mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=history"><span>View history</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-tb" class="vector-menu mw-portlet mw-portlet-tb"  >
+	<div class="vector-menu-heading">
+		General
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-whatlinkshere" class="mw-list-item"><a href="/wiki/Special:WhatLinksHere/Situational_crisis_communication_theory" title="List of all English Wikipedia pages containing links to this page [j]" accesskey="j"><span>What links here</span></a></li><li id="t-recentchangeslinked" class="mw-list-item"><a href="/wiki/Special:RecentChangesLinked/Situational_crisis_communication_theory" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k"><span>Related changes</span></a></li><li id="t-upload" class="mw-list-item"><a href="//en.wikipedia.org/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [u]" accesskey="u"><span>Upload file</span></a></li><li id="t-permalink" class="mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;oldid=1320108134" title="Permanent link to this revision of this page"><span>Permanent link</span></a></li><li id="t-info" class="mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=info" title="More information about this page"><span>Page information</span></a></li><li id="t-cite" class="mw-list-item"><a href="/w/index.php?title=Special:CiteThisPage&amp;page=Situational_crisis_communication_theory&amp;id=1320108134&amp;wpFormIdentifier=titleform" title="Information on how to cite this page"><span>Cite this page</span></a></li><li id="t-urlshortener" class="mw-list-item"><a href="/w/index.php?title=Special:UrlShortener&amp;url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FSituational_crisis_communication_theory"><span>Get shortened URL</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-coll-print_export" class="vector-menu mw-portlet mw-portlet-coll-print_export"  >
+	<div class="vector-menu-heading">
+		Print/export
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="coll-download-as-rl" class="mw-list-item"><a href="/w/index.php?title=Special:DownloadAsPdf&amp;page=Situational_crisis_communication_theory&amp;action=show-download-screen" title="Download this page as a PDF file"><span>Download as PDF</span></a></li><li id="t-print" class="mw-list-item"><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;printable=yes" title="Printable version of this page [p]" accesskey="p"><span>Printable version</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+<div id="p-wikibase-otherprojects" class="vector-menu mw-portlet mw-portlet-wikibase-otherprojects"  >
+	<div class="vector-menu-heading">
+		In other projects
+	</div>
+	<div class="vector-menu-content">
+		
+		<ul class="vector-menu-content-list">
+			
+			<li id="t-wikibase" class="wb-otherproject-link wb-otherproject-wikibase-dataitem mw-list-item"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q17081053" title="Structured data on this page hosted by Wikidata [g]" accesskey="g"><span>Wikidata item</span></a></li>
+		</ul>
+		
+	</div>
+</div>
+
+</div>
+
+									</div>
+				
+	</div>
+</div>
+
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="vector-column-end no-font-mode-scale">
+					<div class="vector-sticky-pinned-container">
+						<div class="wp25eastereggs-vector-sitenotice-landmark"></div>
+						<nav class="vector-page-tools-landmark" aria-label="Page tools">
+							<div id="vector-page-tools-pinned-container" class="vector-pinned-container">
+				
+							</div>
+		</nav>
+						<nav class="vector-appearance-landmark" aria-label="Appearance">
+							<div id="vector-appearance-pinned-container" class="vector-pinned-container">
+				<div id="vector-appearance" class="vector-appearance vector-pinnable-element">
+	<div
+	class="vector-pinnable-header vector-appearance-pinnable-header vector-pinnable-header-pinned"
+	data-feature-name="appearance-pinned"
+	data-pinnable-element-id="vector-appearance"
+	data-pinned-container-id="vector-appearance-pinned-container"
+	data-unpinned-container-id="vector-appearance-unpinned-container"
+>
+	<div class="vector-pinnable-header-label">Appearance</div>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-pin-button" data-event-name="pinnable-header.vector-appearance.pin">move to sidebar</button>
+	<button class="vector-pinnable-header-toggle-button vector-pinnable-header-unpin-button" data-event-name="pinnable-header.vector-appearance.unpin">hide</button>
+</div>
+
+
+</div>
+
+							</div>
+		</nav>
+					</div>
+				</div>
+				<div id="bodyContent" class="vector-body" aria-labelledby="firstHeading" data-mw-ve-target-container>
+					<div class="vector-body-before-content">
+							<div class="mw-indicators">
+		</div>
+
+						<div id="siteSub" class="noprint">From Wikipedia, the free encyclopedia</div>
+					</div>
+					<div id="contentSub"><div id="mw-content-subtitle"></div></div>
+					
+					
+					<div id="mw-content-text" class="mw-body-content"><div class="mw-subjectpageheader">
+</div><div class="mw-content-ltr mw-parser-output" lang="en" dir="ltr"><div class="shortdescription nomobile noexcerpt noprint searchaux" style="display:none">Emergency management theory</div>
+<p><b>Situational Crisis Communication Theory</b> (<b>SCCT</b>),  is a theory in the field of <a href="/wiki/Crisis_communication" title="Crisis communication">crisis communication</a>. It suggests that <a href="/wiki/Crisis_management" title="Crisis management">crisis managers</a> should match strategic crisis responses to the level of crisis responsibility and <a href="/wiki/Reputation" title="Reputation">reputational</a> threat posed by a <a href="/wiki/Crisis" title="Crisis">crisis</a>.<sup id="cite&#95;ref-coombs&#95;a&#95;1-0" class="reference"><a href="#cite_note-coombs_a-1"><span class="cite-bracket">&#91;</span>1<span class="cite-bracket">&#93;</span></a></sup>   SCCT was proposed by W. Timothy Coombs in 2007.
+</p><p>According to SCCT, evaluating the crisis type, crisis history and prior relationship reputation will help crisis managers predict the level of reputational threat of an organization and how that organization's publics will perceive the crisis and attribute crisis responsibility. Thus SCCT can be applied in an organization's crisis management.
+</p><p>Three types of crises have been identified by Coombs: the victim cluster, the accidental cluster, and the intentional cluster.<sup id="cite&#95;ref-2" class="reference"><a href="#cite_note-2"><span class="cite-bracket">&#91;</span>2<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Coombs created his experimentally based SCCT to give communicators scientific evidence to guide their decisions, essentially stating that the actions an organization takes post-crisis depend on the crisis situation. "SCCT identifies how key facets of the crisis situation influence attributions about the crisis and the reputations held by stakeholders. In turn, understanding how stakeholders will respond to the crisis informs the post-crisis communication".<sup id="cite&#95;ref-coombs&#95;b&#95;3-0" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Coombs would later expand his work with SCCT through reflections of <a href="/wiki/Meta-analysis" title="Meta-analysis">meta-analysis</a>.<sup id="cite&#95;ref-4" class="reference"><a href="#cite_note-4"><span class="cite-bracket">&#91;</span>4<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<meta property="mw:PageProp/toc" />
+<div class="mw-heading mw-heading2"><h2 id="SCCT_crisis_response_strategy_guidelines">SCCT crisis response strategy guidelines</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=1" title="Edit section: SCCT crisis response strategy guidelines"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>With <a href="/wiki/Empirical_evidence" title="Empirical evidence">empirical evidence</a> to support his theory, Coombs<sup id="cite&#95;ref-coombs&#95;b&#95;3-1" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup> provided a summary of crisis response strategy guidelines for crisis managers, given here in Table 1. SCCT provides crisis managers with an evidence-based guide to assessing and responding to crises, allowing them to make informed, strategic, and beneficial decisions.  
+</p>
+<table class="wikitable">
+
+<tbody><tr>
+<th><i><b>Table 1: SCCT crisis response strategy guidelines</b></i>
+</th></tr>
+<tr>
+<td>1.	Informing and adjusting information alone can be enough when crises have minimal attributions of crisis responsibility (victim crises), no history of similar crises and a neutral or positive prior relationship reputation.
+</td></tr>
+<tr>
+<td>2.	Victimage can be used as part of the response for workplace violence, product tampering, natural disasters and rumors.
+</td></tr>
+<tr>
+<td>3.	Diminish crisis response strategies should be used for crises with minimal attributions of crisis responsibility (victim crises) coupled with a history of similar crises and/or negative prior relationship reputation.
+</td></tr>
+<tr>
+<td>4.	Diminish crisis response strategies should be used for crises with low attributions of crisis responsibility (accident crises), which have no history of similar crises, and a neutral or positive prior relationship reputation.
+</td></tr>
+<tr>
+<td>5.	Rebuild crisis response strategies should be used for crises with low attributions of crisis responsibility (accident crises), coupled with a history of similar crises and/or negative prior relationship reputation.
+</td></tr>
+<tr>
+<td>6.	Rebuild crisis response strategies should be used for crises with strong attributions of crisis responsibility (preventable crises) regardless of crisis history or prior relationship reputation.
+</td></tr>
+<tr>
+<td>7.	The deny posture crisis response strategies should be used for rumor and challenge crises, when possible.
+</td></tr>
+<tr>
+<td>8.	Maintain consistency in crisis response strategies. Mixing deny crisis response strategies with either the diminish or rebuild strategies will erode the effectiveness of the overall response.
+</td></tr>
+<tr>
+<td>Source: Coombs, W.T. (2007b). Protecting organization reputations during a crisis: The development and application of situational crisis communication theory. Corporate Reputation Review, 10(3), 163-176.
+</td></tr></tbody></table>
+<div class="mw-heading mw-heading2"><h2 id="Theoretical_framework">Theoretical framework</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=2" title="Edit section: Theoretical framework"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>The roots for SCCT can be found in <a href="/wiki/Attribution_Theory" class="mw-redirect" title="Attribution Theory">Attribution Theory</a>. It provided one of the first links between crisis situations and crisis responses. Attributions of responsibility that shape strategic crisis responses formed the foundation for SCCT. Coombs built upon Attribution Theory, using it as a base to predict the severity of potential reputational harm—or reputational threat—a crisis may bring to an organization and, using that prediction, guide communication response decisions to minimize damage. 
+</p><p>Coombs draws on <a href="/wiki/William_Benoit" title="William Benoit">William Benoit</a>'s <a href="/wiki/Image_restoration_theory" title="Image restoration theory">Image Restoration Theory</a> in his conceptualization of responsibility and reputational threat, stating that perception is fundamental to assessments of both components. If the audience perceives that the organization is at fault, a reputational threat is put into existence and the organization is held responsible.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Crisis_responsibility_and_reputational_threat">Crisis responsibility and reputational threat</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=3" title="Edit section: Crisis responsibility and reputational threat"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>SCCT suggests that the key to determining the most effective strategic crisis response is understanding the crisis situation and the amount of reputational threat being posed by the crisis. Reputational threat is how much damage a crisis could inflict on an organization if no action is taken to respond to it. Reputational threat is influenced by three elements: (1) initial crisis responsibility, (2) crisis history and (3) prior relational reputation.<sup id="cite&#95;ref-coombs&#95;b&#95;3-2" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup>
+</p><p>Initial crisis responsibility is how much the organization's <a href="/wiki/Stakeholder_(corporate)" title="Stakeholder (corporate)">stakeholders</a> attribute the crisis to the organization; how responsible the key publics hold the organization itself for the crisis. In assessing the level of reputational threat facing an organization, crisis managers must first determine the type of crisis facing the organization.
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Types_of_crises">Types of crises</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=4" title="Edit section: Types of crises"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Coombs has identified three "crisis clusters," or types of crises, in his SCCT research: the victim cluster, the accidental cluster, and the intentional cluster.<sup id="cite&#95;ref-coombs&#95;b&#95;3-3" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup> Table 2 outlines these crisis clusters.
+</p><p>In the victim cluster, the organization is not attributed as the cause of the crisis; rather, the organization is viewed as a victim. In the accidental cluster, the organization has been nominally attributed as the cause of the crisis, but the situation is generally viewed by stakeholders as being unintentional or simply accidental. In the intentional cluster, the organization is given all or most of the attributions for the crisis and shoulders the responsibility. In this case the crisis is considered deliberate.
+</p><p>One example where SCCT was used was the lockout that began within the <a href="/wiki/National_Hockey_League" title="National Hockey League">National Hockey League</a> in September 2012.<sup id="cite&#95;ref-5" class="reference"><a href="#cite_note-5"><span class="cite-bracket">&#91;</span>5<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<table class="wikitable">
+<caption><b>Table 2: SCCT crisis types by crisis clusters</b>
+</caption>
+<tbody><tr>
+<td><b>Victim cluster</b>: In these crisis types, the organization is also a victim of the crisis.
+</td></tr>
+<tr>
+<td>(Weak attributions of crisis responsibility = Mild reputational threat)
+</td></tr>
+<tr>
+<td><i>Natural disaster</i>: <a href="/wiki/Natural_disaster" title="Natural disaster">Acts of nature</a> damage an organization such as an earthquake.
+</td></tr>
+<tr>
+<td><i>Rumor</i>: False and damaging information about an organization is being circulated.
+</td></tr>
+<tr>
+<td><i><a href="/wiki/Workplace_violence" title="Workplace violence">Workplace violence</a></i>: Current or former employee attacks current employees onsite.
+</td></tr>
+<tr>
+<td><i>Product tampering/Malevolence</i>: External agent causes damage to an organization.
+</td></tr>
+<tr>
+<td>
+</td></tr>
+<tr>
+<td>
+</td></tr>
+<tr>
+<td><b>Accidental cluster</b>: In these crisis types, the organizational actions leading to the crisis were unintentional.
+</td></tr>
+<tr>
+<td>(Minimal attributions of crisis responsibility = Moderate reputational threat)
+</td></tr>
+<tr>
+<td><i>Challenges</i>: Stakeholders claim an organization is operating in an inappropriate manner.
+</td></tr>
+<tr>
+<td><i>Technical-error accidents</i>: A technology or equipment failure causes an industrial accident.
+</td></tr>
+<tr>
+<td><i>Technical-error product harm</i>: A technology or equipment failure causes a <a href="/wiki/Product_recall" title="Product recall">product to be recalled</a>.
+</td></tr>
+<tr>
+<td>
+</td></tr>
+<tr>
+<td><b>Intentional cluster</b>: In these crisis types, the organization knowingly placed people at risk, took inappropriate actions or violated a law/regulation.
+</td></tr>
+<tr>
+<td>(Strong attributions of crisis responsibility = Severe reputational threat)
+</td></tr>
+<tr>
+<td><i><a href="/wiki/Human_error" title="Human error">Human error</a> accidents</i>: Human error causes an industrial accident.
+</td></tr>
+<tr>
+<td><i>Human-error product harm</i>: Human error causes a product to be recalled.
+</td></tr>
+<tr>
+<td><i>Organizational misdeed with no injuries</i>: Stakeholders are deceived without injury.
+</td></tr>
+<tr>
+<td><i>Organizational misdeed management <a href="/wiki/Misconduct" title="Misconduct">misconduct</a></i>: Laws or regulations are violated by management.
+</td></tr>
+<tr>
+<td><i>Organizational misdeed with injuries</i>: Stakeholders are placed at risk by management and injuries occur.
+</td></tr>
+<tr>
+<td>'Source: Coombs, W.T. (2007b).
+</td></tr></tbody></table>
+<p>Once it is determined which type of crisis, or which cluster, the organization's situation falls under, managers can predict how much attribution will be placed on the organization and how much reputational threat it is facing. In fact, Coombs’ own prior research showed that crisis responsibility and organizational reputation are negatively related.<sup id="cite&#95;ref-c&amp;h96&#95;6-0" class="reference"><a href="#cite_note-c&amp;h96-6"><span class="cite-bracket">&#91;</span>6<span class="cite-bracket">&#93;</span></a></sup><sup id="cite&#95;ref-c&amp;h01&#95;7-0" class="reference"><a href="#cite_note-c&amp;h01-7"><span class="cite-bracket">&#91;</span>7<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Crisis_history_and_relational_reputation">Crisis history and relational reputation</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=5" title="Edit section: Crisis history and relational reputation"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Another element that threatens an organization's reputation is its history of crisis, whether it has faced similar crises in the past. Within this context, how well an organization has treated its <a href="/wiki/Stakeholder_(corporate)" title="Stakeholder (corporate)">stakeholders</a> in the past—its prior relational reputation—also plays a part in assessing reputational threat. These two elements are involved in the second step crisis managers must take in evaluating the reputational threat facing the organization: if either of these elements exist within the organization, it will intensify attributions of the organization and increase the level of reputational threat. If an organization has a history of facing crises or a poor history of dealing with its stakeholders, attributions of crisis responsibility and the level of reputational threat are greater.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (March 2021)">citation needed</span></a></i>&#93;</sup>
+</p><p>Because of crisis responsibility and reputational threat, crises can effect changes in <a href="/wiki/Emotion" title="Emotion">emotions</a>, and as a result, behaviors. If a person perceives an organization to have a high level of crisis responsibility, he or she is more likely to have feelings of anger toward the organization. Conversely, lower levels of crisis responsibility can evoke feelings of sympathy. Both of these feelings can affect the behaviors of the person toward the organization, whether that person will act positively or negatively toward the organization.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (March 2021)">citation needed</span></a></i>&#93;</sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="Crisis_response_strategies">Crisis response strategies</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=6" title="Edit section: Crisis response strategies"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<p>Once the levels of crisis responsibility and reputational threat have been determined, SCCT provides crisis managers with a theoretical base to their strategic crisis response. SCCT's list for responding to crises assumes that the organization has accepted some level of responsibility for the crisis. Coombs found that the primary responses to crises in SCCT form three groups: deny, diminish, and rebuild. The SCCT list of crisis response strategies is shown in Table 3.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (March 2021)">citation needed</span></a></i>&#93;</sup>
+</p><p>Each of these strategies helps the organization get its side of the story into the media. After all how the crisis is framed in the media will determine how the organization's publics view the situation.<sup id="cite&#95;ref-coombs&#95;b&#95;3-4" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup> The media's frames become the stakeholders’ frames. 
+</p>
+<ul><li>The <i>deny</i> strategies help establish a crisis frame and sever any perceived connection between the organization and the crisis. If the organization is not involved, or if the crisis is a rumor the organization can dispel, and stakeholders and the media accept that there is no crisis, no reputational harm will be done.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (March 2021)">citation needed</span></a></i>&#93;</sup></li>
+<li><i>Diminish</i> crisis responses attempt to assure the organization's publics that the crisis is not as bad as it seems or that the organization had nothing to do with the situation. These strategies help lessen the connection between the organization and the crisis and help the organization's publics see the crisis in a less negative light. However, these strategies must be reinforced with credible evidence. If conflicting crisis frames are presented in the media, the organization's publics will adopt whichever frame comes from the most credible source.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (March 2021)">citation needed</span></a></i>&#93;</sup></li>
+<li><i>Rebuild</i> strategies help change perceptions of an organization during a crisis by offering real or symbolic forms of aid to victims and asking their forgiveness. These strategies attempt to take the focus off the crisis by taking positive action.<sup class="noprint Inline-Template Template-Fact" style="white-space:nowrap;">&#91;<i><a href="/wiki/Wikipedia:Citation_needed" title="Wikipedia:Citation needed"><span title="This claim needs references to reliable sources. (March 2021)">citation needed</span></a></i>&#93;</sup></li></ul>
+<p>A secondary type of responses, <i>bolstering</i>, attempts to increase positive reputational perceptions by presenting "new, positive information about the organization and/or remind[ing] stakeholders of past good works by the organization".<sup id="cite&#95;ref-coombs&#95;b&#95;3-5" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup> This strategy can bolster goodwill and arouse feelings of sympathy toward the organization, but Coombs warns, should be used to supplement the primary responses, not as replacements.<sup id="cite&#95;ref-coombs&#95;b&#95;3-6" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<table class="wikitable">
+
+<tbody><tr>
+<th><i><b>Table 3: SCCT crisis response strategies</b></i>
+</th></tr>
+<tr>
+<td><i><b>Primary crisis response strategies</b></i>
+</td></tr>
+<tr>
+<td><b>Deny crisis response strategies</b>
+</td></tr>
+<tr>
+<td><i>Attack the accuser</i>: Crisis manager confronts the person or group claiming something is wrong with the organization.
+</td></tr>
+<tr>
+<td><i>Denial</i>: Crisis manager asserts that there is no crisis.
+</td></tr>
+<tr>
+<td><i>Scapegoat</i>: Crisis manager blames some person or group outside of the organization for the crisis.
+</td></tr>
+<tr>
+<td><b>Diminish crisis response strategies</b>
+</td></tr>
+<tr>
+<td><i>Excuse</i>: Crisis manager minimizes organizational responsibility by denying intent to do harm and/or claiming inability to control the events that triggered the crisis.
+</td></tr>
+<tr>
+<td><i>Justification</i>: Crisis manager minimizes the perceived damage caused by the crisis.
+</td></tr>
+<tr>
+<td><b>Rebuild crisis response strategies</b>
+</td></tr>
+<tr>
+<td><i>Compensation</i>: Crisis manager offers money or other gifts to victims.
+</td></tr>
+<tr>
+<td><i>Apology</i>: Crisis manager indicates the organization takes full responsibility for the crisis and asks stakeholders for forgiveness.
+</td></tr>
+<tr>
+<td>
+</td></tr>
+<tr>
+<td><i><b>Secondary crisis response strategies</b></i>
+</td></tr>
+<tr>
+<td><b>Bolstering crisis response strategies</b>
+</td></tr>
+<tr>
+<td><i>Reminder</i>: Tell stakeholders about the past good works of the organization.
+</td></tr>
+<tr>
+<td><i>Ingratiation</i>: Crisis manager praises stakeholders and/or reminds them of past good works by the organization.
+</td></tr>
+<tr>
+<td><i>Victimage</i>: Crisis managers remind stakeholders that the organization is a victim of the crisis too.
+</td></tr>
+<tr>
+<td>Source: Coombs, W.T. (2007b).
+</td></tr></tbody></table>
+<p>SCCT suggests that how an organization communicates with its publics—what it says—will affect its publics’ perceptions of the organization. Those perceptions can shape how an organization's publics emotionally react to or behave toward to the organization. Therefore, the communication decisions crisis managers make in the wake of a crisis could have great consequences, either positive or negative. It is imperative that crisis managers act strategically to save the organization's reputation. According to Coombs:<sup id="cite&#95;ref-coombs&#95;b&#95;3-7" class="reference"><a href="#cite_note-coombs_b-3"><span class="cite-bracket">&#91;</span>3<span class="cite-bracket">&#93;</span></a></sup>
+"Crisis response strategies have three objectives relative to protecting reputations: (1) shape attributions of the crisis, (2) change perceptions of the organization in crisis and (3) reduce the negative effect generated by the crisis."
+</p><p>Coombs' research of situational crisis communication theory has focused on crisis response and the effect of the corporate reputation but never on the <a href="/wiki/Nonprofit_organization" title="Nonprofit organization">nonprofit organization</a> standpoint. While these two industries operate differently, both still need their crisis situations properly addressed and in a timely manner. Not only building, but maintaining trust and reputation is essential in both types of organizations. Nonprofits depend on their publics and are often held on a higher pedestal than the average for-profit organization and are always being shaped by the wants and needs of their external environments. These matters make nonprofits vulnerable to crisis' so having a strategy and being ready to implement is mandatory. Research done by Hilary Fussell Sisco in 2012 found that participants favor nonprofits more positively that utilize a response strategy from Coombs.<sup id="cite&#95;ref-8" class="reference"><a href="#cite_note-8"><span class="cite-bracket">&#91;</span>8<span class="cite-bracket">&#93;</span></a></sup>
+</p>
+<div class="mw-heading mw-heading2"><h2 id="References_and_further_reading">References and further reading</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=7" title="Edit section: References and further reading"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<style data-mw-deduplicate="TemplateStyles:r1327269900">.mw-parser-output .reflist-columns-2{column-width:30em}.mw-parser-output .reflist-columns-3{column-width:25em}body.skin-vector-2022 .mw-parser-output .reflist-columns-2{column-width:27em}body.skin-vector-2022 .mw-parser-output .reflist-columns-3{column-width:22.5em}.mw-parser-output .references[data-mw-group=upper-alpha]{list-style-type:upper-alpha}.mw-parser-output .references[data-mw-group=upper-roman]{list-style-type:upper-roman}.mw-parser-output .references[data-mw-group=lower-alpha]{list-style-type:lower-alpha}.mw-parser-output .references[data-mw-group=lower-greek]{list-style-type:lower-greek}.mw-parser-output .references[data-mw-group=lower-roman]{list-style-type:lower-roman}.mw-parser-output div.reflist-liststyle-upper-alpha .references{list-style-type:upper-alpha}.mw-parser-output div.reflist-liststyle-upper-roman .references{list-style-type:upper-roman}.mw-parser-output div.reflist-liststyle-lower-alpha .references{list-style-type:lower-alpha}.mw-parser-output div.reflist-liststyle-lower-greek .references{list-style-type:lower-greek}.mw-parser-output div.reflist-liststyle-lower-roman .references{list-style-type:lower-roman}</style><div>
+<div class="mw-references-wrap"><ol class="references">
+<li id="cite&#95;note-coombs&#95;a-1"><span class="mw-cite-backlink"><b><a href="#cite_ref-coombs_a_1-0">^</a></b></span> <span class="reference-text">Coombs, W. T. (2007a). Crisis management and communications. Retrieved March 20, 2012 from <a rel="nofollow" class="external free" href="http://www.instituteforpr.org/topics/crisis-management-and-communications/">http://www.instituteforpr.org/topics/crisis-management-and-communications/</a></span>
+</li>
+<li id="cite&#95;note-2"><span class="mw-cite-backlink"><b><a href="#cite_ref-2">^</a></b></span> <span class="reference-text"><style data-mw-deduplicate="TemplateStyles:r1333433106">.mw-parser-output cite.citation{font-style:inherit;word-wrap:break-word}.mw-parser-output .citation q{quotes:"\"""\"""'""'"}.mw-parser-output .citation:target{background-color:rgba(0,127,255,0.133)}.mw-parser-output .id-lock-free.id-lock-free a{background:url("//upload.wikimedia.org/wikipedia/commons/6/65/Lock-green.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-limited.id-lock-limited a,.mw-parser-output .id-lock-registration.id-lock-registration a{background:url("//upload.wikimedia.org/wikipedia/commons/d/d6/Lock-gray-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .id-lock-subscription.id-lock-subscription a{background:url("//upload.wikimedia.org/wikipedia/commons/a/aa/Lock-red-alt-2.svg")right 0.1em center/9px no-repeat}.mw-parser-output .cs1-ws-icon a{background:url("//upload.wikimedia.org/wikipedia/commons/4/4c/Wikisource-logo.svg")right 0.1em center/12px no-repeat}body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-free a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-limited a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-registration a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .id-lock-subscription a,body:not(.skin-timeless):not(.skin-minerva) .mw-parser-output .cs1-ws-icon a{background-size:contain;padding:0 1em 0 0}.mw-parser-output .cs1-code{color:inherit;background:inherit;border:none;padding:inherit}.mw-parser-output .cs1-hidden-error{display:none;color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-visible-error{color:var(--color-error,#bf3c2c)}.mw-parser-output .cs1-maint{display:none;color:#085;margin-left:0.3em}.mw-parser-output .cs1-kern-left{padding-left:0.2em}.mw-parser-output .cs1-kern-right{padding-right:0.2em}.mw-parser-output .citation .mw-selflink{font-weight:inherit}@media screen{.mw-parser-output .cs1-format{font-size:95%}html.skin-theme-clientpref-night .mw-parser-output .cs1-maint{color:#18911f}}@media screen and (prefers-color-scheme:dark){html.skin-theme-clientpref-os .mw-parser-output .cs1-maint{color:#18911f}}</style><cite id="CITEREFCoombs2004" class="citation journal cs1">Coombs, W. T. (1 July 2004). "Impact of Past Crises on Current Crisis Communication: Insights From Situational Crisis Communication Theory". <i>Journal of Business Communication</i>. <b>41</b> (3): <span class="nowrap">265–</span>289. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1177%2F0021943604265607">10.1177/0021943604265607</a>. <a href="/wiki/Hdl_(identifier)" class="mw-redirect" title="Hdl (identifier)">hdl</a>:<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://hdl.handle.net/10818%2F19239">10818/19239</a></span>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:154326081">154326081</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Business+Communication&amp;rft.atitle=Impact+of+Past+Crises+on+Current+Crisis+Communication%3A+Insights+From+Situational+Crisis+Communication+Theory&amp;rft.volume=41&amp;rft.issue=3&amp;rft.pages=265-289&amp;rft.date=2004-07-01&amp;rft&#95;id=info%3Ahdl%2F10818%2F19239&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A154326081%23id-name%3DS2CID&amp;rft&#95;id=info%3Adoi%2F10.1177%2F0021943604265607&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+T.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-coombs&#95;b-3"><span class="mw-cite-backlink">^ <a href="#cite_ref-coombs_b_3-0"><sup><i><b>a</b></i></sup></a> <a href="#cite_ref-coombs_b_3-1"><sup><i><b>b</b></i></sup></a> <a href="#cite_ref-coombs_b_3-2"><sup><i><b>c</b></i></sup></a> <a href="#cite_ref-coombs_b_3-3"><sup><i><b>d</b></i></sup></a> <a href="#cite_ref-coombs_b_3-4"><sup><i><b>e</b></i></sup></a> <a href="#cite_ref-coombs_b_3-5"><sup><i><b>f</b></i></sup></a> <a href="#cite_ref-coombs_b_3-6"><sup><i><b>g</b></i></sup></a> <a href="#cite_ref-coombs_b_3-7"><sup><i><b>h</b></i></sup></a></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombs2007" class="citation journal cs1">Coombs, W Timothy (September 2007). <a rel="nofollow" class="external text" href="https://doi.org/10.1057%2Fpalgrave.crr.1550049">"Protecting Organization Reputations During a Crisis: The Development and Application of Situational Crisis Communication Theory"</a>. <i>Corporate Reputation Review</i>. <b>10</b> (3): <span class="nowrap">163–</span>176. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://doi.org/10.1057%2Fpalgrave.crr.1550049">10.1057/palgrave.crr.1550049</a></span>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:167311536">167311536</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Corporate+Reputation+Review&amp;rft.atitle=Protecting+Organization+Reputations+During+a+Crisis%3A+The+Development+and+Application+of+Situational+Crisis+Communication+Theory&amp;rft.volume=10&amp;rft.issue=3&amp;rft.pages=163-176&amp;rft.date=2007-09&amp;rft&#95;id=info%3Adoi%2F10.1057%2Fpalgrave.crr.1550049&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A167311536%23id-name%3DS2CID&amp;rft.aulast=Coombs&amp;rft.aufirst=W+Timothy&amp;rft&#95;id=https%3A%2F%2Fdoi.org%2F10.1057%252Fpalgrave.crr.1550049&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-4"><span class="mw-cite-backlink"><b><a href="#cite_ref-4">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombs2016" class="citation journal cs1">Coombs, W. Timothy (3 March 2016). "Reflections on a meta-analysis: Crystallizing thinking about SCCT". <i>Journal of Public Relations Research</i>. <b>28</b> (2): <span class="nowrap">120–</span>122. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1080%2F1062726X.2016.1167479">10.1080/1062726X.2016.1167479</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:147912618">147912618</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Public+Relations+Research&amp;rft.atitle=Reflections+on+a+meta-analysis%3A+Crystallizing+thinking+about+SCCT&amp;rft.volume=28&amp;rft.issue=2&amp;rft.pages=120-122&amp;rft.date=2016-03-03&amp;rft&#95;id=info%3Adoi%2F10.1080%2F1062726X.2016.1167479&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A147912618%23id-name%3DS2CID&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+Timothy&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-5"><span class="mw-cite-backlink"><b><a href="#cite_ref-5">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFFormentin2012" class="citation conference cs1">Formentin, Melanie (May 2012). <i>Game off!: Understanding newspaper portrayals of the NHL lockout using situational crisis communication theory</i>. International Communication Association. Phoenix, AZ.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=conference&amp;rft.btitle=Game+off%21%3A+Understanding+newspaper+portrayals+of+the+NHL+lockout+using+situational+crisis+communication+theory&amp;rft.place=Phoenix%2C+AZ&amp;rft.date=2012-05&amp;rft.aulast=Formentin&amp;rft.aufirst=Melanie&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-c&amp;h96-6"><span class="mw-cite-backlink"><b><a href="#cite_ref-c&amp;h96_6-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombsHolladay1996" class="citation journal cs1">Coombs, W. Timothy; Holladay, Sherry J. (October 1996). "Communication and Attributions in a Crisis: An Experimental Study in Crisis Communication". <i>Journal of Public Relations Research</i>. <b>8</b> (4): <span class="nowrap">279–</span>295. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1207%2Fs1532754xjprr0804_04">10.1207/s1532754xjprr0804_04</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Public+Relations+Research&amp;rft.atitle=Communication+and+Attributions+in+a+Crisis%3A+An+Experimental+Study+in+Crisis+Communication&amp;rft.volume=8&amp;rft.issue=4&amp;rft.pages=279-295&amp;rft.date=1996-10&amp;rft&#95;id=info%3Adoi%2F10.1207%2Fs1532754xjprr0804&#95;04&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+Timothy&amp;rft.au=Holladay%2C+Sherry+J.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-c&amp;h01-7"><span class="mw-cite-backlink"><b><a href="#cite_ref-c&amp;h01_7-0">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombsHolladay2001" class="citation journal cs1">Coombs, W. Timothy; Holladay, Sherry (1 October 2001). "An Extended Examination of the Crisis Situations: A Fusion of the Relational Management and Symbolic Approaches". <i>Journal of Public Relations Research</i>. <b>13</b> (4): <span class="nowrap">321–</span>340. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1207%2FS1532754XJPRR1304_03">10.1207/S1532754XJPRR1304_03</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:143601768">143601768</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Public+Relations+Research&amp;rft.atitle=An+Extended+Examination+of+the+Crisis+Situations%3A+A+Fusion+of+the+Relational+Management+and+Symbolic+Approaches&amp;rft.volume=13&amp;rft.issue=4&amp;rft.pages=321-340&amp;rft.date=2001-10-01&amp;rft&#95;id=info%3Adoi%2F10.1207%2FS1532754XJPRR1304&#95;03&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A143601768%23id-name%3DS2CID&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+Timothy&amp;rft.au=Holladay%2C+Sherry&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+<li id="cite&#95;note-8"><span class="mw-cite-backlink"><b><a href="#cite_ref-8">^</a></b></span> <span class="reference-text"><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFSisco2012" class="citation journal cs1">Sisco, Hilary Fussell (January 2012). "Nonprofit in Crisis: An Examination of the Applicability of Situational Crisis Communication Theory". <i>Journal of Public Relations Research</i>. <b>24</b> (1): <span class="nowrap">1–</span>17. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1080%2F1062726X.2011.582207">10.1080/1062726X.2011.582207</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:154360810">154360810</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Public+Relations+Research&amp;rft.atitle=Nonprofit+in+Crisis%3A+An+Examination+of+the+Applicability+of+Situational+Crisis+Communication+Theory&amp;rft.volume=24&amp;rft.issue=1&amp;rft.pages=1-17&amp;rft.date=2012-01&amp;rft&#95;id=info%3Adoi%2F10.1080%2F1062726X.2011.582207&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A154360810%23id-name%3DS2CID&amp;rft.aulast=Sisco&amp;rft.aufirst=Hilary+Fussell&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></span>
+</li>
+</ol></div></div>
+<div class="mw-heading mw-heading2"><h2 id="Sources">Sources</h2><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Situational_crisis_communication_theory&amp;action=edit&amp;section=8" title="Edit section: Sources"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></div>
+<ul><li>Broom, G. M. (2009). <i>Cutlip &amp; Center's Effective Public Relations</i>. (10 ed.). Upper Saddle River, NJ: Prentice Hall.</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFClaeysCauberghe2012" class="citation journal cs1">Claeys, An-Sofie; Cauberghe, Verolien (March 2012). "Crisis response and crisis timing strategies, two sides of the same coin". <i>Public Relations Review</i>. <b>38</b> (1): <span class="nowrap">83–</span>88. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1016%2Fj.pubrev.2011.09.001">10.1016/j.pubrev.2011.09.001</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Public+Relations+Review&amp;rft.atitle=Crisis+response+and+crisis+timing+strategies%2C+two+sides+of+the+same+coin&amp;rft.volume=38&amp;rft.issue=1&amp;rft.pages=83-88&amp;rft.date=2012-03&amp;rft&#95;id=info%3Adoi%2F10.1016%2Fj.pubrev.2011.09.001&amp;rft.aulast=Claeys&amp;rft.aufirst=An-Sofie&amp;rft.au=Cauberghe%2C+Verolien&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombs2004" class="citation journal cs1">Coombs, W. T. (1 July 2004). "Impact of Past Crises on Current Crisis Communication: Insights From Situational Crisis Communication Theory". <i>Journal of Business Communication</i>. <b>41</b> (3): <span class="nowrap">265–</span>289. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1177%2F0021943604265607">10.1177/0021943604265607</a>. <a href="/wiki/Hdl_(identifier)" class="mw-redirect" title="Hdl (identifier)">hdl</a>:<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://hdl.handle.net/10818%2F19239">10818/19239</a></span>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:154326081">154326081</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Business+Communication&amp;rft.atitle=Impact+of+Past+Crises+on+Current+Crisis+Communication%3A+Insights+From+Situational+Crisis+Communication+Theory&amp;rft.volume=41&amp;rft.issue=3&amp;rft.pages=265-289&amp;rft.date=2004-07-01&amp;rft&#95;id=info%3Ahdl%2F10818%2F19239&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A154326081%23id-name%3DS2CID&amp;rft&#95;id=info%3Adoi%2F10.1177%2F0021943604265607&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+T.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li>Coombs, W. T. (2007a). Crisis management and communications. Retrieved March 20, 2012 from <a rel="nofollow" class="external free" href="http://www.instituteforpr.org/topics/crisis-management-and-communications/">http://www.instituteforpr.org/topics/crisis-management-and-communications/</a>.</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombs2007" class="citation journal cs1">Coombs, W Timothy (September 2007). <a rel="nofollow" class="external text" href="https://doi.org/10.1057%2Fpalgrave.crr.1550049">"Protecting Organization Reputations During a Crisis: The Development and Application of Situational Crisis Communication Theory"</a>. <i>Corporate Reputation Review</i>. <b>10</b> (3): <span class="nowrap">163–</span>176. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<span class="id-lock-free" title="Freely accessible"><a rel="nofollow" class="external text" href="https://doi.org/10.1057%2Fpalgrave.crr.1550049">10.1057/palgrave.crr.1550049</a></span>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:167311536">167311536</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Corporate+Reputation+Review&amp;rft.atitle=Protecting+Organization+Reputations+During+a+Crisis%3A+The+Development+and+Application+of+Situational+Crisis+Communication+Theory&amp;rft.volume=10&amp;rft.issue=3&amp;rft.pages=163-176&amp;rft.date=2007-09&amp;rft&#95;id=info%3Adoi%2F10.1057%2Fpalgrave.crr.1550049&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A167311536%23id-name%3DS2CID&amp;rft.aulast=Coombs&amp;rft.aufirst=W+Timothy&amp;rft&#95;id=https%3A%2F%2Fdoi.org%2F10.1057%252Fpalgrave.crr.1550049&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombsHolladay1996" class="citation journal cs1">Coombs, W. Timothy; Holladay, Sherry J. (October 1996). "Communication and Attributions in a Crisis: An Experimental Study in Crisis Communication". <i>Journal of Public Relations Research</i>. <b>8</b> (4): <span class="nowrap">279–</span>295. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1207%2Fs1532754xjprr0804_04">10.1207/s1532754xjprr0804_04</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Public+Relations+Research&amp;rft.atitle=Communication+and+Attributions+in+a+Crisis%3A+An+Experimental+Study+in+Crisis+Communication&amp;rft.volume=8&amp;rft.issue=4&amp;rft.pages=279-295&amp;rft.date=1996-10&amp;rft&#95;id=info%3Adoi%2F10.1207%2Fs1532754xjprr0804&#95;04&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+Timothy&amp;rft.au=Holladay%2C+Sherry+J.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFCoombsHolladay2001" class="citation journal cs1">Coombs, W. Timothy; Holladay, Sherry (1 October 2001). "An Extended Examination of the Crisis Situations: A Fusion of the Relational Management and Symbolic Approaches". <i>Journal of Public Relations Research</i>. <b>13</b> (4): <span class="nowrap">321–</span>340. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1207%2FS1532754XJPRR1304_03">10.1207/S1532754XJPRR1304_03</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:143601768">143601768</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Journal+of+Public+Relations+Research&amp;rft.atitle=An+Extended+Examination+of+the+Crisis+Situations%3A+A+Fusion+of+the+Relational+Management+and+Symbolic+Approaches&amp;rft.volume=13&amp;rft.issue=4&amp;rft.pages=321-340&amp;rft.date=2001-10-01&amp;rft&#95;id=info%3Adoi%2F10.1207%2FS1532754XJPRR1304&#95;03&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A143601768%23id-name%3DS2CID&amp;rft.aulast=Coombs&amp;rft.aufirst=W.+Timothy&amp;rft.au=Holladay%2C+Sherry&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li>Fearn-Banks, K. (2007). <i>Crisis communication: A casebook approach</i>. (3 ed.). Mahwah, New Jersey: Lawrence Erlbaum Associates, Inc.</li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFIdeMartinTotten2011" class="citation journal cs1">Ide, B; Martin, SH; Totten, M (July 2011). "Crisis management and maintaining the public trust". <i>Trustee</i>. <b>64</b> (7): <span class="nowrap">15–</span>8. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/21870695">21870695</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Trustee&amp;rft.atitle=Crisis+management+and+maintaining+the+public+trust&amp;rft.volume=64&amp;rft.issue=7&amp;rft.pages=15-8&amp;rft.date=2011-07&amp;rft&#95;id=info%3Apmid%2F21870695&amp;rft.aulast=Ide&amp;rft.aufirst=B&amp;rft.au=Martin%2C+SH&amp;rft.au=Totten%2C+M&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li><link rel="mw-deduplicated-inline-style" href="mw-data:TemplateStyles:r1333433106" /><cite id="CITEREFKelleyMichela1980" class="citation journal cs1">Kelley, Harold H.; Michela, John L. (January 1980). "Attribution Theory and Research". <i>Annual Review of Psychology</i>. <b>31</b> (1): <span class="nowrap">457–</span>501. <a href="/wiki/Doi_(identifier)" class="mw-redirect" title="Doi (identifier)">doi</a>:<a rel="nofollow" class="external text" href="https://doi.org/10.1146%2Fannurev.ps.31.020180.002325">10.1146/annurev.ps.31.020180.002325</a>. <a href="/wiki/PMID_(identifier)" class="mw-redirect" title="PMID (identifier)">PMID</a>&#160;<a rel="nofollow" class="external text" href="https://pubmed.ncbi.nlm.nih.gov/20809783">20809783</a>. <a href="/wiki/S2CID_(identifier)" class="mw-redirect" title="S2CID (identifier)">S2CID</a>&#160;<a rel="nofollow" class="external text" href="https://api.semanticscholar.org/CorpusID:15258190">15258190</a>.</cite><span title="ctx&#95;ver=Z39.88-2004&amp;rft&#95;val&#95;fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.genre=article&amp;rft.jtitle=Annual+Review+of+Psychology&amp;rft.atitle=Attribution+Theory+and+Research&amp;rft.volume=31&amp;rft.issue=1&amp;rft.pages=457-501&amp;rft.date=1980-01&amp;rft&#95;id=https%3A%2F%2Fapi.semanticscholar.org%2FCorpusID%3A15258190%23id-name%3DS2CID&amp;rft&#95;id=info%3Apmid%2F20809783&amp;rft&#95;id=info%3Adoi%2F10.1146%2Fannurev.ps.31.020180.002325&amp;rft.aulast=Kelley&amp;rft.aufirst=Harold+H.&amp;rft.au=Michela%2C+John+L.&amp;rfr&#95;id=info%3Asid%2Fen.wikipedia.org%3ASituational+crisis+communication+theory" class="Z3988"></span></li>
+<li>Wilcox, D. L., Cameron, G. T., Reber, B. H., &amp; Shin, J. (2011). <i>Think: Public relations</i>. (1 ed.). Boston: Allyn &amp; Bacon.</li></ul>
+<!-- 
+NewPP limit report
+Parsed by mw‐web.codfw.main‐6c7448494f‐js58t
+Cached time: 20260507064755
+Cache expiry: 2592000
+Cache expiry source: Module:Citation/CS1 (os.date(%Y))
+Reduced expiry: false
+Complications: [vary‐revision‐sha1, show‐toc]
+CPU time usage: 0.140 seconds
+Real time usage: 0.212 seconds
+Preprocessor visited node count: 1851/1000000
+Revision size: 21201/2097152 bytes
+Post‐expand include size: 45586/2097152 bytes
+Template argument size: 4204/2097152 bytes
+Highest expansion depth: 11/100
+Expensive parser function count: 2/500
+Unstrip recursion depth: 1/20
+Unstrip post‐expand size: 45738/5000000 bytes
+Lua time usage: 0.086/10.000 seconds
+Lua memory usage: 5754698/52428800 bytes
+Number of Wikibase entities loaded: 0/500
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  194.025      1 -total
+ 39.57%   76.772     13 Template:Cite_journal
+ 39.35%   76.342      1 Template:Reflist
+ 30.32%   58.821      1 Template:Short_description
+ 19.74%   38.309      6 Template:Fact
+ 16.24%   31.517      2 Template:Pagetype
+ 14.56%   28.244      6 Template:Fix
+  8.66%   16.799      9 Template:Main_other
+  7.29%   14.138      1 Template:SDcat
+  4.05%    7.853      6 Template:Delink
+-->
+
+<!-- Render ID ad0cec5a-49e0-11f1-8d5e-6961ecf09628 -->
+
+<!-- Saved in parser cache with key enwiki:pcache:35157384:|#|:idhash:canonical and timestamp 20260507064755 and revision id 1320108134. Rendering was triggered because: page_view
+ -->
+</div><noscript><img src="https://en.wikipedia.org/wiki/Special:CentralAutoLogin/start?useformat=desktop&amp;type=1x1&amp;usesul3=1" alt="" width="1" height="1" style="border: none; position: absolute;"></noscript>
+<div class="printfooter" data-nosnippet="">Retrieved from "<a dir="ltr" href="https://en.wikipedia.org/w/index.php?title=Situational_crisis_communication_theory&amp;oldid=1320108134">https://en.wikipedia.org/w/index.php?title=Situational_crisis_communication_theory&amp;oldid=1320108134</a>"</div></div>
+					<div id="catlinks" class="catlinks" data-mw-interface=""><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Help:Category" title="Help:Category">Categories</a>: <ul><li><a href="/wiki/Category:Emergency_management" title="Category:Emergency management">Emergency management</a></li><li><a href="/wiki/Category:Crisis" title="Category:Crisis">Crisis</a></li><li><a href="/wiki/Category:Mass_media_theories" title="Category:Mass media theories">Mass media theories</a></li><li><a href="/wiki/Category:Communication_theory" title="Category:Communication theory">Communication theory</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Hidden categories: <ul><li><a href="/wiki/Category:Articles_with_short_description" title="Category:Articles with short description">Articles with short description</a></li><li><a href="/wiki/Category:Short_description_is_different_from_Wikidata" title="Category:Short description is different from Wikidata">Short description is different from Wikidata</a></li><li><a href="/wiki/Category:All_articles_with_unsourced_statements" title="Category:All articles with unsourced statements">All articles with unsourced statements</a></li><li><a href="/wiki/Category:Articles_with_unsourced_statements_from_March_2021" title="Category:Articles with unsourced statements from March 2021">Articles with unsourced statements from March 2021</a></li></ul></div></div>
+				</div>
+			</main>
+			
+		</div>
+		<div class="mw-footer-container">
+			
+<footer id="footer" class="mw-footer" >
+	<ul id="footer-info">
+	<li id="footer-info-lastmod"> This page was last edited on 2 November 2025, at 20:04<span class="anonymous-show">&#160;(UTC)</span>.</li>
+	<li id="footer-info-copyright">Text is available under the <a href="/wiki/Wikipedia:Text_of_the_Creative_Commons_Attribution-ShareAlike_4.0_International_License" title="Wikipedia:Text of the Creative Commons Attribution-ShareAlike 4.0 International License">Creative Commons Attribution-ShareAlike 4.0 License</a>;
+additional terms may apply. By using this site, you agree to the <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Terms_of_Use" class="extiw" title="foundation:Special:MyLanguage/Policy:Terms of Use">Terms of Use</a> and <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy" class="extiw" title="foundation:Special:MyLanguage/Policy:Privacy policy">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a rel="nofollow" class="external text" href="https://wikimediafoundation.org/">Wikimedia Foundation, Inc.</a>, a non-profit organization.</li>
+</ul>
+
+	<ul id="footer-places">
+	<li id="footer-places-privacy"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Privacy_policy">Privacy policy</a></li>
+	<li id="footer-places-about"><a href="/wiki/Wikipedia:About">About Wikipedia</a></li>
+	<li id="footer-places-disclaimers"><a href="/wiki/Wikipedia:General_disclaimer">Disclaimers</a></li>
+	<li id="footer-places-contact"><a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a></li>
+	<li id="footer-places-legal-safety-contacts"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Legal:Wikimedia_Foundation_Legal_and_Safety_Contact_Information">Legal &amp; safety contacts</a></li>
+	<li id="footer-places-wm-codeofconduct"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Universal_Code_of_Conduct">Code of Conduct</a></li>
+	<li id="footer-places-developers"><a href="https://developer.wikimedia.org">Developers</a></li>
+	<li id="footer-places-statslink"><a href="https://stats.wikimedia.org/#/en.wikipedia.org">Statistics</a></li>
+	<li id="footer-places-cookiestatement"><a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Policy:Cookie_statement">Cookie statement</a></li>
+	<li id="footer-places-mobileview"><a href="//en.wikipedia.org/w/index.php?title=Situational_crisis_communication_theory&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a></li>
+</ul>
+
+	<ul id="footer-icons" class="noprint">
+	<li id="footer-copyrightico"><a href="https://www.wikimedia.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/static/images/footer/wikimedia-button.svg" width="84" height="29"><img src="/static/images/footer/wikimedia.svg" width="25" height="25" alt="Wikimedia Foundation" lang="en" loading="lazy"></picture></a></li>
+	<li id="footer-poweredbyico"><a href="https://www.mediawiki.org/" class="cdx-button cdx-button--fake-button cdx-button--size-large cdx-button--fake-button--enabled"><picture><source media="(min-width: 500px)" srcset="/w/resources/assets/poweredby_mediawiki.svg" width="88" height="31"><img src="/w/resources/assets/mediawiki_compact.svg" alt="Powered by MediaWiki" lang="en" width="25" height="25" loading="lazy"></picture></a></li>
+</ul>
+
+</footer>
+
+		</div>
+	</div> 
+</div> 
+<div class="vector-header-container vector-sticky-header-container no-font-mode-scale">
+	<div id="vector-sticky-header" class="vector-sticky-header">
+		<div class="vector-sticky-header-start">
+			<div class="vector-sticky-header-icon-start vector-button-flush-left" aria-hidden="true">
+				<button class="cdx-button cdx-button--weight-quiet cdx-button--icon-only vector-sticky-header-search-toggle" tabindex="-1" data-event-name="ui.vector-sticky-search-form.icon"><span class="vector-icon mw-ui-icon-search mw-ui-icon-wikimedia-search"></span>
+
+<span>Search</span>
+			</button>
+		</div>
+			
+		<div role="search" class="vector-search-box-vue  vector-search-box-show-thumbnail vector-search-box">
+			<div class="vector-typeahead-search-container">
+				<div class="cdx-typeahead-search cdx-typeahead-search--show-thumbnail">
+					<form action="/w/index.php" id="vector-sticky-search-form" class="cdx-search-input cdx-search-input--has-end-button">
+						<div  class="cdx-search-input__input-wrapper"  data-search-loc="header-moved">
+							<div class="cdx-text-input cdx-text-input--has-start-icon">
+								<input
+									class="cdx-text-input__input mw-searchInput" autocomplete="off"
+									
+									type="search" name="search" placeholder="Search Wikipedia">
+								<span class="cdx-text-input__icon cdx-text-input__start-icon"></span>
+							</div>
+							<input type="hidden" name="title" value="Special:Search">
+						</div>
+						<button class="cdx-button cdx-search-input__end-button">Search</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-context-bar">
+				<nav aria-label="Contents" class="vector-toc-landmark">
+						
+					<div id="vector-sticky-header-toc" class="vector-dropdown mw-portlet mw-portlet-sticky-header-toc vector-sticky-header-toc vector-button-flush-left"  >
+						<input type="checkbox" id="vector-sticky-header-toc-checkbox" role="button" aria-haspopup="true" data-event-name="ui.dropdown-vector-sticky-header-toc" class="vector-dropdown-checkbox "  aria-label="Toggle the table of contents"  >
+						<label id="vector-sticky-header-toc-label" for="vector-sticky-header-toc-checkbox" class="vector-dropdown-label cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only " aria-hidden="true"  ><span class="vector-icon mw-ui-icon-listBullet mw-ui-icon-wikimedia-listBullet"></span>
+
+<span class="vector-dropdown-label-text">Toggle the table of contents</span>
+						</label>
+						<div class="vector-dropdown-content">
+					
+						<div id="vector-sticky-header-toc-unpinned-container" class="vector-unpinned-container">
+						</div>
+					
+						</div>
+					</div>
+			</nav>
+				<div class="vector-sticky-header-context-bar-primary" aria-hidden="true" ><span lang="en" dir="ltr"><span class="mw-page-title-main">Situational crisis communication theory</span></span></div>
+			</div>
+		</div>
+		<div class="vector-sticky-header-end" aria-hidden="true">
+			<div class="vector-sticky-header-icons">
+				<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-talk-sticky-header" tabindex="-1" data-event-name="talk-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbles mw-ui-icon-wikimedia-speechBubbles"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-subject-sticky-header" tabindex="-1" data-event-name="subject-sticky-header"><span class="vector-icon mw-ui-icon-article mw-ui-icon-wikimedia-article"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-history-sticky-header" tabindex="-1" data-event-name="history-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-history mw-ui-icon-wikimedia-wikimedia-history"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only mw-watchlink" id="ca-watchstar-sticky-header" tabindex="-1" data-event-name="watch-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-star mw-ui-icon-wikimedia-wikimedia-star"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-edit-sticky-header" tabindex="-1" data-event-name="wikitext-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-wikiText mw-ui-icon-wikimedia-wikimedia-wikiText"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-ve-edit-sticky-header" tabindex="-1" data-event-name="ve-edit-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-edit mw-ui-icon-wikimedia-wikimedia-edit"></span>
+
+<span></span>
+			</a>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--icon-only" id="ca-viewsource-sticky-header" tabindex="-1" data-event-name="ve-edit-protected-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-editLock mw-ui-icon-wikimedia-wikimedia-editLock"></span>
+
+<span></span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-buttons">
+				<button class="cdx-button cdx-button--weight-quiet mw-interlanguage-selector" id="p-lang-btn-sticky-header" tabindex="-1" data-event-name="ui.dropdown-p-lang-btn-sticky-header"><span class="vector-icon mw-ui-icon-wikimedia-language mw-ui-icon-wikimedia-wikimedia-language"></span>
+
+<span>Add languages</span>
+			</button>
+			<a href="#" class="cdx-button cdx-button--fake-button cdx-button--fake-button--enabled cdx-button--weight-quiet cdx-button--action-progressive" id="ca-addsection-sticky-header" tabindex="-1" data-event-name="addsection-sticky-header"><span class="vector-icon mw-ui-icon-speechBubbleAdd-progressive mw-ui-icon-wikimedia-speechBubbleAdd-progressive"></span>
+
+<span>Add topic</span>
+			</a>
+		</div>
+			<div class="vector-sticky-header-icon-end">
+				<div class="vector-user-links">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mw-portlet mw-portlet-dock-bottom emptyPortlet" id="p-dock-bottom">
+	<ul>
+		
+	</ul>
+</div>
+<script>(RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgHostname":"mw-web.codfw.main-7c7b59648b-4s987","wgBackendResponseTime":101,"wgPageParseReport":{"limitreport":{"cputime":"0.140","walltime":"0.212","ppvisitednodes":{"value":1851,"limit":1000000},"revisionsize":{"value":21201,"limit":2097152},"postexpandincludesize":{"value":45586,"limit":2097152},"templateargumentsize":{"value":4204,"limit":2097152},"expansiondepth":{"value":11,"limit":100},"expensivefunctioncount":{"value":2,"limit":500},"unstrip-depth":{"value":1,"limit":20},"unstrip-size":{"value":45738,"limit":5000000},"entityaccesscount":{"value":0,"limit":500},"timingprofile":["100.00%  194.025      1 -total"," 39.57%   76.772     13 Template:Cite_journal"," 39.35%   76.342      1 Template:Reflist"," 30.32%   58.821      1 Template:Short_description"," 19.74%   38.309      6 Template:Fact"," 16.24%   31.517      2 Template:Pagetype"," 14.56%   28.244      6 Template:Fix","  8.66%   16.799      9 Template:Main_other","  7.29%   14.138      1 Template:SDcat","  4.05%    7.853      6 Template:Delink"]},"scribunto":{"limitreport-timeusage":{"value":"0.086","limit":"10.000"},"limitreport-memusage":{"value":5754698,"limit":52428800}},"cachereport":{"origin":"mw-web.codfw.main-6c7448494f-js58t","timestamp":"20260507064755","ttl":2592000,"transientcontent":false,"expiry-source":"Module:Citation/CS1 (os.date(%Y))"}}});});</script>
+<script type="application/ld+json">{"@context":"https:\/\/schema.org","@type":"Article","name":"Situational crisis communication theory","url":"https:\/\/en.wikipedia.org\/wiki\/Situational_crisis_communication_theory","sameAs":"http:\/\/www.wikidata.org\/entity\/Q17081053","mainEntity":"http:\/\/www.wikidata.org\/entity\/Q17081053","author":{"@type":"Organization","name":"Contributors to Wikimedia projects"},"publisher":{"@type":"Organization","name":"Wikimedia Foundation, Inc.","logo":{"@type":"ImageObject","url":"https:\/\/www.wikimedia.org\/static\/images\/wmf-hor-googpub.png"}},"datePublished":"2012-03-20T21:49:01Z","dateModified":"2025-11-02T20:04:30Z","headline":"theory"}</script>
+</body>
+</html>
