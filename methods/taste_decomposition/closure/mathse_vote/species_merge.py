@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
-"""BLIND PAIRWISE SPECIES MERGE for a round's Track-B pool, then re-selection.
+"""BLIND PAIRWISE SPECIES MERGE for a round's proposal pool, then re-selection.
+
+BOTH TRACKS on this campaign (coordinator brief 2026-08-09: "strict two-judge merge
+BOTH tracks, run BEFORE the audit").  The sibling math.SE campaigns merged Track B
+only and quoted Track A's mass unmerged at tau; that asymmetry meant the A-side
+missing mass was inflated by exactly the f1 mechanism the B-side merge was invented
+to remove, so the two tracks' mass figures were not comparable.  Here `--track`
+selects the pool and every artifact is suffixed by it (`_bmerge{A,B}_*`), so both
+sides get the freeze's identity rule and both mass figures are on one footing.
 
 WHY THIS EXISTS, recorded rather than silent.  `species.py` clusters a round's
 proposals by bge-large cosine at tau = .79 and then selects the top k species by
 cross-proposer support.  Its own docstring justifies the embedding shortcut on the
-grounds that every proposal comes from one register.  On mathse_vote round 1 that
-shortcut demonstrably UNDER-MERGED the Track-B pool: four proposers across two
+grounds that every proposal comes from one register.  On the SIBLING math.SE VOTE cell's round 1 that
+shortcut demonstrably UNDER-MERGED the Track-B pool (provenance: that campaign, not
+this one -- recorded because a blanket rename would otherwise misattribute it): four proposers across two
 families independently named the answer-arrival-order fingerprint --
 
     claude_opus  "Supplementary framing presupposing an already-populated ..."
@@ -25,9 +34,23 @@ used ONLY to shortlist candidate pairs, and identity is decided by sealed blind
 judges, exactly as the round-0 concept census does.  Selection then re-runs
 unchanged on the merged species.
 
-  build   -> <tag>_bmerge_packet.json  (blind judge packet, + 2 planted anchors)
-  apply   -> rewrites <tag>_species.json's Track-B species and `selected`
-             (the pre-merge file is kept as <tag>_species.PREMERGE.json)
+  build --track {A,B} -> <tag>_bmerge<T>_packet.json (blind judge packet + 2 anchors)
+  apply --track {A,B} -> by DEFAULT writes a NEW <tag>_species_strict<T>.json and leaves
+                         <tag>_species.json untouched; pass --inplace for the legacy
+                         behaviour (rewrite in place, keeping <tag>_species.PREMERGE.json)
+
+  OUTPUT MODE (2026-08-11, certificate-backfill brief).  The original `apply` rewrote
+  <tag>_species.json in place.  That is safe when a round is merged once, as part of its
+  own campaign, but the Track-A backfill re-merges ARCHIVED rounds whose tau-era species
+  files are already cited, so overwriting them would silently move published numbers.
+  The PREMERGE sidecar does NOT protect against this -- it is written only once, by
+  whichever track merges first, so a second merge pass overwrites species.json with no
+  surviving copy of the tau-era state.  Default is therefore a new file.
+
+  MISSING MASS ON THE MERGED SPECIES also carries the LOO-proposer jackknife, computed
+  the same way species.py computes it for the tau-only table (drop one proposer, recount
+  species over the survivors, Good-Turing f1/N on the reduced pool), so the strict and
+  tau figures are read off the same estimator.
 
 CPU only.
 """
@@ -70,9 +93,10 @@ ANCHOR_DIFF = [
 
 def cmd_build(a):
     tag = f"{a.cell}_r{a.round}"
+    T = a.track
     sp = json.loads((HERE / f"{tag}_species.json").read_text())
     pool = json.loads((HERE / f"{tag}_proposals_fleet.json").read_text())["proposals"]
-    B = [p for p in pool if p["track"] == "B"]
+    B = [p for p in pool if p["track"] == T]
     texts = [f"{p['name']}. {p['instruction']}" for p in B]
     V = E.embed(texts, verbose=False)
     S = V @ V.T
@@ -104,19 +128,20 @@ def cmd_build(a):
     blind = {"items": [{k: v for k, v in it.items() if not k.startswith("_")}
                        for it in packet["items"]],
              "anchors": packet["anchors"]}
-    (HERE / f"{tag}_bmerge_key.json").write_text(json.dumps(packet, indent=1))
-    (HERE / f"{tag}_bmerge_packet.json").write_text(json.dumps(blind, indent=1))
-    print(f"{tag}: {len(pairs)} Track-B pairs shortlisted (cos >= {SHORTLIST_COS}, "
+    (HERE / f"{tag}_bmerge{T}_key.json").write_text(json.dumps(packet, indent=1))
+    (HERE / f"{tag}_bmerge{T}_packet.json").write_text(json.dumps(blind, indent=1))
+    print(f"{tag}: {len(pairs)} Track-{T} pairs shortlisted (cos >= {SHORTLIST_COS}, "
           f"cross-proposer only) + {len(packet['anchors'])} anchors "
-          f"-> {tag}_bmerge_packet.json")
+          f"-> {tag}_bmerge{T}_packet.json")
 
 
 def cmd_apply(a):
     tag = f"{a.cell}_r{a.round}"
-    key = json.loads((HERE / f"{tag}_bmerge_key.json").read_text())
+    T = a.track
+    key = json.loads((HERE / f"{tag}_bmerge{T}_key.json").read_text())
     sp = json.loads((HERE / f"{tag}_species.json").read_text())
     pool = json.loads((HERE / f"{tag}_proposals_fleet.json").read_text())["proposals"]
-    B = [p for p in pool if p["track"] == "B"]
+    B = [p for p in pool if p["track"] == T]
     maps = [{v["pair_id"]: v["verdict"].upper()
              for v in json.loads(Path(p).read_text())["verdicts"]}
             for p in a.verdicts.split(",")]
@@ -159,12 +184,12 @@ def cmd_apply(a):
                      "rep_name": B[rep]["name"]})
     rows.sort(key=lambda r: (-r["n_proposers"], -r["n_members"], r["sort_hash"]))
 
-    k_b = sum(1 for c in sp["selected"] if c["track"] == "B")
+    k_b = sum(1 for c in sp["selected"] if c["track"] == T)
     chosen = rows[:k_b]
-    newsel = [c for c in sp["selected"] if c["track"] == "A"]
+    newsel = [c for c in sp["selected"] if c["track"] != T]
     for n, r in enumerate(chosen):
         p = B[r["rep"]]
-        newsel.append({"track": "B", "blind_id": f"B{n+1:02d}", "name": p["name"],
+        newsel.append({"track": T, "blind_id": f"{T}{n+1:02d}", "name": p["name"],
                        "instruction": p["instruction"], "rationale": p.get("rationale", ""),
                        "upstream_parent": p.get("upstream_parent", "surface-only"),
                        "mixed": bool(p.get("mixed", False)),
@@ -187,16 +212,40 @@ def cmd_apply(a):
                  / max(1, S_obs),
                  "species_named_by_ge2_families": sum(1 for r in rows if r["n_families"] >= 2)}
 
-    (HERE / f"{tag}_species.PREMERGE.json").write_text(json.dumps(sp, indent=1))
+    # LOO-proposer jackknife, same estimator species.py uses for the tau-only table:
+    # drop one proposer, recount species over the survivors, Good-Turing f1/N.
+    prop_ids = sorted({p["proposer"] for p in B})
+    jack = []
+    for drop in prop_ids:
+        sizes = [sum(1 for i in r["members"] if B[i]["proposer"] != drop) for r in rows]
+        sizes = [s for s in sizes if s > 0]
+        n_keep = sum(sizes)
+        if n_keep < 2:
+            continue
+        jack.append(sum(1 for s in sizes if s == 1) / n_keep)
+    merged_gt["P"] = len(prop_ids)
+    merged_gt["proposers"] = prop_ids
+    merged_gt["jackknife_LOPO_missing_mass"] = {
+        "values": [round(v, 4) for v in jack],
+        "min": float(min(jack)) if jack else None,
+        "max": float(max(jack)) if jack else None,
+        "mean": float(np.mean(jack)) if jack else None,
+    }
+
+    if a.inplace:
+        pre = HERE / f"{tag}_species.PREMERGE.json"
+        if not pre.exists():                  # written once, by the first track merged
+            pre.write_text(json.dumps(sp, indent=1))
+    newsel.sort(key=lambda c: (c["track"], c["blind_id"]))
     sp["selected"] = newsel
-    sp["tracks"]["B"]["species_table_PREMERGE_tau_only"] = sp["tracks"]["B"]["species_table"]
-    sp["tracks"]["B"]["species_table"] = [
+    sp["tracks"][T]["species_table_PREMERGE_tau_only"] = sp["tracks"][T]["species_table"]
+    sp["tracks"][T]["species_table"] = [
         {k: v for k, v in r.items() if k not in ("members", "rep")} for r in rows]
-    sp["tracks"]["B"]["n_species_PREMERGE_tau_only"] = sp["tracks"]["B"]["n_species"]
-    sp["tracks"]["B"]["n_species"] = S_obs
-    sp["tracks"]["B"]["good_turing_PREMERGE_tau_only"] = sp["tracks"]["B"]["good_turing"]
-    sp["tracks"]["B"]["good_turing"] = merged_gt
-    sp["b_merge"] = {
+    sp["tracks"][T]["n_species_PREMERGE_tau_only"] = sp["tracks"][T]["n_species"]
+    sp["tracks"][T]["n_species"] = S_obs
+    sp["tracks"][T]["good_turing_PREMERGE_tau_only"] = sp["tracks"][T]["good_turing"]
+    sp["tracks"][T]["good_turing"] = merged_gt
+    sp.setdefault("blind_merge", {})[T] = {
         "rule": "FREEZE DECLARATION identity rule -- concept identity by full-recall blind "
                 "pairwise adjudication, never embedding-tau. The cosine only shortlisted "
                 "candidate pairs (cross-proposer pairs at cos >= %.2f)." % SHORTLIST_COS,
@@ -206,17 +255,30 @@ def cmd_apply(a):
         "n_merge_edges_strict": edges,
         "anchor_battery": anchors,
         "anchor_all_pass": all(all(x["pass"]) for x in anchors),
-        "n_species_before": sp["tracks"]["B"]["n_species_PREMERGE_tau_only"],
+        "n_species_before": sp["tracks"][T]["n_species_PREMERGE_tau_only"],
         "n_species_after": S_obs,
+        "track": T,
     }
-    (HERE / f"{tag}_species.json").write_text(json.dumps(sp, indent=1))
-    print(json.dumps({"merge_edges": edges, "B_species_before":
-                      sp["tracks"]["B"]["n_species_PREMERGE_tau_only"],
-                      "B_species_after": S_obs, "anchors": anchors,
+    if a.inplace:
+        out_path = HERE / f"{tag}_species.json"
+    else:
+        out_path = HERE / f"{tag}_species_strict{T}.json"
+        sp["strict_merge_output"] = {
+            "source_species_file": f"{tag}_species.json",
+            "source_left_untouched": True,
+            "note": "Track-%s strict two-judge merge written as a NEW file so the cited "
+                    "tau-era species file is not moved. The tau-only figures are preserved "
+                    "here under the *_PREMERGE_tau_only keys." % T,
+        }
+    out_path.write_text(json.dumps(sp, indent=1))
+    print(f"wrote {out_path.name} (inplace={a.inplace})")
+    print(json.dumps({"track": T, "merge_edges": edges, "species_before":
+                      sp["tracks"][T]["n_species_PREMERGE_tau_only"],
+                      "species_after": S_obs, "anchors": anchors,
                       "merged_good_turing": merged_gt}, indent=1))
-    print("\nselected Track-B after merge:")
+    print(f"\nselected Track-{T} after merge:")
     for c in newsel:
-        if c["track"] == "B":
+        if c["track"] == T:
             print(f"  {c['blind_id']} P={c['n_proposers_naming']} m={c['n_members']} | "
                   f"{c['name'][:60]}")
 
@@ -227,8 +289,14 @@ if __name__ == "__main__":
     b = sub.add_parser("build")
     b.add_argument("--cell", required=True); b.add_argument("--round", required=True)
     b.add_argument("--max-pairs", type=int, default=120)
+    b.add_argument("--track", choices=["A", "B"], default="B")
     p = sub.add_parser("apply")
     p.add_argument("--cell", required=True); p.add_argument("--round", required=True)
     p.add_argument("--verdicts", required=True)
+    p.add_argument("--track", choices=["A", "B"], default="B")
+    p.add_argument("--inplace", action="store_true",
+                   help="legacy behaviour: rewrite <tag>_species.json in place (keeping a "
+                        "one-time PREMERGE sidecar). Default writes a NEW "
+                        "<tag>_species_strict<T>.json and never touches the original.")
     a = ap.parse_args()
     {"build": cmd_build, "apply": cmd_apply}[a.cmd](a)

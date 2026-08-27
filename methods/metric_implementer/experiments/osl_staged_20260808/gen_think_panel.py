@@ -16,31 +16,39 @@ from methods.metric_implementer.vllm_backend import make_judge_backend
 
 B = "/lfs/skampere3/0/alexspan"
 OM = f"{B}/outputs/osl_multi"
-EX = sys.argv[1]
-TASK = sys.argv[2] if len(sys.argv) > 2 else "humor"
 MAX_GEN = 1536
 
-f1 = json.load(open(f"{OM}/freeze_zxa_" + TASK + "_v1.json"))
-rubs = [(e["zxa"]["base"], e["rubric"]) for e in f1["metrics"]
-        if e["zxa"]["arm"] == "definition"]
-assert rubs, "no definition-arm rubrics found"
 
-cfg = cfgmod.apply_task_preset(cfgmod.ImplementerConfig(), TASK.replace("_", "-"))
-texts, _ = _load_texts(TASK.replace("_", "-"), 360, cfg)
-probes = texts[60:360]
-MX = cfg.max_text_chars
-ex = make_judge_backend(EXECUTORS[EX][0], cfgmod.ImplementerConfig(), temperature=None)
+def main():
+    # __main__ guard required: vLLM spawn workers re-import this file.
+    EX = sys.argv[1]
+    TASK = sys.argv[2] if len(sys.argv) > 2 else "humor"
 
-prompts = [ap._YESNO_TEXTFIRST.format(text=t[:MX], rubric=r) for _, r in rubs for t in probes]
-names = np.array([f"{b}||definition" for b, _ in rubs], object)
-print(f"[{EX}] {len(rubs)} rubrics x {len(probes)} probes = {len(prompts)} prompts/mode",
-      flush=True)
-MODES = ((("think", True),) if "gpt-oss" in EX else
-         (("nothink", False), ("think", True)))  # Harmony analysis channel is always on
-for mode, think in MODES:
-    flat = np.asarray(ex.score_binary_gen(prompts, thinking=think, max_gen_tokens=MAX_GEN),
-                      float)
-    M = flat.reshape(len(rubs), len(probes))
-    np.savez(f"{OM}/mbar_zxagen_{mode}_{TASK}_{EX}.npz", m_bar=M, names=names)
-    print(f"[{EX}|{mode}] saved, nan_rate={float(np.mean(~np.isfinite(M))):.4f}", flush=True)
-print("DONE", EX, flush=True)
+    f1 = json.load(open(f"{OM}/freeze_zxa_" + TASK + "_v1.json"))
+    rubs = [(e["zxa"]["base"], e["rubric"]) for e in f1["metrics"]
+            if e["zxa"]["arm"] == "definition"]
+    assert rubs, "no definition-arm rubrics found"
+
+    cfg = cfgmod.apply_task_preset(cfgmod.ImplementerConfig(), TASK.replace("_", "-"))
+    texts, _ = _load_texts(TASK.replace("_", "-"), 360, cfg)
+    probes = texts[60:360]
+    MX = cfg.max_text_chars
+    ex = make_judge_backend(EXECUTORS[EX][0], cfgmod.ImplementerConfig(), temperature=None)
+
+    prompts = [ap._YESNO_TEXTFIRST.format(text=t[:MX], rubric=r) for _, r in rubs for t in probes]
+    names = np.array([f"{b}||definition" for b, _ in rubs], object)
+    print(f"[{EX}] {len(rubs)} rubrics x {len(probes)} probes = {len(prompts)} prompts/mode",
+          flush=True)
+    MODES = ((("think", True),) if "gpt-oss" in EX else
+             (("nothink", False), ("think", True)))  # Harmony analysis channel is always on
+    for mode, think in MODES:
+        flat = np.asarray(ex.score_binary_gen(prompts, thinking=think, max_gen_tokens=MAX_GEN),
+                          float)
+        M = flat.reshape(len(rubs), len(probes))
+        np.savez(f"{OM}/mbar_zxagen_{mode}_{TASK}_{EX}.npz", m_bar=M, names=names)
+        print(f"[{EX}|{mode}] saved, nan_rate={float(np.mean(~np.isfinite(M))):.4f}", flush=True)
+    print("DONE", EX, flush=True)
+
+
+if __name__ == "__main__":
+    main()

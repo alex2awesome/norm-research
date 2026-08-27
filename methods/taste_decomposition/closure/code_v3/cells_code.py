@@ -124,7 +124,15 @@ def within_repo_auc(y, p, groups, mask=None, min_n=MIN_REPO_N):
     pooled AUC here is composition-dominated and is never quoted as a residual."""
     from sklearn.metrics import roc_auc_score
     y, p, groups = np.asarray(y), np.asarray(p), np.asarray(groups)
+    # SHAPE GUARD: a MONITOR-length prediction vector reaching a full-population reader
+    # has now been caught twice (round0_code.py, readout_code.py::discount). Assert it by
+    # name instead of letting numpy raise a confusing IndexError -- or worse, letting it
+    # through silently on a cell where the two lengths happen to coincide.
+    assert len(p) == len(y) == len(groups), (
+        f"within_repo_auc: prediction vector has length {len(p)} but the population has "
+        f"{len(y)} rows -- pass a FULL-LENGTH vector (use _expand on a MONITOR-only one)")
     if mask is not None:
+        assert len(mask) == len(y), f"mask length {len(mask)} != population {len(y)}"
         y, p, groups = y[mask], p[mask], groups[mask]
     per, num, tot = [], 0.0, 0
     for r in np.unique(groups):

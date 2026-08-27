@@ -28,8 +28,11 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
+# NOTE: maps_hw_si first, then HERE, so HERE wins position 0 -- otherwise `import cells`
+# resolves to maps_hw_si/cells.py (whose load() takes a required cell arg) instead of this
+# cell's shim. Caught by the readout dry run.
 sys.path.insert(0, str(HERE.parent / "maps_hw_si"))
+sys.path.insert(0, str(HERE))
 
 import cells as C                                            # noqa: E402
 import closure_core as L                                     # noqa: E402
@@ -42,7 +45,13 @@ def current_blocks(d, rnd):
     """[V, A_base] plus the A-routed score columns accepted in earlier rounds."""
     blocks, tags = [d["V"], np.column_stack([d["A"], (~np.isnan(d["A"])).astype(float)])], \
                    ["V", "A_base(score+applied)"]
-    seq = [] if str(rnd) == "d" else ["d"] + list(range(1, int(rnd)))
+    # prior rounds whose A-routed criteria are already in the bank: none for the
+    # decomposition round "d"; for round r it is "d" plus rounds 1..r-1. Any other label
+    # (e.g. a dry-run tag) is treated as "no prior rounds" rather than crashing.
+    try:
+        seq = ["d"] + list(range(1, int(rnd)))
+    except (TypeError, ValueError):
+        seq = []
     for r in seq:
         f = HERE / f"{TAG}_r{r}_scores.npz"
         rt = HERE / f"{TAG}_r{r}_routing_final.json"
@@ -128,16 +137,22 @@ def main():
 
     ids = [str(d["ids"][int(mi[k])]) for k in picked]
     cards = C.fetch_texts(ids)
-    trunc = d["meta"]["text_trunc"]
+    trunc = d["meta"]["text_trunc"]          # TOKEN budget (cl100k), not characters
     slice_rows = []
-    for k, card in zip(picked, cards):
+    for k, card, rid in zip(picked, cards, ids):
         i = int(mi[k])
+        # ITEM-VIEW ASSERTION (accumulated ruling): the card handed to a proposer must be
+        # the card fetched for THIS row id, in this order.
+        assert str(d["ids"][i]) == rid, f"item-view mismatch at {i}: {d['ids'][i]} != {rid}"
         slice_rows.append({
-            "i": i, "id": str(d["ids"][i]),
+            "i": i, "id": rid,
             "direction": "dense_high_va_low" if gap[k] > 0 else "dense_low_va_high",
             "dense_prob": float(dense[i]), "dense_pct": float(d_rank[k]),
             "va_nl_oof": float(oof_full[i]), "va_nl_pct": float(v_rank[k]),
-            "rank_gap": float(gap[k]), "text": card[:trunc]})
+            "rank_gap": float(gap[k]), "text": C.tcut(card, trunc, "")})
+    tk = [C.ntok(r["text"]) for r in slice_rows]
+    print(f"slice card tokens: max {max(tk)} mean {sum(tk)//len(tk)} "
+          f"total {sum(tk)} (budget {trunc}/card)")
     out = HERE / f"{TAG}_r{a.round}_slice.json"
     out.write_text(json.dumps(slice_rows, indent=1))
     print(f"slice: {len(slice_rows)} rows  |M|={len(mi)} (excluded {len(seen)} already read)"

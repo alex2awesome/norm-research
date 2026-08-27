@@ -168,7 +168,8 @@ def cmd_apply(a):
         anchors.append({"pair_id": an["pair_id"], "truth": an["truth"], "got": got,
                         "pass": [g == an["truth"] for g in got]})
 
-    (HERE / f"{tag}_species.PREMERGE.json").write_text(json.dumps(sp, indent=1))
+    if a.inplace:
+        (HERE / f"{tag}_species.PREMERGE.json").write_text(json.dumps(sp, indent=1))
     tracks = [t for t in a.tracks.split(",") if t in sp["tracks"]]
     newsel, summary = [], {}
     for track in ("A", "B"):
@@ -233,7 +234,14 @@ def cmd_apply(a):
         "anchor_all_pass": all(all(x["pass"]) for x in anchors),
         "per_track": summary,
     }
-    (HERE / f"{tag}_species.json").write_text(json.dumps(sp, indent=1))
+    # 2026-08-11 (Track-A certificate backfill): default is now a NEW file. The archived
+    # rounds this machinery is re-run on have already-cited tau-era species files, and the
+    # PREMERGE sidecar does not protect them (it is written every apply, so a second pass
+    # overwrites the tau-era copy). Pass --inplace for the legacy behaviour.
+    out_path = (HERE / f"{tag}_species.json") if a.inplace else \
+        (HERE / f"{tag}_species_strict.json")
+    out_path.write_text(json.dumps(sp, indent=1))
+    print(f"wrote {out_path.name} (inplace={a.inplace})")
     print(json.dumps({"per_track": summary, "anchors": anchors}, indent=1))
     print("\nselected after merge:")
     for c in newsel:
@@ -252,5 +260,8 @@ if __name__ == "__main__":
     p.add_argument("--cell", required=True); p.add_argument("--round", required=True)
     p.add_argument("--tracks", default="A,B")
     p.add_argument("--verdicts", required=True)
+    p.add_argument("--inplace", action="store_true",
+                   help="legacy behaviour: rewrite <tag>_species.json in place. "
+                        "Default writes a NEW <tag>_species_strict.json.")
     a = ap.parse_args()
     {"build": cmd_build, "apply": cmd_apply}[a.cmd](a)

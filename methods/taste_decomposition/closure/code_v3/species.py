@@ -184,6 +184,43 @@ def main():
                 rec["mixed_any_member"] = bool(any(sub[i].get("mixed") for i in r["members"]))
             out["selected"].append(rec)
 
+    # ---- BOTH-TRACK BLIND MERGE BEFORE AUDIT (accumulated ruling) -----------
+    # The per-track clustering above cannot see a concept that BOTH tracks named -- one
+    # proposer calling it quality, another calling it nuisance. Scoring it twice under
+    # two blind ids would double-count it in the bank and in the nuisance set, and the
+    # audit would route the two copies independently and possibly inconsistently. So the
+    # SELECTED sets from both tracks are re-embedded together, in one space, BEFORE the
+    # audit; cross-track pairs at or above TAU are recorded, and the B-side copy is
+    # dropped (the A side is kept because the audit can still re-route it to B, whereas a
+    # dropped A copy could never be recovered).
+    sel = out["selected"]
+    if sel:
+        import embed_lib as E2
+        V = E2.embed([E2.crit_text(s["name"], s["instruction"]) for s in sel], verbose=False)
+        S = V @ V.T
+        cross, drop = [], set()
+        for i in range(len(sel)):
+            for j in range(i + 1, len(sel)):
+                if sel[i]["track"] == sel[j]["track"]:
+                    continue
+                if S[i, j] >= TAU:
+                    a, b = (i, j) if sel[i]["track"] == "A" else (j, i)
+                    cross.append({"cosine": float(S[i, j]),
+                                  "A_id": sel[a]["blind_id"], "A_name": sel[a]["name"],
+                                  "B_id": sel[b]["blind_id"], "B_name": sel[b]["name"],
+                                  "dropped": sel[b]["blind_id"]})
+                    drop.add(sel[b]["blind_id"])
+        out["cross_track_merge"] = {
+            "tau": TAU, "n_cross_track_duplicates": len(cross), "pairs": cross,
+            "dropped_ids": sorted(drop),
+            "rule": "selected A and B sets re-embedded in ONE space before the audit; "
+                    "cross-track pairs >= tau have the B copy dropped (A is kept because "
+                    "the audit can still re-route it to B)"}
+        if drop:
+            out["selected"] = [s for s in sel if s["blind_id"] not in drop]
+        print(f"[{tag}] cross-track blind merge: {len(cross)} duplicate(s), "
+              f"dropped {sorted(drop)}")
+
     (HERE / f"{tag}_species.json").write_text(json.dumps(out, indent=1))
     for t, blk in out["tracks"].items():
         g = blk["good_turing"]

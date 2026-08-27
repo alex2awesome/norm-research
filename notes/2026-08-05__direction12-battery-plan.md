@@ -2019,3 +2019,45 @@ y*. CONSEQUENCES for Tier B: (a) candidate generation must produce genuinely NEW
 arbiter specs, or triangulation w/ attentive-negative mention-y) before the draft
 sentence's numbers can be minted. Peer is one-sided (even resampled negatives arbitrate
 positive at 83%+) — peer supports pooled but not per-metric arm AUCs.
+
+### 3b EXECUTION LOG (2026-08-21)
+
+- **Gen-readout smoke PASSED (qwen3-8b, 60 prompts x 3 modes, sk3 gpu1)**: nan 0.0 all readouts;
+  gen-nothink vs logprob agreement **1.000** (readout swap validated); think traces mean 1,581 /
+  max 2,819 chars, 0% truncated; no think-tag leak in nothink. think-vs-nothink flip rate .15 —
+  NOT read directionally (prereg). Artifact: sk3 outputs/osl_multi/gen_smoke_qwen3-8b_v1.json.
+- Spawn-wedge fix: gen_readout_smoke.py + gen_think_panel.py lacked __main__ guards → EngineCore
+  init death under VLLM_WORKER_MULTIPROC_METHOD=spawn. Guarded, synced to sk3.
+- **Qwen3 toggle ladder LAUNCHED** (lane gen_think_ladder_sk3.sh, PID 1670678): rungs 1.7b/4b/8b/
+  14b/32b, both modes, sequential, one GPU at a time, per-rung free-memory gate (excludes GPUs
+  3+7 per user directive), squeeze-in utils .14-.55. Artifacts land as
+  outputs/osl_multi/mbar_zxagen_{nothink,think}_humor_{exec}.npz; log logs/gen_think_ladder.log.
+- **CORRECTION (same day): the Qwen3 toggle ladder was ALREADY RUN 2026-08-06/07** by an earlier
+  session — mbar_zxagen_{nothink,think}_{task}_{qwen3-1.7b..32b}.npz exist for humor, creative
+  writing, math AND peer review; humor also has r1-qwen-14b/32b + qwen25-14b/32b comparators +
+  phi4-reasoning + gpt-oss-120b(think). The relaunched ladder skip-guarded to zero work (no
+  double-run). Remaining plan-scope gap = r1-llama-8b <-> llama8b, phi4 (instruct side),
+  glm-z1-32b (weights present incl. GLM-Z1) — **completion lane LAUNCHED** (gen_think_pairs_sk3.sh,
+  PID 1690019, log logs/gen_think_pairs.log, same skip-guards + GPU gates).
+- NEXT after completion lane: 3b harvest analysis — think−nothink delta per metric class across
+  the toggle ladder (contested-class concentration prediction, task #26 prereg), matched-pair
+  deltas with family-conditional readouts, R1-native "nothink" semantics eyeball FIRST.
+
+### 3b HARVEST v1 (2026-08-21, DESCRIPTIVE ONLY — artifact sk3 outputs/osl_multi/harvest_3b_gen_v1.json)
+
+- **Completion lane landed clean**: r1-llama-8b, llama8b, phi4, glm-z1-32b all rc=0, nan ≤ .2%.
+  Full 3b slate now on disk: qwen3 toggle x4 tasks + 8 humor matched-pair/frontier executors.
+- **INSTRUMENT FACT 1 — thinking flag is a NO-OP outside qwen3**: llama8b, phi4,
+  phi4-reasoning, glm-z1-32b, qwen25-14b/32b, r1-* produce BYTE-IDENTICAL means in both modes
+  (delta exactly +.000) — their chat templates ignore enable_thinking. Only qwen3 rungs have a
+  real toggle. Pair contrasts remain valid as native-mode comparisons; "think vs nothink"
+  language must be qwen3-only.
+- **INSTRUMENT FACT 2 — these are YES-RATE levels, not accuracy**: harvest v1 deltas are raw
+  hard-verdict means with no reference key; e.g. phi4-reasoning~phi4 "+.66-+.80" is a yes-rate
+  calibration gap, NOT a quality gap. The prereg readout (think-gains concentrate on contested
+  classes?) requires the zxa harvest tooling against references — queued as the real analysis.
+- Distribution check: 29/59 panels flagged (mostly ≥1 constant rubric); worst = qwen3-1.7b
+  nothink creative-writing (mean .97, 8/11 rubrics constant) — known small-model degeneracy;
+  1.7B think-mode deltas are large-negative everywhere (think breakdown at 1.7B, descriptive).
+- Cosmetic: harvest v1 mis-splits task names with underscores (creative|writing_...) — keys
+  self-consistent, fix in v2.

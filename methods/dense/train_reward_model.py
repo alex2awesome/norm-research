@@ -153,6 +153,13 @@ def parse_args():
     )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
+        "--init_adapter",
+        default=None,
+        help="Stage-B transfer: path to an existing LoRA adapter to initialise from "
+             "instead of a fresh LoRA init. Opt-in; unset reproduces the frozen recipe "
+             "exactly. Refuses to load an adapter trained on a different base model.",
+    )
+    parser.add_argument(
         "--class_weight_auto",
         "--class-weight-auto",
         action="store_true",
@@ -503,7 +510,27 @@ def build_model(args):
         args.lora_dropout,
         ", ".join(args.lora_target_modules),
     )
-    model = get_peft_model(model, lora_config)
+    if getattr(args, "init_adapter", None):
+        # Stage-B transfer: start from an already-trained LoRA adapter instead of a
+        # fresh init. Opt-in only -- every existing caller leaves --init_adapter unset
+        # and gets byte-identical behaviour (same pattern as DENSE_SCORE_MAXLEN /
+        # DENSE_SPLIT_FRACTION_ATOL). The adapter must have been trained on the same
+        # base model and the same num_labels head, which the loader below asserts.
+        from peft import PeftModel
+        acfg_p = os.path.join(args.init_adapter, "adapter_config.json")
+        if not os.path.exists(acfg_p):
+            raise RuntimeError(f"--init_adapter {args.init_adapter} has no adapter_config.json")
+        with open(acfg_p) as fh:
+            acfg = json.load(fh)
+        base_of_adapter = acfg.get("base_model_name_or_path")
+        if base_of_adapter and args.model_name not in str(base_of_adapter):
+            raise RuntimeError(
+                f"--init_adapter was trained on {base_of_adapter!r} but this run uses "
+                f"{args.model_name!r}; refusing to transfer across base models.")
+        logger.info("Stage-B transfer: initialising LoRA from %s", args.init_adapter)
+        model = PeftModel.from_pretrained(model, args.init_adapter, is_trainable=True)
+    else:
+        model = get_peft_model(model, lora_config)
     if hasattr(model, "config"):
         model.config.pad_token_id = tokenizer.pad_token_id
     if hasattr(model, "base_model") and hasattr(model.base_model, "config"):

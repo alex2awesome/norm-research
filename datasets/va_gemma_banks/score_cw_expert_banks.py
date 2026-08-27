@@ -139,11 +139,12 @@ def _load_bank_blocks():
 
 
 def _cw_expert_bank(name, base: Path, sys_prompt, lead, anchor_salt, n_shards,
-                    secondary_col, meta_extra):
+                    secondary_col, meta_extra, pop_rel="va/population.csv.gz"):
     import pandas as pd
     vf = S.load_module(VFEAT, "vf_cw_expert")
-    df = pd.read_csv(base / "va/population.csv.gz")
-    man = json.loads((base / "va/population_manifest.json").read_text())
+    df = pd.read_csv(base / pop_rel)
+    man_p = (base / pop_rel).parent / "population_manifest.json"
+    man = json.loads(man_p.read_text())
 
     items = [{"id": str(r.row_id), "group": str(r.group), "text": str(r.text),
               "judgement": int(r.judgement), "split": str(r.split),
@@ -197,7 +198,7 @@ def _cw_expert_bank(name, base: Path, sys_prompt, lead, anchor_salt, n_shards,
         n_shards=n_shards,
         extra_cols={"split": np.array([r["split"] for r in items], dtype=object),
                     secondary_col: np.array([r["secondary"] for r in items], dtype=object)},
-        meta={"population": str((base / "va/population.csv.gz").relative_to(REPO)),
+        meta={"population": str((base / pop_rel).relative_to(REPO)),
               "population_manifest": man,
               "a_bank": str(BANK.relative_to(REPO)),
               "a_bank_provenance":
@@ -249,8 +250,48 @@ def build_wigleaf_curation():
                                 "Context only -- a different instrument, never a gate."}})
 
 
+def build_royalroad_expanded_newrows():
+    """Score ONLY the rows the re-matched expansion added.
+
+    The 1,023 carried rows keep their existing token-truncated Gemma scores and are
+    NEVER re-judged (coordinator's rule + feedback_never_delete_data): re-judging
+    them would silently mix two judging batches into one matrix. Anchors for this
+    batch are still drawn from the FULL expanded population so the K>=50 battery
+    stays representative of the cell rather than of the new slice alone.
+    """
+    import pandas as pd
+    base = CW / "royalroad_stubs"
+    full = pd.read_csv(base / "va_expanded/population.csv.gz")
+    n_new = int(full["is_new_row"].sum())
+    b = _cw_expert_bank(
+        "cw_royalroad_expanded_newrows", base, SYS_ROYALROAD,
+        "OPENING CHAPTER OF A SERIALISED WEB NOVEL:", anchor_salt=811, n_shards=2,
+        secondary_col="topic_cluster",
+        meta_extra={"group_column": "fiction_id",
+                    "scored_slice": "NEW ROWS ONLY from the re-matched expansion",
+                    "n_new_rows": n_new,
+                    "carried_rows_note":
+                        "the carried rows keep their 2026-08-10 token-truncated "
+                        "scores in outputs/va_gemma_banks_cw_expert/; the two are "
+                        "merged at layer-1 load time, never re-judged"},
+        pop_rel="va_expanded/population.csv.gz")
+    keep = set(full.loc[full.is_new_row, "row_id"].astype(str))
+    all_items = b["items"]
+    b["items"] = [r for r in all_items if r["id"] in keep]
+    b["ys"] = {"judgement": np.array([r["judgement"] for r in b["items"]])}
+    # anchors keep drawing from the FULL population
+    _full_items = all_items
+    _anch = b["anchors"]
+    b["anchors"] = _anch
+    b["_anchor_pool"] = _full_items
+    print(f"[slice] scoring {len(b['items'])} NEW rows of {len(all_items)} "
+          f"expanded-population rows", flush=True)
+    return b
+
+
 BUILDERS = {"cw_royalroad_verdict": build_royalroad_verdict,
-            "cw_wigleaf_curation": build_wigleaf_curation}
+            "cw_wigleaf_curation": build_wigleaf_curation,
+            "cw_royalroad_expanded_newrows": build_royalroad_expanded_newrows}
 
 
 # ------------------------------------------------- judge distribution check --

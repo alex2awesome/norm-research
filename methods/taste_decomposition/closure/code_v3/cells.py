@@ -6,18 +6,24 @@ harness / audit / arbiter / species modules copied from that batch run unchanged
 
 TEXT RENDERING FOR PROPOSERS (recorded decision).  The v3 document is up to 24,000
 characters and is dominated by the diff, while the dense model saw only the first 2,048
-tokens (~8,000 characters) of it -- i.e. title, description, most of the review comments
-and the head of the diff.  A blind character prefix would therefore show a proposer
-nothing but diff on PRs with no description, and would not match what the dense model
-read.  The slice card instead preserves the document's four sections at fixed budgets:
+tokens of it -- i.e. title, description, most of the review comments and the head of the
+diff.  A blind prefix would therefore show a proposer nothing but diff on PRs with no
+description, and would not match what the dense model read.  The slice card instead
+preserves the document's four sections at fixed budgets.
 
-    Title           full
-    Description     900 chars
-    Review comments first 8, 200 chars each
-    Diff            first 1,200 chars, with a one-line summary of what was cut
+TOKENS, NOT CHARACTERS (accumulated ruling).  Every budget below is a TOKEN budget,
+measured with `tiktoken` cl100k_base -- a reasonable common denominator for the
+gpt-5.6-luna and GLM-5.2 legs that actually read these cards.  Character budgets are not
+used anywhere in the renderer, because a character budget silently gives dense
+minified/CJK code far more content than sparse code for the same nominal size:
 
-which is ~3.4 KB per row and keeps a 50-row slice near the 150 KB prompt size the N&C
-and CW campaigns ran at.  The renderer is deterministic and label-blind.
+    Title            60 tokens
+    Description     220 tokens
+    Review comments  first 8, 50 tokens each
+    Diff head       300 tokens, with a one-line summary of what was cut
+
+i.e. <= ~1,000 tokens per card, so a 40-row slice is ~40K tokens.  Deterministic and
+label-blind.
 """
 from __future__ import annotations
 
@@ -38,7 +44,7 @@ CELL_META = {
                "as its title, its description, the inline review comments left on it, "
                "and its code diff",
         construct="how good the pull request is as a contribution to that repository",
-        text_trunc=4000,
+        text_trunc=1100,   # TOKEN budget (cl100k), not characters -- see module docstring
         layer1="code_v3_enriched_layer1.json",
         bank="code_v3",
     )
@@ -51,6 +57,29 @@ CACHE = HERE / "slice_text_cache.jsonl"
 
 
 # ------------------------------------------------------------ slice cards ---
+TOK_TITLE, TOK_DESC, TOK_COMMENT, TOK_DIFF = 60, 220, 50, 300
+_ENC = None
+
+
+def _enc():
+    global _ENC
+    if _ENC is None:
+        import tiktoken
+        _ENC = tiktoken.get_encoding("cl100k_base")
+    return _ENC
+
+
+def ntok(s: str) -> int:
+    return len(_enc().encode(str(s), disallowed_special=()))
+
+
+def tcut(s: str, n: int, marker: str = " …") -> str:
+    """Truncate to n TOKENS (not characters)."""
+    e = _enc()
+    ids = e.encode(str(s), disallowed_special=())
+    return str(s) if len(ids) <= n else e.decode(ids[:n]).rstrip() + marker
+
+
 def render_card(text: str) -> str:
     t = str(text)
     m = re.search(r"^Diff:\n", t, re.M)
@@ -59,19 +88,16 @@ def render_card(text: str) -> str:
     comments, head = (head[mc.end():], head[:mc.start()]) if mc else ("", head)
     md = re.search(r"^Description:", head, re.M)
     desc, head = (head[md.end():], head[:md.start()]) if md else ("", head)
-    title = head.replace("Title:", "", 1).strip()
-
-    desc = desc.strip()
-    if len(desc) > 900:
-        desc = desc[:900].rstrip() + " …[description truncated]"
+    title = tcut(head.replace("Title:", "", 1).strip(), TOK_TITLE)
+    desc = tcut(desc.strip(), TOK_DESC, " …[description truncated]")
     cb = [l for l in comments.split("\n") if l.startswith("- [")]
-    shown = [(c[:200].rstrip() + " …") if len(c) > 200 else c for c in cb[:8]]
+    shown = [tcut(c, TOK_COMMENT) for c in cb[:8]]
     more = f"\n  …[{len(cb) - 8} further review comments]" if len(cb) > 8 else ""
     nfiles = len(re.findall(r"^diff --git a/(\S+)", diff, re.M))
     nhunks = diff.count("\n@@")
-    dhead = diff[:1200]
+    dhead = tcut(diff, TOK_DIFF, "")
     dtail = (f"\n…[diff truncated; {nfiles} file(s), {nhunks} hunk(s) in full]"
-             if len(diff) > 1200 else "")
+             if ntok(diff) > TOK_DIFF else "")
     return (f"Title: {title or '(unknown)'}\n\n"
             f"Description: {desc or '(none)'}\n\n"
             f"Review comments:\n" + ("\n".join(shown) + more if shown else "(none)") +

@@ -44,8 +44,11 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))
+# NOTE: maps_hw_si first, then HERE, so HERE wins position 0 -- otherwise `import cells`
+# resolves to maps_hw_si/cells.py (whose load() takes a required cell arg) instead of this
+# cell's shim. Caught by the readout dry run.
 sys.path.insert(0, str(HERE.parent / "maps_hw_si"))
+sys.path.insert(0, str(HERE))
 
 import cells as C                                            # noqa: E402
 import cells_code as CC                                      # noqa: E402
@@ -58,6 +61,15 @@ MIN_CELL = 10
 
 
 # ------------------------------------------------------------- estimators ---
+def _expand(vec, mask, n):
+    """MONITOR-length vector -> full-length with NaN elsewhere. Required because
+    fit_block returns MONITOR-only predictions while every within-repo reader takes a
+    full-length vector (shape guard in cells_code.within_repo_auc enforces this)."""
+    v = np.full(n, np.nan)
+    v[mask] = vec
+    return v
+
+
 def wauc(y, p, g, mask=None):
     return CC.within_repo_auc(y, p, g, mask)["nwtd"]
 
@@ -145,9 +157,29 @@ def main():
     Xnew = zz["X"][[pos[i] for i in d["ids"]]]
     cids = [str(s) for s in zz["a_ids"]]
     routing = json.loads((HERE / f"{tag}_routing_final.json").read_text())
-    A_ids = [r["blind_id"] for r in routing["final"] if r["final_route"] == "A"]
-    B_rows = [r for r in routing["final"] if r["final_route"] == "B"]
+
+    # ---- ENFORCED COLLAPSE GATE (accumulated ruling) -----------------------
+    # A criterion whose score distribution collapsed (>98% modal, or all-NA) carries no
+    # information and must not enter any block. Recorded, never deleted: the ids and
+    # their statistics are written into the results JSON.
+    rep_path = HERE / f"{tag}_scores.report.json"
+    collapsed, collapse_detail = set(), []
+    if rep_path.exists():
+        rep = json.loads(rep_path.read_text())
+        for c in rep.get("collapse", []):
+            if c["collapsed"]:
+                collapsed.add(c["blind_id"])
+                collapse_detail.append(c)
+
+    A_ids = [r["blind_id"] for r in routing["final"]
+             if r["final_route"] == "A" and r["blind_id"] not in collapsed]
+    B_rows = [r for r in routing["final"]
+              if r["final_route"] == "B" and r["blind_id"] not in collapsed]
     B_ids = [r["blind_id"] for r in B_rows]
+    dropped_by_collapse = {"n": len(collapsed), "ids": sorted(collapsed),
+                           "detail": collapse_detail,
+                           "rule": "modal_frac > .98 or all-NA; excluded from every block, "
+                                   "recorded not deleted"}
     B_mixed = {r["blind_id"]: bool(r.get("mixed")) for r in B_rows}
     B_parent = {r["blind_id"]: r.get("upstream_parent", "surface-only") for r in B_rows}
     NAME = {r["blind_id"]: r["name"] for r in routing["final"]}
@@ -185,6 +217,7 @@ def main():
                        "misrouting_rate": routing["misrouting_rate"],
                        "probe_pass": routing["probe_pass"],
                        "n_mixed_B": routing["n_mixed_B"]},
+           "enforced_collapse_gate": dropped_by_collapse,
            "score_report": (json.loads((HERE / f"{tag}_scores.report.json").read_text())
                             if (HERE / f"{tag}_scores.report.json").exists() else None)}
 
@@ -233,7 +266,8 @@ def main():
             j = full(rbx)
             out = {"label": label, "n_B_features_after_screen": rbx["n_features"],
                    "spurious_alone_within_HONEST_histgb": wauc(y, j, g),
-                   "spurious_alone_within_MONITOR_histgb": wauc(y, rbx["nl_mon"], g, monm),
+                   "spurious_alone_within_MONITOR_histgb":
+                   wauc(y, _expand(rbx["nl_mon"], monm, len(y)), g, monm),
                    "spurious_alone_within_HONEST_linear":
                        wauc(y, _lin_full(rbx, fitm, monm, len(y)), g)}
             for tier, m in tiers.items():

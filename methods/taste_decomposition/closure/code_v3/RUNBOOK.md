@@ -131,6 +131,43 @@ top |dense percentile − VA_nl percentile|, and the dense score is the **seed e
 so a slice built before all three seeds land is a *different* slice, and the sealed
 fleet's one blind look would be spent on the wrong one.
 
+## RESUME CHECKLIST after the 2026-08-10 jump-host outage
+
+sk3 became unreachable via the `whale` ProxyCommand at ~18:15 on 2026-08-10
+(`ssh whale` → `Connection reset by 171.64.75.72 port 22`). sk3 itself was never shown to
+be down, and both GPU jobs run at ppid = 1 under `setsid --fork`, so they continued. On
+reconnect, in this order:
+
+```bash
+# 1. what survived
+ssh sk3 'D=/lfs/skampere3/0/alexspan/norm-research/methods/taste_decomposition/closure/code_v3; \
+  grep -E "^\[shard|SCORE_DONE" $D/rd_score.log | tail; \
+  ls $D/code_v3_rd_scores*.npz; \
+  tail -5 $D/../../code_competitions/ac_dense.log 2>/dev/null; \
+  grep claude-closure-code-v3 /lfs/skampere3/0/alexspan/norm-research/gpu_ledger.txt | tail -4'
+
+# 2. RE-SYNC the code fixed during the outage -- sk3 still has the PRE-FIX copies
+rsync -a readout_code.py stage1_slice_code.py cells_code.py cells.py species.py \
+      score_round_code.py \
+      sk3:/lfs/skampere3/0/alexspan/norm-research/methods/taste_decomposition/closure/code_v3/
+
+# 3. pull the decomposition scores and run the readout (path already dry-run proven)
+rsync -a sk3:.../code_v3/code_v3_rd_scores.npz sk3:.../code_v3/code_v3_rd_scores.report.json .
+python3 readout_code.py --round d
+```
+
+**Fixed during the outage, so sk3's copies are stale**: the `sys.path` shadowing fix
+(`maps_hw_si` must be inserted *before* `HERE`), the non-integer round-label tolerance in
+`current_blocks`, the `_expand` fix in `readout_code.discount`, the named shape guard in
+`cells_code.within_repo_auc`, the token-budgeted `render_card`, and the both-track blind
+merge in `species.py`.
+
+**Readout path status: DRY-RUN PROVEN.** `readout_code.py` was executed end-to-end on
+synthetic scores during the outage; all four tiers, the spurious map, both discount blocks,
+the matched-sampling trigger, the stacked increment and the swap algebra produced correct
+structure, and the enforced collapse gate correctly dropped a planted constant column
+(n_B 10 → 9). All dry-run artifacts were deleted.
+
 ## Fleet
 
 Target P = 6 across 3 families (Claude ×2 sealed subagents, gpt-5.6-luna ×2 via the Codex

@@ -192,3 +192,213 @@ NYC Midnight: park unless forum-access ethics + posting-rate question resolved.
 4. PullPush WP removed-text harvester — sk3
 5. Jokes Wayback pipeline — sk3
 6. Wayback coverage probe (2022/2023 verification) — laptop
+
+## 2026-08-13 — WP removed-comment Wayback retry: CLOSED (negative, definitive)
+
+Retried recovering WritingPrompts removed-story text from Wayback by walking all
+snapshots per thread ("find the to-be-deleted ones"). Findings:
+
+1. **Capture inventory** (3 threads, 484/424/20 captures): 100% www.reddit.com
+   HTML. Zero old.reddit captures, zero direct .json endpoint captures of
+   thread pages.
+2. **React-era (2018–mid-2023) permalink HTML is structurally empty**: the
+   hydration blob contains only routing metadata (`models:{}`,
+   `headCommentId:null`) — comment bodies were loaded via XHR the crawler
+   never captured. Confirmed on 2 captures + earlier gxaplkn test.
+3. **NEW CHANNEL FOUND — archived `/api/info.json?id=t1_<cid>`**: Wayback crawl
+   sessions for comment permalinks also archived Reddit's raw JSON endpoint
+   (visible via `sessionReferrer`). Raw bytes retrievable with the `id_`
+   timestamp modifier. Coverage is real: 6/6 of the original sample and 5/6 of
+   2021–2023 probe ids have such captures (near-zero pre-2021).
+4. **But 0/12 intact.** Every archived info.json is already
+   `body:"[removed]", author:"[deleted]"`. Timing is damning: one capture 73
+   SECONDS after creation, already blanked (AutoMod instant removal); exactly
+   one capture per comment. The captures are *triggered by the removal itself*
+   (mod-log / Reveddit-style bot hitting Save Page Now) → post-removal by
+   construction. There is no live-window snapshot to find.
+
+Uniform 40-id probe (stable-hash over the 333,834 removed ids, 2015–2025):
+cdx coverage 6/40 (all 2018+, dense only 2021–2023), intact 0/40.
+
+**Conclusion**: WP removed-story TEXT is unrecoverable retrospectively by any
+known channel (dumps 0%, PullPush gated, Wayback post-removal-triggered).
+r/Jokes remains the recoverable removal-verdict cell (submissions pipeline,
+~17% and climbing on sk3). Clean CW verdict alternative: Kindle Scout.
+
+Removed-id universe by year (wp_removed_ids.jsonl.gz, n=333,834):
+2015:37k 2016:77k 2017:39.5k 2018:43k 2019:34k 2020:27k 2021:22k 2022:20.5k
+2023:16k 2024:10k 2025:7k — metadata (id, thread, timing, score) intact even
+though text is not; removal RATE analyses remain possible.
+
+### 2026-08-14 addendum — SSR-era probe (answers "is there a non-React era that works?")
+Both flanking eras DO render comment bodies server-side (pre-2018 old-reddit
+HTML, n=153,528 removed ids; shreddit Aug-2023+, n=22,581). Probed 12+12
+removed comments: for each, enumerated ALL thread captures AFTER comment
+creation and fetched up to 3 earliest. Result **0/24 recovered**:
+- pre-2018: threads typically have exactly ONE post-creation capture, taken
+  much later (broad crawls), comment absent (removed/paged out).
+- shreddit: 6/12 threads had post-creation captures (up to 153) but comment id
+  absent from all fetched HTML except one preload-URL reference at +550h, no
+  body. Removal beats capture.
+Failure mode in SSR eras = TIMING, not structure. WP text recovery stays CLOSED.
+
+## 2026-08-14 — overnight wave 2
+
+**WP removals, targeted-window campaign (user-directed)**: bulk CDX dump of the
+whole r/WritingPrompts/comments/ prefix (677 pages, 3.68M rows) -> local join vs
+removed created_utc. Results: own-permalink SSR captures = only 5 old-era (2/5
+recovered = full pre-removal stories); 3,620 shreddit "permalink" captures are
+removal-triggered empty shells (svc partials OMIT removed comments, no
+placeholder) -> dropped unfetched. Old-era thread pages 48h window: 94 unique
+texts from ~3,100 pages. **Universe is 100% top-level** (story-slot comments);
+recovered texts median 147 chars -> WP removal verdict is mostly FORMAT-NORM
+enforcement (non-story top-level comments), plus occasional real stories (6-9K
+chars). Round 2 (7-day window, 3,133 more old-era pages) running. Realistic
+final: 150-400 texts = audit-scale, not classifier-scale.
+
+**Jokes speedup**: slow harvester ~10-day pace (2 req/joke) at 3,900/106,937
+(649 texts, 16.6%). Bulk CDX dump of r/Jokes/comments/ prefix (1,702 pages)
+running; join script deployed -> fetch-only harvester sorted by capture delay
+(~2.5-3 days, skips the ~38% with no captures).
+
+**Kindle Scout COMPLETE**: 1,037 campaigns, 709 terminal on-page verdicts
+(471 not-selected / 222 published / 16 selected), 613 with >500-char excerpts;
+raw HTML in datasets/creative-writing/kindle_scout/raw/. Winners list capped at
+180 (pages 10+ never archived) — superseded by on-page action-bar verdicts.
+
+**RoyalRoad removal question (user)**: NOT usable as verdict. Deleted fictions
+= bare 404, no mod-vs-author attribution; author-deletion correlates with
+SUCCESS (KU pull); ~50K missing ids in 3-186,093 range but 4/15 sampled
+"missing" ids were live-but-unlisted (listing coverage holes). RR verdict
+signals remain STUB + Community Magazine Contest.
+
+**Reedsy**: 15,779 story pages. **SO Votes count**: relaunched (first attempt
+died silently).
+
+### WP recovery FINAL (2026-08-14)
+Round 2 (7-day window) complete. **414 unique pre-removal texts** total
+(sk3: reddit_dumps/wp_recovered_final.jsonl.gz). Years: 2015:65 2016:110
+2017:196 2018:43. Length: median 171 ch; >300ch: 124; >800ch (story-like): 47;
+max 9,733. Character: predominantly format-norm removals (non-story top-level
+comments) + a tail of real removed stories. Audit/validation-scale corpus, not
+training-scale. Wayback cost: ~7,400 page fetches + 677 CDX pages total.
+
+Reedsy approval-gate quantified (user Q): 262 contests report both counts:
+69,987 entries -> 31,283 approved (45%; median 43%/contest, p10 35%, p90 63%).
+Rejected text never public — verdict-count observable, text not.
+
+## 2026-08-15 — consolidation wave (analysis-ready datasets)
+
+- **Kindle Scout PARSED**: campaigns_parsed.jsonl — 1,006 campaigns, 995 w/
+  excerpt text (median 31,285 chars = full first-chapters from expand-excerpt
+  captures). 709 terminal verdicts: 238 accept / 471 reject, ALL with excerpts.
+  Strongest rejected-text verdict cell in the collection.
+- **Reedsy PARSED (incremental)**: stories_parsed.jsonl.gz — 18,811 stories
+  (67 contests complete so far), full text (median ~9.9K chars), likes,
+  winner badge (validated 64/64 vs contest-index "Won by") + 130 shortlist
+  badges. Parser re-runs incrementally as scrape proceeds.
+- **Jokes fast harvester**: 7,600+/63,959, 3,031 texts at 39.9% (delay-sorted).
+- **SO Votes census DONE**: accepted 12,444,260 / bounty-closed 290,786 /
+  up 183.2M / down 24.7M — verdict+curation+voting on one population, 14x Math.SE.
+- **Kept-side builds launched (sk3)**: jokes_kept_universe (non-removed,
+  text-intact, same window/filters) + wp_kept_sample (top-level kept stories:
+  same-thread-as-removal contrast pairs + 2% stable-hash background).
+
+### 2026-08-15 — WP 414 is now cross-archive FINAL
+User challenged "final". Checked every remaining archive:
+- **Common Crawl**: index dumped for all 31 crawls 2015-2017 (old-reddit era).
+  Only 1,271 WP thread captures TOTAL (reddit throttles CC); join vs removed
+  timestamps = **0 captures within 7d of any removed comment**. CLOSED.
+- **Memento aggregator** (federates archive.today, national libraries, etc.):
+  zero non-IA mementos for sampled WP thread URLs. CLOSED.
+- **archive.today** directly: hard 429 to bots, but covered via Memento above.
+- Kindle Scout universe: NO centralized tracker ever existed (author blogs +
+  Goodreads threads only) → 1,037 archived campaigns = practical ceiling.
+414 recovered texts = final across Wayback + CC + Memento + dumps + PullPush.
+
+## 2026-08-16 — Reveddit-channel resolution + PROSPECTIVE collector launched
+
+**User challenged "no author metadata" — resolved with a clean asymmetry:**
+- Removed COMMENTS: text survives in author's public old.reddit listing, but
+  author blanked in every retrospective source (verified: 1 known / 333,745 in
+  dumps; live api/info blanks too). Channel needs names we mostly lack.
+  Reply-mention mining: 120 candidates → live listing harvest → PROVEN
+  (recovered full 2,257-char removed story mnflqz0 via u/Zeznex).
+- Removed SUBMISSIONS (Jokes): author SURVIVES (97-100% 2020-25!) but selftext
+  blanked in ALL public views (listing expando, RSS, /api/expando all
+  "[removed]"). Channel dead for posts.
+The two blanking policies interlock: comments keep text/lose name; posts keep
+name/lose text. Explains Reveddit's posts-show-title-only limitation.
+
+**PROSPECTIVE COLLECTOR RUNNING (sk3)**: wp_prospective_collector.py polls
+old.reddit r/WritingPrompts live comment stream (SSR bodies) every 180s,
+captures id/link_id/author/body/created pre-removal; labels removed/kept at
++5d via Arctic Shift batch API every 6h. Data:
+sk3:reddit_dumps/wp_prospective/{captures,labels}.jsonl.gz. First poll: 25/25
+rows complete. Expected: ~20 removals/day labeled (2025 rate) with full text
++ author — builds the WP verdict cell prospectively, no wall.
+
+## 2026-08-16 — GitHub PR cells collected
+
+**datasets/github-prs/** (new):
+- issue_reactions__<repo>.jsonl.gz — 97,005 closed PRs across 13 gold repos
+  (merge flag, size, PR reactions/comments, linked-issue reactions). Findings:
+  PR-level reactions ~0 (dead channel); linked-issue coverage 4-33%/repo;
+  linked issue WITH reactions only 2,708 PRs (2.8%) → issue-reactions usable
+  as demand covariate on the linked subset, NOT a primary community y.
+- Rust release cell: release_highlights/rust/ — pool_entries.jsonl.gz (4,031
+  changelog entries, 147 versions, PR ids) + 133 announcement HTMLs (curated
+  highlights; label by matching entries into announcement text at model time).
+- Mathlib cell: release_highlights/mathlib/posts/ — 16 "This month in mathlib"
+  posts (Aug 2021-May 2024), 623 curated PR refs; pool =
+  issue_reactions__leanprover-community__mathlib{,4}.jsonl.gz (57,628 closed
+  PRs). ★ CAVEAT: mathlib merges via BORS -> GitHub merged flag FALSE for
+  bors-landed PRs (mathlib 1,910/18,590, mathlib4 368/39,038 "merged") — true
+  merge verdict needs bors/label pass (ready-to-merge label or commit-in-master
+  check) before using as verdict y.
+- Changelog census: traefik/nomad changelogs are EXHAUSTIVE categorization
+  (every PR listed) — no top-k selection; curation only exists in editorial
+  release ANNOUNCEMENTS (Rust/K8s-class projects).
+
+## 2026-08-16 — ★ CORRECTION: Reedsy "45% approval gate" was a MISPARSE
+Cross-check of 262 contests: public contest-listing count ≈ card "entries"
+(median ratio 0.96), NOT the card "stories" number. Card shows two separate
+populations: "N contest entries" (paid $5 submissions, ~all public) vs
+"M stories" (likely free publish-to-profile prompt responses). The earlier
+claim "69,987 entries → 31,283 approved (45%)" is WRONG — real editorial
+rejection of paid entries ≈ ~4% (rule/content violations only).
+**NEVER quote a 45% Reedsy approval gate.** Reedsy verdict leg is WEAK
+(~4% reject, text unobservable, only counts); Reedsy's real value = curated
+(winner+shortlist of ~200/contest) + community (likes) + full text.
+Rejected-text recovery: no public pre-approval state ever exists → no archive
+race; only route = direct research collaboration with Reedsy.
+
+## 2026-08-19 — r/Jokes removal corpus CLOSED: 16,755 pre-removal texts
+Consolidation (sk3 `jokes_removed_final.jsonl.gz`, readback-verified): three
+harvest shards merged + dedup by id — sk3 slow shard 699, sk3 fast shard
+11,531 (readable prefix) + 4,521 via gzip multi-member RESYNC past a corrupt
+block (438 new beyond prefix overlap), laptop shard 4,087 (mostly overlapping).
+**Final: 16,755 unique removed jokes with pre-removal text = 15.7% of the
+106,937 removed-joke universe.** Kept universe 184,774. Laptop harvester
+stopped by PID after sk3 finished the full 63,959-page queue (laptop was
+re-walking covered pages). Recovery-rate note: the queue was delay-sorted, so
+the 15.7% overall rate masks the early high-yield band (~39% at the front).
+
+## 2026-08-21 — WP prospective collector: first labeling pass + shard repair
+
+First Leg-B labeling pass fired 04:53: **36 labeled → 35 live, 1 absent**
+(removed-or-author-deleted; ~2.8% catch rate so far, n tiny). Collection
+healthy: 1,110 comments captured over 5.1 days (~220/day).
+
+**Defect found and fixed**: `captures.jsonl.gz`'s first gzip member was
+truncated by the Aug-17 restart (kill mid-write). The labeler's plain
+GzipFile read died at ~row 282, which would have PERMANENTLY hidden every
+later capture from Leg B. Repaired by magic-byte resync (282+828 → 1,110
+unique rows, zero loss; originals kept as `.bak_20260821` /
+`.corrupt_20260821`), and the collector now reads captures via
+`read_captures_resilient()` (resyncs past truncated members — same fix
+pattern as the jokes shard, 2026-08-20). Collector restarted pid 2878627,
+verified: `start: 1114 seen, 35 labeled`, immediate pass labeled 1
+previously-hidden row. Collector lives ONLY on sk3:
+`/lfs/.../data/reddit_dumps/wp_prospective_collector.py` (no repo copy —
+divergence recorded here per code-sync rule).

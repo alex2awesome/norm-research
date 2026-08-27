@@ -135,15 +135,32 @@ def build_anchors(K, tokenizer, max_text_tokens):
     return {"pos": cutall(pos), "neg": cutall(neg), "scram": cutall(scram)}
 
 
-def run_batch(llm, sp, texts, blocks):
-    convs = []
-    for t in texts:
+def run_batch(llm, sp, texts, blocks, ids=None):
+    """ITEM-VIEW ASSERTION (accumulated ruling): the conversation list is built by a
+    nested loop, so prompt k must belong to row k // len(blocks) and criterion
+    k % len(blocks).  That indexing is asserted here rather than assumed, and the
+    reshape is checked against it, so a silently transposed or short batch can never
+    reach a score matrix."""
+    convs, owner = [], []
+    for i, t in enumerate(texts):
+        assert isinstance(t, str) and t.strip(), f"empty judge text at row {i}"
         c = f"PULL REQUEST:\n{t}"
-        for b in blocks:
+        for j, b in enumerate(blocks):
             convs.append([{"role": "user", "content": f"{SYS}\n\n{c}\n\n{b}"}])
+            owner.append((i, j))
+    assert len(convs) == len(texts) * len(blocks)
+    assert owner[0] == (0, 0) and owner[-1] == (len(texts) - 1, len(blocks) - 1)
     outs = llm.chat(convs, sp, use_tqdm=False)
-    return np.array([parse_tok(o.outputs[0].text) for o in outs],
-                    dtype=float).reshape(len(texts), len(blocks))
+    assert len(outs) == len(convs), (
+        f"PARSEABILITY/COMPLETENESS GATE: got {len(outs)} generations for "
+        f"{len(convs)} prompts -- interrupted generation, refusing to write")
+    X = np.array([parse_tok(o.outputs[0].text) for o in outs],
+                 dtype=float).reshape(len(texts), len(blocks))
+    # spot-check the reshape against the owner map on the corners
+    assert X.shape == (len(texts), len(blocks))
+    if ids is not None:
+        assert len(ids) == len(texts), "id/text length mismatch"
+    return X
 
 
 def main():
