@@ -1,0 +1,95 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_ad49685e4552.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11862,
+  "output_tokens": 3215,
+  "elapsed_s": 3152.221220708918,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners working on patent classification, natural language processing, and explainable AI",
+    "subtask_short": "explainable patent classification",
+    "subtask_description": "Designing and evaluating deep-learning based patent classification systems that also produce human-understandable explanations (word-level) for their predictions using layer-wise relevance propagation (LRP). Covers model representation, training, evaluation, and visualization of explanations.",
+    "subtask_keywords": [
+      "patent",
+      "classification",
+      "explainability",
+      "lrp",
+      "deep_learning",
+      "fasttext"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Provide human-understandable explanations for predictions",
+        "description": "The system should provide human-understandable explanations for predictions (i.e., make DNN decisions less opaque and more transparent to patent experts).",
+        "guidance": "Explanations should highlight the reasons and priorities behind each prediction to build trust and promote transparency; in text-based uni-modal patent classification this is achieved by highlighting relevant words and their relevance to the prediction so users can see why the model chose a class."
+      },
+      {
+        "name": "Use layer-wise relevance propagation (LRP) to compute term relevances",
+        "description": "Adopt LRP: apply the layer-wise conservation principle to calculate relevance scores by redistributing the prediction score backwards through the network layers to the input features (words).",
+        "guidance": "Compute relevance messages Ri\u2190j according to the described redistribution rule and propagate relevance from the output neuron for class c down to input tokens. Follow established LRP procedures for recurrent and convolutional networks (references and implementation notes given)."
+      },
+      {
+        "name": "LRP numeric settings and properties (stabilizer \u03b5 and \u03b4)",
+        "description": "LRP redistribution uses a stabilizer \u03b5 (small positive real number) and a \u03b4 parameter (0 or 1) in the relevance-message formula; the authors use \u03b5 = 0.001 and \u03b4 = 1.",
+        "guidance": "Use the specified formula for Ri\u2190j (including the \u03b5\u00b7sign(zj) and \u03b4\u00b7bj terms) to avoid numerical instability. Ensure relevance conservation across layers (Ri = sum_i Ri\u2190j) and follow the cited LRP implementations for LSTM/CNN variants."
+      },
+      {
+        "name": "Relevance scores per input term lie in [0,1] and are interpretable by magnitude",
+        "description": "The relevance score for each relevant term is a scalar in [0,1]; higher scores represent higher relevance toward the predicted class.",
+        "guidance": "Interpret and present relevance magnitudes to users (e.g., normalize or threshold as needed); use higher-intensity visual cues to indicate higher relevance."
+      },
+      {
+        "name": "Visualize explanations by highlighting relevant words with intensity proportional to relevance",
+        "description": "Explanations should be presented by highlighting words in the patent text, where color intensity corresponds to the computed relevance score.",
+        "guidance": "Example visualizations highlight chemistry-related terms (alkali, alkyl, monomer, acid, acrylate) or electricity-related terms (power, channel, modem). Use color intensity to communicate contribution strength; note that some commonly-used words may also appear relevant."
+      },
+      {
+        "name": "Represent patent text with semantic word embeddings that handle OOV/patent jargon (FastText recommended)",
+        "description": "Represent preprocessed patent text by high-dimensional distributed semantic vectors; choose embeddings that can handle out-of-vocabulary (OOV) terms common in patents (authors use FastText).",
+        "guidance": "FastText (character n-gram-based) is preferred over GloVe/Word2Vec because patents contain rare or invented terms; sequence the embeddings and feed into the DNN. The paper also recommends future work to train local/patent-specific embeddings for improved domain representation."
+      },
+      {
+        "name": "Train and evaluate multiple DNN architectures (Bi-LSTM, CNN, CNN-BiLSTM)",
+        "description": "Train DNN models including Bi-LSTM, CNN, and CNN-BiLSTM on the semantic representations to perform patent classification.",
+        "guidance": "Example Bi-LSTM architecture: embedding layer \u2192 Bi-LSTM(64) \u2192 Bi-LSTM(32) \u2192 FC(64, ReLU) \u2192 FC(9, softmax). Example CNN: embedding \u2192 1D convolution \u2192 global average pooling \u2192 FC(9, softmax). Implementations used: scikit-learn and Keras. Compare architectures and select best-performing model empirically."
+      },
+      {
+        "name": "Evaluate performance with precision, recall, and F1-score (overall and class-wise)",
+        "description": "Use standard classification metrics \u2014 Precision, Recall, and F1-Score \u2014 to measure classifier performance; report both aggregate and class-wise results.",
+        "guidance": "Present per-class metrics (example table for nine classes) and overall scores on multiple datasets. Compare metrics against related works to contextualize effectiveness; report which model performs best on each dataset (authors found Bi-LSTM led on both datasets)."
+      },
+      {
+        "name": "Use sufficiently large and appropriate datasets with clear train/validation/test splits",
+        "description": "Experiment on large-scale patent datasets (examples: AI-Growth-Lab dataset of 1.5M claims annotated with classes; BigPatent with ~35k labelled texts and pre-split training/validation/testing).",
+        "guidance": "Be explicit about dataset preprocessing (claims vs human-generated abstracts), splits (BigPatent example: 25k train, 5k val, 5k test), and how dataset characteristics (e.g., abstracts vs claims) affect semantic representation and performance."
+      },
+      {
+        "name": "Account for class imbalance and hierarchical label structure",
+        "description": "Patent classification datasets are often highly imbalanced across classes and are hierarchical/multi-level (IPC has thousands of subgroups).",
+        "guidance": "Recognize imbalance as an additional challenge; report class distributions (visualize where helpful) and consider methods or evaluation practices that accommodate imbalance. Note the complexity of multi-level/subgroup explanations and the need for approaches that scale to many classes."
+      },
+      {
+        "name": "Support multi-label and multi-level explainability (requirement/goal)",
+        "description": "Explainability should extend beyond single-label top-level classes to multi-label and hierarchical (subgroup) classification settings common in patent taxonomies.",
+        "guidance": "Authors note explaining subgroup-level predictions is more challenging and is a future direction; implementations should plan for producing explanations per predicted label in multi-label outputs and for different hierarchical levels."
+      },
+      {
+        "name": "Conduct human-centered evaluation of generated explanations",
+        "description": "Generated explanations must be evaluated with human experts (patent industry specialists) to validate usefulness and interpretability.",
+        "guidance": "Plan user-centric studies to elicit human-centric requirements and measure how explanations help experts assess predictions. Acknowledge that algorithmic plausibility (highlighted chemistry terms) does not replace formal human evaluation."
+      },
+      {
+        "name": "Compare to baseline and prior works employing similar embeddings and architectures",
+        "description": "Validate gains by comparing the proposed models and explainability approach to prior patent-classification works (e.g., models by Roudsari et al., Shaobo et al.).",
+        "guidance": "Include direct metric comparisons (precision/recall/f1) on the same datasets and embedding choices to demonstrate consistent improvements or parity; report which metrics improve and where models fall short."
+      },
+      {
+        "name": "Acknowledge and communicate limitations of explanations (irrelevant but informative words)",
+        "description": "Accept that explanations may highlight words that are not strictly field-specific but may still be useful (e.g., generic words like 'device').",
+        "guidance": "Document such cases and consider them during human evaluation; use domain-specific embeddings or additional preprocessing to reduce spurious relevances. Declare limitations explicitly in reporting and discussion."
+      }
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_de1d5cdfe2cf.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15904,
+  "output_tokens": 3764,
+  "elapsed_s": 3191.496934958035,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners at the intersection of natural language processing/ML and patent drafting/prosecution (developers of patent language models and RLHF pipelines)",
+    "subtask_short": "patent_claim_rlhf_training",
+    "subtask_description": "Training and evaluating generative language models to produce patent claim text (focus on claim 1) using a 3-stage Reinforcement Learning from Human Feedback pipeline (SFT \u2192 Reward Model or reward function \u2192 PPO), with datasets drawn from USPTO AIPD and PatentsView.",
+    "subtask_keywords": [
+      "patent",
+      "rlhf",
+      "claim_generation",
+      "sft_rm_ppo",
+      "aipd",
+      "peft_lora"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Three-stage RLHF pipeline (SFT, RM, PPO)",
+        "description": "Train language models following the standard 3-stage RLHF pipeline: (1) Supervised Fine-Tuning (SFT) on domain data, (2) train a Reward Model (RM) using human feedback (or define reward functions), and (3) optimize a policy with Proximal Policy Optimization (PPO) against the reward model or reward function.",
+        "guidance": "SFT uses domain-specific datasets (AIPCO). RM can be either a learned classifier/regressor or a rule-based reward function. PPO optimizes the SFT model (policy) to maximize scalar rewards coming from RM or reward functions. The paper uses this explicit sequence and notes alternatives (e.g., combining neural reward and rule-based reward) and practical considerations (GPU memory)."
+      },
+      {
+        "name": "Types of human feedback available in patent prosecution",
+        "description": "Human feedback types that can be derived from patent/prosecution data: (a) preference ratings, (b) summarizations, (c) corrections, (d) demonstrations, and (e) specific reward signals (drafting intent).",
+        "guidance": "Examples: (a) granted vs rejected/pre-grant as preference ratings; (b) abstracts as summarizations; (c) revised claims indicating corrections such as fixing antecedent-basis errors; (d) dependent claims as demonstrations of how independent claims derive dependents; (e) reward signals like desired claim length or number of limiting terms to reflect drafting intent. The study focuses on (a) and (e) due to resource limits."
+      },
+      {
+        "name": "Using granted vs pre-grant status as implicit preference labels",
+        "description": "Treat 'granted' patent claims as positive/preferred examples and 'pre-grant' (published applications) as less-preferred/negative examples to form training labels for reward modeling.",
+        "guidance": "In the RM-stage implementation, a DistilBERT-based binary classifier is trained with granted=1 and pre-grant=0. This approach leverages publicly-available metadata as implicit human feedback without manual labeling. The paper uses these binary labels to create reward signals for PPO."
+      },
+      {
+        "name": "Reward function: claim length control",
+        "description": "Define a reward function that encourages generation of claims of a specified length (broader vs narrower scope control). The reward is based on generated text length relative to a maximum length threshold.",
+        "guidance": "Implemented reward pseudocode: truncate generated text to max_len; if no end-of-claim tag then reward = 0; else reward = 1 + len(s)/float(max_len). The paper experiments with max_len values (e.g., 512, 1024) and tracks training reward progression, average claim length, and side effects (e.g., limiting terms count). Rationale: shorter claims tend to be broader (higher infringement risk), longer claims may avoid anticipation and obviousness rejections but are narrower."
+      },
+      {
+        "name": "Reward function: limiting terms count (e.g., 'wherein')",
+        "description": "Define a reward function that counts occurrences of limiting terms/clauses (such as 'wherein') in a claim and rewards more occurrences to encourage narrower, more allowable claims.",
+        "guidance": "Rationale: limiting clauses typically narrow claim scope and can increase allowance likelihood. The experiment counts limiting terms to compute rewards; tradeoffs are noted (more limiting terms -> higher chance of allowance but narrower scope and lower infringement probability). The paper discusses legal nuance (some 'wherein' clauses may not be limiting if they merely state intended results)."
+      },
+      {
+        "name": "Joint reward combining claim length and limiting terms",
+        "description": "Combine the length-based and limiting-terms reward functions into a single joint reward to control both length and scope simultaneously.",
+        "guidance": "The joint reward in experiments is a composition of the two rule-based reward functions. The paper notes that joint rewards can also combine learned reward models and rule-based functions, but each component should be validated separately before combining."
+      },
+      {
+        "name": "Reward Model (RM) as learned binary classifier",
+        "description": "Train a neural reward model (DistilBERT base) to predict granted vs pre-grant (binary classification) and use predicted score as scalar reward for PPO.",
+        "guidance": "Implementation details: DistilBERT (66M params) fine-tuned on each AIPCO dataset (one epoch, split: 90% train / 5% val / 5% test). Reward mapping: granted\u21921, pre-grant\u21920. Reported accuracies per component (e.g., 0.718 for ML, etc.) and resource rationale for choosing a small reward model (allows running alongside SFT on consumer GPU)."
+      },
+      {
+        "name": "Use only claim one (first claim) as text target",
+        "description": "Restrict dataset and model focus to the first claim (claim 1) of patent documents for tractability and interpretability.",
+        "guidance": "Reasoning: reduces data volume for quicker iterations and clearer proof-of-concept; AIPCO datasets were constructed by joining AIPD category metadata with PatentsView claim-one text. Experiments and examples (generated claims) are all for claim one."
+      },
+      {
+        "name": "Dataset construction: AIPCO (AIPD + PatentsView) by AI component",
+        "description": "Construct training datasets by combining AIPD (AI patent identifiers) with PatentsView claim text to form eight component-specific datasets: AIPCO-ML, AIPCO-EVO, AIPCO-NLP, AIPCO-SPEECH, AIPCO-VISION, AIPCO-KR, AIPCO-PLANNING, AIPCO-HARDWARE.",
+        "guidance": "AIPD provides doc identifiers and AI component labels but not text; PatentsView supplies claim text and crosswalks. The paper provides counts and average lengths for granted vs pre-grant per component. Practical note: PatentsView DB dump inspected lacked claim text; the author assembled datasets via downloadable tables and crosswalks."
+      },
+      {
+        "name": "Office Action datasets are valuable but limited in current availability",
+        "description": "Office actions (examiner rejections and rationale) are an ideal source of explicit human feedback (rejections, affected claims, prior art) but existing office-action datasets lack coverage/connectivity to the AIPD data and often lack the claim text needed for language model training.",
+        "guidance": "The Office Action Research Dataset covers many office actions (2008\u20132017) but doesn't align well with AIPD and lacks claim text; Patent Examination Data System has similar limitations. The paper therefore uses granted/pre-grant status rather than office action content for RM training, while noting office actions as future enhancement."
+      },
+      {
+        "name": "Parameter-efficient fine-tuning (PEFT) and hardware-aware methods",
+        "description": "Use PEFT techniques (LoRA) and 8-bit quantization (bitsandbytes) to reduce trainable parameters and memory footprint so models can be fine-tuned and used on a single consumer-grade GPU (e.g., 16G or 24G VRAM).",
+        "guidance": "LoRA adds low-rank adapters and fine-tunes only those weights; the adapter can be merged back into the model. Loading the base model in 8-bit and using LoRA allows single-epoch fine-tuning per dataset on consumer hardware. The paper lists libraries used (PEFT, LoRA, bitsandbytes) and notes VRAM requirements per experiment (16G for rule-based reward PPO experiments, 24G when running the DistilBERT RM alongside PPO)."
+      },
+      {
+        "name": "Perplexity as an SFT-stage evaluation metric",
+        "description": "Use perplexity to evaluate the effectiveness of the Supervised Fine-Tuning stage; lower perplexity indicates better predictive capability.",
+        "guidance": "The paper reports end-of-fine-tuning perplexity values per component (e.g., ~6.0\u20136.8 for many components; KR higher at 11.77) and treats the reported values as 'low' and indicative of effective SFT predictive performance."
+      },
+      {
+        "name": "Reward model performance (accuracy) as an RM evaluation metric",
+        "description": "Evaluate reward model quality using standard classification metrics (accuracy reported) on held-out splits.",
+        "guidance": "Each reward model trained for one epoch with a 90/5/5 split; accuracies per AIPCO component are reported (e.g., NLP 0.764, KR 0.749). The paper treats these accuracies as sufficient for a prototype RM and notes potential gains if a larger base model were used."
+      },
+      {
+        "name": "Controllability requirement: model should reflect drafting intent",
+        "description": "Generative models should be controllable to reflect patent drafting intents such as favoring broader scope or higher allowance probability (via length, limiting term usage, etc.).",
+        "guidance": "The paper motivates reward functions and RM design by the need to encode drafting preferences (e.g., shorter claims for broader scope vs longer claims to avoid anticipation). It shows experiments demonstrating the model can be steered toward different drafting intents using reward functions and PPO."
+      },
+      {
+        "name": "Legal patentability desiderata to consider when training reward signals",
+        "description": "Patent claims should satisfy essential patentability requirements\u2014novelty, non-obviousness (inventive step), and utility\u2014which can be modeled as separate reward signals or reward models.",
+        "guidance": "The paper suggests it is theoretically possible to train separate reward models for novelty, non-obviousness, and utility and combine them (with rule-based rewards like length) to drive policy toward patentable claims. This is presented as an aspirational extension rather than implemented here."
+      },
+      {
+        "name": "Implementation detail: explicit end-of-claim tag required for reward calculation",
+        "description": "The reward functions rely on the presence of a specific tag '<|end of claim|>' to detect claim termination; absence of this tag after truncation yields zero reward.",
+        "guidance": "In the claim-length reward implementation, generated text is truncated to max_len and only if the '<|end of claim|>' tag is present is the length-based reward computed (otherwise reward=0). This is both an anti-pattern guard (discourages overlong incomplete outputs) and an implementation requirement."
+      },
+      {
+        "name": "Use PPO as the policy optimizer and accept both model-based and rule-based rewards",
+        "description": "PPO is used to optimize the policy (SFT model) against numeric rewards produced either by trained reward models or by rule-based reward functions (or combinations thereof).",
+        "guidance": "The paper uses PPO (from TRL) with reward inputs coming from either the DistilBERT RM or the rule-based functions (length, limiting terms, or joint). It notes PPO hyperparameters implicitly by experiment scale (training steps like 10k\u201320k) and emphasizes the interchangeability of neural reward models and hand-coded reward functions for providing scalar rewards to PPO."
+      }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_1707b5a1eb69.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 16402,
+  "output_tokens": 4748,
+  "elapsed_s": 3087.2798532079905,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "economists, patent policy researchers, USPTO analysts, and empirical researchers studying patent examination outcomes",
+    "subtask_short": "Alice impact on USPTO examination",
+    "subtask_description": "Data construction, metric definitions, and empirical methods for estimating how the Supreme Court's Alice decision and subsequent USPTO guidance affected first-office-action Section 101 rejections and examiner-level uncertainty. Uses application-level and aggregated technology-half-year datasets with difference-in-differences linear models and multiple robustness checks.",
+    "subtask_keywords": [
+      "patent_policy",
+      "alice_v_cls",
+      "empirical_economics",
+      "USPTO",
+      "section_101"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Percentage of first office action Section 101 rejections",
+        "description": "Binary indicator equal to 1 when the first office action includes a rejection for patent-ineligible subject matter (35 U.S.C. \u00a7101), 0 otherwise. Descriptive figures aggregate this indicator by technology and month to show the percentage of first office action Section 101 rejections among all first office actions.",
+        "guidance": "The binary indicator is the dependent variable in regression models. Office actions may contain multiple rejections and rejection types; OADP provides the rejection-type information (e.g., \u00a7101). Aggregation by technology-month is used for descriptive plots. First office action is defined as the earliest mailing date shown in PatEx for an application."
+      },
+      {
+        "name": "Section 101 first action examination uncertainty",
+        "description": "A technology-half-year level metric capturing variation in examiners' Section 101 first-action decisions: compute each examiner's share of first office actions with Section 101 rejections within a technology-half-year cell, then take the variance across examiners' shares in that cell.",
+        "guidance": "This metric increases when examiners' determinations on subject matter eligibility are more uneven within a technology-half-year. For descriptive analysis, report the average of the variance observed in each technology-half-year for groups of interest (Alice-affected vs other technologies). Include controls (number of examiners, number of applications, average examiner variance, variance in abstractness, avg applications per examiner) to adjust for mechanical changes in variance caused by dataset restrictions or examiner/composition changes."
+      },
+      {
+        "name": "Definition of first office action",
+        "description": "The earliest mailing date shown in PatEx for an application is defined as the 'first office action.'",
+        "guidance": "Use PatEx mailing dates to identify the first office action. For proprietary dataset (PALM), use internal records to identify the examiner who issued the first office action because PatEx may only identify the last examiner associated with the application."
+      },
+      {
+        "name": "Identification of Section 101 rejection in office actions",
+        "description": "Use OADP (Office Action Research Dataset for Patents) which indicates whether an office action contains a non-final or final rejection and identifies rejection types; the rejection type of interest is 35 U.S.C. \u00a7101.",
+        "guidance": "Merge OADP with PatEx or PALM by application number and office action mailing date to flag \u00a7101 rejections. Note that office actions can list multiple rejection types; the \u00a7101 indicator is present if \u00a7101 appears among them."
+      },
+      {
+        "name": "Definition of 'Alice-affected' technologies",
+        "description": "USPC technology classes (3-digit USPCs) that appear in litigation cases involving the 'abstract ideas' judicial exception, as recorded by USPTO's OPLA case tracking.",
+        "guidance": "OPLA maintains a public list of CAFC and Supreme Court cases with an 'Exception Type' field identifying abstract ideas. For this analysis, Alice-affected technologies are the 33 USPCs appearing in such cases (comprising ~33% of applications in the dataset); other technologies are USPCs not involved in those cases."
+      },
+      {
+        "name": "Public vs proprietary application datasets",
+        "description": "Two application-level datasets: a public version using PatEx merged with OADP (covers published/granted public apps) and a proprietary version using PALM merged with a private OADP (includes non-public applications).",
+        "guidance": "Use the public dataset to evaluate Alice (public data availability sufficient), but use the proprietary dataset to evaluate later USPTO examiner guidance (Berkheimer memo, 2019 PEG) because public data are delayed (~18 months). PALM allows identifying the actual examiner issuing the first office action; PatEx may only identify the last examiner."
+      },
+      {
+        "name": "Claim scope measures (ICC and ICL) for claim-breadth control",
+        "description": "Use independent claim count (ICC) and shortest independent claim length (ICL) from the Patent Claims Research Dataset to capture claim scope (breadth) for each application.",
+        "guidance": "Include ICC and ICL as application-level co-variates in regression specifications to control for claim scope when estimating effects on \u00a7101 rejections. These variables are available for public data; not always available in proprietary dataset."
+      },
+      {
+        "name": "Abstractness of application language",
+        "description": "A text-based measure of abstract language in patent claims derived from PGPub or granted patent claim text (USPTO bulk XML), computed per application.",
+        "guidance": "Include abstractness as a covariate and as an interaction term with treatment indicators to test whether Alice had differential effects for more abstractly worded applications. Abstractness variables rely on public-text sources and thus are not available for the proprietary dataset used in certain analyses."
+      },
+      {
+        "name": "Dataset restriction to applications filed before event",
+        "description": "Restrict datasets to patent applications filed before the event of interest (e.g., Alice decision, Berkheimer memo, 2019 PEG) to mitigate endogeneity due to applicant behavior (redrafting or different prosecution strategies after events).",
+        "guidance": "This restriction reduces influence of applicant drafting and later-stage actors; however it creates left-censoring over time (fewer remaining first-office-action observations), which can mechanically increase variance across examiners. Address this with covariates (number of applications, number of examiners, applications per examiner) and robustness checks using alternative time windows."
+      },
+      {
+        "name": "Restriction of analysis start date to mitigate prior-case influence (Bilski)",
+        "description": "Start regression dataset in 2013 (instead of 2011) to minimize potential influence from the Supreme Court's Bilski v. Kappos decision on pre-event trends for Alice-affected technologies.",
+        "guidance": "This choice supports the difference-in-differences pre-trend assumption. As a robustness check, relax the restriction to include 2011\u20132016 and allow a linear time trend interacted with treatment group to account for potential Bilski effects; results should be compared for consistency."
+      },
+      {
+        "name": "Aggregation to technology-half-year cells for uncertainty analysis",
+        "description": "Aggregate application-level observations to 3-digit USPC technology classes and six-month intervals (technology-half-year observations) to compute examiner-level shares and the variance across examiners.",
+        "guidance": "Aggregation is necessary to measure variation across examiners within a technology/time cell. Compute average application-level covariates within each cell to include as controls in technology-level models."
+      },
+      {
+        "name": "Difference-in-differences methodology with linear probability model",
+        "description": "Identify the impact of events (Alice, Berkheimer memo, 2019 PEG) using difference-in-differences linear probability models (for application-level \u00a7101 rejection outcome) and analogous DID models for technology-half-year uncertainty outcomes.",
+        "guidance": "Baseline equation includes treatment-group-by-post-event interaction (PatGrp \u2022 Alice), technology fixed effects (3-digit USPC), time fixed effects (month-year for application models; half-year for uncertainty models), examiner fixed effects (when available), application- or technology-level covariates, and robust standard errors. The coefficient on the interaction term is the treatment effect of interest."
+      },
+      {
+        "name": "Fixed-effects and clustering choices",
+        "description": "Include technology (3-digit USPC) fixed effects, time fixed effects (month x year or half-year), and examiner fixed effects (application-level specifications). Use robust standard errors to account for heteroskedasticity.",
+        "guidance": "Examiner fixed effects help control for non-random assignment due to examiner heterogeneity. Time and technology fixed effects absorb common shocks. Robust SEs reported in tables; significance stars indicate p-values."
+      },
+      {
+        "name": "Inclusion of application- and cell-level co-variates for non-random assignment",
+        "description": "Control for multiple patent characteristics to mitigate omitted-variable bias: claim-scope measures (ICC, ICL), abstractness, average number of independent claims, average word count in claims, average examiner variance, number of examiners, number of applications, average applications per examiner, and variance in abstractness.",
+        "guidance": "Select co-variates appropriate to dataset (some abstractness/claim scope measures unavailable in proprietary data). Averaged or variance measures are used in technology-half-year models. These covariates address potential confounders related to both assignment to treatment group and outcome variation."
+      },
+      {
+        "name": "Differential-impact testing via interaction terms",
+        "description": "Test whether the event impact differs by application abstractness (or other characteristics) by adding interaction terms: (PatGrp \u2022 Alice), (Abst), and triple interaction (PatGrp \u2022 Abst \u2022 Alice) to the regression specification.",
+        "guidance": "Interpret triple-interaction coefficients carefully; large standard errors may indicate multicollinearity. Compute combined effects at relevant values (e.g., mean abstractness) to quantify total treatment effect for a subgroup. Report and interpret statistical significance for both main and interaction terms."
+      },
+      {
+        "name": "Pre-trends assessment requirement",
+        "description": "Validate DID identification by testing that pre-event trends in outcome are statistically indistinguishable between Alice-affected and other technologies. Estimate models interacting PatGrp with time indicators over a pre-event window (e.g., Jan 2013\u2013Dec 2016) and test that pre-Alice interaction coefficients are not significantly different from zero.",
+        "guidance": "Use an F-test on pre-event interaction coefficients (or visually inspect coefficient plots with confidence intervals). If pre-trend assumption fails, reconsider identification strategy or include trend controls. Base period used in figures is often month immediately before Alice (May 2014) or half-year directly preceding Alice (2014h1)."
+      },
+      {
+        "name": "Event indicator definitions and dates",
+        "description": "Define event indicators as binary variables switching from 0 to 1 at specific dates: Alice decision (June 2014), Berkheimer memorandum (April 2018), 2019 Revised Patent Subject Matter Eligibility Guidance (2019 PEG) (January 2019).",
+        "guidance": "Interact these event indicators with the Alice-affected technology group (PatGrp) to estimate heterogeneous treatment effects. For Berkheimer and 2019 PEG analyses using proprietary data, be mindful of missing application-level covariates and use more parsimonious specifications."
+      },
+      {
+        "name": "Robustness checks for dataset restrictions and time windows",
+        "description": "Perform robustness checks to examine sensitivity to dataset construction choices: (a) restrict time window (e.g., 2013\u20132015) to address mechanical variance increases from left censoring; (b) expand start date to 2011 with linear time trend interacted with treatment group to assess Bilski influence; (c) re-estimate uncertainty models over alternate windows.",
+        "guidance": "Report whether main estimates change in magnitude or significance; include alternative model specifications (Models 11\u201313, etc.) and discuss whether restrictions materially affect conclusions."
+      },
+      {
+        "name": "Assess effects on other rejection types (\u00a7102/\u00a7103/\u00a7112) to test substitution",
+        "description": "Estimate parallel DID specifications for Section 102 (novelty), Section 103 (non-obviousness), and Section 112 (clarity/enablement) rejection rates and their uncertainty to test whether examiners substituted other rejection types for \u00a7101 after Alice.",
+        "guidance": "Expectation: Alice should not impact these other rejection types because Alice pertains to subject-matter eligibility and examiners are trained to issue all grounds in the first office action under compact prosecution policy. Present coefficient plots for \u00a7102/\u00a7103/\u00a7112; absence of a discontinuous jump provides evidence against substitution."
+      },
+      {
+        "name": "Pooled cross-section construction for application-level models",
+        "description": "Group application-level observations into monthly filing-date cohorts (pooled cross-sections) for application-level regression models of first-office-action \u00a7101 rejection probability.",
+        "guidance": "Use month-by-year fixed effects in these pooled cross-section models. Ensure consistent merging of PatEx/OADP (public) or PALM/proprietary OADP to construct complete application records."
+      },
+      {
+        "name": "Computation of examiner-level shares",
+        "description": "Within a technology-half-year cell, aggregate first office actions to examiner-level to compute each examiner's share (proportion) of first office actions with \u00a7101 rejections; these shares are the inputs for computing across-examiner variance.",
+        "guidance": "This two-step aggregation supports decomposition of uncertainty into examiner-level decision spread. Include the average of examiners' variances and number-of-examiners controls to account for sampling noise and composition effects."
+      },
+      {
+        "name": "Use of PatEx/PALM and OADP merging protocol",
+        "description": "Merge PatEx (public) with OADP to obtain office action rejection-type information and use PALM (internal) with proprietary OADP for non-public applications; merge by application number and office action mailing date.",
+        "guidance": "Be aware that PatEx may not record the examiner who issued the first office action; PALM can. Public datasets omit non-published applications (about 18-month delay), so use proprietary data when timely non-public application data are required (e.g., for post-2018 guidance analyses)."
+      }
+    ]
+  }
+}

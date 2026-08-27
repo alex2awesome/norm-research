@@ -1,0 +1,145 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_2d611b55aac5.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 17115,
+  "output_tokens": 4455,
+  "elapsed_s": 3097.3752025410067,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "ML and NLP researchers and practitioners building/evaluating LLMs for automated patent examination (examiners, legal-AI researchers, and dataset/benchmark developers)",
+    "subtask_short": "office_action_and_rebuttal_generation",
+    "subtask_description": "Create and evaluate full-stage patent Office Actions (examiner role) and applicant rebuttals (applicant role), including multi-turn interactions, evidence grounding, statutory mapping, and claim amendments. The benchmark covers three OA information settings (zero-shot, oracle references, retrieval-simulated) and uses deterministic and LLM-judge metrics.",
+    "subtask_keywords": [
+      "patent",
+      "office_action",
+      "rebuttal",
+      "llm_benchmark",
+      "uspto",
+      "legal_reasoning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Office Action (OA) Generation (task)",
+        "description": "Given current claim version C_t (and optional prior rebuttal B_{t-1}), generate a formal Office Action O_t by evaluating claims against provided or retrieved prior art to identify legal and technical defects.",
+        "guidance": "The OA generation task evaluates the model's ability to simulate an examiner's decision-making and statutory interpretability by mapping claim features to prior art disclosures under legal constraints. OA generation is assessed under three settings (Directly Prompting, Reference-Oracle, Retrieval-Simulated) which vary available evidence and realism."
+      },
+      {
+        "name": "OA Directly Prompting (OA-DP)",
+        "description": "Zero-shot prompting setting: the model must generate an Office Action relying solely on internal parameters and pre-trained knowledge without any external prior art provided.",
+        "guidance": "Models should use intrinsic knowledge and PHOSITA common-sense reasoning. Expect higher hallucination risk; evaluate decision accuracy, statute invocation, and logical consistency despite no external references."
+      },
+      {
+        "name": "OA Reference-Oracle Generation (OA-RO)",
+        "description": "Provide the model with an oracle reference set R_oracle (ground-truth references cited by examiner/applicant). The model must select the most relevant references from R_oracle to construct legal justifications for the Office Action.",
+        "guidance": "This setting serves as an upper-bound information condition. The model must explain reference selection (e.g., why Ref A supports a \u00a7102 rejection) and perform element-by-element mapping before deciding allowance or rejection."
+      },
+      {
+        "name": "OA Retrieval-Simulated Generation (OA-RS)",
+        "description": "Provide a noisy candidate pool R_noise (top-k BM25 retrieved references combined with sampled ground-truth). The model must distinguish pertinent prior art from irrelevant noise to generate the Office Action.",
+        "guidance": "Simulates realistic retrieval environments. The model must first evaluate candidate pool, select relevant references, and then map claim elements to chosen references. Performance measures should capture the model's robustness to noisy retrieval."
+      },
+      {
+        "name": "Applicant Rebuttal Generation (task)",
+        "description": "Given an Office Action O_t and associated prior art R (and current claims C_t), generate a rebuttal B_t that contests specific rejection grounds and provides persuasive legal and technical arguments to overcome cited prior art.",
+        "guidance": "The rebuttal task requires tripartite alignment: (i) grounding arguments in the OA's specific rejection grounds, (ii) contrasting technical features of claims vs. prior art, and (iii) maintaining logical consistency with intended claim scope. Focus on substantive argumentation rather than procedural filing formality."
+      },
+      {
+        "name": "Decision Accuracy (deterministic metric)",
+        "description": "Binary indicator of whether the predicted Office Action disposition (allowance vs rejection/final status) matches the ground-truth label.",
+        "guidance": "Used to verify overall correctness of the generated OA decision. Report as percentage over dataset. LLMs may achieve different decision accuracies across OA settings (DP/RO/RS)."
+      },
+      {
+        "name": "Statute Precision (deterministic metric)",
+        "description": "Precision of invoked 35 U.S.C. statutes in generated documents: Statute Precision = |S_pred \u2229 S_gt| / |S_pred|, where S_pred and S_gt are sets of statutes cited in generated and ground-truth documents respectively.",
+        "guidance": "Measures how accurately the model cites statutory bases (e.g., \u00a7101, \u00a7102, \u00a7103, \u00a7112). High statute precision indicates fewer hallucinated statute invocations; pair with Decision Accuracy for interpretability."
+      },
+      {
+        "name": "Lexical Overlap (Rouge-L)",
+        "description": "Use ROUGE-L to measure sequential/lexical alignment between generated and ground-truth texts.",
+        "guidance": "Captures surface-level similarity but may decouple from substantive legal validity; Rouge-L often correlates weakly with decision accuracy and judge scores in patent examination."
+      },
+      {
+        "name": "Reference Citation Accuracy (RCA)",
+        "description": "Accuracy of grounding model's cited references in the provided evidence: RCA = |R_pred \u2229 R_valid| / |R_pred|, where R_pred is set of references cited by model and R_valid is the valid reference set provided in context.",
+        "guidance": "RCA tracks whether model-cited references are actually present/valid in the evidence. Performance shown monotonic trend: Oracle > BM25-Retrieved \u226b No-Ref. Hallucinated citations when no references are provided are penalized under this metric."
+      },
+      {
+        "name": "Point-wise Coverage (rebuttal metric)",
+        "description": "For rebuttal generation: the responsive rate to atomic OA rejection points; measures how many individual rejection points the rebuttal addresses.",
+        "guidance": "Operates as a semantic measure of defense thoroughness; compute coverage over atomic rejection points in OA. Used alongside LLM-as-a-judge completeness/constructiveness dimensions."
+      },
+      {
+        "name": "Hierarchical evaluation framework (two-level evaluation)",
+        "description": "Evaluation framework combines (I) deterministic/objective metrics for factual verification and (II) LLM-as-a-Judge metrics for deep semantic and logical auditing.",
+        "guidance": "Deterministic layer (Decision Accuracy, Statute Precision, RCA, Rouge-L) provides objective signals; the LLM-as-a-Judge layer scores documents on semantic/legal quality to capture interpretative nuances not covered by lexical metrics."
+      },
+      {
+        "name": "LLM-as-a-Judge \u2014 Soundness",
+        "description": "1\u201310 scale evaluating the technical and legal soundness of the generated OA or rebuttal.",
+        "guidance": "Scores low when reasoning contains factual errors, hallucinated mappings, or incorrect statutory application. LLM-as-a-Judge protocol mandates capping soundness when disposition mismatches ground truth. Penalize 'right answer, wrong reason' (correct disposition reached via hallucination)."
+      },
+      {
+        "name": "LLM-as-a-Judge \u2014 Clarity",
+        "description": "1\u201310 scale focusing on legal readability, logical coherence, and document structure.",
+        "guidance": "Assesses whether arguments are presented clearly in USPTO-style structure. High clarity requires clear headings, claim-rejection linkage, and unambiguous language."
+      },
+      {
+        "name": "LLM-as-a-Judge \u2014 Constructiveness",
+        "description": "1\u201310 scale emphasizing actionability of the model response: usefulness of examiner guidance in OAs or strength of counterarguments in rebuttals.",
+        "guidance": "For OA: measures whether examiner guidance helps applicant correct defects. For rebuttal: measures whether arguments persuasively address rejections. Penalize boilerplate and generic suggestions."
+      },
+      {
+        "name": "LLM-as-a-Judge \u2014 Completeness",
+        "description": "1\u201310 scale focusing on coverage/utility of the feedback and whether all relevant issues are addressed.",
+        "guidance": "Evaluates whether OA/rebuttal covers all applicable rejection groups, citations, and claim elements. Use in conjunction with Point-wise Coverage for rebuttals."
+      },
+      {
+        "name": "LLM-as-a-Judge \u2014 Language Style",
+        "description": "1\u201310 scale measuring adherence to legal drafting conventions, professional tone, and PTO stylistic norms.",
+        "guidance": "Captures surface-level professionalism. Note experimental observations: models often score well on style but poorly on soundness or completeness; high style score should not mask substantive flaws."
+      },
+      {
+        "name": "OA prompt hard constraints and formatting rules",
+        "description": "Strict prompt-level requirements for generated Office Actions: use provided inputs only, do not apologize or claim inability, do not request additional data, produce PTO-style headings (DETAILED ACTION, CLAIM REJECTIONS - 35 U.S.C. 101/102/103/112, CONCLUSION), omit sections not applicable, realistic USPTO phrasing, and do not append JSON.",
+        "guidance": "Enforce 'No-Disclaimer' and 'No-Apology' rules. Include only applicable statutory headings; if no rejection applies, omit that heading. Start with DETAILED ACTION. Use standard USPTO sentences (e.g., 'Claims 1\u201310 are rejected under 35 U.S.C. \u00a7112(b)'). Do not include headings for statutes not applied. Decision labels (Non-Final/Final/Allowance) should follow Decision Logic rules."
+      },
+      {
+        "name": "OA Decision Logic & Active Statute Gating",
+        "description": "Before drafting, determine which statutes will be substantively applied (e.g., 101, 102, 103, 112, double patenting) and apply them strictly; decide allowance vs rejection based on claim language and technical reasoning; do not label Final unless criteria are met.",
+        "guidance": "Active Statute Gating ensures the model only invokes statutes it substantively applies. Scope Lock requires grounding technical content in provided inputs. Decision Logic requires impartial determination, not assuming rejections by default."
+      },
+      {
+        "name": "Rebuttal prompt structure and constraints",
+        "description": "Rebuttals must follow PTO-style structure: RESPONSE TO OFFICE ACTION; AMENDMENT AND REMARKS; I. Status of the Claims; II\u2013VI (only if raised) sections for objections/rejections; Conclusion; REFINED CLAIMS. Strict statute gating: include only statutes raised in OA. Point-by-point responses tied to claim numbers and cited references. No new matter; amendments must be supported by original disclosure and marked (underlining/strikethrough).",
+        "guidance": "Date handling: use OA date if provided. For limited OAs (e.g., Notice of Allowance or only double patenting) keep responses brief. Avoid boilerplate; each argument must be claim-specific. Ensure amendment compliance with standard PTO markings and no-new-matter rule."
+      },
+      {
+        "name": "No-New-Matter & Amendment Compliance",
+        "description": "Any claim amendments in rebuttal must be fully supported by the original specification; use standard markings (underlining for additions, strikethrough for deletions) and status identifiers (Original/Currently Amended/Withdrawn/Canceled).",
+        "guidance": "Evaluation penalizes introductions of new matter. Rebuttal evaluation specifically checks amendment_compliance; score reductions for unsupported amendments or hallucinated specification support."
+      },
+      {
+        "name": "LLM-as-a-Judge audit rules (fact-checking & evidence scrutiny)",
+        "description": "Auditor must fact-check the generated OA/rebuttal against ground-truth; any contradiction with ground-truth (disposition, statutes, citations) is a critical failure. Detect 'Right Answer, Wrong Reason' and penalize reliance on hallucinated features or incorrect prior-art mappings. Use only provided inputs; do not assume external facts.",
+        "guidance": "Hard constraints: use only provided texts; cap soundness at low scores if disposition mismatch; penalize hallucinated technical details; produce a professional audit report and structured JSON containing total_score, per-dimension scores, and justification details (conclusion_match, statute_alignment, evidence_verification)."
+      },
+      {
+        "name": "LLM-as-a-Judge scoring guidance (detailed rubrics)",
+        "description": "For each LLM-as-a-Judge dimension (soundness, clarity, constructiveness, completeness, language style) provide 1\u201310 scoring anchors with explicit behavioral descriptions (e.g., soundness: 10 = full match with Ground Truth and correct reasoning; 4\u20136 = reasoning flaws; 1\u20133 = incorrect disposition or major errors).",
+        "guidance": "Use metric-specific scoring guidelines as in the provided prompts: justify numeric scores with evidence, list conclusion_match true/false, statute_alignment summary, and evidence_verification commentary. For rebuttals include additional criteria: effectiveness, reliability, statute_compliance, feature_distinction, specification_support, point_wise_coverage."
+      },
+      {
+        "name": "Data collection & quality-control protocol",
+        "description": "Multi-stage pipeline for dataset construction: automated filtering of noisy or metadata-broken records, manual audit by trained annotators verifying structural integrity of prosecution timelines and logical consistency between cited references and rejection grounds, and redaction of personally identifiable information.",
+        "guidance": "Ensures high-fidelity full-stage benchmark: collect verbatim OAs, rebuttals, iterative claim versions, and full reference lists. Manual audits confirm claim-to-reference mappings and remove documents with excessive noise; redact PII for ethical compliance."
+      },
+      {
+        "name": "Reference selection & explanation requirement (OA-RO & OA-RS)",
+        "description": "When references are provided (oracle or retrieved), the model must not blindly use all of them; it must select the most pertinent references and briefly explain the selection rationale (e.g., primary reference for \u00a7102 or combination for \u00a7103).",
+        "guidance": "Require element-by-element mapping from claim limitations to chosen references. In OA-RS, first evaluate candidate pool and then select relevant refs; in OA-RO, select from oracle set. Penalize using irrelevant refs or failing to justify selection."
+      }
+    ]
+  }
+}

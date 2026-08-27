@@ -1,0 +1,135 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/44fdff6279a5.html",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "44fdff6279a5.html",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39935,
+  "model": "gpt-5-mini",
+  "elapsed_s": 59.56335662503261,
+  "input_tokens": 11397,
+  "output_tokens": 3992,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP and patent informatics researchers and practitioners developing/evaluating LLMs and datasets for patent tasks",
+    "subtask_short": "LLM evaluation for patent tasks",
+    "subtask_description": "Benchmarks, dataset design, evaluation metrics, and failure modes for applying and evaluating language models on patent-specific tasks such as claim generation, subject classification, summarization, retrieval, and language modeling.",
+    "subtask_keywords": [
+      "patent",
+      "llm",
+      "evaluation",
+      "claim_generation",
+      "dataset_benchmarking"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patent document components",
+        "description": "Patent documents typically include the following elements: title, bibliometric information, patent classification code, citations, abstract, drawings, detailed description, and claims.",
+        "guidance": "Although format and content may vary by jurisdiction, include these elements when preparing patent corpora or when using patents as input for models; these elements are integral components of the patenting process and publicly accessible once a patent is issued."
+      },
+      {
+        "name": "LLM challenges for patent tasks",
+        "description": "Jiang and Goetz identified three key challenges for LLMs in patent-related tasks: handling the long context length, processing technical language, and satisfying precision requirements.",
+        "guidance": "Design datasets, models, and evaluation to explicitly address long contexts, domain technical terminology, and strict precision constraints required by patent texts."
+      },
+      {
+        "name": "International Patent Classification (IPC) hierarchical labeling",
+        "description": "The IPC system classifies patents into hierarchical levels (section, class, subclass, group, subgroup). Example: F \u2192 F02 \u2192 F02D \u2192 F02D 41 \u2192 F02D 41/02.",
+        "guidance": "Use IPC labels (section/class/subclass) for subject classification tasks; IPC (or CPC) hierarchies facilitate multi-level classification and comparison with prior work."
+      },
+      {
+        "name": "Prefer claims for subject classification",
+        "description": "Claims are more specific and legally representative of the invention and thus more discriminative for patent subject classification than abstracts.",
+        "guidance": "When training classifiers, prefer claims as input rather than abstracts: models fine-tuned on claims outperformed abstract-based models by roughly 3\u20137% across section/class/subclass levels in reported experiments."
+      },
+      {
+        "name": "Dataset inclusion for preference pairs (application vs granted)",
+        "description": "Construct preference datasets using pairs of the application (initially rejected) and the granted version; the EPD dataset filters patents with both versions and description lengths under 8,000 tokens to obtain preference pairs.",
+        "guidance": "Filter candidate patents to ensure both versions exist and limit description length (e.g., < 8,000 tokens) to create reliable human-annotated or naturally occurring preference labels for RLHF or preference learning."
+      },
+      {
+        "name": "Classification evaluation metrics",
+        "description": "Use accuracy, precision, recall, and F1 score to evaluate patent subject classification models.",
+        "guidance": "Compute these metrics with standard libraries (the paper uses sklearn); report multi-class metrics at each hierarchical level (section/class/subclass) to capture performance granularity."
+      },
+      {
+        "name": "Text-generation evaluation metrics",
+        "description": "Use BLEU, ROUGE (R-1, R-2, R-L), and BERTScore to evaluate claim generation and summarization.",
+        "guidance": "Measure summarization with ROUGE variants and claim generation with BLEU/ROUGE/BERTScore (the authors use the Huggingface evaluate library). Compare across prior benchmarks (e.g., HUPD) and new datasets to quantify domain/time/jurisdiction gaps."
+      },
+      {
+        "name": "Token counting / language-modeling corpus metric",
+        "description": "Count tokens using a consistent tokenizer (the paper uses tiktoken with the GPT-4o tokenizer) to measure corpus size and to compute claim length statistics.",
+        "guidance": "Use the same tokenizer for dataset and model tokenization statistics so token-based cutoff lengths and statistics are comparable across experiments."
+      },
+      {
+        "name": "Claim length (tokens per claim)",
+        "description": "Claim length is computed as the total token count divided by the number of claims for a patent.",
+        "guidance": "Use claim length as a basic quantitative feature and as an input to analyses (e.g., claim-length correlates with classification and generation behaviors)."
+      },
+      {
+        "name": "Structural complexity (subordinate clause ratio)",
+        "description": "Structural complexity is determined by the ratio of subordinate clauses to the total number of sentences.",
+        "guidance": "Extract subordinate-clause counts (authors used spaCy) and report this ratio as a measure of grammatical/structural complexity of claims; higher ratios indicate more syntactically complex claims."
+      },
+      {
+        "name": "Syntactic tree depth",
+        "description": "Syntactic tree depth is computed using a constituency parser and measures the depth of the syntactic parse tree of the main independent claim; higher values indicate more deeply nested grammatical structures.",
+        "guidance": "Report syntactic tree depth to capture nesting/complexity that may affect model performance on generation and parsing tasks."
+      },
+      {
+        "name": "Readability: Flesch\u2013Kincaid Grade Level",
+        "description": "Readability is evaluated using the Flesch\u2013Kincaid Grade Level formula; a lower score indicates greater readability.",
+        "guidance": "Compute readability with a textstat library and use it to compare patents across time/jurisdictions or to analyze generation quality (easier-to-read claims may be preferable for some downstream uses)."
+      },
+      {
+        "name": "Lexical diversity: MTLD",
+        "description": "Lexical diversity is calculated by MTLD (Measure of Textual Lexical Diversity); higher values indicate more varied vocabulary and less repetition.",
+        "guidance": "Use MTLD to assess vocabulary variety in claims or generated texts; lexical diversity may correlate with perceived quality or redundancy."
+      },
+      {
+        "name": "Term density (technical terminology concentration)",
+        "description": "Term density is calculated as the proportion of proper nouns and named entities and reflects the concentration of technical terminology.",
+        "guidance": "Report term density to quantify how technical or named-entity-heavy patent texts are; useful for domain adaptation and model input selection decisions."
+      },
+      {
+        "name": "LLM-as-a-judge evaluation setting",
+        "description": "Obtain automated evaluation scores using an LLM-as-a-judge prompt (the paper uses a specific prompt in Table 13) with inference settings temperature=0.1 and top_p=0.95.",
+        "guidance": "Use LLM evaluators consistently (prompt + temperature/top_p) when applying LLM-as-judge; be aware of prompt design impact and calibrate against human judgments where possible."
+      },
+      {
+        "name": "Detecting reward-model overfitting / suspiciously high reward accuracy",
+        "description": "Rewarding accuracy achieving exceptionally high scores (e.g., >98% during DPO) can indicate overfitting to superficial patterns rather than meaningful quality distinctions.",
+        "guidance": "Investigate high reward accuracy as a red flag: check whether the reward model is exploiting simple heuristics (e.g., claim length, presence of specific legal terms) and not capturing substantive technical/legal quality."
+      },
+      {
+        "name": "Common claim-generation anti-patterns",
+        "description": "Observed low-quality outputs include: an excessively long overloaded independent claim, redundancy in dependent claims, and frequent overuse of terms such as 'wherein' and 'configured to'.",
+        "guidance": "Use these anti-patterns as qualitative error categories when auditing generated claims; aim for concise independent claims, minimal redundancy in dependencies, and varied syntactic phrasing where appropriate."
+      },
+      {
+        "name": "Preference-dataset construction guidance for RLHF",
+        "description": "Direct application of application\u2192granted transformations as preferences does not necessarily yield an effective preference dataset for RLHF; datasets should be refined or include human-annotated preferences.",
+        "guidance": "To build better RLHF datasets, incorporate more human-annotated preferences, curate or reweight examples to avoid superficial correlates, and consider more sophisticated RLHF formulations beyond direct DPO on naive preference pairs."
+      },
+      {
+        "name": "Evaluate separately on difficulty strata",
+        "description": "Report model performance separately on 'difficult' and 'easy' samples to reveal differing effects of training/optimization techniques.",
+        "guidance": "Use stratified evaluation (e.g., Tables showing BLEU/ROUGE/BERTScore on difficult vs easy examples) to diagnose where methods help or hurt; methods like DPO may degrade performance on both strata or more on difficult examples."
+      },
+      {
+        "name": "Prompt and inference settings for claim generation",
+        "description": "Example prompt: 'You are a patent expert. Given the following patent description, generate patent claims.' Inference settings used: max new tokens=1024, temperature=0.1, top_p=0.95.",
+        "guidance": "Document and standardize prompts and decoding settings when comparing claim-generation methods; small changes to prompt or decoding hyperparameters can materially affect generation quality and evaluation metrics."
+      },
+      {
+        "name": "Use IPC codes for label consistency",
+        "description": "Because of overlap between IPC and CPC, the paper uses IPC codes as labels for consistency with prior work (e.g., Suzgun et al., 2024) when performing subject classification.",
+        "guidance": "Choose a consistent classification taxonomy (IPC or CPC) across datasets/experiments to enable comparisons with prior benchmarks and to avoid label mapping inconsistencies."
+      }
+    ]
+  }
+}

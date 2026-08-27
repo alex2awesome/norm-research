@@ -1,0 +1,160 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_a2f397f15538.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 15414,
+  "output_tokens": 4444,
+  "elapsed_s": 3176.568883500062,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academic researchers and practitioners in interpretable machine learning, entrepreneurial finance, and innovation policy (researchers, data scientists, and investors working on startup outcome prediction)",
+    "subtask_short": "startup outcome prediction pipeline",
+    "subtask_description": "Designing, validating, and deploying a leakage-safe, interpretable ML pipeline to predict startup outcomes (next funding, patent-stock growth, exit) on a firm-quarter panel using Crunchbase and USPTO merges. Emphasizes development-only preprocessing, out-of-time evaluation, imbalance handling, interpretability, and reproducible scoring.",
+    "subtask_keywords": [
+      "startup",
+      "predictive_modeling",
+      "patent",
+      "funding",
+      "exit",
+      "interpretable_ml"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Unit of analysis and evaluability",
+        "description": "The unit of analysis is the firm-quarter. Outcomes were defined strictly forward from each quarter-end, and rows too close to panel boundaries for a full horizon were flagged as non-evaluable.",
+        "guidance": "Mark observations that are within a horizon-length of panel edges as non-evaluable and exclude them from the corresponding outcome to avoid look-ahead."
+      },
+      {
+        "name": "Outcome definitions and horizons",
+        "description": "Three dependent variables: (i) next financing within 12 months, (ii) patent-stock growth within 24 months, and (iii) IPO or acquisition within 36 months.",
+        "guidance": "Define outcomes strictly forward from the quarter boundary and evaluate each outcome only on rows that have a full forward-horizon available."
+      },
+      {
+        "name": "Temporal splits (leakage-safe time splitting)",
+        "description": "Non-overlapping time splits: development (2010\u20132019), holdout (2020\u20132021), and final (2022\u20132023). Preprocessing is fit on the development window (2010\u20132019) and applied without change to later cohorts.",
+        "guidance": "Use strictly out-of-time evaluation (no overlap between development and evaluation windows) to avoid leakage; fit all preprocessing on development only."
+      },
+      {
+        "name": "Preprocessing estimated on development only",
+        "description": "All preprocessing parameters (infinite-to-NaN, NA indicators, median imputation) are estimated once on development and reused unchanged on holdout/final.",
+        "guidance": "Do not re-fit imputers, scalers, or feature lists on holdout/final; this preserves leakage controls and simulates forward deployment."
+      },
+      {
+        "name": "Replace infinities and median imputation",
+        "description": "Replace \u221e with NaN, add missingness flags as indicated, then apply median imputation fitted on development and reused unchanged on later splits.",
+        "guidance": "Use median-based imputation fit on development to complete numeric features; preserve platform IDs and ensure deterministic application at scoring time."
+      },
+      {
+        "name": "Missingness indicators and thresholding",
+        "description": "Add explicit indicators for features with \u226510% NA in development plus a forced flag for days since last round.",
+        "guidance": "Make missingness informative by including NA-indicators for features above the threshold (and force important fields like days-since-last-round to have an indicator even if below)."
+      },
+      {
+        "name": "Persisted feature list / column alignment",
+        "description": "The development feature list is persisted to guarantee column alignment at scoring time.",
+        "guidance": "Save and reuse the exact feature list (column order and names) learned on development when scoring future cohorts to avoid mismatches and hidden leakage."
+      },
+      {
+        "name": "Unit-level carry-forward rules for patent stocks",
+        "description": "Patent counts and citation totals are aligned to the firm\u2013quarter calendar and carried forward within firm histories (with no backfilling prior to a firm\u2019s first observation), creating cumulative stocks as predictors.",
+        "guidance": "Carry forward cumulative stocks forward in time for features but do not backfill prior to first observation to avoid inventing historical data."
+      },
+      {
+        "name": "Class-imbalance treatment confined to development",
+        "description": "Class-imbalance variants were constructed only on the development period (2010\u20132019); evaluation splits were never modified.",
+        "guidance": "Perform resampling or weighting only during training on development data; never resample/reweight evaluation data."
+      },
+      {
+        "name": "Imbalance methods considered",
+        "description": "Five training variants: inverse-prevalence class weights, random oversampling (ROS), SMOTE-NC, Borderline-SMOTE, and ADASYN. Main analysis carried forward: inverse-prevalence weights and SMOTE-NC.",
+        "guidance": "Retain ROS and other fallbacks for robustness checks but prefer stable, reproducible choices (here weights and SMOTE-NC) for the main analysis."
+      },
+      {
+        "name": "SMOTE-NC configuration",
+        "description": "For SMOTE-NC, the categorical mask includes only the missingness indicator for days since last round; all other features are treated as numeric. SMOTE-NC balances each outcome to roughly 50:50.",
+        "guidance": "When using SMOTE-NC, carefully declare categorical features (here only NA-indicator); check for NaNs which can cause Borderline-SMOTE/ADASYN to fail."
+      },
+      {
+        "name": "Handling resampling failures and fallbacks",
+        "description": "Borderline-SMOTE and ADASYN failed on this dataset due to residual NaN values and therefore reverted to ROS; ROS is saved but not used in the main analysis.",
+        "guidance": "Detect resampling failures (e.g., due to NaNs) and document fallbacks, but avoid relying on unstable methods in the main results."
+      },
+      {
+        "name": "Model families to benchmark",
+        "description": "Benchmark a model zoo: regularized logistic regression, Random Forest, XGBoost, LightGBM, and CatBoost.",
+        "guidance": "Compare linear baselines and flexible tree ensembles to capture non-linearities and interactions; pick winners by pre-specified selection criteria."
+      },
+      {
+        "name": "Model selection metric hierarchy",
+        "description": "Winners were selected by area under the precision\u2013recall curve (PR-AUC) with AUROC as a tiebreaker. Brier score and precision@K (K \u2208 {30,100,500}) were also reported.",
+        "guidance": "Prioritize PR-AUC in imbalanced settings where ranking of positives matters; use AUROC as secondary tie-breaker and report calibration and P@K for ranking-usefulness."
+      },
+      {
+        "name": "Strict out-of-time evaluation policy",
+        "description": "Evaluation was strictly out of time, with the final window used for the 12-month funding task and the holdout window used for 24-month patent growth and 36-month exits. Evaluation splits were never resampled or reweighted.",
+        "guidance": "Ensure evaluation mirrors deployment timing: use only future cohorts for testing and do not apply training-only transformations to evaluation."
+      },
+      {
+        "name": "Interpretability diagnostics (methods & reporting)",
+        "description": "Models were diagnosed with interpretable artifacts: TreeSHAP for gradient-boosted trees where feasible and permutation or impurity importance for Random Forests, along with calibration curves and partial dependence.",
+        "guidance": "State the exact explanation method used for each figure/table. Use TreeSHAP when feasible; otherwise use permutation or impurity-based importances; pair importance with partial dependence to explain effect shapes."
+      },
+      {
+        "name": "Feature-importance reporting conventions",
+        "description": "Global importance measured by mean |SHAP| for SHAP-based explanations; mean decrease in impurity (MDI/Gini) or permutation importance (scored by average precision) for Random Forests. Each figure/table states the exact method used.",
+        "guidance": "Be explicit about the importance metric; warn that MDI can overemphasize high-cardinality or correlated predictors and complement with permutation importance when possible."
+      },
+      {
+        "name": "Partial dependence and effect visualization",
+        "description": "Provide partial-dependence plots for the most influential predictors to show marginal relationships (e.g., days since last round, age, cumulative capital).",
+        "guidance": "Use partial dependence to visualize non-linearities and concavity/monotonicity; interpret in the context of possible interactions and non-additivity."
+      },
+      {
+        "name": "Calibration assessment and guidance",
+        "description": "Calibration was assessed with quantile-binned reliability curves and the Brier score. Where curves showed optimism, post hoc isotonic recalibration was recommended; calibration does not affect ranking.",
+        "guidance": "If probabilities are required for decision thresholds, apply isotonic (or other) recalibration post hoc; otherwise use scores for ranking since recalibration does not change orderings."
+      },
+      {
+        "name": "Out-of-sample scoring and ranked-list production",
+        "description": "Apply the winning specification to the most recent cohort for which the prediction horizon is fully evaluable: align columns via the persisted feature list, apply development medians unchanged, and output predicted probabilities \u02c6p, integer ranks, and percentiles with one row per organization after deduplication.",
+        "guidance": "Deduplicate by keeping the highest score and the most recent quarter when ties occur. Do not reweight or resample evaluation data at scoring time."
+      },
+      {
+        "name": "Reproducibility artifacts",
+        "description": "Deterministic seeds, filenames, and manifests are fixed to guarantee exact replication. The development feature list and preprocessing manifests are persisted.",
+        "guidance": "Save seeds, file paths, manifests, leaderboards, figures, and models to enable exact replication of results and scoring."
+      },
+      {
+        "name": "Feature construction guidance (recency, momentum, cumulative stocks)",
+        "description": "Predictor construction relied on signals: financing recency and momentum, cumulative exposure to investors and capital, patent and citation stocks, and firm descriptors (industry, geography, age). Momentum measures (e.g., funding raised in the prior four quarters) and recency measures (days since last round) are included.",
+        "guidance": "Engineer features that capture both stock and flow dynamics (cumulative sums and short-horizon counts) and preserve provenance by retaining platform IDs and quarter-end timestamps."
+      },
+      {
+        "name": "Descriptive screening and signed-lift metrics",
+        "description": "Use univariate screens computed on development rows that are evaluable for each outcome; compute signed AUC so values >0.5 indicate helpful discrimination regardless of direction, and report PR-AUC magnitudes with sign indicating direction.",
+        "guidance": "Use signed AUC/PR-AUC as a univariate signal-selection tool, but treat magnitudes as stand-alone lift (not additive) because correlated predictors mean magnitudes are not additive."
+      },
+      {
+        "name": "Sensitivity and robustness analysis policy",
+        "description": "Keep the main analysis focused on stable, reproducible variants (weights and SMOTE-NC) and retain ROS/Borderline-SMOTE/ADASYN as fallbacks in appendices for robustness checks.",
+        "guidance": "Prefer stable methods for primary claims; document and report alternative/resampling fallbacks and reasons they failed or were not used in main text."
+      },
+      {
+        "name": "Reporting of selection and scoring cohorts",
+        "description": "Report the selection split, selection metrics (PR-AUC, AUROC), and the scored cohort (year and rows). For example: selection split metrics are taken from Table 5 and cohorts are 2022 for funding (12m), 2021 for patent growth (24m), 2020 for exits (36m).",
+        "guidance": "When producing ranked lists, explicitly document which cohorts were scored and which splits were used for model selection so downstream users can interpret performance claims."
+      },
+      {
+        "name": "Ranking vs probability-use guidance",
+        "description": "Ranking is useful and robust; when calibrated probabilities are required for decision-making, isotonic recalibration can be applied post hoc without changing ranking.",
+        "guidance": "Prefer rank-based screening when calibration is imperfect; apply post hoc calibration only when the decision process depends on absolute probabilities."
+      },
+      {
+        "name": "Documentation of known estimator limitations",
+        "description": "Note method-specific caveats (e.g., MDI can overemphasize high-cardinality or correlated predictors; TreeSHAP may be infeasible due to memory/runtime and then permutation importance is used).",
+        "guidance": "Explicitly state estimator or explanation method limitations in figures/tables and choose alternate diagnostics when primary ones are infeasible."
+      }
+    ]
+  }
+}

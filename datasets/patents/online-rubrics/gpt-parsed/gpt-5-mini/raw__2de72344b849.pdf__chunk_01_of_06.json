@@ -1,0 +1,141 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/2de72344b849.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "2de72344b849.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 6,
+  "chunk_chars": 39914,
+  "model": "gpt-5-mini",
+  "elapsed_s": 44.93919174995972,
+  "input_tokens": 11800,
+  "output_tokens": 4155,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academic researchers and policy analysts studying patents, standard-essential patents (SEPs), and patent prosecution behavior (economists, IP scholars, USPTO analysts)",
+    "subtask_short": "empirical SEP continuation analysis",
+    "subtask_description": "An empirical research protocol for measuring how standard publication affects continuation filing behavior for standard-essential patents (SEPs), including sample construction, outcome definitions, matching, DID/event-study specifications, heterogeneity tests, and robustness checks.",
+    "subtask_keywords": [
+      "patents",
+      "SEP",
+      "continuations",
+      "difference_in_differences",
+      "event_study",
+      "empirical_economics"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of SEP (treatment)",
+        "description": "A SEP is defined as the earliest U.S. utility patent application of a domestic patent family that contains at least one U.S. utility patent application declared essential for a standard.",
+        "guidance": "SEPs include U.S. utility patent applications declared essential for a standard, as well as all their parent and child applications. Pre- and post-standard SEPs are defined using the earliest standard linked to a family of SEPs. Alternative SEP definitions (e.g., only patents explicitly mentioned in SSO disclosure letters) are considered in robustness checks."
+      },
+      {
+        "name": "Application type classification (Original / Continuation / Other)",
+        "description": "Classify applications into 'Original', 'Continuation' (CON), and 'Other' (continuations-in-part, divisionals, and reissues).",
+        "guidance": "When an application has multiple roles (e.g., continuation and divisional, continuation and continuation-in-part, or continuation and reissue), classify it as a continuation. Note: continuations that are also divisionals/continuations-in-part/reissues are 6.2% of SEPs and 2.3% of the reference group used for comparisons."
+      },
+      {
+        "name": "Timing window and plotting conventions",
+        "description": "Use a multi-year window centered on standard publication to analyze timing of filings relative to the standard.",
+        "guidance": "The paper plots data in a 21-year window centered around standard publication (this window contains about 96% of SEPs in the sample). For some graphs and event studies, use a 17-quarter window around standard publication with indicators for \u03c4 \u2264 -8 and \u03c4 \u2265 8 aggregated."
+      },
+      {
+        "name": "Pre/post-standard grouping",
+        "description": "Collapse SEPs into groups filed before versus after publication of the (earliest) linked standard.",
+        "guidance": "Define 'filed before' / 'filed after' based on the difference between the application filing month-year and the publication month-year of the earliest standard linked to the patent family."
+      },
+      {
+        "name": "Control group construction (stratified controls)",
+        "description": "Construct a control group from non-SEP applications filed in the same quarter as a SEP, excluding applications that claim priority to a previous U.S. utility patent application.",
+        "guidance": "To identify applications covering similar technology, stratify on filing-quarter, art-unit and examiner, retaining all applications in any group with at least one SEP and one control. This yields the baseline sample of SEPs and controls."
+      },
+      {
+        "name": "Matched control sample on pre-standard continuations",
+        "description": "Create a second matched control sample where SEPs and controls have the same number of continuation filings prior to standard publication by construction.",
+        "guidance": "For each SEP randomly select a single control in the same filing-quarter-art-unit-examiner group that (i) has at least one filing in the U.S. patent family still under examination and (ii) has the same cumulative number of continuations filed in the quarter before standard publication. Match without replacement and break ties at random. This discards SEPs for which no suitable control exists (~7% of SEPs)."
+      },
+      {
+        "name": "Unit of observation and sample inclusion window",
+        "description": "Use application-quarter as the unit of observation; include each application from its filing quarter to the latest disposal quarter of any application in its U.S. patent family (or end of 2016 if still pending).",
+        "guidance": "Retain information on continuations between an application's filing quarter and the family's latest disposal quarter. Using data through 2016 minimizes truncation concerns. The mean probability of continuation filing in the constructed sample is 1.2%; about 14% of applications have one or more continuations during the sample period."
+      },
+      {
+        "name": "Outcome variable: indicator for continuation filing (CONit)",
+        "description": "Define CONit as an indicator equal to one if application i has a continuation filed in quarter t.",
+        "guidance": "Because the outcome is rare, multiply CONit by 100 so coefficients can be interpreted as percentage-point changes. Note it's extremely rare for an application to spawn multiple continuations in the same quarter."
+      },
+      {
+        "name": "Baseline empirical model (linear probability DID)",
+        "description": "Estimate CONit = SEPi \u00d7 (\u03b1 + \u03b2 PostStandardit) + \u03b3j(i) + \u03b4t + f(ageit) + \u03b5it where SEPi indicates SEP status and PostStandardit indicates being in quarters after standard publication.",
+        "guidance": "Consider three variants differing in fixed effects: (1) pooled cross-sectional with calendar-quarter effects and application-age effects; (2) add art-unit-examiner-filing-quarter effects and replace age effects with a fourth-order polynomial f(age); (3) replace art-unit-examiner-filing-quarter effects with application fixed effects \u03b3i. Cluster residuals \u03b5it by application. Interpret \u03b2 (under parallel trends) as average treatment effect for treated applications."
+      },
+      {
+        "name": "Parallel trends assumption and interpretation of \u03b2",
+        "description": "Under a parallel trends assumption between SEPs and controls, the DID coefficient \u03b2 measures the impact of standard publication on the probability of filing a continuation (the ATE for treated).",
+        "guidance": "Test parallel trends using pre-treatment event-study coefficients and alternative matching. Be aware measurement error (e.g., missing disclosures) or anticipation effects (leaks before publication) can bias \u03b2 toward zero."
+      },
+      {
+        "name": "Event-study specification and interpretation",
+        "description": "Estimate an event-study regression CONit = \u03a3_{\u03c4=-8}^{8} (\u03b1\u03c4 + \u03b2\u03c4 SEPi) + \u03b3i + \u03b4t + f(ageit) + \u03b5it to examine dynamics around standard publication.",
+        "guidance": "Omit \u03c4 = -1 as reference. Use a 17-quarter window (\u03c4 \u2264 -8 and \u03c4 \u2265 8 aggregated). When using matched controls assign matched SEP's publication date to controls. \u03b2\u03c4 measure differences in continuation probability between SEPs and controls before (\u03c4<0) and after (\u03c4\u22650) publication. Use F-tests on pre-period \u03b2\u03c4 to assess parallel trends."
+      },
+      {
+        "name": "Use of high-dimensional fixed-effect estimator",
+        "description": "Estimate models with many fixed effects (e.g., application or art-unit-examiner-filing-quarter FE) using fast high-dimensional FE estimators.",
+        "guidance": "The authors use Correia (2016) estimator to rapidly estimate linear regressions with high-dimensional fixed effects."
+      },
+      {
+        "name": "Examiner leniency measurement and heterogeneity test",
+        "description": "Measure examiner leniency as the examiner-specific grant rate computed on all post-AIPA published applications disposed by the same examiner excluding applications in the focal family, then standardize this measure.",
+        "guidance": "Exclude examiners for which the leniency measure is computed using fewer than 10 applications. Add three-way interaction of leniency \u00d7 PostStandard \u00d7 SEP to DID regressions (and relevant two-way interactions) to test whether more lenient examiners are associated with larger post-publication increases in continuation filings. Interpret as a probe for applicant learning about examiner behavior; do not treat leniency as an IV."
+      },
+      {
+        "name": "Business-model heterogeneity classification",
+        "description": "Classify SEP-owner business model into categories (e.g., product suppliers/vendors/system integrators; components; patent holding companies; residual/other) and interact with treatment.",
+        "guidance": "Use dSEP database categories; for SEPs with multiple companies use the first company alphabetically. Interact PostStandard \u00d7 SEP with business-model dummies to estimate heterogeneous treatment effects across owner types."
+      },
+      {
+        "name": "Robustness checks and alternative specifications",
+        "description": "Conduct multiple robustness checks including alternative SEP definitions, alternative outcomes, additional controls, anticipation leads, hazard models, hold-out samples and alternative DID estimators.",
+        "guidance": "Examples: (a) SEP defined only by SSO disclosure-letter mentions; (b) sample including only granted patents; (c) outcome as any child application (CIP, divisional, reissue); (d) add observable application characteristics as controls; (e) include leads to measure anticipation effects; (f) piecewise-constant hazard models removing applications after first continuation; (g) samples with only SEPs filed before standard publication; (h) control for time-varying technology-area shocks; (i) use recent DID/event-study estimators addressing staggered adoption bias (de Chaisemartin & D\u2019Haultf\u0153uille; Callaway & Sant\u2019Anna; Sun & Abraham; Borusyak et al.). Report that results are robust across these checks."
+      },
+      {
+        "name": "Assignment of publication dates to controls in matched designs",
+        "description": "When controls are matched 1-to-1 to SEPs, assign the matched SEP's publication date to the control for event-study timing; baseline controls do not have associated standard publication dates.",
+        "guidance": "When using a matched sample that equalizes pre-standard continuations, add the main effect of PostStandard and use the matched SEP's publication date to define PostStandard for the control."
+      },
+      {
+        "name": "Handling complex priority chains in classification",
+        "description": "Recognize that applications with complex priority chains may fall into more than one category and apply classification rules consistently.",
+        "guidance": "If an application is both a continuation and another type (divisional, continuation-in-part, or reissue), classify it as a continuation. Report share of such mixed-type cases; note potential multiple classification in data."
+      },
+      {
+        "name": "Interpretation of continuations vs. prosecution responses",
+        "description": "Treat post-standard continuations as evidence of late claiming tailored to standards rather than merely responses to examiner rejections.",
+        "guidance": "Provide supporting checks: (a) continuations are often filed after a notice of allowance rather than after rejections; (b) regressions of continuation indicators on measures of change in scope during examination show small and mixed effects; (c) timing of surge aligned with standard publication argues against rejection-synchronized continuation filings."
+      },
+      {
+        "name": "Matching protocol details",
+        "description": "When matching controls to SEPs, perform matching without replacement and break ties at random.",
+        "guidance": "In the random art-unit-examiner-filing-quarter match the authors matched 99.6% of SEPs, discarding only a small number. Report match rates and which SEPs are discarded and why (e.g., difficulty finding controls for high pre-standard continuation counts)."
+      },
+      {
+        "name": "Restrictions for examiner-leniency heterogeneity sample",
+        "description": "When testing heterogeneity by examiner leniency, restrict the sample to applications where the examiner's leniency measure is based on at least 10 eligible disposed applications.",
+        "guidance": "Keep art-unit-examiner- filing-quarter groups with at least one SEP and one control after this restriction; in matched-pair analyses require both applications to meet the criterion. This avoids noisy leniency estimates."
+      },
+      {
+        "name": "Clustering and inference",
+        "description": "Cluster standard errors by application in all regressions.",
+        "guidance": "Report p-values and significance levels; use clustered standard errors to account for serial correlation within applications over quarters."
+      },
+      {
+        "name": "Presentation and interpretation of effect sizes",
+        "description": "Express coefficients on CON \u00d7 100 as percentage-point changes in the quarterly probability of continuation filing and provide interpretation relative to baseline mean.",
+        "guidance": "Example: a DID coe\ufb03cient of 1.13 corresponds to a 1.13 percentage point increase which was interpreted as a 93% increase relative to the baseline probability in the pooled sample."
+      }
+    ]
+  }
+}

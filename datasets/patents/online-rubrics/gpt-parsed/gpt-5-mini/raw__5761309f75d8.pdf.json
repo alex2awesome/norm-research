@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/5761309f75d8.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 19859,
+  "output_tokens": 4043,
+  "elapsed_s": 3444.7983484161086,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academic researchers and empirical economists studying innovation, patent measurement, and firm-level productivity/valuation",
+    "subtask_short": "measuring patent quality",
+    "subtask_description": "Constructing and applying a composite patent-quality index from patent characteristics (claims, forward/backward citations, family size) to adjust measures of research productivity and to study links to firm market value and technological exhaustion.",
+    "subtask_keywords": [
+      "patent",
+      "quality_index",
+      "innovation_metrics",
+      "econometrics",
+      "patent_citations",
+      "claims_family_size"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Number of claims",
+        "description": "The claims in the patent specification delineate the property rights protected by the patent; principal claims define essential novel features and subordinate claims describe detailed features. The patentee has an incentive to claim as much as possible but the examiner may require narrowing.",
+        "guidance": "Available on PTO-CD. Number of claims is interpreted as indicating that an innovation is broader and of greater potential profitability. In most technology fields (except drugs) claims receive the largest weight in the composite quality index and dominate the signal content. Controlling for claims reduces variance in forward citations; claims should be included as an indicator when constructing a quality index."
+      },
+      {
+        "name": "Forward citations (Fwd5, Fwd610)",
+        "description": "Subsequent patents that cite a given patent; constructed as counts within specified citation spans (Fwd5 = citations within five years of application; Fwd610 = citations six to ten years).",
+        "guidance": "Forward citations measure technological importance and contribution to future research; early citations suggest rapid recognition and active research area. Use longer citation spans when available as they can increase signal (payoff to Fwd610 noted). Forward citations are the dominant indicator in drugs. Forward cites and family size both reflect information that accumulates after application and can have correlated measurement errors; this should be allowed for in the factor model (the authors relax the error covariance between forward cites and family size)."
+      },
+      {
+        "name": "Backward citations",
+        "description": "Prior patents cited in the application (and those identified by the examiner) that represent prior art.",
+        "guidance": "Backward citations are informative about related prior art and may indicate that an innovation is more derivative if there are many backward citations. Include as one of multiple indicators; in some fields backward cites receive substantial weight in the composite index."
+      },
+      {
+        "name": "Patent family size (number of countries in family)",
+        "description": "The number of countries in which protection for the same innovation (patent family / parallel patents) is sought; captures the geographic breadth of protection.",
+        "guidance": "Family size captures the patentee's expected private value and market opportunities because filing widely is costly. Data may be limited (authors had family data for ~20% sample from Derwent). Family size generally receives small weight in drugs, biotech and chemicals but can be more important for computers and, to lesser extent, electronics and mechanical fields. Because family size and forward citations accumulate post-application, their measurement errors may be correlated and model specification should allow that."
+      },
+      {
+        "name": "Composite patent-quality index (one-factor latent variable model)",
+        "description": "A minimum-variance estimator of an unobserved latent quality factor q constructed from multiple observed indicators (claims, forward citations, backward citations, family size) using a factor model (latent variable normalised to variance one). The posterior mean conditional on observed indicators is used as the patent quality measure.",
+        "guidance": "Weights for the index are linear functions of estimated factor loadings and the indicators' covariance matrix (weights proportional to A-1'A-1A etc. as in the paper). The composite index reduces the unconditional variance in quality substantially (authors report 20\u201373% reductions across fields). Use the composite index when a single quality-adjusted patent metric is needed (e.g., to construct quality-adjusted patent stocks, regressions on research productivity or market value). Component indicators may have links to dependent variables not due to quality, so a composite index can isolate the common (quality) signal. The index is most useful when averaged over time or firms; time-series identification of firm-level quality is noisy."
+      },
+      {
+        "name": "Use multiple indicators to reduce measurement error / signal rates",
+        "description": "Combining multiple patent indicators increases the signal-to-noise ratio in measuring patent quality and reduces the conditional variance of the latent quality variable.",
+        "guidance": "The paper reports signal rates (percentage of variance in each indicator explained by the common factor) and shows using all four indicators reduces variance by roughly one-third in drugs and over half in many other fields. Any subset of at least three indicators can identify the one-factor model, but adding indicators yields additional information gains; trade off data collection costs versus information gain. The estimated conditional posterior variance (Var(q|y) = 1 - 1'A-'(\u2026) in the model) quantifies the variance reduction."
+      },
+      {
+        "name": "Citation span selection and handling",
+        "description": "Define forward-citation measures over consistent citation spans (authors use Fwd5 and Fwd610) to treat patents within eligible cohorts symmetrically.",
+        "guidance": "Fwd5 (citations within five years) is available for more cohorts; Fwd610 uses longer horizon but for fewer cohorts. When choosing spans, prefer longer spans if available for the cohorts to capture longer-term technological influence, but be consistent across cohorts used in estimation."
+      },
+      {
+        "name": "Log transformation and treatment of zeros",
+        "description": "Raw indicator data (claims, citations, family size) are skewed and are log-transformed for analysis.",
+        "guidance": "When forward citations equal zero, the authors set the log to zero in some analyses; in factor-model estimation they drop observations with zero forward citations because of log transformation. Results are similar when zeros are handled differently, but analysts should be explicit about handling zeros (e.g., add small constant, set log to zero, or drop) since this affects sample composition and estimation."
+      },
+      {
+        "name": "Control for nationality and cohort effects",
+        "description": "Include nationality (domestic vs foreign) and cohort (application-year) dummy variables when estimating the factor model and subsequent regressions.",
+        "guidance": "Cohort dummies are jointly significant in all technology fields in the paper; include these controls to account for common shocks, changes in patenting behaviour over time, or country-specific effects that influence indicators but are not patent quality per se."
+      },
+      {
+        "name": "Technology-field stratification (use of USPC aggregation)",
+        "description": "Assign patents to technology groups using USPC classifications and aggregate into meaningful technology fields (authors use seven: drugs, biotechnology, other health, chemicals, computers, other electronic, mechanical).",
+        "guidance": "Estimate factor models and weights separately by technology field because signal rates, weights and indicator importance vary substantially across fields (e.g., forward citations dominant in drugs; claims dominate in other fields). Use the primary USPC when patents have multiple classifications for consistent grouping."
+      },
+      {
+        "name": "Model of research productivity determinants",
+        "description": "Analytical model where expected patent flow depends on R&D and a time trend; research productivity Pft = Nft / Rft is influenced by (i) the firm's ability to appropriate rents, (ii) R&D elasticity, (iii) expected innovation quality, and (iv) market size (demand S).",
+        "guidance": "Model implies observed research productivity depends negatively on variables that increase equilibrium R&D (diminishing returns). The model yields testable predictions: parameter a > 0 and a \u2208 [0,1]. Use the patent quality index as a control to separate real changes in invention/R&D from measurement effects in patent/R&D ratios and test for technological exhaustion by checking for trended year effects after controlling for quality and demand."
+      },
+      {
+        "name": "Statistical tests and model diagnostics for the factor model",
+        "description": "Test for the existence of a common factor linking indicators, test cohort importance, and test over-identifying restrictions in the one-factor model; allow for non-zero covariance between measurement errors when required (e.g., forward cites and family size).",
+        "guidance": "Authors decisively reject the null of no common factor in all fields. Over-identifying restrictions may be rejected in some fields \u2014 in such cases relax zero constraints in the measurement-error covariance matrix (choice guided by likelihood gradient) and retest remaining restrictions. Use alternative criteria (Bayesian-F / Leamer) alongside conventional significance to assess stability in large samples."
+      },
+      {
+        "name": "Technology-specific indicator weights",
+        "description": "Weights in the composite index differ by technology field reflecting differing factor loadings and covariance structure (Table 3 gives percent weights on log indicators by field).",
+        "guidance": "For drugs the weights place ~48% on forward citations and ~29% on claims; in biotech and many other fields claims receive >50% weight. Use field-specific weights rather than a single pooled weight when feasible. If family size unavailable, re-normalise weights among remaining indicators (authors provide renormalised weights when family size omitted)."
+      },
+      {
+        "name": "Use of quality index in applied regressions (research productivity and firm market value)",
+        "description": "Include the patent quality index (and/or quality-adjusted patent stock) as regressors when studying patent/R&D measures, cross-firm differences in research productivity, and Tobin's Q (market value) equations.",
+        "guidance": "The quality index helps account for part of time-series variation in sector-level research productivity and explains a substantial part of between-firm variation in research productivity but does not explain much of within-firm (time-series) variation. Quality-adjusted patent stock has similar coefficients to unadjusted stock in Tobin's Q regressions, but mean firm-level quality (q) explains cross-sectional differences in firm market value strongly in several fields (notably drugs and other health). Use quality index to value patent portfolios and as an additional firm-level regressor, but be cautious about time-series identification."
+      },
+      {
+        "name": "Validation via patent renewal behaviour",
+        "description": "Test whether the estimated quality index predicts maintenance of patent protection (renewal decisions).",
+        "guidance": "Probit regressions for renewals at required ages (4, 8, 12 years) show the coefficient on q is positive and significant across technology areas, supporting the index\u2019s validity as reflecting private value of patents; use renewal behavior as an external validation where renewal data are available."
+      }
+    ]
+  }
+}

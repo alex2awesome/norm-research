@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/rej_ed8abc527f56.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 15344,
+  "output_tokens": 4533,
+  "elapsed_s": 2642.3660771250725,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "empirical researchers, economists, and other scholars who use patent data (patent researchers)",
+    "subtask_short": "creating USPTO historical patent datasets",
+    "subtask_description": "Methodology and standards for constructing USPTO Historical Patent Data Files: assigning NBER sub-categories to granted, pending, and abandoned utility patent applications and computing monthly and annual stocks/flows and patents-in-force from 1840\u20132014 (monthly detail 1981\u20132014).",
+    "subtask_keywords": [
+      "patent_data",
+      "nber_classification",
+      "uspto",
+      "historical_dataset",
+      "patents-in-force",
+      "empirical_research"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use NBER sub-categories for technology classification",
+        "description": "Apply the NBER sub-categories (37 two-digit sub-categories aggregated into six main technology categories) as a standard, widely-adopted classification scheme for patents and applications.",
+        "guidance": "The NBER classification provides a useful standard for research; apply it to granted patents as well as pending and abandoned applications to create consistent technology breakdowns. (Paper: Hall, Jaffe, and Trajtenberg (2001) NBER scheme.)"
+      },
+      {
+        "name": "Apply NBER classification to granted, pending, and abandoned applications",
+        "description": "Assign NBER sub-categories to all granted patents, published and publicly-available unpublished applications, and (where possible) abandoned applications filed between January 1981 and December 2014, and to grants back to 1840.",
+        "guidance": "Micro-level data for non-publicly-available unpublished applications are preserved in confidence and are not included in the historical_masterfile; unpublished applications become public if referenced by a patent or published application."
+      },
+      {
+        "name": "Create concordance between current USPC class and NBER sub-category",
+        "description": "Generate a concordance between current USPC class values (updated to 31 Dec 2014) and NBER sub-category to enable mapping of patent records to NBER categories.",
+        "guidance": "Derive the concordance from the NBER data file, which provides concordance with the 2008 USPC system, and update USPC classifications in the NBER dataset to current values for consistency."
+      },
+      {
+        "name": "Four-step NBER classification algorithm",
+        "description": "Follow a four-step methodology: (1) update NBER dataset USPC classifications to current values and generate concordance; (2) assign NBER sub-categories to all patents via concordance; (3) generate concordance between USPC class-at-issue and NBER sub-category for each classification era; (4) apply that concordance to assign NBER sub-categories to pending and abandoned applications based on class-at-disposal or current class.",
+        "guidance": "This overall algorithm is the core process for assigning NBER sub-categories across granted and non-granted records (see Figure 1 in the paper)."
+      },
+      {
+        "name": "Match pending/abandoned applications to granted counterparts by vintage and initial classification",
+        "description": "Match pending and abandoned applications to granted applications of the same vintage and initial (initial/current) classification and assign the granted patent's NBER sub-category to the application counterpart.",
+        "guidance": "This exploits the higher scrutiny applied prior to patent publication by matching abandoned applications to granted applications from the same vintage and the same initial classification to impute sub-categories for abandoned/pending apps."
+      },
+      {
+        "name": "Iterative classification with classification-era variables and probability thresholds",
+        "description": "Execute three iterations of the classification algorithm using different constructions of 'classification era' variables (based on reclassification orders) to refine ambiguous mappings.",
+        "guidance": "Initial iteration: match class-at-disposal or current class to NBER sub-category with a probability of at least 75%. Second and third iterations use class- and subclass-level 'classification era' variables respectively to classify previously ambiguous relationships if the relationship is exclusive (a probabilistic match equal to 75%)."
+      },
+      {
+        "name": "Use Classification Orders Index to build era variables",
+        "description": "Use implementation dates from Classification Orders to construct sequential 'classification era' variables that identify the time period each USPC scheme is in force (aggregate-, class-, and subclass-level) between 1981 and 2014.",
+        "guidance": "An era begins the day of an order and ends the day before the subsequent order. Use orders_class and orders_subclass to apply NBER sub-categories when class-at-disposal mapping is ambiguous."
+      },
+      {
+        "name": "Prefer published/current class for concordance; account for reclassification dynamics",
+        "description": "Recognize that publication records and full-text databases may show updated ('current') class information while face-of-patent data capture class-at-publication; the PTO reclassifies patents according to the classification system in force.",
+        "guidance": "Be aware that classification updates complicate use of classification data generated at different times and that abandoned applications do not receive reclassification scrutiny; exploit published/granted patent scrutiny when imputing classes for abandoned/pending applications."
+      },
+      {
+        "name": "Data sources and their roles",
+        "description": "Use multiple data sources: NBER Patent Citation Data File, internal PALM (Patent Application Location and Monitoring) system (applications 1981\u20132014), published sources (Public PAIR, XML bulk data), Classification Orders Index, PTMT continuity data, maintenance fee payment data, and other internal/external files as necessary.",
+        "guidance": "Where possible, rely on published sources; use PALM for unpublished application data; supplement pre-1981 data with other internal systems because PALM undercounts before 1981; use PTMT extracts for continuity and earliest filing dates post-1995."
+      },
+      {
+        "name": "Definition of disposal types and disposal-date conventions",
+        "description": "Define terminal outcomes (disposals) for applications as either issuance (grant) or abandonment; for issuance, use the day the patent is published as the disposal/issuance date in the dataset.",
+        "guidance": "Allowances are not terminal until applicant pays fee for grant; abandonment can be express or automatic (failure to respond); when examiner files abandonment it is back-filled to the initial response deadline; rejections are not terminal unless followed by abandonment."
+      },
+      {
+        "name": "Monthly and annual time series construction (stocks and flows)",
+        "description": "Produce monthly time series (1981\u20132014) of stocks and flows (incoming applications, grants, abandonments; pending applications; patents-in-force) and annual time series (1840\u20132014) of applications, grants and patents-in-force by NBER sub-category.",
+        "guidance": "Create monthly_disposal file tracking prosecution outcomes for each monthly filing cohort until disposal, allowing cohort analysis (entry cohorts and potential conversion to exit cohorts)."
+      },
+      {
+        "name": "Left truncation and pending stock reporting convention",
+        "description": "Account for left truncation in early monthly data: detailed application data only begin January 1981, so estimated stock of pending applications is reported starting 73 months after Jan 1981 (February 1987) to minimize undercounting.",
+        "guidance": "Average survival curves for early cohorts show only 1% pending after 73 months; therefore monthly pending stock begins from Feb 1987 in the monthly file."
+      },
+      {
+        "name": "Estimate patents-in-force by accounting for statutory terms, maintenance payments, PTA/PTE, and continuity",
+        "description": "To calculate patents-in-force, account for statutory patent term changes over time, maintenance payments (post-12 Dec 1980), patent term adjustments/extensions (PTA/PTE), and earliest priority filing dates via continuity data.",
+        "guidance": "Use maintenance fee payment data and internal continuity/PTA/PTE data where available (internal PTMT and maintenance fee event extracts). Failing to include these leads to misestimation of expiration dates and patents-in-force."
+      },
+      {
+        "name": "Historical patent term assumptions and boundaries",
+        "description": "Apply explicit assumptions for historical statutory term regimes: assume 14-year term for 1790-era patents; for 1836\u20131861 use upper (21 years) and lower (14 years) bounds; 1861\u20131980 use 17 years from issuance; post-12 Dec 1980 incorporate maintenance fees; post-8 June 1995 use 20-year-from-earliest-filing (with transition rules).",
+        "guidance": "These assumptions are necessary because explicit records (expiration dates, extension records) may be missing for early historical patents; provide exp_dt_max for upper-limit estimates where extensions may have occurred."
+      },
+      {
+        "name": "Do not adjust patents-in-force for terminal disclaimers or post-grant cancelations",
+        "description": "Exclude terminal disclaimers, administrative post-grant proceedings (re-examinations), and judicial invalidations from patents-in-force calculations because machine-readable data for these are not consistently available.",
+        "guidance": "Note that terminal disclaimers historically are uncommon, but their omission may become more problematic over time (internal estimate: 11.9% of patents granted in 2012 contain terminal disclaimers)."
+      },
+      {
+        "name": "Exclude non-regular utility patent application types",
+        "description": "Limit the datasets to 'regular' utility patent applications and patents; exclude provisional applications, design patents, plant patents, statutory invention registrations, reissues, defensive publications, and other non-serialized application types.",
+        "guidance": "Include utility national stage entries or conversions where appropriate but explicitly exclude the listed categories to ensure consistency."
+      },
+      {
+        "name": "Use maintenance fee events and internal datasets for expiration estimation",
+        "description": "Use maintenance fee payment records (three scheduled fees with grace periods) and internal fee event data to determine whether patents issued after maintenance-fee implementation remained in force through statutory term.",
+        "guidance": "Maintenance fees data source: PatentMaintFeeEvents (Reed Tech) or PTO-maintained maintenance data; failure to account for maintenance payments (post-1980) will misstate patents-in-force."
+      },
+      {
+        "name": "Handle classification and data discrepancies between systems",
+        "description": "Be aware that different PTO data systems (PALM, published XML, full-text databases) may record different class information and record counts (e.g., PALM vs published aggregates diverge pre-1981 and due to RCE counting).",
+        "guidance": "Where available, prefer published sources for published records; use PALM for unpublished application metadata; reconcile counts and document differences (e.g., RCEs cause widening difference between published and calculated application counts)."
+      },
+      {
+        "name": "Provide intermediate and output files with clear variable definitions",
+        "description": "Release intermediate data (orders, orders_class, orders_subclass) and four output files (historical_masterfile, monthly, monthly_disposal, annual) and include a codebook describing included variables and their meanings.",
+        "guidance": "historical_masterfile: micro-level fields (appl_id, pubno, patent, nber, uspc/uspc_sub, appl_dt, prior_dt, pub_dt, disp_dt, disp_ty, pta, exp_dt, exp_dt_max). Monthly/annual files include aggregated counts by NBER sub-category and disposition statuses. Appendix 4 provides variable descriptions and inclusion matrices."
+      },
+      {
+        "name": "Conventions for cohort tracking and disposal timing",
+        "description": "Track monthly filing cohorts and their disposals over time; when recording abandonment dates, back-fill to the initial response deadline when examiner files abandonment after waiting for petitions to revive.",
+        "guidance": "This back-filling creates right-censoring issues for the most recent ~6 months in the time series; ensure data end sufficiently before extraction date (this dataset goes through Dec 31, 2014) to capture most abandonments."
+      },
+      {
+        "name": "Report classification success rates and missing-data diagnostics",
+        "description": "Provide summary diagnostics on classification success (e.g., of 3.5M non-granted applications 96.91% assigned to a single NBER sub-category; of 4.6M patents 99.95% assigned) and report reasons for unclassified/missing (ambiguous mapping, missing USPC class data, time lags in assignment).",
+        "guidance": "Document proportions of records unclassifiable due to missing USPC class (e.g., 2.58% for applications) and note that some applications filed in 2014 lacked classification because time to receive initial USPC code had not passed."
+      },
+      {
+        "name": "Document limitations and intended uses of the data",
+        "description": "Explicitly state limitations (no terminal disclaimer adjustment, no administrative or judicial cancelation incorporation, left truncation before 1981 for application micro-data, right-censoring for recent months) and suggest intended research uses (studying application disposal, pendency, abandonment, patents-in-force, technology composition over two centuries).",
+        "guidance": "Researchers should use these data for primary analysis or as controls; the datasets facilitate study of application disposal dynamics, historical context for patenting trends, and composition changes by NBER sub-category."
+      },
+      {
+        "name": "Use publication for disposal date when patent issuance paperwork timing varies",
+        "description": "In the data file, use the day that the patent is published as the disposal/issuance date because applicants must pay a fee and publication timing best represents the issuance date for dataset purposes.",
+        "guidance": "Recognize that allowance is not the terminal disposal; issuance requires fee payment, hence publication/issuance date is used as the recorded disposal date."
+      }
+    ]
+  }
+}

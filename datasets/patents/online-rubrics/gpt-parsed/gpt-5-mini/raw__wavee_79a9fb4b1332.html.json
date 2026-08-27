@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_79a9fb4b1332.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8340,
+  "output_tokens": 3217,
+  "elapsed_s": 3114.4178886250593,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and engineers working on patent information retrieval, machine learning for patent novelty detection, and dataset creators for patent ML/IR",
+    "subtask_short": "novelty-destroying patent dataset creation",
+    "subtask_description": "Designing and implementing a pipeline to generate labeled patent-claim datasets for training/evaluating ML and IR models to identify novelty-destroying prior art (i.e., patents that anticipate claim elements). The pipeline uses USPTO APIs, Google Patents scraping, and model-based extraction and supports configurable negative sampling and evaluation protocols.",
+    "subtask_keywords": [
+      "patent",
+      "novelty_detection",
+      "dataset_pipeline",
+      "uspto",
+      "claim-based",
+      "machine_learning"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Definition of novelty destroying",
+        "description": "Prior art is deemed 'novelty destroying' if it anticipates or references every element of at least one of a proposed invention\u2019s claims.",
+        "guidance": "Treat anticipation of all claim elements by a single prior-art document as the criterion for novelty destruction; this is the core labeling semantics used throughout the pipeline."
+      },
+      {
+        "name": "Positive-sample source: USPTO office actions with 102 rejections",
+        "description": "Use USPTO office actions that contain a 102 rejection to identify novelty destroying prior art patents (positive samples).",
+        "guidance": "Only consider 102 rejections because they indicate a single document is sufficient to destroy novelty; exclude 103 rejections since they often involve multiple documents and common knowledge and do not map cleanly to single-document novelty destruction."
+      },
+      {
+        "name": "Negative-sample selection via keyword-based retrieval",
+        "description": "Generate negative (non-novelty-destroying but relevant) samples by extracting keywords/phrases from the base patent abstract and querying the USPTO Bulk Data API.",
+        "guidance": "This mimics common prior-art search practice (i.e., relevant but not novelty destroying results). The authors use KeyBERT to extract top-5 keywords. Be aware that such negatives may be too 'easy' and make classification trivial; consider stronger query strategies or harder negatives for robustness."
+      },
+      {
+        "name": "Prefer claim sets (entire claims) over short excerpts",
+        "description": "Include broader claim sets rather than short claim excerpts when constructing examples.",
+        "guidance": "Short excerpts (as used in PatentMatch) often lack context and hurt transformer models' ability to capture semantic relationships; claim sets better encapsulate essential elements defining novelty while providing context."
+      },
+      {
+        "name": "Maintain real-world class imbalance",
+        "description": "Deliberately maintain imbalance between positive and negative classes to reflect the actual distribution where novelty-destroying patents are relatively rare.",
+        "guidance": "Although imbalanced datasets present ML training challenges, keeping the imbalance preserves realism. Experiment with different k (number of related patents per base patent) or downsampling negatives to study effects on performance."
+      },
+      {
+        "name": "Dataset structure: row-wise to pairwise conversion",
+        "description": "Convert dataset rows that contain a base patent and k related patents into a pairwise format where each example is a (base patent claims, related patent claims) pair with a binary label.",
+        "guidance": "This pairwise format allows training sequence classification models. Label 1 for novelty-destroying pairs and 0 otherwise. Ensure nulls are used for missing claimed-related fields when fewer positives exist to keep k consistent per base patent if desired."
+      },
+      {
+        "name": "Train/validation/test split and leakage prevention",
+        "description": "Use an 80-10-10 stratified train-val-test split and restrict each base patent (and therefore all its related pairs) to a single split to avoid data leakage.",
+        "guidance": "Stratify so each split has similar positive proportions. To mitigate sampling bias, create multiple random subsamples/splits (authors used three) and average results across runs."
+      },
+      {
+        "name": "k parameter and negative downsampling experimentation",
+        "description": "Control the number of related patents per base patent with parameter k (e.g., k=25, 10, 5) and optionally downsample negative examples to study effects on learning and class imbalance.",
+        "guidance": "Vary k to examine model behavior under different imbalance and dataset-size regimes; retain all positives while sampling negatives when reducing k."
+      },
+      {
+        "name": "Citation-extraction process using text2text model",
+        "description": "Extract publication numbers of cited novelty-destroying patents from office action rejection text by passing the rejection text to a text2text T5 model with a standardized prompt.",
+        "guidance": "Authors reported a 94% success rate for this automated extraction; perform simple cleanup on publication numbers before querying patent claims. Validate and consider manual checks or fallback heuristics for extraction errors."
+      },
+      {
+        "name": "Use Google Patents web-scraping for up-to-date claim retrieval",
+        "description": "Query Google Patents (web-scraping) for claims of cited patents because Google Patents can redirect to current patent numbers if numbers are outdated.",
+        "guidance": "APIs may return outdated publication numbers; web redirects from Google Patents help obtain the most recent documents. Implement robust scraping and respect terms of service."
+      },
+      {
+        "name": "Primary use of USPTO APIs",
+        "description": "Utilize USPTO Bulk Data API and USPTO Office Action Citation API for retrieving base patents and office-action-based citations.",
+        "guidance": "These official API sources provide structured access to application/publication metadata and office actions that can be used to derive labels; consider newer USPTO APIs (e.g., Citation API) for future improvements."
+      },
+      {
+        "name": "Evaluation metrics appropriate for imbalanced classification and ranking",
+        "description": "Evaluate models using metrics suited to imbalanced settings and ranking tasks: average precision (AP), AUROC, mean reciprocal rank (MRR), and Precision@1 (P@1).",
+        "guidance": "For set-level novelty determination over k retrieved patents, aggregate pairwise scores (use max probability) and use ranking metrics to assess ability to surface novelty-destroying patents. Report multiple metrics as each highlights different performance aspects."
+      },
+      {
+        "name": "Set-level decision via logical OR ensemble",
+        "description": "Combine pairwise predictions for each set of k patents with a logical OR to produce a set-level novelty decision: if any related patent is predicted novelty-destroying, mark the base patent as not novel.",
+        "guidance": "This ensemble strategy aligns with the decision task of whether any retrieved prior art invalidates novelty. For scoring the set, use the maximum pairwise positive probability as the set score for ranking/metrics."
+      },
+      {
+        "name": "Placeholder patent insertion for ranking when positives absent",
+        "description": "Insert a placeholder patent assigned a high score (authors used 0.9) into each k-set prior to ranking to meaningfully compute ranking metrics when no positive exists.",
+        "guidance": "The placeholder ensures consistent computation of metrics like MRR and P@1 across sets with and without positives; rank the placeholder as ideal #1 when no true positive is present."
+      },
+      {
+        "name": "Model choice and baseline comparisons",
+        "description": "Fine-tune compact transformer models (e.g., DistilRoBERTa) for sequence classification and compare against domain-specific models (e.g., BERT for Patents) as baselines.",
+        "guidance": "Authors fine-tuned DistilRoBERTa for 3 epochs with cross-entropy loss, batch size 16, learning rate 2e-5, and weight decay 0.01. Use domain-specific pretrained baselines where computationally feasible to provide stronger comparisons."
+      },
+      {
+        "name": "Monitor for overfitting and data leakage",
+        "description": "Check training and validation loss trends and manually inspect dataset samples to detect overfitting or inadvertent data leakage.",
+        "guidance": "Authors observed nominal loss trends and manual checks showing no data leakage; nonetheless, perform systematic checks (e.g., document-level deduplication, ensuring no overlapping base patents across splits)."
+      },
+      {
+        "name": "Be wary of 'easy' negatives and need for harder negatives",
+        "description": "Recognize that keyword-extracted negatives may be semantically easy to separate from positives, inflating apparent performance.",
+        "guidance": "Investigate creating harder negatives via more powerful Boolean queries, leveraging unique inter-patent relationships, or retrieving semantically similar non-novelty-destroying patents to improve robustness at classification boundaries."
+      },
+      {
+        "name": "Use CPC codes or domain-specific queries for domain specialization",
+        "description": "To create domain-specific datasets, consider using Cooperative Patent Classification (CPC) codes rather than plain keywords for seeding the pipeline.",
+        "guidance": "CPC-based queries can help generate datasets for specific technical fields with better coverage and relevance than keyword-only seeds."
+      },
+      {
+        "name": "Stratified multiple-split evaluation to mitigate sampling bias",
+        "description": "Generate multiple random subsamples/splits of the raw dataset (authors used three) and average results to reduce the impact of sampling bias on reported metrics.",
+        "guidance": "This practice yields more reliable estimates of model performance and variance across dataset realizations."
+      }
+    ]
+  }
+}

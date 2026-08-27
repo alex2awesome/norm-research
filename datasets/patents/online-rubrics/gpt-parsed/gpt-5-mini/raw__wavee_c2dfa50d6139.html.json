@@ -1,0 +1,120 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_c2dfa50d6139.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 11400,
+  "output_tokens": 3499,
+  "elapsed_s": 3180.7109108751174,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in patent analytics and NLP (patent classification and semantic search)",
+    "subtask_short": "patent embedding and classification",
+    "subtask_description": "Designing and evaluating transformer-based patent text embeddings (SBERT / AugSBERT) for patent-to-patent (p2p) semantic similarity, semantic patent search, and multi-label CPC classification using a KNN-based hybrid classifier.",
+    "subtask_keywords": [
+      "patent",
+      "nlp",
+      "sbert",
+      "classification",
+      "semantic_similarity",
+      "claims_text"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Use of patent claims as primary textual input",
+        "description": "Claims are preferred because they contain more comprehensive and accurate information; the first claim is considered the backbone of the claim hierarchy and was used as input in this study.",
+        "guidance": "The paper uses only the first claim to create embeddings, noting claims are more informative than title/abstract. It suggests future work combining all claims based on their tree structure. Mean claim length reported (~162 tokens) motivated sequence length choices."
+      },
+      {
+        "name": "Sequence length and input preprocessing (padding/truncating)",
+        "description": "BERT input limitation requires setting max_seq_length (set to 510 here) and applying padding/truncating so all inputs match model input size.",
+        "guidance": "SBERT receives fixed-length input; for shorter sentences add padding tokens, for longer truncate to the maximum length. The paper set max_seq_length to 510 (BERT limit 512 tokens) and used padding/truncation accordingly."
+      },
+      {
+        "name": "Prefer SBERT for p2p similarity due to efficiency",
+        "description": "Use SBERT (bi-encoder) to produce sentence/patent embeddings that enable fast nearest-neighbor search while retaining BERT-like accuracy.",
+        "guidance": "SBERT reduces retrieval time drastically (example: finding most similar pair in 10,000 sentences goes from ~65 hours with BERT/RoBERTa to ~5 seconds with SBERT). SBERT is practical for large-scale p2p similarity/semantic search compared to on-the-fly cross-encoder approaches."
+      },
+      {
+        "name": "Augmented SBERT (domain-transfer) fine-tuning with cross-encoder labels",
+        "description": "Fine-tune SBERT by augmenting in-domain training pairs labeled by a stronger cross-encoder (e.g., RoBERTa) \u2014 the Augmented SBERT (AugSBERT) approach.",
+        "guidance": "Three-step process: (1) fine-tune RoBERTa as a cross-encoder on a small STS benchmark; (2) use trained RoBERTa to label in-domain patent claim pairs; (3) train SBERT on the labeled target dataset (small STS + in-domain labeled pairs). Selecting which sentence pairs to label (sampling strategy) is crucial. Example: from 1143 claims (652,653 possible pairs) they sampled 3432 pairs for SBERT fine-tuning."
+      },
+      {
+        "name": "Cross-encoder (RoBERTa) role for labeling and domain adaptation",
+        "description": "Use a cross-encoder model (fine-tuned RoBERTa) to generate high-quality similarity labels for unlabeled in-domain sentence pairs to augment SBERT training.",
+        "guidance": "First fine-tune the cross-encoder on STS data, then apply it to label selected in-domain claim pairs. This semi-supervised augmentation can yield meaningful performance improvements (paper cites up to +6 pts in-domain, up to +37 pts for domain adaptation)."
+      },
+      {
+        "name": "Sampling strategy for pair selection",
+        "description": "Do not use all n*(n-1)/2 in-domain pairs for augmentation; apply a careful sampling strategy to select a subset of pairs to label and avoid excessive computational overhead while improving performance.",
+        "guidance": "The paper emphasizes that selecting sentence pairs is crucial to success. Example sampling: from 652,653 possible combinations from 1143 claims they selected 3432 pairs for labeling and SBERT fine-tuning."
+      },
+      {
+        "name": "Embedding distance metric for semantic similarity",
+        "description": "Compute p2p semantic similarity using embedding distance measures such as cosine similarity or Euclidean distance on SBERT embeddings.",
+        "guidance": "The paper uses cosine similarity (and mentions Euclidean distance) for ranking similar patents and for semantic search tasks such as Patent Semantic Search (PSS)."
+      },
+      {
+        "name": "KNN-based hybrid classifier using top-N similar patents",
+        "description": "Predict CPC classes by finding top-N semantically similar patents (via SBERT embeddings) and using a K-nearest-neighbors (KNN) approach to infer the class(es) from the neighbors.",
+        "guidance": "The hybrid model finds the top N claims with highest similarity and predicts multi-label CPC assignments via KNN. A Sigmoid function is used after neighbor retrieval to produce multi-label outputs. The simplicity aids interpretability because predictions are explained by inspected nearest neighbors."
+      },
+      {
+        "name": "Choice of K and trade-offs (precision vs recall/F1)",
+        "description": "The number of nearest neighbors (K) impacts precision, recall, F1, and accuracy; tune K to balance precision and overall F1.",
+        "guidance": "In this paper K=8 yielded best F1 (F1\u224866.48% at subclass level) with precision ~74% and recall ~60%. Increasing K to 20 increased precision to ~86% but decreased F1 and accuracy (F1\u219258%, accuracy\u219246%), illustrating the trade-off between precision and coverage."
+      },
+      {
+        "name": "Multi-label classification handling and output activation",
+        "description": "Patent CPC assignment is multi-label; use appropriate multi-label modeling and output activation (sigmoid) rather than softmax.",
+        "guidance": "The paper uses a Sigmoid function for multi-label predictions after retrieving similar patents and aggregating neighbor labels. Multi-label metrics should evaluate all assigned labels rather than single-label accuracy alone."
+      },
+      {
+        "name": "Evaluation metrics for classification and retrieval",
+        "description": "Evaluate models using accuracy, F1 (per subclass and class level), precision, recall, Top-N accuracy (Top-5 etc.), and retrieval-specific metrics like Mean Reciprocal Rank (MRR) for semantic search.",
+        "guidance": "The paper reports subclass-level F1 (66.48%), accuracy (58%), class-level F1 (82.44%), and discusses Top-5 accuracy and Top-N concepts. It notes planning to evaluate semantic search accuracy via MRR in future work."
+      },
+      {
+        "name": "Benchmarking against prior models (PatentBERT, DeepPatent, ULMFiT)",
+        "description": "Compare performance against state-of-the-art baselines (text-based patent classifiers) to establish improvements in F1/accuracy.",
+        "guidance": "The study benchmarks against PatentBERT and DeepPatent (reported baseline F1s <45% and ~43% respectively at subclass level) and reports outperforming these baselines with the proposed hybrid method."
+      },
+      {
+        "name": "Dataset selection, deduplication, and train/test split",
+        "description": "Use a well-documented patent data source (PatentsView / Google patent claims), remove duplicate records, and hold out a test set (8% used here).",
+        "guidance": "The paper used PatentsView and Google patent public datasets for patents 2013\u20132017, removed duplicate patent ids and claim text, used 1,492,294 patents total with 8% as test set."
+      },
+      {
+        "name": "Label imbalance handling and minimum-sample thresholds",
+        "description": "Address label imbalance in CPC subclass distribution; consider restricting evaluation to labels with sufficient samples to improve classifier robustness.",
+        "guidance": "Dataset had 663 labels of which 159 had <350 samples; authors note KNN is weak with imbalance. Restricting to labels with >350 patents (504 subclasses) and evaluating on 10,000 patents increased F1 to 67.23%."
+      },
+      {
+        "name": "Scalability: approximate nearest neighbor methods for large datasets",
+        "description": "For very large patent corpora, use approximate nearest neighbor (ANN) libraries (e.g., Annoy) to reduce query latency at the cost of approximate results.",
+        "guidance": "Paper identifies Annoy (Approximate Nearest Neighbor Oh Yeah!) as future work to scale to larger datasets (e.g., 3M patents) and decrease response time by trading exactness for speed."
+      },
+      {
+        "name": "Interpretability and end-user validation via nearest neighbors",
+        "description": "Favor models/architectures that allow end-users to inspect top-N similar patents to understand and validate predicted CPC labels.",
+        "guidance": "The simple KNN strategy provides explainability: predicted subclass is a function of assignments of the K most similar patents, making model decisions inspectable and verifiable by domain experts/end-users."
+      },
+      {
+        "name": "Need for domain-expert curated STS datasets for patents",
+        "description": "Create expert-curated Semantic Textual Similarity (STS) benchmark datasets for patents to better fine-tune and validate transformer models in this domain.",
+        "guidance": "The paper points to building patent STS datasets (annotated by experts) as future work to improve embedding quality and enable stronger fine-tuning/benchmarking."
+      },
+      {
+        "name": "Choice of textual fields and multi-input fusion",
+        "description": "Decide which patent text fields to use (claims, title, abstract, description) and consider multi-input models that combine these fields for potentially better similarity/classification.",
+        "guidance": "The study used claim text only (first claim), citing literature that claims alone can be sufficient. Future work is planned to combine abstracts and descriptions and to handle longer combined inputs without truncation."
+      },
+      {
+        "name": "Model limitations & reporting",
+        "description": "Explicitly report dataset and methodological limitations (sample size, truncation, class imbalance) and propose follow-up experiments to address them.",
+        "guidance": "Authors report sample-size limitation (1.5M claims) and plan larger-sample tests with ANN; note truncation due to token limits and propose exploring longer-input approaches; explicitly list how limitations might affect generalization."
+      }
+    ]
+  }
+}

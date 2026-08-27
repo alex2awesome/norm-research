@@ -1,0 +1,114 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/waveh5_nber_patent_history.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 19270,
+  "output_tokens": 4088,
+  "elapsed_s": 3380.1183668749873,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "academic researchers and policy analysts studying patents, innovation, and international knowledge diffusion (economists, econometricians, science & technology policy researchers)",
+    "subtask_short": "patent-citation analysis for knowledge flow",
+    "subtask_description": "Empirical framework and measurement rules for using USPTO patent citation data to study international knowledge diffusion (focus: U.S., Japan, Korea, Taiwan; 1977\u20131999). Includes data selection, aggregation, indicators, bias corrections, and diffusion-model estimation.",
+    "subtask_keywords": [
+      "patents",
+      "citation_analysis",
+      "knowledge_diffusion",
+      "international",
+      "econometrics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patent citations as proxy for knowledge flow",
+        "description": "Use patent citations as an indicator of knowledge flow: 'if patent B cites patent A, it implies that patent A represents a piece of previously existing knowledge upon which patent B builds.'",
+        "guidance": "Treat citations as a coarse and noisy measure: many citations occur without actual knowledge flow; citations are more likely where knowledge flow occurred. See Jaffe and Trajtenberg (1999) and Hall, Jaffe and Trajtenberg (2001) for limitations and further discussion; Jaffe, Trajtenberg and Fogarty (2000) survey evidence that citations are a noisy indicator."
+      },
+      {
+        "name": "Legal/administrative interpretation of citations",
+        "description": "Recognize that citations serve an important legal function: they delimit the scope of property rights awarded by the patent.",
+        "guidance": "Applicant has a duty to disclose prior art but the patent examiner ultimately decides which patents to cite; hence observed citations reflect both applicant knowledge and examiner judgment and expertise."
+      },
+      {
+        "name": "Data selection: sample frame",
+        "description": "Use all utility patents granted by the U.S. PTO to inventors residing in the countries of interest (here: Korea, Japan, Taiwan, U.S.) for 1977\u20131999 drawn from the NBER Patent Citations Database.",
+        "guidance": "Citations information begins in 1975 and patents from Korea/Taiwan are very few before mid-1970s; therefore analysis focuses on 1977\u20131999. Work with 'patents granted in the U.S.' as shorthand for these USPTO-granted patents."
+      },
+      {
+        "name": "Required data elements",
+        "description": "For each patent use: country of residence of the primary inventor; dates of application and grant; U.S.PTO patent classification; identity of previous patents contained in the citations/references made.",
+        "guidance": "Use the available NBER Patent Citations Data File fields. For technological analysis use 3-digit USPTO patent classes."
+      },
+      {
+        "name": "Aggregation into six technological categories",
+        "description": "Aggregate 3-digit patent classes into six major technological categories: Chemical; Computers and Communications; Drugs and Medical; Electrical and Electronic; Mechanical; All Other (per Jaffe & Trajtenberg grouping).",
+        "guidance": "Use these aggregated categories for comparisons of technological composition and to summarize large-class distributions; keep the original 3-digit classes for detailed proximity metrics where needed."
+      },
+      {
+        "name": "Bias-adjusted Herfindahl index for concentration (H\u0302)",
+        "description": "Use a bias-adjusted Herfindahl index as an unbiased measure of true concentration across patent classes when sample patent counts are small.",
+        "guidance": "The paper provides a bias-adjusted H (\u02c6H) based on N (number of patents) and the traditional HHI (sum of squared shares). As N grows large, \u02c6H converges to traditional HHI; for small N the adjustment can be large. Apply the adjustment when computing concentration across ~400 classes or across assignees; be aware of upward bias of raw HHI with small sample sizes."
+      },
+      {
+        "name": "Average citations per patent as indicator of technological significance",
+        "description": "Use the average number of citations a patent receives as a measure of its technological importance or quality.",
+        "guidance": "Because of geographic localization of citations, when comparing the technological significance of patents across countries, compute average cites using citations made by U.S. patents only (or otherwise hold localization constant) to permit fair comparisons across recipient countries."
+      },
+      {
+        "name": "Citation frequency (CF) measure",
+        "description": "Define citation frequency CF_{i-j,t} = NC_{i-j,t} / (NP_{i,t} * NPD_{j,t}), where NC_{i-j,t} is number of citations made by country i's patents (granted in year t) to country j's potentially citable patents, NP_{i,t} is number of i's patents in year t, and NPD_{j,t} is number of potentially citable patents in country j as of year t.",
+        "guidance": "CF is interpreted as the likelihood that any given inventor in recipient country i will cite any given invention created in source country j; constructing the denominator (potentially citable patents) requires accounting for obsolescence/decay of knowledge\u2014do not simply use total historical stock without adjustment."
+      },
+      {
+        "name": "Relative citation frequency (RCF) to remove source patenting-rate effects",
+        "description": "Construct RCF_{k-i-j,t} as the ratio of frequency of country k citing country j to that of i citing j in year t (i.e., compare citation rates while removing effects of the number of potentially citable patents in the source country).",
+        "guidance": "RCF is particularly helpful for assessing whether one recipient country cites a source country more intensively than another after controlling for differences in source-country patenting volumes. Use RCF to avoid artifacts from differential propensities to patent in the U.S. vs other countries."
+      },
+      {
+        "name": "Accounting for obsolescence/knowledge decay in citable pool",
+        "description": "Do not treat the total cumulative stock of a source country's patents as equally citable at time t because knowledge embodied in patents becomes obsolete; effective citable pool should reflect decay.",
+        "guidance": "The paper avoids constructing a single effective pool and instead uses relative measures (RCF) and diffusion models that include knowledge decay. If constructing a pool, explicitly model decay/obsolescence or use time-limited windows rather than lifetime stock."
+      },
+      {
+        "name": "Technology proximity (Tprox) measure",
+        "description": "Measure technological proximity between countries i and j in year t as Tprox_{i,j,t} = sum_{n=1}^{400} f_{n,i,t} * f_{n,j,t}, where f_{n,i,t} is the share of country i's patents in class n in year t.",
+        "guidance": "Tprox is the overlap (inner product) of 400-d patent-distribution vectors: 0 if orthogonal, maximal when distributions identical. Use this to capture multi-dimensional technological closeness and to explain differences in citation intensities."
+      },
+      {
+        "name": "Control for source-country patenting propensity when comparing citation shares",
+        "description": "Recognize that raw shares of citations to a source country are distorted by that country's absolute number of patents and by differing propensities to patent in the U.S.; comparisons should control for these effects.",
+        "guidance": "Use CF or RCF measures or model-based controls to remove effects of source patenting rates; otherwise higher citation shares may reflect higher availability rather than stronger spillovers."
+      },
+      {
+        "name": "Model and estimate citation diffusion over time including lag/decay",
+        "description": "Explicitly model knowledge diffusion over time, including lag structure and knowledge decay, to estimate citation frequency as a function of citation lag and other covariates.",
+        "guidance": "Estimate diffusion functions (as in the paper's Table 4) to derive predicted citation-frequency-by-lag curves (simulations shown in Figures 7 and 8). Use estimated parameters (\u03b1, \u03b2, etc.) to compare peak frequency, modal lag, and rate of obsolescence across country pairs."
+      },
+      {
+        "name": "Use simulated citation-frequency-by-lag curves for comparison",
+        "description": "Simulate citation frequency over citation lags for different citing\u2013cited country pairs to visualize and compare intensity and timing of spillovers (e.g., modal lag, peak rates).",
+        "guidance": "The paper shows Korean citations to Japan peak earlier and higher (modal lag 4) than Taiwanese citations (modal lag 6); use simulations to illustrate substantive differences implied by estimated diffusion parameters."
+      },
+      {
+        "name": "New patent classes as indicator of proximity to world frontier",
+        "description": "Measure fraction of a country's patents that fall in patent classes created recently (e.g., new classes since 1996) as a test for proximity to technological frontier.",
+        "guidance": "Interpret cautiously: high shares may reflect concentration in a single new class (e.g., Semiconductor Device Manufacturing) rather than broad frontier proximity; examine class composition to avoid misleading inferences."
+      },
+      {
+        "name": "Patents per capita and R&D/GDP as complementary indicators",
+        "description": "Use patents per 100,000 people and R&D expenditure as share of GDP to compare innovation output and R&D intensity across countries.",
+        "guidance": "Patents per capita give a normalized output measure; R&D-GDP provides input intensity\u2014use both to contextualize citation-based measures and country technological capability."
+      },
+      {
+        "name": "Include economic/ institutional channels as explanatory covariates",
+        "description": "Consider foreign direct investment (FDI), capital goods imports, trade links, returning students and expatriate networks, and industry/industrial policy in explaining differential citation/knowledge diffusion patterns.",
+        "guidance": "The paper links higher Korea\u2013Japan citation dependence partly to technological/economic proximity and FDI/capital goods import patterns; include such channels in models or in interpretation to account for observed citation asymmetries."
+      },
+      {
+        "name": "Adjust concentration measures across assignees similarly to classes",
+        "description": "When computing concentration of patenting across assignees, apply the same bias correction (for small N) used for class concentration because small counts bias HHI upward.",
+        "guidance": "Be aware that treating affiliated entities as distinct assignees (e.g., Chaebol subsidiaries) can understate true concentration; interpret assignee-based Herfindahl with caution and contextual knowledge."
+      }
+    ]
+  }
+}

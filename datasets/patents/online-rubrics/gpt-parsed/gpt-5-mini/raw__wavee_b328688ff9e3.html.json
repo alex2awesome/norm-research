@@ -1,0 +1,105 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_b328688ff9e3.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 12225,
+  "output_tokens": 3804,
+  "elapsed_s": 3171.8400490838103,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners building predictive models for patent litigation (machine learning researchers, data scientists, IP analysts, patent portfolio managers)",
+    "subtask_short": "predicting patent litigation likelihood",
+    "subtask_description": "Developing and evaluating machine\u2011learning models to (a) predict whether a granted patent will be litigated and (b) predict time-to-first-litigation (multi\u2011class/hierarchical). The work covers feature engineering (textual and non-textual), handling extreme class imbalance, model architectures (clustering + classification and pure classification), calibration, and evaluation on realistic patent datasets.",
+    "subtask_keywords": [
+      "patent",
+      "litigation_prediction",
+      "machine_learning",
+      "text_mining",
+      "imbalanced_data",
+      "ip_analytics"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Textual features extracted from claim section",
+        "description": "Construct a document-term matrix from the claim section using unigram, bigram, and trigram features with tf-idf weighting; select the top textual features by information gain.",
+        "guidance": "Use tf-idf so common words that appear across many documents are down-weighted. Generate a large matrix then select 30 textual features with highest information gain for modeling. Report the top textual features (e.g., 'device', 'system', 'network' for Wireless Network)."
+      },
+      {
+        "name": "Non-textual patent features (document-level and referencing)",
+        "description": "Include non-textual features extracted from the patent document such as number of inventors, number of claims, backward references (first layer), second-layer references, counts of referenced patents that were litigated, and PageRank computed on the patent reference network.",
+        "guidance": "Construct a reference network where nodes are patents and edges indicate references; compute PageRank using reciprocal weighting by outgoing edges. The first and second layers of references and litigated backward references were found influential (report information gain values)."
+      },
+      {
+        "name": "Assignee financial features from SEC",
+        "description": "Augment patent features with financial information of the patent\u2019s assignee: revenue, earnings per share (EPS), and market share price (extracted from annual reports e.g., 10-K/20-F).",
+        "guidance": "Financial data should be discounted to current time and categorized into groups. Because SEC data may be missing for private/small companies, consider three data handling options: (1) omit SEC features entirely, (2) include only records with SEC data, or (3) impute/assume default values for missing SEC features. The paper finds SEC-without-default (i.e., only records with SEC) often gives best F1 for litigation likelihood but may reduce sample size and hurt other models."
+      },
+      {
+        "name": "Data selection by domain keywords and realistic litigation rate",
+        "description": "Collect patent instances by selecting technology\u2011related keywords (e.g., 'Wireless Network', 'Advertising', 'Telecommunication') and label litigation using an external litigation database (LexMachina). Use datasets that reflect the actual low litigation rate (~1\u20132%).",
+        "guidance": "Choosing keywords with higher litigation rates yields more useful signal for evaluation. Avoid artificially inflating litigation rates in the test set (e.g., by over-sampling litigated patents without reflecting real-world base rates), because performance metrics can be misleading."
+      },
+      {
+        "name": "Handling extreme class imbalance (re-sampling via SMOTE)",
+        "description": "Address the rare-event nature of litigation with re-sampling: use SMOTE to oversample the minority (litigated) class and undersample the majority (non-litigated) class. For time-to-litigation, apply SMOTE per hierarchical label.",
+        "guidance": "Tune SMOTE hyperparameters: number of synthetic minority cases generated and number of majority cases sampled per synthetic minority. Example chosen values: generate 5\u00d7 minority and select 1\u00d7 majority (i.e., parameters 5 and 1). Apply SMOTE separately for each hierarchical label (e.g., T<1 node)."
+      },
+      {
+        "name": "Cluster-with-ensemble modeling architecture",
+        "description": "Combine clustering (K-means on litigated and non-litigated training cases) with a convex-hull based heuristic and an ensemble classifier (SVM + random forest) to predict litigation likelihood.",
+        "guidance": "Compute distance from a test case to convex hulls of clusters and form a convex hull distance ratio; assign initial label based on threshold hyperparameter A. Define a ball around the test case with radius z (fraction of hyperparameter X) and compute litigated fraction ratio; if below hyperparameter B, flip label. If litigated fraction ratio exceeds B, re-adjust using the SVM+random-forest ensemble. Calibrate hyperparameters X, A, B (example values: X=3.5, A=1.3, B=0.015). K-means is used as baseline clustering."
+      },
+      {
+        "name": "Pure classification and ensemble between SVM and Random Forest",
+        "description": "Use supervised classifiers (SVM, decision tree, boosted trees, random forest) and ensembles; an ensemble between SVM and random forest performed well.",
+        "guidance": "Tune classifier hyperparameters (e.g., radial kernel SVM with gamma=0.001 and regularization C=0.1). Combine algorithms with weights (example: 0.3 for SVM and 0.7 for random forest). Choose a probability cut-off to map probabilities to predicted classes (example cut-off = 0.3)."
+      },
+      {
+        "name": "Time-to-litigation modeling with hierarchical multi-class labels",
+        "description": "Categorize time-to-first-litigation into hierarchical groups (e.g., litigated by 1 year, by 4 years, by 7 years, by 14 years) and model either per-class or jointly while enforcing hierarchy (prediction for an earlier time implies membership in later time bins).",
+        "guidance": "Fit models per node/class or attempt a global model with hierarchical constraints. One approach is to cluster the T<1 leaf and expand clusters outward for higher time buckets, assigning labels by which convex-hull layer a test case falls into. Final predictions must respect the hierarchical relationship (e.g., predicted T<1 implies T<4, T<7, T<14)."
+      },
+      {
+        "name": "Evaluation metrics and reporting",
+        "description": "Evaluate models using confusion matrix, precision, recall, and F1-score; for multiclass time-to-litigation report F1 per class and/or overall F1.",
+        "guidance": "Because litigation is rare, AUC may be inappropriate; focus on precision/recall trade-offs and F1 as a summary. Report confusion matrices and per-class F1 for hierarchical labels. Use multiple replications of k-fold cross-validation (example: repeated 10-fold CV) to ensure stability and tune hyperparameters to maximize F1 according to user priorities."
+      },
+      {
+        "name": "Feature selection and importance ranking via information gain",
+        "description": "Rank candidate features by information gain and select the most informative features (used to select top textual features and to identify significant non-textual features).",
+        "guidance": "Report information gain values for top features (e.g., revenue, EPS, litigated backward references had highest gains for Wireless Network). Use these rankings to justify feature inclusion and to reduce dimensionality (e.g., select top 30 textual features)."
+      },
+      {
+        "name": "Model calibration and hyperparameter tuning protocol",
+        "description": "Calibrate hyperparameters (SMOTE params, SVM kernel parameters, ensemble weights, clustering thresholds X/A/B, probability cut-off) using cross-validation to maximize chosen evaluation metrics (F1).",
+        "guidance": "Perform multiple replications of k-fold cross-validation (example uses 10-fold repeated) and report the best hyperparameter settings found. Explore trade-offs between precision and recall by adjusting cut-off thresholds and hyperparameters according to user cost preferences."
+      },
+      {
+        "name": "Reporting of top textual features and interpretation",
+        "description": "Report the top textual features (unigrams/bigrams/trigrams) that correlate with litigation and provide interpretation relating them to the domain.",
+        "guidance": "Provide proportions of litigated vs non-litigated cases containing those words and discuss domain relevance (e.g., terms related to communication systems occur more often in litigated patents in 'Wireless Network')."
+      },
+      {
+        "name": "Use of external litigation labeling source (LexMachina)",
+        "description": "Label patents as litigated or not using an authoritative litigation database like LexMachina to obtain first litigation dates for time-to-litigation labeling.",
+        "guidance": "Ensure labels are correctly matched to patents and that first litigation dates are used to compute time-to-litigation. Note potential coverage limitations of the external source."
+      },
+      {
+        "name": "Anomaly-detection inspiration and clustering both classes",
+        "description": "Treat litigations as anomalies and apply techniques from anomaly detection: cluster both litigated and non-litigated classes and use nearest-convex-hull heuristics to detect rare events.",
+        "guidance": "Clustering both classes and combining with classification is intended to improve detection when labeled historical records are limited. However, improvements may not hold for time-to-litigation where class imbalance is less pronounced and sample sizes are small."
+      },
+      {
+        "name": "Trade-off tuning according to operational cost (precision vs recall)",
+        "description": "Tune the model (thresholds, hyperparameters) to trade off precision and recall according to user priorities (e.g., preference to reduce false positives vs false negatives).",
+        "guidance": "Adjust cut-off probability and other hyperparameters to reach the desired balance. The choice depends on the user's cost model: whether it is more costly to investigate false positives or to miss true litigated patents."
+      },
+      {
+        "name": "Acknowledgment of data limitations and need for comprehensive datasets",
+        "description": "Recognize that limited or incomplete data (e.g., missing SEC data for private firms) and the rare-event nature of litigation constrain model performance and generalizability.",
+        "guidance": "Consider future work to acquire more complete datasets, explore multi-class multi-label hierarchical loss functions, and evaluate global hierarchical models. Report how missing data handling choices (exclude/select/impute) affect sample size and performance."
+      }
+    ]
+  }
+}

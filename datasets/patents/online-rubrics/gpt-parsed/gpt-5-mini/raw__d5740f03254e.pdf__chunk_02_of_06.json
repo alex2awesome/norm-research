@@ -1,0 +1,101 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/d5740f03254e.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "d5740f03254e.pdf",
+  "chunk_idx": 2,
+  "n_chunks": 6,
+  "chunk_chars": 39965,
+  "model": "gpt-5-mini",
+  "elapsed_s": 51.252260207984364,
+  "input_tokens": 13340,
+  "output_tokens": 4392,
+  "extracted": {
+    "orientation": "formal_guideline",
+    "intended_audience": "researchers, analysts and policymakers constructing or using patent quality indicators from PATSTAT / EPO data",
+    "subtask_short": "patent quality indicator construction",
+    "subtask_description": "Methodological guidance for building and interpreting patent-level indicators (NPL citation indices, claims indices, forward citations, breakthrough patents) using PATSTAT and OECD citation databases, including algorithmic procedures and robustness considerations.",
+    "subtask_keywords": [
+      "patent",
+      "indicator",
+      "patstat",
+      "epo",
+      "bibliometrics",
+      "forward_citation"
+    ],
+    "subtask_breadth": "moderate",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "NPL citation index",
+        "description": "References to non-patent literature (NPL) are extracted from the OECD Citation database and summarised in an NPL citation index that is normalised according to the maximum family size of the patents in the same cohort (filing date and technology fields). The index has been winsorized to correct for extreme values.",
+        "guidance": "The NPL index captures citations to non-patent literature per patent; distributions have many zeros (>70% equal to zero). The index is cohort- and field-normalised; winsorization is applied to handle outliers. Average-by-economy statistics are provided only for economies with more than 200 patents reporting the index (in 2009). Interpret cross-country/field differences cautiously because of technological specialisations and stage-of-development effects. Source: OECD, PATSTAT (EPO, April 2012)."
+      },
+      {
+        "name": "NPL share index",
+        "description": "A complementary NPL proportion (share) index capturing another dimension of NPL citation behaviour; used alongside the NPL citation index.",
+        "guidance": "The NPL share index and the NPL index capture different aspects of NPL citation behaviour; in absolute terms differences are small because most patents have zero NPL citations, but differences are relatively larger in central values. Use both indices to understand different dimensions; check pairwise correlations over time when interpreting changes."
+      },
+      {
+        "name": "NPL extraction algorithm and filtering rules",
+        "description": "NPL references are extracted from the OECD Citation database with filters to avoid double counts. References to databases (e.g., Patent Abstracts of Japan, WPI Database) are removed. Explicit links in related patent documents (e.g., 'See references of ...') are used to consolidate NPL lists; OECD_CIT prefixes mark citation-table sources.",
+        "guidance": "Implementation example provided as T-SQL: count distinct NPL_Publn_id per Appln_id across relevant OECD_CIT tables (EP and WO mappings). NPL_Publn_id refers to PATSTAT surrogate keys. The algorithm and script are provided for reuse, and the OECD requests acknowledgement when used. Ensure database-reference removals and consolidation steps to avoid double-counting."
+      },
+      {
+        "name": "Normalization and winsorizing of indices",
+        "description": "All indices (NPL index, claims index, forward citations index, adjusted indices) are normalised according to the maximum family size of patents in the same cohort (filing date and technology fields) and have been winsorized to correct for extreme values.",
+        "guidance": "Normalization ensures comparability within year/technology cohorts; winsorization reduces the influence of extreme outliers. Be aware that winsorizing can change distributional properties and correlations (winsorized vs non-winsorized vs corrected indices show different pairwise correlations). Document normalisation and winsorizing choices when reporting results."
+      },
+      {
+        "name": "Number of claims per patent indicator",
+        "description": "Indicator measuring the number of claims contained in a patent (claims index), normalised within cohort. Number and content of claims determine the legal boundaries and breadth of a patent, and can reflect expected market value.",
+        "guidance": "Claims counts vary by patent office rules (historical one-claim rule in Japan) and by fee structures (EPO excess claims fees changed in 2008). The claims indicator is sensitive to truncation because claims can be dropped/redefined during examination; recent cohorts may show artificially higher means if still under examination. Compare across offices and over time with caution and account for institutional/fiscal rules affecting claim counts. The index is winsorized and normalised as above."
+      },
+      {
+        "name": "Adjusted claims index (claims over backward citations)",
+        "description": "An 'adjusted' claims index defined as number of claims over number of backward citations, following Lanjouw and Schankerman: backward citations signal that a patent belongs to a relatively well-developed technology area.",
+        "guidance": "The adjusted index aims to control for technological maturity/uncertainty; it is normalised and winsorized like the basic claims index. The corrected (adjusted) claims index shows more important differences compared to the basic index than does simple winsorizing. Use adjusted index to mitigate interpretation issues where many claims reflect developed fields rather than intrinsic patent value."
+      },
+      {
+        "name": "Claims extraction algorithm (Publn_claims-based)",
+        "description": "Procedure to retrieve number of claims using PATSTAT_PAT_PUBLN Publn_claims variable: first input claims from granted publications (Publn_kind like 'B%'), then add claims from pending publications (Publn_kind like 'A%') for patents still pending.",
+        "guidance": "Two-step approach ensures latest status accounting for examination. T-SQL examples are provided that join PATSTAT publication table to indicator table by Appln_id (PATSTAT surrogate key). Only positive Publn_claims are imported. Document which publication kind codes were used and how pending/granted statuses are distinguished."
+      },
+      {
+        "name": "Forward citations indicator (counts and X/I/Y distinctions)",
+        "description": "Number of forward citations a patent receives is used as a proxy for technological importance and economic value. Forward citations are counted over fixed windows after publication (commonly 5 or 7 years) and can be measured for all citations or restricted to EPO relevance codes X, I, and Y.",
+        "guidance": "Forward citation counts include patent equivalents and self-citations (the OECD follows Hall et al. 2005 in including self-citations). Use a 5-year window where possible (OECD finds little gain from extending to 7 years and 5-year improves timeliness). Present statistics both for all citations and for X/I/Y citations because X/I/Y signal higher technological relevance. Normalise and winsorize counts by cohort (family max) and be cautious about truncation for recent publications."
+      },
+      {
+        "name": "EPO citation relevance codes (X, I, Y, A, O, P, T, E, D, L)",
+        "description": "EPO search codes classify the relevance of cited documents: X (particularly relevant alone \u2014 novelty), I (particularly relevant alone \u2014 inventive step), Y (relevant if combined), A (general state of the art), O (non-written disclosure), P (intermediate documents), T (theory or principle for understanding), E (potentially conflicting documents published later), D (documents cited in the application), L (documents cited for other reasons).",
+        "guidance": "Up to three codes can be allocated to a citation (e.g., AD, XD, XP). Category 'I' was introduced in 2012 splitting the former X category. Use codes to filter forward-citation-based indicators (e.g., compute separate indices for X/I/Y citations) to focus on legally/technologically more relevant citations."
+      },
+      {
+        "name": "Forward citations algorithm (equivalents and multi-source merging)",
+        "description": "Forward citation counting combines multiple sources to account for patent equivalents: direct EP-to-EP citations (EP_EP), citations to EP equivalents (Equiv_EP), citations in WO (EP_WO_EP), and equivalents cited via WO (Equiv_EP_WO), subject to citation lag constraints (e.g., <= 60 months for a 5-year window).",
+        "guidance": "Implementation uses OECD tables (OECD_CIT_EP_Citations, OECD_CIT_EP_Equiv, OECD_CIT_WO_Citations, OECD_CIT_EP_WO) and T-SQL to union distinct citing_appln_id counts per Appln_id, applying DATEDIFF month filters to enforce the observation window. Ensure equivalence mapping methodology is documented (Martinez, 2010)."
+      },
+      {
+        "name": "Inclusion of self-citations in forward counts",
+        "description": "Forward citation counts presented include self-citations.",
+        "guidance": "OECD includes self-citations based on evidence (Hall et al., 2005) that self-citations are generally more valuable than external citations. If excluding self-citations, report the difference and rationale."
+      },
+      {
+        "name": "Citation observation window selection and timeliness/truncation considerations",
+        "description": "Forward-citation-based indicators require an observation window after publication (commonly 5 or 7 years). Indices suffer from timeliness/truncation: using longer windows reduces timeliness; using shorter windows can miss late citations.",
+        "guidance": "OECD finds 5-year and 7-year windows give very similar results but recommends a 5-year window to improve timeliness with almost no loss of information. For recent cohorts interpret indices with caution due to truncation. Claims indicators also suffer from truncation because claims can be amended during examination; report cohort completeness and examination status."
+      },
+      {
+        "name": "Breakthrough inventions indicator (top 1% cited patents)",
+        "description": "Breakthrough inventions are defined as the top 1% most-cited patents (following Ahuja and Lampert). Breakthroughs can be identified using all citations or restricting to X/I/Y citations; counts are aggregated at country and technology levels using fractional counting.",
+        "guidance": "Because this indicator is built on forward citations, it inherits their timeliness limitations and requires a 5/7 year citation window to identify top-cited patents reliably. Use fractional counting when aggregating across countries/fields. Alternative definitions (e.g., top 1% within field-year cohorts) should be documented."
+      },
+      {
+        "name": "Minimum sample rules for reporting averages by economy or field",
+        "description": "When reporting average indices by economy/field, OECD sets minimum sample sizes: e.g., average by economy is provided only for economies with more than 200 patents reporting the NPL/claims index in 2009, and for forward citations an economy needs more than 100 patents reporting the index in 2004.",
+        "guidance": "Apply minimum-observation thresholds to avoid unstable averages; report the number of observations supporting each average. For small economies or sparse fields, suppress or flag averages and provide caveats."
+      }
+    ]
+  }
+}

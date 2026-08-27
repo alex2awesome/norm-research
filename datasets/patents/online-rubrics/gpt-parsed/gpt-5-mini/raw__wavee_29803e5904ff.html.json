@@ -1,0 +1,100 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/wavee_29803e5904ff.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 8946,
+  "output_tokens": 2943,
+  "elapsed_s": 3056.401179916924,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "researchers and practitioners in patent classification and NLP/machine learning (patent informatics)",
+    "subtask_short": "patent classification with BERT",
+    "subtask_description": "Fine-tuning pre-trained BERT models for multi-label patent classification (CPC/IPC taxonomy) using patent text (claims, title, abstract) and large-scale datasets; includes dataset preparation, evaluation protocols, and experimental choices.",
+    "subtask_keywords": [
+      "patent",
+      "classification",
+      "bert",
+      "cpc",
+      "claims",
+      "nlp"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patent classification is a multi-label task with many labels",
+        "description": "Patent classification is a multi-label classification task. It is challenging because the number of labels can be large, e.g. more than 630 at subclass level.",
+        "guidance": "Design models and evaluation to handle many simultaneous labels (e.g., CPC/IPC subclass counts such as 632 or 656). Consider scalability and label imbalance when selecting model and loss."
+      },
+      {
+        "name": "Prefer CPC taxonomy (more specific) over IPC for detailed classification",
+        "description": "The CPC system is a more specific and detailed version of the IPC system. The CPC system came into force in 2013 and is being adopted widely; CPC is likely to replace IPC as the new standard.",
+        "guidance": "When building modern baselines, target CPC subclass/section levels to be more relevant and specific. Note that many past works used IPC (e.g., CLEF-IP) so comparisons should account for taxonomy differences."
+      },
+      {
+        "name": "Use large datasets; dataset size strongly affects Deep Learning performance",
+        "description": "Deep Learning outperforms other methods when the size of dataset is large. Dataset sizes in past patent research vary widely, making comparisons difficult.",
+        "guidance": "Prefer very large corpora (e.g., USPTO-3M with 3,050,615 patents) for training large models like BERT. When benchmarking, use comparable-scale datasets or clearly report dataset ranges to enable fair comparison."
+      },
+      {
+        "name": "Prefer patent claims (first claim) as input for classification experiments",
+        "description": "Our datasets are based on patent claims. The importance of patent claims was underappreciated in the past. To keep our model simpler, we use only the first claim of each patent.",
+        "guidance": "Claims alone can be sufficient for classification tasks and are appropriate if downstream tasks target claim generation. Using the first claim simplifies input processing; evaluate the trade-off versus including title/abstract/full text."
+      },
+      {
+        "name": "Report precision, recall, and F1 (not just precision)",
+        "description": "It is not clear why R@1 and F1@1 were omitted in past works. A precision value could be very high at the cost of a very low recall. Therefore, P@1 alone might not be a fair number to compare if R@1 and F1@1 were not provided.",
+        "guidance": "Always report precision, recall, and F1 for the chosen Top-k (e.g., Top 1, Top 5). Use an F1@1 (or matching Top-k F1) as a primary benchmark when appropriate."
+      },
+      {
+        "name": "Use Top-k evaluation (Top 1, Top 4, Top 5) and report metrics at those k",
+        "description": "Key performances were evaluated with P@1 (precision at top 1), P@5, R@5 (recall at top 5), F1@5 and other metrics. The paper compares results at various Top k (Top 1, Top 4, Top 5).",
+        "guidance": "Choose and clearly state Top-k evaluation(s). Provide metrics (precision/recall/F1) at those k to allow comparison with prior work that may have used different k values."
+      },
+      {
+        "name": "Benchmark against strong baselines and state-of-the-art (e.g., DeepPatent)",
+        "description": "We use DeepPatent as the baseline to benchmark. Benchmarking should take into account dataset differences and reported metrics (precision/recall/F1).",
+        "guidance": "Compare to relevant prior approaches (CNN+word embeddings, SVM, logistic regression, hierarchical and feature-engineered methods). Where possible, replicate baselines on the same dataset splits or explain discrepancies due to data/preprocessing differences."
+      },
+      {
+        "name": "Fine-tune pre-trained language models (BERT) for patent classification",
+        "description": "Set a goal to know how well BERT can perform on patent classification after fine-tuning. The approach fine-tunes a pre-trained BERT-Base model and outperforms DeepPatent.",
+        "guidance": "Use pre-trained transformer models (BERT-Base as a practical starting point; BERT-Large left for future work). Leverage the two-stage framework (pre-training & fine-tuning) for downstream patent tasks."
+      },
+      {
+        "name": "Use sigmoid cross entropy with logits for multi-label classification (replace softmax)",
+        "description": "For multi-label purpose, we use sigmoid cross entropy with logits function to replace the original softmax function which is for one-hot classification only.",
+        "guidance": "When adapting classification code/examples (often written for single-label tasks), replace softmax+categorical loss with sigmoid + binary cross-entropy (logits) to handle multi-label outputs."
+      },
+      {
+        "name": "Keep implementation/code changes minimal and use default hyperparameters initially",
+        "description": "We intentionally keep the code change as minimal as possible so as to make future BERT experiments comparable. All hyperparameters remain as default values, e.g. max_seq_length as 128.",
+        "guidance": "Start with the official BERT fine-tuning example and default hyperparameters to establish a baseline. Note that shorter max_seq_length may suffice when there are fewer labels; hyperparameter tuning can be left for future work."
+      },
+      {
+        "name": "Provide reproducible dataset extraction (SQL) instead of preprocessed dumps",
+        "description": "We prepared a new dataset based on the CPC with more than three millions US patents. We deem SQL statements as a better way than sharing conventional datasets for two reasons: (1) Separation of concerns... (2) Clarity and flexibility.",
+        "guidance": "Publish data-extraction queries (e.g., BigQuery SQL) that select claims and aggregate CPC codes rather than sharing a preprocessed static dataset, so others can re-create or adapt the dataset and preprocessing criteria."
+      },
+      {
+        "name": "Avoid ad-hoc feature engineering for large-scale patent datasets",
+        "description": "Feature engineering is difficult to scale up in general. We skip benchmarking with methods that rely on ad-hoc feature engineering and target a larger dataset without such engineering.",
+        "guidance": "Favor end-to-end learning approaches (pre-trained models + fine-tuning) for very large datasets instead of handcrafted features that may not scale or transfer across corpora."
+      },
+      {
+        "name": "Use temporal and multiple test splits; monitor performance drift over time",
+        "description": "We evaluated on multiple test sets from different years (e.g., 2015-A, 2015-B, 2016, 2017). F1, precision and recall values all dropped slightly as the date (year) of the test data moved further away from the training data.",
+        "guidance": "When possible, evaluate models on temporally separated test sets and report how performance changes as test time diverges from training time. This reveals model robustness to concept drift."
+      },
+      {
+        "name": "Design experiments to show impact of input text selection (claims vs title+abstract)",
+        "description": "We compared using IPC+Title+Abstract vs IPC+Claim and CPC+Claim. Replacing title and abstract with claims caused small drops but claims were still sufficient for downstream tasks.",
+        "guidance": "Run ablations to quantify classification performance when using different patent parts (title, abstract, claims, first claim only) and report results so downstream choices are informed by empirical evidence."
+      },
+      {
+        "name": "Clearly report dataset composition and testing set sizes",
+        "description": "Provide counts and provenance (e.g., EPO: 580,546 patents; WIPO: 161,551; USPTO-2M: 2,000,147; USPTO-3M: 3,050,615). Testing dataset sizes (e.g., 150,000 per year) are enumerated.",
+        "guidance": "For fair comparison, disclose training and testing sizes, the date ranges used, label counts, and any discrepancies due to data sources or preprocessing."
+      }
+    ]
+  }
+}

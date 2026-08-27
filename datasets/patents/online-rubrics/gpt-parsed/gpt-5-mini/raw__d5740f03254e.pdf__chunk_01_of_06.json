@@ -1,0 +1,91 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/d5740f03254e.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "d5740f03254e.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 6,
+  "chunk_chars": 39963,
+  "model": "gpt-5-mini",
+  "elapsed_s": 38.68039074999979,
+  "input_tokens": 13342,
+  "output_tokens": 3653,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "patent analysts and researchers constructing/computing patent-based indicators from PATSTAT / EPO data (e.g. OECD analysts, bibliometricians)",
+    "subtask_short": "patent indicator construction (PATSTAT)",
+    "subtask_description": "Methodology and algorithms for computing a set of patent-level indicators (e.g. patent scope, family size, grant lag, backward citations, NPL citations) from the EPO PATSTAT and OECD citation databases, including SQL scripts, normalization and robustness procedures.",
+    "subtask_keywords": [
+      "patent",
+      "patstat",
+      "epo",
+      "indicator",
+      "bibliometrics",
+      "sql"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Indicator table schema / variables",
+        "description": "The indicator table contains per-patent variables such as Appln_id, Filing_year, WIPO_Tech and the indicators Patent_Scope, Fwd_Cits, Fwd_Cits_XY, Bwd_Cits, NPL, Claims, Claims_Bwd, Family_size, Grant_lag, Breakthrough, Breakthrough_XY and (in Normalised_table) Generality, Originality, Composite_index_4, Composite_index_6.",
+        "guidance": "CREATE TABLE examples are provided showing the exact field names, datatypes and a primary key on Appln_id. Insert the list of patent documents (Appln_id) to be processed (example: SELECT distinct Appln_id from PATSTAT_APPLN WHERE Appln_auth='EP' AND Appln_kind='A' and IPR-Type='PI'). Note: Appln_id refers to PATSTAT surrogate keys."
+      },
+      {
+        "name": "Patent scope (Patent_Scope)",
+        "description": "Number of distinct 4-digit IPC classes associated with a patent (measured from the IPC Class Symbol in PATSTAT_APPLN_IPC).",
+        "guidance": "Computed with SQL by COUNT(distinct LEFT(Class_symbol,4)) where Class_Symbol LIKE '[A-H][0-9][0-9][A-Z]%'. The script updates Indicator_table.Patent_Scope by joining to the aggregated counts. (Source: OECD, T-SQL script on PATSTAT_APPLN_IPC.)"
+      },
+      {
+        "name": "Patent family size (raw count)",
+        "description": "Count of distinct patent offices (publication authorities) in which documents belonging to the same extended INPADOC family have protection (proxy for geographical scope of protection).",
+        "guidance": "Uses PATSTAT_INPADOC_FAM to identify family membership and PATSTAT_PAT_PUBLN to count distinct Publn_auth per family. SQL example: group by inpadoc_family_id and COUNT(distinct p.Publn_auth) as 'Family_size', then update Indicator_table. The algorithm is based on 'extended' families (Martinez 2010) and the PATSTAT pre-defined families table."
+      },
+      {
+        "name": "Family size index (normalized & winsorised)",
+        "description": "Family size index = family size normalized with respect to the maximum family size observed among patents in the same cohort (cohort defined by filing year and technology field); winsorised to correct extreme values.",
+        "guidance": "Index normalisation: divide by cohort maximum (filing date & technology fields). Winsorisation applied by transforming values below the 1st percentile to the 1st percentile and values above the 99th percentile to the 99th percentile, done by year and technology field cohorts. Beware truncation/timeliness: family-size indicators for recent years may be incomplete due to publication delays."
+      },
+      {
+        "name": "Grant lag (raw value)",
+        "description": "Number of days between application filing date and grant date for a patent (measured at patent-document level).",
+        "guidance": "Compute raw grant lag with DATEDIFF(DAY, a.Appln_filing_date, g.Grant_date) where Grant_date is MIN(Publn_date) from PATSTAT_PAT_PUBLN with Publn_first_grant=1 and Publn_auth='EP'. Use earliest grant date if multiple publications. Note: Appln_id = PATSTAT surrogate key."
+      },
+      {
+        "name": "Grant lag index (normalised & winsorised)",
+        "description": "Grant lag index for patent p (GrantPi) is a normalized measure based on the time \u2206t between application and grant relative to the maximum \u2206t observed in the same cohort; index is highest when a patent is granted very rapidly relative to cohort peers. The index is constructed to control for examination backlogs and workload variation across years.",
+        "guidance": "Index normalization uses cohort maximum grant lag (filing date & technology field). The index is winsorised to correct extreme values. Be cautious: truncation artificially lowers index values for most recent cohorts (max \u2206t not yet observable for recent filings). SQL/algorithmic guidance: compute raw \u2206t as above, then normalise to the cohort max (or to the 99th percentile when used for final values) as described in the document."
+      },
+      {
+        "name": "Backward citations index (Bwd_Cits)",
+        "description": "Number of backward patent citations per patent (excluding non-patent literature), normalised to the maximum number of backward citations in the same year-and-technology cohort; the OECD excludes NPL from this count but does not exclude self-citations.",
+        "guidance": "Backward citations capture prior patents and are used to assess novelty and knowledge flows; EPO classifications X and Y are especially important (may question inventive step). The index is winsorised to correct extreme values. The distribution is typically left-skewed with a long right tail (average ~0.3). Note: differences in citation/disclosure rules across offices affect comparability."
+      },
+      {
+        "name": "Backward citations counting algorithm (OECD citation DB + PCT handling)",
+        "description": "Consolidated count of backward patent citations that merges citations available directly in EPO filings and citations from related PCT (WO) filings that entered the EPO regional phase.",
+        "guidance": "SQL example provided: UNION EP citations and WO citations (via mapping OECD_CIT_EP_WO) and COUNT(distinct Cited_Appln_id). Uses OECD citation database tables (OECD_CIT_EP_Citations, OECD_CIT_WO_Citations, OECD_CIT_EP_WO). Exclude NULL Cited_Appln_id. This consolidates cases where EPO references are only available in the original PCT filing."
+      },
+      {
+        "name": "Citations to non-patent literature (NPL) index and NPL share index",
+        "description": "NPL index = number of NPL citations in a patent divided by the maximum number of NPL citations among patents in the same year-and-technology cohort. NPL share index = propensity of a patent to cite NPL relative to all prior art citations in the same document; normalised to range 0\u20131.",
+        "guidance": "NPL consists of peer-reviewed papers, conference proceedings, databases, etc. Exclude certain types of NPL (patent abstracts, commercial patent databases). Both indices are winsorised to correct extreme values. The NPL share index captures relative reliance on non-patent literature; both indices typically have most patents with zero NPL citations (75th percentile often zero). Extraction uses OECD_CIT_NPL_Citations with filters to avoid double counts and to consolidate explicit links."
+      },
+      {
+        "name": "Winsorization for robustness",
+        "description": "To correct for extreme values, indices are winsorised by cohort: values below the 1st percentile set to the 1st percentile and values above the 99th percentile set to the 99th percentile (applied by year and technology field cohorts).",
+        "guidance": "Winsorization shifts distributions (e.g. family size and backward citations indices) and affects comparisons between winsorised and non-winsorised indices (pairwise correlations reported). Apply winsorisation consistently across cohorts and document its effect (median shifts, correlation values)."
+      },
+      {
+        "name": "Normalization by cohort (filing date & technology field)",
+        "description": "Many indicators are normalised by dividing a patent\u2019s raw value by the maximum value observed among patents in the same cohort, where cohorts are defined by filing year and technology field.",
+        "guidance": "This cohort normalization is used for family size, backward citations, NPL citations, grant lag, and other indices to control for time- and technology-specific variation. Always record cohort definition (filing date + technology classification) and the normalisation denominator (max or percentile used)."
+      },
+      {
+        "name": "Interpretation caveats: truncation / timeliness and office differences",
+        "description": "Patent-related indicators may suffer from truncation/timeliness (recent years incomplete due to publication/grant delays) and comparability issues across patent offices due to differing disclosure and citation practices.",
+        "guidance": "The document repeatedly warns that indicators for recent cohorts (e.g., post-2004/2005) should be interpreted with care; grant lag and family-size indicators are particularly sensitive. Also note that EPO-filed patents (and PCT entrants to EPO) tend to have broader families; combining data across offices without adjustment may bias results."
+      }
+    ]
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/d5740f03254e.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17310,
+  "output_tokens": 4267,
+  "elapsed_s": 3221.3965377919376,
+  "extracted": {
+    "orientation": "professional_standard",
+    "intended_audience": "researchers, patent statisticians, policymakers, and analysts constructing or using patent-quality indicators (e.g., economists, IP office analysts, and R&D policy analysts)",
+    "subtask_short": "measuring patent quality indicators",
+    "subtask_description": "Constructing and interpreting patent-level indicators of technological and economic value using information in patent documents (IPC codes, citations, claims, family/renewal data) with cohort-normalisation and SQL implementation for comparability across time, fields and countries.",
+    "subtask_keywords": [
+      "patent",
+      "quality_indicators",
+      "patstat_epo",
+      "ipc_classification",
+      "patent_statistics"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Conceptual definition of patent quality",
+        "description": "Patent quality intended as the technological and economic value of patented inventions, and the possible impact that these might have on subsequent technological developments.",
+        "guidance": "Different stakeholders interpret 'quality' differently (e.g. attorneys: well-written claims; legal scholars: ability to survive invalidation; economists: ability to reward innovation while enabling diffusion). The paper focuses on indicators that proxy technological/economic value and downstream impact."
+      },
+      {
+        "name": "Cohort-based normalisation (technology-field \u00d7 filing-year)",
+        "description": "Indicators are calculated on patent cohorts defined by the combination of the technology field and the year of filing of patents to account for time- and technology-related shocks.",
+        "guidance": "Normalisation by cohort reduces distortions from changes over time or across fields (e.g., sudden rises in application rates). Cohort statistics (mean, percentiles, skewness, kurtosis, n) are provided to aid normalisation and regression analysis."
+      },
+      {
+        "name": "Index normalisation to 0\u20131 by cohort maximum",
+        "description": "Most indicators are presented as normalised indexes ranging between zero and one obtained by dividing the raw result by the maximum score obtained by any patent in the same year and technology field cohort.",
+        "guidance": "This facilitates comparability across cohorts. Normalised indexes sometimes constructed after winsorization (see 98% winsorization)."
+      },
+      {
+        "name": "Winsorization / outlier treatment (98% winsorized distribution)",
+        "description": "To reduce distortion from extreme values, indexes are sometimes constructed over a 98% winsorized distribution: values below 1st percentile set to 1st percentile and above 99th percentile set to 99th percentile.",
+        "guidance": "Apply winsorization prior to normalisation when distributions have spurious outliers that could otherwise dominate the index."
+      },
+      {
+        "name": "Technology field classification (Schmoch IPC\u2013Technology concordance)",
+        "description": "Technology fields are defined according to Schmoch (2008) (revised 2010/2011), relying on IPC codes to map patents into 6 sectors and 35 technology fields.",
+        "guidance": "Use the specified concordance for consistent cohort assignment; alternative classifications will change indicator values. When patents span multiple fields, assign the field with majority IPC codes (dataset keeps one field per patent)."
+      },
+      {
+        "name": "Patent scope index",
+        "description": "Scope defined as the number of distinct 4\u2011digit IPC subclasses (LEFT(Class_symbol,4)) listed in the patent document (np). Index normalised by cohort maximum.",
+        "guidance": "Broader scope (more distinct 4-digit IPC classes) implies broader technological/market coverage and potentially higher value. Watch for IPC-revision effects (re-classification to IPC 8th edition can inflate historic scope values) and sensitivity to the IPC detail level (4-digit vs 7-digit produces differences)."
+      },
+      {
+        "name": "Patent family size (geographical breadth)",
+        "description": "Family size proxied by the number of patent offices/jurisdictions at which protection for the same invention has been sought; normalised by cohort maximum.",
+        "guidance": "Larger international families indicate greater willingness to incur costs for protection and are associated with higher value. Family-size indicators can suffer from truncation/timeliness (delays in publications) and differ depending on office (EPO patents typically show larger families)."
+      },
+      {
+        "name": "Grant lag",
+        "description": "Time elapsed between filing date and grant date, measured in number of days (grant_lag variable).",
+        "guidance": "Grant lag can reflect examination duration and procedural factors; interpretation may differ by office and over time. Use caution for comparisons across offices or recent cohorts subject to truncation."
+      },
+      {
+        "name": "Backward patent citations (Bwd_Cits)",
+        "description": "Number of prior patent citations (citations to earlier patents) included in the patent document.",
+        "guidance": "Backward citations capture the technological antecedents and are timely (shorter observation window needed than forward citations). Be aware of differences in citation practices (examiner vs inventor citations) across offices and over time; counts can be used directly or as part of other indices (e.g., originality)."
+      },
+      {
+        "name": "Citations to non-patent literature (NPL)",
+        "description": "Number of non-patent literature references cited in the patent document.",
+        "guidance": "NPL citations indicate links to scientific/publication-based knowledge and can be informative about the basicness or science linkage of the invention. Compilation can be challenging due to heterogeneity in NPL formats and office practices."
+      },
+      {
+        "name": "Number of claims",
+        "description": "Count of claims in the patent document (claims variable).",
+        "guidance": "Claims reflect the scope of legal protection and the technology/product 'space' covered. More claims have been associated with higher value and greater litigation likelihood; comparisons should account for office differences in claiming practices."
+      },
+      {
+        "name": "Claims-to-backward-citations ratio (Claims_Bwd)",
+        "description": "The ratio of number of claims over number of backward patent citations for a patent.",
+        "guidance": "Combines legal breadth (claims) with technological antecedents (backward citations) as a proxy for the size of the protected technology/product space; interpret carefully where backward citation counts are low or zero."
+      },
+      {
+        "name": "Forward citations (short windows: 5 and 7 years) and X/I/Y classification variants",
+        "description": "Counts of citations a patent receives from subsequent patents in fixed windows (e.g., up to 5 years and up to 7 years after publication). Variants restrict to citations flagged as X, I or Y (e.g., Fwd_Cits5_XY, Fwd_Cits7_XY) indicating particular types/importance of citations.",
+        "guidance": "Forward citations are widely used proxies for technological/economic impact but suffer truncation delays and depend on citation practices; fixed windows (5/7 years) control for truncation. Using X/I/Y-coded citations can focus on stronger or more relevant citation links."
+      },
+      {
+        "name": "Breakthrough inventions (top-cited identification)",
+        "description": "Binary indicator equal to 1 if the patent belongs to the top 1% most-cited patents (e.g., up to 5 years after publication); also available for X/I/Y-coded citations (breakthrough_xy).",
+        "guidance": "Identifies exceptionally influential patents, but choice of percentile/window affects identification. Top-1% used here; other thresholds possible depending on research question."
+      },
+      {
+        "name": "Generality index",
+        "description": "Index measuring the dispersion of forward citations across technological fields (i.e., how broadly the patent influences different IPC fields).",
+        "guidance": "High generality indicates cross-field impact (broad technological applicability). Calculate on forward-citation distribution across IPC fields and normalise by cohort. Useful for distinguishing narrow vs general technological impact."
+      },
+      {
+        "name": "Originality index",
+        "description": "Index capturing the technological diversity of the backward citations (i.e., the dispersion of cited prior art across IPC fields) to measure how novel/original the combination of antecedent technologies is.",
+        "guidance": "High originality indicates that the patent builds on a diverse set of technological fields. Construct from distribution of backward citations across IPC fields and normalise by cohort."
+      },
+      {
+        "name": "Radicalness index",
+        "description": "Index intended to capture technological radicalness; operationalisations draw on prior literature (e.g., measures combining originality/generality or comparing to field norms).",
+        "guidance": "Radicalness can be computed via various approaches (e.g., Dahlin & Behrens); interpret with caution because measures depend on choice of components and windows. The paper provides an index and discusses sensitivity tests."
+      },
+      {
+        "name": "Patent renewal / life duration",
+        "description": "Measured as the life duration or renewal length of a granted patent (renewal variable: life duration in number of years), reflecting continued payment of maintenance fees.",
+        "guidance": "Renewal behaviour is an economic indicator of private value (applicants pay to maintain valuable patents). Renewal measures are retrospective and subject to institutional fee schedules and truncation for recent grants."
+      },
+      {
+        "name": "Composite patent quality index (experimental: quality_index_4 and quality_index_6)",
+        "description": "Experimental composite indicators combining multiple individual indicators (two variants using 4 or 6 components). Components are equally weighted in the OECD experimental composite index.",
+        "guidance": "Composite indicators summarise multidimensional quality but inherit composite-index drawbacks; equal weighting is used here for comparability, but users should test alternative weightings. Interpret with caution and consider robustness tests."
+      },
+      {
+        "name": "Use of EPO PATSTAT and office-specific data considerations",
+        "description": "Indicators in the paper are compiled using EPO patent applications in the PATSTAT (EPO, April 2012) database; EPO-specific procedures (e.g., European patent being validated nationally) affect indicator values.",
+        "guidance": "Office-specific practices (citation propensity, claim length, class assignment) influence indicators. For cross-office comparisons, use harmonised methods and be aware that using multiple offices without adjustment may bias results. The provided SQL codes ease replication on other office data but office differences remain."
+      },
+      {
+        "name": "Timeliness / retrospective nature and truncation effects",
+        "description": "Almost all measures are retrospective and can only be compiled ex-post; indicators based on forward citations and family size are particularly subject to truncation and delayed observation.",
+        "guidance": "Choose indicator windows (e.g., 5/7 years) to mitigate truncation; be cautious interpreting recent cohorts; use backward-citation based indicators for timelier signals."
+      },
+      {
+        "name": "Algorithmic implementation and reproducibility (SQL/T\u2011SQL scripts)",
+        "description": "OECD provides T\u2011SQL scripts and an algorithm description for constructing indicators (tables: Indicator_table and Normalised_table; routines to compute patent_scope, counts, cohort normalisation).",
+        "guidance": "Follow provided scripts and PATSTAT variable mappings (e.g., PATSTAT_APPLN_IPC LEFT(Class_symbol,4)) for reproducibility. Use cohort tables and supplied cohort statistics for normalisation. Acknowledge OECD source when reusing."
+      },
+      {
+        "name": "Data dissemination and dataset structure",
+        "description": "Two-table dataset available on request: 'indicators' (patent-level non-normalised indicators, filing year, tech field) and 'cohorts' (cohort-level statistics: mean, std_dev, skewness, kurtosis, percentiles, n).",
+        "guidance": "Use the cohorts table to normalise and to obtain cohort percentiles for regression and comparisons. Link to PATSTAT via appln_id. The dataset currently covers EPO patents 1978\u20132012 (as computed in paper)."
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/rej_2c909a9f934a.pdf",
+  "model": "gpt-5-mini",
+  "input_tokens": 17912,
+  "output_tokens": 3683,
+  "elapsed_s": 2132.2757710001897,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "scholars, empirical researchers, and policymakers in patent law, law & economics, and intellectual property litigation",
+    "subtask_short": "empirical Federal Circuit patent study",
+    "subtask_description": "An empirical law & economics analysis measuring how the creation of the U.S. Court of Appeals for the Federal Circuit affected (by circuit) the commercial value and technological quality of patents, using litigation and patent datasets and regression methods.",
+    "subtask_keywords": [
+      "patents",
+      "federal_circuit",
+      "empirical_research",
+      "commercial_value",
+      "technological_quality"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Court ruling classification (invalid / valid but not infringed / valid and infringed)",
+        "description": "Ranging from the least to most favorable for the patent owner, the court could rule that the patent was invalid (Z = 0), valid but not infringed (Z = 1), or valid and infringed (Z = 2).",
+        "guidance": "Coding rule: the ruling, Z_pct, is taken from (i) the original district court if not appealed or if appealed and affirmed; (ii) the second district court if the appellate court vacated and remanded; or (iii) the appellate court if it ruled. This ordinal outcome is the dependent variable in an ordered logit model (assumes logistic error distribution) used to construct the CAFC index."
+      },
+      {
+        "name": "Federal Circuit (CAFC) index (pro-patentee shift by circuit)",
+        "description": "An index (\u03bb_c) representing the pro-patentee shift in the interpretation of patent law by federal judicial circuit due to the Federal Circuit, estimated as the change in rulings in favor of patent owners.",
+        "guidance": "Constructed from an ordered logit of court rulings (Eq. 2) with controls for patent and litigation characteristics and year fixed effects; Third Circuit pre-CAFC law is the reference (\u03b7_3 = 0). The index varies by circuit (average nationwide shift = 107%) and is the main 'treatment' measure used in subsequent patent-level regressions."
+      },
+      {
+        "name": "Commercial value of a patent (stock-market-based measure)",
+        "description": "Commercial value represented by the natural logarithm of the change in the stock market value of the company around the date of the patent grant (deflated by CPI and winsorized at 1st and 99th percentiles).",
+        "guidance": "Patent sample restricted to patents granted to publicly-listed companies (NBER Patent Dataset, 1976\u201382 and 1986\u201392). Used as the dependent variable in OLS regressions with technology-industry-year and circuit fixed effects. Authors report an average association of CAFC with an 11.7% increase in commercial value (CI [-2.8, 48.4]). Note caveat: commercial value is constructed from stock-market regressions and may reflect many firm-level and market factors."
+      },
+      {
+        "name": "Technological quality: forward citations (excluding self-citations)",
+        "description": "Technological quality proxied by the number of forward citations a patent receives from other companies (i.e., excluding self-citations).",
+        "guidance": "Used as an outcome (Poisson quasi-maximum likelihood / ppmlhdfe) to represent knowledge contribution; the paper finds no significant increase in this measure associated with the CAFC despite the rise in commercial value. Forward citations also used as a control in robustness checks."
+      },
+      {
+        "name": "Technological quality: citations to scientific publications",
+        "description": "Alternative measure of technological quality: the number of citations from the patent to scientific journal articles.",
+        "guidance": "Used as an alternative outcome/control to test whether regional scientific progress explains observed effects; included in regressions and robustness tests (not significant enough to explain CAFC effect)."
+      },
+      {
+        "name": "Technological quality: minimum word count of independent claims",
+        "description": "Proxy for patent scope/technical content: the minimum word count across all independent claims of a patent.",
+        "guidance": "Included as an alternative measure of technological quality / patent scope in regressions (Table 4, col. d) to test whether narrowing/widening of claim length explains commercial value changes."
+      },
+      {
+        "name": "Patent scope proxies (number of claims and backward citations)",
+        "description": "Patent scope and relation to prior art proxied by total number of claims and total number of backward citations.",
+        "guidance": "Included as controls in patent-level regressions to account for patent breadth and dependence on prior art; used to argue the CAFC effect is not driven by simple changes in claim counts or backward citations."
+      },
+      {
+        "name": "Home-circuit assignment assumption (mapping patents to CAFC index)",
+        "description": "Assign each patent to the Federal Circuit index of the circuit in which the assignee (owner) was located (the 'home circuit assumption').",
+        "guidance": "Motivation: owners are more likely to litigate in their home circuit; caveats: forum shopping (litigating outside home circuit) can bias estimates. Authors discuss implications: unconstrained forum shopping would be absorbed by year fixed effects; constrained forum shopping could bias estimates toward underestimating the effect. Robustness checks examine forum shopping impacts."
+      },
+      {
+        "name": "Difference-in-differences estimator specification (CAFC \u00d7 Post)",
+        "description": "Regression specification: \u03be_pkit = \u03b2 \u22c5 (CAFC_c \u00d7 Post_t) + \u03b2_X \u22c5 X_it + \u03b2_Z \u22c5 Z_p + \u03bd_c + \u03c9_kit + \u03b5_pkit, where outcome \u03be is commercial value or technological quality.",
+        "guidance": "Identification relies on cross-circuit variation in CAFC index and before/after comparison. Controls include company-time-varying factors (X_it), patent characteristics (Z_p), circuit fixed effects (\u03bd_c) and technology-industry-year fixed effects (\u03c9_kit). \u03b2 is the primary parameter of interest (interpreted as the causal effect under assumptions)."
+      },
+      {
+        "name": "Econometric concerns: generated regressor bias and standard errors",
+        "description": "The CAFC index is an estimated regressor, creating 'generated regressor' bias in standard errors; patent outcomes may have serial correlation within circuits or companies.",
+        "guidance": "Authors address these by a two-step bootstrapping algorithm repeated 1,000 times: (1) bootstrap sample the litigation data (stratified by circuit pre/post) to re-estimate the CAFC index, (2) bootstrap sample the patent data with two-way clustering (parent company and circuit) and estimate the patent regression; compute standard errors from distribution of bootstrap estimates. They also use clustered bootstrapping to handle the small number (11) of circuits."
+      },
+      {
+        "name": "Sampling/time-window and inclusion criteria",
+        "description": "Litigation analysis uses UGA Patent Litigation Datafile for cases 1968\u20132000 (excluding transitional 1983\u201385); patent analysis uses NBER Patent Dataset for patents granted 1976\u201382 and 1986\u201392.",
+        "guidance": "Circuits required to have at least five cases both before and after CAFC; Eleventh Circuit pre-CAFC cases handled by mapping to Fifth Circuit stance due to court split in 1981; outcome classifications and period splits (pre 1968\u201382, transition 1983\u201385, post 1986\u20132000) reflect durability of judicial precedent and known timing of CAFC rulings."
+      },
+      {
+        "name": "Appeals-rate logistic model (test for anticipation / timing)",
+        "description": "Logistic model of whether a case was decided by an appellate court, including circuit indicators, post-CAFC indicators by circuit, number of claims, assignment indicator, tech fixed effects, owner_defendant, home_circuit, and year fixed effects.",
+        "guidance": "Used to test whether CAFC timing/direction was anticipated (if so, rates of appeals would not change). Figure 2 and regression results show a substantial nationwide increase in appeals after CAFC, inconsistent with anticipation. Model specification and interpretation are provided."
+      },
+      {
+        "name": "Robustness and alternative-explanation checks",
+        "description": "Tests to rule out that CAFC effect on commercial value is driven by changes in technological quality, patent scope, scientific progress, or regional R&D/PhD supply.",
+        "guidance": "Specific robustness regressions control for forward citations, citations to scientific publications, minimum independent claim word count, PhDs per million population, and R&D per capita. Authors also construct alternative CAFC indices with different control sets (year FE only; with patent characteristics; with litigation characteristics) and show similar patterns; Hausman tests fail to reject equality of coefficients across specifications. Additional robustness: excluding patents from circuits showing largest CAFC shifts to test sensitivity to selection."
+      },
+      {
+        "name": "Interpretive guideline: commercial value vs technological quality",
+        "description": "Caution that commercial value (stock-market response) should not be used uncritically as a proxy for technological quality, because legal/regulatory/institutional changes can raise commercial value without corresponding increases in technological quality.",
+        "guidance": "Empirical finding: CAFC-associated 11.7% average increase in commercial value accompanied by no significant increase (and small negative point estimate) in forward citations; implication: policy analyses should use commercial-value measures cautiously when inferring technological contribution."
+      }
+    ]
+  }
+}

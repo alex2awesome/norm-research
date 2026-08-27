@@ -1,0 +1,140 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/rej_ed8abc527f56.pdf",
+  "task": "patents",
+  "source_dir": "raw",
+  "source_file": "rej_ed8abc527f56.pdf",
+  "chunk_idx": 1,
+  "n_chunks": 3,
+  "chunk_chars": 39929,
+  "model": "gpt-5-mini",
+  "elapsed_s": 36.315211000008276,
+  "input_tokens": 10764,
+  "output_tokens": 4155,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "economists and researchers using USPTO patent data (patent policy researchers, empirical economists, data scientists)",
+    "subtask_short": "USPTO historical patent data construction",
+    "subtask_description": "Guidance and rules for constructing, interpreting, and using the USPTO Historical Patent Data Files (historical_masterfile, annual, monthly, monthly_disposal) including classification to NBER sub-categories, handling of missing/ambiguous fields, inclusion/exclusion rules, and limits of interpretation.",
+    "subtask_keywords": [
+      "patent_data",
+      "USPTO",
+      "NBER_classification",
+      "data_construction",
+      "economic_research"
+    ],
+    "subtask_breadth": "narrow",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Era definition for USPC classes/subclasses",
+        "description": "For each class and subclass, an era begins the day of an order which modifies the class or subclass and ends the day before the subsequent order affecting that class or subclass; classes/subclasses unaffected by an order remain in their prior era.",
+        "guidance": "Example: Classification Order 1902 issued Jan 4, 2011 directly modified USPC class 340 and other classes indirectly, so all affected classes/subclasses begin a new era. Eras remain constant for unaffected classes. Use era boundaries when applying historical classifications."
+      },
+      {
+        "name": "Resolve ambiguous NBER mappings with orders_class/orders_subclass",
+        "description": "When matching class-at-disposal or current class to an NBER sub-category yields an ambiguous result (probability < 75%), use the orders_class and orders_subclass data files to apply NBER sub-categories.",
+        "guidance": "The orders_class and orders_subclass files capture partial/indirect modifications by classification orders and are used to disambiguate low-probability automated mappings."
+      },
+      {
+        "name": "historical_masterfile fields and contents",
+        "description": "The historical_masterfile contains detailed data on each published or publicly-available non-published application, including application/PGPub/patent numbers (appl_id, pubno, patent), NBER sub-category (nber), current USPC class and subclass (uspc, uspc_sub), application/priority/publication/disposal dates (appl_dt, prior_dt, pub_dt, disp_dt), disposal type (disp_ty), total patent term adjustment (pta), and estimated expiration date (exp_dt).",
+        "guidance": "These micro-data are the basis for aggregating into the annual, monthly, and monthly_disposal datasets. Use these fields to construct time-series and cohort analyses."
+      },
+      {
+        "name": "Back-fill appl_dt using PTMT Custom Bibliographic DVD",
+        "description": "Missing appl_dt values from PALM are back-filled using the PTMT Custom Bibliographic Patent Data Extract DVD.",
+        "guidance": "The DVD is only updated through 2013; application dates for filings after 2013 may remain missing. Note this limitation when analyzing recent filings."
+      },
+      {
+        "name": "prior_dt sourced from PTMT DVD",
+        "description": "The prior_dt field (priority date) is pulled from the PTMT Custom Bibliographic Patent Data Extract DVD.",
+        "guidance": "Be aware of the same update limitations of the DVD when using priority dates for recent filings."
+      },
+      {
+        "name": "exp_dt_max for 1836\u20131861",
+        "description": "The variable exp_dt_max represents the upper limit of the expiration date for the period 1836\u20131861, when the Commissioner could extend a patent\u2019s statutory term by seven years.",
+        "guidance": "There are no records of which patents received extensions in that period, so researchers are provided the upper limit rather than a definitive expiration date."
+      },
+      {
+        "name": "Annual file contents",
+        "description": "The annual data file includes annual counts of granted patents and patents-in-force by NBER sub-category and aggregated filed applications.",
+        "guidance": "Use the annual file for long-run aggregate trends and decade-level analyses; patents-in-force from this file can be valuable control variables."
+      },
+      {
+        "name": "Monthly file start date and contents",
+        "description": "The monthly data file begins in January 1981, the first year of reliable patent application data, and captures many of the same variables as the annual file but adds abandoned and pending application counts by NBER category.",
+        "guidance": "Because sufficient abandonment data begin in 1981, monthly series are appropriate for cohort and short-term dynamics analyses starting in 1981 onward."
+      },
+      {
+        "name": "monthly_disposal: cohort disposal tracking",
+        "description": "The monthly_disposal data file follows prosecution outcomes over time for each monthly application filing cohort across NBER categories; disposals are issuance (grant) or abandonment; pending denotes yet-to-be-disposed applications.",
+        "guidance": "The series tracks monthly disposals for each cohort until all applications are disposed (unless pending as of Dec 31, 2014). It provides distributions of disposal dates (cumulative incidence functions) by cohort and NBER sub-category."
+      },
+      {
+        "name": "Definition of stock of pending applications",
+        "description": "The stock of pending applications at the end of the month is determined by the inflow of incoming applications and the outflow of grants and abandonments during that month.",
+        "guidance": "When constructing stocks, ensure consistent accounting of inflows and outflows; monthly_disposal reports cumulative counts within an entry cohort (stocks, not flows)."
+      },
+      {
+        "name": "Left truncation and reporting start for pending stock",
+        "description": "Because detailed application data begin only in Jan 1981, there is left truncation on new applications making early measurement of pending stock inaccurate.",
+        "guidance": "Using the average survival curve for cohorts 1981\u20131983 (only 1% still pending at 73 months), the monthly file reports estimated stock of pending applications beginning 73 months after Jan 1981 (Feb 1987) to minimize undercounting from left truncation."
+      },
+      {
+        "name": "Allowances/rejections are not disposals; issuance disposal date",
+        "description": "Examination decisions (allowances and rejections) are not technically disposals. For allowances, applicants must pay a fee for the patent to be granted; in the data the day the patent is published is used as the disposal (issuance) date.",
+        "guidance": "Do not equate allowance events directly with disposals in the dataset; use the publication/grant date as the disposal date for issued patents."
+      },
+      {
+        "name": "Abandonment timing and back-filling",
+        "description": "Abandonment occurs either by express abandonment or automatically when the applicant fails to respond to an office action (typically within six months). When an examiner files the abandonment after waiting, the abandonment date is back-filled to the initial response deadline.",
+        "guidance": "This back-filling creates right censoring for the most recent ~6 months in the time series; account for this when analyzing recent abandonment timing."
+      },
+      {
+        "name": "Express abandonment is rare (empirical note)",
+        "description": "Express abandonment is relatively rare: internal statistics show express abandonments peaked at 7.6% of all abandonments in 2002 and fell to 2.1% in 2012.",
+        "guidance": "Most abandonments result from failure to respond; treat express abandonment as a small fraction in aggregate analyses."
+      },
+      {
+        "name": "Inclusion/exclusion of application types",
+        "description": "Include only 'regular' utility patent applications; exclude provisional applications, re-issue applications, and PCT applications. Include utility applications filed as national stage entries of a parent PCT or converted provisional applications.",
+        "guidance": "This definition shapes counts of new filings and abandonments; ensure consistency with these inclusion rules when reproducing aggregates."
+      },
+      {
+        "name": "Treatment of RCEs and continuations",
+        "description": "Requests for Continued Examination (RCEs) are a form of 'non-serialized continuations' that retain the parent serial number and are excluded from counts of new filings and abandonments. Traditional continuations (including continuations-in-part and divisionals) are included because they do not force abandonment of the parent application.",
+        "guidance": "Some official statistics include RCEs; the USPTO Historical files exclude them to avoid double-counting nearly-identical parent/child records. Include continuations but exclude RCEs to measure new filings consistently."
+      },
+      {
+        "name": "monthly_disposal counts are cumulative stocks (not flows)",
+        "description": "Counts in monthly_disposal are cumulative within each appl_month, representing stocks: the numbers of issued, abandoned and pending applications always sum to the corresponding number of applications for that entry cohort and NBER sub-category.",
+        "guidance": "These cumulative counts are consistent with the monthly new application counts; convert to flows carefully if analyzing month-to-month changes."
+      },
+      {
+        "name": "Allowance rate interpretation caveats",
+        "description": "Allowance rates (often reported as grant rate = number of issuances divided by number of disposals) are cohort- and time-dependent and can be misleading if pendency duration or application growth varies over time.",
+        "guidance": "When comparing allowance rates over time or across categories, account for cohort effects, differing pendency durations, and growth in application volumes which can mechanically affect the allowance ratio."
+      },
+      {
+        "name": "monthly_disposal intended research uses",
+        "description": "The monthly_disposal dataset provides detailed, anonymized information about disposal timing and pendency by cohort and NBER sub-category; it does not identify particular applications.",
+        "guidance": "Researchers can use these distributions to analyze pendency, abandonment timing, and incidence functions across technologies and cohorts; it enables study of dynamics previously unavailable."
+      },
+      {
+        "name": "Patents-in-force as control variable and interpretation",
+        "description": "Counts of patents-in-force (disaggregated by NBER sub-category) may indicate how crowded patented technology spaces are and serve as important control variables in time-series and cross-technology analyses.",
+        "guidance": "Patents-in-force can proxy for congestion/crowding; use them carefully as controls in regression or time-series analyses of litigation, R&D, or application behavior."
+      },
+      {
+        "name": "NBER classification algorithm performance and extra categories",
+        "description": "The NBER classification algorithm assigned a single NBER sub-category successfully in the vast majority of cases (applications 96.91% classified for 1981\u20132014; patents 99.95%); sub-categories 70 (Not classified) and 80 (Missing) were added to account for unlabelled items.",
+        "guidance": "Be aware of the small fraction of unclassified/missing records and the addition of codes 70 and 80 when aggregating by NBER category; time required to assign USPC class may leave recent 2014 applications incompletely classified."
+      },
+      {
+        "name": "Use Gini coefficient to measure concentration across classes",
+        "description": "The Gini coefficient is used to quantify concentration of patents across classes (USPC class/subclass and NBER sub-category) over time.",
+        "guidance": "Interpretation must consider endogenous factors (like reclassification orders) that can affect apparent concentration trends; differences between classification schemes may reflect administrative changes."
+      }
+    ]
+  }
+}

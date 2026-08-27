@@ -1,0 +1,191 @@
+{
+  "path": "/Users/spangher/Projects/stanford-research/norm-research/datasets/patents/online-rubrics/raw/2bc41852f1d1.html",
+  "model": "gpt-5-mini",
+  "input_tokens": 13882,
+  "output_tokens": 5128,
+  "elapsed_s": 6942.14469279116,
+  "extracted": {
+    "orientation": "research_article",
+    "intended_audience": "NLP and multimodal-model researchers working on patent analysis and generation",
+    "subtask_short": "patent_nlp_survey",
+    "subtask_description": "A broad survey of natural language processing and multimodal techniques applied to patent documents, covering patent fundamentals, structural/linguistic characteristics, datasets, task definitions, methods, and evaluation metrics for analysis and generation tasks. Intended to orient researchers to challenges and opportunities in patent NLP.",
+    "subtask_keywords": [
+      "patent",
+      "nlp",
+      "survey",
+      "patent_analysis",
+      "patent_generation",
+      "multimodal",
+      "llm"
+    ],
+    "subtask_breadth": "broad",
+    "error": null,
+    "rubrics_metrics": [
+      {
+        "name": "Patentability requirements",
+        "description": "To be patentable a technical solution must be (1) new (novelty), (2) involve an inventive step (non-obviousness), and (3) be industrially applicable (utility).",
+        "guidance": "Substantive examination compares the invention with earlier prior art from patent literature or any public source. The utility requirement may be applied less strictly in many offices; examination also enforces formal and procedural requirements. Novelty/inventiveness are core to novelty prediction tasks."
+      },
+      {
+        "name": "Patent document structure and required sections",
+        "description": "Patent documents normally include publication information, title, bibliometric information, patent classification, citations, abstract, background, detailed description, claims, and drawings.",
+        "guidance": "For dataset curation and automated processing, segmenting documents into these sections (abstract, claims, description, etc.) is a recommended preprocessing step. Each section serves different analytical/generative roles (e.g., descriptions contain details; claims define legal scope)."
+      },
+      {
+        "name": "Claims drafting rules",
+        "description": "Claims define the legal scope of the patent; each claim is a single sentence describing specific features that make the invention novel and non-obvious.",
+        "guidance": "Claims must be carefully and precisely crafted to define boundaries that can withstand legal scrutiny. Claim wording must be consistent with descriptions and reference numbers; small wording differences can dramatically change scope. Automated claim generation must prioritize precision and legal defensibility."
+      },
+      {
+        "name": "Consistency of terminology",
+        "description": "Each technical term must be used consistently throughout the document; self-defined or coined terms are common in patents and must not be replaced by other words unless equivalence is explicitly stated.",
+        "guidance": "High repetitiveness and strict term consistency are expected; models and preprocessing should preserve and respect defined term usage. Paraphrasing for readability is an anti-pattern in patent drafting."
+      },
+      {
+        "name": "Reference numbers and figure-term consistency",
+        "description": "Reference numbers in drawings must be named by the same term consistently throughout the patent application, even when deviating from normal language conventions.",
+        "guidance": "Automated extraction and generation systems must track and maintain consistent mappings between reference numbers and terms across text and figures."
+      },
+      {
+        "name": "Detailed description completeness",
+        "description": "The detailed description must provide comprehensive details about the invention and specific embodiments, typically discussing the drawings to support the claims.",
+        "guidance": "Patent analysis and generation should prioritize full descriptions (not just titles or abstracts) because they contain essential technical details; training/evaluation datasets should include description sections when possible."
+      },
+      {
+        "name": "Long-context handling",
+        "description": "Patent descriptions are very long (average patent description tokens can exceed 11,000), which exceeds many LLMs' default context windows.",
+        "guidance": "Models for patent tasks should support long context (e.g., long-range attention, extended window LLMs) or use segmentation/summarization strategies. Failure to handle long context is a critical challenge for accurate analysis/generation."
+      },
+      {
+        "name": "Domain-specific terminology and technical language",
+        "description": "Patent language is highly technical and often contains newly coined or law-specific terms that differ from general-domain corpora.",
+        "guidance": "Domain adaptation or patent-specific pretraining improves performance; general LLMs trained on colloquial corpora may fail to capture defined terms or their patent-specific senses."
+      },
+      {
+        "name": "Precision requirement of patent text",
+        "description": "Patent texts prioritize precision and information density over readability; sentences often include multiple clauses and strict definitions to ensure enforceability.",
+        "guidance": "Generation models must minimize small lexical variations that alter legal meaning. High repetitiveness and constrained paraphrase are normal; evaluation must check for precision, not just fluency."
+      },
+      {
+        "name": "Pre-processing and dataset curation standards",
+        "description": "Pre-processing steps should segment patent documents into defined sections and rectify irregularities like missing fields, erroneous characters, and formatting issues.",
+        "guidance": "Because patent offices rarely provide pre-processed structured datasets, researchers should perform careful cleaning and section segmentation to improve downstream model performance. Document-level normalization and error correction are emphasized."
+      },
+      {
+        "name": "Multimodal integration guidance",
+        "description": "Patents can include drawings and metadata; multimodal methods that combine text, images, and quantitative metadata may yield more comprehensive results.",
+        "guidance": "Text is the primary legally binding carrier (claims/descriptions), so multimodal approaches should treat images as complementary. Many drawings are generic/low quality, so models must handle noisy visual inputs; hybrid (text+image+metadata) methods are recommended where available."
+      },
+      {
+        "name": "Use of metadata (citations, classifications, actors) in analysis",
+        "description": "Metadata such as citations, classification codes, inventors, applicants, assignees, and examiners provide high-level relational information useful for retrieval, classification, and valuation.",
+        "guidance": "Incorporating citation graphs and metadata embeddings can improve performance (e.g., ~6% improvement reported). But classification codes may be coarse and misleading; rely on metadata as a complement to textual analysis, not a substitute for full description."
+      },
+      {
+        "name": "Automated subject classification task definition",
+        "description": "Automated subject classification is a multi-label classification task: given patent content (title, abstract, claims), predict one or multiple IPC/CPC class labels.",
+        "guidance": "Evaluation methods include top-1 prediction, top-N guesses, and all-categories matching. Multiple methodological approaches exist: feature-based classifiers, fine-tuned transformers, and hybrid methods."
+      },
+      {
+        "name": "Patent classification schemes (IPC/CPC)",
+        "description": "International Patent Classification (IPC) and Cooperative Patent Classification (CPC) are hierarchical schemes (sections, classes, subclasses, main groups, sub-groups) used to categorize patents.",
+        "guidance": "Classifier outputs should map to these hierarchical codes; system design may leverage hierarchy for multi-label prediction and evaluation."
+      },
+      {
+        "name": "Classification evaluation methods (top-1, top-N, all-categories)",
+        "description": "Three evaluation approaches: top prediction checks if top-1 equals main class; top-N succeeds if any of top-N matches main class; all-categories checks whether top-1 is in the set of main and incidental classes.",
+        "guidance": "Top-N is more flexible; choice depends on downstream use (e.g., examiner assistance vs exact labelling). Reporting multiple of these measures is advised."
+      },
+      {
+        "name": "Classification metrics and averaging (accuracy, precision, recall, F1; macro vs micro)",
+        "description": "Common metrics: accuracy, precision, recall, F1. For multi-class/multi-label tasks use macro-averaging (equal weight per class) or micro-averaging (aggregate counts across classes).",
+        "guidance": "Micro-averaging is preferred by default for class-imbalanced data because it weights frequent classes more appropriately. Report both when possible to capture per-class and overall performance."
+      },
+      {
+        "name": "Patent information retrieval task and metrics",
+        "description": "Patent retrieval aims to retrieve target patent documents from databases; standard IR metrics include precision, recall, mean average precision (MAP), and patent-specific PRES.",
+        "guidance": "PRES evaluates ranking deviation of relevant documents; retrieval can leverage metadata, citation graphs, text embeddings, and image features. Choose metrics aligned with user needs (recall-important prior-art search vs precision-oriented tasks)."
+      },
+      {
+        "name": "Patent retrieval: metadata- and image-based method considerations",
+        "description": "Metadata (citations, classes, inventors) can improve retrieval; image-based retrieval is possible but has historically lower performance due to generic or low-resolution drawings.",
+        "guidance": "Hybrid representations (text + metadata + images) often outperform single-modality approaches; image-specific architectures and large curated datasets (e.g., DeepPatent) improve image retrieval performance."
+      },
+      {
+        "name": "Information extraction from patents",
+        "description": "Information extraction focuses on extracting desired structured information (entities, relationships, claims, figures) from patent texts for downstream tasks.",
+        "guidance": "IE systems must account for idiosyncratic patent phrasing, self-defined terms, and noisy figures/metadata; high-quality labeled data is limited for some IE sub-tasks, requiring task-specific dataset creation or silver-standard labeling."
+      },
+      {
+        "name": "Quality assessment tasks (novelty, granting, litigation, valuation)",
+        "description": "Quality assessment includes predicting novelty, whether an application will be granted, litigation likelihood, and patent valuation as proxies for patent quality and scope.",
+        "guidance": "These tasks incorporate textual signals and metadata; e.g., unclear or ambiguous claims and scarce descriptions increase litigation risk. Granting prediction must consider formal/legal language and document completeness beyond novelty."
+      },
+      {
+        "name": "Novelty proxy and dataset caveats",
+        "description": "Datasets sometimes proxy novelty using indirect signals (e.g., patents connected to major awards considered novel; patents granted by USPTO but rejected by EPO and JPO considered lacking novelty).",
+        "guidance": "Be cautious: such proxies may deviate from formal novelty definitions used in examination and can introduce bias into novelty-prediction models."
+      },
+      {
+        "name": "Litigation risk indicators",
+        "description": "Patents with unclear or ambiguous claims or very scarce descriptions tend to have higher likelihoods of being subject to litigation.",
+        "guidance": "Litigation-prediction models should include measures of claim clarity, description completeness, and possibly citation/network features to improve predictions."
+      },
+      {
+        "name": "Patent valuation as reflection of quality and scope",
+        "description": "Patent valuation aims to measure the economic or strategic value of patents, reflecting patent quality and breadth of protection.",
+        "guidance": "Valuation models combine textual features, citations, classifications, and market/company metadata; valuation is multi-faceted and task-specific evaluation criteria should be defined."
+      },
+      {
+        "name": "Technology forecasting and innovation recommendation tasks",
+        "description": "Use patent corpora to predict future technology trends (forecasting) and to recommend novel combinations or ideas (innovation recommendation).",
+        "guidance": "Tasks leverage longitudinal patent data, classification trajectories, citation networks, and embeddings; evaluation criteria depend on forecasting horizons and recommendation utility metrics."
+      },
+      {
+        "name": "Shared task / benchmark importance",
+        "description": "Shared tasks (e.g., CLEF-IP, NTCIR, TREC-CHEM) provide curated datasets and common tasks to enable fair comparison among methods.",
+        "guidance": "Participating in shared tasks or using their datasets is recommended to allow reproducible, comparable evaluation; benchmarks often include text, images, and metadata."
+      },
+      {
+        "name": "Figure caption and formal minimal wording requirement",
+        "description": "Figure captions in many patents often contain minimal wording to satisfy formalities (e.g., 'Figure n depicts another embodiment of the invention'), as required by formal regulations (European Patent Regulations Rule 42(d), PCT Rule 5.1(a)(iv), US 37 CFR 1.74).",
+        "guidance": "Caption-generation systems must recognize that many captions are intentionally terse; generating legally problematic or overly detailed captions might conflict with disclosure strategy. Datasets may contain both brief and detailed captions (e.g., PatentDesc, IMPACT)."
+      },
+      {
+        "name": "Image/drawing limitations for automated processing",
+        "description": "Patent drawings are often generic, schematic, low-resolution, or lack accompanying descriptive text, which limits their usefulness for automated processing.",
+        "guidance": "Image-only classification/retrieval performs worse than text-based approaches in many cases; use images as complementary inputs and apply specialized encoders for patent figures."
+      },
+      {
+        "name": "Evaluation metrics for text generation",
+        "description": "Text generation evaluation includes human evaluation (gold standard) and automated metrics like BLEU, ROUGE, METEOR, and BERTScore; automated metrics compare generated text against reference texts.",
+        "guidance": "Human evaluation is reliable but costly; BLEU/ROUGE/METEOR have limitations (focus on n-gram overlap), while BERTScore captures semantic similarity. Use multiple metrics and human assessment for patent generation tasks."
+      },
+      {
+        "name": "Keystroke-based evaluation for generative patent tools",
+        "description": "Keystroke-based evaluation measures the number of keystrokes saved by model autocomplete suggestions (a productivity metric for claim drafting).",
+        "guidance": "Reported results are task- and model-dependent; this metric may not correlate with legal correctness or claim quality. Use alongside other quality/human-evaluation metrics."
+      },
+      {
+        "name": "PatentEval human-evaluation framework",
+        "description": "PatentEval categorizes machine-generated patent text errors into types such as grammatical errors, irrelevant content, incomplete coverage, and clarity issues for structured human evaluation.",
+        "guidance": "Applying PatentEval provides targeted feedback on common LLM failures in patent drafting and can guide model improvements; use for systematic human evaluation of generative outputs."
+      },
+      {
+        "name": "Gold vs silver-standard datasets and labeling trade-offs",
+        "description": "Some patent tasks (e.g., simplification) lack gold-standard labels due to cost/expertise constraints; silver-standard data generated by automated tools is sometimes used.",
+        "guidance": "Recognize limitations of silver standards (noise, bias). When possible, create expert-labeled gold data for critical evaluation or use silver labels with caution and validation subsets."
+      },
+      {
+        "name": "Aggregation and ranking-specific metrics (MAP, PRES) for retrieval",
+        "description": "Mean average precision (MAP) and patent retrieval evaluation score (PRES) quantify retrieval ranking quality; PRES measures average deviation of relevant documents' ranks from ideal ordering, normalized by maximum returned documents.",
+        "guidance": "Use MAP for standard IR ranking comparisons; use PRES when evaluating patent-specific prior-art search systems and ranking quality with respect to relevance positions."
+      },
+      {
+        "name": "Reporting and benchmarking practices",
+        "description": "Because tasks and datasets vary widely, researchers should report dataset preprocessing steps, exact sections used (abstract/claims/description), evaluation metrics, and averaging methods to enable reproducibility.",
+        "guidance": "Shared tasks and large curated datasets (e.g., HUPD) are recommended to standardize comparisons. Explicitly document proxies used for labels (e.g., novelty proxies) and limitations."
+      }
+    ]
+  }
+}
